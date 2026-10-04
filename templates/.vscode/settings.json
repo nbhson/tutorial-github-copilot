@@ -1,0 +1,24 @@
+{
+  // Copilot instruction files: tu dong nap .github/muse-instructions.md + instructions con.
+  // File goc: .github/muse-instructions.md (<200 dong). Chi tiet theo path: .github/instructions/*.instructions.md
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+
+  // Content exclusion: Copilot KHONG doc cac path nay (them path nhay cam cua repo vao).
+  // Org policy (Business/Enterprise) de len setting nay — day la lop repo-level.
+  "github.copilot.chat.exclude": [
+    "**/*.pem",
+    "**/*.key",
+    "**/secrets/**",
+    "**/.env*",
+    "**/credentials*.json"
+  ],
+
+  // Go y: mo Copilot Completions cho moi file tru khi bi exclusion o tren.
+  "github.copilot.enable": {
+    "*": true
+  },
+
+  // MCP: doc servers tu .vscode/mcp.json (cung thu muc .vscode).
+  // Secrets MCP chi qua ${input:...}/${env:...} trong mcp.json — KHONG hardcode token o day.
+  "mcp.enabled": true
+}
