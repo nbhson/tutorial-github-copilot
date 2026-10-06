@@ -18,6 +18,31 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Copilot CLI (`gh copilot`)** | Gọi Copilot từ terminal để hỏi lệnh/giải thích. | Như lơ xe: bạn lái (terminal), lơ chỉ đường + sửa xe nhỏ. | `gh copilot suggest "tìm 5 files TS lớn nhất"` → `find src -name "*.ts"...`. | `gh copilot --version` in version; `suggest` in lệnh copy-paste được. |
+| **Web chat (`@copilot`)** | Hỏi Copilot ngay trên github.com (issue/PR). | Như hỏi thủ kho ngay tại kệ hàng, khỏi về văn phòng. | `@copilot Review diff PR này vs issue #101, [SEVERITY] file:line`. | PR hiện comment review + verdict PASS/NEEDS-FIX. |
+| **Coding Agent** | Robot cloud nhận issue → branch `copilot/*` → PR draft. | Như giao khoán cho thợ remote: sáng giao, chiều nhận hàng. | Issue có scope + done → Assign Copilot → 2h sau PR draft + CI. | `gh pr list --author "app/copilot"` + branch `copilot/issue-123`. |
+| **github.dev / Mobile / Voice** | VS Code trên web / app điện thoại / ra lệnh bằng miệng. | Như điều khiển từ xa: ở quán cà phê vẫn giao việc + duyệt. | Mobile assign issue; `github.dev/org/repo` fix typo; voice "tóm tắt 3 tasks P1". | Về máy pull branch agent, test local xanh mới merge. |
+
+```mermaid
+flowchart LR
+    M[Mobile đọc issue] --> A[Assign Coding Agent]
+    A --> C[Cloud code + CI]
+    C --> W[Web review PR]
+    W --> V[VS Code pull + test local]
+    V --> MG[Merge khi CI xanh + PASS]
+    MG --> M2[Mobile duyệt merge]
+```
+
+Giải thích: xa máy thì giao + duyệt nhẹ; ngồi máy thì code sâu + verify nặng (test/lint/build local + Reviewer fresh). Spec mờ thì chưa giao; task 15 phút thì Edit local nhanh hơn.
+
+> ✅ **Kỳ vọng thấy gì:** `gh copilot --version` xanh; issue assign xong hiện branch `copilot/*` + PR draft + comment tiến độ agent.
+
+---
+
 ## 1. Vì sao phải ra khỏi VS Code?
 
 VS Code tuyệt vời khi bạn ngồi máy, nhưng:
@@ -256,17 +281,37 @@ Tổng bạn thao tác ~25 phút rải rác, agent làm 30 phút cloud. Không c
 
 ## 8. Bảng tra nhanh: ở đâu làm gì?
 
-| Bạn đang ở | Dùng | Làm được | Không nên |
-|---|---|---|---|
-| VS Code (ngồi máy) | Agent/Edit | Code nặng, debug, test local | — |
-| Terminal/ssh | gh copilot | Gợi ý lệnh, explain lỗi, script | Sửa multi-files phức tạp |
-| github.com | Chat/@copilot | Hỏi code, review PR, giao agent | Chạy local, test nặng |
-| Cloud | Coding Agent | Việc 1–2h độc lập, PR draft | Spec mờ, task 15 phút |
-| Mobile | App | Đọc, giao, duyệt nhanh | Code, review sâu |
-| Máy mượn | github.dev | Fix nhỏ, review | Setup nặng, secrets |
-| Họp/tay bận | Voice | Tóm tắt, tạo issue, giao việc | Prompt dài, tên file khó |
+| Bạn đang ở | Hiểu nôm na | Ví dụ | Dùng | Làm được | Không nên |
+|---|---|---|---|---|---|
+| VS Code (ngồi máy) | Xưởng chính đủ đồ nghề. | Refactor 5 files + debug. | Agent/Edit | Code nặng, debug, test local | — |
+| Terminal/ssh | Lơ xe đi cùng. | `find` 5 files lớn + explain lỗi. | gh copilot | Gợi ý lệnh, explain lỗi, script | Sửa multi-files phức tạp |
+| github.com | Hỏi tại kệ hàng. | `@copilot review PR #123`. | Chat/@copilot | Hỏi code, review PR, giao agent | Chạy local, test nặng |
+| Cloud | Thợ remote 2h. | Issue refund có criteria. | Coding Agent | Việc 1–2h độc lập, PR draft | Spec mờ, task 15 phút |
+| Mobile | Điều khiển từ xa. | Trên xe assign #123. | App | Đọc, giao, duyệt nhanh | Code, review sâu |
+| Máy mượn | Mượn bếp nấu mì. | Fix typo 1 dòng. | github.dev | Fix nhỏ, review | Setup nặng, secrets |
+| Họp/tay bận | Sai vặt bằng miệng. | "Tạo issue refund 500". | Voice | Tóm tắt, tạo issue, giao việc | Prompt dài, tên file khó |
 
 > Quy tắc ngón tay: **xa máy thì giao + duyệt, ngồi máy thì code + verify. Không cố code nặng trên điện thoại.**
+
+### Before / After — ôm laptop trên xe vs giao cloud
+
+**Before (ôm laptop + spec mờ):**
+```text
+Trên xe mở laptop, issue viết 1 dòng "fix refund", assign agent ngay, không scope, không done.
+```
+> Kết quả: 2h sau PR sai hướng, conflict scope, CI đỏ. Về công ty mất thêm 1h sửa + revert.
+
+**After (mobile giao chuẩn + về máy verify):**
+```text
+Mobile (8h): đọc issue #123, xác nhận scope src/payments/** + done checklist rõ mới assign:
+"@copilot Implement theo mô tả + plan.md, chỉ src/payments/, PR draft + log xanh."
+Cloud (8h–10h): agent code + CI. Web (điện thoại): đọc diff-stat + log + Copilot review.
+VS Code (10h tới cty):
+gh pr checkout 123 && npm test -- payments && npm run lint && npm run build
+# ✅ Kỳ vọng: 3 logs xanh + /team-review PASS mới merge
+```
+> Kết quả: bạn thao tác ~25 phút rải rác, agent làm 30 phút cloud, merge V4 đủ. Verify: branch `copilot/issue-123` + PR draft + CI xanh.
+> ✅ **Kỳ vọng thấy gì:** `gh copilot --version` + `gh pr list --author "app/copilot"` thấy PR; local 3 logs xanh.
 
 ---
 

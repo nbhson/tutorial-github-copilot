@@ -21,10 +21,24 @@
 
 ## 1. Vì sao instructions là file quan trọng nhất? (why)
 
-Mọi Copilot Chat session (bật `useInstructionFiles`) đều nạp instructions
-**đầu tiên, giữ suốt, nạp lại mỗi turn**. Nó là "bộ nhớ dài hạn" duy nhất bạn
-kiểm soát được. Prompt files/custom agents đều load có điều kiện; instructions
-load **vô điều kiện**. Vì vậy:
+- Là gì (1 câu): instructions là file markdown bạn viết, Copilot đọc đầu mỗi chat và nhớ suốt phiên.
+- Hiểu nôm na: như tờ dặn dò dán trên tủ lạnh cho người giúp việc: "chó ăn 2 bữa, đừng mở cửa sau".
+- Ví dụ kỹ thuật: dòng `Test focused: npm test -- --filter api` giúp agent không chạy nhầm `pnpm test` full 20 phút.
+
+```mermaid
+flowchart TD
+    A[Bạn mở Chat mới] --> B[Harness nạp instructions?]
+    B -- "useInstructionFiles = true" --> C[Đọc .github/muse-instructions.md\n+ AGENTS.md + files applyTo khớp path]
+    B -- "=false / không có file" --> D[Chat trần: model tự đoán\n Hay chạy sai lệnh]
+    C --> E[Nạp vào system prompt\nGiữ suốt mọi turn]
+    E --> F[Mỗi turn agent: instructions + history + tool results]
+    F --> G{Task xong?}
+    G -- Chưa --> F
+    G -- Rồi --> H[Báo cáo + diff]
+```
+
+> **Kỳ vọng / Verify:** mở chat mới, hỏi "Liệt kê 3 lệnh dev/test/lint + 2 thứ NEVER".
+> Nếu trả lời khớp file bạn viết = instructions đã load. Sai = check `useInstructionFiles`.
 
 - Viết tốt → mọi task sau tự đúng (lệnh test đúng, style đúng, không đụng generated).
 - Viết tệ (500 dòng wiki) → mọi task sau đều trả premium requests cho rác.
@@ -40,9 +54,41 @@ mode nạp lại toàn bộ context (instructions + history + tool results). Ngh
 
 ## 2. muse-instructions.md là gì và đặt ở đâu
 
-Markdown Copilot đọc **đầu mỗi Chat** (khi bật setting), giữ suốt chat.
-Chứa: project là gì, build/test/lint lệnh nào, kiến trúc, code style,
-rules "luôn/không bao giờ".
+- Là gì (1 câu): `muse-instructions.md` là file repo-wide, Copilot đọc đầu mỗi Chat khi bật setting.
+- Hiểu nôm na: như nội quy chung của cả nhà — ai vào cũng phải đọc.
+- Ví dụ kỹ thuật: ghi `Dev: npm run dev (cần .env từ 1Password)` thì mọi task sau agent tự biết, không hỏi lại.
+
+### 2.0. Phân biệt 3 loại file (chỗ hay rối nhất — đọc kỹ)
+
+| Loại file | Nằm ở đâu | Là gì (hiểu nôm na) | Ví dụ cụ thể | Khi nào dùng |
+|---|---|---|---|---|
+| **1. `muse-instructions.md`** | `.github/muse-instructions.md` (1 file duy nhất, commit git) | Nội quy cả nhà, đọc mọi lần vào nhà | "Dùng pnpm. Test: `pnpm vitest run...`. NEVER commit thẳng main." | Quy ước mọi task đều cần (<200 dòng) |
+| **2. `*.instructions.md`** | `.github/instructions/<ten>.instructions.md` (nhiều files, mỗi file có `applyTo`) | Nội quy từng phòng, chỉ đọc khi vào phòng đó | `applyTo: "apps/api/**"` → "Route không query DB trực tiếp" | Quy tắc chỉ đúng 1 subtree (mỗi file <50 dòng, tối đa ~8 files) |
+| **3. `AGENTS.md`** | `AGENTS.md` ở repo root (chuẩn mở, nhiều agent đọc được) | Nội quy khu phố, đội thợ nào cũng hiểu | "Dev: `npm run dev`. Test: `npm test`." | Viết 1 lần để Copilot + Claude Code + Codex đều dùng được |
+
+```mermaid
+flowchart TD
+    A[Repo của bạn] --> B[AGENTS.md ở root\nChung cho mọi agent]
+    A --> C[.github/muse-instructions.md\nRiêng Copilot, thắng khi xung đột]
+    A --> D[.github/instructions/api.instructions.md\napplyTo: apps/api/**]
+    A --> E[.github/instructions/web.instructions.md\napplyTo: apps/web/**]
+    A --> F[.vscode/settings.json\nTầng cá nhân, không commit]
+    G[Task sửa apps/api/orders.ts] --> D
+    G --> C
+    G --> B
+    H[Task sửa apps/web/page.tsx] --> E
+    H --> C
+    H --> B
+```
+
+```bash
+# Copy-paste: tạo đủ 3 loại file trong 1 phút
+mkdir -p .github/instructions
+touch .github/muse-instructions.md AGENTS.md .github/instructions/api.instructions.md
+ls -la .github/muse-instructions.md .github/instructions/ AGENTS.md 2>&1
+# Kỳ vọng / Verify: ls hiện đủ 3 paths, không báo "No such file".
+# Sau đó paste nội dung mẫu ở mục 3 (file chung) và mục 4.2 (file applyTo).
+```
 
 ### 2.1. Vị trí files (học thuộc)
 
@@ -167,10 +213,12 @@ user settings < org policy < repo muse-instructions.md < *.instructions.md (appl
 
 ### 4.1. `*.instructions.md` là gì? (why)
 
-`muse-instructions.md` load **mọi chat** → chỉ để thứ mọi task cần.
-Rules chỉ liên quan 1 subtree (vd `apps/api/**`) → tách ra
-`.github/instructions/api.instructions.md` với `applyTo` glob → Copilot chỉ load
-khi task chạm path đó → rẻ + chính xác hơn.
+- Là gì (1 câu): file rules theo đường dẫn, có dòng `applyTo: "glob"` ở đầu, chỉ load khi task chạm vào path đó.
+- Hiểu nôm na: như biển báo trong phòng thí nghiệm: chỉ ai vào phòng đó mới cần đọc "không mang nước vào đây".
+- Ví dụ kỹ thuật: file `api.instructions.md` với `applyTo: "apps/api/**"` chỉ load khi bạn sửa file trong `apps/api/`, sửa web thì không load → tiết kiệm tokens.
+
+> **Kỳ vọng / Verify:** sửa 1 file trong `apps/api/` rồi hỏi agent "rules nào đang áp cho folder này?".
+> Phải kể ra nội dung file `api.instructions.md`. Sửa file ngoài `apps/api/` mà nó vẫn áp = glob quá rộng.
 
 ### 4.2. Giải phẫu file `*.instructions.md` (copy-paste)
 
@@ -229,9 +277,9 @@ applyTo: "db/migrations/**"
 
 ### 5.1. AGENTS.md là gì? (why)
 
-Chuẩn mở 2026: 1 file `AGENTS.md` ở repo root, mọi coding agent đọc được
-(Copilot, Claude Code, Codex, Gemini...). Copilot 2026 đã support đọc `AGENTS.md`
-kèm `muse-instructions.md`. Viết đúng → đổi agent không phải viết lại.
+- Là gì (1 câu): `AGENTS.md` là file chuẩn mở ở root repo, mọi coding agent (Copilot, Claude Code, Codex, Gemini) đều biết đọc.
+- Hiểu nôm na: như ổ cắm điện chuẩn quốc tế — mang máy sấy tóc đi nước nào cũng cắm được.
+- Ví dụ kỹ thuật: ghi `Test: npm test -- --filter api` vào `AGENTS.md` thì đổi từ Copilot sang Claude Code vẫn chạy đúng lệnh, không phải viết lại.
 
 ### 5.2. Thứ tự load khi có cả 2 files
 
@@ -376,7 +424,17 @@ Checklist xong khi:
 
 ---
 
-## 9. Pitfalls + bài tập
+## 9. Hiểu nhầm thường gặp + Pitfalls + bài tập
+
+### 9.0. Hiểu nhầm thường gặp (90% team dính)
+
+| Hiểu nhầm | Sự thật | Ví dụ |
+|---|---|---|
+| "3 loại file là 1, viết vào đâu cũng được" | 3 phạm vi khác nhau: cả nhà / từng phòng / cả khu phố | Lệnh test chung → `muse-instructions.md`; rule DB riêng api → `api.instructions.md` |
+| "`applyTo: **` cho chắc ăn" | Glob rộng = load mọi lúc = tốn quota + dễ áp sai chỗ | Luôn glob hẹp nhất (`apps/api/**`), tối đa ~8 files |
+| "Copy nguyên `AGENTS.md` sang instructions cho chắc" | Trùng lặp = trả tiền 2 lần mỗi turn | Chung → AGENTS, riêng Copilot → instructions, chạy `diff` kiểm tra |
+| "Ghi lệnh đoán, agent tự sửa khi fail" | Agent chạy sai lệnh 3 lần là cháy quota + loạn context | Mọi lệnh phải PASS tay + ghi ngày VERIFIED |
+| "Viết 1 lần là xong mãi mãi" | Toolchain đổi là instructions thành rác | Mỗi lần đổi test/lint/build → verify lại + ghi ngày mới |
 
 | Pitfall | Vì sao xảy ra | Fix |
 |---|---|---|

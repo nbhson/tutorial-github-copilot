@@ -20,6 +20,29 @@
 
 ## 1. Vì sao Copilot 2026 khác trước? (why)
 
+- Là gì (1 câu): Copilot 2026 là hệ multi-model + multi-surface, không còn là 1 extension gợi ý code.
+- Hiểu nôm na: ngày xưa là xe số 1 tốc độ; nay là xe tay ga có 3 chế độ lái (GPT/Claude/Gemini) + chạy được cả đường phố (IDE) lẫn cao tốc (cloud).
+- Ví dụ kỹ thuật: cùng prompt "thêm rate-limit", chọn GPT-mini ra code đơn giản, chọn Claude ra code + test + giải thích trade-off.
+
+```mermaid
+flowchart TD
+    A[Chưa có Copilot] --> B[Có GitHub account?]
+    B -- Chưa --> C[Tạo account tại github.com/signup]
+    B -- Rồi --> D[Chọn plan: Trial / Individual / Business / Enterprise]
+    C --> D
+    D --> E[Cài IDE extension\nVS Code / JetBrains / VS / Neovim]
+    E --> F[Sign in OAuth đúng account]
+    F --> G[Cài gh CLI + gh-copilot]
+    G --> H[Verify: status + ghost text + Chat + CLI]
+    H --> I{Pass hết?}
+    I -- Chưa --> J[Tra bảng lỗi mục 8.2]
+    J --> H
+    I -- Rồi --> K[Chạy session đầu mục 6.3]
+```
+
+> **Kỳ vọng / Verify:** đọc xong sơ đồ, bạn biết mình đang ở bước nào. Chạy
+> `gh auth status` phải thấy `Logged in to github.com as <tên-bạn>`. Sai tên là sai account.
+
 Trước 2024: Copilot = extension autocomplete + chat đơn giản, 1 model duy nhất.
 
 Từ 2025–2026:
@@ -41,12 +64,19 @@ Từ 2025–2026:
 
 ### 2.1. Bảng quyết định (why)
 
+> **Plan là gì?** Định nghĩa: plan là gói trả phí quyết định bạn có bao nhiêu quota + dùng được model nào.
+> Hiểu nôm na: như gói cước điện thoại — gói rẻ nghe gọi cơ bản, gói doanh nghiệp có thêm roaming + quản lý.
+> Ví dụ kỹ thuật: Individual hết premium requests giữa tháng thì agent mode báo quota; Business thì admin mua thêm seats.
+
 | Bạn là ai | Chọn | Được gì | Lưu ý |
 |---|---|---|---|
 | Cá nhân thử lần đầu | Trial (check github.com/copilot) | Dùng thử giới hạn | Hết trial phải chọn plan trả phí |
 | Dev cá nhân | Individual / Pro | Quota cá nhân + full IDE + CLI | Quota ít nhất, mua thêm nếu cháy |
 | Team 5–50 người | Business | Quota team + org policy + usage dashboard | Admin quản lý seats, content exclusion |
 | Corp / compliance | Enterprise | BYOK, audit log, policy chi tiết | Cần admin setup SSO + policy |
+
+> **Kỳ vọng / Verify:** sau khi đăng ký, vào `https://github.com/settings/copilot`
+> phải thấy dòng plan + ngày hết hạn trial. Không thấy = chưa active, đừng cài tiếp.
 
 > Giá và quota đổi theo quý — luôn check `github.com/pricing` và
 > `github.com/settings/copilot` làm chuẩn cuối, đừng tin số trong tutorial.
@@ -85,12 +115,20 @@ VS Code là bề mặt mạnh nhất 2026: agent mode full tools + MCP + custom 
 
 ### 3.1. Step-by-step (copy-paste)
 
+> **OAuth login là gì?** Định nghĩa: OAuth là cách VS Code nhờ GitHub xác nhận "đúng là bạn" mà không cần bạn gõ mật khẩu vào VS Code.
+> Hiểu nôm na: như dùng CCCD để lễ tân cấp thẻ thang máy — lễ tân (GitHub) xác nhận, VS Code chỉ giữ thẻ (token).
+> Ví dụ kỹ thuật: click "Sign in" → browser mở `github.com/login/oauth` → bấm Allow → VS Code nhận token lưu local.
+
 ```bash
 # 1. Cai VS Code moi nhat (>= 1.90 de co agent mode on dinh):
 # Tai tu https://code.visualstudio.com/ (dung ban Stable, khong dung Insiders tru khi can test).
 
 # 2. Kiem tra version:
 code --version
+# Kỳ vọng / Verify: hiện 3 dòng, ví dụ:
+# 1.90.2
+# commit hash...
+# arm64 (hoặc x64). Nếu < 1.90 → tải bản mới, đừng cố dùng agent mode.
 ```
 
 ```text
@@ -349,6 +387,25 @@ gh copilot --version
 - [ ] `.vscode/settings.json` bật `useInstructionFiles`.
 - [ ] Neovim (nếu dùng): `:Copilot status` = Enabled.
 - [ ] Đã chạy walkthrough mục 6.3 trên 1 repo thật.
+
+### 8.1b. Bảng thuật ngữ cài đặt (tra nhanh khi quên)
+
+| Thuật ngữ | Là gì (hiểu nôm na) | Ví dụ cụ thể | Khi nào dùng |
+|---|---|---|---|
+| **Plan / Trial** | Gói cước quyết định quota | Individual hết quota giữa tháng | Khi chọn gói, khi hết quota |
+| **OAuth / Sign in** | Nhờ GitHub cấp thẻ thang máy (token) | Click Sign in → Allow trong browser | Mỗi lần login / đổi account |
+| **Ghost text** | Chữ mờ gợi ý, Tab để nhận | Gõ `for` → hiện cả vòng lặp mờ | Khi gõ code hàng ngày |
+| **Model picker** | Nút chọn "động cơ" GPT/Claude/Gemini | Task dễ chọn model rẻ, task khó chọn model mạnh | Đầu mỗi task |
+| **Duplicate install** | Cài 2 bản đè nhau (stable + nightly) | Ghost text lúc có lúc không | Khi extension chập chờn sau update |
+
+### 8.1c. Hiểu nhầm thường gặp khi cài đặt
+
+| Hiểu nhầm | Sự thật |
+|---|---|
+| "Cài extension là xong, không cần login đúng account" | Sai account = sai quota/policy cả buổi. Luôn `gh auth status` trước |
+| "Ghost text không hiện là Copilot hỏng" | Thường do file >2000 dòng, extension tắt cho ngôn ngữ đó, hoặc duplicate install |
+| "`gh copilot: command not found` là máy hỏng" | Chỉ là chưa chạy `gh extension install github/gh-copilot` |
+| "Trial hết thì dùng chùa tiếp được" | Hết trial phải mua plan, CLI sẽ báo `no Copilot subscription` |
 
 ### 8.2. Lỗi cài đặt hay gặp
 

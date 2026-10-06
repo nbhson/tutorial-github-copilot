@@ -6,6 +6,17 @@ File này là "hooks tương đương" của Copilot: instruction không ăn, pr
 
 ---
 
+## Sơ đồ tư duy nhanh (đọc 30 giây)
+
+```mermaid
+flowchart LR
+    A[Quy tac viet] --> B{Loai?}
+    B -->|Goi y| C[instructions / prompts]
+    B -->|Luat cung| D[policy / branch protection / secret scanning]
+    C --> E[Miss 2 lan -> dua vao D]
+    D --> F[CI + pre-commit chan]
+```
+
 ## Bảng tổng hợp: guardrail nào chặn ở đâu
 
 | Muốn chặn | Công cụ | Chặn ở tầng |
@@ -20,7 +31,11 @@ File này là "hooks tương đương" của Copilot: instruction không ăn, pr
 
 ## 1. Instruction "không ăn" — vì sao Copilot vẫn làm điều cấm?
 
-**Giải thích.** 5 nguyên nhân theo thứ tự kiểm tra:
+> **Hỏi ngắn gọn:** _Instruction "không ăn" — vì sao Copilot vẫn làm điều cấm?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** 5 nguyên nhân theo thứ tự kiểm tra:
 
 1. **File đặt sai chỗ/tên:** `muse-instructions.md` phải ở `.github/`, instructions con phải `*.instructions.md` trong `.github/instructions/`.
 2. **`applyTo` sai glob** → file cần không khớp pattern (xem [bài 06](06-prompts-agents-instructions.md)).
@@ -28,7 +43,9 @@ File này là "hooks tương đương" của Copilot: instruction không ăn, pr
 4. **Prompt task đè instruction:** user bảo "sửa luôn migration" → model nghe prompt gần hơn.
 5. **Context tràn** → instructions bị cắt khỏi window (xem [bài 02](02-model-context-premium.md)).
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Checklist file có đúng chỗ không
@@ -39,22 +56,29 @@ wc -l .github/muse-instructions.md  # nên <200 dòng, dài quá bị cắt
 # "Liệt kê 3 quy tắc quan trọng nhất trong muse-instructions.md"
 ```
 
-**Ví dụ:** cấm "không push main" mà agent vẫn push → kiểm tra thấy câu cấm nằm ở dòng 250/300 → model ít đọc tới → chuyển lên top 20 dòng + đổi thành "NEVER git push --force...".
+**Ví dụ cụ thể:** cấm "không push main" mà agent vẫn push → kiểm tra thấy câu cấm nằm ở dòng 250/300 → model ít đọc tới → chuyển lên top 20 dòng + đổi thành "NEVER git push --force...".
 
-**Khi nào áp dụng:** mọi ca "em đã ghi rồi mà nó không nghe" — check vị trí + độ cụ thể trước.
+> **Khi nào áp dụng:** mọi ca "em đã ghi rồi mà nó không nghe" — check vị trí + độ cụ thể trước.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 2. Viết quy tắc "cấm" sao cho Copilot nghe lời?
 
-**Giải thích.** Công thức: **động từ mạnh + phạm vi chính xác + hậu quả/hướng thay thế.**
+> **Hỏi ngắn gọn:** _Viết quy tắc "cấm" sao cho Copilot nghe lời?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Công thức: **động từ mạnh + phạm vi chính xác + hậu quả/hướng thay thế.**
 
 - Yếu: "Cẩn thận khi sửa migrations."
 - Mạnh: "NEVER sửa `db/migrations/**`. DB change → tạo file migration mới + chạy `npm run migrate:up`."
 - Yếu: "Nhớ chạy test."
 - Mạnh: "ALWAYS chạy `npm test -- <file-lien-quan>` sau mỗi sửa. Không báo PASS thì không kết luận xong."
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```markdown
 <!-- Mẫu block Rules trong .github/muse-instructions.md -->
@@ -65,21 +89,28 @@ wc -l .github/muse-instructions.md  # nên <200 dòng, dài quá bị cắt
 - ALWAYS chạy focused test sau mỗi sửa, paste kết quả PASS/FAIL.
 ```
 
-**Ví dụ:** copy block trên vào `templates/.github/muse-instructions.md` → sửa lệnh test cho khớp repo → quy tắc "ăn" ngay vì cụ thể + check được.
+**Ví dụ cụ thể:** copy block trên vào `templates/.github/muse-instructions.md` → sửa lệnh test cho khớp repo → quy tắc "ăn" ngay vì cụ thể + check được.
 
-**Khi nào áp dụng:** khi viết/sửa mọi instruction — mỗi quy tắc phải có động từ ALWAYS/NEVER + path/lệnh cụ thể.
+> **Khi nào áp dụng:** khi viết/sửa mọi instruction — mỗi quy tắc phải có động từ ALWAYS/NEVER + path/lệnh cụ thể.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 3. Pre-commit tương đương: chặn commit xấu thế nào?
 
-**Giải thích.** Copilot không có hooks engine như Claude Code — pre-commit ở đây = **git hooks local + GitHub push protection**. Dựng 3 lớp:
+> **Hỏi ngắn gọn:** _Pre-commit tương đương: chặn commit xấu thế nào?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Copilot không có hooks engine như Claude Code — pre-commit ở đây = **git hooks local + GitHub push protection**. Dựng 3 lớp:
 
 1. **pre-commit framework:** lint/format/test nhanh trước commit.
 2. **gitleaks/trufflehog:** quét secret trong staged files.
 3. **GitHub push protection:** chặn push chứa secret đã biết (secret scanning).
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Cài pre-commit + hook secret scan
@@ -103,22 +134,29 @@ pre-commit install
 gitleaks protect --staged --verbose
 ```
 
-**Ví dụ:** dev vô tình `export STRIPE_KEY=sk-live...` vào `.env.example` → `gitleaks protect --staged` chặn commit + chỉ đúng dòng.
+**Ví dụ cụ thể:** dev vô tình `export STRIPE_KEY=sk-live...` vào `.env.example` → `gitleaks protect --staged` chặn commit + chỉ đúng dòng.
 
-**Khi nào áp dụng:** setup repo mới (cùng đợt copy `templates/`), và bắt buộc cho repo có secret/thanh toán.
+> **Khi nào áp dụng:** setup repo mới (cùng đợt copy `templates/`), và bắt buộc cho repo có secret/thanh toán.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 4. Branch protection: chặn push main + ép review thế nào?
 
-**Giải thích.** Vào `Repo → Settings → Rules → Rulesets → New ruleset`: target `main`, bật:
+> **Hỏi ngắn gọn:** _Branch protection: chặn push main + ép review thế nào?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Vào `Repo → Settings → Rules → Rulesets → New ruleset`: target `main`, bật:
 
 - **Require pull request:** ít nhất 1 reviewer, dismiss stale approvals.
 - **Require status checks:** CI xanh mới merge được.
 - **Block force pushes + deletions:** chống mất history.
 - (Nâng cao) **Require Copilot code review** (xem [bài 10](10-ci-sdk-review-web.md)).
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Tạo ruleset bằng gh CLI (thay <OWNER>/<REPO>)
@@ -131,22 +169,29 @@ gh api repos/<OWNER>/<REPO>/rulesets -X POST -f name='protect-main' \
 gh api repos/<OWNER>/<REPO>/rulesets --jq '.[].name'
 ```
 
-**Ví dụ:** ruleset `protect-main` + required check `ci` → agent hay người đều không push/merge bừa được; muốn merge phải qua PR xanh.
+**Ví dụ cụ thể:** ruleset `protect-main` + required check `ci` → agent hay người đều không push/merge bừa được; muốn merge phải qua PR xanh.
 
-**Khi nào áp dụng:** mọi repo team >1 người — dựng trước khi onboarding Copilot coding agent (nó cũng phải tuân ruleset).
+> **Khi nào áp dụng:** mọi repo team >1 người — dựng trước khi onboarding Copilot coding agent (nó cũng phải tuân ruleset).
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 5. Secret scanning + push protection bật thế nào?
 
-**Giải thích.** 2 tính năng GitHub (Business/Enterprise có full):
+> **Hỏi ngắn gọn:** _Secret scanning + push protection bật thế nào?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** 2 tính năng GitHub (Business/Enterprise có full):
 
 - **Secret scanning:** quét repo tìm secret đã lộ → báo alert trong `Security → Secret scanning`.
 - **Push protection:** chặn ngay lúc `git push` nếu phát hiện secret (hiện thông báo + link bypass có lý do).
 
 Bật ở `Repo/Org → Settings → Code security → Secret scanning + Push protection`.
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Kiểm tra alerts secret đã lộ
@@ -163,17 +208,24 @@ echo "fake" | git commit --allow-empty -m test -q  # không liên quan; push pro
 git rm --cached secrets/leaked.key && git commit -m "chore: remove leaked secret"
 ```
 
-**Ví dụ:** push dính `ghp_...` → GitHub chặn + báo "Push blocked" → xóa key khỏi code → `git commit --amend` → push lại.
+**Ví dụ cụ thể:** push dính `ghp_...` → GitHub chặn + báo "Push blocked" → xóa key khỏi code → `git commit --amend` → push lại.
 
-**Khi nào áp dụng:** bật mặc định mọi repo; khi bị chặn push thì đọc kỹ thông báo (nó chỉ đúng file:dòng).
+> **Khi nào áp dụng:** bật mặc định mọi repo; khi bị chặn push thì đọc kỹ thông báo (nó chỉ đúng file:dòng).
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 6. Ép conventional commits / lint trước khi agent commit?
 
-**Giải thích.** Kết hợp: **commitlint hook local** + **status check CI**. Agent tạo commit message sai → hook local sửa/báo ngay; lọt qua local → CI check đỏ, PR không merge được.
+> **Hỏi ngắn gọn:** _Ép conventional commits / lint trước khi agent commit?_
 
-**Lệnh copy-paste:**
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Kết hợp: **commitlint hook local** + **status check CI**. Agent tạo commit message sai → hook local sửa/báo ngay; lọt qua local → CI check đỏ, PR không merge được.
+
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Thêm commitlint vào pre-commit (đoạn thêm vào .pre-commit-config.yaml)
@@ -198,17 +250,24 @@ jobs:
       - run: npm ci && npm run lint
 ```
 
-**Ví dụ:** agent commit `fix stuff` → commitlint chặn → agent tự sửa thành `fix(auth): handle expired session` → commit qua.
+**Ví dụ cụ thể:** agent commit `fix stuff` → commitlint chặn → agent tự sửa thành `fix(auth): handle expired session` → commit qua.
 
-**Khi nào áp dụng:** khi log git của team loạn do agent + người commit kiểu khác nhau.
+> **Khi nào áp dụng:** khi log git của team loạn do agent + người commit kiểu khác nhau.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 7. Giới hạn coding agent: chỉ cho nó đụng repo/branch nào?
 
-**Giải thích.** Admin (Enterprise) cấu hình ở org policy: coding agent bật cho repo nào, chạy trên branch nào, có tự tạo PR không. Dev thường: tôn trọng bằng cách assign task đúng repo + ghi rõ branch trong prompt/issue.
+> **Hỏi ngắn gọn:** _Giới hạn coding agent: chỉ cho nó đụng repo/branch nào?_
 
-**Lệnh copy-paste:**
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Admin (Enterprise) cấu hình ở org policy: coding agent bật cho repo nào, chạy trên branch nào, có tự tạo PR không. Dev thường: tôn trọng bằng cách assign task đúng repo + ghi rõ branch trong prompt/issue.
+
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Khi giao việc cho coding agent (trong issue), ghi rõ phạm vi:
@@ -216,21 +275,28 @@ jobs:
 #  Chỉ sửa src/payments/**. Không đụng infra/."
 ```
 
-**Ví dụ:** org có 50 repo, chỉ bật agent cho 5 repo pilot → member repo khác assign task cho agent sẽ báo "not enabled" → đúng ý admin.
+**Ví dụ cụ thể:** org có 50 repo, chỉ bật agent cho 5 repo pilot → member repo khác assign task cho agent sẽ báo "not enabled" → đúng ý admin.
 
-**Khi nào áp dụng:** khi mở rộng coding agent từ pilot ra toàn org — mở từng đợt + ruleset đi kèm.
+> **Khi nào áp dụng:** khi mở rộng coding agent từ pilot ra toàn org — mở từng đợt + ruleset đi kèm.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 8. Audit: biết ai/agent đã làm gì?
 
-**Giải thích.** 3 nguồn log:
+> **Hỏi ngắn gọn:** _Audit: biết ai/agent đã làm gì?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** 3 nguồn log:
 
 - **Git history:** `git log` — commit của agent thường có `Co-authored-by: Copilot` hoặc author bot.
 - **GitHub audit log (org):** `Org → Settings → Audit log` — ai bật/tắt policy, ai assign seat.
 - **PR timeline:** coding agent ghi comment từng bước (plan → changes → test results).
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Tìm commit do agent tạo
@@ -241,17 +307,24 @@ git log --format='%h %an %s' -20 | grep -i "bot\|copilot"
 gh api orgs/<ORG>/audit-log --jq '.[] | {action, actor, created_at}' | head -20
 ```
 
-**Ví dụ:** PR lỗi không rõ ai sửa → `git log` thấy 3 commit `Co-authored-by: Copilot` → đọc PR timeline comment tương ứng để biết agent đã làm gì.
+**Ví dụ cụ thể:** PR lỗi không rõ ai sửa → `git log` thấy 3 commit `Co-authored-by: Copilot` → đọc PR timeline comment tương ứng để biết agent đã làm gì.
 
-**Khi nào áp dụng:** postmortem, review PR agent, và khi compliance hỏi "thay đổi này từ đâu ra".
+> **Khi nào áp dụng:** postmortem, review PR agent, và khi compliance hỏi "thay đổi này từ đâu ra".
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 9. Guardrail cho lệnh nguy hiểm trong CI (không dangerously-skip)?
 
-**Giải thích.** Workflow gọi Copilot CLI phải: secrets qua `${{ secrets.* }}` → env, KHÔNG `echo` secret, KHÔNG dùng flag skip-verification/bypass. Dùng `environment:` + required reviewers cho job đụng prod (xem mẫu `templates/.github/workflows/`).
+> **Hỏi ngắn gọn:** _Guardrail cho lệnh nguy hiểm trong CI (không dangerously-skip)?_
 
-**Lệnh copy-paste:**
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Workflow gọi Copilot CLI phải: secrets qua `${{ secrets.* }}` → env, KHÔNG `echo` secret, KHÔNG dùng flag skip-verification/bypass. Dùng `environment:` + required reviewers cho job đụng prod (xem mẫu `templates/.github/workflows/`).
+
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```yaml
 # Mẫu đúng (trích templates/.github/workflows/copilot-review.yml)
@@ -267,15 +340,20 @@ jobs:
         run: gh copilot suggest "summarize changes" --no-interactive || true
 ```
 
-**Ví dụ:** workflow triage issue → chỉ đọc issue + comment gợi ý, không có quyền push (dùng `GITHUB_TOKEN` read-only + không checkout write).
+**Ví dụ cụ thể:** workflow triage issue → chỉ đọc issue + comment gợi ý, không có quyền push (dùng `GITHUB_TOKEN` read-only + không checkout write).
 
-**Khi nào áp dụng:** mọi workflow có Copilot CLI — review quyền `permissions:` tối thiểu trước khi merge workflow.
+> **Khi nào áp dụng:** mọi workflow có Copilot CLI — review quyền `permissions:` tối thiểu trước khi merge workflow.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 10. Checklist guardrails cho repo mới (5 phút)?
 
-**Giải thích.** Chạy checklist này sau khi copy `templates/`:
+> **Hỏi ngắn gọn:** _Checklist guardrails cho repo mới (5 phút)?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Chạy checklist này sau khi copy `templates/`:
 
 1. [ ] `.vscode/settings.json` có exclusion paths.
 2. [ ] `muse-instructions.md` có block Rules ALWAYS/NEVER.
@@ -284,7 +362,9 @@ jobs:
 5. [ ] CI lint/test chạy trên PR (status check).
 6. [ ] `mcp.json` không hardcode secret.
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Script check nhanh (đứng ở root repo)
@@ -293,10 +373,11 @@ grep -rn "ghp_\|sk-live\|xoxb-" .vscode/ .github/ 2>/dev/null && echo "CO SECRET
 gh api repos/<OWNER>/<REPO>/rulesets --jq '.[].name'
 ```
 
-**Ví dụ:** chạy script trên cho repo mới → thấy thiếu ruleset → tạo theo câu 4 → đủ 6 tick mới onboarding team.
+**Ví dụ cụ thể:** chạy script trên cho repo mới → thấy thiếu ruleset → tạo theo câu 4 → đủ 6 tick mới onboarding team.
 
-**Khi nào áp dụng:** definition-of-done cho mọi repo mới trước khi bật coding agent.
+> **Khi nào áp dụng:** definition-of-done cho mọi repo mới trước khi bật coding agent.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)

@@ -1,4 +1,6 @@
-# 03 — Câu hỏi thường gặp (10 bài)
+# 03 — Câu hỏi thường gặp (10 bài, tra cứu khi kẹt)
+
+> Mỗi bài gồm ~10 câu, mỗi câu theo cấu trúc cố định: **Hỏi ngắn gọn → Trả lời 1 câu → Giải thích chi tiết + ví dụ → Làm thế nào (steps copy-paste) → Nếu vẫn lỗi thì...**. Bận thì đọc "Trả lời 1 câu" + sơ đồ mermaid đầu file; rảnh thì làm theo steps.
 
 | # | Chủ đề | Link |
 |---|--------|------|

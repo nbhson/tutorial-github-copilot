@@ -18,6 +18,35 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Premium request** | Tiền lẻ trả theo lượt hỏi AI (model đắt tốn nhiều). | Như xu arcade: game xịn nuốt 5 xu, game thường 1 xu. | Agent 50 steps × flagship ×3 = 150 requests bốc hơi. | Settings → Billing → Copilot usage xem % đã dùng. |
+| **Model routing** | Việc nào xe đó: việc nhỏ xe đạp, việc lớn xe tải. | Như gọi Grab: đi chợ gọi xe máy, chuyển nhà gọi xe tải. | Hỏi vặt → mini; plan/refactor khó → flagship. | Cuối tuần flagship <30% requests là đạt. |
+| **Completions vs Chat vs Agent** | Gợi ý Tab (rẻ) → hỏi (vừa) → tự làm nhiều bước (đắt). | Như gõ tắt (Tab) vs hỏi bạn (chat) vs thuê thợ (agent). | `function sum(` + Tab thay vì chat "viết hàm cộng". | Boilerplate Tab nhanh hơn chat 10x, tốn ~0 request. |
+| **Prune MCP** | Nhổ cây thừa cho vườn thoáng. | Như xóa app không dùng cho điện thoại nhẹ. | Giữ ≤6 MCP servers, tắt cái 2 tuần không dùng. | Mỗi turn nhẹ hơn, ít tool defs rác. |
+
+```mermaid
+flowchart TD
+    A[Việc mới] --> B{Nhỏ + rõ?}
+    B -->|Có| C[Completions Tab / Ask nhẹ]
+    B -->|Không| D{Multi-files?}
+    D -->|Không, 1 chỗ| E[Edit mid-tier]
+    D -->|Có| F[Agent + plan duyệt]
+    F --> G{Stuck?}
+    G -->|Không| H[Done]
+    G -->|Có, >30p| I[Leo flagship/reasoning]
+    C --> H
+    E --> H
+```
+
+Giải thích: Tab trước, Ask/Edit sau, Agent khi đáng, Coding Agent khi rảnh tay. 1 turn plan mạnh tránh 10 turns sửa sai (đáng tiền); hỏi vặt bằng Agent mạnh là đốt tiền.
+
+> ✅ **Kỳ vọng thấy gì:** sau routing 1 tuần, requests/tuần giảm 30–50% mà test xanh + review PASS giữ nguyên.
+
+---
+
 ## 1. Vì sao tốn requests?
 
 Ba cách đốt requests nhanh nhất:
@@ -70,14 +99,32 @@ Xem chat gọn ở [Tips 01](./01-context-hygiene.md), prompt tốt ở [Tips 02
 
 ### Bảng routing gợi ý (điều chỉnh theo gói của bạn)
 
-| Việc | Model | Mode | Vì sao |
-|---|---|---|---|
-| Gợi ý inline, boilerplate | Nhẹ / auto | Completions | Rẻ, nhanh, đủ đúng |
-| Giải thích hàm, hỏi docs | Nhẹ | Ask | Không cần reasoning nặng |
-| Fix 1 hàm rõ ràng | Trung bình | Edit | Đủ sức, ít tốn |
-| Feature multi-files, refactor | Mạnh | Agent + plan | Đáng tiền, tránh retry |
-| Review khó, kiến trúc | Mạnh | Ask/Reviewer fresh | Cần reasoning tốt nhất |
-| Việc nền độc lập 2 giờ | Coding Agent | Cloud | Đắt nhưng bạn làm việc khác |
+| Việc | Hiểu nôm na | Ví dụ cụ thể | Model | Mode | Vì sao |
+|---|---|---|---|---|---|
+| Gợi ý inline, boilerplate | Đánh vần hộ 3 chữ. | Gõ `function sum(` + Tab. | Nhẹ / auto | Completions | Rẻ, nhanh, đủ đúng |
+| Giải thích hàm, hỏi docs | Hỏi đường đi chợ. | `retryWithBackoff` làm gì? 3 bullet. | Nhẹ | Ask | Không cần reasoning nặng |
+| Fix 1 hàm rõ ràng | Vá 1 lỗ thủng. | Fix `normalizeEmail` crash dấu. | Trung bình | Edit | Đủ sức, ít tốn |
+| Feature multi-files, refactor | Xây cả nhà. | Refactor auth 800 dòng 5 files. | Mạnh | Agent + plan | Đáng tiền, tránh retry |
+| Review khó, kiến trúc | Thuê giám định. | Review PR payments HIGH bug. | Mạnh | Ask/Reviewer fresh | Cần reasoning tốt nhất |
+| Việc nền độc lập 2 giờ | Giao khoán đi vắng. | Issue rate-limit 2h. | Coding Agent | Cloud | Đắt nhưng bạn làm việc khác |
+
+### Before / After — đốt quota vs tiết kiệm
+
+**Before (mọi việc Agent mạnh):**
+```text
+(Agent + flagship cho cả hỏi vặt) "@workspace thêm null-check giúp tôi" → quét cả repo
++ Mọi câu hỏi đều model mạnh nhất + 1 chat 100 turns + 12 MCP servers
+```
+> Kết quả: 500 requests/tuần, hết quota giữa tháng, 3 tuần cuối dùng model base hẻo. Mỗi request gánh 80K rác.
+
+**After (routing rẻ mà mạnh):**
+```text
+Bôi đen 5 dòng → Ctrl+I (Edit, model trung bình): "thêm null-check, giữ signature."
+Hỏi vặt → chat Ask model nhẹ. Chỉ plan/refactor khó mới Agent mạnh + plan duyệt.
+Completions Tab cho boilerplate. Prune MCP ≤6. 1 task 1 chat.
+```
+> Kết quả: 200 requests/tuần (−60%), chất lượng tương đương (test xanh + PASS giữ). Verify: Billing usage tuần sau giảm mà V3/V4 vẫn đạt.
+> ✅ **Kỳ vọng thấy gì:** bảng routing dán wiki + default model nhẹ; completions Tab dùng trước khi chat.
 
 ### Ví dụ 1 — Đặt default nhẹ (copy-paste setup)
 

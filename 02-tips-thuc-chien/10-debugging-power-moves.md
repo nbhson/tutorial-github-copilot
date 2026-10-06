@@ -18,6 +18,36 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **`/fix + #testFailure`** | Nút sửa tự động cho test đỏ, kèm scope. | Như thợ sửa ống nước: chỉ vá chỗ vỡ, không đục cả nhà. | `/fix #testFailure chỉ fix test này, root cause 3 bullet`. | Fix 5 dòng + focused xanh, diff không lan. |
+| **Test failure loop** | Bắt robot chạy → đỏ → sửa → chạy lại tới xanh. | Như bắt học sinh làm tới đúng thì thôi, max 3 lần. | `Chạy npm test -- auth, đỏ thì fix trong message tới xanh/dừng sau 3`. | Thấy 2–3 logs đỏ → xanh trong cùng message. |
+| **Bisect** | Chia đôi để loại trừ, tìm commit/file gây lỗi. | Như tìm bóng đèn cháy trong dãy: tắt nửa này, sáng thì lỗi nửa kia. | `git bisect start/bad/good` + script `npm test` mỗi commit. | Khoanh được 1 commit/file sau ~log2(n) bước. |
+| **Log→prompt** | Tóm log 1000 dòng thành 10 dòng rồi mới fix. | Như tóm tắt bệnh án trước khi mổ, không ôm cả tủ hồ sơ vào phòng mổ. | Log → `/tmp/test.log` → chat phụ tóm 3 lỗi đầu → chat chính `/fix`. | Chat chính chỉ nhận 10 dòng summary, không ngợp. |
+| **`@terminal / @testFailure`** | Cho Copilot đọc lỗi trực tiếp, khỏi copy tay. | Như bác sĩ nhìn X-quang trực tiếp thay vì nghe kể. | `@terminalLastCommand giải thích 3 bullet + fix 1 file`. | Không paste tay mà vẫn đúng file:dòng. |
+
+```mermaid
+flowchart TD
+    A[Tái hiện 1 lệnh] --> B{Failure gọn?}
+    B -->|Chưa| C[Bisect / Log→prompt]
+    C --> A
+    B -->|Rồi| D[Khoanh 1 file]
+    D --> E[/fix scope hẹp + root cause]
+    E --> F{Loop xanh?}
+    F -->|Đỏ <3| E
+    F -->|Đỏ >=2 cãi| G[Restore checkpoint + re-prompt hẹp]
+    F -->|Xanh| H[+ Regression test + mở rộng lint/build]
+    H --> I[Reviewer fresh PASS]
+```
+
+Giải thích: chưa tái hiện thì chưa debug (mới đoán). Rõ file:line thì `/fix` ngay; mờ thì bisect/log trước; cãi 2 lần thì restore. Mọi bug 1 regression chứa issue id.
+
+> ✅ **Kỳ vọng thấy gì:** sau `/fix`, focused test xanh trong ≤4 turns + 1 regression test mới + `diff --stat` 2 files.
+
+---
+
 ## 1. Vì sao debug với AI hay lạc?
 
 Ba kiểu debug đốt requests mà không ra:
@@ -241,14 +271,36 @@ Tổng 30 phút, 0 lần cãi nhau, có regression test + logs.
 
 ## 8. Bảng tra nhanh: lỗi nào move nào?
 
-| Dấu hiệu | Move đầu tiên | Prompt 1 dòng | Khi nào dừng |
-|---|---|---|---|
-| Stack trace rõ file:line | /fix scope hẹp | `/fix #testFailure, root cause 3 bullet` | Xanh focused + regression |
-| Test đỏ 1 module | Test loop | `Chạy focused, đỏ thì loop 3 lần` | Full scope + lint/build xanh |
-| Không biết file nào | Bisect | `Đề xuất 3 điểm bisect + verify` | Khoanh được 1 file |
-| Log 1000 dòng | Log→prompt | `Tóm tắt 3 lỗi đầu, không fix` | Có summary 10 dòng |
-| Lệnh terminal đỏ | @terminal | `@terminalLastCommand giải thích 3 bullet` | Hiểu lỗi + fix 1 file |
-| Flaky 3/10 lần | Thu thập evidence | `Liệt kê 3 nguyên nhân + cách kiểm chứng` | Có log/timestamp, chưa fix vội |
+| Dấu hiệu | Hiểu nôm na | Ví dụ | Move đầu tiên | Prompt 1 dòng | Khi nào dừng |
+|---|---|---|---|---|---|
+| Stack trace rõ file:line | Có địa chỉ nhà trộm. | `TypeError` tại `login.ts:42`. | /fix scope hẹp | `/fix #testFailure, root cause 3 bullet` | Xanh focused + regression |
+| Test đỏ 1 module | Biết xóm, chưa biết nhà. | 3 tests đỏ trong `payments/`. | Test loop | `Chạy focused, đỏ thì loop 3 lần` | Full scope + lint/build xanh |
+| Không biết file nào | Mất dấu hoàn toàn. | Prod 500 không stack trace. | Bisect | `Đề xuất 3 điểm bisect + verify` | Khoanh được 1 file |
+| Log 1000 dòng | Bệnh án dày 100 trang. | `npm test` log 1000 dòng. | Log→prompt | `Tóm tắt 3 lỗi đầu, không fix` | Có summary 10 dòng |
+| Lệnh terminal đỏ | Xe chết máy giữa đường. | `npm test` exit 1 + stack 30 dòng. | @terminal | `@terminalLastCommand giải thích 3 bullet` | Hiểu lỗi + fix 1 file |
+| Flaky 3/10 lần | Ma trêu: lúc đỏ lúc xanh. | 10 lần chạy đỏ 3. | Thu thập evidence | `Liệt kê 3 nguyên nhân + cách kiểm chứng` | Có log/timestamp, chưa fix vội |
+
+### Before / After — paste mù vs thu hẹp
+
+**Before (paste 1000 dòng + cãi):**
+```text
+(paste 1000 dòng log vào chat chính) "fix giúp tôi"
+→ "sai rồi, sửa lại" × 5 turns
+```
+> Kết quả: Copilot ngợp đoán bừa, sửa 5 files lan man, càng sửa càng đỏ. 5 turns × 80K rác = 400K tokens đốt.
+
+**After (thu hẹp 30 phút):**
+```bash
+npm test -- payments > /tmp/test.log 2>&1
+# ✅ Kỳ vọng: /tmp/test.log ~200-1000 dòng, lệnh exit !=0
+```
+
+```text
+Chat phụ: "Đọc #file:/tmp/test.log, chỉ trả 3 lỗi đầu (file:line + message), không fix."
+Chat chính: "/fix #testFailure, root cause 3 bullet, fix tối thiểu, chạy npm test -- payments dán log, loop 3 lần."
+```
+> Kết quả: summary 10 dòng → khoanh `refund.ts:42` → fix 5 dòng + regression → xanh focused → lint/build xanh. Tổng ≤4 turns. Verify: `npm test -- payments` xanh + regression `days=31`.
+> ✅ **Kỳ vọng thấy gì:** chat chính chỉ 10 dòng summary; `git diff --stat` 2 files.
 | Cãi 2 lần vẫn sai | Restore checkpoint | `Restore trước turn 1, re-prompt sạch` | Prompt mới hẹp hơn |
 | Sửa A hỏng B | Thu hẹp scope | `Chỉ sửa file X, diff --stat kiểm tra` | Diff gọn + full test xanh |
 

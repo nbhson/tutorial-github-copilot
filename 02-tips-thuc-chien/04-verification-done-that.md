@@ -17,6 +17,36 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Done / Evidence** | Xong là phải có hóa đơn (log), không nói miệng. | Như giao hàng: phải có ảnh + chữ ký, không "em gửi rồi (chắc vậy)". | `## Evidence: test log + lint log + git diff --stat` paste trong PR. | Không log = chưa done, dù code nhìn đúng. |
+| **V1→V4** | 4 nấc chắc: nhìn đúng → chạy đúng chỗ → không gãy chỗ khác → người khác tin. | Như nấu ăn: ngửi thơm (V1) → nếm 1 miếng (V2) → cả mâm ok (V3) → khách khen (V4). | Fix 1 hàm cần V2; merge main cần V4. | Merge mà chỉ V2 là thiếu (phải V4). |
+| **Regression test** | Test gác cửa: bug cũ không được quay lại. | Như ổ khóa mới sau khi mất trộm: trộm cũ không vào được nữa. | Test `refund >30 ngày #101` chạy xanh + full scope xanh. | Xóa test để xanh là gian lận (cấm trong prompt). |
+| **Reviewer fresh** | Nhờ người chưa thấy bài làm chấm lại. | Như thi: thí sinh không được tự chấm bài mình. | Chat mới `/team-review` verdict PASS/NEEDS-FIX + `[SEVERITY] file:line`. | Tự review bài mình → LGTM mù. |
+
+```mermaid
+flowchart TD
+    A[Code xong] --> B{Task gì?}
+    B -->|Hỏi/research| V1[V1 Nhìn đúng]
+    B -->|Fix 1 hàm| V2[V2 Focused test xanh + log]
+    B -->|Feature/refactor| V3[V3 Full test + lint + build]
+    V2 --> C{Regression?}
+    V3 --> D[Reviewer fresh]
+    C --> D
+    D --> E{PASS?}
+    E -->|Có| F[V4 Merge được]
+    E -->|Không| G[Fix tiếp trong message, max 3 lần]
+    G --> D
+```
+
+Giải thích: 1) Càng gần main càng cần V nặng. 2) Mọi bug phải có regression test chứa issue id. 3) Cấm xóa test để xanh. 4) Evidence dán cuối message + mô tả PR.
+
+> ✅ **Kỳ vọng thấy gì:** mỗi prompt code trả `## Evidence` với 10 dòng cuối log xanh + `diff --stat` gọn đúng scope.
+
+---
+
 ## 1. Vì sao phải định nghĩa done?
 
 Ba câu nói dối kinh điển của AI (và của cả con người):
@@ -235,16 +265,34 @@ Tổng 30 phút, có log xanh + review PASS. Không còn should work.
 
 ## 7. Bảng tra nhanh: evidence nào cho task nào?
 
-| Task | Test | Lint/Build | Diff | Review | Dòng dặn 1 câu |
-|---|---|---|---|---|---|
-| Hỏi / research | Không | Không | Không | Không | `Chỉ trả lời, không sửa` |
-| Fix 1 hàm | Focused 1 file | Không bắt buộc | --stat | Không bắt buộc | `Chạy focused test + dán log` |
-| Bug + regression | Focused + case mới | Lint file | --stat scope | Nên có | `Thêm regression + test xanh` |
-| Feature multi-files | Full scope | Lint + build | --stat scope | Bắt buộc fresh | `3 logs + review PASS` |
-| Refactor | Full scope từng bước | Lint + build | --stat gọn | Bắt buộc fresh | `Mỗi bước 1 log xanh` |
-| Merge main | Full CI xanh | Full CI | PR diff | Người + Copilot | `CI xanh + 2 reviews` |
+| Task | Hiểu nôm na | Ví dụ | Test | Lint/Build | Diff | Review | Dòng dặn 1 câu |
+|---|---|---|---|---|---|---|---|
+| Hỏi / research | Chỉ nghe, không làm. | Giải thích `retryWithBackoff`. | Không | Không | Không | Không | `Chỉ trả lời, không sửa` |
+| Fix 1 hàm | Vá 1 lỗ nhỏ. | Fix `validate()` email dấu. | Focused 1 file | Không bắt buộc | --stat | Không bắt buộc | `Chạy focused test + dán log` |
+| Bug + regression | Vá + gắn khóa chống trộm lại. | Bug refund #101 + test mới. | Focused + case mới | Lint file | --stat scope | Nên có | `Thêm regression + test xanh` |
+| Feature multi-files | Xây cả phòng + nghiệm thu. | Thêm `POST /refund` 3 files. | Full scope | Lint + build | --stat scope | Bắt buộc fresh | `3 logs + review PASS` |
+| Refactor | Dọn nhà không mất đồ. | Tách `auth.ts` 900 dòng. | Full scope từng bước | Lint + build | --stat gọn | Bắt buộc fresh | `Mỗi bước 1 log xanh` |
+| Merge main | Bàn giao nhà cho khách. | Merge vào `main` release. | Full CI xanh | Full CI | PR diff | Người + Copilot | `CI xanh + 2 reviews` |
 
 > Quy tắc ngón tay: **càng gần main càng cần evidence nặng. Hỏi thì V1 đủ, merge thì phải V4.**
+
+### Before / After — prompt dở vs tốt
+
+**Before (tin miệng):**
+```text
+Fix login giúp tôi, xong báo nhé
+```
+> Kết quả: Copilot trả "Xong rồi!" không log. Bạn merge → prod gãy vì test đỏ 1 chỗ. Không regression, không diff-stat.
+
+**After (bắt evidence):**
+```text
+BUG: Login email có dấu bị 500 (#file:src/auth/login.ts:42).
+Root cause 3 bullet trước khi sửa. Fix tối thiểu + 1 regression test.
+Chạy `npm test -- auth` dán log. Tuyệt đối không xóa test để xanh.
+Cuối message có ## Evidence: log + diff --stat.
+```
+> Kết quả: log xanh + regression + diff gọn 2 files + Reviewer PASS. Merge tự tin. Verify: mở CI run thấy xanh thật.
+> ✅ **Kỳ vọng thấy gì:** After luôn có `## Evidence` 3 dòng logs; Before chỉ có chữ "done".
 
 ---
 

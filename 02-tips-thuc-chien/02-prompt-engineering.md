@@ -19,6 +19,31 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Scope** | Khoanh vùng: chỉ được đụng files này. | Như khoanh đất xây nhà: ngoài vạch là đất hàng xóm, đụng là kiện. | `Scope src/payments/*.ts, đừng đụng src/legacy/`. | `git diff --stat` chỉ hiện files trong scope. |
+| **End-state** | Trạng thái xong trông thế nào (không phải làm gì). | Như đặt món: "cho 1 phở bò tái" thay vì "nấu gì ngon ngon". | `Top 5 complaints: quote + count + segment, markdown table`. | Output khớp đúng format + số liệu, không chung chung. |
+| **Success criteria / Verify** | Cách chứng minh xong thật (lệnh + log). | Như biên lai: không hóa đơn là chưa trả tiền. | `Done = npm test -- payments xanh + dán log`. | Thấy log xanh paste trong chat/PR, không phải "should work". |
+| **Ràng buộc phủ định (NEVER)** | Danh sách cấm địa: đừng đụng X. | Như dặn trẻ: "đừng thò tay ổ điện, đừng mở cửa người lạ". | `Đừng đụng src/generated/, đừng commit main, đừng thêm dep`. | Diff không có file cấm; commit thẳng main bị chặn. |
+| **Few-shot** | Cho 1 ví dụ đúng để Copilot bắt chước. | Như cho văn mẫu trước khi viết: đọc mẫu là biết dàn bài. | Cuối `.prompt.md` có `Input: ... / Output đúng: ...`. | 3 lần gọi cùng prompt ra cùng format. |
+
+```mermaid
+flowchart LR
+    A[Prompt dở] --> B[+ Scope files]
+    B --> C[+ End-state]
+    C --> D[+ Chi tiết + Format]
+    D --> E[+ Verify + NEVER]
+    E --> F[Prompt đạt chuẩn]
+```
+
+Giải thích: mỗi vòng thêm 1 thành phần là bớt 2–3 turns sửa. Thiếu scope thì lan files; thiếu end-state thì chung chung; thiếu verify thì "should work"; thiếu NEVER thì đụng cấm địa.
+
+> ✅ **Kỳ vọng thấy gì:** prompt đủ 4 mảnh + verify + NEVER → Copilot trả đúng files + dán log xanh ngay turn 1–2, không hỏi vặn 5 turns.
+
+---
+
 ## 1. Vì sao prompt quyết định output?
 
 ### 1.1. Model giỏi + prompt ẩu = output sprawling
@@ -335,17 +360,40 @@ Bài học:
 
 ## 7. Bảng sai→sửa
 
-| Sai (prompt ẩu) | Vì sao hỏng | Sửa (copy ý này) |
-|---|---|---|
-| `"investigate auth"` không scope | Đọc 300 files, tốn requests | Khoanh module + câu hỏi + output format |
-| Một prompt 5 việc không liên quan | Chat nhiễm, việc nọ lẫn việc kia | Tách 5 prompts/chats, mỗi cái 1 việc + new chat |
-| Không cho cách verify | Xong rồi chắc vậy | Luôn kèm check: test/lint/log/diff + dán evidence |
-| Mô tả solution thay vì problem | Ép model theo hướng sai | Mô tả problem + constraints, để Ask mode đề xuất solution |
-| File >1000 dòng ném nguyên | Tràn chat, quên đầu | Tách nhỏ, hoặc tóm tắt từng phần |
-| `"làm cho nhanh"` | Model cắt test, cắt verify | Đổi thành làm tối thiểu nhưng test phải xanh, dán log |
-| Không ràng buộc phủ định | Sửa lan sang file cấm | Liệt kê NEVER: generated/, schema, main, dep mới |
-| Không format output | Nhận prose dài khó review | Ép format: table / checklist / file:line |
-| Không dùng prompt files | Mỗi lần gõ một kiểu | Lưu vào .github/prompts/*.prompt.md, gọi /tên-file |
+| Sai (prompt ẩu) | Hiểu nôm na | Ví dụ cụ thể | Vì sao hỏng | Sửa (copy ý này) |
+|---|---|---|---|---|
+| `"investigate auth"` không scope | Nhờ tìm kim mà đưa cả biển. | Repo 500 files, Copilot đọc 300 files. | Đọc 300 files, tốn requests | Khoanh module + câu hỏi + output format |
+| Một prompt 5 việc không liên quan | 1 đơn gọi 5 món khác quán. | Bug + feature + refactor gộp 1 prompt → sửa A hỏng B. | Chat nhiễm, việc nọ lẫn việc kia | Tách 5 prompts/chats, mỗi cái 1 việc + new chat |
+| Không cho cách verify | Xong mà không hóa đơn. | "Xong rồi (chắc vậy)" không log. | Xong rồi chắc vậy | Luôn kèm check: test/lint/log/diff + dán evidence |
+| Mô tả solution thay vì problem | Ép thợ làm theo cách sai của bạn. | "Thêm if ở dòng 42" trong khi root ở dòng 80. | Ép model theo hướng sai | Mô tả problem + constraints, để Ask mode đề xuất solution |
+| File >1000 dòng ném nguyên | Nhét cả cuốn từ điển vào cặp. | `auth.ts` 1500 dòng paste nguyên → quên đầu. | Tràn chat, quên đầu | Tách nhỏ, hoặc tóm tắt từng phần |
+| `"làm cho nhanh"` | Bảo thợ ẩu cho kịp giờ. | Model xóa test để xanh cho nhanh. | Model cắt test, cắt verify | Đổi thành làm tối thiểu nhưng test phải xanh, dán log |
+| Không ràng buộc phủ định | Không rào, bò ăn lúa hàng xóm. | Sửa luôn `generated/` + push thẳng main. | Sửa lan sang file cấm | Liệt kê NEVER: generated/, schema, main, dep mới |
+| Không format output | Nhận thư tay dài 5 trang khó đọc. | Prose 100 dòng không table. | Nhận prose dài khó review | Ép format: table / checklist / file:line |
+| Không dùng prompt files | Mỗi lần nấu 1 công thức mới. | 5 người 5 kiểu prompt bug. | Mỗi lần gõ một kiểu | Lưu vào .github/prompts/*.prompt.md, gọi /tên-file |
+
+### Before / After — prompt dở vs tốt (bắt buộc)
+
+**Before (prompt dở):**
+
+```text
+Refactor auth cho sạch
+```
+
+> Kết quả dở: Copilot đọc 40 files, đổi API, thêm dep, test đỏ 5 chỗ. Bạn mất 45 phút restore. Không có log, không có diff-stat, không biết done chưa.
+
+**After (prompt tốt — đủ 4 mảnh + verify + NEVER):**
+
+```text
+Refactor #file:src/auth.ts (~800 dòng) thành src/auth/login.ts, session.ts, types.ts.
+Giữ nguyên public API (file cũ re-export để không gãy import).
+Sau mỗi bước chạy `npm test -- auth` và dán log. Đỏ thì dừng và báo.
+Đừng đụng src/generated/, đừng thêm dep mới, đừng commit.
+Trước khi code, trình outline 5 bullet files/hàm sẽ di chuyển và chờ duyệt.
+```
+
+> Kết quả tốt: 1 turn plan + 3 turns implement sạch, test xanh, diff gọn 3 files. Tổng 15 phút. Verify: `npm test -- auth` xanh + `git diff --stat` chỉ 3 files.
+> ✅ **Kỳ vọng thấy gì:** After cho outline 5 bullet trước, rồi từng bước 1 log xanh; Before cho code 200 dòng ngay + 5 chỗ đỏ.
 
 ---
 

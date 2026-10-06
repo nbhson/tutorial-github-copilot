@@ -6,6 +6,21 @@ File này trả lời mọi câu hỏi "dùng Muse 2026 thì cần tài khoản 
 
 ---
 
+## Sơ đồ tư duy nhanh (đọc 30 giây)
+
+```mermaid
+flowchart LR
+    A[Ban la ai?] --> B{Dev ca nhan?}
+    B -->|Yes| C[Individual / Pro]
+    B -->|No| D{Cong ty?}
+    D -->|Vua| E[Business seat]
+    D -->|Corp| F[Enterprise SSO]
+    C --> G[Cai extension + sign-in]
+    E --> G
+    F --> G
+    G --> H[Verify 1 file that]
+```
+
 ## Bảng tổng hợp: chọn đường vào nhanh
 
 | Bạn là ai | Plan cần | Cài thế nào | Việc đầu tiên |
@@ -21,7 +36,11 @@ File này trả lời mọi câu hỏi "dùng Muse 2026 thì cần tài khoản 
 
 ## 1. Các plan Individual / Pro / Business / Enterprise khác nhau gì?
 
-**Giải thích.** GitHub chia 4 plan chính (giá 2026 có thể đổi, check `github.com/features/copilot` trước khi chốt):
+> **Hỏi ngắn gọn:** _Các plan Individual / Pro / Business / Enterprise khác nhau gì?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** GitHub chia 4 plan chính (giá 2026 có thể đổi, check `github.com/features/copilot` trước khi chốt):
 
 - **Individual ($10/tháng):** 1 user, completions + chat cơ bản, giới hạn premium requests/tháng. Hợp dev cá nhân, side-project.
 - **Pro ($39/tháng):** hạn mức premium requests cao hơn nhiều, ưu tiên model mới, dùng coding agent thoải mái hơn. Hợp dev dùng Copilot như pair-programmer full-time.
@@ -30,7 +49,9 @@ File này trả lời mọi câu hỏi "dùng Muse 2026 thì cần tài khoản 
 
 Điểm mấu chốt: **Individual/Pro = tự trả, tự quản; Business/Enterprise = admin quản, policy đè lên setting cá nhân.**
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Xem plan hiện tại của account (cần gh CLI đã login)
@@ -38,22 +59,29 @@ gh api user --jq '{login, plan: .plan.name}'
 gh api /user/copilot_seat_details --jq . 2>/dev/null || echo "Chua co seat hoac API chua mo"
 ```
 
-**Ví dụ:** bạn trả Individual nhưng công ty mua Business. Khi join org, seat Business đè lên — policy org (VD chặn `*.pem`) thắng setting cá nhân của bạn.
+**Ví dụ cụ thể:** bạn trả Individual nhưng công ty mua Business. Khi join org, seat Business đè lên — policy org (VD chặn `*.pem`) thắng setting cá nhân của bạn.
 
-**Khi nào áp dụng:** luôn xác định plan NGAY từ đầu vì nó khóa quota (câu 2), policy (bài 05), và quyền riêng tư (bài 09).
+> **Khi nào áp dụng:** luôn xác định plan NGAY từ đầu vì nó khóa quota (câu 2), policy (bài 05), và quyền riêng tư (bài 09).
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 2. Trial hoạt động thế nào, hết trial thì sao?
 
-**Giải thích.** GitHub thường cho 2 loại trial:
+> **Hỏi ngắn gọn:** _Trial hoạt động thế nào, hết trial thì sao?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** GitHub thường cho 2 loại trial:
 
 - **Individual free tier:** completions + chat giới hạn (VD 2.000 completions + 50 chat/tháng), không cần thẻ, hết quota thì chờ reset tháng sau.
 - **Business trial (30 ngày):** full tính năng Business cho cả org, cần admin bật, hết 30 ngày tự chuyển sang trả phí nếu không hủy.
 
 Hết trial: Individual free → suggestions dừng, chat báo quota; Business trial → org bị downgrade, seat mất, coding agent PR dở dang vẫn giữ nhưng không tạo mới được.
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Không có lệnh CLI xem trial; check trên web:
@@ -61,19 +89,26 @@ Hết trial: Individual free → suggestions dừng, chat báo quota; Business t
 # Đặt reminder trước 3 ngày để quyết định mua/hủy
 ```
 
-**Ví dụ:** admin bật Business trial ngày 1/10 → set reminder 27/10 review: giữ thì add billing, không thì `Settings → Billing → Cancel trial` + export audit log trước khi mất.
+**Ví dụ cụ thể:** admin bật Business trial ngày 1/10 → set reminder 27/10 review: giữ thì add billing, không thì `Settings → Billing → Cancel trial` + export audit log trước khi mất.
 
-**Khi nào áp dụng:** trước khi onboarding team >5 người — luôn trial Business trước, đừng mua blind.
+> **Khi nào áp dụng:** trước khi onboarding team >5 người — luôn trial Business trước, đừng mua blind.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 3. Seat là gì, admin assign / thu hồi seat thế nào?
 
-**Giải thích.** Seat = 1 ghế Copilot gắn với 1 GitHub user trong org. Org mua N seats → admin assign cho N người. Hết seat → người thứ N+1 thấy "No seat available" dù đã join org.
+> **Hỏi ngắn gọn:** _Seat là gì, admin assign / thu hồi seat thế nào?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Seat = 1 ghế Copilot gắn với 1 GitHub user trong org. Org mua N seats → admin assign cho N người. Hết seat → người thứ N+1 thấy "No seat available" dù đã join org.
 
 Admin quản seat ở `Org → Settings → Copilot → Access`. Có 2 chế độ: allow all members (tốn seat theo headcount) hoặc selected teams/users (tiết kiệm).
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Admin: xem ai đang giữ seat (cần org owner + gh CLI)
@@ -84,22 +119,29 @@ gh api -X POST orgs/<ORG>/copilot/billing/selected_teams \
   -f selected_teams='["team-slug"]'
 ```
 
-**Ví dụ:** org 50 dev nhưng chỉ mua 20 seats → tạo team `copilot-pilot` 20 người, assign seat cho team đó, còn lại chờ đợt 2.
+**Ví dụ cụ thể:** org 50 dev nhưng chỉ mua 20 seats → tạo team `copilot-pilot` 20 người, assign seat cho team đó, còn lại chờ đợt 2.
 
-**Khi nào áp dụng:** khi có dev báo "Copilot đòi mua dù đã join org" — 90% là chưa được assign seat.
+> **Khi nào áp dụng:** khi có dev báo "Copilot đòi mua dù đã join org" — 90% là chưa được assign seat.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 4. Cài đặt thế nào cho sạch: VS Code / JetBrains / Neovim / CLI?
 
-**Giải thích.** Chỉ giữ **1 extension Copilot + 1 Copilot Chat** mỗi IDE, đừng cài thêm fork "copilot-plus-plus" trôi nổi. Thứ tự khuyên dùng:
+> **Hỏi ngắn gọn:** _Cài đặt thế nào cho sạch: VS Code / JetBrains / Neovim / CLI?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Chỉ giữ **1 extension Copilot + 1 Copilot Chat** mỗi IDE, đừng cài thêm fork "copilot-plus-plus" trôi nổi. Thứ tự khuyên dùng:
 
 - **VS Code:** extension `GitHub Copilot` + `GitHub Copilot Chat` (chính chủ, update theo VS Code release).
 - **JetBrains:** plugin `GitHub Copilot` từ Marketplace, login qua browser.
 - **Neovim:** `github/copilot.vim` hoặc `zbirenbaum/copilot.lua`, auth bằng `:Copilot auth`.
 - **CLI:** `gh extension install github/gh-copilot` → dùng `gh copilot suggest` / `gh copilot explain`.
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # VS Code CLI: cài extension chính chủ
@@ -114,21 +156,28 @@ gh copilot --help
 # :Copilot setup  -> mở browser auth -> :Copilot status
 ```
 
-**Ví dụ:** máy mới → cài VS Code extensions + `gh` + `gh-copilot` là đủ 95% nhu cầu (IDE + terminal).
+**Ví dụ cụ thể:** máy mới → cài VS Code extensions + `gh` + `gh-copilot` là đủ 95% nhu cầu (IDE + terminal).
 
-**Khi nào áp dụng:** máy mới, hoặc khi suggestions chập chờn do cài 2 plugin đè nhau.
+> **Khi nào áp dụng:** máy mới, hoặc khi suggestions chập chờn do cài 2 plugin đè nhau.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 5. Sign-in / sign-out / đổi account (cá nhân ↔ công ty) thế nào?
 
-**Giải thích.** Copilot auth gắn với GitHub account đang login trong IDE. Lỗi kinh điển: máy công ty login nhầm account cá nhân → policy org không áp dụng, bill sai chỗ.
+> **Hỏi ngắn gọn:** _Sign-in / sign-out / đổi account (cá nhân ↔ công ty) thế nào?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Copilot auth gắn với GitHub account đang login trong IDE. Lỗi kinh điển: máy công ty login nhầm account cá nhân → policy org không áp dụng, bill sai chỗ.
 
 - **VS Code:** `Ctrl+Shift+P → "Sign out of GitHub"` rồi sign-in lại account đúng.
 - **gh CLI:** `gh auth login` / `gh auth logout`, check bằng `gh auth status`.
 - **JetBrains:** `Settings → GitHub → Remove account → Add lại`.
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Kiểm tra account đang dùng cho gh + copilot
@@ -140,19 +189,26 @@ gh auth logout
 gh auth login --web -h github.com
 ```
 
-**Ví dụ:** freelancer có 2 account (cá nhân + client). Dùng `gh auth switch --user <login>` hoặc 2 VS Code profile riêng để khỏi lẫn seat/bill.
+**Ví dụ cụ thể:** freelancer có 2 account (cá nhân + client). Dùng `gh auth switch --user <login>` hoặc 2 VS Code profile riêng để khỏi lẫn seat/bill.
 
-**Khi nào áp dụng:** đầu mỗi máy mới, mỗi khi bill sai, và khi policy org "không ăn" (thường do sai account).
+> **Khi nào áp dụng:** đầu mỗi máy mới, mỗi khi bill sai, và khi policy org "không ăn" (thường do sai account).
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 6. Policy của org đè lên setting cá nhân ra sao?
 
-**Giải thích.** Với Business/Enterprise, admin set policy ở org level: model nào được dùng, có cho phép `*` exclusion, coding agent có chạy không... Policy org **luôn thắng** setting cá nhân — bạn bật trong IDE cũng bị ép tắt.
+> **Hỏi ngắn gọn:** _Policy của org đè lên setting cá nhân ra sao?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Với Business/Enterprise, admin set policy ở org level: model nào được dùng, có cho phép `*` exclusion, coding agent có chạy không... Policy org **luôn thắng** setting cá nhân — bạn bật trong IDE cũng bị ép tắt.
 
 Triệu chứng: setting tự revert sau restart, model picker thiếu model, chat báo "disabled by your administrator".
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Không có lệnh xem policy từ client; check trên web:
@@ -160,21 +216,28 @@ Triệu chứng: setting tự revert sau restart, model picker thiếu model, ch
 # Dev: nếu nghi bị policy đè, hỏi admin chụp màn hình Policies tab
 ```
 
-**Ví dụ:** bạn bật "Allow all models" nhưng picker chỉ hiện GPT, thiếu Claude — vì admin set model allowlist. Fix duy nhất: nhờ admin mở thêm.
+**Ví dụ cụ thể:** bạn bật "Allow all models" nhưng picker chỉ hiện GPT, thiếu Claude — vì admin set model allowlist. Fix duy nhất: nhờ admin mở thêm.
 
-**Khi nào áp dụng:** mọi trường hợp "em bật rồi mà không có tác dụng" trong org Business/Enterprise. Chi tiết xem [bài 05](05-policies-guardrails-faq.md).
+> **Khi nào áp dụng:** mọi trường hợp "em bật rồi mà không có tác dụng" trong org Business/Enterprise. Chi tiết xem [bài 05](05-policies-guardrails-faq.md).
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 7. Lỗi cài đặt kinh điển: extension xung đột, version cũ, PATH thiếu `gh`?
 
-**Giải thích.** 3 lỗi gặp nhiều nhất:
+> **Hỏi ngắn gọn:** _Lỗi cài đặt kinh điển: extension xung đột, version cũ, PATH thiếu `gh`?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** 3 lỗi gặp nhiều nhất:
 
 1. **2 plugin Copilot đè nhau** (cũ `copilot` + fork) → gỡ hết, giữ 1 bản chính chủ.
 2. **IDE quá cũ** → Copilot Chat yêu cầu VS Code ≥ bản N; update IDE trước.
 3. **CLI thiếu `gh`** → `gh copilot` báo `command not found`; cài `gh` rồi mới add extension.
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # VS Code: liệt kê extension copilot đang cài
@@ -188,15 +251,20 @@ code --install-extension GitHub.copilot GitHub.copilot-chat
 gh --version && gh extension list | grep copilot
 ```
 
-**Ví dụ:** `code --list-extensions | grep -i copilot` ra 3 dòng (1 chính chủ + 2 fork) → gỡ 2 fork, reload IDE, suggestions chạy lại ngay.
+**Ví dụ cụ thể:** `code --list-extensions | grep -i copilot` ra 3 dòng (1 chính chủ + 2 fork) → gỡ 2 fork, reload IDE, suggestions chạy lại ngay.
 
-**Khi nào áp dụng:** khi suggestions/chat đột nhiên chết sau update IDE hoặc sau khi vọc extension.
+> **Khi nào áp dụng:** khi suggestions/chat đột nhiên chết sau update IDE hoặc sau khi vọc extension.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 8. Bắt đầu repo mới: 5 việc setup đầu repo là gì?
 
-**Giải thích.** Thứ tự chuẩn cho repo vừa clone / vừa tạo (làm 1 lần, hưởng cả dự án):
+> **Hỏi ngắn gọn:** _Bắt đầu repo mới: 5 việc setup đầu repo là gì?_
+
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Thứ tự chuẩn cho repo vừa clone / vừa tạo (làm 1 lần, hưởng cả dự án):
 
 1. Mở repo trong IDE, verify Copilot suggestions chạy (gõ 1 hàm đơn giản).
 2. Copy `.github/muse-instructions.md` từ `templates/` (bài này bước 9).
@@ -204,7 +272,9 @@ gh --version && gh extension list | grep copilot
 4. Thêm `.vscode/mcp.json` nếu cần data ngoài repo (DB, docs...).
 5. Thêm `.vscode/settings.json` với content exclusion cho path nhạy cảm.
 
-**Lệnh copy-paste:**
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 cd ~/code/my-repo && code .
@@ -221,15 +291,22 @@ cp -r /path/to/tutorial-copilot/templates/.vscode ./
 
 **Ví dụ repo trống:** chưa có code để Copilot học pattern → `muse-instructions.md` càng quan trọng (khai stack + conventions ngay từ đầu).
 
-**Khi nào áp dụng:** mọi repo chưa từng dùng Copilot. Team thì commit `.github/` + `.vscode/` để người sau khỏi setup lại.
+> **Khi nào áp dụng:** mọi repo chưa từng dùng Copilot. Team thì commit `.github/` + `.vscode/` để người sau khỏi setup lại.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 9. Project mới tinh thì copy `templates/` thế nào?
 
-**Giải thích.** Không như tool quét codebase, Copilot đọc instructions tĩnh — repo trống vẫn setup được full khung, chỉ cần sửa 20% cho khớp stack thật.
+> **Hỏi ngắn gọn:** _Project mới tinh thì copy `templates/` thế nào?_
 
-**Lệnh copy-paste:**
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Không như tool quét codebase, Copilot đọc instructions tĩnh — repo trống vẫn setup được full khung, chỉ cần sửa 20% cho khớp stack thật.
+
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 ls /path/to/tutorial-copilot/templates/
@@ -237,17 +314,24 @@ cp /path/to/tutorial-copilot/templates/.github/muse-instructions.md ./.github/mu
 # Mở file, sửa: stack, lệnh test/lint/build, cấu trúc thư mục, quy ước branch
 ```
 
-**Ví dụ:** template ghi `npm test`; bạn dùng `pnpm` → sửa ngay dòng đó. Sai 1 dòng này, Copilot gợi ý sai lệnh cả tháng.
+**Ví dụ cụ thể:** template ghi `npm test`; bạn dùng `pnpm` → sửa ngay dòng đó. Sai 1 dòng này, Copilot gợi ý sai lệnh cả tháng.
 
-**Khi nào áp dụng:** `git init` vừa xong, chưa có file nào. Sau khi code lên hình, bổ sung instructions theo path.
+> **Khi nào áp dụng:** `git init` vừa xong, chưa có file nào. Sau khi code lên hình, bổ sung instructions theo path.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
-## 10. Báo lỗi /求助 cho GitHub thế nào?
+## 10. Báo lỗi / nhờ hỗ trợ từ GitHub thế nào?
 
-**Giải thích.** Kênh chính: `github.com/community` Discussions (Copilot category) hoặc Support ticket (Business/Enterprise). Report tốt = kèm 3 thứ: plan + IDE version + log.
+> **Hỏi ngắn gọn:** _Báo lỗi / nhờ hỗ trợ từ GitHub thế nào?_
 
-**Lệnh copy-paste:**
+**Trả lời 1 câu:** 
+
+**Giải thích chi tiết + ví dụ:** Kênh chính: `github.com/community` Discussions (Copilot category) hoặc Support ticket (Business/Enterprise). Report tốt = kèm 3 thứ: plan + IDE version + log.
+
+### Làm thế nào (steps copy-paste)
+
+Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Thu thập info trước khi báo lỗi
@@ -266,8 +350,9 @@ Mô tả: suggestions dừng từ hôm update, JS vẫn có, Python không.
 Kèm: extension versions + Output log đoạn lỗi + đã thử reload/re-login.
 ```
 
-**Khi nào áp dụng:** khi đã đi hết thứ tự debug ([bài 08](08-loi-thuong-gap-troubleshooting.md)) mà vẫn lỗi.
+> **Khi nào áp dụng:** khi đã đi hết thứ tự debug ([bài 08](08-loi-thuong-gap-troubleshooting.md)) mà vẫn lỗi.
 
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)

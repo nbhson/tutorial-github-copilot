@@ -18,6 +18,38 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Plan-first** | Vẽ bản đồ trước khi xây — duyệt mới code. | Như xin giấy phép xây nhà: duyệt bản vẽ rồi mới đổ bê tông. | `plan.md` có files sửa/steps/risks/verify → bạn duyệt → Agent implement. | Chưa có plan duyệt mà code là sai quy trình. |
+| **Ask / Edit / Agent / Coding Agent** | 4 nấc quyền từ hỏi → sửa 1 chỗ → sửa nhiều chỗ → robot cloud tự làm. | Như thuê thợ: hỏi giá (Ask) → vá áo (Edit) → sửa nhà (Agent) → giao chìa khóa (Coding Agent). | Hỏi flow → Ask; fix 1 hàm → Edit; multi-files + test → Agent; issue 2h → Coding Agent. | Task >2 steps mà nhảy thẳng Agent là đốt 10 turns. |
+| **plan.md** | Tờ hợp đồng: làm gì, đụng đâu, xong kiểm sao. | Như đơn thuốc: ghi rõ uống gì, mấy viên, tái khám khi nào. | `plan.md` mục 6 mẫu: mục tiêu + files + steps + KHÔNG đụng + verify. | Mọi chat implement đều đọc cùng `plan.md` đã commit. |
+
+```mermaid
+flowchart TD
+    A[Task >2 steps] --> B[Ask research]
+    B --> C[Trình plan + chờ duyệt]
+    C --> D{Duyệt?}
+    D -->|Chưa| E[Sửa plan]
+    E --> C
+    D -->|Rồi| F[Save plan.md + commit]
+    F --> G{Scope?}
+    G -->|1 file| H[Edit]
+    G -->|Multi-files| I[Agent Phase 1/chat]
+    G -->|Độc lập 2h| J[Coding Agent issue]
+    H --> K[Verify log xanh]
+    I --> K
+    J --> K
+    K --> L[Reviewer fresh PASS]
+```
+
+Giải thích: 1) Luôn bắt đầu Ask (rẻ). 2) Plan phải có verify từng phase + KHÔNG đụng. 3) Duyệt mới save + commit (để chat nào cũng đọc được). 4) 1 phase 1 chat fresh. 5) Xong thì Reviewer fresh verdict.
+
+> ✅ **Kỳ vọng thấy gì:** sau Ask+Plan, có file `plan.md` commit với 7 mục mẫu; Agent implement dán log xanh từng phase, không code ngoài plan.
+
+---
+
 ## 1. Vì sao phải plan-first với Copilot?
 
 Ba nỗi đau kinh điển khi cho Copilot code ngay:
@@ -293,13 +325,31 @@ Nếu giao Coding Agent: phút 30 bạn assign issue kèm plan.md link, 2 giờ 
 
 ## 8. Bảng tra nhanh: chọn nấc nào?
 
-| Dấu hiệu task | Nấc đúng | Prompt mẫu 1 dòng |
-|---|---|---|
-| Hỏi, giải thích, research | Ask | `@workspace giải thích flow X, 5 bullet, không sửa` |
-| Task >2 steps / >1 file | Plan trước | `Trình plan + chờ duyệt, không code` |
-| Fix 1 hàm, rõ ràng | Edit | `Bôi đen → fix trong selection, giữ signature` |
-| Multi-files + chạy test | Agent + plan duyệt | `Đọc plan.md, làm Phase N, dán log` |
-| Việc độc lập, spec rõ, 1–2 giờ | Coding Agent | `Assign issue #X, mở PR draft + log xanh` |
+| Dấu hiệu task | Hiểu nôm na | Ví dụ | Nấc đúng | Prompt mẫu 1 dòng |
+|---|---|---|---|---|
+| Hỏi, giải thích, research | Mới nghe ngóng, chưa làm. | Flow refund trong `payments/*.ts`? | Ask | `@workspace giải thích flow X, 5 bullet, không sửa` |
+| Task >2 steps / >1 file | Việc lớn, phải vẽ bản đồ. | Thêm `POST /refund` đụng 3 files. | Plan trước | `Trình plan + chờ duyệt, không code` |
+| Fix 1 hàm, rõ ràng | Vá 1 lỗ nhỏ. | Fix `normalizeEmail` crash dấu. | Edit | `Bôi đen → fix trong selection, giữ signature` |
+| Multi-files + chạy test | Sửa cả nhà + nghiệm thu. | Refactor auth 5 files + test. | Agent + plan duyệt | `Đọc plan.md, làm Phase N, dán log` |
+| Việc độc lập, spec rõ, 1–2 giờ | Giao khoán đi vắng. | Issue rate-limit có criteria. | Coding Agent | `Assign issue #X, mở PR draft + log xanh` |
+
+### Before / After — prompt dở vs tốt
+
+**Before (nhảy thẳng Agent):**
+```text
+làm feature payments giúp tôi
+```
+> Kết quả: code 200 dòng sai spec, test đỏ, mất 1h revert. Không plan, không scope, không verify.
+
+**After (plan-first):**
+```text
+FEATURE: Thêm POST /api/payments/refund.
+Trước khi code: 1) Đọc #file:docs/payment-spec.md + #file:src/payments/refund.ts.
+2) Trình plan: files sửa, steps, risks, KHÔNG đụng, verify từng phase.
+3) Chờ duyệt mới implement. Không code message này.
+```
+> Kết quả: 1 turn plan duyệt → 2 chats implement xanh từng phase → Reviewer PASS. Tổng 60 phút, 0 revert lớn. Verify: `plan.md` commit + 2 logs xanh.
+> ✅ **Kỳ vọng thấy gì:** After có plan 7 mục + commit; Before có code ngay + đỏ.
 | Spec mờ | Ask phỏng vấn | `Hỏi tôi tối đa 5 câu rồi mới plan` |
 | Muốn thử 2 hướng | 2 chats Plan song song | Mỗi chat 1 phương án, so pros/cons |
 

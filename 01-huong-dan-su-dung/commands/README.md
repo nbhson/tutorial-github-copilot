@@ -1,6 +1,6 @@
 # Commands — Index tra cứu 46 lệnh Copilot 2026
 
-> Index tổng 46 lệnh chi tiết, chia 4 nhóm. Mỗi dòng = 1 lệnh: mô tả 1 dòng + link sang folder chi tiết (`./<nhóm>/<slug>/README.md`). Mỗi README chi tiết 120–200 dòng, 8 mục: tiêu đề + quote, cú pháp bảng 3 cột, cơ chế + sơ đồ text + khác lệnh dễ nhầm, 2 ví dụ bash copy-paste, rủi ro + token + plan gating, combo workflow, lỗi hay gặp, tham khảo. Tiếng Việt.
+> Index tổng 46 lệnh chi tiết, chia 4 nhóm. Mỗi dòng = 1 lệnh: mô tả 1 dòng + link sang folder chi tiết (`./<nhóm>/<slug>/README.md`). Mỗi README chi tiết theo format 6 phần: tên lệnh + 1 câu nôm na, khi nào dùng, cách gọi (code block phím tắt/slash), ví dụ prompt thật + kết quả mong đợi, lỗi thường gặp, tham khảo. Tiếng Việt, ví dụ riêng từng lệnh.
 
 **Cách dùng:** tìm nhóm → đọc mô tả 1 dòng → click link sang folder chi tiết. Gõ `/` (slash), `@` (participant), `#` (variable) trong Chat input để xem list khả dụng **ở môi trường của bạn** (khác plan/model/version sẽ khác).
 

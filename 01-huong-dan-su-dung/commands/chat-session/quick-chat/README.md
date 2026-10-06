@@ -1,176 +1,49 @@
-# Shift+Alt+I — Hỏi nhanh phủ trên editor, xong về code ngay
+# Shift+Alt+I (quick chat) — Hỏi nhanh phủ trên editor
 
-> Loại Built-in · Editor · Nhóm Nhóm Chat Session · Nguy hiểm Không (mặc định read-only, hỏi nhanh)
+> Nôm na: giơ tay hỏi nhanh 1 câu rồi hạ xuống code tiếp, khỏi rời editor.
 
-`Shift+Alt+I` `Shift+Alt+I` mở khung hỏi nhanh phủ trên editor để tra cứu, giải thích mà không mất vị trí con trỏ. Đóng lại là về code ngay. Dùng đúng lúc giúp gắn scope, model và tools ngay từ turn 1 — rẻ hơn 3–5 turns làm rõ bằng prompt tự nhiên.
+## Lệnh làm gì (1 câu nôm na)
 
----
+Nôm na: giơ tay hỏi nhanh 1 câu rồi hạ xuống code tiếp, khỏi rời editor. Thuộc nhóm lệnh dùng hàng ngày — gắn scope gọn thì 1–2 turns là xong.
 
-## 1. Cú pháp & tham số
+## Khi nào dùng
 
-| Cú pháp | Tham số | Ý nghĩa |
-|---|---|---|
-| `Shift+Alt+I` | _(không có)_ | Chạy với context hiện tại (selection/chat mở) |
-| `Shift+Alt+I <mô tả>` | text tự do sau lệnh | Chạy kèm yêu cầu cụ thể trong 1 bước |
-| `Shift+Alt+I --help` / gõ `/` trong input | _(tra cứu)_ | Xem lệnh có khả dụng ở plan/model của bạn không |
+- Hỏi định nghĩa, cú pháp, “hàm này làm gì?” trong 30 giây.
+- Đang code dở, không muốn mở hẳn Chat view.
+- Hỏi xong không cần lưu lịch sử dài.
 
-Ví dụ gọi từng dạng:
+## Cách gọi (copy-paste)
 
 ```bash
-# Dạng 1: gọi trần với context hiện tại
-Shift+Alt+I
+Shift+Alt+I → nhập câu hỏi → Enter → Esc đóng
 ```
+
+> Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Shift+Alt+I (quick chat)`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
+
+## Ví dụ prompt thật + kết quả mong đợi
+
+**Prompt thật (copy-paste, nhớ gắn scope trước):**
 
 ```bash
-# Dạng 2: gọi kèm yêu cầu rõ ràng (khuyên dùng)
-Shift+Alt+I hàm này làm gì, trả lời 3 câu
+Shift+Alt+I → “hàm debounce này delay bao nhiêu ms là hợp lý?”
 ```
 
-```bash
-# Dạng 3: kiểm tra khả dụng trước khi dùng (plan gating)
-# Gõ / trong Chat input -> tìm Shift+Alt+I trong list
-# Không thấy -> xem mục 4 (plan gating) thay vì kết luận bug
-```
+**Kết quả mong đợi:** Popup trả lời ngắn gọn ngay trên editor; đóng là về code tiếp.
 
-Không có flag `--size`, `--ratio` phức tạp. Tham số là text tự do — càng nêu file + mong đợi càng chính xác.
+**Cách verify:** Áp dụng được câu trả lời trong 1 phút là đạt.
 
----
-
-## 2. Cách nó hoạt động
-
-### Cơ chế sâu: 5 bước khi bạn Enter `Shift+Alt+I`
-
-1. **Thu thập context:** Chat gom selection, file mở, instructions repo, history ngắn và (nếu có) MCP/tools đang bật.
-2. **Đóng scope:** lệnh này khóa phạm vi xử lý (file/selection/session hiện tại) thay vì để model đoán mò toàn repo.
-3. **Gọi model hiện tại:** prompt + context được gửi tới model bạn đã chọn trong `/model` (đổi bằng `/model` khi cần não to hơn).
-4. **Trả diff/text có kiểm chứng:** kết quả hiện dưới dạng diff duyệt từng hunk hoặc text có cấu trúc — bạn luôn là người duyệt cuối.
-5. **Giữ nguyên đĩa cho tới khi duyệt:** không file nào đổi cho tới khi bạn Accept/Apply; `git diff` luôn soi được trước/sau.
-
-```text
-[Chat input: Shift+Alt+I + mô tả] --> [gom context + scope] --> [model xử lý]
-        |                              |                        |
-   selection/file                 instructions + MCP        diff/text chờ duyệt
-```
-
-### Khác gì với lệnh dễ nhầm?
-
-| Lệnh | Kết quả | Mất gì / Đổi gì | Khi nào dùng |
-|---|---|---|---|
-| `Shift+Alt+I` | Mở Quick Chat hỏi nhanh không rời editor | Theo bảng rủi ro mục 4 | Task khớp mô tả 1 dòng ở trên |
-| Lệnh anh em gần nhất trong nhóm | Scope/quyền khác 1 nấc | Đọc kỹ cột Ý nghĩa | Khi `Shift+Alt+I` trả kết quả sai scope |
-| Prompt tự nhiên không lệnh | Linh hoạt nhưng tốn turns | Tốn 3–5 turns làm rõ | Khi việc quá lạ, chưa có lệnh nào khớp |
-| Agent mode tự hành | Tự tìm file + chạy lệnh | Tốn quota, rủi ro cao hơn | Khi task mở, chưa biết chạm file nào |
-
-> Kinh nghiệm xương máu: _lệnh càng ngắn càng phải gắn scope rõ._ `Shift+Alt+I` không scope = model đoán mò = sửa sai file.
-
----
-
-## 3. Ví dụ thực tế
-
-### Kịch bản 1: dùng chuẩn trong task hàng ngày
-
-Bạn đang làm task thật trong repo, đã mở đúng file và bôi đen đúng đoạn cần xử lý.
-
-```bash
-# Bước 1: chuẩn bị scope (bôi đen code hoặc mở đúng file)
-# Bước 2: gọi lệnh kèm yêu cầu rõ
-Shift+Alt+I hàm này làm gì, trả lời 3 câu
-
-# Bước 3: review diff từng hunk rồi mới Accept
-# Bước 4: chạy kiểm chứng (test/build/lint) xác nhận
-```
-
-> Kết quả: xong việc trong 1–2 turns thay vì 5 turns hỏi-đáp lòng vòng, diff gọn dễ review.
-
-### Kịch bản 2: kết hợp kiểm tra chéo (không tin 100%)
-
-Bạn nghi kết quả `Shift+Alt+I` có thể thiếu context (docs cũ, file chưa gắn, model rẻ quá).
-
-```bash
-# Bước 1: chạy lệnh lần 1 với model hiện tại
-Shift+Alt+I cú pháp optional chaining trong TS là gì
-
-# Bước 2: đổi chiến thuật khi kết quả chưa đạt
-# - Việc khó hơn dự kiến -> /model đổi model mạnh + chạy lại
-# - Thiếu file -> gắn thêm #file rồi chạy lại
-# - Task mở rộng -> chuyển sang Agent mode làm tiếp
-```
-
-> Kết quả: có baseline để so sánh, biết chính xác thiếu gì (model/scope/mode) thay vì kết luận "AI dở".
-
----
-
-## 4. Rủi ro & lưu ý
-
-### Mất gì? Có cứu được không?
-
-| Mất gì | Cứu được không? | Ghi chú |
-|---|---|---|
-| History chat khi dùng lệnh session | Không (trong phiên) | `/export` trước khi `/clear` hoặc `/new` nếu cần giữ |
-| Edit sai file khi scope lệch | Được (Undo/checkpoint) | Luôn review diff, dùng checkpoints khi sửa nhiều file |
-| Secrets lọt vào prompt/export | Khó (đã gửi đi là khó thu hồi) | Soát file trước khi attach/export/share |
-| Code trên đĩa, git history | Không mất | `git diff` + `git checkout -- <file>` luôn cứu được |
-
-> **Ảo giác nguy hiểm nhất:** model nói tự tin như thể đã hiểu cả repo, nhưng thực ra chỉ đọc scope bạn gắn. Hãy bắt nó "liệt kê file đã đọc" khi cần chính xác.
-
-### Tốn token?
-
-- `Shift+Alt+I` tốn 1 lượt gọi model với context hiện tại. Gắn scope gọn (1 file/selection) rẻ hơn gắn cả repo 10–50 lần.
-- Bài toán hòa vốn: gắn scope đúng từ turn 1 = tiết kiệm 3–5 turns làm rõ (~vài nghìn tokens mỗi turn).
-- Model rẻ cho việc nhẹ (`/explain`, `/doc`, review), model mạnh chỉ cho agent/kiến trúc khó.
-
-### Plan / model gating (vì sao lệnh vắng mặt?)
-
-- Không thấy `Shift+Alt+I` trong list `/` → check `/status` + plan trước khi kết luận lệnh không tồn tại.
-- Individual < Business < Enterprise (mở dần). Coding agent + một số participants có thể vắng ở plan thấp.
-- BYOK (Enterprise): list model khác Individual. Hỏi admin khi model bạn cần không hiện.
-- Checklist 30 giây: `/status` → `github.com/settings/copilot` (plan + quota) → gõ `/` xem list thực tế → `/update` nếu extension cũ.
-
----
-
-## 5. Kết hợp trong workflow
-
-| Combo | Cách dùng |
-|---|---|
-| `/status` → `Shift+Alt+I` | Biết account/model trước khi làm gì khác |
-| `Shift+Alt+I` + `#file` / `#selection` | Mọi prompt code phải có scope gắn kèm |
-| `Shift+Alt+I` → review diff → test | Không Accept mù, luôn chạy kiểm chứng |
-| `Shift+Alt+I` → `/model` đổi + chạy lại | So sánh chất lượng rẻ vs mạnh |
-| `Shift+Alt+I` → `/export` | Lưu lại case hay cho team wiki |
-
-Anti-pattern:
-
-```bash
-# SAI: gọi lệnh không scope, mô tả chung chung
-Shift+Alt+I
-# -> model đoán mò, sửa sai file, tốn turns sửa lại
-
-# ĐÚNG: scope + yêu cầu + tiêu chí xong
-# (bôi đen code trước, rồi:)
-Shift+Alt+I hàm này làm gì, trả lời 3 câu
-```
-
----
-
-## 6. Lỗi hay gặp
+## Lỗi thường gặp
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
-| Gõ `Shift+Alt+I` không có gì xảy ra | Chưa có scope (chưa chọn code/mở file) hoặc lệnh bị gating | Bôi đen code trước; gõ `/` kiểm tra lệnh có trong list không |
-| Kết quả chung chung, sai file | Thiếu `#file`/`@workspace`, model đoán scope | Gắn scope rõ rồi chạy lại |
-| Lệnh vắng mặt trong list `/` | Plan/model gating hoặc extension cũ | `/status` → check plan → `/update` |
-| Kết quả tốt nhưng diff khó duyệt | Change quá to 1 lần | Chia nhỏ yêu cầu, duyệt từng hunk |
-| Model mạnh tốn quota nhanh | Dùng model đắt cho việc nhẹ | Việc nhẹ dùng model rẻ; mạnh để dành agent/kiến trúc |
-| Tin 100% không review | Lười đọc diff/message | Luôn đọc + sửa tay trước khi commit/push/merge |
+| Phím tắt không ăn | Xung đột keybinding / layout khác | Vào Keyboard Shortcuts search “quick chat” gán lại |
+| Hỏi phức tạp bị trả lời cộc | Quick chat hợp câu ngắn | Việc phức tạp → mở Chat view hoặc Agent mode |
+| Quên mất câu trả lời hay | Quick chat không lưu kỹ | Câu nào hay → hỏi lại trong Chat view rồi /export |
 
----
+## Tham khảo
 
-## 7. Tham khảo
+- Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh.
+- Cheatsheet 1 trang: [../../../../CHEATSHEET.md](../../../../CHEATSHEET.md).
+- Kẹt thì tra [FAQ troubleshooting](../../../../03-cau-hoi-thuong-gap/08-loi-thuong-gap-troubleshooting.md).
 
-- Lệnh liên quan (cùng nhóm `chat-session`):
-  - Xem index nhóm: [../README.md](../README.md) — bảng tra cứu 1 dòng mỗi lệnh
-  - Bài tổng quan: [../../../04-chat-commands-toan-tap.md](../../../04-chat-commands-toan-tap.md) — index ~70 lệnh 4 nhóm
-- Session đầu chuẩn (làm 1 lần/repo): `/status` → `/instructions` → `/mcp` → custom agent → `/policy`
-- Khi lệnh vắng mặt: `/status` → check plan tại `github.com/settings/copilot` → gõ `/` xem list thực tế
-
-> Mẹo 1 dòng: _mở Quick Chat hỏi nhanh không rời editor — gắn scope trước, review diff sau, đừng bao giờ Accept mù._
+> Mẹo 1 dòng: _gắn scope trước (`#file`/`@workspace`), review diff sau, đừng bao giờ Accept mù._

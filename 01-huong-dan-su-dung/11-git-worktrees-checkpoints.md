@@ -17,6 +17,18 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (đọc 2 phút là hiểu hết bài)
+
+| Thuật ngữ | Hiểu nôm na (1 câu) | Analogie đời thường | Ví dụ kỹ thuật thật | Verify (gõ để kiểm chứng) |
+|---|---|---|---|---|
+| **Git worktree** | 1 repo nhưng mở được nhiều thư mục làm việc song song, mỗi thư mục 1 branch riêng. | Như 1 căn nhà (repo) có nhiều phòng (worktree) — mỗi người 1 phòng, không giẫm chân. | `git worktree add ../myrepo-worktrees/feat-login -b feat/login` tạo phòng mới cho branch `feat/login`. | `git worktree list` → phải thấy 2+ dòng (main + worktree mới). |
+| **Checkpoint (Timeline restore)** | Nút Undo của VS Code: quay 1 file về bản trước khi agent phá. | Như Ctrl+Z nhưng nhớ được nhiều giờ trước, kể cả đã đóng máy. | Explorer → Timeline → chọn điểm trước khi agent sửa → Restore `src/auth/login.ts`. | `git diff HEAD -- <file>` → trống sau restore (đã về cũ). |
+| **Chat session restore / Fork** | Mở lại đoạn chat cũ để thử hướng khác mà không mất mạch chính. | Như rẽ nhánh trong game: save ở ngã ba, thử đường A, chết thì load lại đi đường B. | Chat view → History (đồng hồ) → Restore/Fork session hôm qua. | Session cũ hiện lại, chat hiện tại vẫn còn nguyên. |
+| **Branch `copilot/*`** | Branch do coding agent trên cloud tự tạo, bạn chỉ review không push tay. | Như robot thuê ngoài có phòng riêng — bạn kiểm hàng ở cửa, không vào phòng nó sửa. | `git branch -r \| grep "copilot/"` thấy `origin/copilot/issue-123-x`. | `gh pr list --author "app/copilot"` → thấy PR draft của agent. |
+| **Git restore (rewind thật)** | Xóa sửa đổi sai, quay code về bản sạch rồi chat mới từ đầu. | Như lật bàn cờ khi đánh sai 10 nước — xếp lại đánh ván mới nhanh hơn cố gỡ. | `git restore src/auth/login.ts` + mở chat mới sạch. | `git diff --stat` → gọn lại (không còn 10 files lan man). |
+
+---
+
 ## 1. Vì sao worktrees + checkpoints? (why)
 
 2 vấn đề song song của agent work:
@@ -32,17 +44,51 @@ Vấn đề 2 — Đi sai đường: agent sửa 15 turns vẫn sai, càng sửa
 Git là source of truth cuối (commit/PR), checkpoints là undo local nhanh,
 worktrees là cách ly không gian. 3 lớp phối hợp (không thay nhau).
 
+### 1.1. Sơ đồ luồng (nhìn 30 giây hiểu)
+
+```mermaid
+flowchart TD
+    A[Task mới tới] --> B{Task song song<br/>với task khác?}
+    B -->|Có| C[Tạo worktree + branch riêng]
+    B -->|Không| D[Chat trong repo chính]
+    C --> E[Agent code trong worktree]
+    D --> E
+    E --> F{Agent đi sai<br/>2 lần?}
+    F -->|Sai nhẹ 1-2 files| G[Timeline Restore 1 file]
+    F -->|Nát 10+ turns| H[git restore + new chat sạch]
+    F -->|Muốn thử hướng khác| I[Fork chat session]
+    F -->|Đúng| J[Review diff -> commit -> PR -> merge]
+    G --> E
+    H --> E
+    I --> E
+    J --> K[Dọn worktree + xóa branch]
+```
+
+Giải thích từng bước (người mới đọc ở đây là đủ):
+
+1. **A → B:** Mọi task bắt đầu bằng câu hỏi "có ai đang sửa cùng repo không?" — có là worktree ngay, đừng tiếc 30 giây.
+2. **B → C:** `git worktree add ../repo-worktrees/ten -b feat/ten` — mỗi session 1 phòng riêng, branch riêng.
+3. **C/D → E:** Mở VS Code window riêng cho từng worktree — 1 window = 1 branch, nhìn title biết đang ở đâu.
+4. **E → F:** Sau mỗi 2 lần agent fix vẫn fail cùng lỗi → dừng, không argue turn 3.
+5. **F → G:** Sai 1–2 files → Timeline Restore đúng file đó (rẻ nhất, giữ chat).
+6. **F → H:** Nát 10+ turns / lan 10 files → `git restore` + new chat sạch (rewind thật).
+7. **F → I:** Muốn thử hướng B mà giữ mạch A → Fork chat, không mất cái đang đúng 50%.
+8. **F → J:** Đúng → `git diff --stat` gọn → commit → push → PR → merge.
+9. **J → K:** Merge xong xóa worktree + branch ngay — worktree tồn tại sau merge là nợ.
+
+> ✅ **Kỳ vọng thấy gì:** sau bước C, `git worktree list` hiện 2+ dòng. Sau bước J, `git diff --stat` ≤5 files đúng scope.
+
 ---
 
 ## 2. VS Code checkpoints: timeline + chat session restore
 
 Copilot không có `/rewind` như Claude Code. Bạn undo bằng 3 cơ chế VS Code:
 
-| Cơ chế | Làm gì | Khi nào |
-|---|---|---|
-| **Timeline** (file history) | Restore 1 file về bản trước đó | Sai 1–2 files, còn lại đúng |
-| **Chat session restore** | Mở lại chat cũ / fork từ điểm cũ | Muốn thử hướng khác giữ mạch chính |
-| **Git restore + new chat** | `git restore/checkout` code + mở chat mới sạch | Agent nát 10+ turns (rewind thật) |
+| Cơ chế | Hiểu nôm na | Ví dụ | Khi nào |
+|---|---|---|---|
+| **Timeline** (file history) | Nút Undo từng file — quay 1 file về hôm qua. | Agent phá `login.ts` → Timeline → Restore bản 9h sáng. | Sai 1–2 files, còn lại đúng |
+| **Chat session restore** | Rẽ nhánh hội thoại — thử đường mới giữ đường cũ. | Fork chat ở turn 5 để thử JWT thay vì session. | Muốn thử hướng khác giữ mạch chính |
+| **Git restore + new chat** | Lật bàn cờ — xóa hết đánh ván mới. | `git restore src/auth/` + chat mới với prompt đủ ý. | Agent nát 10+ turns (rewind thật) |
 
 ```text
 Timeline (nhanh nhất):
@@ -63,6 +109,11 @@ git diff HEAD -- <file>              # agent đã sửa gì chưa commit?
 git diff --stat                      # scope có phình không? (>5 files khi chỉ cần 2 → lan)
 git log --oneline -5 -- <file>       # lịch sử file (điểm restore nào an toàn?)
 ```
+
+> ✅ **Kỳ vọng thấy gì:**
+> - `git diff HEAD -- src/auth/login.ts` hiện đỏ/xanh từng dòng agent sửa (hoặc trống = chưa sửa gì).
+> - `git diff --stat` ra `2 files changed, 30 insertions(+)` — nếu ra `10 files changed` là agent đang lan scope → rewind.
+> - `git log --oneline -5` ra 5 dòng hash + message gần nhất của file đó.
 
 ---
 
@@ -103,6 +154,8 @@ git worktree remove ../myrepo-worktrees/feat-login        # worktree sạch
 git worktree remove --force ../myrepo-worktrees/feat-login # có changes chưa commit (cẩn thận!)
 git worktree prune    # dọn metadata worktree đã xóa tay
 ```
+
+> ✅ **Kỳ vọng thấy gì:** `git worktree list` in 2–3 dòng đường dẫn + branch + commit, ví dụ `/path/myrepo-worktrees/feat-login  abc1234 [feat/login]`. Lệnh `remove` xong chạy `list` lại → mất dòng đó.
 
 ### 3.2. Vì sao quy ước folder/branch? (why)
 
@@ -247,15 +300,21 @@ Quyết định: KHÔNG rewind — sửa trực tiếp (Edit 1 dòng) hoặc b�
 
 ### Bảng quyết định 30 giây
 
-| Tình huống | Rewind? | Bằng gì? |
-|---|---|---|
-| Cùng lỗi fail 2–3 lần | Có | `git restore` + new chat (scenario 1) |
-| Lan scope, diff phình | Có | Restore files ngoài scope + chat mới hẹp |
-| Hiểu nhầm yêu cầu từ đầu | Có | Restore hết + viết lại prompt đủ |
-| Sai 1 dòng, còn lại đúng | Không | Edit trực tiếp / Timeline 1 file |
-| Muốn thử hướng khác song song | Không (dùng worktree mới) | Worktree + branch mới, giữ mạch chính |
-| Task đã commit PR rồi | Không (dùng git/PR) | `git revert` / PR mới — checkpoints là local |
-| Coding agent đi sai trên cloud | Không (dùng PR flow) | Comment redirect / close PR + delete `copilot/*` |
+| Tình huống | Hiểu nôm na | Ví dụ | Rewind? | Bằng gì? |
+|---|---|---|---|---|
+| Cùng lỗi fail 2–3 lần | Cãi hoài 1 lỗi không xong. | Test login đỏ 3 lần cùng `TypeError normalize`. | Có | `git restore` + new chat (scenario 1) |
+| Lan scope, diff phình | Nhờ sửa 2 files, agent đụng 10 files. | `git diff --stat` hiện `auth/` + `cart/` + `legacy/`. | Có | Restore files ngoài scope + chat mới hẹp |
+| Hiểu nhầm yêu cầu từ đầu | Prompt thiếu ý, agent làm đúng chữ sai ý. | Bảo "thêm refund" nhưng quên nói giới hạn 30 ngày. | Có | Restore hết + viết lại prompt đủ |
+| Sai 1 dòng, còn lại đúng | 9/10 đúng, sai 1 tên cột. | Sai `user_id` thành `users_id`. | Không | Edit trực tiếp / Timeline 1 file |
+| Muốn thử hướng khác song song | Giữ A đang đúng 50%, thử B. | A dùng JWT, muốn thử B dùng session. | Không (dùng worktree mới) | Worktree + branch mới, giữ mạch chính |
+| Task đã commit PR rồi | Đã push lên GitHub rồi. | PR #45 đã review 2 người. | Không (dùng git/PR) | `git revert` / PR mới — checkpoints là local |
+| Coding agent đi sai trên cloud | Robot cloud làm sai hướng. | Branch `copilot/issue-123` implement sai spec. | Không (dùng PR flow) | Comment redirect / close PR + delete `copilot/*` |
+
+### Hiểu nhầm thường gặp (đừng vấp)
+
+- **Hiểu nhầm:** "Worktree là clone mới tốn disk gấp đôi." → **Thật ra:** worktree chia sẻ `.git` objects, chỉ tốn thêm working files (nhẹ hơn clone 5–10x). Verify: `du -sh ../myrepo-worktrees/feat-x` so với `git clone` mới.
+- **Hiểu nhầm:** "Checkpoint = commit." → **Thật ra:** checkpoint chỉ ở máy bạn, mất khi xóa IDE cache; muốn bền phải `git commit`. Verify: restore xong `git log` không có commit mới nào.
+- **Hiểu nhầm:** "Restore xong chat cũng quay lại." → **Thật ra:** Timeline chỉ quay code, chat giữ nguyên — muốn quay cả chat phải Fork session cũ.
 
 ---
 

@@ -44,8 +44,9 @@ Quy tắc vàng (nhớ 4 câu này là đủ 80% sức mạnh):
 - Docs gốc: https://docs.github.com/copilot — VS Code Copilot: https://code.visualstudio.com/docs/copilot
 - Chú ý: model picker GPT-5/Claude/Gemini/o-series, premium requests, coding agent gán issue.
 
-## Cách dùng repo này
+## Cách dùng repo này (đọc 3 phút rồi hãy học)
 
-- Đọc theo thứ tự file `00-*` → `NN-*` trong mỗi folder (đã đánh số).
-- Mọi code block đều copy-paste được. Template trong `templates/` dùng được ngay.
+- Đọc theo thứ tự file `00-*` → `NN-*` trong mỗi folder (đã đánh số). Mỗi bài FAQ trong `03-*` đều theo cấu trúc cố định: **Hỏi ngắn gọn → Trả lời 1 câu → Giải thích chi tiết + ví dụ → Làm thế nào (steps copy-paste) → Nếu vẫn lỗi thì...** — bận thì chỉ đọc "Trả lời 1 câu", rảnh thì làm theo steps.
+- Mọi code block đều copy-paste được. Template trong `templates/` dùng được ngay (copy `.github/` + `.vscode/` sang repo thật, sửa stack/lệnh/glob cho khớp).
 - Gõ `/` trong Copilot Chat để xem slash commands khả dụng, `@` để xem participants ở môi trường của bạn.
+- Kẹt ở đâu tra đó: `CHEATSHEET.md` (1 trang, lệnh nào cũng có ví dụ mini) → `01-huong-dan-su-dung/commands/` (46 lệnh, mỗi lệnh 1 folder chi tiết) → `03-cau-hoi-thuong-gap/` (10 bài FAQ, mỗi bài có mermaid + mục "Vẫn lỗi thì sao?").

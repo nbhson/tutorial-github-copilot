@@ -19,6 +19,37 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Context hygiene** | Giữ chat sạch để model không loạn vì rác. | Như dọn bàn làm việc: bàn gọn thì tìm đồ 5 giây, bàn rác thì mất 30 phút. | 1 task = 1 chat; attachments ≤5 files; paste log vào file không paste vào chat chính. | Chat >50 turns mà vẫn trả đúng rule instructions = sạch; quên rule = bẩn. |
+| **Attention dilution** | Chat đầy rác thì rule quan trọng bị chìm. | Như shouting trong chợ ồn: nói nhỏ (rule) không ai nghe. | Instructions "không đụng generated/" bị quên khi chat 100K tokens. | New chat gọn → Copilot nhớ lại rule ngay. |
+| **`#file / #selection / @workspace`** | Cách gắn đồ vào chat: 1 file / 1 đoạn / cả repo. | Như đưa sách: 1 trang (#selection), 1 cuốn (#file), cả thư viện (@workspace). | Fix 1 hàm → `#selection`; explore repo lạ → `@workspace` 1 lần rồi ghi file. | `#selection` tốn ít tokens nhất, `@workspace` đắt nhất. |
+| **Knowledge base** | Tủ docs team để hỏi spec không cần paste. | Như sổ tay thay vì photo 200 trang mỗi lần hỏi. | `@payments-docs refund quá 30 ngày?` kèm link nguồn. | Không paste spec mà vẫn trả đúng + có link file. |
+| **Checkpoint / Timeline** | Nút Undo quay về trước khi sai. | Như save game: chết thì load lại, không chơi lại từ đầu. | Timeline Restore `login.ts` về trước turn agent phá. | `git diff --stat` gọn lại sau restore. |
+
+```mermaid
+flowchart TD
+    A[Task mới] --> B{Đúng task cũ?}
+    B -->|Khác task| C[New chat sạch]
+    B -->|Cùng task| D{Scope rộng?}
+    D -->|1 hàm/file| E[#selection + #file hẹp]
+    D -->|Cả module| F[@workspace 1 lần + ghi file]
+    E --> G[Chat chính gọn]
+    F --> G
+    G --> H{Sai hướng 2 lần?}
+    H -->|Có| I[Restore checkpoint + re-prompt]
+    H -->|Không| J[Done -> save decisions -> New chat]
+    I --> G
+```
+
+Giải thích từng bước: 1) Khác task là new chat ngay (đừng tiếc). 2) Scope hẹp thì `#selection`, rộng thì `@workspace` 1 lần rồi ghi `plan.md`. 3) Chat chính chỉ nhận summary 5 bullet, không nhận log 1000 dòng. 4) Sai 2 lần thì restore, không cãi turn 3. 5) Xong thì save `docs/decisions.md` rồi mới reset.
+
+> ✅ **Kỳ vọng thấy gì:** sau new chat + gắn 3–5 files, chat trả đúng rule instructions ngay turn 1 (không hỏi lại files). `git diff --stat` gọn đúng scope.
+
+---
+
 ## 1. Vì sao context hygiene quyết định 80%?
 
 Bạn gặp cảnh này chưa:
@@ -39,8 +70,8 @@ Ba con số bạn cần ghim:
 
 | Con số | Ý nghĩa | Hành động |
 |---|---|---|
-| `1 task` | 1 chat 1 việc | Xong → new chat ngay |
-| `3–5 files` | Ngưỡng attachments gọn | Quá thì thu hẹp hoặc tách chat |
+| `1 task` | 1 việc 1 chat. | Bug giỏ hàng 1 chat, docs API chat khác. | 1 chat 1 việc | Xong → new chat ngay |
+| `3–5 files` | Bàn chỉ để 5 tờ giấy. | Fix login chỉ gắn `login.ts + login.test.ts`. | Ngưỡng attachments gọn | Quá thì thu hẹp hoặc tách chat |
 | `10 phút` | Chu kỳ kiểm tra chat | Lan man → reset thay vì cãi |
 ---
 
@@ -206,12 +237,12 @@ Lợi ích:
 
 ### 4.2. Khi nào dùng @workspace?
 
-| Tình huống | Dùng gì | Vì sao |
-|---|---|---|
-| Fix 1 hàm cụ thể | `#selection` + `#file` test | Rẻ nhất, chính xác nhất |
-| Hỏi flow 1 module | `#file` 3–5 files + prompt hẹp | Đủ context, không tràn |
-| Explore repo lạ | `@workspace` 1 lần + ghi ra plan.md | Chỉ đắt 1 lần, sau đó new chat |
-| Hỏi kiến trúc tổng | Knowledge base / docs | Không cần quét code raw |
+| Tình huống | Hiểu nôm na | Ví dụ | Dùng gì | Vì sao |
+|---|---|---|---|---|
+| Fix 1 hàm cụ thể | Đưa đúng 1 trang sách. | Fix `validate()` email có dấu. | `#selection` + `#file` test | Rẻ nhất, chính xác nhất |
+| Hỏi flow 1 module | Đưa 1 chương sách. | Flow refund trong `src/payments/*.ts`. | `#file` 3–5 files + prompt hẹp | Đủ context, không tràn |
+| Explore repo lạ | Nhờ thủ thư tìm 1 lần rồi ghi giấy. | Repo mới 500 files, chưa biết gì. | `@workspace` 1 lần + ghi ra plan.md | Chỉ đắt 1 lần, sau đó new chat |
+| Hỏi kiến trúc tổng | Hỏi sổ tay, không lục kệ. | Quy ước refund 30 ngày ở đâu? | Knowledge base / docs | Không cần quét code raw |
 
 > Mẹo: explore bằng `@workspace` xong → **ghi findings ra file → new chat** chỉ đọc file đó.
 > Đừng mang chat explore nặng đi implement tiếp.
@@ -398,7 +429,7 @@ Kết quả: 3 chats gọn (<50% rác mỗi cái) thay vì 1 chat 3 tiếng đ�
 
 ---
 
-## 10. Pitfalls + cách fix
+## 10. Pitfalls + cách fix (Hiểu nhầm thường gặp)
 
 | Pitfall | Vì sao dính | Fix |
 |---|---|---|
@@ -412,6 +443,27 @@ Kết quả: 3 chats gọn (<50% rác mỗi cái) thay vì 1 chat 3 tiếng đ�
 | New chat xong tiếc decisions | Quên save | Tóm tắt ra docs/decisions.md trước khi reset |
 | Tin "should work" | Mệt, muốn xong | Đòi log/diff/test xanh (xem Tips 04) |
 | Gắn ảnh chụp code thay vì file | Lười copy path | Gắn #file để Copilot đọc text thật |
+
+### Before / After — prompt dở vs tốt (kết quả khác nhau)
+
+**Before (prompt dở — chat bẩn):**
+
+```text
+@workspace fix login giúp tôi
+```
+
+> Kết quả dở: Copilot đọc 40 files, sửa 3 chỗ không liên quan, quên rule "không đụng generated/", test đỏ 2 chỗ mới. Bạn mất 45 phút restore + 5 turns cãi. Tokens ~80K/turn vì gánh cả repo.
+
+**After (prompt tốt — chat sạch):**
+
+```text
+#selection Fix hàm validate() login email có dấu bị 500.
+Chỉ sửa trong file này, giữ nguyên export.
+Trước khi sửa, liệt kê 3 test cases trong src/auth/__tests__/login.test.ts phải giữ xanh.
+```
+
+> Kết quả tốt: Copilot chỉ đọc 2 files, fix 5 dòng + 1 regression test, dán log `npm test -- auth` xanh. Tổng 2 turns, ~5K tokens/turn. Verify: `git diff --stat` chỉ 2 files.
+> ✅ **Kỳ vọng thấy gì:** After cho diff gọn + log xanh ngay; Before cho diff phình + phải restore.
 
 ---
 

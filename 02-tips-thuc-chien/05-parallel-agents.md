@@ -18,6 +18,35 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Fan-out / Fan-in** | Chia việc ra nhiều nhánh rồi gộp lại. | Như 3 người cùng nấu 3 món rồi dọn 1 mâm. | 3 chats research `auth/payments/cart` → chat thứ 4 gộp thành plan. | Chat chính chỉ nhận 3 files summary, không nhận log dài. |
+| **Multi-chat** | Mở nhiều chat cùng lúc, mỗi chat 1 việc. | Như mở 3 cửa sổ chat với 3 trợ lý khác nhau. | Chat A `auth`, B `payments`, C `cart` chạy song song 20 phút. | 30 phút xong 3 modules (tuần tự mất 60 phút). |
+| **Worktree** | Phòng riêng cho mỗi nhánh code. | Như mỗi đầu bếp 1 bếp riêng — không tranh dao. | `git worktree add ../proj-auth feature/auth-fix` + `code ../proj-auth`. | 2 VS Code windows, `git diff` mỗi bên chỉ scope mình. |
+| **Output contract** | Quy định nhánh chỉ trả gì (3 bullet + evidence). | Như bắt shipper chỉ giao hóa đơn gọn, không chở cả kho. | Mỗi nhánh trả: quyết định 3 bullet + `file:line` + log xanh. | Chat chính không phình (>50% rác là vi phạm). |
+
+```mermaid
+flowchart TD
+    P[Plan duyệt] --> A[Chat A auth]
+    P --> B[Chat B payments]
+    P --> C[Chat C cart]
+    A --> F1[Ghi research-auth.md]
+    B --> F2[Ghi research-payments.md]
+    C --> F3[Ghi research-cart.md]
+    F1 --> G[Chat chính gộp]
+    F2 --> G
+    F3 --> G
+    G --> H[Plan 3 phases + verify]
+```
+
+Giải thích: 1) Chỉ fan-out việc độc lập + khác files. 2) Mỗi nhánh ghi ra file riêng (không dump vào chat chính). 3) Chat chính gộp + duyệt plan. 4) Merge tuần tự + full test sau mỗi merge. Cùng file thì cấm song song.
+
+> ✅ **Kỳ vọng thấy gì:** 3 files `research-*.md` mỗi file ≤30 dòng; chat gộp ra table `Module/Flow/Risks` + plan duyệt.
+
+---
+
 ## 1. Vì sao phải song song?
 
 Làm tuần tự với Copilot rất phí:
@@ -265,17 +294,35 @@ Nếu có 2 issues độc lập: phút 30 assign 2 Coding Agent sessions, đi u�
 
 ## 8. Bảng tra nhanh: chọn kiểu nào?
 
-| Tình huống | Kiểu đúng | Số lượng tối đa gợi ý |
-|---|---|---|
-| Research 2–4 modules độc lập | Multi-chat | 3 chats + 1 chat gộp |
-| Thử 2 hướng fix | 2 chats plan | 2 chats, chat chính chọn 1 |
-| 2–3 issues độc lập, khác scope | Multi Coding Agent | 2–3 sessions, scope không giao |
-| Code local nặng, sợ conflict | Worktrees | 2 worktrees, merge tuần tự |
-| 1 task cần plan/test/review | Custom agents | 3 vai: Planner/Tester/Reviewer |
-| Hỏi phụ khi đang implement | Chat phụ Ask | 1 chat phụ, không block chính |
-| Cùng 1 file, cùng hàm | KHÔNG song song | Làm tuần tự, 1 người/agent 1 lúc |
+| Tình huống | Hiểu nôm na | Ví dụ | Kiểu đúng | Số lượng tối đa gợi ý |
+|---|---|---|---|---|
+| Research 2–4 modules độc lập | Trinh sát 3 nhà cùng lúc. | `auth + payments + cart`. | Multi-chat | 3 chats + 1 chat gộp |
+| Thử 2 hướng fix | Thử 2 đường, giữ đường thắng. | If-guard vs tách module voucher. | 2 chats plan | 2 chats, chat chính chọn 1 |
+| 2–3 issues độc lập, khác scope | Giao 2 khoán cho 2 thợ khác nhà. | #101 `auth/**` + #102 `cart/**`. | Multi Coding Agent | 2–3 sessions, scope không giao |
+| Code local nặng, sợ conflict | Mỗi thợ 1 bếp riêng. | 2 Agents local `proj-auth/proj-cart`. | Worktrees | 2 worktrees, merge tuần tự |
+| 1 task cần plan/test/review | 1 việc 3 vai: vẽ + xây + kiểm. | Feature payments cần plan/test/review. | Custom agents | 3 vai: Planner/Tester/Reviewer |
+| Hỏi phụ khi đang implement | Hỏi chen không ngắt mạch chính. | Đang code hỏi `retryWithBackoff` là gì. | Chat phụ Ask | 1 chat phụ, không block chính |
+| Cùng 1 file, cùng hàm | 2 thợ giành 1 dao. | 2 agents cùng sửa `login.ts`. | KHÔNG song song | Làm tuần tự, 1 người/agent 1 lúc |
 
 > Quy tắc ngón tay: **độc lập + khác files → song song. Phụ thuộc hoặc cùng file → tuần tự.**
+
+### Before / After — prompt dở vs tốt
+
+**Before (song song ẩu — cùng file):**
+```text
+Chat A: "Fix login giúp tôi"
+Chat B: "Thêm tính năng login giúp tôi"  # cùng file login.ts!
+```
+> Kết quả: 2 PRs conflict, mất code, `git merge` báo conflict 20 chỗ. Không scope, không output contract.
+
+**After (song song chuẩn — khác scope + gộp):**
+```text
+Chat A: "@workspace Chỉ trong src/auth/*.ts: flow login 5 bullet + file:line. Không sửa. Ghi ra docs/research-auth.md"
+Chat B: "@workspace Chỉ trong src/payments/*.ts: flow refund 5 bullet + file:line. Không sửa. Ghi ra docs/research-payments.md"
+Chat chính: "Đọc 2 files research-*.md, gộp table Module/Flow/Risks + plan 2 phases, chờ duyệt."
+```
+> Kết quả: 20 phút xong cả 2 (tuần tự 40 phút), chat chính gọn, có plan duyệt. Verify: 2 files research + 1 plan.
+> ✅ **Kỳ vọng thấy gì:** After có 2 files gọn + plan; Before có 2 PRs conflict.
 
 ---
 

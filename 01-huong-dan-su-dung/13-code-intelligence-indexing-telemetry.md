@@ -20,6 +20,19 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Codebase indexing** | Đánh mục lục cả repo để Copilot tìm đúng 5–10 đoạn liên quan thay vì đọc bừa. | Như mục lục + index cuối sách: hỏi là lật đúng trang, không đọc cả cuốn. | Repo 500 files → `@workspace flow POST /login?` trả đúng `auth.ts + session.ts + migration`. | Hỏi `@workspace` 1 flow thật → liệt kê ≤10 files kèm `file:dòng` đúng. |
+| **`@workspace`** | Câu hỏi gửi cho cả repo (nhờ index tìm giúp). | Như hỏi thủ thư "sách nào nói về refund?" thay vì tự lục kệ. | `@workspace trong apps/api auth dùng session hay JWT?` | Trả về files + dòng trích dẫn thật, không bịa. |
+| **Semantic search** | Tìm theo ý nghĩa, không theo chữ khớp 100%. | Như tìm "chỗ nuốt lỗi" ra cả `catch{}`, `catch(log)`, `catch{}` dù chữ khác nhau. | `@workspace tìm mọi chỗ catch mà chỉ console.log rồi nuốt` | So với `grep catch` → ít hơn 5–10x mà trúng hơn. |
+| **Knowledge base** | Tủ docs team (ADR, runbook) cho Copilot trích quy ước, không bịa. | Như sổ tay gia đình: code nói "làm gì", sổ nói "vì sao làm thế". | `@workspace theo base backend-conventions, viết API mới cần gì?` | Câu trả lời kèm link file docs nguồn. |
+| **LSP** | Thầy kiểm chính tả types/symbols live trong IDE. | Như gia sư đứng cạnh: viết sai type là gạch đỏ ngay. | F12 jump định nghĩa, F2 rename cả repo, Problems panel báo lỗi. | Cố chèn sai type → Problems đỏ đúng dòng trong 5 giây. |
+| **Audit log / Usage dashboard** | Camera + hóa đơn: ai làm gì, tiền (quota) đi đâu. | Như sao kê ngân hàng: top user/model nào ngốn premium requests. | Filter `action:copilot_policy`, metric `Premium requests / user`. | Chỉ ra được top 1 model ngốn + actor đổi policy gần nhất. |
+
+---
+
 ## 1. Vì sao index + telemetry? (why)
 
 Copilot không index mà chỉ đọc files bạn mở thì nó mù: hỏi "auth flow chạy qua mấy
@@ -42,6 +55,33 @@ Có telemetry:    dashboard: agent mode × Claude Sonnet = 70% premium requests 
 > Quy tắc: **repo > 50 files mà chưa bật indexing là tự handicap. Quota hết mà
 > chưa nhìn dashboard là đoán mò.**
 
+### 1.1. Sơ đồ `@workspace` retrieve (mermaid)
+
+```mermaid
+sequenceDiagram
+    participant U as Bạn
+    participant C as Chat @workspace
+    participant I as Index (vector + keyword)
+    participant R as Repo files
+    U->>C: Hỏi flow POST /login?
+    C->>I: Retrieve top 10 chunks liên quan
+    I-->>R: Bỏ qua excluded/binary/lockfiles
+    I->>C: Trả auth.ts + session.ts + migration
+    C->>U: Trả lời kèm file:dòng
+    U->>U: F12/LSP verify def thật
+```
+
+Giải thích từng bước:
+
+1. **Bạn hỏi:** luôn kèm scope hẹp (`trong apps/api`, `bỏ *.test.ts`) để giảm nhiễu 5x.
+2. **Chat retrieve:** không đọc cả repo, chỉ xin index top-K chunks (embeddings + keyword hybrid).
+3. **Index lọc:** files trong content exclusion, binary, `dist/*.min.js` bị bỏ qua — hỏi `.env` phải ra "excluded".
+4. **Trả chunks:** kỳ vọng ≤10 files, mỗi file 1 dòng vì sao liên quan — nhiều hơn là prompt quá rộng.
+5. **Trả lời + verify:** Copilot trả `file:dòng`, bạn F12 jump + Problems panel chéo — tin retrieve nhưng verify bằng LSP.
+6. **Trễ index:** vừa push <5 phút thì index cũ → hỏi lại sau hoặc `#file` file mới trực tiếp.
+
+> ✅ **Kỳ vọng thấy gì:** hỏi mẫu mục 4.1 → trả đúng graph 3 lớp (handler → domain → db) trong 10–30 giây, không chung chung.
+
 ---
 
 ## 2. `@workspace` hoạt động thế nào
@@ -54,16 +94,23 @@ Có telemetry:    dashboard: agent mode × Claude Sonnet = 70% premium requests 
   thêm knowledge bases (docs ngoài code).
 - **Khi nào `@workspace` thắng `#file`?**
 
-| Nhu cầu | `#file` / mở tay | `@workspace` |
-|---|---|---|
-| Hỏi 1 file cụ thể | ✓ nhanh, chính xác | Thừa (retrieve nhiễu) |
-| Hàm này ai gọi, flow xuyên mấy lớp? | Mở tay 10 files | ✓ retrieve theo graph thật |
-| Tìm pattern lặp (error handling, logging) | Grep tay từng chỗ | ✓ semantic search cả repo |
-| Repo JS thuần nhỏ (< 20 files) | ✓ đủ | Không cần index cũng được |
-| Monorepo 500+ files | Mở tay là chết | ✓ bắt buộc index |
+| Nhu cầu | Hiểu nôm na | Ví dụ | `#file` / mở tay | `@workspace` |
+|---|---|---|---|---|
+| Hỏi 1 file cụ thể | Hỏi 1 trang sách. | `normalizeEmail` ở `login.ts:42` làm gì? | ✓ nhanh, chính xác | Thừa (retrieve nhiễu) |
+| Hàm này ai gọi, flow xuyên mấy lớp? | Hỏi cả đường đi qua 3 nhà. | `POST /login` qua handler → domain → db? | Mở tay 10 files | ✓ retrieve theo graph thật |
+| Tìm pattern lặp (error handling, logging) | Tìm mọi chỗ làm ẩu giống nhau. | Mọi `catch` chỉ `console.log` rồi nuốt. | Grep tay từng chỗ | ✓ semantic search cả repo |
+| Repo JS thuần nhỏ (< 20 files) | Sách mỏng đọc hết cũng được. | Repo demo 15 files. | ✓ đủ | Không cần index cũng được |
+| Monorepo 500+ files | Thư viện lớn không mục lục là chết. | `apps/api + apps/web` 500 files. | Mở tay là chết | ✓ bắt buộc index |
+
+> ✅ **Kỳ vọng thấy gì:** hỏi flow thật → `@workspace` trả ≤10 files kèm `file:dòng`. Hỏi `.env` → trả `excluded/không thấy` (nếu đọc được key thật là exclusion hỏng).
 
 - **Giới hạn bạn phải biết**: index có độ trễ (push xong vài phút mới có), files
   trong content exclusion KHÔNG được index (mục 3.3), binary/lockfiles bị bỏ qua.
+
+### Hiểu nhầm thường gặp (mục 2)
+
+- **Hiểu nhầm:** "`@workspace` đọc cả repo nên hỏi càng rộng càng hay." → **Thật ra:** nó chỉ lấy top-K chunks — hỏi "giải thích cả repo" là nhận đáp án thiếu. Chia nhỏ mỗi câu 1 flow.
+- **Hiểu nhầm:** "Index là realtime." → **Thật ra:** push xong chờ ~5 phút. Verify: `git log --oneline -3` xem giờ push, hỏi file mới bằng `#file` nếu chưa kịp.
 
 ---
 

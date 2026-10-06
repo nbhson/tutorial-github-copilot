@@ -20,6 +20,18 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Model picker** | Nút chọn "bộ não" cho từng chat (rẻ/đắt khác nhau). | Như chọn xe: xe đạp (mini) đi chợ, xe tải (flagship) chở nhà. | Chat view → dropdown góc dưới → `GPT-5.x / Claude Sonnet / Gemini Pro / mini`. | Đổi model → chat mới hiện tên model mới trên header. |
+| **Premium request multiplier** | Hệ số nhân tiền: model đắt tốn gấp nhiều lần model rẻ. | Như giá điện giờ cao điểm ×3 — bật điều hòa flagship là hóa đơn bốc. | Mini ×0–0.5, Mid ×1, Flagship ×2–3, Reasoning ×3–5 (khung, tra billing exact). | Billing → Copilot usage xem % đã dùng + tốc độ hết tháng. |
+| **Flagship (GPT-5.x / Opus-tier)** | Bộ não mạnh nhất, hợp việc khó mơ hồ. | Như giáo sư: hỏi khó mới cần, hỏi đường thì phí. | Thiết kế migrate auth 5 files, debug stuck 1h. | Task khó: flagship 1 lần đúng; mini thử 3 lần vẫn sai. |
+| **Reasoning (o-series)** | Bộ não nghĩ lâu, hợp toán/logic/race khó. | Như ngồi thiền 30 phút để giải toán khó — đừng nhờ mua rau. | Tối ưu query, race condition, thuật toán. | Latency cao rõ (chờ lâu) nhưng chain-of-thought dài. |
+| **BYOK / Model gating** | Công ty tự mang chìa khóa + khóa tủ: ai được dùng model nào. | Như bố giữ két: con nhỏ chỉ lấy ngăn mini, anh lớn mới mở ngăn flagship. | Interns chỉ mini+mid, seniors mới flagship (Org Settings → Policies). | Mở picker → model bị cấm phải không hiện. |
+
+---
+
 ## 1. Vì sao chọn model? (why)
 
 Model mạnh nhất không phải lúc nào cũng là model đúng. Mỗi task có 3 chiều cần
@@ -39,6 +51,38 @@ Task rõ ràng, lặp lại, khối lượng lớn → model rẻ + nhanh (mini/
 Không bao giờ default model đắt nhất — chỉ gọi đích danh khi cần reasoning sâu.
 ```
 
+### 1.1. Sơ đồ route model 30 giây (mermaid)
+
+```mermaid
+flowchart TD
+    A[Task mới] --> B{Khó + mơ hồ + hậu quả lớn?}
+    B -->|Cả 3 Có| C[Flagship GPT-5.x / Opus]
+    B -->|Không| D{Cần context khổng lồ?}
+    D -->|Có, monorepo| E[Gemini Pro long-context]
+    D -->|Không| F{Cần văn tinh tế / review wording?}
+    F -->|Có| G[Claude Sonnet-tier]
+    F -->|Không| H{Toán/logic/race khó?}
+    H -->|Có| I[o-series reasoning]
+    H -->|Không| J[Mini/Flash-tier rẻ]
+    C --> K{Stuck >30p?}
+    J --> K
+    K -->|Vẫn stuck| L[Leo 1 nấc: mini→mid→flagship→reasoning]
+    K -->|Xong| M[Ghi log: task X tier nào đủ]
+```
+
+Giải thích từng bước:
+
+1. **A → B:** Checklist 3✓ mục 2.2 (nhiều steps + đã thử rẻ mà fail + sai là đau) — đủ 3 mới flagship.
+2. **B → C:** Flagship cho thiết kế/refactor multi-file, migration prod, debug stuck.
+3. **D → E:** Monorepo hỏi rộng ("tóm tắt cả package") → Gemini long-context thay vì nhét 20 files vào flagship.
+4. **F → G:** Docs, PR description, review wording bị GPT chê "quá máy" → đổi Claude.
+5. **H → I:** Thuật toán/query/race cần thinking dài → o-series, chấp nhận chờ lâu.
+6. **Mặc định J:** Autocomplete, rename, CRUD, test, explore 5 hướng song song → mini rẻ nhất.
+7. **K → L:** Stuck thì leo thang, không nhảy cóc mini→reasoning (đốt quota).
+8. **M:** Ghi 1 dòng team wiki để lần sau route đúng ngay.
+
+> ✅ **Kỳ vọng thấy gì:** đổi model ở picker → header chat hiện tên mới. Billing usage sau 1 tuần cho thấy flagship <30% requests (nếu >50% là routing hỏng).
+
 - Quản lý: model picker đổi mỗi chat; org policy gate models cho team (mục 5);
   cost thực tế: usage dashboard (bài 13) sau mỗi tuần.
 
@@ -51,13 +95,13 @@ Không bao giờ default model đắt nhất — chỉ gọi đích danh khi c�
 
 ### 2.1. Bảng tổng (vai trò, không phải giá tuyệt đối)
 
-| Nhóm | Ví dụ trên picker | Vai trò |
-|---|---|---|
-| **GPT-5.x (flagship)** | GPT-5.x, GPT-5.x-codex | Suy luận sâu, agent multi-step, refactor lớn |
-| **o-series (reasoning)** | o1/o3/o4-tier | Toán/logic khó, debug stuck, cần chain-of-thought dài |
-| **Claude trên Copilot** | Claude Sonnet/Opus-tier | Viết + giải thích code dài, docs, review tinh tế |
-| **Gemini trên Copilot** | Gemini Pro/Flash-tier | Context rất dài, retrieve monorepo, task đa ngữ |
-| **Mini/Flash-tier (rẻ)** | GPT-mini, Flash, Haiku-tier | Việc hàng ngày: complete, test, CRUD, explore |
+| Nhóm | Hiểu nôm na | Ví dụ trên picker | Ví dụ task nên dùng | Vai trò |
+|---|---|---|---|---|
+| **GPT-5.x (flagship)** | Giáo sư toàn diện — khó gì cũng nghĩ được. | GPT-5.x, GPT-5.x-codex | Plan migrate auth 5 files; debug stuck 1h. | Suy luận sâu, agent multi-step, refactor lớn |
+| **o-series (reasoning)** | Nhà toán học trầm ngâm — chậm mà sâu. | o1/o3/o4-tier | Tối ưu query N+1, race condition retry. | Toán/logic khó, debug stuck, cần chain-of-thought dài |
+| **Claude trên Copilot** | Nhà văn tinh tế — viết hay, review khéo. | Claude Sonnet/Opus-tier | Viết docs, PR description, review wording giữ style. | Viết + giải thích code dài, docs, review tinh tế |
+| **Gemini trên Copilot** | Thủ thư nhớ cả thư viện — context khổng lồ. | Gemini Pro/Flash-tier | Tóm tắt cả `apps/api`, hỏi xuyên monorepo. | Context rất dài, retrieve monorepo, task đa ngữ |
+| **Mini/Flash-tier (rẻ)** | Xe ôm nhanh rẻ — việc nhỏ gọi ngay. | GPT-mini, Flash, Haiku-tier | Autocomplete, rename, CRUD, 5 chats explore song song. | Việc hàng ngày: complete, test, CRUD, explore |
 
 ### 2.2. GPT-5.x — flagship mặc định khi cần depth
 
@@ -148,12 +192,12 @@ Không hiểu multiplier → hết quota tuần 1, 3 tuần còn lại dùng mod
 
 ### 4.2. Bảng multiplier minh họa (khung — tra docs hiện hành)
 
-| Tier | Multiplier minh họa | Nghĩa thực tế |
-|---|---|---|
-| Mini/Flash-tier | ×0 – ×0.5 | Hỏi tẹt ga, tốn ít |
-| Mid-tier (Sonnet/Pro/GPT-4o-class) | ×1 | Chuẩn 1 request = 1 |
-| Flagship (GPT-5.x / Opus-tier) | ×2 – ×3+ | Mỗi câu đắt gấp 2–3 lần |
-| Reasoning (o-series deep) | ×3 – ×5+ | Suy luận dài, đắt nhất |
+| Tier | Hiểu nôm na | Ví dụ model | Multiplier minh họa | Ví dụ task nên dùng | Nghĩa thực tế |
+|---|---|---|---|---|---|
+| Mini/Flash-tier | Trà đá — uống tẹt không xót. | GPT-mini, Flash, Haiku | ×0 – ×0.5 | Sửa typo, rename, explore 5 hướng. | Hỏi tẹt ga, tốn ít |
+| Mid-tier (Sonnet/Pro/GPT-4o-class) | Cơm văn phòng — ngày nào cũng ăn. | Sonnet, GPT-4o-class, Pro | ×1 | Implement theo plan, CRUD, test. | Chuẩn 1 request = 1 |
+| Flagship (GPT-5.x / Opus-tier) | Nhà hàng — ngon mà đắt, tuần 1 lần. | GPT-5.x, Opus-tier | ×2 – ×3+ | Plan kiến trúc, refactor 5 files. | Mỗi câu đắt gấp 2–3 lần |
+| Reasoning (o-series deep) | Tiệc cưới — chỉ khi đại sự. | o-series deep | ×3 – ×5+ | Race condition, thuật toán khó. | Suy luận dài, đắt nhất |
 
 > Số trên là KHUNG minh họa để hiểu cơ chế — tra docs/billing page số exact quý
 > hiện tại. Cơ chế (đắt theo tier + agentic nhân steps) thì không đổi.
@@ -210,18 +254,26 @@ Không hiểu multiplier → hết quota tuần 1, 3 tuần còn lại dùng mod
 
 ## 6. Khi nào dùng model nào (bảng dán tường)
 
-| Task | Model | Vì sao |
-|---|---|---|
-| Thiết kế kiến trúc, plan multi-file | Flagship (GPT-5.x / Opus-tier) | Quyết định đắt nhất → model mạnh |
-| Debug stuck > 30 phút | Flagship → reasoning nếu vẫn stuck | Cần depth, không cần tốc độ |
-| Implement theo plan đã duyệt | Mid-tier | Rõ ràng → vừa đủ + tiết kiệm |
-| Viết test, docs, CRUD | Mini/Mid-tier | Cơ học, khối lượng lớn |
-| Explore codebase, grep, tóm tắt | Mini/Flash-tier | Rộng + nhanh + rẻ |
-| Format, rename, classify | Mini-tier | Flagship làm cũng vậy mà đắt nhiều lần |
-| Context khổng lồ (monorepo) | Gemini-tier (long context) | Cửa sổ context rộng nhất |
-| Giải thích tinh tế, review wording | Claude-tier | Văn + style tốt hơn |
-| Thuật toán/logic khó | o-series reasoning | Thinking dài, đừng vội |
-| Demo live cần nhanh | Mid-tier nhanh | Reasoning chậm làm demo chết |
+| Task | Hiểu nôm na | Ví dụ cụ thể | Model | Vì sao |
+|---|---|---|---|---|
+| Thiết kế kiến trúc, plan multi-file | Vẽ bản đồ trước khi xây nhà. | Plan migrate `auth.ts` 900 dòng → 3 modules. | Flagship (GPT-5.x / Opus-tier) | Quyết định đắt nhất → model mạnh |
+| Debug stuck > 30 phút | Kẹt 1 chỗ 30 phút không ra. | `normalizeEmail` crash email có dấu, thử 3 cách fail. | Flagship → reasoning nếu vẫn stuck | Cần depth, không cần tốc độ |
+| Implement theo plan đã duyệt | Bản đồ có rồi, chỉ việc xây. | Implement step 1–3 của `plan.md` refund. | Mid-tier | Rõ ràng → vừa đủ + tiết kiệm |
+| Viết test, docs, CRUD | Việc tay chân lặp lại. | Viết 10 test CRUD `payments`. | Mini/Mid-tier | Cơ học, khối lượng lớn |
+| Explore codebase, grep, tóm tắt | Đi trinh sát 5 hướng cùng lúc. | 5 chats mini mỗi chat 1 module `auth/db/api`. | Mini/Flash-tier | Rộng + nhanh + rẻ |
+| Format, rename, classify | Dọn nhà, đổi tên nhãn. | Rename `userId` → `user_id` 20 files. | Mini-tier | Flagship làm cũng vậy mà đắt nhiều lần |
+| Context khổng lồ (monorepo) | Đọc cả thư viện 1 lần. | Tóm tắt cả `apps/api` 500 files. | Gemini-tier (long context) | Cửa sổ context rộng nhất |
+| Giải thích tinh tế, review wording | Viết thư xin việc, cần văn hay. | PR description refund + review comments. | Claude-tier | Văn + style tốt hơn |
+| Thuật toán/logic khó | Giải toán Olympic. | Tối ưu query N+1, retry backoff. | o-series reasoning | Thinking dài, đừng vội |
+| Demo live cần nhanh | Diễn sân khấu, không được ấp úng. | Demo sprint review 5 phút. | Mid-tier nhanh | Reasoning chậm làm demo chết |
+
+> ✅ **Kỳ vọng thấy gì:** sau 1 tuần chạy bảng này, billing cho thấy mini/mid chiếm >70% requests, flagship <30% — quota sống hết tháng.
+
+### Hiểu nhầm thường gặp (file 14)
+
+- **Hiểu nhầm:** "Model mạnh nhất là tốt nhất cho mọi task." → **Thật ra:** flagship sửa typo cũng ra chữ y hệt mini mà tốn ×3. Verify: cùng task typo chạy mini vs flagship, so output + thời gian.
+- **Hiểu nhầm:** "Tên model học thuộc 1 lần dùng mãi." → **Thật ra:** tên đổi theo quý. Luôn copy exact từ picker, đừng gõ từ trí nhớ.
+- **Hiểu nhầm:** "Agent + flagship từ đầu cho chắc." → **Thật ra:** đây là combo đốt quota nhanh nhất (50 steps × ×3). Agent mid trước, stuck mới leo.
 
 ---
 

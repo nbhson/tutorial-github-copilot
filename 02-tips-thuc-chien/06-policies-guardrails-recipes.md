@@ -18,6 +18,33 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Guardrail** | Dải phân cách: đi lạc là bị chặn. | Như lan can cầu: buồn ngủ lấn làn vẫn không rơi. | `muse-instructions.md` + pre-commit + branch protection + tool approval. | Cố sửa `generated/` → bị chặn ít nhất 1 lớp. |
+| **Instructions enforcement** | Luật tự áp: Copilot tự đọc mỗi turn. | Như nội quy dán tường: ai vào phòng đều phải đọc. | `NEVER: không sửa generated/, không commit main`. | Hỏi bừa vẫn thấy Copilot né file cấm. |
+| **Pre-commit / Branch protection** | Khóa cửa nhà (local) + khóa cổng khu (GitHub). | Như cửa nhà + bảo vệ khu: qua 2 lớp mới vào được. | `pre-commit` chặn `generated/`; protection đòi PR + CI xanh. | Thử commit sai → hook báo BLOCKED; thử merge đỏ → GitHub chặn. |
+| **Tool/MCP approval** | Hỏi trước khi cho robot dùng dao. | Như dặn con: dùng kéo phải hỏi mẹ. | `Confirm before running commands: ON`, `rm -rf` blocklist. | Agent chạy lệnh lạ → popup hỏi; lệnh allowlist chạy luôn. |
+
+```mermaid
+flowchart TD
+    A[Copilot muốn sửa/chạy] --> L1{L1 Instructions?}
+    L1 -->|Cấm| X1[Chặn bằng lời]
+    L1 -->|Lọt| L2{L2 Local gate?}
+    L2 -->|pre-commit/tool approval| X2[Chặn local]
+    L2 -->|Lọt| L3{L3 CI + protection?}
+    L3 -->|Require checks/review| X3[Chặn merge]
+    L3 -->|Lọt| L4[Review người chốt]
+    L4 --> M[Merge an toàn]
+```
+
+Giải thích: 4 lớp chồng nhau — lọt 1 lớp không sao, còn 3 lớp sau. Luật nhắc miệng 2 lần thì viết thành file (recipe), không nhắc lần 3.
+
+> ✅ **Kỳ vọng thấy gì:** sau 45 phút dựng (mục 7), thử cố ý sai (sửa `generated/`, commit main, `rm -rf`) đều bị chặn + log BLOCKED.
+
+---
+
 ## 1. Vì sao cần guardrails?
 
 Không guardrails, Copilot sẽ:
@@ -319,16 +346,39 @@ Sau 45 phút: 4 lớp guardrails chạy. Copilot đi lạc → bị chặn ít n
 
 ## 8. Bảng tra nhanh: recipe nào cho lỗi nào?
 
-| Lỗi hay gặp | Recipe chặn | Lớp |
-|---|---|---|
-| Sửa generated/ | Recipe 1 + 2 + 4 (no-generated hook) | 1 + 2 |
-| Commit thẳng main | Recipe 1 + 4 (no-main-commit) + 7 | 1 + 2 + 3 |
-| Thêm dep bừa | Recipe 1 NEVER + review + CI | 1 + 3 |
-| Xóa test để xanh | Recipe 3 gate + reviewer prompt | 1 |
-| Chạy rm -rf nguy hiểm | Recipe 6 tool approval blocklist | 2 |
-| Thiếu test/lint/build | Recipe 5 + 8 CI required | 2 + 3 |
-| PR không ai review | Recipe 7 + 9 CODEOWNERS | 3 |
-| MCP gọi bừa, rò secret | Recipe 10 + 11 + 12 | 4 |
+| Lỗi hay gặp | Hiểu nôm na | Ví dụ | Recipe chặn | Lớp |
+|---|---|---|---|---|
+| Sửa generated/ | Vẽ bậy lên bản in, không sửa bản gốc. | Sửa `src/generated/types.ts` thay vì schema. | Recipe 1 + 2 + 4 (no-generated hook) | 1 + 2 |
+| Commit thẳng main | Đi tắt qua ruộng, không qua cổng. | `git push main` trực tiếp, bypass PR. | Recipe 1 + 4 (no-main-commit) + 7 | 1 + 2 + 3 |
+| Thêm dep bừa | Mua đồ không hỏi vợ. | `npm i lodash-extra` vì tiện. | Recipe 1 NEVER + review + CI | 1 + 3 |
+| Xóa test để xanh | Giấu bài kiểm tra khó đi. | Xóa test đỏ để CI xanh giả. | Recipe 3 gate + reviewer prompt | 1 |
+| Chạy rm -rf nguy hiểm | Đốt nhà để dọn rác. | Agent chạy `rm -rf dist/` nhầm `/`. | Recipe 6 tool approval blocklist | 2 |
+| Thiếu test/lint/build | Nộp bài không chấm. | PR không log xanh. | Recipe 5 + 8 CI required | 2 + 3 |
+| PR không ai review | Tự chấm điểm mình 10. | Merge không review. | Recipe 7 + 9 CODEOWNERS | 3 |
+| MCP gọi bừa, rò secret | Đưa chìa két cho người lạ. | MCP đọc `.env` gửi ra ngoài. | Recipe 10 + 11 + 12 | 4 |
+
+### Before / After — nhắc miệng vs guardrail
+
+**Before (nhắc miệng, không guardrail):**
+```text
+(lần 5 trong tuần bạn gõ) "đừng sửa generated/ nhé, đừng commit main nhé"
+```
+> Kết quả: Copilot quên sau 20 turns, vẫn sửa `generated/` 1 lần/tuần. Mỗi lần mất 30 phút revert. Không ai chặn giúp bạn lúc 2h sáng.
+
+**After (guardrail 4 lớp):**
+```markdown
+# .github/muse-instructions.md
+- Không sửa `src/generated/`, không commit thẳng main.
+```
+
+```bash
+pre-commit install && pre-commit run --all-files
+# ✅ Kỳ vọng: terminal in Passed/Failed từng hook; thử commit generated/ → BLOCKED
+git diff --cached --name-only | grep "src/generated/" && echo BLOCKED
+```
+
+> Kết quả: nhắc 0 lần (file tự dặn), cố sai thì pre-commit chặn local, lọt thì CI chặn merge. 1 tháng 0 incident. Verify: thử sai cố ý 3 lần đều bị chặn.
+> ✅ **Kỳ vọng thấy gì:** `pre-commit run` xanh; commit sai hiện `BLOCKED: đừng sửa generated/`.
 | Instructions bị sửa bừa | Recipe 9 CODEOWNERS cho prompts | 3 |
 | Diff chạm file cấm | Recipe 8 diff-check step | 3 |
 

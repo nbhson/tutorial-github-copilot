@@ -37,6 +37,58 @@ GPT, Claude, Gemini — bạn chọn trong IDE). Một subscription mở khóa 5
 > Tư duy đúng: autocomplete đoán **dòng tiếp theo** trong file bạn mở.
 > Agent giải **task đóng**: tự tìm file, lập plan, sửa, chạy test, lặp lại.
 
+### 1.0. Hiểu nôm na từng chế độ (định nghĩa + ví dụ đời thường + ví dụ kỹ thuật)
+
+> Quy tắc của toàn bộ series: mỗi khái niệm mới đều có 3 lớp: **định nghĩa 1 câu**,
+> **ví dụ đời thường**, **ví dụ kỹ thuật**. Nếu bạn thấy thuật ngữ lạ mà không có
+> 3 lớp này, đó là chỗ cần báo lại cho editor.
+
+- **Autocomplete (ghost text).**
+  Là gì: Copilot đoán dòng code tiếp theo dựa trên file bạn đang gõ.
+  Hiểu nôm na: như gợi ý từ trên bàn phím điện thoại, nhưng cho code.
+  Ví dụ kỹ thuật: bạn gõ `def fetch_user(user_id:` thì nó gợi cả thân hàm
+  `try: return db.query(...) except ...`. Bấm `Tab` để nhận, `Esc` để bỏ.
+
+- **Chat — Ask mode.**
+  Là gì: bạn hỏi, Copilot trả lời bằng chữ + snippet, không đụng vào file.
+  Hiểu nôm na: như hỏi thầy giáo "đoạn này nghĩa là gì", thầy chỉ giảng, không cầm tay bạn sửa.
+  Ví dụ kỹ thuật: bôi đen hàm `login()` rồi hỏi "Giải thích hàm này, mỗi nhánh if làm gì?".
+
+- **Edit mode.**
+  Là gì: bạn chỉ rõ 2–3 files, Copilot sửa trực tiếp trong đó.
+  Hiểu nôm na: như đưa thợ 3 viên gạch cụ thể và nói "trát lại 3 viên này".
+  Ví dụ kỹ thuật: chọn `login.ts` + `auth.ts` rồi ra lệnh "Thêm null check cho `customerId`".
+
+- **Agent mode.**
+  Là gì: bạn giao task mở, Copilot tự tìm file, sửa, chạy terminal, lặp lại.
+  Hiểu nôm na: như giao chìa khóa nhà cho thợ sửa: tự tìm phòng hỏng, mua vật liệu, sửa, nghiệm thu.
+  Ví dụ kỹ thuật: "Thêm rate-limit cho POST /login, chạy `npm test` để chứng minh".
+
+- **Coding agent (trên github.com).**
+  Là gì: bạn assign issue cho bot `copilot`, nó code trên máy cloud rồi mở PR.
+  Hiểu nôm na: như thuê đội thi công qua đêm: sáng dậy bạn chỉ cần nghiệm thu PR.
+  Ví dụ kỹ thuật: assign issue #123 "Fix crash POST /orders" → 10 phút sau có PR `copilot/fix-123`.
+
+- **Copilot CLI.**
+  Là gì: trợ lý lệnh shell trong terminal (`gh copilot suggest/explain`).
+  Hiểu nôn na: như từ điển lệnh Linux biết nói tiếng Việt.
+  Ví dụ kỹ thuật: `gh copilot suggest "xóa branch đã merge"` → nó sinh `git branch --merged | grep -v main | xargs git branch -d`.
+
+```mermaid
+flowchart TD
+    A[Bạn có task] --> B{Task to hay nhỏ?}
+    B -- "Gõ 1 dòng, quen tay" --> C[Autocomplete\nTab để nhận]
+    B -- "Chưa hiểu code" --> D[Chat Ask mode\nChỉ hỏi, không sửa]
+    B -- "Biết rõ 2-3 files cần sửa" --> E[Edit mode\nSửa đúng files đã chọn]
+    B -- "Task mở, nhiều file, cần chạy test" --> F[Agent mode VS Code\nTự tìm file + chạy terminal]
+    B -- "Task độc lập, muốn chạy qua đêm" --> G[Coding agent github.com\nTạo branch + mở PR]
+    B -- "Quên lệnh shell" --> H[Copilot CLI\nsuggest / explain]
+    F --> I{Pass test?}
+    I -- Chưa --> F
+    I -- Rồi --> J[Báo cáo diff + lệnh đã chạy]
+    G --> K[Review PR như review junior dev]
+```
+
 Ví dụ prompt tệ vs tốt:
 
 ```text
@@ -82,6 +134,32 @@ Mỗi vòng lặp gồm 4 pha — giống mọi agent, chỉ khác harness là V
 Điểm mấu chốt: **model không chạm disk trực tiếp**. VS Code harness
 (Copilot Chat extension) mới là thứ thực thi read/edit/search/terminal,
 áp policy (org policy, content exclusion), rồi nhét kết quả vào context.
+
+- Là gì (1 câu): harness là "tay chân" của model — model chỉ ra lệnh bằng chữ, harness mới làm thật.
+- Hiểu nôm na: model như kiến trúc sư vẽ bản vẽ, harness như đội thợ cầm búa, máy khoan.
+- Ví dụ kỹ thuật: model sinh `read(auth.ts)` → harness mở file thật, đọc 200 dòng, trả lại text cho model.
+
+```mermaid
+sequenceDiagram
+    participant You as Bạn
+    participant Model as Model (GPT/Claude/Gemini)
+    participant Harness as VS Code harness<br/>(Copilot Chat extension)
+    participant Disk as Disk/Terminal<br/>(file, npm test)
+    You->>Model: Task: Thêm rate-limit cho POST /login
+    loop Mỗi turn (lặp tới khi xong)
+        Model->>Model: REASONING: cần đọc file nào? chạy lệnh nào?
+        Model->>Harness: TOOL_USE: read(auth.ts) + search(login) + terminal(npm test)
+        Harness->>Disk: Thực thi thật + áp policy/org rules
+        Disk-->>Harness: file content / stdout / stderr / exit code
+        Harness-->>Model: OBSERVATION: nhét kết quả vào context
+        Model->>Model: Đủ điều kiện dừng chưa?
+    end
+    Model->>You: Báo cáo diff + lệnh đã chạy + rủi ro còn lại
+```
+
+> **Kỳ vọng / Verify:** sau khi đọc sơ đồ này, bạn phải kể lại được cho đồng nghiệp
+> trong 2 phút: "model không chạm disk, harness mới chạm". Test nhanh: mở Agent mode,
+> giao task nhỏ, quan sát panel hiện từng tool call `read → edit → terminal` đúng thứ tự trên.
 
 Vì sao tách vậy?
 
@@ -300,15 +378,39 @@ gh copilot explain "docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
 
 ## 7. Bản đồ extension: instructions / prompts / agents / skills / MCP / extensions
 
-| Feature | Nó là gì | Khi nào dùng | Ví dụ |
+> **MCP server là gì?** Định nghĩa 1 câu: MCP server là chương trình nhỏ đứng ngoài
+> repo, phơi ra các "tools" (hàm có input/output schema) để agent gọi khi cần dữ liệu ngoài.
+> Hiểu nôm na: như ki-ốt dịch vụ trong siêu thị — siêu thị (VS Code) có sẵn quầy thịt/rau
+> (read/edit/terminal), ki-ốt (MCP server GitHub, Postgres, Slack) cho thuê thêm dịch vụ.
+> Ví dụ kỹ thuật: MCP server `github` phơi tool `create_pr(input: {title, body, base})`;
+> agent muốn mở PR thì gọi `mcp__github__create_pr`, server chạy GitHub API thật rồi trả kết quả về.
+
+```mermaid
+flowchart LR
+    A[Agent mode] --> B{Harness VS Code}
+    B --> C[Tools có sẵn\nread / edit / search / terminal]
+    B --> D[MCP client trong VS Code\nđọc .vscode/mcp.json]
+    D --> E[MCP server github\ntool: create_pr, list_issues]
+    D --> F[MCP server postgres\ntool: query]
+    D --> G[MCP server slack\ntool: post_message]
+    E --> H[GitHub API thật]
+    F --> I[Database thật]
+    G --> J[Slack workspace thật]
+```
+
+> **Kỳ vọng / Verify:** sau khi cài mẫu `mcp.json` ở mục 3.4, mở Chat gõ `/mcp`
+> phải thấy server `github` hiện `connected`. Nếu thấy `disconnected`, check `command: npx`
+> có chạy được không.
+
+| Thuật ngữ | Là gì (hiểu nôm na) | Ví dụ cụ thể | Khi nào dùng |
 |---|---|---|---|
-| **muse-instructions.md** | Context nạp mỗi chat | Quy ước "luôn luôn làm X" | "Dùng pnpm, không dùng npm." |
-| **\*.instructions.md** | Rules theo glob path | Quy tắc cho 1 subtree | `applyTo: apps/api/**` |
-| **Prompt files** | Workflow tái dùng, gọi `/ten` | Việc lặp lại | `/deploy` chạy checklist deploy |
-| **Custom agents** | Persona + tools riêng | Task chuyên biệt | Agent `reviewer` chỉ đọc + comment |
-| **Agent Skills** | `SKILL.md` chuẩn mở 2026 | Knowledge agent tự load | Skill `deploy-prod` |
-| **MCP** | Kết nối dịch vụ ngoài | Dữ liệu ngoài repo | Query DB, post Slack |
-| **Extensions** | Đóng gói prompts/agents/MCP | Share cho team/nhiều repo | Extension `security-review` |
+| **muse-instructions.md** | Giấy dặn dò dán đầu tủ lạnh, agent đọc mỗi lần vào bếp | "Dùng pnpm, không dùng npm. Test: `npm test -- --filter api`." | Quy ước cần mọi chat đều nhớ |
+| **\*.instructions.md** | Giấy dặn riêng cho từng phòng, chỉ đọc khi vào phòng đó | `applyTo: apps/api/**` → "Route không query DB trực tiếp" | Quy tắc chỉ đúng 1 subtree |
+| **Prompt files** | Công thức nấu ăn in sẵn, cần thì lôi ra làm theo | Gõ `/deploy` chạy checklist 15 bước deploy | Việc lặp lại >3 lần |
+| **Custom agents** | Thuê thợ chuyên việc: thợ điện chỉ sửa điện | Agent `reviewer` chỉ đọc + comment, cấm sửa code | Task chuyên biệt, hẹp scope |
+| **Agent Skills** | Sổ tay nghề chuẩn mở, agent nào cũng đọc được | `SKILL.md` của skill `deploy-prod` | Knowledge agent tự load khi cần |
+| **MCP** | Ki-ốt dịch vụ ngoài siêu thị (DB, Slack, GitHub) | `mcp__github__create_pr` mở PR thật | Cần dữ liệu ngoài repo |
+| **Extensions** | Combo đóng gói sẵn (prompts + agents + MCP) để share | Extension `security-review` cho cả team | Share cho team / nhiều repo |
 
 Quy tắc chọn nhanh:
 
@@ -385,7 +487,19 @@ Checklist bạn đã hiểu bài 00 khi:
 
 ---
 
-## 9. Pitfalls + cách fix
+## 9. Hiểu nhầm thường gặp + Pitfalls + cách fix
+
+### 9.1. Hiểu nhầm thường gặp (đọc kỹ trước khi trách Copilot)
+
+| Hiểu nhầm | Sự thật | Ví dụ |
+|---|---|---|
+| "Copilot là 1 con chatbot, hỏi gì đáp nấy" | Copilot có 5 chế độ, mỗi chế độ là 1 cách làm việc khác nhau | Hỏi ở Ask mode thì chỉ có chữ; muốn sửa file phải sang Edit/Agent |
+| "Agent tự nghĩ tự làm, không cần kiểm tra" | Agent là junior dev nhanh nhưng ẩu, bạn là reviewer bắt buộc | Luôn duyệt diff từng hunk + bắt chạy test thật |
+| "MCP là plugin cài vào là xong" | MCP server là tiến trình riêng chạy ngoài VS Code, có thể rớt mạng, sai key | Phải `/mcp` kiểm tra `connected`, test tool thật |
+| "Instructions càng dài càng khôn" | Instructions nạp lại mỗi turn, dài = tốn quota + loãng trọng tâm | Giữ <200 dòng, checklist dài tách sang prompt file |
+| "Model mạnh nhất luôn tốt nhất" | Model mạnh đắt (multiplier cao), task dễ dùng model rẻ là đủ | Giải thích code → model rẻ; refactor khó → model mạnh |
+
+### 9.2. Pitfalls + cách fix
 
 | Pitfall | Vì sao xảy ra | Fix |
 |---|---|---|

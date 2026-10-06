@@ -18,6 +18,35 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Prompt file (`.prompt.md`)** | Đơn mẫu in sẵn: điền 2 chỗ là gọi được. | Như mẫu đơn xin nghỉ: điền tên + ngày là nộp. | `/team-bug scope=src/payments bug="refund 500"` gọi file `team-bug.prompt.md`. | 3 người gọi cùng prompt ra cùng format. |
+| **Instructions (`applyTo`)** | Luật dán theo phòng: vào phòng nào áp luật đó. | Như "phòng lab cấm ăn uống" — chỉ áp trong lab. | `applyTo: "src/payments/**"` → refund >30 ngày phải hỏi duyệt. | Sửa file payments thì luật hiện; sửa `auth` thì không. |
+| **Skill (`SKILL.md`)** | Quy trình 5+ bước robot tự biết khi nào dùng. | Như sổ tay PCCC: thấy cháy là mở đúng trang, không cần ai nhắc. | `skills/release/SKILL.md` (bump + changelog + tag + CI). | Nói "release patch" → Copilot tự load procedure. |
+| **Variables / Few-shot** | Ô trống + văn mẫu để output đồng nhất. | Như chỗ trống trong đơn + 1 đơn điền mẫu. | `${input:scope}` + `Input: ... / Output đúng: ...`. | Không còn sửa tay mỗi lần gọi. |
+| **Frontmatter (mode/tools)** | Tem dán ngoài: ai được dùng, dùng dao nào. | Như nhãn thuốc: uống khi nào, liều bao nhiêu. | `mode: agent / tools: [search,read,edit,test]`. | Research (`ask`) không sửa code dù bạn nhờ. |
+
+```mermaid
+flowchart TD
+    A[Dùng >2 lần/tuần?] -->|Không| Z[Chat thường]
+    A -->|Có| B{Luật 1 dòng?}
+    B -->|Có| C[Instructions]
+    B -->|Không| D{Task lặp?}
+    D -->|Có| E[Prompt file .prompt.md]
+    D -->|Quy trình >5 bước| F[Skill SKILL.md]
+    E --> G[Test + share PR]
+    F --> G
+    C --> G
+```
+
+Giải thích: 1 dòng → instructions; 1 task lặp → prompt file (<60 dòng + variables + 1 few-shot); quy trình dài → skill. Mọi thứ commit vào repo + PR review.
+
+> ✅ **Kỳ vọng thấy gì:** gọi `/team-bug scope=... bug=...` → output đủ Steps + Ràng buộc + Evidence, không thiếu mục.
+
+---
+
 ## 1. Vì sao phải tái dùng?
 
 Dấu hiệu bạn đang nợ prompt:
@@ -365,16 +394,31 @@ Sau 35 phút: team có 1 prompt chuẩn, mọi bug output cùng format.
 
 ## 8. Bảng tra nhanh: dùng loại nào?
 
-| Nhu cầu | Dùng gì | File | Gọi thế nào |
-|---|---|---|---|
-| Task lặp lại (bug/review/research) | Prompt file | `.github/prompts/*.prompt.md` | `/tên-file var=...` |
-| Luật áp mọi turn | Root instructions | `muse-instructions.md` | Tự áp, không cần gọi |
-| Luật riêng 1 module | Scoped instructions | `*.instructions.md` + applyTo | Tự áp khi chạm glob |
-| Procedure >5 bước | Skill | `skills/*/SKILL.md` | Tự trigger / gọi tên skill |
-| Hỏi 1 lần, không tái dùng | Chat thường | Không file | Gõ tay + new chat |
-| Gate verify/report | Prompt file verify | `verify-*.prompt.md` | `/verify-feature` trước commit |
+| Nhu cầu | Hiểu nôm na | Ví dụ | Dùng gì | File | Gọi thế nào |
+|---|---|---|---|---|---|
+| Task lặp lại (bug/review/research) | Đơn mẫu điền là xong. | Fix bug tuần nào cũng có. | Prompt file | `.github/prompts/*.prompt.md` | `/tên-file var=...` |
+| Luật áp mọi turn | Nội quy dán tường. | Cấm sửa `generated/` mọi lúc. | Root instructions | `muse-instructions.md` | Tự áp, không cần gọi |
+| Luật riêng 1 module | Nội quy theo phòng. | Riêng `payments/` cần idempotency-key. | Scoped instructions | `*.instructions.md` + applyTo | Tự áp khi chạm glob |
+| Procedure >5 bước | Sổ tay 5+ bước. | Release: bump + changelog + tag + CI. | Skill | `skills/*/SKILL.md` | Tự trigger / gọi tên skill |
+| Hỏi 1 lần, không tái dùng | Nói miệng 1 lần. | Hỏi lẻ, không lặp lại. | Chat thường | Không file | Gõ tay + new chat |
+| Gate verify/report | Trạm kiểm soát trước cổng. | Gate trước commit. | Prompt file verify | `verify-*.prompt.md` | `/verify-feature` trước commit |
 
 > Quy tắc ngón tay: **1 dòng → instructions, 1 task lặp → prompt file, 1 quy trình dài → skill.**
+
+### Before / After — gõ tay vs đóng gói
+
+**Before (gõ tay mỗi lần):**
+```text
+Fix bug refund quá 30 ngày bị 500 trong src/payments, nhớ không đụng generated, nhớ chạy test, nhớ thêm regression... (gõ 10 dòng, lần nào cũng sót 2 dòng)
+```
+> Kết quả: 20 lần gõ 20 kiểu, output khác nhau, review mệt. Đồng nghiệp hỏi "prompt hôm qua đâu?" → không nhớ.
+
+**After (đóng gói 1 lần):**
+```text
+/team-bug scope=src/payments bugDescription="refund quá 30 ngày bị 500"
+```
+> Kết quả: file 30 dòng lo hết (root cause + fix + regression + log + NEVER + Evidence). 20 lần gọi ra cùng format. Verify: `git diff --stat` + log xanh kèm theo.
+> ✅ **Kỳ vọng thấy gì:** gọi `/team-bug` → output có đủ `## Evidence` + `NEVER` mà không cần gõ lại.
 
 ---
 

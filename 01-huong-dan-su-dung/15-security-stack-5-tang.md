@@ -20,6 +20,18 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Content exclusion** | Danh sách "cấm nhìn": Copilot không được đọc/index files này. | Như phòng khóa trong nhà — giúp việc (Copilot) không được vào. | `**/.env*`, `**/*.pem`, `secrets/**` trong Org Settings → Copilot. | Hỏi `@workspace tìm STRIPE_KEY?` → phải "không thấy/excluded". |
+| **Duplication detection** | Chặn Copilot copy y nguyên code người ta có bản quyền. | Như chống đạo văn: gợi ý trùng là báo nguồn, team kín thì chặn luôn. | Chế độ `Block` cho closed-source, `Allow + cảnh báo` cho open-source. | Copilot gợi ý trùng → hiện `matching public code` + link gốc. |
+| **Secret scanning + push protection** | Camera quét + bảo vệ cửa: phát hiện key lọt, chặn ngay lúc push. | Như máy soi chiếu sân bay: có dao (key) là tuýt còi tại chỗ. | Push chứa `sk-live-...` → bị chặn + hướng dẫn chuyển sang env. | Thử push fake key → phải bị chặn (mục 8 walkthrough). |
+| **CodeQL / Code scanning** | Bác sĩ soi X-quang: tìm SQLi/XSS/path traversal trong PR. | Như kiểm định xe: chưa đạt là chưa cho lăn bánh (merge). | Alert `SQL query built from user input` tại `refund.ts:42`. | PR hiện check `CodeQL` đỏ/xanh; Security tab liệt kê alerts. |
+| **Defense-in-depth** | Không tin 1 lớp nào — 5 lớp chồng nhau, trượt lớp này còn lớp sau đỡ. | Như nhà 5 khóa: cổng + cửa + két + camera + bảo vệ — trộm qua 1 lớp vẫn kẹt. | T1 trượt (exclusion sai) → T2 chặn push → T3 gắn flag → T4 reviewer thấy → T5 truy audit. | Mỗi incident trả lời được "tầng nào trượt + tầng nào đỡ". |
+
+---
+
 ## 1. Vì sao 5 tầng? (why)
 
 1 lớp bảo mật luôn có lỗ: exclusion cấu hình sai 1 path là secret lọt vào index;
@@ -40,13 +52,13 @@ Có stack:    T1 chặn .env khỏi index → trượt? T2 push protection chặ
 
 ## 2. Bản đồ 5 tầng (nhìn 1 phút hiểu hết)
 
-| Tầng | Chặn gì | Ở đâu | Ai sở hữu |
-|---|---|---|---|
-| **1. Exclusion + duplication** | Copilot đọc file nhạy cảm; gợi ý copy code có license | Copilot settings (org/repo) | Admin + team lead |
-| **2. Secret scanning + push protection** | Key/token lọt vào repo | GitHub Advanced Security | Admin (bật), dev (fix alert) |
-| **3. Code scanning (CodeQL)** | Lỗ hổng (SQLi, XSS, path traversal...) | PR checks + `github/codeql` | Team (fix), CI (chặn) |
-| **4. Copilot code review gate** | Bug/logic mà máy + mắt người sót | PR review + required checks | Reviewer + maintainer |
-| **5. Policy + audit** | Ai đổi 4 tầng trên, ai dùng gì | Org policy + audit log | Admin |
+| Tầng | Hiểu nôm na | Ví dụ | Chặn gì | Ở đâu | Ai sở hữu |
+|---|---|---|---|---|---|
+| **1. Exclusion + duplication** | Khóa phòng + chống đạo văn. | `.env` không vào index; gợi ý trùng GPL bị block. | Copilot đọc file nhạy cảm; gợi ý copy code có license | Copilot settings (org/repo) | Admin + team lead |
+| **2. Secret scanning + push protection** | Máy soi + bảo vệ cửa. | Push `sk-live-FAKE` bị chặn tại chỗ. | Key/token lọt vào repo | GitHub Advanced Security | Admin (bật), dev (fix alert) |
+| **3. Code scanning (CodeQL)** | Bác sĩ X-quang. | `query("SELECT ..."+input)` bị gắn cờ SQLi. | Lỗ hổng (SQLi, XSS, path traversal...) | PR checks + `github/codeql` | Team (fix), CI (chặn) |
+| **4. Copilot code review gate** | 2 cặp mắt (máy + người). | Bot review + reviewer fresh verdict PASS. | Bug/logic mà máy + mắt người sót | PR review + required checks | Reviewer + maintainer |
+| **5. Policy + audit** | Sổ trực + camera. | `action:copilot_policy` thấy ai tắt exclusion. | Ai đổi 4 tầng trên, ai dùng gì | Org policy + audit log | Admin |
 
 ```text
 # Dòng chảy 1 PR an toàn (5 tầng đi qua):
@@ -54,6 +66,42 @@ Có stack:    T1 chặn .env khỏi index → trượt? T2 push protection chặ
 # T3: CodeQL quét xong xanh → T4: review (người + Copilot) approve →
 # T5: mọi bước ghi audit log. Thiếu 1 tầng là mù 1 mắt.
 ```
+
+### 2.1. Sơ đồ defense-in-depth 5 lớp (mermaid — BẮT BUỘC)
+
+```mermaid
+flowchart TD
+    A[Dev + Copilot gợi ý code] --> T1{T1 Exclusion +<br/>duplication}
+    T1 -->|Chặn .env khỏi index| T2{T2 Secret scanning +<br/>push protection}
+    T1 -->|Trượt: exclusion sai path| T2
+    T2 -->|Chặn push chứa key| T3{T3 CodeQL<br/>code scanning}
+    T2 -->|Trượt: key format lạ| T3
+    T3 -->|Gắn cờ SQLi/XSS| T4{T4 Review gate<br/>bot + người}
+    T3 -->|Trượt: logic sai| T4
+    T4 -->|Approve + checks xanh| T5[T5 Policy + audit log]
+    T4 -->|Trượt: reviewer mệt bỏ qua| T5
+    T5 --> M[Merge an toàn]
+```
+
+Giải thích từng bước (kèm ví dụ tấn công mỗi lớp chặn được):
+
+1. **A → T1:** Dev gõ code, Copilot gợi ý. T1 đảm bảo nó không "nhìn trộm" `.env` để gợi ý.
+   - *Ví dụ tấn công bị chặn:* Copilot đọc `STRIPE_KEY=sk-live-...` trong `.env` rồi gợi ý `const key="sk-live-..."` vào code → T1 chặn vì `.env` excluded khỏi index.
+   - *Ví dụ duplication:* Copilot gợi ý hàm trùng repo GPL → chế độ `Block` chặn, hiện `matching public code` + link gốc.
+2. **T1 → T2:** Dù T1 trượt (admin exclude sai `src/` thay vì `secrets/`), push chứa key vẫn bị tuýt còi tại cửa.
+   - *Ví dụ tấn công bị chặn:* Dev vô tình `git push` file chứa `AKIA...` (AWS key) → push protection chặn ngay, báo file:dòng.
+   - *Verify:* thử push fake key ở mục 8 → phải thấy `BLOCKED`.
+3. **T2 → T3:** Key format lạ lọt qua T2 (ví dụ token nội bộ không có pattern) thì CodeQL vẫn soi lỗ hổng code.
+   - *Ví dụ tấn công bị chặn:* `db.query("SELECT * FROM users WHERE id=" + req.params.id)` → CodeQL báo `SQL query built from user input` (SQLi), check đỏ.
+   - *Ví dụ khác:* `res.send("<div>"+comment+"</div>")` → báo XSS; `fs.readFile("./"+name)` → báo path traversal.
+4. **T3 → T4:** CodeQL không bắt logic sai (refund sai 30 ngày) thì review 2 lớp (bot + người fresh) bắt.
+   - *Ví dụ tấn công bị chặn:* PR "đúng" hết checks nhưng thiếu `auth check` ở route `/admin` (IDOR) → reviewer hỏi "auth ở đâu?" và Copilot review gắn `HIGH: missing auth`.
+   - *Verify:* `git diff --stat main...HEAD` chạm `payments/auth` → review kỹ gấp đôi.
+5. **T4 → T5 → M:** Mọi bước ghi audit. Reviewer mệt approve bừa, dismiss CodeQL không lý do → audit lôi ra.
+   - *Ví dụ tấn công bị chặn/truy:* Nửa đêm ai đó tắt push protection → `action:secret_scanning` + `actor` hiện tên + giờ trong audit log.
+   - *Vòng lặp quý:* rà dismiss không lý do + exclusion drift (repo mới chưa cover) + vá tầng yếu nhất.
+
+> ✅ **Kỳ vọng thấy gì:** sau khi bật đủ 5 tầng, PR mẫu hiện 3 checks xanh (`Secret scanning`, `CodeQL`, `Copilot review`) + audit log filter ra được actor đổi policy gần nhất.
 
 ---
 
@@ -282,6 +330,8 @@ git add fake-test.env && git commit -m "test push protection" || echo "chan la D
 git reset HEAD fake-test.env; rm fake-test.env /tmp/fake.env
 # → bị chặn = tầng 2 sống. Không chặn → báo admin kiểm tra config
 ```
+
+> ✅ **Kỳ vọng thấy gì:** `git commit` báo `Push protection / Secret detected: Stripe key at fake-test.env:1` (hoặc `chan la DUNG`). Sau `rm`, `git status --porcelain` trống (không còn file test).
 
 **Phút 10–15 (tầng 3+4 — 1 PR mẫu):**
 

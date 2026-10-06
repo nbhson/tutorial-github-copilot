@@ -22,11 +22,40 @@
 
 ## 1. Cách đọc index này + why phải học commands
 
-- Mỗi dòng = 1 lệnh: `/lệnh` hoặc `@participant` hoặc `#variable` — 1 dòng mô tả — link tới `./commands/<slug>/README.md`.
-- Tổng 46 mục, chia 4 nhóm: Chat session (12) · Model & Agent (9) · Code actions (10) · System & Knowledge (15).
-- Gõ `/` (slash), `@` (participant), `#` (variable) trong Chat input để xem list
-  khả dụng **ở môi trường của bạn** (khác plan/model/version sẽ khác).
-- Nếu link nào 404 ở máy bạn (lệnh vắng mặt) → xem mục 7 (plan/model gating).
+- Là gì (1 câu): chat commands là 3 ký hiệu `/` (lệnh), `@` (gọi đúng người), `#` (đưa đúng tài liệu) giúp gắn scope ngay từ turn 1.
+- Hiểu nôm na: `/` như gọi món theo số (nhanh, chuẩn), `@` như gọi đúng nhân viên (thu ngân / bếp), `#` như đưa đúng hóa đơn cho họ xem.
+- Ví dụ kỹ thuật: gõ `/fix #selection thêm null check` nhanh và rẻ hơn gõ "bạn ơi sửa giúp mình đoạn code này với..." 3 turns làm rõ.
+
+```mermaid
+flowchart TD
+    A[Bạn gõ trong Chat input] --> B{Ký tự đầu?}
+    B -- "/" --> C[Slash command:\n/new, /fix, /tests, /explain\nChạy workflow có sẵn]
+    B -- "@" --> D[Participant:\n@workspace, @terminal, @github\nChọn nguồn tri thức]
+    B -- "#" --> E[Variable:\n#file, #selection, #editor\nGắn file/vùng chọn vào context]
+    B -- "chữ thường" --> F[Prompt tự nhiên\nLinh hoạt nhưng tốn turns làm rõ]
+    C --> G[Agent chạy + verify]
+    D --> G
+    E --> G
+    F --> G
+```
+
+> **Kỳ vọng / Verify:** gõ `/` trong Chat input phải thấy list lệnh; gõ `@` thấy list
+> participants; gõ `#` thấy list variables. Không thấy = extension cũ hoặc plan gating (xem mục 7).
+
+### 1.1. Bảng thuật ngữ `/` `@` `#` (học thuộc 1 phút)
+
+| Thuật ngữ | Là gì (hiểu nôm na) | Ví dụ cụ thể | Khi nào dùng |
+|---|---|---|---|
+| **`/slash`** | Gọi món theo số — chạy workflow có sẵn | `/fix`, `/tests`, `/explain` trên đoạn đang chọn | Việc ngắn, lặp lại, muốn 1 phát ăn ngay |
+| **`@participant`** | Gọi đúng nhân viên — chọn nguồn tri thức | `@workspace` hỏi cả repo, `@terminal` hỏi lỗi vừa chạy, `@github` hỏi issue/PR | Khi cần tri thức ngoài đoạn đang chọn |
+| **`#variable`** | Đưa đúng hóa đơn — gắn file/vùng chọn vào context | `#file:src/routes/login.ts`, `#selection`, `#editor` | Mọi prompt code để agent khỏi đoán mò |
+
+```bash
+# Copy-paste: công thức gắn scope đủ 3 ký hiệu (dán thẳng vào Chat)
+# @workspace + #file + /agent trong 1 prompt:
+# "@workspace tìm mọi nơi gọi POST /orders. #file:src/routes/orders.ts fix crash khi thiếu customerId, thêm regression test, chạy npm test xác nhận."
+# Kỳ vọng / Verify: turn 1 agent đã đọc đúng file, không hỏi lại "file nào?".
+```
 
 Vì sao học commands thay vì gõ tự nhiên mãi? Prompt tự nhiên linh hoạt nhưng tốn
 tokens + thiếu determinism. Commands (`/`, `@`, `#`) là "đường tắt có kiểm chứng":
@@ -36,7 +65,16 @@ gắn đúng scope, đúng model, đúng tools ngay từ turn 1 — rẻ hơn 3�
 
 ## Nhóm 1 — Chat session (12)
 
-| Lệnh | Mô tả 1 dòng | Chi tiết |
+> **Nhóm này là gì?** Quản lý vòng đời 1 phiên chat: mở mới, xóa, lưu, quay checkpoint.
+> Hiểu nôm na: như nút điều khiển máy ghi âm — New/Clear/Resume/Checkpoint.
+> Ví dụ thật + kết quả mong đợi:
+> ```text
+> Prompt thật: /new
+> Kết quả mong đợi: chat trắng, history cũ biến mất, instructions vẫn load.
+> Verify: hỏi "lệnh test của repo là gì" → vẫn trả lời đúng (chứng tỏ instructions còn).
+> ```
+
+| Lệnh | Là gì (hiểu nôm na) + Ví dụ cụ thể | Khi nào dùng + Chi tiết |
 |---|---|---|
 | `/new` | Mở chat mới, xóa history (thói quen #1 mỗi task) | [./commands/chat-session/new-chat/README.md](./commands/chat-session/new-chat/README.md) |
 | `/clear` | Xóa context trong chat hiện tại, giữ instructions | [./commands/chat-session/clear/README.md](./commands/chat-session/clear/README.md) |
@@ -53,7 +91,17 @@ gắn đúng scope, đúng model, đúng tools ngay từ turn 1 — rẻ hơn 3�
 
 ## Nhóm 2 — Model & Agent (9)
 
-| Lệnh | Mô tả 1 dòng | Chi tiết |
+> **Nhóm này là gì?** Nút đổi "động cơ" (model) và "chế độ lái" (Ask/Edit/Agent).
+> Hiểu nôm na: như hộp số xe — đường làng đi số thấp (Ask + model rẻ), cao tốc đi số cao (Agent + model mạnh).
+> Ví dụ thật + kết quả mong đợi:
+> ```text
+> Prompt thật: /model → chọn model rẻ → "@workspace hàm login chạy qua files nào?"
+> Kết quả mong đợi: liệt kê 2–3 files + số dòng, không sửa file.
+> Sau đó: chuyển Agent mode + model mạnh → "Thêm rate-limit cho POST /login, chạy npm test."
+> Kết quả mong đợi: có diff + output test PASS. Verify: /usage tăng ít cho Ask, nhiều cho Agent.
+> ```
+
+| Lệnh | Là gì (hiểu nôm na) + Ví dụ cụ thể | Khi nào dùng + Chi tiết |
 |---|---|---|
 | `/model` | Đổi model giữa chat (mạnh/rẻ tùy task) | [./commands/model-agent/model-picker/README.md](./commands/model-agent/model-picker/README.md) |
 | `Ask mode` | Về Ask read-only: chỉ hỏi, không sửa | [./commands/model-agent/ask-mode/README.md](./commands/model-agent/ask-mode/README.md) |
@@ -67,7 +115,19 @@ gắn đúng scope, đúng model, đúng tools ngay từ turn 1 — rẻ hơn 3�
 
 ## Nhóm 3 — Code actions (10)
 
-| Lệnh | Mô tả 1 dòng | Chi tiết |
+> **Nhóm này là gì?** Các việc code ngắn gọn làm trên đoạn đang chọn: giải thích, sửa, sinh test, viết docs.
+> Hiểu nôm na: như bộ dao bếp — mỗi dao 1 việc (gọt, thái, chặt), đừng dùng dao chặt để gọt táo.
+> Ví dụ thật + kết quả mong đợi:
+> ```text
+> Prompt thật (bôi đen hàm login rồi gõ): /explain
+> Kết quả mong đợi: 5–7 câu tiếng Việt: hàm làm gì, mỗi nhánh if làm gì, rủi ro null ở đâu.
+> Prompt tiếp: /fix "thêm null check cho customerId, giữ nguyên shape { code, message }"
+> Kết quả mong đợi: diff chỉ trong hàm đó + gợi ý chạy focused test.
+> Prompt tiếp: /tests "viết theo mẫu login.test.ts"
+> Kết quả mong đợi: file test mới có case 400 khi thiếu customerId. Verify: chạy test PASS.
+> ```
+
+| Lệnh | Là gì (hiểu nôm na) + Ví dụ cụ thể | Khi nào dùng + Chi tiết |
 |---|---|---|
 | `/explain` | Giải thích code đang chọn bằng model hiện tại | [./commands/code-actions/explain/README.md](./commands/code-actions/explain/README.md) |
 | `/fix` | Fix lỗi/selection đang chọn (nhanh hơn prompt tay) | [./commands/code-actions/fix/README.md](./commands/code-actions/fix/README.md) |
@@ -82,7 +142,19 @@ gắn đúng scope, đúng model, đúng tools ngay từ turn 1 — rẻ hơn 3�
 
 ## Nhóm 4 — System & Knowledge (15)
 
-| Lệnh | Mô tả 1 dòng | Chi tiết |
+> **Nhóm này là gì?** Lệnh xem/sửa "hậu trường": instructions đang load gì, MCP nào đang bật, account nào đang login.
+> Hiểu nôm na: như mở nắp capo xe kiểm tra nhớt/nước mát trước chuyến đi xa.
+> Ví dụ thật + kết quả mong đợi:
+> ```text
+> Prompt thật: /status → /instructions → /mcp (chạy theo thứ tự)
+> Kết quả mong đợi: /status hiện Active + đúng account; /instructions liệt kê
+> muse-instructions.md + files applyTo; /mcp hiện github connected.
+> Verify: nếu /mcp báo disconnected → check .vscode/mcp.json + key, reconnect.
+> Prompt thật: @github Tóm tắt issue #123 (mô tả + comments mới nhất)
+> Kết quả mong đợi: bản tóm tắt 5–7 dòng + ai đang làm. Copy vào task cho /agent.
+> ```
+
+| Lệnh | Là gì (hiểu nôm na) + Ví dụ cụ thể | Khi nào dùng + Chi tiết |
 |---|---|---|
 | `/instructions` | Xem/sửa instructions đang load cho repo này | [./commands/system-knowledge/instructions/README.md](./commands/system-knowledge/instructions/README.md) |
 | `/prompts` | Liệt kê prompt files `.github/prompts/` khả dụng | [./commands/system-knowledge/prompt-file/README.md](./commands/system-knowledge/prompt-file/README.md) |
@@ -250,7 +322,16 @@ gh copilot suggest "viet commit message conventional commits cho diff hien tai"
 
 ---
 
-## 9. Pitfalls + bài tập
+## 9. Hiểu nhầm thường gặp + Pitfalls + bài tập
+
+### 9.0. Hiểu nhầm thường gặp về commands
+
+| Hiểu nhầm | Sự thật | Ví dụ |
+|---|---|---|
+| "`/` `@` `#` là 1, dùng cái nào cũng được" | `/` chạy workflow, `@` chọn nguồn tri thức, `#` gắn file cụ thể | `/fix` + `#selection` + `@workspace` là 3 việc khác nhau, hay đi cùng nhau |
+| "Gõ tự nhiên dài là tốt nhất" | Prompt dài không scope tốn 3–5 turns làm rõ | Thêm `#file`/`@workspace` ngay turn 1 rẻ hơn nhiều |
+| "Ask không sửa được là bug" | Ask cố tình read-only để hỏi an toàn | Muốn sửa → `/edit` hoặc Agent mode |
+| "Lệnh vắng mặt là Copilot hỏng" | Thường do plan gating hoặc extension cũ | Check `/status` + plan + gõ `/` xem list thực tế |
 
 | Pitfall | Vì sao xảy ra | Fix |
 |---|---|---|

@@ -1,9 +1,14 @@
-# 01 — Hướng dẫn sử dụng Muse
+# 01 — Hướng dẫn sử dụng Muse (đọc từ 00 → 16)
 
 Đọc theo thứ tự **00 → 16**: từ tổng quan, cài đặt, bề mặt sử dụng, cấu hình nền tảng
 (`muse-instructions.md`, chat commands, prompt files, custom agents, instructions,
 rules, MCP, extensions, policies), tới agent mode, code review, testing,
 models, security và best practices team.
+
+Cách học nhanh: đọc bài tổng quan trước (00–04), vừa đọc vừa mở `commands/` tra lệnh tương ứng
+(ví dụ đọc bài 04 thì mở `commands/code-actions/fix/` xem ví dụ prompt thật). Mỗi folder lệnh trong
+`commands/` đều theo format cố định: **lệnh làm gì → khi nào dùng → cách gọi → ví dụ prompt thật +
+kết quả mong đợi → lỗi thường gặp**.
 
 ## Danh sách bài (17 bài)
 

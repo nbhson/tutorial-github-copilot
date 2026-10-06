@@ -20,7 +20,23 @@
 
 ## 1. Vì sao nhiều bề mặt? (why)
 
-Cùng 1 model Copilot, nhưng **code chạy ở đâu** và **config nào được dùng** khác nhau:
+- Là gì (1 câu): "bề mặt" (surface) là nơi bạn gặp Copilot — VS Code, web, terminal, điện thoại.
+- Hiểu nôm na: như cùng 1 đầu bếp nhưng có nhiều quầy: quầy tại bàn (VS Code), giao tận nhà (coding agent cloud), quầy take-away (CLI).
+- Ví dụ kỹ thuật: cùng lệnh "thêm rate-limit", làm ở VS Code thì chạy `npm test` local; giao coding agent thì nó chạy CI trên cloud.
+
+```mermaid
+flowchart TD
+    A[Task của bạn] --> B{Cần gì?}
+    B -- "Terminal local, DB local, MCP local" --> C[VS Code Agent\nMáy bạn, full tools]
+    B -- "Gõ nhanh trong IDE quen tay" --> D[JetBrains / VS / Neovim\nGõ + hỏi nhanh]
+    B -- "Quên lệnh shell" --> E[Copilot CLI\nsuggest / explain]
+    B -- "Task độc lập, chạy qua đêm" --> F[Coding agent cloud\nAssign issue -> PR]
+    B -- "Hỏi nhanh, không có máy dev" --> G[github.com chat / Mobile\ngithub.dev]
+    C --> H{Pass test local?}
+    H -- Rồi --> I[Mở PR]
+    F --> J[Review PR trên web]
+    J --> I
+```
 
 ```text
 VS Code / Visual Studio / JetBrains / Neovim / CLI -> code chay TREN MAY BAN,
@@ -46,6 +62,11 @@ Task 2 giờ (migrate, refactor 50 files) cần máy chạy tiếp khi bạn g�
 - Inline diff + Accept/Reject từng hunk, `#file/#selection` gắn scope chính xác.
 
 ### 2.2. 3 modes trong Chat (học thuộc)
+
+> **Ask / Edit / Agent khác nhau thế nào?**
+> Định nghĩa: 3 mức "quyền" bạn cấp cho Copilot trong 1 phiên chat.
+> Hiểu nôm na: Ask = hỏi thầy (chỉ nghe), Edit = thuê thợ sửa 2 viên gạch bạn chỉ, Agent = giao cả nhà cho thầu.
+> Ví dụ kỹ thuật: Ask không tạo diff; Edit tạo diff trong files bạn chọn; Agent tự mở thêm files + chạy `npm test`.
 
 | Mode | Sửa file? | Chạy terminal? | Khi dùng |
 |---|---|---|---|
@@ -151,7 +172,28 @@ Khi dung: review PR ngoai gio, hoi code khi khong co may dev.
 
 ### 4.2. Coding agent (assign issue → branch → PR)
 
-Đây là "agent cloud" 2025–2026: bạn giao việc, nó tự code trên cloud VM.
+- Là gì (1 câu): coding agent là Copilot chạy trên máy cloud của GitHub, tự code rồi mở PR khi bạn assign issue cho nó.
+- Hiểu nôm na: như gửi xe vào gara qua đêm: tối giao chìa khóa (issue), sáng nhận xe đã sửa (PR).
+- Ví dụ kỹ thuật: issue "Fix crash POST /orders" → agent tạo branch `copilot/fix-orders-422`, sửa `orders.ts`, chạy CI, mở PR link về issue.
+
+```mermaid
+sequenceDiagram
+    participant You as Bạn
+    participant Issue as GitHub Issue
+    participant Agent as Coding agent (cloud VM)
+    participant PR as Pull Request
+    You->>Issue: Viết issue: mục tiêu + scope + lệnh verify
+    You->>Issue: Assign cho bot copilot
+    Issue->>Agent: Kích hoạt: clone repo + đọc issue
+    Agent->>Agent: Đọc code, sửa, chạy test trên cloud
+    Agent->>PR: Mở PR + báo cáo files đổi + rủi ro
+    You->>PR: Review diff + CI, comment yêu cầu sửa
+    Agent->>PR: Push thêm commits theo review
+    You->>PR: CI xanh + duyệt -> Merge
+```
+
+> **Kỳ vọng / Verify:** sau khi assign 2–5 phút, issue phải hiện dòng "Copilot started work..."
+> và có branch `copilot/...` mới. Không thấy = assign nhầm người, hoặc repo chưa bật coding agent.
 
 ```text
 Flow chuan (copy-paste tung buoc):
@@ -279,6 +321,20 @@ gh copilot suggest "chay migration prisma tren staging (dry-run truoc)"
 
 ### 7.1. Bảng so sánh (nơi code chạy, config nào dùng, khi nào dùng)
 
+### 7.1b. Bảng thuật ngữ bề mặt (tra nhanh)
+
+| Thuật ngữ | Là gì (hiểu nôm na) | Ví dụ cụ thể | Khi nào dùng |
+|---|---|---|---|
+| **Surface** | Quầy gặp đầu bếp: VS Code, web, CLI, mobile | VS Code = quầy tại bàn, CLI = quầy take-away | Khi chọn nơi làm việc |
+| **Local agent** | Thợ làm tại nhà bạn, thấy tủ lạnh (`.env`, DB) | VS Code agent chạy `npm test` local | Task cần env/DB/MCP local |
+| **Coding agent** | Đội thi công qua đêm trên xưởng cloud | Assign issue → sáng có PR `copilot/fix-...` | Task độc lập, verify bằng CI |
+| **github.dev** | VS Code chạy trong browser (nhấn `.`) | Sửa typo không cần clone | Sửa nhanh, máy lạ, demo |
+| **Copilot CLI** | Từ điển lệnh shell biết nói tiếng Việt | `gh copilot suggest "nén folder dist"` | Quên flag docker/git/ffmpeg |
+
+> **Kỳ vọng / Verify:** đọc xong bảng, bạn trả lời được trong 10 giây cho mỗi task:
+> "code chạy ở đâu + config nào được dùng". Test: hỏi "task này cần `.env` local không?"
+> Có → local agent; Không, CI đủ → coding agent.
+
 | Surface | Nơi code chạy | Config nào dùng | Khi nào dùng |
 |---|---|---|---|
 | **VS Code** | Máy bạn | `.github/` + `.vscode/` + MCP local | Mặc định; agent multi-file + terminal |
@@ -312,7 +368,16 @@ Task 5: "Review PR cua coding agent luc dang cafe" -> github.com chat / Mobile.
 
 ---
 
-## 8. Pitfalls + bài tập
+## 8. Hiểu nhầm thường gặp + Pitfalls + bài tập
+
+### 8.0. Hiểu nhầm thường gặp về bề mặt
+
+| Hiểu nhầm | Sự thật | Ví dụ |
+|---|---|---|
+| "VS Code và github.com agent giống hệt nhau" | Local thấy `.env`/DB/MCP local; cloud chỉ thấy repo + CI | Task cần DB local mà giao cloud là fail chắc |
+| "Neovim agent yếu là do Copilot dở" | Do harness Neovim thiếu terminal tool full, không phải model dở | Chuyển task khó sang VS Code là xong |
+| "github.dev có terminal thật" | github.dev chạy trên browser, không có terminal local | Cần chạy test thật → về VS Code local |
+| "CLI suggest luôn đúng" | Suggest là gợi ý, có thể sai flag nguy hiểm (`rm`, `find -delete`) | Luôn `explain` + chạy khô (`head`/dry-run) trước |
 
 ### 8.1. Lưu ý config theo surface
 

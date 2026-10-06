@@ -1,4 +1,4 @@
-# 02 — Tips thực chiến (11 bài)
+# 02 — Tips thực chiến (11 bài, đọc khi đã dùng được cơ bản)
 
 | # | Bài | Mô tả 1 dòng | Link |
 |---|-----|--------------|------|

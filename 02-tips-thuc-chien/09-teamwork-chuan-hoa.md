@@ -18,6 +18,32 @@
 
 ---
 
+## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
+|---|---|---|---|---|
+| **Chuẩn hóa team** | Cả đội đá 1 chiến thuật, không ai đá tự do. | Như quán phở: 5 chi nhánh cùng công thức, khách ăn đâu cũng giống. | `muse-instructions.md + prompts/ + agents/ + verify.yml` commit vào repo. | Người mới clone là có, không setup miệng. |
+| **CODEOWNERS** | Bảng phân công: đất ai người đó duyệt. | Như tổ trưởng: việc payments phải qua tổ payments ký. | `/src/payments/** @team-payments`. | PR chạm payments tự tag đúng owner + SLA 24h. |
+| **Review 3 lớp** | 3 cặp mắt: máy quét + bạn chấm + sếp chốt. | Như kiểm hàng: máy soi + nhân viên + quản lý. | Copilot review → `/team-review` fresh → người CODEOWNERS. | PR merge có 2 reviews + CI xanh + Evidence logs. |
+| **Onboarding 30 phút** | Học việc cấp tốc: 30 phút là làm được việc. | Như hướng dẫn xe mới: 30 phút là lái ra đường. | `docs/copilot-onboarding.md`: Ask 10p + Fix 10p + Plan 10p. | Người mới tự xong PR đầu không cần hỏi. |
+
+```mermaid
+flowchart TD
+    A[Repo mới] --> B[Viết instructions + 2 prompts]
+    B --> C[Thêm verify.yml + CODEOWNERS]
+    C --> D[Viết onboarding 30p]
+    D --> E[Mở PR team setup]
+    E --> F[Demo 30p cả team]
+    F --> G[Người mới onboard 30p]
+    G --> H[Monthly audit usage/incidents]
+```
+
+Giải thích: luật nằm trong repo (không nằm trong đầu ai). Mọi đổi qua PR + lead review. Bắt đầu nhẹ (1 review + CI), chặt dần theo incidents.
+
+> ✅ **Kỳ vọng thấy gì:** sau 60 phút (mục 7), repo có `.github/` + `verify.yml` + `CODEOWNERS` + `copilot-onboarding.md`; PR mới có Evidence logs.
+
+---
+
 ## 1. Vì sao phải chuẩn hóa?
 
 Không chuẩn hóa, team bạn sẽ:
@@ -306,18 +332,37 @@ Sau 60 phút: repo có bộ khung team. Tuần sau đo: PR có evidence? review 
 
 ## 8. Bảng tra nhanh: ai giữ gì?
 
-| Việc | Ai | Ở đâu | Khi nào sửa |
-|---|---|---|---|
-| Luật chung | Tech leads | muse-instructions.md | Luật lặp lại >2 lần |
-| Luật module | Owner module | *.instructions.md | Module đổi convention |
-| Prompt team | Cả team PR | .github/prompts/ | Prompt dùng >2 lần/tuần |
-| Agents/skills | Leads + contributors | agents/ skills/ | Procedure >5 bước |
-| CI/gates | DevOps/leads | verify.yml, protection | Thêm check mới |
-| Knowledge base | Tech writers/leads | Org knowledge | Docs/spec đổi |
-| Onboarding | Buddy + leads | docs/copilot-onboarding.md | Người mới feedback |
-| Usage/incidents | Leads monthly | Wiki report | Monthly audit |
+| Việc | Hiểu nôm na | Ví dụ | Ai | Ở đâu | Khi nào sửa |
+|---|---|---|---|---|---|
+| Luật chung | Hiến pháp cả nước. | Cấm sửa `generated/` mọi lúc. | Tech leads | muse-instructions.md | Luật lặp lại >2 lần |
+| Luật module | Luật làng. | Riêng `payments/` cần idempotency-key. | Owner module | *.instructions.md | Module đổi convention |
+| Prompt team | Đơn mẫu cả xã dùng. | `/team-bug` fix + regression. | Cả team PR | .github/prompts/ | Prompt dùng >2 lần/tuần |
+| Agents/skills | Tổ chuyên môn. | Skill `release` 4 bước. | Leads + contributors | agents/ skills/ | Procedure >5 bước |
+| CI/gates | Cổng làng + camera. | `verify.yml` test/lint/build. | DevOps/leads | verify.yml, protection | Thêm check mới |
+| Knowledge base | Thư viện làng. | `org-docs` ADRs + API specs. | Tech writers/leads | Org knowledge | Docs/spec đổi |
+| Onboarding | Trường làng 30 phút. | `copilot-onboarding.md` Ask/Fix/Plan. | Buddy + leads | docs/copilot-onboarding.md | Người mới feedback |
+| Usage/incidents | Sổ họp làng hàng tháng. | Report requests + retry + SLA. | Leads monthly | Wiki report | Monthly audit |
 
 > Quy tắc ngón tay: **ai đau nhất vì thiếu luật thì người đó đề xuất PR, lead duyệt.**
+
+### Before / After — mạnh ai nấy đá vs chuẩn hóa
+
+**Before (mỗi người 1 kiểu):**
+```text
+An prompt: "fix giúp" — Bình prompt: "sửa code" — Chi không dùng prompt files.
+Luật "đừng đụng generated/" nằm trong đầu An. Guardrails chỉ máy An có.
+Người mới hỏi 2 tuần, PR 5 kiểu, review cãi nhau vì không có Evidence chuẩn.
+```
+> Kết quả: review mệt, incident 1 lần/tuần (sửa generated/commit main), onboard 2 tuần.
+
+**After (chuẩn hóa 60 phút):**
+```text
+Mọi người gọi: /team-bug scope=... bug=... → cùng format + Evidence.
+Luật trong .github/muse-instructions.md (<200 dòng). Gates: verify.yml + CODEOWNERS + protection.
+Người mới đọc docs/copilot-onboarding.md 30 phút → PR đầu có log xanh.
+```
+> Kết quả: 100% PR có Evidence, onboard 30 phút, incident ~0. Verify: `git log -- .github/` thấy luật đổi qua PR + review.
+> ✅ **Kỳ vọng thấy gì:** PR mẫu có `## Evidence` + 2 reviews (bot + người) + CI xanh.
 
 ---
 
