@@ -1,27 +1,30 @@
 # 03 — Instructions, Memory & Rules (File Quan Trọng Nhất Copilot)
 
-> Bài 03 của series — file quyết định 50% chất lượng agent. Đọc xong bạn viết được
-> `.github/muse-instructions.md` <200 dòng, tách rules theo `applyTo` globs,
-> tương thích `AGENTS.md`, và hiểu instruction hierarchy. Thời gian: ~35 phút.
+> **Dành cho:** dev đã dùng Copilot Chat nhưng chưa có file instructions chuẩn cho repo.
+> **Vấn đề:** agent đoán lệnh sai, chạy sai style, đụng vào file generated — vì repo không có file hướng dẫn.
+> **Đọc xong:** viết được `.github/muse-instructions.md` <200 dòng, tách rules theo `applyTo` globs,
+> tương thích `AGENTS.md`, và hiểu instruction hierarchy. **Thời gian:** ~35 phút.
 
 ## Mục lục
 
 1. [Vì sao instructions là file quan trọng nhất? (why)](#1-vì-sao-instructions-là-file-quan-trọng-nhất-why)
 2. [muse-instructions.md là gì và đặt ở đâu](#2-muse-instructionsmd-là-gì-và-đặt-ở-đâu)
-3. [3 instructions mẫu hoàn chỉnh](#3-3-instructions-mẫu-hoàn-chỉnh-copy-paste)
+3. [3 instructions mẫu hoàn chỉnh (copy-paste)](#3-3-instructions-mẫu-hoàn-chỉnh-copy-paste)
 4. [Rules patterns + applyTo globs](#4-rules-patterns--applyto-globs)
-5. [AGENTS.md portability](#5-agentsmd-portability--viết-1-lần-chạy-mọi-agent)
-6. [Import, @import, front-load và tách nhỏ](#6-import-front-load-và-tách-nhỏ-đừng-phình-file)
+5. [AGENTS.md portability — viết 1 lần, chạy mọi agent](#5-agentsmd-portability--viết-1-lần-chạy-mọi-agent)
+6. [Import, front-load và tách nhỏ (đừng phình file)](#6-import-front-load-và-tách-nhỏ-đừng-phình-file)
 7. [VS Code settings custom instructions deep-dive](#7-vs-code-settings-custom-instructions-deep-dive)
 8. [Walkthrough viết instructions từ 0](#8-walkthrough-viết-instructions-từ-0)
-9. [Pitfalls + bài tập](#9-pitfalls--bài-tập)
+9. [Hiểu nhầm thường gặp + Pitfalls + bài tập](#9-hiểu-nhầm-thường-gặp--pitfalls--bài-tập)
 10. [Link chéo](#10-link-chéo)
 
 ---
 
 ## 1. Vì sao instructions là file quan trọng nhất? (why)
 
-- Là gì (1 câu): instructions là file markdown bạn viết, Copilot đọc đầu mỗi chat và nhớ suốt phiên.
+Section này trả lời: vì sao một file markdown nhỏ lại quyết định 50% chất lượng agent?
+
+- Là gì (1 câu): instructions là file markdown do bạn viết. Copilot đọc nó ở đầu mỗi chat và nhớ suốt phiên.
 - Hiểu nôm na: như tờ dặn dò dán trên tủ lạnh cho người giúp việc: "chó ăn 2 bữa, đừng mở cửa sau".
 - Ví dụ kỹ thuật: dòng `Test focused: npm test -- --filter api` giúp agent không chạy nhầm `pnpm test` full 20 phút.
 
@@ -40,12 +43,14 @@ flowchart TD
 > **Kỳ vọng / Verify:** mở chat mới, hỏi "Liệt kê 3 lệnh dev/test/lint + 2 thứ NEVER".
 > Nếu trả lời khớp file bạn viết = instructions đã load. Sai = check `useInstructionFiles`.
 
-- Viết tốt → mọi task sau tự đúng (lệnh test đúng, style đúng, không đụng generated).
-- Viết tệ (500 dòng wiki) → mọi task sau đều trả premium requests cho rác.
+- Viết tốt → mọi task sau tự đúng: lệnh test đúng, style đúng, không đụng file generated.
+- Viết tệ (500 dòng wiki) → mọi task sau đều trả AI Credits cho rác.
 
-Cơ chế sâu: instructions được inject vào system prompt đầu chat. Mỗi turn agent
-mode nạp lại toàn bộ context (instructions + history + tool results). Nghĩa là
-1 dòng thừa trong instructions = trả tiền N lần (N = số turns).
+Cơ chế sâu (hiểu 1 lần, khỏi thắc mắc sau này):
+
+- Instructions được inject vào system prompt ở đầu chat.
+- Mỗi turn, agent mode nạp lại toàn bộ context: instructions + history + tool results.
+- Nghĩa là: 1 dòng thừa trong instructions = trả tiền N lần (N = số turns).
 
 > Quy tắc 200 dòng không phải thẩm mỹ — là token economics (bài 00 mục 4).
 > 150 dòng ~ 2.500 tokens × N turns. Cắt 1 dòng thừa tiết kiệm N lần.
@@ -54,11 +59,15 @@ mode nạp lại toàn bộ context (instructions + history + tool results). Ngh
 
 ## 2. muse-instructions.md là gì và đặt ở đâu
 
-- Là gì (1 câu): `muse-instructions.md` là file repo-wide, Copilot đọc đầu mỗi Chat khi bật setting.
+Section này trả lời: file instructions chính nằm ở đâu, và 3 loại file instructions khác nhau phân biệt bằng gì?
+
+- Là gì (1 câu): `muse-instructions.md` là file repo-wide. Copilot đọc nó đầu mỗi Chat khi bật setting.
 - Hiểu nôm na: như nội quy chung của cả nhà — ai vào cũng phải đọc.
 - Ví dụ kỹ thuật: ghi `Dev: npm run dev (cần .env từ 1Password)` thì mọi task sau agent tự biết, không hỏi lại.
 
 ### 2.0. Phân biệt 3 loại file (chỗ hay rối nhất — đọc kỹ)
+
+Bảng này là xương sống của cả bài. Đọc kỹ 3 cột "Hiểu nôm na" và "Khi nào dùng".
 
 | Loại file | Nằm ở đâu | Là gì (hiểu nôm na) | Ví dụ cụ thể | Khi nào dùng |
 |---|---|---|---|---|
@@ -119,15 +128,19 @@ wc -l .github/muse-instructions.md .github/instructions/*.instructions.md 2>/dev
 user settings < org policy < repo muse-instructions.md < *.instructions.md (applyTo cu the)
 ```
 
+Hiểu nhanh thứ tự thắng thua:
+
 - File **cụ thể hơn thắng**: rule trong `api.instructions.md` (`applyTo: apps/api/**`)
-  thắng rule chung trong `muse-instructions.md` khi sửa file trong `apps/api/`.
+  thắng rule chung trong `muse-instructions.md` khi bạn sửa file trong `apps/api/`.
 - Org policy (Business/Enterprise) thắng mọi thứ — admin cấm thì repo không mở được.
-- Quy tắc team: personal preferences (ngôn ngữ trả lời) để ở user settings;
-  mọi thứ team dùng chung phải vào repo files + commit.
+- Quy tắc team: personal preferences (ngôn ngữ trả lời) để ở user settings.
+- Mọi thứ team dùng chung phải vào repo files + commit.
 
 ---
 
 ## 3. 3 instructions mẫu hoàn chỉnh (copy-paste)
+
+Section này trả lời: một file instructions hoàn chỉnh trông ra sao? Câu trả lời: 3 mẫu dưới đây.
 
 > Mỗi mẫu <100 dòng, verified-commands, rules check được. Thay `<...>` bằng project bạn.
 
@@ -211,11 +224,13 @@ user settings < org policy < repo muse-instructions.md < *.instructions.md (appl
 
 ## 4. Rules patterns + applyTo globs
 
+Section này trả lời: khi nào phải tách rules ra file riêng theo đường dẫn, và viết glob thế nào cho đúng?
+
 ### 4.1. `*.instructions.md` là gì? (why)
 
-- Là gì (1 câu): file rules theo đường dẫn, có dòng `applyTo: "glob"` ở đầu, chỉ load khi task chạm vào path đó.
-- Hiểu nôm na: như biển báo trong phòng thí nghiệm: chỉ ai vào phòng đó mới cần đọc "không mang nước vào đây".
-- Ví dụ kỹ thuật: file `api.instructions.md` với `applyTo: "apps/api/**"` chỉ load khi bạn sửa file trong `apps/api/`, sửa web thì không load → tiết kiệm tokens.
+- Là gì (1 câu): file rules theo đường dẫn. Đầu file có dòng `applyTo: "glob"`. File chỉ load khi task chạm vào path đó.
+- Hiểu nôm na: như biển báo trong phòng thí nghiệm — chỉ ai vào phòng đó mới cần đọc "không mang nước vào đây".
+- Ví dụ kỹ thuật: file `api.instructions.md` với `applyTo: "apps/api/**"` chỉ load khi bạn sửa file trong `apps/api/`. Sửa web thì không load → tiết kiệm tokens.
 
 > **Kỳ vọng / Verify:** sửa 1 file trong `apps/api/` rồi hỏi agent "rules nào đang áp cho folder này?".
 > Phải kể ra nội dung file `api.instructions.md`. Sửa file ngoài `apps/api/` mà nó vẫn áp = glob quá rộng.
@@ -275,9 +290,11 @@ applyTo: "db/migrations/**"
 
 ## 5. AGENTS.md portability — viết 1 lần, chạy mọi agent
 
+Section này trả lời: viết `AGENTS.md` và `muse-instructions.md` cùng lúc thì để nội dung nào vào file nào?
+
 ### 5.1. AGENTS.md là gì? (why)
 
-- Là gì (1 câu): `AGENTS.md` là file chuẩn mở ở root repo, mọi coding agent (Copilot, Claude Code, Codex, Gemini) đều biết đọc.
+- Là gì (1 câu): `AGENTS.md` là file chuẩn mở ở root repo. Mọi coding agent (Copilot, Claude Code, Codex, Gemini) đều biết đọc.
 - Hiểu nôm na: như ổ cắm điện chuẩn quốc tế — mang máy sấy tóc đi nước nào cũng cắm được.
 - Ví dụ kỹ thuật: ghi `Test: npm test -- --filter api` vào `AGENTS.md` thì đổi từ Copilot sang Claude Code vẫn chạy đúng lệnh, không phải viết lại.
 
@@ -316,6 +333,8 @@ diff <(sort AGENTS.md) <(sort .github/muse-instructions.md) | head -30
 
 ## 6. Import, front-load và tách nhỏ (đừng phình file)
 
+Section này trả lời: khi file instructions bắt đầu phình ra thì sắp xếp thứ tự thế nào, và dòng nào phải tách sang file khác?
+
 ### 6.1. Front-load: rule quan trọng lên đầu (why)
 
 Model đọc instructions từ trên xuống, chú ý đầu file hơn cuối file.
@@ -329,6 +348,8 @@ Rule bị miss 2 lần → chuyển lên top 20 dòng đầu. Thứ tự gợi �
 ```
 
 ### 6.2. Tách nhỏ: khi nào tách file mới?
+
+Bảng này dùng khi file >200 dòng. Cột trái là dấu hiệu, cột phải là đích đến.
 
 | Dấu hiệu file phình | Tách thành |
 |---|---|
@@ -348,6 +369,8 @@ Rule bị miss 2 lần → chuyển lên top 20 dòng đầu. Thứ tự gợi �
 ---
 
 ## 7. VS Code settings custom instructions deep-dive
+
+Section này trả lời: ngoài repo files, instructions còn đặt được ở tầng nào? Câu trả lời: tầng settings của máy cá nhân. Phần này dành cho người cấu hình máy riêng (không commit).
 
 Ngoài repo files, VS Code cho phép instructions ở tầng settings (máy cá nhân):
 
@@ -375,6 +398,8 @@ Ngoài repo files, VS Code cho phép instructions ở tầng settings (máy cá 
 ---
 
 ## 8. Walkthrough viết instructions từ 0
+
+Section này trả lời: chưa có gì trong tay thì bắt đầu từ đâu? Làm theo 4 bước dưới đây, mỗi bước có thời lượng sẵn.
 
 > 30 phút, làm 1 lần/repo. Chuẩn bị: repo thật + Copilot Chat (Agent mode).
 
@@ -425,6 +450,8 @@ Checklist xong khi:
 ---
 
 ## 9. Hiểu nhầm thường gặp + Pitfalls + bài tập
+
+Section này trả lời: team hay sai gì khi viết instructions, và tự sửa bằng 4 bài tập thực hành nào?
 
 ### 9.0. Hiểu nhầm thường gặp (90% team dính)
 

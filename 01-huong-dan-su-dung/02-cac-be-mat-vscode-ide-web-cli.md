@@ -1,24 +1,27 @@
 # 02 — Các Bề Mặt Copilot: VS Code, IDE, Web, CLI
 
-> Bài 02 của series. Đọc xong bạn chọn đúng surface cho từng task, biết code chạy
-> ở đâu + config nào được dùng, setup được coding agent trên github.com và Copilot
-> trong Windows Terminal/GH Desktop. Thời gian: ~30 phút.
+> **Dành cho:** dev đã cài xong Copilot (bài 01), muốn biết task nào nên làm ở surface nào.
+> **Vấn đề:** không biết code chạy ở đâu (máy bạn hay cloud), config nào được dùng, khi nào nên giao việc cho coding agent.
+> **Đọc xong:** chọn đúng surface cho từng task, biết code chạy ở đâu + config nào được dùng, setup được coding agent trên github.com và Copilot trong Windows Terminal/GH Desktop.
+> **Thời gian:** ~30 phút. *(Bài 02 của series)*
 
 ## Mục lục
 
 1. [Vì sao nhiều bề mặt? (why)](#1-vì-sao-nhiều-bề-mặt-why)
 2. [VS Code — bề mặt mạnh nhất](#2-vs-code--bề-mặt-mạnh-nhất)
 3. [Visual Studio + JetBrains + Neovim](#3-visual-studio--jetbrains--neovim)
-4. [github.com chat + coding agent](#4-githubcom-chat--coding-agent-cloud)
+4. [github.com chat + coding agent (cloud)](#4-githubcom-chat--coding-agent-cloud)
 5. [github.dev / Mobile / GH Desktop / Windows Terminal](#5-githubdev--mobile--gh-desktop--windows-terminal)
 6. [Copilot CLI deep-dive](#6-copilot-cli-deep-dive)
-7. [Bảng so sánh tổng + walkthrough chọn surface](#7-bảng-so-sánh-tổng--walkthrough-chọn-surface-theo-task)
+7. [Bảng so sánh tổng + walkthrough chọn surface theo task](#7-bảng-so-sánh-tổng--walkthrough-chọn-surface-theo-task)
 8. [Pitfalls + bài tập](#8-pitfalls--bài-tập)
 9. [Link chéo](#9-link-chéo)
 
 ---
 
 ## 1. Vì sao nhiều bề mặt? (why)
+
+Section này trả lời: "bề mặt" (surface) là gì, và vì sao bạn phải chọn surface theo task thay vì chỉ dùng một nơi duy nhất.
 
 - Là gì (1 câu): "bề mặt" (surface) là nơi bạn gặp Copilot — VS Code, web, terminal, điện thoại.
 - Hiểu nôm na: như cùng 1 đầu bếp nhưng có nhiều quầy: quầy tại bàn (VS Code), giao tận nhà (coding agent cloud), quầy take-away (CLI).
@@ -39,10 +42,10 @@ flowchart TD
 ```
 
 ```text
-VS Code / Visual Studio / JetBrains / Neovim / CLI -> code chay TREN MAY BAN,
-  dung .github/ + .vscode/ repo + settings local cua ban.
-github.com chat + coding agent -> code chay TREN GITHUB CLOUD,
-  chi dung repo (khong thay settings local, env phai cau hinh lai).
+VS Code / Visual Studio / JetBrains / Neovim / CLI -> code chạy TRÊN MÁY BẠN,
+  dùng .github/ + .vscode/ repo + settings local của bạn.
+github.com chat + coding agent -> code chạy TRÊN GITHUB CLOUD,
+  chỉ dùng repo (không thấy settings local, env phải cấu hình lại).
 ```
 
 Vì sao GitHub tách? Task 5 phút (fix typo) cần latency thấp → local.
@@ -52,6 +55,8 @@ Task 2 giờ (migrate, refactor 50 files) cần máy chạy tiếp khi bạn g�
 ---
 
 ## 2. VS Code — bề mặt mạnh nhất
+
+Section này trả lời: vì sao VS Code mạnh nhất, đọc thuộc 3 modes Ask/Edit/Agent, xem ví dụ thật và phím tắt hay dùng.
 
 ### 2.1. Vì sao mạnh nhất? (why)
 
@@ -75,81 +80,83 @@ Task 2 giờ (migrate, refactor 50 files) cần máy chạy tiếp khi bạn g�
 | **Agent** | Có (tự tìm files) | Có | Task mở, multi-file, cần verify bằng test |
 
 ```text
-# Flow khuyen nghi (copy-paste tu duy):
-# 1. Chua ro -> Ask: "@workspace ham login chay qua nhung file nao?"
-# 2. Ro scope -> Edit: chon 2-3 files + "them null check, giu nguyen API".
-# 3. Viec mo -> Agent: "them rate-limit cho POST /login, chay test xac nhan."
+# Flow khuyến nghị (copy-paste tư duy):
+# 1. Chưa rõ -> Ask: "@workspace hàm login chạy qua những file nào?"
+# 2. Rõ scope -> Edit: chọn 2-3 files + "thêm null check, giữ nguyên API".
+# 3. Việc mở -> Agent: "thêm rate-limit cho POST /login, chạy test xác nhận."
 ```
 
 ### 2.3. Ví dụ thực tế (copy-paste)
 
 ```text
-# Ask (khong sua gi, hieu truoc):
-"@workspace @file:package.json repo nay chay dev/test/lint bang lenh nao?
-Tra loi ngan gon, khong sua file."
+# Ask (không sửa gì, hiểu trước):
+"@workspace @file:package.json repo này chạy dev/test/lint bằng lệnh nào?
+Trả lời ngắn gọn, không sửa file."
 
-# Edit (scope hep, duyet diff):
+# Edit (scope hẹp, duyệt diff):
 "#file:src/routes/login.ts #file:src/middleware/auth.ts
-Them rate-limit 5 req/phut cho POST /login dung express-rate-limit.
-Giu nguyen response shape { code, message, requestId }."
+Thêm rate-limit 5 req/phút cho POST /login dùng express-rate-limit.
+Giữ nguyên response shape { code, message, requestId }."
 
-# Agent (task mo, co verify):
-"Trong apps/api, endpoint POST /orders crash khi thieu customerId.
-Tim root cause, fix, them regression test, chay npm test de xac nhan.
-Dung sua gi ngoai scope nay."
+# Agent (task mở, có verify):
+"Trong apps/api, endpoint POST /orders crash khi thiếu customerId.
+Tìm root cause, fix, thêm regression test, chạy npm test để xác nhận.
+Đừng sửa gì ngoài scope này."
 ```
 
 ### 2.4. Phím tắt đáng nhớ
 
 ```text
-Ctrl+Alt+I            mo Copilot Chat panel
-Ctrl+Shift+P > Chat   lenh chat (New Chat, Attach File...)
-Tab                   nhan ghost text (autocomplete)
-/  @  #              trong Chat input: lenh / participant @ / bien #
-Up/Down trong input   lich su prompt (dung lai prompt cu sua nhanh)
+Ctrl+Alt+I            mở Copilot Chat panel
+Ctrl+Shift+P > Chat   lệnh chat (New Chat, Attach File...)
+Tab                   nhận ghost text (autocomplete)
+/  @  #              trong Chat input: lệnh / participant @ / biến #
+Up/Down trong input   lịch sử prompt (dùng lại prompt cũ sửa nhanh)
 ```
 
 ---
 
 ## 3. Visual Studio / JetBrains / Neovim
 
+Section này dành cho bạn dùng IDE khác VS Code: biết điểm mạnh/yếu của từng nơi, khi nào nên ở lại và khi nào chuyển sang VS Code.
+
 ### 3.1. Visual Studio (Windows, .NET/C++)
 
 ```text
-Manh: ghost text + Chat cho solution .NET lon, hieu MSBuild/C# context tot.
-Yeu hon VS Code: agent mode han che terminal tools; MCP/custom agents ho tro cham hon.
-Khi dung: dev .NET/WinForms/WPF/C++ hang ngay.
-Khi chuyen: task multi-file + terminal phuc tap -> sang VS Code.
+Mạnh: ghost text + Chat cho solution .NET lớn, hiểu MSBuild/C# context tốt.
+Yếu hơn VS Code: agent mode hạn chế terminal tools; MCP/custom agents hỗ trợ chậm hơn.
+Khi dùng: dev .NET/WinForms/WPF/C++ hàng ngày.
+Khi chuyển: task multi-file + terminal phức tạp -> sang VS Code.
 ```
 
 ```text
-Verify 30 giay:
-1. Mo file .cs -> ghost text hien, Tab nhan duoc.
-2. View -> Copilot Chat -> hoi "@workspace solution nay co may projects?"
-3. Thu Edit nho: chon 1 method + "them null check cho params".
+Verify 30 giây:
+1. Mở file .cs -> ghost text hiện, Tab nhận được.
+2. View -> Copilot Chat -> hỏi "@workspace solution này có mấy projects?"
+3. Thử Edit nhỏ: chọn 1 method + "thêm null check cho params".
 ```
 
 ### 3.2. JetBrains (IntelliJ / PyCharm / WebStorm / GoLand...)
 
 ```text
-Manh: ghost text + Chat hieu project model JetBrains (module indexes).
-Yeu hon VS Code: agent terminal tool han che; prompt files/agents co the cham ho tro.
-Khi dung: Java/Kotlin/Python/Go hang ngay trong IDE quen tay.
-Khi chuyen: can MCP + custom agents day du -> sang VS Code.
+Mạnh: ghost text + Chat hiểu project model JetBrains (module indexes).
+Yếu hơn VS Code: agent terminal tool hạn chế; prompt files/agents có thể hỗ trợ chậm.
+Khi dùng: Java/Kotlin/Python/Go hàng ngày trong IDE quen tay.
+Khi chuyển: cần MCP + custom agents đầy đủ -> sang VS Code.
 ```
 
 ### 3.3. Neovim
 
 ```bash
-# Manh: go nhanh, nhe, ghost text ngay trong buffer.
-# Yeu: khong co agent mode full (khong terminal tool nhu VS Code).
-# Khi dung: edit nhanh, fix nho, gõ code toc do cao.
-# Khi chuyen: task can doc nhieu file + chay test -> sang VS Code.
+# Mạnh: gõ nhanh, nhẹ, ghost text ngay trong buffer.
+# Yếu: không có agent mode full (không terminal tool như VS Code).
+# Khi dùng: edit nhanh, fix nhỏ, gõ code tốc độ cao.
+# Khi chuyển: task cần đọc nhiều file + chạy test -> sang VS Code.
 
-# Lennh hang ngay:
-# :Copilot status    -> kiem tra
-# :Copilot enable    -> bat lai
-# Tab                -> nhan goi y
+# Lệnh hàng ngày:
+# :Copilot status    -> kiểm tra
+# :Copilot enable    -> bật lại
+# Tab                -> nhận gợi ý
 ```
 
 > Quy tắc team: Neovim/VS/JetBrains để gõ + hỏi nhanh. VS Code để agent.
@@ -159,15 +166,17 @@ Khi chuyen: can MCP + custom agents day du -> sang VS Code.
 
 ## 4. github.com chat + coding agent (cloud)
 
+Section này dành cho bạn muốn làm việc không cần máy dev: hỏi anh bằng web chat, hoặc giao hẳn việc cho coding agent trên cloud để nó mở PR.
+
 ### 4.1. github.com Chat (hỏi trên web)
 
 ```text
-Vao repo tren github.com -> nhan icon Copilot (goc phai) -> hoi bang tieng Viet/Anh.
-Dung duoc: "@workspace" tuong duong (hoi toan repo), doc file/PR/issue.
+Vào repo trên github.com -> nhấn icon Copilot (góc phải) -> hỏi bằng tiếng Việt/Anh.
+Dùng được: "@workspace" tương đương (hỏi toàn repo), đọc file/PR/issue.
 
-Manh: khong can setup local, hoi tu dien thoai duoc.
-Yeu: khong thay settings local, khong chay terminal local, khong MCP local.
-Khi dung: review PR ngoai gio, hoi code khi khong co may dev.
+Mạnh: không cần setup local, hỏi từ điện thoại được.
+Yếu: không thấy settings local, không chạy terminal local, không MCP local.
+Khi dùng: review PR ngoài giờ, hỏi code khi không có máy dev.
 ```
 
 ### 4.2. Coding agent (assign issue → branch → PR)
@@ -196,32 +205,32 @@ sequenceDiagram
 > và có branch `copilot/...` mới. Không thấy = assign nhầm người, hoặc repo chưa bật coding agent.
 
 ```text
-Flow chuan (copy-paste tung buoc):
-1. Tao issue mo ta ro: muc tieu + scope files + lenh verify + "dung dung X".
-   Vi du: "POST /orders crash khi thieu customerId. Fix + regression test.
-   Verify: npm test -- --filter api. Dung doi schema DB."
-2. Trong issue, Assign -> chon "copilot" (bot) nhu assign dev.
-3. Agent tu: tao branch `copilot/fix-...`, doc code, sua, chay test, mo PR + link ve issue.
-4. Ban review PR nhu review cua junior dev: doc diff, xem CI, comment yeu cau sua.
-5. Agent tu push them commits theo review comments (neu ban tag no).
-6. CI xanh + duyet -> merge.
+Flow chuẩn (copy-paste từng bước):
+1. Tạo issue mô tả rõ: mục tiêu + scope files + lệnh verify + "đừng dùng X".
+   Ví dụ: "POST /orders crash khi thiếu customerId. Fix + regression test.
+   Verify: npm test -- --filter api. Đừng đổi schema DB."
+2. Trong issue, Assign -> chọn "copilot" (bot) như assign dev.
+3. Agent tự: tạo branch `copilot/fix-...`, đọc code, sửa, chạy test, mở PR + link về issue.
+4. Bạn review PR như review của junior dev: đọc diff, xem CI, comment yêu cầu sửa.
+5. Agent tự push thêm commits theo review comments (nếu bạn tag nó).
+6. CI xanh + duyệt -> merge.
 ```
 
 ```text
-# Mau issue giao cho coding agent (copy-paste, sua lai):
-## Muc tieu
-Fix crash POST /orders khi payload thieu customerId (tra 422 + { code, message }).
+# Mẫu issue giao cho coding agent (copy-paste, sửa lại):
+## Mục tiêu
+Fix crash POST /orders khi payload thiếu customerId (trả 422 + { code, message }).
 
 ## Scope
-- Chi sua: apps/api/src/routes/orders.ts + test tuong ung.
-- Dung sua: schema DB, auth middleware.
+- Chỉ sửa: apps/api/src/routes/orders.ts + test tương ứng.
+- Đừng sửa: schema DB, auth middleware.
 
-## Verify (agent phai chay that tren cloud)
+## Verify (agent phải chạy thật trên cloud)
 - npm test -- --filter api (pass)
 - npm run lint (pass)
 
-## Bao cao trong PR
-- File nao doi, vi sao; con rui ro gi.
+## Báo cáo trong PR
+- File nào đổi, vì sao; còn rủi ro gì.
 ```
 
 ### 4.3. Khi nào dùng coding agent vs local agent?
@@ -238,33 +247,35 @@ Fix crash POST /orders khi payload thieu customerId (tra 422 + { code, message }
 
 ## 5. github.dev / Mobile / GH Desktop / Windows Terminal
 
+Section này dành cho các bề mặt phụ: VS Code trên browser, điện thoại, GitHub Desktop, Windows Terminal — dùng đúng lúc sẽ tiết kiệm thời gian.
+
 ### 5.1. github.dev (VS Code trên browser)
 
 ```text
-Nhan "." (cham) khi dang xem repo tren github.com -> mo github.dev (VS Code web).
-Dang nhap Copilot -> co ghost text + Chat co ban.
-Khi dung: sua nhanh khong can clone, demo, may la.
-Gioi han: khong terminal that, khong MCP local.
+Nhấn "." (chấm) khi đang xem repo trên github.com -> mở github.dev (VS Code web).
+Đăng nhập Copilot -> có ghost text + Chat cơ bản.
+Khi dùng: sửa nhanh không cần clone, demo, máy lạ.
+Giới hạn: không terminal thật, không MCP local.
 ```
 
 ### 5.2. Mobile (iOS/Android)
 
 ```text
-GitHub Mobile app -> mo repo/PR/issue -> icon Copilot -> hoi.
-Khi dung: doc giai thich PR khi dang di duong, duyet coding-agent PR.
-Khong dung: viet code nghiem tuc (man hinh nho, khong diff tot).
+GitHub Mobile app -> mở repo/PR/issue -> icon Copilot -> hỏi.
+Khi dùng: đọc giải thích PR khi đang đi đường, duyệt coding-agent PR.
+Không dùng: viết code nghiêm túc (màn hình nhỏ, không diff tốt).
 ```
 
 ### 5.3. GitHub Desktop
 
 ```text
-GH Desktop 2026 co tich hop Copilot: goi y commit message + mo PR body summary.
-Khi dung: ban thich GUI git, muon commit message tu dong theo diff.
-Verify: stage files -> nut "Generate commit message" (icon Copilot) -> duyet truoc khi commit.
+GH Desktop 2026 có tích hợp Copilot: gợi ý commit message + mở PR body summary.
+Khi dùng: bạn thích GUI git, muốn commit message tự động theo diff.
+Verify: stage files -> nút "Generate commit message" (icon Copilot) -> duyệt trước khi commit.
 ```
 
 ```bash
-# Tuong duong CLI (khi khong dung GUI):
+# Tương đương CLI (khi không dùng GUI):
 git diff --staged --stat
 gh copilot suggest "viet commit message conventional commits cho diff hien tai"
 ```
@@ -272,25 +283,27 @@ gh copilot suggest "viet commit message conventional commits cho diff hien tai"
 ### 5.4. Copilot trong Windows Terminal
 
 ```text
-Windows Terminal + GitHub Copilot CLI ho tro goi y lenh ngay trong terminal.
-Khi dung: dev Windows khong dung WSL, muon suggest lenh PowerShell.
-Cai: Windows Terminal moi nhat + gh + gh-copilot (muc 6) + dang nhap.
-Gioi han: PowerShell suggestion kem hon bash/zsh (test ky truoc khi Enter).
+Windows Terminal + GitHub Copilot CLI hỗ trợ gợi ý lệnh ngay trong terminal.
+Khi dùng: dev Windows không dùng WSL, muốn suggest lệnh PowerShell.
+Cài: Windows Terminal mới nhất + gh + gh-copilot (mục 6) + đăng nhập.
+Giới hạn: PowerShell suggestion kém hơn bash/zsh (test kỹ trước khi Enter).
 ```
 
 ---
 
 ## 6. Copilot CLI deep-dive
 
+Section này dành cho bạn muốn dùng CLI thành thạo: 2 lệnh gốc, quy trình an toàn với lệnh nguy hiểm, và pattern kết hợp CLI + IDE.
+
 ### 6.1. Hai lệnh gốc (dùng hàng ngày)
 
 ```bash
-# suggest: sinh lenh shell tu mo ta tieng Viet/Anh:
+# suggest: sinh lệnh shell từ mô tả tiếng Việt/Anh:
 gh copilot suggest "xoa cac git branch local da merge vao main"
 gh copilot suggest "tim 10 file lon nhat trong thu muc hien tai"
 gh copilot suggest "backup folder data sang data-$(date +%F).tar.gz"
 
-# explain: giai thich lenh kho hieu truoc khi chay:
+# explain: giải thích lệnh khó hiểu trước khi chạy:
 gh copilot explain "find . -type f -name '*.log' -mtime +7 -delete"
 gh copilot explain "git rebase --onto main feature-old feature-new"
 ```
@@ -298,30 +311,34 @@ gh copilot explain "git rebase --onto main feature-old feature-new"
 ### 6.2. Flow an toàn với lệnh nguy hiểm (copy-paste)
 
 ```bash
-# NGUYEN TAC: explain truoc, chay sau. Dac biet voi rm/find/docker prune.
+# NGUYÊN TẮC: explain trước, chạy sau. Đặc biệt với rm/find/docker prune.
 gh copilot explain "find . -type f -name '*.log' -mtime +7 -delete"
-# Doc ky: co dung folder khong? co -delete nham khong?
-# Test kho truoc (them echo / chay tren folder test):
+# Đọc kỹ: đúng folder không? có -delete nhầm không?
+# Test khô trước (thêm echo / chạy trên folder test):
 find . -type f -name '*.log' -mtime +7 | head
-# Dung moi chay that (bo | head, them -delete).
+# Đúng mới chạy thật (bỏ | head, thêm -delete).
 ```
 
 ### 6.3. Kết hợp CLI + IDE (pattern hay)
 
 ```bash
-# Pattern: CLI soan lenh kho -> paste vao VS Code terminal -> agent mode chay + verify.
+# Pattern: CLI soạn lệnh khó -> paste vào VS Code terminal -> agent mode chạy + verify.
 gh copilot suggest "chay migration prisma tren staging (dry-run truoc)"
-# Copy lenh duoc goi y -> dua cho agent mode VS Code:
-# "Chay lenh nay o terminal, doc output, neu loi thi fix config thieu."
+# Copy lệnh được gợi ý -> đưa cho agent mode VS Code:
+# "Chạy lệnh này ở terminal, đọc output, nếu lỗi thì fix config thiếu."
 ```
 
 ---
 
 ## 7. Bảng so sánh tổng + walkthrough chọn surface theo task
 
+Section này trả lời nhanh: mỗi surface code chạy ở đâu, dùng config gì, hợp task nào — để bạn chọn được trong 10 giây.
+
 ### 7.1. Bảng so sánh (nơi code chạy, config nào dùng, khi nào dùng)
 
 ### 7.1b. Bảng thuật ngữ bề mặt (tra nhanh)
+
+Tra cứu nhanh, không cần đọc từ đầu.
 
 | Thuật ngữ | Là gì (hiểu nôm na) | Ví dụ cụ thể | Khi nào dùng |
 |---|---|---|---|
@@ -352,23 +369,25 @@ gh copilot suggest "chay migration prisma tren staging (dry-run truoc)"
 ### 7.2. Walkthrough: 5 task mẫu chọn surface nào?
 
 ```text
-Task 1: "Giai thich ham nay" (5 phut) -> Ask mode o IDE ban dang mo (VS/JetBrains/nvim).
-Task 2: "Them rate-limit + test + chay verify" -> Agent mode VS Code (manh nhat).
-Task 3: "Fix issue doc lap, tao PR, toi di ngu" -> Coding agent (assign issue).
-Task 4: "Quen flag docker/git" -> gh copilot suggest/explain ngay trong terminal.
-Task 5: "Review PR cua coding agent luc dang cafe" -> github.com chat / Mobile.
+Task 1: "Giải thích hàm này" (5 phút) -> Ask mode ở IDE bạn đang mở (VS/JetBrains/nvim).
+Task 2: "Thêm rate-limit + test + chạy verify" -> Agent mode VS Code (mạnh nhất).
+Task 3: "Fix issue độc lập, tạo PR, tối đi ngủ" -> Coding agent (assign issue).
+Task 4: "Quên flag docker/git" -> gh copilot suggest/explain ngay trong terminal.
+Task 5: "Review PR của coding agent lúc đang cafe" -> github.com chat / Mobile.
 ```
 
 ```bash
-# Kiem tra ban dang o surface nao (tu hoi 10 giay):
-# - Co terminal local + MCP local khong? Co -> VS Code. Khong -> cloud.
-# - Can chay tiep khi gap laptop khong? Co -> coding agent.
-# - Chi quen lenh shell? -> CLI, dung mo IDE.
+# Kiểm tra bạn đang ở surface nào (tự hỏi 10 giây):
+# - Có terminal local + MCP local không? Có -> VS Code. Không -> cloud.
+# - Cần chạy tiếp khi gập laptop không? Có -> coding agent.
+# - Chỉ quên lệnh shell? -> CLI, đừng mở IDE.
 ```
 
 ---
 
 ## 8. Hiểu nhầm thường gặp + Pitfalls + bài tập
+
+Section này dành cho bạn muốn tránh 5 nhầm lẫn phổ biến nhất về bề mặt, nắm lưu ý config theo từng surface, rồi luyện bằng 4 bài tập.
 
 ### 8.0. Hiểu nhầm thường gặp về bề mặt
 
@@ -382,12 +401,12 @@ Task 5: "Review PR cua coding agent luc dang cafe" -> github.com chat / Mobile.
 ### 8.1. Lưu ý config theo surface
 
 ```text
-- .github/muse-instructions.md + *.instructions.md: VS Code/JetBrains/VS/nvim doc duoc;
-  coding agent chi doc phan trong repo (khong thay settings local cua ban).
-- .vscode/mcp.json (MCP local): chi VS Code local thay; cloud phai cau hinh MCP cloud rieng.
-- Env secrets (.env local): cloud KHONG thay -> task can DB local dung lam tren VS Code.
-- Model picker: moi surface co list model hoi khac (theo plan) -> het quota model manh
-  thi doi model re hon thay vi doi surface.
+- .github/muse-instructions.md + *.instructions.md: VS Code/JetBrains/VS/nvim đọc được;
+  coding agent chỉ đọc phần trong repo (không thấy settings local của bạn).
+- .vscode/mcp.json (MCP local): chỉ VS Code local thấy; cloud phải cấu hình MCP cloud riêng.
+- Env secrets (.env local): cloud KHÔNG thấy -> task cần DB local đừng làm trên VS Code.
+- Model picker: mỗi surface có list model hơi khác (theo plan) -> hết AI Credits của model mạnh
+  thì đổi model rẻ hơn thay vì đổi surface.
 ```
 
 | Pitfall | Vì sao xảy ra | Fix |

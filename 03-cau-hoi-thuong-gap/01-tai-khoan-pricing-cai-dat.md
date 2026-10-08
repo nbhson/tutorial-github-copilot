@@ -1,12 +1,16 @@
 # FAQ 01 — Tài Khoản, Pricing & Cài Đặt
 
-> Nhóm Tài khoản & Cài đặt · 10 câu hỏi deep-dive · Đọc xong tự chọn plan, xin seat, bật trial, cài sạch trong 10 phút
+> **Dành cho:** dev cần chọn plan, xin seat, bật trial hoặc cài lại Copilot cho sạch — người mới lẫn người đã dùng.
+> **Vấn đề:** "dùng GitHub Copilot 2026 thì cần tài khoản gì, tốn bao nhiêu, cài sao cho sạch" — trả lời theo 10 câu hỏi deep-dive.
+> **Đọc xong:** tự chọn plan, xin seat, bật trial, cài sạch trong ~10 phút. **Thời gian:** ~10 phút đọc.
 
-File này trả lời mọi câu hỏi "dùng Muse 2026 thì cần tài khoản gì, tốn bao nhiêu, cài sao cho sạch". Mỗi câu có giải thích + lệnh copy-paste + ví dụ + khi nào áp dụng.
+File này trả lời mọi câu hỏi "dùng GitHub Copilot 2026 thì cần tài khoản gì, tốn bao nhiêu, cài sao cho sạch". Mỗi câu có giải thích + lệnh copy-paste + ví dụ + khi nào áp dụng.
 
 ---
 
 ## Sơ đồ tư duy nhanh (đọc 30 giây)
+
+Section này trả lời: bạn thuộc nhóm người nào → đi vào plan và đường cài nào cho đúng, không cần đọc cả bài.
 
 ```mermaid
 flowchart LR
@@ -23,31 +27,47 @@ flowchart LR
 
 ## Bảng tổng hợp: chọn đường vào nhanh
 
+Section này trả lời: bạn là ai → cần plan nào, cài thế nào, và việc đầu tiên phải làm là gì. Tra cứu nhanh, không cần đọc từ đầu.
+
 | Bạn là ai | Plan cần | Cài thế nào | Việc đầu tiên |
 |---|---|---|---|
-| Dev cá nhân | Individual ($10/tháng) hoặc Free | Extension VS Code / JetBrains / Neovim | Mở IDE → sign-in GitHub → check status bar |
-| Dev Pro xài nhiều premium model | Pro ($39/tháng) | Extension + Copilot CLI | `gh copilot --help` test CLI |
+| Dev cá nhân | Free ($0) hoặc Pro ($10/tháng) | Extension VS Code / JetBrains / Neovim | Mở IDE → sign-in GitHub → check status bar |
+| Dev Pro xài nhiều model mạnh | Pro+ ($39/tháng) hoặc Max ($100/tháng) | Extension + Copilot CLI | `gh copilot --help` test CLI |
 | Dev công ty | Business ($19/user/tháng) seat do admin cấp | Extension, policy theo org | Xin admin assign seat, check policy |
-| Team enterprise / compliance nặng | Enterprise (custom giá) | SSO/SAML + org policy + audit | Đọc SSO doc nội bộ, verify audit log |
-| Muốn thử trước khi mua | Trial (Business 30 ngày / Individual free tier giới hạn) | Như plan tương ứng | Bật trial → set reminder trước ngày hết hạn |
+| Team enterprise / compliance nặng | Enterprise ($39/user/tháng) | SSO/SAML + org policy + audit | Đọc SSO doc nội bộ, verify audit log |
+| Muốn thử trước khi mua | Trial (Business 30 ngày / plan Free giới hạn) | Như plan tương ứng | Bật trial → set reminder trước ngày hết hạn |
 | Repo mới tinh | Bất kỳ plan trên | Mở repo → copy `templates/` của tutorial này | Verify suggestions chạy trên 1 file thật |
 
 ---
 
 ## 1. Các plan Individual / Pro / Business / Enterprise khác nhau gì?
 
+Section này trả lời: các plan khác nhau ở đâu, giá và hạn mức Credits ra sao, và bạn nên chọn gói nào.
+
 > **Hỏi ngắn gọn:** _Các plan Individual / Pro / Business / Enterprise khác nhau gì?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** GitHub chia plan thành nhóm cá nhân Free / Pro / Pro+ / Max và nhóm tổ chức Business / Enterprise, tất cả đều dùng chung đơn vị thanh toán là AI Credits (1 credit = $0.01).
 
-**Giải thích chi tiết + ví dụ:** GitHub chia 4 plan chính (giá 2026 có thể đổi, check `github.com/features/copilot` trước khi chốt):
+**Giải thích chi tiết + ví dụ:** Từ 01/06/2026 GitHub chuyển sang **usage-based billing** (tính tiền theo usage) — plan "Individual" cũ giờ gồm Free / Pro / Pro+ / Max. Giá tham khảo 10/2026 (check `github.com/features/copilot` trước khi chốt):
 
-- **Individual ($10/tháng):** 1 user, completions + chat cơ bản, giới hạn premium requests/tháng. Hợp dev cá nhân, side-project.
-- **Pro ($39/tháng):** hạn mức premium requests cao hơn nhiều, ưu tiên model mới, dùng coding agent thoải mái hơn. Hợp dev dùng Copilot như pair-programmer full-time.
-- **Business ($19/user/tháng):** thêm org management, policy control (content exclusion, model allowlist), audit cơ bản, IP indemnity. Seat do admin assign. Hợp công ty vừa.
-- **Enterprise (giá custom):** thêm SSO/SAML bắt buộc, audit logs đầy đủ, data residency / ZDR tương đương, review & approve coding-agent PR, SLA. Hợp corp, bank, gov.
+- **1 AI credit = $0.01 USD.** Chi phí mỗi lượt = giá mỗi token của model × số token, quy đổi ra credits.
+- **Free ($0):** allowance credits (số cụ thể GitHub chưa công bố — cần verify), chỉ auto model selection, inline suggestions giới hạn 2.000 completions/tháng.
+- **Student/Teacher ($0):** Free cho sinh viên/giáo viên, cần xác thực email trường.
+- **Pro ($10/tháng):** 1.000 base + 500 flex = **1.500 credits**. Hợp dev cá nhân, side-project.
+- **Pro+ ($39/tháng):** 3.900 + 3.100 = **7.000 credits**. Ưu tiên model mới, dùng coding agent thoải mái hơn.
+- **Max ($100/tháng):** 10.000 + 10.000 = **20.000 credits**. Hợp dev dùng Copilot như pair-programmer full-time.
+- **Business ($19/user/tháng):** 1.900 credits/seat/tháng, Credits **pooled cả org** (không chia cứng từng ghế). Thêm org management, policy control (content exclusion, model allowlist), audit cơ bản, IP indemnity (cần verify). Seat do admin assign. Hợp công ty vừa.
+- **Enterprise ($39/user/tháng):** 3.900 credits/seat/tháng, pooled. Thêm SSO/SAML bắt buộc, audit logs đầy đủ, data residency / ZDR tương đương, review & approve coding-agent PR, SLA. Hợp corp, bank, gov.
 
-Điểm mấu chốt: **Individual/Pro = tự trả, tự quản; Business/Enterprise = admin quản, policy đè lên setting cá nhân.**
+Quy tắc tính tiền cần nhớ:
+
+- **Code completions và next edit suggestions KHÔNG trừ AI Credits** — không giới hạn trên mọi plan trả phí.
+- Plan trả phí dùng **auto model selection được giảm 10%** (Copilot Chat, CLI, Copilot app, cloud agent).
+- Hết credits base + flex → dùng tiếp tính vào **additional usage budget** (spend cap cấu hình được). **Paid usage policy bật mặc định** — admin phải chủ động tắt để cắt chi tiêu.
+- Hitting limit có thể xin owner/billing manager nâng budget (áp dụng Business/Enterprise dùng usage-based billing; GA 9/2026).
+- Code review tốn thêm **GitHub Actions minutes** (không nằm trong ước tính credits).
+
+Điểm mấu chốt: **Free/Pro/Pro+/Max = tự trả, tự quản; Business/Enterprise = admin quản, policy đè lên setting cá nhân.**
 
 ### Làm thế nào (steps copy-paste)
 
@@ -59,25 +79,27 @@ gh api user --jq '{login, plan: .plan.name}'
 gh api /user/copilot_seat_details --jq . 2>/dev/null || echo "Chua co seat hoac API chua mo"
 ```
 
-**Ví dụ cụ thể:** bạn trả Individual nhưng công ty mua Business. Khi join org, seat Business đè lên — policy org (VD chặn `*.pem`) thắng setting cá nhân của bạn.
+**Ví dụ cụ thể:** bạn trả Pro nhưng công ty mua Business. Khi join org, seat Business đè lên — policy org (VD chặn `*.pem`) thắng setting cá nhân của bạn.
 
-> **Khi nào áp dụng:** luôn xác định plan NGAY từ đầu vì nó khóa quota (câu 2), policy (bài 05), và quyền riêng tư (bài 09).
+> **Khi nào áp dụng:** luôn xác định plan NGAY từ đầu vì nó khóa hạn mức Credits (câu 2), policy (bài 05), và quyền riêng tư (bài 09).
 
 > **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 2. Trial hoạt động thế nào, hết trial thì sao?
 
+Section này trả lời: dùng thử miễn phí được gì, và khi hạn mức dùng hết thì chuyện gì xảy ra.
+
 > **Hỏi ngắn gọn:** _Trial hoạt động thế nào, hết trial thì sao?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Plan Free cho dùng thử không cần thẻ với giới hạn rõ ràng (2.000 completions/tháng), còn Business trial 30 ngày là full tính năng cho cả org và hết hạn thì tự chuyển sang trả phí nếu không hủy.
 
-**Giải thích chi tiết + ví dụ:** GitHub thường cho 2 loại trial:
+**Giải thích chi tiết + ví dụ:** GitHub cho 2 loại dùng thử:
 
-- **Individual free tier:** completions + chat giới hạn (VD 2.000 completions + 50 chat/tháng), không cần thẻ, hết quota thì chờ reset tháng sau.
+- **Plan Free:** completions + chat giới hạn (2.000 completions/tháng; giới hạn chat hàng tháng trước đây là 50 tin — cần verify), không cần thẻ, hết hạn mức thì chờ chu kỳ mới.
 - **Business trial (30 ngày):** full tính năng Business cho cả org, cần admin bật, hết 30 ngày tự chuyển sang trả phí nếu không hủy.
 
-Hết trial: Individual free → suggestions dừng, chat báo quota; Business trial → org bị downgrade, seat mất, coding agent PR dở dang vẫn giữ nhưng không tạo mới được.
+Hết trial: Free → suggestions dừng, chat báo hạn mức; Business trial → org bị downgrade, seat mất, coding agent PR dở dang vẫn giữ nhưng không tạo mới được.
 
 ### Làm thế nào (steps copy-paste)
 
@@ -98,13 +120,17 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ## 3. Seat là gì, admin assign / thu hồi seat thế nào?
 
+Section này trả lời: seat là gì, ai được cấp, và quản lý cấp/thu hồi ở đâu.
+
 > **Hỏi ngắn gọn:** _Seat là gì, admin assign / thu hồi seat thế nào?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Seat là 1 ghế Copilot gắn với 1 GitHub user trong org, admin cấp ở `Org → Settings → Copilot → Access`, hết seat thì người kế tiếp báo "No seat available".
 
 **Giải thích chi tiết + ví dụ:** Seat = 1 ghế Copilot gắn với 1 GitHub user trong org. Org mua N seats → admin assign cho N người. Hết seat → người thứ N+1 thấy "No seat available" dù đã join org.
 
 Admin quản seat ở `Org → Settings → Copilot → Access`. Có 2 chế độ: allow all members (tốn seat theo headcount) hoặc selected teams/users (tiết kiệm).
+
+Credits của org được **pooled ở mức billing entity** — không chia cứng từng seat, nên seat nào xài nhiều vẫn lấy chung hạn mức tổ chức.
 
 ### Làm thế nào (steps copy-paste)
 
@@ -128,16 +154,18 @@ gh api -X POST orgs/<ORG>/copilot/billing/selected_teams \
 
 ## 4. Cài đặt thế nào cho sạch: VS Code / JetBrains / Neovim / CLI?
 
+Section này trả lời: cài thứ tự gì, giữ extension nào, và làm sao để không cài trùng đè nhau.
+
 > **Hỏi ngắn gọn:** _Cài đặt thế nào cho sạch: VS Code / JetBrains / Neovim / CLI?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Mỗi IDE chỉ giữ đúng 1 extension Copilot chính chủ, cài theo thứ tự VS Code → JetBrains → Neovim → CLI là sạch.
 
 **Giải thích chi tiết + ví dụ:** Chỉ giữ **1 extension Copilot + 1 Copilot Chat** mỗi IDE, đừng cài thêm fork "copilot-plus-plus" trôi nổi. Thứ tự khuyên dùng:
 
 - **VS Code:** extension `GitHub Copilot` + `GitHub Copilot Chat` (chính chủ, update theo VS Code release).
 - **JetBrains:** plugin `GitHub Copilot` từ Marketplace, login qua browser.
 - **Neovim:** `github/copilot.vim` hoặc `zbirenbaum/copilot.lua`, auth bằng `:Copilot auth`.
-- **CLI:** `gh extension install github/gh-copilot` → dùng `gh copilot suggest` / `gh copilot explain`.
+- **CLI:** `gh extension install github/gh-copilot` → dùng `gh copilot suggest` / `gh copilot explain`. Bản CLI độc lập 2026 là binary `copilot` (có `copilot init`, slash command `/mcp`, `/usage`) — xem [bài 10](10-ci-sdk-review-web.md).
 
 ### Làm thế nào (steps copy-paste)
 
@@ -165,9 +193,11 @@ gh copilot --help
 
 ## 5. Sign-in / sign-out / đổi account (cá nhân ↔ công ty) thế nào?
 
+Section này trả lời: đổi tài khoản GitHub đang dùng cho Copilot ở từng bề mặt, và khi nào cần đổi.
+
 > **Hỏi ngắn gọn:** _Sign-in / sign-out / đổi account (cá nhân ↔ công ty) thế nào?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Copilot dùng đúng GitHub account đang login trong IDE, đổi bằng sign-out → sign-in lại (VS Code), `gh auth login/logout` (CLI) hoặc Remove/Add account (JetBrains).
 
 **Giải thích chi tiết + ví dụ:** Copilot auth gắn với GitHub account đang login trong IDE. Lỗi kinh điển: máy công ty login nhầm account cá nhân → policy org không áp dụng, bill sai chỗ.
 
@@ -198,9 +228,11 @@ gh auth login --web -h github.com
 
 ## 6. Policy của org đè lên setting cá nhân ra sao?
 
+Section này trả lời: setting cá nhân và policy org cái nào thắng, và cách kiểm tra mình có đang bị policy đè không.
+
 > **Hỏi ngắn gọn:** _Policy của org đè lên setting cá nhân ra sao?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Với Business/Enterprise, policy org luôn thắng setting cá nhân — bạn bật trong IDE cũng bị ép tắt.
 
 **Giải thích chi tiết + ví dụ:** Với Business/Enterprise, admin set policy ở org level: model nào được dùng, có cho phép `*` exclusion, coding agent có chạy không... Policy org **luôn thắng** setting cá nhân — bạn bật trong IDE cũng bị ép tắt.
 
@@ -225,9 +257,11 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ## 7. Lỗi cài đặt kinh điển: extension xung đột, version cũ, PATH thiếu `gh`?
 
+Section này trả lời: 3 lỗi cài đặt gặp nhiều nhất và cách fix từng cái theo thứ tự.
+
 > **Hỏi ngắn gọn:** _Lỗi cài đặt kinh điển: extension xung đột, version cũ, PATH thiếu `gh`?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** 3 lỗi top là 2 plugin Copilot đè nhau, IDE quá cũ và máy chưa cài `gh` — gỡ bản lạ, update IDE, cài `gh` là chạy lại.
 
 **Giải thích chi tiết + ví dụ:** 3 lỗi gặp nhiều nhất:
 
@@ -260,9 +294,11 @@ gh --version && gh extension list | grep copilot
 
 ## 8. Bắt đầu repo mới: 5 việc setup đầu repo là gì?
 
+Section này trả lời: vừa clone/ tạo repo xong thì phải làm 5 việc nào, theo đúng thứ tự.
+
 > **Hỏi ngắn gọn:** _Bắt đầu repo mới: 5 việc setup đầu repo là gì?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** 5 việc là verify suggestions chạy, copy file instructions chính, thêm instructions theo stack, thêm MCP nếu cần data ngoài repo, và thêm content exclusion cho path nhạy cảm.
 
 **Giải thích chi tiết + ví dụ:** Thứ tự chuẩn cho repo vừa clone / vừa tạo (làm 1 lần, hưởng cả dự án):
 
@@ -298,9 +334,11 @@ cp -r /path/to/tutorial-copilot/templates/.vscode ./
 
 ## 9. Project mới tinh thì copy `templates/` thế nào?
 
+Section này trả lời: repo chưa có code thì copy template ra sao và phải sửa gì cho khớp stack thật.
+
 > **Hỏi ngắn gọn:** _Project mới tinh thì copy `templates/` thế nào?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Repo trống vẫn copy được full khung `templates/`, chỉ cần sửa khoảng 20% cho khớp stack thật vì Copilot đọc instructions tĩnh chứ không quét dự án.
 
 **Giải thích chi tiết + ví dụ:** Không như tool quét codebase, Copilot đọc instructions tĩnh — repo trống vẫn setup được full khung, chỉ cần sửa 20% cho khớp stack thật.
 
@@ -323,9 +361,11 @@ cp /path/to/tutorial-copilot/templates/.github/muse-instructions.md ./.github/mu
 
 ## 10. Báo lỗi / nhờ hỗ trợ từ GitHub thế nào?
 
+Section này trả lời: gửi báo lỗi ở đâu và phải kèm thông tin gì để được xử lý nhanh.
+
 > **Hỏi ngắn gọn:** _Báo lỗi / nhờ hỗ trợ từ GitHub thế nào?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Báo qua GitHub Discussions hoặc Support ticket (Business/Enterprise), kèm plan + IDE version + log thì mới xử lý nhanh.
 
 **Giải thích chi tiết + ví dụ:** Kênh chính: `github.com/community` Discussions (Copilot category) hoặc Support ticket (Business/Enterprise). Report tốt = kèm 3 thứ: plan + IDE version + log.
 
@@ -357,11 +397,13 @@ Kèm: extension versions + Output log đoạn lỗi + đã thử reload/re-login
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)
 
+Section này trả lời: khi đã thử mọi cách ở trên mà vẫn kẹt thì chạy 5 bước nào, theo đúng thứ tự.
+
 1. `gh auth status` — đúng account chưa, seat còn không.
 2. `code --list-extensions | grep -i copilot` — chỉ còn bản chính chủ.
 3. Update IDE + extension lên bản mới nhất.
 4. Sign-out → sign-in lại GitHub trong IDE.
-5. Check `github.com/settings/copilot` — quota/seat/policy có đỏ gì không.
+5. Check `github.com/settings/copilot` — hạn mức/seat/policy có đỏ gì không.
 
 ```bash
 gh auth status && gh --version && code --list-extensions | grep -i copilot
@@ -370,6 +412,8 @@ gh auth status && gh --version && code --list-extensions | grep -i copilot
 ---
 
 ## Tham khảo chéo
+
+Section này trả lời: đọc tiếp bài nào nếu cần đào sâu hơn chủ đề trong file này.
 
 - Bài tiếp theo: [02-model-context-premium.md](02-model-context-premium.md) (chọn model + giữ context), [bài 08](08-loi-thuong-gap-troubleshooting.md) (bảng lỗi full).
 - Policy chi tiết: [bài 05](05-policies-guardrails-faq.md). Bảo mật: [bài 09](09-bao-mat-quyen-rieng-tu.md).

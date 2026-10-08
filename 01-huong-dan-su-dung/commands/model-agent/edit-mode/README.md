@@ -1,18 +1,23 @@
 # Edit mode — Sửa file chỉ định, có kiểm soát
 
-> Nôm na: đưa thợ danh sách phòng được sửa — ngoài danh sách cấm đụng.
+> **Dành cho:** người đã biết sửa file nào (1–5 file) · **Vấn đề:** agent sửa ngoài phạm vi cho phép · **Đọc xong:** kiểm soát được file nào được chạm, diff gọn để review (~2 phút)
 
 ## Lệnh làm gì (1 câu nôm na)
 
-Nôm na: đưa thợ danh sách phòng được sửa — ngoài danh sách cấm đụng. Thuộc nhóm lệnh dùng hàng ngày — gắn scope gọn thì 1–2 turns là xong.
+Nôm na: đưa thợ danh sách phòng được sửa — ngoài danh sách cấm đụng. Chat → mode Edit → tick files, rồi ghi rõ “chỉ đụng những file đã tick”.
 
 ## Khi nào dùng
 
+Section này trả lời: khi nào chọn Edit thay vì Agent, và làm sao không tick quá nhiều file.
+
+- **Cho ai:** người sửa có chủ đích, muốn review từng hunk trước khi Accept.
 - Đã biết sửa file nào (1–5 file).
 - Sửa vừa: đổi message, thêm validation, refactor nhỏ.
 - Muốn kiểm soát chặt file nào được chạm.
 
 ## Cách gọi (copy-paste)
+
+Cách gọi `Edit mode` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:
 
 ```bash
 Chat → mode Edit → tick files
@@ -22,6 +27,8 @@ Chat → mode Edit → tick files
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Edit mode`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
 
 ## Ví dụ prompt thật + kết quả mong đợi
+
+Prompt mẫu cho `Edit mode` — đổi phần tên file/task cho đúng việc của bạn:
 
 **Prompt thật (copy-paste, nhớ gắn scope trước):**
 
@@ -35,6 +42,8 @@ Chat → mode Edit → tick files
 
 ## Lỗi thường gặp
 
+Ba triệu chứng hay gặp nhất với lệnh này — kèm nhanh cách xử lý:
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Sửa lan sang file chưa tick | Prompt thiếu “chỉ ... ” | Ghi rõ “chỉ đụng files đã tick” |
@@ -42,6 +51,8 @@ Chat → mode Edit → tick files
 | Accept mù | Lười đọc diff | Đọc từng hunk + chạy test trước Accept |
 
 ## Tham khảo
+
+Liên quan — index nhóm, cheatsheet 1 trang và FAQ phòng khi kẹt:
 
 - Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh.
 - Cheatsheet 1 trang: [../../../../CHEATSHEET.md](../../../../CHEATSHEET.md).

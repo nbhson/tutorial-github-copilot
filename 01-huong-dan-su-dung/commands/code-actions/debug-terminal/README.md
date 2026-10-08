@@ -1,18 +1,23 @@
 # @terminal — Biến log đỏ thành task fix
 
-> Nôm na: chụp ảnh màn hình lỗi đưa cho thợ — “xe kêu thế này, sửa giúp”.
+> **Dành cho:** dev kẹt với lỗi đỏ trong terminal/build/test · **Vấn đề:** log dài, chưa biết nguyên nhân top-1 nằm ở đâu · **Đọc xong:** biến log thành task fix có thứ tự ưu tiên (~2 phút)
 
 ## Lệnh làm gì (1 câu nôm na)
 
-Nôm na: chụp ảnh màn hình lỗi đưa cho thợ — “xe kêu thế này, sửa giúp”. Thuộc nhóm lệnh dùng hàng ngày — gắn scope gọn thì 1–2 turns là xong.
+Nôm na: chụp ảnh màn hình lỗi đưa cho thợ — “xe kêu thế này, sửa giúp”. Nhập `@terminal` kèm yêu cầu đọc log; chỉ đưa 30–50 dòng quanh lỗi + lệnh đã chạy.
 
 ## Khi nào dùng
 
+Section này trả lời: khi nào biến log thành prompt, và làm sao để fix không mạo hiểm (xóa/force).
+
+- **Cho ai:** dev đang kẹt ở build/test fail, kể cả người chưa biết lỗi nằm ở đâu.
 - Terminal báo lỗi đỏ chưa hiểu.
 - Test fail với stack trace dài.
 - Lệnh build/deploy fail.
 
 ## Cách gọi (copy-paste)
+
+Cách gọi `@terminal` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:
 
 ```bash
 @terminal
@@ -22,6 +27,8 @@ Nôm na: chụp ảnh màn hình lỗi đưa cho thợ — “xe kêu thế này
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `@terminal`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
 
 ## Ví dụ prompt thật + kết quả mong đợi
+
+Prompt mẫu cho `@terminal` — đổi phần tên file/task cho đúng việc của bạn:
 
 **Prompt thật (copy-paste, nhớ gắn scope trước):**
 
@@ -35,6 +42,8 @@ Nôm na: chụp ảnh màn hình lỗi đưa cho thợ — “xe kêu thế này
 
 ## Lỗi thường gặp
 
+Ba triệu chứng hay gặp nhất với lệnh này — kèm nhanh cách xử lý:
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Log quá dài, model đọc sót | Paste cả 500 dòng | Chỉ lấy 30–50 dòng quanh lỗi + lệnh đã chạy |
@@ -42,6 +51,8 @@ Nôm na: chụp ảnh màn hình lỗi đưa cho thợ — “xe kêu thế này
 | Fix mạo hiểm (xóa/force) | Tin luôn không review | Cấm lệnh destructive; review trước khi chạy |
 
 ## Tham khảo
+
+Liên quan — index nhóm, cheatsheet 1 trang và FAQ phòng khi kẹt:
 
 - Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh.
 - Cheatsheet 1 trang: [../../../../CHEATSHEET.md](../../../../CHEATSHEET.md).

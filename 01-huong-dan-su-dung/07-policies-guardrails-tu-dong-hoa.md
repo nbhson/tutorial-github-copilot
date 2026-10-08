@@ -1,8 +1,9 @@
 # 07 — Policies & Guardrails Tự Động Hóa (Copilot Không Có Hooks In-Process)
 
-> Bài 07 của series. Đọc xong bạn dựng được 6 lớp guardrails tương đương hooks:
-> instructions enforcement, MCP allowlist, content exclusion, pre-commit, branch
-> protection, secret scanning + Copilot review gate. Thời gian: ~50 phút (bản mở rộng).
+> **Dành cho:** dev đã dùng Copilot muốn "ép" Copilot tuân thủ quy tắc, cộng tech lead/admin dựng chuẩn cho team.
+> **Vấn đề:** Copilot 2026 không có hooks in-process như Claude Code. Bạn không chặn Copilot được "tại cửa". Vậy cấm push main, chặn lộ secret, bắt review bằng cách nào?
+> **Đọc xong:** dựng được 6 lớp guardrails — instructions, MCP allowlist, content exclusion, pre-commit, branch protection, secret scanning + Copilot review gate. Lớp nào cũng có lệnh copy-paste và cách verify.
+> **Thời gian:** ~50 phút (bản mở rộng)
 
 ## Mục lục
 
@@ -21,9 +22,21 @@
 
 ## 1. Copilot không có hooks — vậy enforce bằng gì? (why)
 
-**Nôm na 1 câu:** Claude Code có bảo vệ đứng chặn ngay cửa (hooks: "cấm chạy lệnh này!"). Copilot 2026 chưa có bảo vệ cửa — bạn phải dựng 6 chốt chặn vòng ngoài (từ nhắc nhở miệng tới khóa cổng server).
+Section này trả lời 2 câu. Thứ nhất: vì sao chỉ viết instructions là chưa đủ. Thứ hai: nên xếp lớp bảo vệ nào lên trước.
 
-**Analogie đời thường:** Như dạy con không nghịch ổ điện: lớp 1 là dặn miệng ("đừng sờ!") — con có thể quên. Lớp 5-6 là bịt ổ điện + aptomat chống giật — con quên cũng không sao vì điện đã ngắt. Rule nào con quên 2 lần → nâng lên bịt ổ (thành law).
+**2 thuật ngữ mở bài (gặp lại suốt bài):**
+
+- **Hooks** = đoạn code chạy chen vào giữa một thao tác, ngay trước khi thao tác đó được chạy. Đời thường: chuông khói tự ngắt cầu dao. Kỹ thuật: Claude Code có hooks in-process — chặn lệnh nguy hiểm trước khi lệnh chạy.
+- **Guardrail** = hàng rào an toàn. Đời thường: lan can cầu thang, aptomat chống giật. Kỹ thuật: branch protection trên GitHub, content exclusion.
+
+**Nôm na 1 câu:** Claude Code có bảo vệ đứng chặn ngay cửa (hooks: "cấm chạy lệnh này!"). Copilot 2026 chưa có bảo vệ cửa như vậy. Bạn phải dựng 6 chốt chặn ở vòng ngoài — từ nhắc nhở miệng tới khóa cổng server.
+
+**Analogie đời thường:** Như dạy con không nghịch ổ điện. Lớp 1 là dặn miệng ("đừng sờ!") — con có thể quên. Lớp 5-6 là bịt ổ điện + aptomat chống giật — con quên cũng không sao vì điện đã ngắt. Rule nào con quên 2 lần → nâng lên bịt ổ (thành law).
+
+**Advisory vs law (cặp từ dùng cả bài):**
+
+- **Advisory** = lời khuyên. Người nghe có quyền bỏ qua. Ví dụ: instructions trong prompt.
+- **Law** = luật. Không ai override được. Ví dụ: branch protection trên server.
 
 > Triết lý: instructions là advisory (Copilot có thể quên). Guardrails ngoài
 > model là law (Copilot không override được). Rule nào miss 2 lần → nâng thành law.
@@ -46,6 +59,8 @@ Thứ tự nghĩ: **server-side (GitHub) > local deterministic (pre-commit, lint
 content exclusion) > advisory (instructions, prompt files)**. Càng gần server,
 càng khó lách.
 
+Cách nhớ: lớp nào bạn gõ tay được thì dev sửa tay được. Lớp nào nằm trên GitHub thì dev không sửa nổi.
+
 ```text
 # Verify bạn đã hiểu (tự check):
 # Hỏi: "nếu Copilot gợi ý push main thì sao?"
@@ -58,6 +73,8 @@ càng khó lách.
 
 ## 2. Bản đồ 6 lớp guardrails
 
+Section này cho bạn bản đồ 1 trang. Cột "Chặn ở đâu" nói lên mức độ chắc chắn. Cột "Ai dùng lúc nào" nói ai là người cấu hình lớp đó.
+
 | # | Lớp | Nôm na | Chặn ở đâu | Copilot override được? | Dùng cho (ai dùng lúc nào) |
 |---|---|---|---|---|---|
 | 1 | Instructions enforcement | Dặn miệng | Prompt (advisory) | Có (quên được) | Chuẩn code, non-goals |
@@ -66,6 +83,8 @@ càng khó lách.
 | 4 | Pre-commit + linter | Soi hành lý trước khi lên xe | Local git hook | Không (chạy ngoài model) | Format, lint, block secrets trước commit |
 | 5 | Branch protection + required checks | Khóa cổng làng | Server (GitHub) | Không | Block push main, bắt CI xanh + review |
 | 6 | Secret scanning/push protection + review gate | Máy soi + kiểm định cuối | Server (GitHub) | Không | Block leak secrets + bắt Copilot review pass |
+
+Đọc bảng theo cách này: lớp 1–2 là **advisory + client** (mềm, dễ đổi). Lớp 3–6 là **server** (cứng, dev không lách được). Việc cần chắc chắn thì để lớp 3–6. Việc cần linh hoạt thì để lớp 1–2.
 
 ```text
 Luồng 1 commit đi qua:
@@ -78,6 +97,8 @@ Bạn/Copilot sửa → [3] exclusion (file nhạy cảm không gửi model) →
 ---
 
 ## 3. Sơ đồ: 1 commit đi qua 6 cổng gác
+
+Section này show đường đi thật. Đọc để biết: commit gặp lớp nào trước, lớp nào fail thì dừng ở đâu. Ai cũng nên đọc (dev biết bị chặn ở đâu, admin biết cấu hình chỗ nào).
 
 ```mermaid
 flowchart LR
@@ -93,6 +114,8 @@ flowchart LR
   L6 -->|fail| Fix[Sửa + push lại]
   L6 -->|pass + approval| Merge[Merge]
 ```
+
+Sơ đồ trên là **không gian** (6 cổng xếp song song). Sơ đồ dưới là **thời gian** (thứ tự chạy thật, ai chặn ai):
 
 ```mermaid
 sequenceDiagram
@@ -119,7 +142,11 @@ sequenceDiagram
 
 ## 4. Lớp 1 – 2: instructions enforcement + MCP allowlist
 
+Section này đi vào 2 lớp mềm. 4.1 viết instructions cho Copilot khó quên. 4.2 khóa tools bằng allowlist. 4.3 dành cho admin: policy cấp org/enterprise (`managed-settings.json`, model allowlist, budgets).
+
 ### 4.1. Lớp 1 — Instructions enforcement (advisory, nhưng viết cho khó quên)
+
+Section này trả lời: viết rules thế nào để Copilot ít quên, và test bằng prompt nào.
 
 **Nôm na 1 câu:** Lớp 1 là **bảng nội quy dán tường** — viết dạng cấm rõ + hậu quả + việc đúng thì Copilot nhớ lâu hơn.
 
@@ -138,6 +165,8 @@ sequenceDiagram
 <!-- Mẹo: rules dạng "KHÔNG + hậu quả + việc đúng" tuân thủ tốt hơn "nên". -->
 <!-- Review: rule nào miss 2 lần → nâng thành lớp 4/5 (pre-commit/branch protection). -->
 ```
+
+Mẫu thứ hai: rules **chỉ áp đúng chỗ** (path-scoped) thay vì dán khắp repo.
 
 ```markdown
 <!-- .github/instructions/backend.instructions.md — path-scoped, ví dụ -->
@@ -160,6 +189,10 @@ applyTo: "src/server/**/*.ts"
 **Ai dùng lúc nào:** Mọi team đều viết lớp 1 đầu tiên (rẻ nhất). Rule nào miss 2 lần → nâng thành lớp 4/5.
 
 ### 4.2. Lớp 2 — MCP allowlist + tool approval
+
+Section này trả lời: cách nào chặn Copilot gọi tool sai. Trả lời: **allowlist** — danh sách những gì được phép, còn lại hỏi hoặc cấm.
+
+**Allowlist là gì?** Danh sách cho phép. Đời thường: danh sách khách mời — người không có tên phải đứng ở cửa. Kỹ thuật: set `postgres-prod` thành `deny` trong `github.copilot.chat.tools` như bên dưới.
 
 **Nôm na 1 câu:** Lớp 2 là **giữ chìa khóa** — Copilot chỉ được cầm chìa phòng đọc (allow), chìa phòng máy phải hỏi (ask), chìa két sắt thì không đưa (deny).
 
@@ -188,9 +221,67 @@ Org-level (admin, github.com → Org Settings → Copilot → Policies):
 # - Gọi tool postgres-prod (deny) → phải báo blocked by policy.
 ```
 
+### 4.3. Enterprise policy: managed-settings.json, model allowlist, budgets (admin)
+
+**Dành cho admin/org owner.** Section này trả lời: khi settings local chưa đủ (mỗi dev sửa được file của mình), admin chốt policy ở đâu và chốt được những gì.
+
+Chính sách Copilot nằm ở **AI controls tab (enterprise)** và **org settings**. Policy kiểm soát features, agents, models, MCP, CLI và Copilot app. Hai điểm cần nhớ:
+
+- **Copilot app và Copilot CLI chạy theo 2 policy client riêng, độc lập nhau.** Bật ở app không có nghĩa là bật ở CLI.
+- Enterprise đặt policy trước, rồi có thể chọn "let organizations decide" cho từng policy.
+
+**`managed-settings.json` là gì?** File cấu hình cấp enterprise, ép mọi client dùng chung một bộ luật. Đời thường: nội quy công ty dán ở lễ tân — không phải mỗi phòng tự viết một bản. Kỹ thuật: áp cho Copilot CLI, VS Code, GitHub Copilot app, Copilot cloud agent và JetBrains IDEs.
+
+| Key trong `managed-settings.json` | Làm gì | Dùng khi nào (ai dùng lúc nào) |
+|---|---|---|
+| `model` | Ép model mặc định cho cả enterprise | Đưa mọi người về 1 model đã duyệt |
+| `autoTier` | Ép tier mặc định của auto model selection (efficiency / balance / intelligence) | Chọn ưu tiên chi phí hay chất lượng |
+| `permissions.deny` / `.ask` / `.allow` | Cấm / hỏi trước / cho qua từng thao tác | Ưu tiên: **deny > ask > allow** |
+| `permissions.disableBypassPermissionsMode` | Tắt luôn bypass (YOLO) mode | Tránh dev tắt permission cho nhanh |
+| `allowedMcpServers` / `deniedMcpServers` | Allowlist MCP server ở mức enterprise | Deny thắng allow; giao (intersection) giữa các nguồn; `[]` rỗng = lockdown |
+| `sandbox` | Ép mức sandbox tối thiểu cho command, fs, network, credentials | Vd `sandbox.userPolicy.network.allowedHosts` |
+| `telemetry` | Xuất telemetry kiểu OpenTelemetry (endpoint OTLP, protocol, `captureContent`) | Gửi log về hệ thống quan sát của công ty |
+| `enabledPlugins` / `extraKnownMarketplaces` / `strictKnownMarketplaces` | Kiểm soát plugin và marketplace | Chỉ marketplace công ty tin cậy |
+
+**Model allowlist (ai được dùng model nào):**
+
+- Enterprise bật/tắt model theo baseline → rồi chọn **Delegate to Organizations** (mặc định), hoặc ra rule model cho từng nhóm.
+- Copilot app + CLI có policy model riêng — kiểm tra cả 2 chỗ.
+- Ai dùng lúc nào: admin muốn chỉ đúng model được phép dùng → cấu hình ở đây, không dặn qua instructions.
+
+**Budgets (ngân sách AI credits):**
+
+- **1 AI credit = $0.01.** Credit của org gộp chung ở mức billing-entity, không chia cứng từng seat.
+- User hết credit → xin tăng budget. Owner/billing manager duyệt, chỉnh hoặc từ chối trong settings.
+- Paid usage policy (cho phép chi vượt credit đã kèm) **bật mặc định**. Admin muốn cắt chi phí thì phải tắt đi.
+- Code completions và next edit suggestions **không tính credit** — không giới hạn trên mọi plan trả phí.
+- Ai dùng lúc nào: admin lo chi phí → đặt budget + tắt paid usage policy.
+
+**Audit log (biết ai đã đổi policy):**
+
+- Tìm bằng `action:copilot`. Giữ **180 ngày**. Nên stream sang SIEM.
+- Ghi lại thay đổi plan/settings/policy/license + agent activity trên github.com.
+- **Không chứa prompt hay session data của client.** Muốn log phần đó thì tự gắn hook riêng (vd CLI events gửi về logging của bạn).
+
+**Network allowlist (firewall — admin mạng cần mở):**
+
+```text
+Network allowlist (các URL Copilot cần ra ngoài):
+- https://*.githubcopilot.com/*                                (mọi plan)
+- https://*.individual.githubcopilot.com                       (plan cá nhân)
+- https://*.business.githubcopilot.com                         (Business)
+- https://*.enterprise.githubcopilot.com                       (Enterprise)
+- https://github.com/login/*  +  https://collector.github.com/*
+- https://copilot-telemetry.githubusercontent.com/telemetry
+- https://default.exp-tas.com  +  https://origin-tracker.githubusercontent.com   (dò public code)
+- https://*.SUBDOMAIN.ghe.com                                  (data residency GHE.com)
+```
+
 ---
 
 ## 5. Lớp 3: content & language exclusion
+
+Section này trả lời: làm sao để file nhạy cảm không bao giờ lọt vào model — kể cả khi bạn lỡ tay ask.
 
 **Nôm na 1 câu:** Lớp 3 là **bịt mắt Copilot** với file nhạy cảm — file đó không bao giờ được gửi lên model, kể cả bạn năn nỉ.
 
@@ -198,6 +289,13 @@ Org-level (admin, github.com → Org Settings → Copilot → Policies):
 
 Content exclusion = file nhạy cảm **không bao giờ** gửi lên model Copilot
 (server-side, Copilot không override được). Khác `.gitignore` (chỉ ignore git).
+
+**Ai dùng lúc nào:** admin repo/org làm (cần quyền Settings). Bốn điểm cần biết trước khi bắt tay:
+
+- Content exclusion chỉ có ở **Copilot Business/Enterprise**.
+- Path được kế thừa từ org cha.
+- Xem được qua REST API.
+- Role **Maintain** xem được nhưng không sửa được.
 
 ```text
 Setup (admin repo/org — ai làm: admin):
@@ -216,6 +314,8 @@ Verify (ai cũng làm được — copy-paste):
 # Kỳ vọng: bước 1 hiện excluded, bước 2 từ chối.
 ```
 
+Phòng thủ thêm ở máy dev (defense in depth — `.vscode/settings.json`):
+
 ```jsonc
 // Bổ sung client-side (defense in depth — .vscode/settings.json):
 {
@@ -233,12 +333,15 @@ Verify (ai cũng làm được — copy-paste):
 ```
 
 > Duplication detection (suggestion matching public code) bật ở org-level:
-> `Policies → Suggestions matching public code: Block`. Code gợi ý trùng public
+> `Policies → Suggestions matching public code: Block`. Với **Copilot Business,
+> mặc định là Blocked** — đổi được trong phần Privacy. Code gợi ý trùng public
 > repo lớn → block + hiện references. Chi tiết bài 10.
 
 ---
 
 ## 6. Lớp 4: pre-commit hooks + linter (copy-paste)
+
+Section này trả lời: chặn lỗi **trước khi commit** bằng gì, và chọn 1 trong 3 recipe (A, B, C) theo stack của team.
 
 **Nôm na 1 câu:** Pre-commit là **máy soi hành lý ở sân bay** — vali (commit) có đồ cấm (lint lỗi, secrets, sửa migration cũ) là giữ lại, khỏi lên máy bay.
 
@@ -343,7 +446,11 @@ exit 0
 
 ## 7. Lớp 5 – 6: branch protection + secret scanning + review gate
 
+Section này là **phần server** — 3 lớp dev không lách được. 7.1 khóa nhánh, 7.2 chặn secret lúc push, 7.3 bắt Copilot review trước khi merge.
+
 ### 7.1. Lớp 5 — Branch protection + required checks (server-side, không lách được)
+
+Section này trả lời: làm sao chặn push thẳng vào `main`, kể cả admin. Hai cách: lệnh `gh` (một lần là xong) hoặc Rulesets UI (dễ nhìn, dễ review).
 
 **Nôm na 1 câu:** Lớp 5 là **khóa cổng làng + bắt có giấy thông hành** — muốn vào làng (main) phải có PR + CI xanh + 1 người duyệt, admin cũng không leo rào được.
 
@@ -367,6 +474,8 @@ gh api repos/{owner}/{repo}/branches/main/protection --jq '{enforce_admins, allo
 # Sai → thay {owner}/{repo} đúng, check quyền admin.
 ```
 
+**Ruleset là gì?** Gói quy tắc GitHub áp cho một nhóm nhánh. Đời thường: quy định khu vực dân cư. Kỹ thuật: GitHub Settings → Rules → Rulesets.
+
 ```text
 Ruleset UI (khuyên dùng 2026, github.com → Settings → Rules → Rulesets):
 - Target: branch `main` (+ `release/*` nếu có).
@@ -379,7 +488,9 @@ Ruleset UI (khuyên dùng 2026, github.com → Settings → Rules → Rulesets):
 
 ### 7.2. Lớp 6a — Secret scanning + push protection
 
-**Nôm na:** Máy soi phát hiện dao (secret) trong vali ngay lúc bạn đẩy vali qua băng chuyền (push) — giữ lại luôn, khỏi lên máy bay.
+Section này trả lời: làm sao chặn secret **ngay lúc push**, kể cả khi Copilot là người tạo commit.
+
+**Secret scanning** = quét repo tìm key/token đã lọt. **Push protection** = chặn push ngay khi nó chứa secret. Đời thường: máy soi phát hiện dao trong vali ngay lúc bạn đẩy vali qua băng chuyền — giữ lại luôn, khỏi lên máy bay.
 
 ```text
 Bật (admin, github.com → Settings → Code security):
@@ -397,7 +508,16 @@ git reset HEAD~1 && rm leak-test.txt && git push origin --delete feat/test-push-
 
 ### 7.3. Lớp 6b — Copilot code review as gate (required check)
 
+Section này trả lời: biến Copilot review thành **cổng bắt buộc** — PR không qua cổng thì không merge.
+
 **Nôm na:** Bắt mọi xe qua trạm kiểm định (Copilot review) trước khi ra đường (merge) — xe có lỗi CRITICAL là giữ lại.
+
+3 fact cần biết trước khi cấu hình:
+
+- **Loại review mặc định là "Comment"** — comment, KHÔNG tính là approval. Muốn Copilot approve thì phải cấu hình riêng.
+- **Effort mặc định là "Balanced"** (đổi từ 28/09/2026). `Lite` nhanh/rẻ hơn, `Balanced` suy luận sâu hơn cho logic phức tạp và security.
+- **Chi phí ước tính mỗi review:** Lite khoảng **$0.05–$1**, Balanced khoảng **$0.25–$5** AI credits (chưa tính phút Actions).
+- Từ 02/10/2026 có **API (REST + GraphQL)** để request review và set effort — chạy được từ CI.
 
 ```text
 Setup (github.com → repo → Settings → Rules → Rulesets → Add):
@@ -415,6 +535,8 @@ Tune precision (reviewer quá khắt → dặn trong .github/muse-instructions.m
 Đừng flag style đã có prettier/loại, đừng over-engineer."
 # Verify: mở PR test cố ý có SQL injection → Copilot review phải flag.
 ```
+
+Muốn cứng hơn "chỉ mong Copilot review" → dựng check fail cả PR khi có CRITICAL:
 
 ```yaml
 # .github/workflows/copilot-gate.yml — fail PR nếu Copilot review có CRITICAL (khung):
@@ -449,6 +571,8 @@ jobs:
 
 ## 8. Hiểu nhầm thường gặp
 
+Tra cứu nhanh, không cần đọc từ đầu. Cột trái là câu bạn hay nghe, cột phải là điều thật sự xảy ra.
+
 | Hiểu nhầm | Sự thật |
 |---|---|
 | "Viết instructions cấm là đủ, khỏi server guard" | Sai. Instructions là advisory — Copilot quên được khi context dài. Cấm tuyệt đối → branch protection + push protection |
@@ -458,12 +582,18 @@ jobs:
 | "Branch protection chặn luôn admin là bất tiện" | Đúng là chặn, nhưng hotfix đi đường PR fast-track + auto-merge, không tắt protection |
 | "Copilot review flag nhiều là tốt" | Sai. Flag lan man → team ignore hết. Tune "chỉ lỗi thực sự" trong instructions |
 | "Secrets trong mcp.json tiện, commit rồi xóa sau" | Sai. Git history giữ mãi. Secrets qua env (bài 08), grep trước mỗi PR |
+| "Bật audit log là xem được mọi prompt" | Sai. Audit log (`action:copilot`) ghi thay đổi policy/settings + agent activity, giữ 180 ngày. Không chứa prompt/session của client |
+| "Hết credit là Copilot tự dừng" | Chưa chắc. Paid usage policy bật mặc định — admin phải tắt mới cắt được chi phí vượt budget |
 
 ---
 
 ## 9. Walkthrough + pitfalls + bài tập
 
+Section này để **làm tay**, không phải đọc cho biết. 9.1 dựng từ 0 (40 phút), 9.2 debug khi guardrail im lặng, 9.3 danh sách pitfall, 9.4 5 bài tập.
+
 ### 9.1. Walkthrough: dựng guardrails từ 0 (40 phút)
+
+5 bước, mỗi bước có sẵn prompt/lệnh test. Làm đúng thứ tự là dựng xong 6 lớp.
 
 ```text
 Bước 1 (5 phút): instructions LAW (mục 4.1). Copy vào .github/muse-instructions.md.
@@ -489,6 +619,8 @@ Bước 5 (10 phút): bật push protection + Copilot review gate (mục 7.2–7
 
 ### 9.2. Debug flowchart (guardrail không chạy → đi từng bước)
 
+Guardrail nào không chạy thì đi từ trên xuống, stop ở nhánh khớp triệu chứng:
+
 ```text
 Guardrail không chạy?
 ├─ 1. Instructions bị quên? → bình thường (advisory). Rule miss 2 lần → nâng thành lớp 4/5.
@@ -506,6 +638,8 @@ Guardrail không chạy?
 
 ### 9.3. Pitfalls + fix
 
+Cột "Vì sao" giải thích nguyên nhân, cột "Fix" là việc cần làm ngay.
+
 | Pitfall | Vì sao | Fix |
 |---|---|---|
 | Tin instructions thay server guard | Advisory quên được | Critical → branch protection + push protection |
@@ -517,6 +651,8 @@ Guardrail không chạy?
 | Secrets trong `.vscode/mcp.json` committed | Tiện tay paste | Secrets qua env (bài 08), grep repo trước khi push |
 
 ### 9.4. Bài tập thực hành
+
+5 bài, tổng ~80 phút. Làm hết là bạn có đủ 6 lớp guardrails chạy thật.
 
 **Bài 1 (15 phút):** Cài recipe A (husky + lint-staged). Commit 1 file cố ý sai
 lint, xem hook auto-fix. Đo thời gian — >5s thì thu hẹp scope.
@@ -536,6 +672,8 @@ message block. Dọn branch test.
 ---
 
 ## 10. Link chéo
+
+Đọc tiếp khi bạn cần đào sâu phần nào của 6 lớp.
 
 - **Bài 03 — Instructions, Memory, Rules:** advisory vs law — khi nào nâng rule thành guardrail.
 - **Bài 05 — Prompt files:** prompt review/test tái dùng — gắn vào review gate.

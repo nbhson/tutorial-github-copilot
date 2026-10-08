@@ -1,6 +1,8 @@
 # Nhóm System & Knowledge (15 lệnh)
 
-> Tri thức và hệ thống: instructions, prompt files, skills, MCP, extensions, exclusion, telemetry, auth, feedback, knowledge base, CLI. Đọc 1 dòng rồi click sang README chi tiết.
+> **Dành cho:** người cấu hình/troubleshoot hệ thống và tri thức của Copilot · **Vấn đề:** 15 lệnh (instructions, prompt files, skills, MCP, extensions, exclusion, telemetry, auth, feedback, knowledge base, CLI) nằm rải rác, không biết lệnh nào dùng lúc nào · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi click sang README chi tiết (~2 phút)
+
+Mỗi README chi tiết trả lời 5 câu: **dùng khi nào · cho ai · kết quả ra gì · ví dụ copy-paste · liên quan.**
 
 | Lệnh | Mô tả 1 dòng | Chi tiết |
 |---|---|---|

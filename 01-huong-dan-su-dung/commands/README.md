@@ -1,8 +1,8 @@
 # Commands — Index tra cứu 46 lệnh Copilot 2026
 
-> Index tổng 46 lệnh chi tiết, chia 4 nhóm. Mỗi dòng = 1 lệnh: mô tả 1 dòng + link sang folder chi tiết (`./<nhóm>/<slug>/README.md`). Mỗi README chi tiết theo format 6 phần: tên lệnh + 1 câu nôm na, khi nào dùng, cách gọi (code block phím tắt/slash), ví dụ prompt thật + kết quả mong đợi, lỗi thường gặp, tham khảo. Tiếng Việt, ví dụ riêng từng lệnh.
+> **Dành cho:** ai cần tra nhanh 1 trong 46 lệnh Copilot 2026 · **Vấn đề:** 46 lệnh chia 4 nhóm, mỗi dòng là 1 lệnh + link sang folder chi tiết, không biết mở file nào · **Đọc xong:** tìm đúng lệnh trong bảng rồi mở README chi tiết trả lời 5 câu: dùng khi nào · cho ai · kết quả ra gì · ví dụ copy-paste · liên quan (~3 phút)
 
-**Cách dùng:** tìm nhóm → đọc mô tả 1 dòng → click link sang folder chi tiết. Gõ `/` (slash), `@` (participant), `#` (variable) trong Chat input để xem list khả dụng **ở môi trường của bạn** (khác plan/model/version sẽ khác).
+**Cách dùng:** tìm nhóm → đọc mô tả 1 dòng → click link sang folder chi tiết (`./<nhóm>/<slug>/README.md`). Gõ `/` (slash), `@` (participant), `#` (variable) trong Chat input để xem list khả dụng **ở môi trường của bạn** (khác plan/model/version sẽ khác). Mỗi README chi tiết giữ nguyên format 6 phần: tên lệnh + 1 câu nôm na, khi nào dùng, cách gọi (code block phím tắt/slash), ví dụ prompt thật + kết quả mong đợi, lỗi thường gặp, tham khảo. Tiếng Việt, ví dụ riêng từng lệnh.
 
 ## Nhóm 1 — Chat session (12)
 

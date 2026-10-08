@@ -1,8 +1,9 @@
-# 00 — Tổng Quan Muse: Từ Autocomplete Tới Agent
+# 00 — Tổng Quan Copilot: Từ Autocomplete Tới Agent
 
-> Bài mở đầu của series `01-huong-dan-su-dung/`. Đọc xong bạn sẽ phân biệt 5 chế độ
-> Copilot, hiểu agentic loop (model + VS Code harness + tools), tính được premium
-> requests, và có bản đồ toàn khóa học. Thời gian đọc: ~25 phút.
+> **Dành cho:** người mới dùng GitHub Copilot, và dev đã quen gõ autocomplete nhưng chưa thử agent.
+> **Vấn đề:** một tài khoản có nhiều cách làm việc khác nhau — cái nào dùng khi nào, vòng lặp agent chạy ra sao, tốn bao nhiêu AI Credits.
+> **Đọc xong:** phân biệt được 5 chế độ, giải thích được vòng lặp agent cho đồng nghiệp trong 2 phút, ước lượng được AI Credits, và làm xong task đầu tiên.
+> **Thời gian:** ~25 phút.
 
 ## Mục lục
 
@@ -14,7 +15,7 @@
 6. [Các bề mặt sử dụng — chọn cái nào?](#6-các-bề-mặt-sử-dụng--chọn-cái-nào)
 7. [Bản đồ extension](#7-bản-đồ-extension-instructions--prompts--agents--skills--mcp--extensions)
 8. [Walkthrough 5 bước cho người mới](#8-walkthrough-5-bước-cho-người-mới-từ-0-tới-task-đầu-tiên)
-9. [Pitfalls + cách fix](#9-pitfalls--cách-fix)
+9. [Hiểu nhầm thường gặp + Pitfalls + cách fix](#9-hiểu-nhầm-thường-gặp--pitfalls--cách-fix)
 10. [Bài tập thực hành](#10-bài-tập-thực-hành)
 11. [Đi tiếp tới đâu?](#11-đi-tiếp-tới-đâu-link-chéo)
 
@@ -22,8 +23,9 @@
 
 ## 1. Copilot là gì? 5 chế độ một tài khoản
 
-**Muse** là AI pair programmer của GitHub (2026: chạy nhiều models —
-GPT, Claude, Gemini — bạn chọn trong IDE). Một subscription mở khóa 5 chế độ:
+Section này trả lời: mở một tài khoản Copilot ra được những cách làm việc nào, và phân biệt chúng bằng ví dụ thật.
+
+**GitHub Copilot** là AI pair programmer của GitHub. Năm 2026 nó chạy nhiều model (GPT, Claude, Gemini...), và bạn đổi model ngay trong Chat. Một subscription mở cho bạn những chế độ sau:
 
 | Chế độ | Bạn gõ | Nó làm | Ví dụ |
 |---|---|---|---|
@@ -36,6 +38,8 @@ GPT, Claude, Gemini — bạn chọn trong IDE). Một subscription mở khóa 5
 
 > Tư duy đúng: autocomplete đoán **dòng tiếp theo** trong file bạn mở.
 > Agent giải **task đóng**: tự tìm file, lập plan, sửa, chạy test, lặp lại.
+>
+> Bảng trên liệt kê 6 dòng vì có thêm **Copilot CLI** — đó là công cụ chạy trong terminal, dùng riêng lẻ, không nằm trong 5 chế độ trên.
 
 ### 1.0. Hiểu nôm na từng chế độ (định nghĩa + ví dụ đời thường + ví dụ kỹ thuật)
 
@@ -71,8 +75,10 @@ GPT, Claude, Gemini — bạn chọn trong IDE). Một subscription mở khóa 5
 
 - **Copilot CLI.**
   Là gì: trợ lý lệnh shell trong terminal (`gh copilot suggest/explain`).
-  Hiểu nôn na: như từ điển lệnh Linux biết nói tiếng Việt.
+  Hiểu nôm na: như từ điển lệnh Linux biết nói tiếng Việt.
   Ví dụ kỹ thuật: `gh copilot suggest "xóa branch đã merge"` → nó sinh `git branch --merged | grep -v main | xargs git branch -d`.
+
+Chọn chế độ nào? Sơ đồ dưới đây trả lời đúng 1 câu: task nhỏ tới lớn thì đi theo nhánh nào.
 
 ```mermaid
 flowchart TD
@@ -89,7 +95,7 @@ flowchart TD
     G --> K[Review PR như review junior dev]
 ```
 
-Ví dụ prompt tệ vs tốt:
+Prompt viết tệ thì kết quả tệ. Hai dòng dưới đây là cách phân biệt nhanh nhất giữa hỏi chuyện và giao việc:
 
 ```text
 # TE — hoi nhu chatbot (Ask mode, khong context):
@@ -103,6 +109,8 @@ Dung sua gi ngoai scope nay."
 
 ### 1.1. Vì sao 2026 khác 2023? (why)
 
+Hiểu mốc thời gian giúp bạn không áp dụng tư duy 3 năm trước vào công cụ của hôm nay.
+
 - 2023: Copilot = autocomplete + chat đơn giản.
 - 2024–2025: thêm Edit mode, agent mode trong VS Code, coding agent trên github.com.
 - 2026: multi-model picker (bạn đổi model ngay trong Chat), Agent Skills
@@ -115,6 +123,8 @@ Bài này dạy bạn chọn đúng mode trước khi tối ưu prompt.
 ---
 
 ## 2. Agentic loop của Copilot deep-dive (why, không chỉ what)
+
+Section này trả lời: bên trong Agent mode thực sự xảy ra gì giữa bạn và model, để bạn biết chỗ nào can thiệp được.
 
 ### 2.1. Giải phẫu 1 vòng lặp (Agent mode trong VS Code)
 
@@ -139,6 +149,8 @@ Mỗi vòng lặp gồm 4 pha — giống mọi agent, chỉ khác harness là V
 - Hiểu nôm na: model như kiến trúc sư vẽ bản vẽ, harness như đội thợ cầm búa, máy khoan.
 - Ví dụ kỹ thuật: model sinh `read(auth.ts)` → harness mở file thật, đọc 200 dòng, trả lại text cho model.
 
+Sơ đồ chuỗi dưới đây cho thấy 2 luồng giao tiếp: bạn ↔ model, và model ↔ harness ↔ disk.
+
 ```mermaid
 sequenceDiagram
     participant You as Bạn
@@ -161,13 +173,15 @@ sequenceDiagram
 > trong 2 phút: "model không chạm disk, harness mới chạm". Test nhanh: mở Agent mode,
 > giao task nhỏ, quan sát panel hiện từng tool call `read → edit → terminal` đúng thứ tự trên.
 
-Vì sao tách vậy?
+Vì sao phải tách model và harness thành 2 thứ?
 
 - Policy enforce được **kể cả khi model muốn lách** (model chỉ sinh tool calls).
 - Cùng 1 model hành xử nhất quán trên VS Code/JetBrains/Neovim (chỉ đổi harness).
 - Gắn determinism (instructions, policy, MCP allowlist) vào vòng xác suất (LLM).
 
 ### 2.2. Ví dụ trace 1 task thật
+
+Đọc trace dưới đây để hình dung 1 task chạy thực tế mất bao nhiêu turn.
 
 Task: *"Thêm rate-limit cho POST /login"* (Agent mode, VS Code):
 
@@ -185,6 +199,8 @@ Tổng 7 turns, bạn chỉ gõ 1 prompt + 1 lần duyệt.
 
 ### 2.3. Khi nào loop thất bại? (3 nguyên nhân gốc)
 
+Bảng này trả lời: agent đang sai thì thật ra là khuyết ở khâu nào, và học bài nào để fix.
+
 | Nguyên nhân | Dấu hiệu | Fix ở bài nào |
 |---|---|---|
 | Thiếu context (không tìm ra file đúng) | Đọc lung tung, sửa sai chỗ | Instructions + prompt files (bài 03, 05) |
@@ -196,9 +212,11 @@ Tổng 7 turns, bạn chỉ gõ 1 prompt + 1 lần duyệt.
 
 ### 2.4. Agentic loop vs autocomplete
 
+Hai khái niệm này hay bị nhầm sang nhau vì cùng hiện trong chung một IDE. Khác nhau ở chỗ ai quyết định bước tiếp theo:
+
 ```text
-Autocomplete = goi y dong tiep theo (re, 1 request = 0 premium request thuong).
-Agent mode   = tu quyet dinh buoc tiep theo (linh hoat, ton premium requests).
+Autocomplete = goi y dong tiep theo (re, khong tinh AI credits tren plan tra phi).
+Agent mode   = tu quyet dinh buoc tiep theo (linh hoat, tien AI credits theo model x tokens).
 ```
 
 Kinh nghiệm: việc gõ code quen tay → để autocomplete. Việc lặp >3 lần
@@ -207,6 +225,8 @@ Kinh nghiệm: việc gõ code quen tay → để autocomplete. Việc lặp >3 
 ---
 
 ## 3. 4 họ tool Copilot
+
+Section này trả lời: khi Agent mode "nghĩ", nó thực sự được cầm những thứ gì trong tay.
 
 Agent mode trong VS Code 2026 có 4 họ tool. Học thuộc để biết khi nào cái gì chạy:
 
@@ -221,6 +241,8 @@ Agent mode trong VS Code 2026 có 4 họ tool. Học thuộc để biết khi n�
 
 Cơ chế sâu: luôn **tìm file trước (search), đọc sau (read)** để đỡ ngốn context.
 File >300 dòng → bảo agent đọc từng phần, đừng dump cả cục.
+
+Prompt dưới đây là cách ép agent tiết kiệm context ngay từ câu đầu:
 
 ```text
 # Prompt mau tiet kiem context (copy-paste):
@@ -249,6 +271,8 @@ roi chi doc 2 file lien quan nhat. Giai thich vi sao chon 2 file do."
 | `#fetch` | Đọc URL/docs ngoài | Tra docs mới nhất |
 | `Todo-ish prompt` | Checklist trong prompt | Task >3 bước để khỏi quên |
 
+Ví dụ kết hợp `@workspace` + `@terminal` trong 1 prompt:
+
 ```text
 # Vi du @workspace + @terminal (copy-paste):
 "@workspace tim moi noi goi POST /orders, liet ke file + dong.
@@ -274,26 +298,40 @@ Càng nhiều tools visible → model càng dễ chọn nhầm → giữ 3–6 s
 
 ## 4. Token economics — premium requests đi đâu?
 
+Section này trả lời: tiền của bạn đi theo đường nào, và làm sao ước lượng được 1 task tốn bao nhiêu.
+
 ### 4.1. Vì sao phải quan tâm?
 
-Copilot tính theo **premium requests** (không phải raw tokens như API).
-Mỗi turn agent mode = 1+ requests tùy model (model mạnh như Claude/GPT-5-class
-tốn multiplier cao hơn). Task 20 turns × instructions dài = cháy quota tháng.
+Từ 01/06/2026, GitHub Copilot chuyển sang tính tiền theo mô hình **AI Credits** (usage-based billing). Hiểu 4 quy tắc này là đủ để tự ước lượng chi phí:
 
-| Gói (2026, check giá mới nhất) | Quota gợi ý | Ai hợp |
+- **1 AI Credit = 0,01 USD.**
+- Chi phí 1 lượt = giá per-token của model × số token, quy đổi ra credits.
+- **Code completion và next edit suggestions KHÔNG trừ AI Credits** — không giới hạn trên mọi plan trả phí.
+- Dùng auto model selection (Copilot Chat, CLI, app, cloud agent) trên plan trả phí được **giảm 10%**.
+- Mỗi turn agent mode = 1+ lượt gọi model. Model mạnh → token nhiều → credits nhanh cháy.
+- Plan **Free**: chỉ auto model selection, inline suggestions giới hạn 2.000 completions/tháng, mức credits hàng tháng cần verify.
+
+Mỗi turn agent mode = 1+ requests tùy model (model mạnh như Claude/GPT-5-class
+tốn nhiều credits hơn). Task 20 turns × instructions dài = cháy credits tháng.
+
+| Gói (giá 10/2026 — luôn check lại) | Credits kèm theo | Ai hợp |
 |---|---|---|
-| Individual / Pro | Quota cơ bản + mua thêm | Cá nhân |
-| Business | Quota team + policy org | Team cần quản trị |
-| Enterprise | Quota lớn + BYOK/audit | Corp, compliance |
+| Pro — 10 USD/tháng | 1.500 credits (1.000 base + 500 flex) | Cá nhân |
+| Pro+ — 39 USD/tháng | 7.000 credits (3.900 base + 3.100 flex) | Cá nhân code nặng |
+| Max — 100 USD/tháng | 20.000 credits (10.000 base + 10.000 flex) | Cá nhân dùng agent cả ngày |
+| Business — 19 USD/seat/tháng | 1.900 credits/seat/tháng, dùng chung cả org | Team cần quản trị |
+| Enterprise — 39 USD/seat/tháng | 3.900 credits/seat/tháng, dùng chung | Corp, compliance |
 
 > Con số quota đổi theo thời gian — luôn check `github.com/settings/copilot`
 > làm chuẩn cuối, đừng tin số trong tutorial này.
 
 ### 4.2. Bảng chi phí context của từng thứ
 
+Bảng này trả lời: thứ nào trong repo của bạn bị nạp lại mỗi turn (tức là trả tiền lặp đi lặp lại).
+
 | Feature | Load khi nào | Chi phí | Chiến lược |
 |---|---|---|---|
-| `muse-instructions.md` | Đầu chat, giữ suốt | **Cao** | <200 dòng, chỉ pitfalls + conventions khác default |
+| `muse-instructions.md` | Đầu chat, giữ suốt mọi turn | **Cao — trả tiền mỗi turn** | <200 dòng, chỉ pitfalls + conventions khác default |
 | Prompt files | Khi gọi `/ten` hoặc agent tự load | **Thấp tới khi dùng** | Tách checklist dài thành file riêng |
 | MCP servers | Lazy khi tool được gọi | Thấp, nhưng >10 tools giảm accuracy | 3–6 servers, prune định kỳ |
 | Custom agents | Khi chọn agent trong picker | Trung bình (system prompt riêng) | Agent hẹp cho việc hẹp |
@@ -305,18 +343,23 @@ tốn multiplier cao hơn). Task 20 turns × instructions dài = cháy quota th�
 
 ### 4.3. Ví dụ tính nhẩm (copy-paste được)
 
+Dán block dưới đây, đổi số cho khớp repo bạn. Mục tiêu: thấy được chênh lệch giữa instructions gọn và instructions phình.
+
 ```text
-Gia dinh (lam tron de nham nhanh):
+Gia dinh (lam tron de nham nhanh; 1 AI credit = 0,01 USD):
 - muse-instructions.md 150 dong ~ 2.500 tokens.
 - 1 task 10 turns -> instructions ton 10 x 2.500 = 25.000 tokens input.
 - Neu instructions phinh 600 dong (~10.000 tokens) -> 10 x 10.000 = 100.000 tokens.
 - Chenh lech 75.000 tokens/task x 20 tasks/tuan = 1,5M tokens/tuan vut qua cua so.
+- Instructions duoc nạp lai MOI turn, nen phinh = tra lai lien tuc, khong phai tra 1 lan.
 
 Ket luan: 1 gio don instructions (bai 03) tiet kiem nhieu hon 1 tuan toi uu prompt.
 Kiem chung: xem Copilot usage dashboard o github.com/settings/copilot.
 ```
 
 ### 4.4. Checklist tiết kiệm quota (dán vào team wiki)
+
+Đánh dấu từng dòng sau mỗi sprint — dòng nào còn sót là chỗ đang rò rỉ credits.
 
 - [ ] `muse-instructions.md` <200 dòng (`wc -l .github/muse-instructions.md`).
 - [ ] Checklist dài → prompt file `.github/prompts/*.prompt.md`, không nhét instructions.
@@ -329,6 +372,8 @@ Kiem chung: xem Copilot usage dashboard o github.com/settings/copilot.
 
 ## 5. Copilot làm được gì (thực tế)
 
+Section này trả lời: sau khi đọc hết lý thuyết, việc nào giao được cho Copilot ngay hôm nay.
+
 - **Build feature / fix bug đa file** (Agent mode): mô tả ý định, nó tìm file, sửa, chạy test.
 - **Việc nhàm chán**: viết test thiếu, fix lint, resolve conflict, upgrade dep, viết release notes.
 - **Git/GitHub**: commit message, tạo branch, mở PR, đọc PR comments, coding agent tự làm PR.
@@ -336,6 +381,8 @@ Kiem chung: xem Copilot usage dashboard o github.com/settings/copilot.
 - **Terminal**: `gh copilot suggest/explain` gợi ý lệnh shell khó nhớ.
 
 ### 5.1. 3 ví dụ end-to-end (copy-paste prompt mẫu)
+
+Mỗi ví dụ dưới đây đã kèm scope + lệnh verify — dán vào là chạy được.
 
 ```text
 # Vi du 1 — Fix bug da file, Agent mode (10 phut):
@@ -361,6 +408,8 @@ gh copilot explain "docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
 
 ## 6. Các bề mặt sử dụng — chọn cái nào?
 
+Section này trả lời: mở Copilot ở đâu cho đúng việc — và vì sao hành vi agent gần như giống nhau ở mọi nơi.
+
 | Surface | Code chạy ở đâu | Dùng repo config? | Khi nào dùng |
 |---|---|---|---|
 | **VS Code** (mạnh nhất) | Máy bạn | Có (`.github/`, `.vscode/`) | Mặc định, agent mode full tools |
@@ -378,12 +427,16 @@ gh copilot explain "docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
 
 ## 7. Bản đồ extension: instructions / prompts / agents / skills / MCP / extensions
 
+Section này trả lời: 6 khái niệm "mở rộng" trông na ná nhau thì phân biệt bằng cách nào, và cái nào chọn khi nào.
+
 > **MCP server là gì?** Định nghĩa 1 câu: MCP server là chương trình nhỏ đứng ngoài
 > repo, phơi ra các "tools" (hàm có input/output schema) để agent gọi khi cần dữ liệu ngoài.
 > Hiểu nôm na: như ki-ốt dịch vụ trong siêu thị — siêu thị (VS Code) có sẵn quầy thịt/rau
 > (read/edit/terminal), ki-ốt (MCP server GitHub, Postgres, Slack) cho thuê thêm dịch vụ.
 > Ví dụ kỹ thuật: MCP server `github` phơi tool `create_pr(input: {title, body, base})`;
 > agent muốn mở PR thì gọi `mcp__github__create_pr`, server chạy GitHub API thật rồi trả kết quả về.
+
+Sơ đồ dưới đây cho thấy MCP không nằm trong VS Code — nó chạy ngoài, VS Code chỉ là khách gọi.
 
 ```mermaid
 flowchart LR
@@ -424,6 +477,8 @@ Quy tắc chọn nhanh:
 
 ## 8. Walkthrough 5 bước cho người mới (từ 0 tới task đầu tiên)
 
+Section này trả lời: 30 phút đầu tiên nên làm gì theo đúng thứ tự, để có 1 task pass thật.
+
 > Yêu cầu: đã cài xong (nếu chưa, xem bài 01). Dưới đây là 30 phút đầu chuẩn.
 
 **Bước 1 — Mở Chat trong repo thật (2 phút):**
@@ -437,6 +492,8 @@ code /path/to/repo-cua-ban
 
 **Bước 2 — Viết instructions nháp (5 phút):**
 
+Mục tiêu bước này không phải là "hỏi cho vui" — mà là kiểm tra Copilot đọc đúng repo trước khi bạn tin nó.
+
 ```text
 Trong Chat go:
 "Doc README + package.json, tom tat: project nay la gi,
@@ -446,6 +503,8 @@ chay dev bang lenh nao, test bang lenh nao. Khong sua gi, chi tra loi."
 ```
 
 **Bước 3 — Giao task nhỏ đầu tiên (10 phút):**
+
+Đây là mẫu instructions tối thiểu. Đừng copy wiki 500 dòng vào đây.
 
 ```markdown
 <!-- .github/muse-instructions.md — mau toi thieu (copy-paste, sua lai) -->
@@ -463,6 +522,8 @@ chay dev bang lenh nao, test bang lenh nao. Khong sua gi, chi tra loi."
 
 **Bước 4 — Task sửa thật có verify (10 phút):**
 
+Task này có sẵn lệnh verify, nên bạn không cần tin lời "xong" của agent.
+
 ```text
 "Chay linter cua repo, fix 3 loi dau tien, chay lai lint de xac nhan.
 Chi sua files lien quan, khong dung config."
@@ -472,9 +533,9 @@ Chi sua files lien quan, khong dung config."
 **Bước 5 — Đóng session sạch (3 phút):**
 
 ```bash
-# Xem usage tai: github.com/settings/copilot (so premium requests da dung)
+# Xem usage tai: github.com/settings/copilot (so AI credits da dung)
 # Mo chat moi cho task moi: Ctrl+Shift+P > "Chat: New Chat"
-# Khong noi task moi vao history cu (do ton quota + nhieu).
+# Khong noi task moi vao history cu (do ton credits + nhieu).
 ```
 
 Checklist bạn đã hiểu bài 00 khi:
@@ -482,12 +543,14 @@ Checklist bạn đã hiểu bài 00 khi:
 - [ ] Phân biệt được 5 chế độ + kể ví dụ mỗi chế độ.
 - [ ] Giải thích được agentic loop cho đồng nghiệp trong 2 phút.
 - [ ] Kể được 4 họ tools + ví dụ mỗi họ.
-- [ ] Biết vì sao instructions phình gây tốn quota.
+- [ ] Biết vì sao instructions phình gây tốn credits.
 - [ ] Chạy xong 5 bước walkthrough và có 1 task pass thật.
 
 ---
 
 ## 9. Hiểu nhầm thường gặp + Pitfalls + cách fix
+
+Section này trả lời: tại sao Copilot làm sai thường là do mình setup, không phải do nó "dở".
 
 ### 9.1. Hiểu nhầm thường gặp (đọc kỹ trước khi trách Copilot)
 
@@ -496,10 +559,12 @@ Checklist bạn đã hiểu bài 00 khi:
 | "Copilot là 1 con chatbot, hỏi gì đáp nấy" | Copilot có 5 chế độ, mỗi chế độ là 1 cách làm việc khác nhau | Hỏi ở Ask mode thì chỉ có chữ; muốn sửa file phải sang Edit/Agent |
 | "Agent tự nghĩ tự làm, không cần kiểm tra" | Agent là junior dev nhanh nhưng ẩu, bạn là reviewer bắt buộc | Luôn duyệt diff từng hunk + bắt chạy test thật |
 | "MCP là plugin cài vào là xong" | MCP server là tiến trình riêng chạy ngoài VS Code, có thể rớt mạng, sai key | Phải `/mcp` kiểm tra `connected`, test tool thật |
-| "Instructions càng dài càng khôn" | Instructions nạp lại mỗi turn, dài = tốn quota + loãng trọng tâm | Giữ <200 dòng, checklist dài tách sang prompt file |
-| "Model mạnh nhất luôn tốt nhất" | Model mạnh đắt (multiplier cao), task dễ dùng model rẻ là đủ | Giải thích code → model rẻ; refactor khó → model mạnh |
+| "Instructions càng dài càng khôn" | Instructions nạp lại mỗi turn, dài = tốn credits + loãng trọng tâm | Giữ <200 dòng, checklist dài tách sang prompt file |
+| "Model mạnh nhất luôn tốt nhất" | Model mạnh đắt (token giá cao), task dễ dùng model rẻ là đủ | Giải thích code → model rẻ; refactor khó → model mạnh |
 
 ### 9.2. Pitfalls + cách fix
+
+Bảng này là bản "chẩn đoán nhanh": gặp triệu chứng ở cột 1 thì đọc sang cột 3.
 
 | Pitfall | Vì sao xảy ra | Fix |
 |---|---|---|
@@ -516,13 +581,15 @@ Checklist bạn đã hiểu bài 00 khi:
 
 ## 10. Bài tập thực hành
 
+Section này trả lời: làm 4 bài dưới đây để biến phần lý thuyết thành phản xạ.
+
 **Bài 1 (15 phút) — Trace agentic loop:**
 Giao 1 task nhỏ ở Agent mode, sau khi xong hỏi: *"liệt kê từng turn mày đã làm:
 nghĩ gì, gọi tool gì, thấy gì"*. So sánh với sơ đồ mục 2.1. Ghi số turns + tool calls.
 
 **Bài 2 (15 phút) — Đo token economics:**
 Mở `github.com/settings/copilot` xem usage trước/sau 1 task dài. Tìm xem model nào
-ngốn premium requests nhất. Đề xuất 1 thay đổi (cắt instructions / đổi model rẻ).
+ngốn AI Credits nhất. Đề xuất 1 thay đổi (cắt instructions / đổi model rẻ).
 
 **Bài 3 (20 phút) — Phân loại extension:**
 Lấy 5 nhu cầu thật của team bạn, điền bảng: mỗi nhu cầu thuộc instructions /
@@ -535,6 +602,8 @@ Liệt kê 3 điều bạn hiểu sai trước khi đọc bài này.
 ---
 
 ## 11. Đi tiếp tới đâu? (link chéo)
+
+Section này trả lời: bài nào đọc tiếp theo nhu cầu của bạn ngay lúc này.
 
 - **Bài 01 — Cài đặt + xác thực + plans**: nếu bạn chưa cài được hoặc chưa rõ trial/quota.
 - **Bài 02 — Từng surface dùng sao cho đúng**: VS Code vs JetBrains vs github.com vs CLI.

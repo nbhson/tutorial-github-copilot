@@ -1,8 +1,11 @@
 # 11 — Git Worktrees & Checkpoints (Song Song Không Giẫm + Undo)
 
-> Bài 11 của series. Đọc xong bạn chạy được worktree workflows cho parallel
+> Bài 11 của series 01. **Dành cho:** bạn đã quen Copilot trong VS Code và muốn
+> chạy nhiều agent song song không giẫm chân nhau. **Vấn đề:** 2 sessions cùng
+> sửa 1 working dir → conflict, đè file; hoặc agent sửa 15 turns mà vẫn sai,
+> càng sửa càng nát. **Đọc xong:** chạy được worktree workflows cho parallel
 > coding agents, dùng VS Code checkpoints/timeline undo đúng lúc, và theo đúng
-> branch strategy `copilot/*`. Thời gian: ~30 phút.
+> branch strategy `copilot/*`. **Thời gian:** ~30 phút.
 
 ## Mục lục
 
@@ -19,6 +22,8 @@
 
 ## 0. Giải ngố thuật ngữ (đọc 2 phút là hiểu hết bài)
 
+Section này trả lời: 5 khái niệm xuyên suốt bài — worktree, checkpoint, session fork, branch `copilot/*`, git restore — nghĩa là gì và gõ lệnh gì để tự kiểm chứng. Đọc xong 2 phút là vào bài không bị ngợp.
+
 | Thuật ngữ | Hiểu nôm na (1 câu) | Analogie đời thường | Ví dụ kỹ thuật thật | Verify (gõ để kiểm chứng) |
 |---|---|---|---|---|
 | **Git worktree** | 1 repo nhưng mở được nhiều thư mục làm việc song song, mỗi thư mục 1 branch riêng. | Như 1 căn nhà (repo) có nhiều phòng (worktree) — mỗi người 1 phòng, không giẫm chân. | `git worktree add ../myrepo-worktrees/feat-login -b feat/login` tạo phòng mới cho branch `feat/login`. | `git worktree list` → phải thấy 2+ dòng (main + worktree mới). |
@@ -31,7 +36,7 @@
 
 ## 1. Vì sao worktrees + checkpoints? (why)
 
-2 vấn đề song song của agent work:
+Section này trả lời: 2 vấn đề song song của agent work là gì, và 3 lớp công cụ nào dùng để vá — trước khi đi vào lệnh cụ thể.
 
 ```text
 Vấn đề 1 — Giẫm chân: 2 sessions cùng sửa 1 working dir → conflict, đè file, test flaky.
@@ -41,8 +46,11 @@ Vấn đề 2 — Đi sai đường: agent sửa 15 turns vẫn sai, càng sửa
   → Giải pháp: checkpoints (undo cả code + conversation về điểm trước khi nát).
 ```
 
-Git là source of truth cuối (commit/PR), checkpoints là undo local nhanh,
-worktrees là cách ly không gian. 3 lớp phối hợp (không thay nhau).
+- **Git** = nguồn sự thật cuối cùng (commit/PR).
+- **Checkpoints** = undo local nhanh, không tạo commit.
+- **Worktrees** = cách ly không gian làm việc.
+
+3 lớp này phối hợp với nhau, không thay thế nhau.
 
 ### 1.1. Sơ đồ luồng (nhìn 30 giây hiểu)
 
@@ -82,7 +90,7 @@ Giải thích từng bước (người mới đọc ở đây là đủ):
 
 ## 2. VS Code checkpoints: timeline + chat session restore
 
-Copilot không có `/rewind` như Claude Code. Bạn undo bằng 3 cơ chế VS Code:
+Section này trả lời: undo code + chat trong VS Code bằng cơ chế nào, và mỗi cơ chế dùng khi nào. Copilot không có `/rewind` như Claude Code — bạn undo bằng 3 cơ chế VS Code:
 
 | Cơ chế | Hiểu nôm na | Ví dụ | Khi nào |
 |---|---|---|---|
@@ -92,7 +100,7 @@ Copilot không có `/rewind` như Claude Code. Bạn undo bằng 3 cơ chế VS 
 
 ```text
 Timeline (nhanh nhất):
-VS Code → Explorer →右键 file → Timeline → chọn điểm trước khi agent sửa → Restore.
+VS Code → Explorer → chuột phải file → Timeline → chọn điểm trước khi agent sửa → Restore.
 → chỉ restore 1 file, chat giữ nguyên (khác rewind cả conversation).
 
 Chat session restore:
@@ -100,7 +108,7 @@ Chat view → History (đồng hồ) → chọn session cũ → Restore/Fork.
 → thử hướng khác mà không mất mạch đang đúng 50% (tương đương /branch).
 
 Nguyên tắc: sửa 2 lần vẫn sai → đừng argue tiếp, git restore + new chat sạch
-(rẻ hơn 10 turns cãi nhau + premium requests).
+(rẻ hơn 10 turns cãi nhau + tốn AI credits).
 ```
 
 ```bash
@@ -119,7 +127,7 @@ git log --oneline -5 -- <file>       # lịch sử file (điểm restore nào an
 
 ## 3. Worktrees deep-dive (lệnh thuộc lòng)
 
-Mỗi session 1 git checkout riêng → 2 agents sửa cùng repo không conflict file.
+Section này trả lời: lệnh nào để tạo, liệt kê, mở và dọn worktree, và vì sao đặt tên thư mục/branch theo 1 quy ước. Trước hết, bản chất: mỗi session 1 git checkout riêng → 2 agents sửa cùng repo không conflict file.
 
 ```bash
 git worktree add ../myfeature-worktrees/feat-x -b feat/x
@@ -170,8 +178,7 @@ dọn sau merge              → worktree tồn tại = branch tồn tại = n�
 
 ## 4. Branch strategy của coding agent (`copilot/*`)
 
-Coding agent (github.com, assign issue → agent làm → ra PR) dùng branch prefix
-riêng. Bạn cần biết để không giẫm + review đúng.
+Section này trả lời: coding agent cloud tạo branch kiểu gì, bạn đụng vào được không, và review PR của nó ra sao. Coding agent (github.com, assign issue → agent làm → ra PR) dùng branch prefix riêng. Bạn cần biết để không giẫm + review đúng.
 
 ```text
 Luồng coding agent chuẩn:
@@ -209,6 +216,8 @@ git worktree prune && git worktree list            # xác nhận sạch
 ---
 
 ## 5. 3 worktree workflows (copy-paste)
+
+Section này trả lời: khi nào dùng pattern nào — làm 2 features song song, thử 2 phương án giữ cái thắng, hay bạn code + agent cloud fan-out. Ba pattern dưới copy-paste thẳng vào terminal.
 
 ### Pattern A — Solo 2 features song song (phổ biến nhất)
 
@@ -262,6 +271,8 @@ git branch -D spike/option-1
 
 ## 6. Rewind = git restore + new chat (bảng quyết định)
 
+Section này trả lời: rewind khi nào và bằng cái gì? Đọc 4 scenario rồi tra bảng quyết định 30 giây ở cuối. Quy tắc ngắn: sửa 2 lần vẫn sai → đừng argue, restore + chat mới.
+
 ### Scenario 1 — Agent sửa 3 turns vẫn fail cùng 1 test
 
 ```text
@@ -295,7 +306,7 @@ Quyết định: REWIND + viết lại prompt đầy đủ (mục tiêu + scope 
 ```text
 Dấu hiệu: 9/10 steps đúng, 1 step sai (vd sai tên column).
 Quyết định: KHÔNG rewind — sửa trực tiếp (Edit 1 dòng) hoặc bảo agent "sửa dòng X thành Y".
-  Rewind ở đây phí (mất 9 steps đúng + premium).
+  Rewind ở đây phí (mất 9 steps đúng + tốn AI credits).
 ```
 
 ### Bảng quyết định 30 giây
@@ -319,6 +330,8 @@ Quyết định: KHÔNG rewind — sửa trực tiếp (Edit 1 dòng) hoặc b�
 ---
 
 ## 7. Walkthrough + pitfalls + bài tập
+
+Section này trả lời: làm sao luyện tay cho phản xạ — 1 walkthrough 20 phút, 4 gotchas ai cũng vấp, 6 pitfalls và 4 bài tập cuối bài.
 
 ### 7.1. Walkthrough kết hợp (20 phút)
 
@@ -388,7 +401,7 @@ settings: "window.title": "${rootName} — ${activeEditorShort}"
 `git worktree list` + merge + dọn. Ghi thời gian so với làm tuần tự.
 
 **Bài 2 (15 phút):** Cố ý giao task sai hướng, để agent làm 5 turns, rồi restore +
-new chat sạch (scenario 3). So sánh premium/turns rewind-sớm vs argue-tiếp.
+new chat sạch (scenario 3). So sánh AI credits/turns rewind-sớm vs argue-tiếp.
 
 **Bài 3 (10 phút):** Thử Timeline restore 1 file + Chat history fork. Khi nào
 Timeline đủ, khi nào cần `git restore` + new chat?
@@ -400,6 +413,8 @@ Timeline đủ, khi nào cần `git restore` + new chat?
 
 ## 8. Link chéo
 
+Các bài khác trong series liên quan trực tiếp — đọc sâu khi cần.
+
 - **Bài 06 — Custom agents:** parallel sessions (local multi-chat + cloud multi-agent) — worktrees là cách ly.
 - **Bài 07 — Guardrails:** branch protection + auto-delete + push protection cho `copilot/*`.
 - **Bài 10 — Modes & permissions:** scope Agent mode (1 worktree/branch) + approval.
@@ -407,4 +422,4 @@ Timeline đủ, khi nào cần `git restore` + new chat?
 - **Bài 04 — Chat commands:** Chat history, model picker khi mở chat mới sau rewind.
 
 ---
-*(Hết bài 11 — tổng ~400 dòng. Tiếp theo: Bài 12 — Copilot SDK & CI/CD automation.)*
+*(Hết bài 11 — tổng ~440 dòng. Tiếp theo: Bài 12 — Copilot SDK & CI/CD automation.)*

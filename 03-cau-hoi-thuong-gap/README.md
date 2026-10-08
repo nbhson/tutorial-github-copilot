@@ -1,6 +1,10 @@
 # 03 — Câu hỏi thường gặp (10 bài, tra cứu khi kẹt)
 
-> Mỗi bài gồm ~10 câu, mỗi câu theo cấu trúc cố định: **Hỏi ngắn gọn → Trả lời 1 câu → Giải thích chi tiết + ví dụ → Làm thế nào (steps copy-paste) → Nếu vẫn lỗi thì...**. Bận thì đọc "Trả lời 1 câu" + sơ đồ mermaid đầu file; rảnh thì làm theo steps.
+> **Dành cho:** ai đang kẹt với GitHub Copilot — từ người mới tới dev đã dùng, cần tra cứu nhanh.
+> **Vấn đề:** 10 nhóm câu hỏi lặp đi lặp lại (tài khoản, model, MCP, policy, lỗi...) khiến bạn phải tìm documentation khắp nơi.
+> **Đọc xong:** mở đúng file trong 30 giây, trả lời được ngay nhờ mục "Trả lời 1 câu". **Thời gian:** ~5 phút đọc mục lục.
+
+Mỗi bài gồm ~10 câu hỏi, mỗi câu theo cấu trúc cố định: **Hỏi ngắn gọn → Trả lời 1 câu → Giải thích chi tiết + ví dụ → Làm thế nào (steps copy-paste) → Khi nào áp dụng → Nếu vẫn lỗi thì...**. Bận thì đọc "Trả lời 1 câu" + sơ đồ mermaid đầu file; rảnh thì làm theo steps.
 
 | # | Chủ đề | Link |
 |---|--------|------|
@@ -17,8 +21,10 @@
 
 ## Gặp lỗi X → đọc bài nào?
 
+Section này trả lời: với triệu chứng bạn đang gặp, nên mở file nào trong 10 bài. Tra cứu nhanh, không cần đọc từ đầu.
+
 - Không đăng nhập / thắc mắc giá / seat / trial / policy chặn → **bài 01**
-- Model nào ngon, premium multiplier, tràn context, BYOK → **bài 02**
+- Model nào ngon, chi phí AI Credits, tràn context, BYOK → **bài 02**
 - Bị chặn tool, không hiểu Ask/Edit/Agent, approval hoài → **bài 03**
 - MCP tools không hiện, auth fail, secrets → **bài 04**
 - Instruction không ăn, muốn pre-commit / branch protection → **bài 05**

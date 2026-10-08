@@ -1,18 +1,23 @@
 # /doc — Sinh docstring/JSDoc trong 1 nốt
 
-> Nôm na: nhờ viết nhãn mác cho lọ thuốc — tên, công dụng, cách dùng, ví dụ.
+> **Dành cho:** dev vừa viết xong hàm public · **Vấn đề:** docs thiếu params/example nên người khác không dám dùng · **Đọc xong:** ra docstring/JSDoc đủ @param/@returns/example chạy được (~2 phút)
 
 ## Lệnh làm gì (1 câu nôm na)
 
-Nôm na: nhờ viết nhãn mác cho lọ thuốc — tên, công dụng, cách dùng, ví dụ. Thuộc nhóm lệnh dùng hàng ngày — gắn scope gọn thì 1–2 turns là xong.
+Nôm na: nhờ viết nhãn mác cho lọ thuốc — tên, công dụng, cách dùng, ví dụ. Bôi đen hàm rồi `/doc`; sau mỗi lần đổi signature hãy chạy lại để docs không sai.
 
 ## Khi nào dùng
 
+Section này trả lời: hàm nào cần docs, và làm sao để docs không chung chung hay sai params.
+
+- **Cho ai:** người giữ API/hàm public, team đang chuẩn hóa docs cho module cũ.
 - Vừa viết hàm public, cần docs chuẩn.
 - Chuẩn hóa docs cũ thiếu params/example.
 - Onboard: đọc docs là hiểu module.
 
 ## Cách gọi (copy-paste)
+
+Cách gọi `/doc` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:
 
 ```bash
 Bôi đen hàm → /doc
@@ -22,6 +27,8 @@ Bôi đen hàm → /doc
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/doc`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
 
 ## Ví dụ prompt thật + kết quả mong đợi
+
+Prompt mẫu cho `/doc` — đổi phần tên file/task cho đúng việc của bạn:
 
 **Prompt thật (copy-paste, nhớ gắn scope trước):**
 
@@ -35,6 +42,8 @@ Bôi đen hàm → /doc
 
 ## Lỗi thường gặp
 
+Ba triệu chứng hay gặp nhất với lệnh này — kèm nhanh cách xử lý:
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Docs chung chung, thiếu example | Prompt thiếu yêu cầu example | Thêm “gồm 1 example chạy được” |
@@ -42,6 +51,8 @@ Bôi đen hàm → /doc
 | Docs dài hơn code | Tham mọi thứ | Chỉ docs cho hàm public/phức tạp |
 
 ## Tham khảo
+
+Liên quan — index nhóm, cheatsheet 1 trang và FAQ phòng khi kẹt:
 
 - Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh.
 - Cheatsheet 1 trang: [../../../../CHEATSHEET.md](../../../../CHEATSHEET.md).

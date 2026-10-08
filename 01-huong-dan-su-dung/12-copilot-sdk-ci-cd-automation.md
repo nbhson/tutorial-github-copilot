@@ -1,8 +1,6 @@
 # 12 — Copilot SDK, CI/CD & Automation (CLI, Actions, Coding Agent)
 
-> Bài cuối series 01. Đọc xong bạn có 2 GitHub Actions workflows hoàn chỉnh,
-> automate được `gh copilot` CLI, giao việc cho coding agent đúng cách, và setup
-> Copilot code review workflow cho team. Thời gian: ~45 phút.
+> Bài cuối series 01. **Dành cho:** dev/tech lead muốn đưa Copilot vào pipeline CI/CD và automation. **Vấn đề:** CI runner không có người bấm Allow — job hỏi giữa chừng là treo tới timeout; code AI sinh ra chạy mù trong CI có thể thành lỗ hổng bảo mật. **Đọc xong:** có 2 GitHub Actions workflows hoàn chỉnh, automate được `gh copilot` CLI, giao việc cho coding agent đúng cách, và setup Copilot code review workflow cho team. **Thời gian:** ~45 phút.
 
 ## Mục lục
 
@@ -19,6 +17,8 @@
 
 ## 0. Giải ngố thuật ngữ (đọc trước, khỏi ngợp)
 
+Section này trả lời: 5 thuật ngữ xuyên suốt bài — Copilot SDK, `gh copilot`, Actions workflow, coding agent, scheduled routine — nghĩa là gì và lệnh nào để tự kiểm chứng. Đọc xong bảng này vào bài không bị ngợp.
+
 | Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
 |---|---|---|---|---|
 | **Copilot SDK** | Bộ Lego để bạn tự lắp robot Copilot riêng (tools + luật + UI tùy ý). | Như mua động cơ + khung xe về độ xe riêng thay vì thuê taxi (`gh copilot`). | `new CopilotClient({allowedTools: ["read","grep"]})` — robot chỉ được đọc, cấm chạy shell. | Gọi tool cấm → SDK từ chối, log hiện `denied`. |
@@ -30,6 +30,8 @@
 ---
 
 ## 1. Vì sao đưa Copilot vào pipeline? (why)
+
+Section này trả lời: vì sao CI chạy Copilot khác chat trên máy (không người bấm Allow), và pattern nào để pipeline không treo, không thành lỗ hổng.
 
 Chat/VS Code cần người ngồi bấm Allow. CI runner **không có người**: job hỏi giữa
 chừng = treo tới timeout. Pattern CI: **scope hẹp + không hỏi + allowlist tối
@@ -75,6 +77,8 @@ Giải thích từng bước:
 
 ## 2. Copilot SDK — build agent riêng
 
+Section này trả lời: khi nào nên tự build agent bằng Copilot SDK thay vì dùng CLI sẵn có, và trạng thái SDK năm 2026 (runtimes, harness, AHP) ra sao.
+
 - SDK bọc vòng lặp Copilot (tools + permissions + orchestration) để bạn build
   workflow custom: full control tool access, orchestration, callbacks.
 - Dùng khi: quy trình team quá đặc thù, cần UI riêng, cần nhúng vào backend
@@ -99,7 +103,7 @@ import { CopilotClient } from "@github/copilot-sdk";
 const client = new CopilotClient({
   // Auth qua env: GITHUB_TOKEN (KHÔNG hardcode — xem mục 2.3).
   token: process.env.GITHUB_TOKEN!,
-  model: "gpt-4o",            // default rẻ; khó mới đổi mạnh
+  model: "gpt-4o",            // chỉ minh họa — 2026 để auto (auto model selection) hoặc model hiện hành
   allowedTools: ["read", "grep", "github-read"],  // allowlist hẹp: không terminal/deploy
 });
 
@@ -148,9 +152,25 @@ Audit: grep -rniE "ghp_|gho_|sk-|xox_" examples/ .github/workflows/ → phải T
 CI: dùng ${{ secrets.GITHUB_TOKEN }} (tự có) hoặc repo secrets (Settings → Secrets).
 ```
 
+### 2.4. SDK 2026: runtimes, Copilot harness & AHP
+
+Trạng thái theo FACT-PACK (10/2026):
+
+- Runtimes hỗ trợ: **Node.js 20+**, **Python 3.11+**, **Go 1.24+**, **Rust 1.94+**,
+  **Java 17+**, **.NET 8.0+** — mức tối thiểu theo README repo `github/copilot-sdk`, `(cần verify)`.
+- Gói cài: npm `@github/copilot-sdk`, pip `github-copilot-sdk` — tên chính xác `(cần verify)`.
+- SDK bọc cả **Copilot CLI** và cung cấp **sessions + permissions + custom tools + events** — đủ bộ phận để lắp vòng lặp agent riêng.
+- **Copilot harness** (tầng agent chạy nhờ SDK) chạy trong tiến trình **Agent Host** qua giao thức **AHP (Agent Host Protocol)** — nói nôm na như đầu cắm chuẩn: cùng 1 harness nối được vào VS Code, Copilot app và CLI, cho hành vi nhất quán; cùng 1 session có thể nối từ nhiều cửa sổ VS Code.
+- SDK là nền của **dynamic workflows** (public preview, 01/10/2026): dàn dựng đa-agent khai báo bằng code — dùng qua Copilot CLI (experimental), Copilot app (không cần setup) và Copilot SDK.
+- Attribution: SDK dùng để ghi session agent IDE vào usage metrics. Fix 10/2026: cập nhật IDE — VS Code 1.139.0+, Visual Studio 18.12 (10/2026), JetBrains cuối 10/2026, Eclipse/Xcode ~11/2026.
+
+> ✅ **Kỳ vọng thấy gì:** sau phần này bạn trả lời được — SDK 2026 chạy ngôn ngữ nào, harness/AHP là gì, và dynamic workflows dựa trên SDK ra sao.
+
 ---
 
 ## 3. `gh copilot` CLI automation (copy-paste)
+
+Section này trả lời: 3 lệnh `gh copilot` nào là đắt giá nhất trong script/CI, và làm sao để CLI không treo job. Lưu ý 2026: GitHub phân phối Copilot CLI như binary `copilot` độc lập (`copilot init`, `/usage`, `/mcp`, `/skills`, `/experimental`, `/fork`); các lệnh `gh copilot` bên dưới vẫn để làm ví dụ script — đối chiếu bản hiện hành `(cần verify)`.
 
 ```bash
 # Cài (1 lần):
@@ -185,6 +205,8 @@ cat /tmp/suggest.txt
 ---
 
 ## 4. 2 GitHub Actions workflows hoàn chỉnh
+
+Section này trả lời: 2 workflow sẵn sàng copy-paste — auto-review PR mới và triage CI fail ban đêm — kèm khung GitLab CI tương đương.
 
 ### 4.1. Workflow 1 — Auto-review PR mới (hoàn chỉnh, copy-paste)
 
@@ -319,6 +341,8 @@ jobs:
 
 ## 5. Coding agent assign + scheduled routines
 
+Section này trả lời: viết issue thế nào thì coding agent làm đúng ngay lần đầu, và viết job định kỳ kiểu gì cho an toàn khi chạy vắng người.
+
 ### 5.1. Assign issue cho coding agent (đúng cách — quyết định chất lượng PR)
 
 ```bash
@@ -382,6 +406,8 @@ Quy tắc viết job định kỳ (như viết skill — steps + verify + output
 
 ## 6. Copilot code review workflow
 
+Section này trả lời: cài đặt Copilot code review thành 1 gate thật trong PR workflow, và tinh chỉnh để review không bị team bỏ qua. Mặc định từ 28/09/2026: effort là **Balanced** (nhiều reasoning hơn Lite, tốn AI credits hơn); bạn chọn được Lite hoặc Balanced — mọi review đều tính **AI credits + GitHub Actions minutes**.
+
 ```text
 Luồng PR chuẩn team (dán vào CONTRIBUTING):
 1. Push branch feat/* hoặc copilot/* → mở PR (draft nếu WIP).
@@ -397,7 +423,7 @@ Setup (repo → Settings → Rules → Rulesets):
 
 ```text
 Tune precision (reviewer quá khắt → team ignore → mất gate):
-- Dặn trong .github/muse-instructions.md:
+- Dặn trong .github/copilot-instructions.md:
   "Code review: chỉ flag lỗi thực sự (bug, security, perf regression).
    Đừng flag style đã có prettier, đừng over-engineer."
 - Calibration: mỗi tháng review 5 PRs cũ — findings nào false positive?
@@ -409,10 +435,12 @@ Tune precision (reviewer quá khắt → team ignore → mất gate):
 
 ## 7. Setup maintainable + pitfalls + bài tập
 
+Section này trả lời: setup cả team từ 0 trong 1 giờ cần làm những gì, 7 pitfalls ai cũng vấp, và 5 bài tập cuối khóa để kiểm tra tay nghề.
+
 ### 7.1. Setup team từ 0 (checklist 1 giờ)
 
 ```text
-[ ] 1. muse-instructions.md LAW + path-scoped instructions (bài 03) — 15 phút
+[ ] 1. copilot-instructions.md / AGENTS.md LAW + path-scoped instructions (bài 03) — 15 phút
 [ ] 2. settings.json team (approval ask/deny) + content exclusion (bài 07/10) — 10 phút
 [ ] 3. husky + lint-staged + branch protection (bài 07) — 15 phút
 [ ] 4. MCP GitHub + db instructions nếu có DB (bài 08) — 10 phút
@@ -460,6 +488,8 @@ retro: khóa này thay đổi workflow team bạn thế nào?
 
 ## 8. Link chéo
 
+Các bài khác trong series liên quan trực tiếp — đọc sâu khi cần.
+
 - **Bài 03 — Instructions:** instructions tune Copilot review precision.
 - **Bài 05 — Prompt files:** prompt review/triage tái dùng cho CI jobs.
 - **Bài 06 — Custom agents:** agents local vs coding agent cloud — khi nào dùng ai.
@@ -470,4 +500,4 @@ retro: khóa này thay đổi workflow team bạn thế nào?
 - **Bài 11 — Worktrees:** `copilot/*` branch strategy + review PR agent.
 
 ---
-*(Hết bài 12 — hết series 01. Tổng ~430 dòng.)*
+*(Hết bài 12 — hết series 01. Tổng ~500 dòng.)*

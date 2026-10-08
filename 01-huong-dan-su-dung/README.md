@@ -1,4 +1,9 @@
-# 01 — Hướng dẫn sử dụng Muse (đọc từ 00 → 16)
+# 01 — Hướng dẫn sử dụng GitHub Copilot (đọc từ 00 → 16)
+
+> **Dành cho:** người mới bắt đầu, và dev đã dùng Copilot nhưng muốn đi lại cho đúng thứ tự.
+> **Vấn đề:** 17 bài học + 46 thư mục lệnh — đọc cái nào trước, bài nào liên quan tới việc mình đang làm.
+> **Đọc xong:** biết thứ tự đọc 00 → 16, biết ghép bài đọc với lệnh trong `commands/`, và chọn được bài đúng nhu cầu ngay lúc này.
+> **Thời gian:** ~5 phút.
 
 Đọc theo thứ tự **00 → 16**: từ tổng quan, cài đặt, bề mặt sử dụng, cấu hình nền tảng
 (`muse-instructions.md`, chat commands, prompt files, custom agents, instructions,
@@ -9,6 +14,8 @@ Cách học nhanh: đọc bài tổng quan trước (00–04), vừa đọc vừ
 (ví dụ đọc bài 04 thì mở `commands/code-actions/fix/` xem ví dụ prompt thật). Mỗi folder lệnh trong
 `commands/` đều theo format cố định: **lệnh làm gì → khi nào dùng → cách gọi → ví dụ prompt thật +
 kết quả mong đợi → lỗi thường gặp**.
+
+Muốn nhảy cóc? Bảng dưới đây mô tả đúng 1 dòng mỗi bài — đọc cột "Mô tả 1 dòng" là đủ để quyết định có cần mở bài đó không.
 
 ## Danh sách bài (17 bài)
 
@@ -28,11 +35,13 @@ kết quả mong đợi → lỗi thường gặp**.
 | 11 | Git worktrees & Checkpoints | Làm việc song song, checkpoints/undo an toàn | [11-git-worktrees-checkpoints.md](./11-git-worktrees-checkpoints.md) |
 | 12 | Copilot SDK, CI/CD, Automation | Tự động hóa bằng SDK, gh copilot CLI, Actions | [12-copilot-sdk-ci-cd-automation.md](./12-copilot-sdk-ci-cd-automation.md) |
 | 13 | Code intelligence, Indexing, Telemetry | @workspace index, knowledge bases, audit logs | [13-code-intelligence-indexing-telemetry.md](./13-code-intelligence-indexing-telemetry.md) |
-| 14 | Models: chọn model đúng | GPT/Claude/Gemini: premium requests, khi nào dùng | [14-models-chon-model-dung.md](./14-models-chon-model-dung.md) |
+| 14 | Models: chọn model đúng | GPT/Claude/Gemini: AI Credits, khi nào dùng model nào | [14-models-chon-model-dung.md](./14-models-chon-model-dung.md) |
 | 15 | Security stack 5 tầng | Defense-in-depth cho Copilot: exclusion → audit | [15-security-stack-5-tang.md](./15-security-stack-5-tang.md) |
 | 16 | Extensions/MCP: bảo mật & validate | Validate extension/MCP trước khi cài | [16-extensions-mcp-bao-mat-validate.md](./16-extensions-mcp-bao-mat-validate.md) |
 
 ## Tra cứu lệnh chi tiết (`commands/`)
+
+Phần này dùng để tra nhanh khi đang làm việc — không cần đọc từ đầu.
 
 - Tổng số: **46** thư mục lệnh (`find 01-huong-dan-su-dung/commands -mindepth 2 -type d | wc -l`).
 - Index đầy đủ theo 4 nhóm: [commands/README.md](./commands/README.md)

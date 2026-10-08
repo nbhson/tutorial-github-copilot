@@ -1,28 +1,32 @@
 # 04 — Chat Commands Toàn Tập (Slash, Participants, Variables)
 
-> Bài 04 là INDEX tra cứu 46 chat commands Copilot 2026. Mỗi lệnh có 1 folder riêng
-> trong `commands/` (vd `commands/chat-session/new-chat/`), chứa README chi tiết: cú pháp,
-> ví dụ, pitfalls, plan/model gating. Cách dùng: tìm nhóm → đọc mô tả 1 dòng →
-> click link sang folder chi tiết. Thời gian: ~30 phút đọc + tra cứu dần.
+> **Dành cho:** người mới lẫn dev đã dùng Copilot — dùng làm index tra cứu 46 chat commands Copilot 2026.
+> **Vấn đề:** gõ prompt tự nhiên dài dòng, tốn turns làm rõ, không biết lệnh nào đang có sẵn.
+> **Đọc xong:** biết chọn đúng nhóm lệnh, chạy được công thức 5 lệnh session đầu, và tự debug khi lệnh "bị mất".
+> **Cách dùng:** tìm nhóm → đọc mô tả 1 dòng → click link sang folder chi tiết.
+> Mỗi lệnh có 1 folder riêng trong `commands/` (vd `commands/chat-session/new-chat/`), chứa README chi tiết: cú pháp,
+> ví dụ, pitfalls, plan/model gating. **Thời gian:** ~30 phút đọc + tra cứu dần.
 
 ## Mục lục
 
 1. [Cách đọc index này + why phải học commands](#1-cách-đọc-index-này--why-phải-học-commands)
-2. [Nhóm 1 — Chat session (18)](#nhóm-1--chat-session-18)
-3. [Nhóm 2 — Model & Mode + Code (18)](#nhóm-2--model--mode--code-18)
-4. [Nhóm 3 — Tri thức & Hệ thống (17)](#nhóm-3--tri-thức--hệ-thống-17)
-5. [Nhóm 4 — Auth & Settings (17)](#nhóm-4--auth--settings-17)
-6. [Công thức 5 lệnh session đầu](#6-công-thức-5-lệnh-session-đầu-giữ-nguyên-làm-1-lầnrepo)
-7. [Lưu ý plan/model gating](#7-lưu-ý-planmodel-gating-premium-requests-byok)
+2. [Nhóm 1 — Chat session (12)](#nhóm-1--chat-session-12)
+3. [Nhóm 2 — Model & Agent (9)](#nhóm-2--model--agent-9)
+4. [Nhóm 3 — Code actions (10)](#nhóm-3--code-actions-10)
+5. [Nhóm 4 — System & Knowledge (15)](#nhóm-4--system--knowledge-15)
+6. [Công thức 5 lệnh session đầu (giữ nguyên, làm 1 lần/repo)](#6-công-thức-5-lệnh-session-đầu-giữ-nguyên-làm-1-lầnrepo)
+7. [Lưu ý plan/model gating (premium requests, BYOK)](#7-lưu-ý-planmodel-gating-premium-requests-byok)
 8. [Walkthrough + ví dụ copy-paste](#8-walkthrough--ví-dụ-copy-paste)
-9. [Pitfalls + bài tập](#9-pitfalls--bài-tập)
+9. [Hiểu nhầm thường gặp + Pitfalls + bài tập](#9-hiểu-nhầm-thường-gặp--pitfalls--bài-tập)
 10. [Link chéo](#10-link-chéo)
 
 ---
 
 ## 1. Cách đọc index này + why phải học commands
 
-- Là gì (1 câu): chat commands là 3 ký hiệu `/` (lệnh), `@` (gọi đúng người), `#` (đưa đúng tài liệu) giúp gắn scope ngay từ turn 1.
+Section này trả lời: 3 ký hiệu `/`, `@`, `#` khác nhau thế nào, và vì sao phải học chúng thay vì gõ tự nhiên mãi?
+
+- Là gì (1 câu): chat commands là 3 ký hiệu — `/` (lệnh), `@` (gọi đúng người), `#` (đưa đúng tài liệu) — giúp gắn scope ngay từ turn 1.
 - Hiểu nôm na: `/` như gọi món theo số (nhanh, chuẩn), `@` như gọi đúng nhân viên (thu ngân / bếp), `#` như đưa đúng hóa đơn cho họ xem.
 - Ví dụ kỹ thuật: gõ `/fix #selection thêm null check` nhanh và rẻ hơn gõ "bạn ơi sửa giúp mình đoạn code này với..." 3 turns làm rõ.
 
@@ -57,9 +61,11 @@ flowchart TD
 # Kỳ vọng / Verify: turn 1 agent đã đọc đúng file, không hỏi lại "file nào?".
 ```
 
-Vì sao học commands thay vì gõ tự nhiên mãi? Prompt tự nhiên linh hoạt nhưng tốn
-tokens + thiếu determinism. Commands (`/`, `@`, `#`) là "đường tắt có kiểm chứng":
-gắn đúng scope, đúng model, đúng tools ngay từ turn 1 — rẻ hơn 3–5 turns làm rõ.
+Vì sao học commands thay vì gõ tự nhiên mãi? Câu trả lời ngắn:
+
+- Prompt tự nhiên linh hoạt nhưng tốn tokens + thiếu determinism.
+- Commands (`/`, `@`, `#`) là "đường tắt có kiểm chứng": gắn đúng scope, đúng model, đúng tools ngay từ turn 1.
+- Kết quả: rẻ hơn 3–5 turns làm rõ.
 
 ---
 
@@ -108,7 +114,7 @@ gắn đúng scope, đúng model, đúng tools ngay từ turn 1 — rẻ hơn 3�
 | `Edit mode` | Vào Edit với files bạn chọn, sửa có kiểm soát | [./commands/model-agent/edit-mode/README.md](./commands/model-agent/edit-mode/README.md) |
 | `Agent mode` | Tự tìm file, sửa, chạy terminal | [./commands/model-agent/agent-mode/README.md](./commands/model-agent/agent-mode/README.md) |
 | `Custom agent` | Gọi custom agent trong `.github/agents/` | [./commands/model-agent/custom-agent/README.md](./commands/model-agent/custom-agent/README.md) |
-| `/usage` | Xem premium requests đã dùng (link dashboard) | [./commands/model-agent/premium-requests/README.md](./commands/model-agent/premium-requests/README.md) |
+| `/usage` | Xem AI Credits đã dùng (link dashboard) | [./commands/model-agent/premium-requests/README.md](./commands/model-agent/premium-requests/README.md) |
 | `Coding agent` | Giao issue cho Copilot coding agent xử lý async | [./commands/model-agent/coding-agent-assign/README.md](./commands/model-agent/coding-agent-assign/README.md) |
 | `Coding agent PR` | Tóm tắt diff thành PR, review flow issue→PR | [./commands/model-agent/coding-agent-pr/README.md](./commands/model-agent/coding-agent-pr/README.md) |
 | `Policy approval` | Xem/duyệt policy, approve lệnh nhạy cảm | [./commands/model-agent/policy-approval/README.md](./commands/model-agent/policy-approval/README.md) |
@@ -176,6 +182,8 @@ gắn đúng scope, đúng model, đúng tools ngay từ turn 1 — rẻ hơn 3�
 
 ## 6. Công thức 5 lệnh session đầu (giữ nguyên, làm 1 lần/repo)
 
+Section này trả lời: mở repo mới thì chạy 5 lệnh nào, theo thứ tự nào, mỗi lệnh kiểm tra gì?
+
 ```text
  /status → /instructions → /mcp → /customAgent → /policy
 ```
@@ -195,9 +203,13 @@ gắn đúng scope, đúng model, đúng tools ngay từ turn 1 — rẻ hơn 3�
 
 ## 7. Lưu ý plan/model gating (premium requests, BYOK)
 
+Section này trả lời: lệnh hoặc model không hiện trong list thì phải kiểm tra gì trước khi kết luận "Copilot hỏng"?
+
+- Thẻ "premium requests" là cách gọi cũ. Từ 01/06/2026, GitHub Copilot dùng **AI Credits**
+  (usage-based billing): 1 credit = $0.01, trừ theo model × số token. Code completions không trừ credits.
 - Không thấy lệnh nào → check `/status` + plan trước khi kết luận lệnh không tồn tại.
-- Premium requests: model mạnh (Claude/GPT-5-class) tốn multiplier cao hơn model
-  rẻ. Hết quota model mạnh → `/model` đổi sang model rẻ thay vì dừng việc.
+- Model mạnh (Claude/GPT-5-class) tốn nhiều credits hơn model rẻ. Hết credits →
+  `/model` đổi sang model rẻ thay vì dừng việc.
 - BYOK (Enterprise): org dùng key/model riêng → list model trong `/model` khác
   Individual. Hỏi admin khi model bạn cần không hiện.
 - Model availability theo plan: Individual < Business < Enterprise (mở dần).
@@ -216,6 +228,8 @@ gắn đúng scope, đúng model, đúng tools ngay từ turn 1 — rẻ hơn 3�
 ---
 
 ## 8. Walkthrough + ví dụ copy-paste
+
+Section này trả lời: dùng lệnh theo flow thật (hỏi → sửa → test → giao task) trông ra sao?
 
 ### 8.1. Flow Ask → Edit → Agent bằng commands (10 phút)
 
@@ -324,6 +338,8 @@ gh copilot suggest "viet commit message conventional commits cho diff hien tai"
 
 ## 9. Hiểu nhầm thường gặp + Pitfalls + bài tập
 
+Section này trả lời: người dùng commands hay sai gì, và tự sửa bằng 4 bài tập nào?
+
 ### 9.0. Hiểu nhầm thường gặp về commands
 
 | Hiểu nhầm | Sự thật | Ví dụ |
@@ -360,7 +376,7 @@ Trên branch test, chạy `/diff → /review → /commit → /pr`. Liệt kê: l
 
 **Bài 4 (15 phút) — Gating check:**
 Mở `/model` liệt kê models khả dụng ở plan bạn. So với đồng nghiệp plan khác
-(nếu có). Ghi bảng: model nào tốn premium multiplier cao (ước lượng từ dashboard).
+(nếu có). Ghi bảng: model nào tốn AI Credits cao nhất (ước lượng từ dashboard).
 
 ---
 

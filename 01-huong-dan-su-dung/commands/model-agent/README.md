@@ -1,6 +1,8 @@
 # Nhóm Model & Agent (9 lệnh)
 
-> Chọn não (model), chọn chế độ (Ask/Edit/Agent), gọi custom/coding agent, soi quota và duyệt policy. Đọc 1 dòng rồi click sang README chi tiết.
+> **Dành cho:** người chọn model/chế độ và gọi agent · **Vấn đề:** 9 việc (chọn não, Ask/Edit/Agent, custom/coding agent, soi quota, duyệt policy) không biết bắt đầu từ đâu · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi click sang README chi tiết (~2 phút)
+
+Mỗi README chi tiết trả lời 5 câu: **dùng khi nào · cho ai · kết quả ra gì · ví dụ copy-paste · liên quan.**
 
 | Lệnh | Mô tả 1 dòng | Chi tiết |
 |---|---|---|

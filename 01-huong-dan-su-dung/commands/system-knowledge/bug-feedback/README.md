@@ -1,18 +1,23 @@
 # /feedback + /bug — Gửi feedback/bug cho GitHub
 
-> Nôm na: bỏ phiếu góp ý + báo hỏng hóc cho ban quản lý.
+> **Dành cho:** người gặp bug lặp lại được hoặc có góp ý cho GitHub · **Vấn đề:** báo “nó dở” chung chung thì GitHub không xử lý được · **Đọc xong:** gửi bug/feedback đủ context: prompt + version + bước lặp (~2 phút)
 
 ## Lệnh làm gì (1 câu nôm na)
 
-Nôm na: bỏ phiếu góp ý + báo hỏng hóc cho ban quản lý. Thuộc nhóm lệnh dùng hàng ngày — gắn scope gọn thì 1–2 turns là xong.
+Nôm na: bỏ phiếu góp ý + báo hỏng hóc cho ban quản lý. `/feedback` vote tốt/xấu kèm lý do; `/bug` gửi mô tả + bước lặp + version. Soát secrets trước khi gửi.
 
 ## Khi nào dùng
 
+Section này trả lời: khi nào nên báo, và context nào khiến bug được xử lý nhanh.
+
+- **Cho ai:** mọi người dùng Copilot, nhất là người test tính năng mới.
 - Câu trả lời hay/dở muốn vote.
 - Gặp bug lặp lại được.
 - Muốn GitHub cải thiện tính năng.
 
 ## Cách gọi (copy-paste)
+
+Cách gọi `/feedback + /bug` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:
 
 ```bash
 /feedback tốt/xấu + lý do
@@ -22,6 +27,8 @@ Nôm na: bỏ phiếu góp ý + báo hỏng hóc cho ban quản lý. Thuộc nh�
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/feedback + /bug`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
 
 ## Ví dụ prompt thật + kết quả mong đợi
+
+Prompt mẫu cho `/feedback + /bug` — đổi phần tên file/task cho đúng việc của bạn:
 
 **Prompt thật (copy-paste, nhớ gắn scope trước):**
 
@@ -35,6 +42,8 @@ Nôm na: bỏ phiếu góp ý + báo hỏng hóc cho ban quản lý. Thuộc nh�
 
 ## Lỗi thường gặp
 
+Ba triệu chứng hay gặp nhất với lệnh này — kèm nhanh cách xử lý:
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Báo “nó dở” chung chung | Thiếu bước lặp | Kèm prompt + file + version + ảnh/log |
@@ -42,6 +51,8 @@ Nôm na: bỏ phiếu góp ý + báo hỏng hóc cho ban quản lý. Thuộc nh�
 | Gửi feedback có secrets | Paste log chứa token | Soát secrets trước khi gửi |
 
 ## Tham khảo
+
+Liên quan — index nhóm, cheatsheet 1 trang và FAQ phòng khi kẹt:
 
 - Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh.
 - Cheatsheet 1 trang: [../../../../CHEATSHEET.md](../../../../CHEATSHEET.md).

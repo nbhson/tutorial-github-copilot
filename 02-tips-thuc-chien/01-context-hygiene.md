@@ -1,8 +1,15 @@
 # Tips 01 — Context Hygiene: Giữ Copilot Sạch Để Không "Loạn"
 
-> Mọi best practice Copilot đều quy về 1 constraint: **chat đầy rất nhanh, model dở dần khi context đầy.** Bài này deep-dive: new chat mỗi task, attachments gọn, @workspace hẹp, knowledge base, custom agent, checkpoints.
+> **Dành cho:** dev đã dùng Copilot ở mức chat hằng ngày (có chat dài, có paste log) nhưng thấy chất lượng trả lời đi xuống sau 30–60 phút.
+> **Vấn đề:** chat đầy nhanh, model dở dần khi context đầy — bạn quên rule, sửa chỗ A hỏng chỗ B, và tốn AI Credits cho tokens rác.
+> **Đọc xong:** áp được 4 thói quen (new chat mỗi task, attachments gọn, knowledge base thay paste, agent cô lập + checkpoints), tự chẩn đoán được chat bẩn và cứu được trong 5 phút.
+> **Thời gian:** ~15 phút đọc + ~30 phút làm bài tập cuối bài.
+
+Bài này deep-dive đúng 1 constraint của mọi best practice Copilot: **chat đầy rất nhanh, model dở dần khi context đầy.** Bạn sẽ đi qua new chat mỗi task, attachments gọn, @workspace hẹp, knowledge base, custom agent và checkpoints.
 
 ## Mục lục
+
+Section này trả lời: 12 phần của bài viết分别 làm gì, để bạn nhảy đúng chỗ cần đọc.
 
 - [1. Vì sao context hygiene quyết định 80%?](#1-vì-sao-context-hygiene-quyết-định-80)
 - [2. Cơ chế: Copilot nhét gì vào context?](#2-cơ-chế-copilot-nhét-gì-vào-context)
@@ -13,13 +20,17 @@
 - [7. Dấu hiệu chat bẩn và cách cứu](#7-dấu-hiệu-chat-bẩn-và-cách-cứu)
 - [8. Walkthrough theo phút: buổi sáng 3 tasks](#8-walkthrough-theo-phút-buổi-sáng-3-tasks)
 - [9. Bảng tra nhanh: công cụ dọn context Copilot](#9-bảng-tra-nhanh-công-cụ-dọn-context-copilot)
-- [10. Pitfalls + cách fix](#10-pitfalls--cách-fix)
+- [10. Pitfalls + cách fix (Hiểu nhầm thường gặp)](#10-pitfalls--cách-fix)
 - [11. Bài tập cuối bài](#11-bài-tập-cuối-bài)
 - [12. Tham khảo chéo](#12-tham-khảo-chéo)
 
 ---
 
 ## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+
+Section này trả lời: 5 thuật ngữ chính của bài viết nghĩa là gì, và lấy ví dụ nào để nhớ chúng cả đời.
+
+Bảng dưới đây là bảng tra nhanh — đọc trước khi vào phần kỹ thuật, rồi quay lại đối chiếu khi quên.
 
 | Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
 |---|---|---|---|---|
@@ -52,6 +63,8 @@ Giải thích từng bước: 1) Khác task là new chat ngay (đừng tiếc). 
 
 ## 1. Vì sao context hygiene quyết định 80%?
 
+Section này trả lời: vì sao cùng model, cùng repo mà kết quả lại khác nhau một trời một vực — và quy tắc vàng nào bạn phải ghim.
+
 Bạn gặp cảnh này chưa:
 
 - Bạn mở 1 chat Copilot từ sáng, nhờ fix CSS, rồi hỏi deploy, rồi nhờ viết SQL, rồi refactor auth.
@@ -66,18 +79,23 @@ Cùng một model, cùng một repo, chỉ khác cách quản lý context → k�
 > - **1 task = 1 chat sạch.** Đổi task là new chat.
 > - **Việc ồn ào đẩy sang chỗ khác** (custom agent, chat phụ, file trung gian), giữ chat chính gọn để ra quyết định.
 
-Ba con số bạn cần ghim:
+Ba con số bạn cần ghim — mỗi con số đi kèm 1 hành động, không cần nhớ gì thêm:
 
-| Con số | Ý nghĩa | Hành động |
-|---|---|---|
+| Con số | Ý nghĩa | Ví dụ | Nhãn nhanh | Hành động |
+|---|---|---|---|---|
 | `1 task` | 1 việc 1 chat. | Bug giỏ hàng 1 chat, docs API chat khác. | 1 chat 1 việc | Xong → new chat ngay |
 | `3–5 files` | Bàn chỉ để 5 tờ giấy. | Fix login chỉ gắn `login.ts + login.test.ts`. | Ngưỡng attachments gọn | Quá thì thu hẹp hoặc tách chat |
-| `10 phút` | Chu kỳ kiểm tra chat | Lan man → reset thay vì cãi |
+| `10 phút` | Chu kỳ kiểm tra chat | Lan man → reset thay vì cają | — | — |
+
 ---
 
 ## 2. Cơ chế: Copilot nhét gì vào context?
 
+Section này trả lời: mỗi lần bạn gõ một câu, Copilot thật sự gửi đi những gì, và vì sao đầy thì dở.
+
 ### 2.1. Mỗi prompt Copilot gửi đi gồm gì?
+
+Đây là thành phần của 1 turn chat — cộng dồn từ đầu phiên tới giờ:
 
 ```text
 [system + custom instructions + prompt files khả dụng]
@@ -97,6 +115,8 @@ Nghĩa là **mọi thứ bạn mở đều bị tính thuế**:
 
 ### 2.2. Vì sao đầy thì dở? (3 cơ chế)
 
+Ba cơ chế giải thích vì sao chat dài tự dở — nhớ 3 tên này là bạn chẩn đoán được mọi triệu chứng.
+
 **1. Attention dilution (loãng sự chú ý).**
 
 - Chat gọn 5K tokens → Copilot tập trung cao.
@@ -112,10 +132,12 @@ Nghĩa là **mọi thứ bạn mở đều bị tính thuế**:
 **3. Không có auto-compact cứu bạn.**
 
 - Khác Claude Code, Copilot Chat không tự tóm tắt khéo.
-- Chat dài chỉ phình to, chậm dần, tốn premium requests.
+- Chat dài chỉ phình to, chậm dần, tốn AI Credits.
 - Fix: **bạn phải chủ động new chat**, không ai làm thay.
 
 ### 2.3. Sơ đồ vòng đời chat
+
+Mốc thời gian dưới đây là "đèn báo" — thấy vàng là cân nhắc reset:
 
 ```text
 [Chat 0%] --làm việc--> [50%: đèn vàng, cân nhắc new chat] --> [80%: chắc chắn reset]
@@ -128,6 +150,8 @@ Nghĩa là **mọi thứ bạn mở đều bị tính thuế**:
 ---
 
 ## 3. Thói quen 1: new chat mỗi task
+
+Section này trả lời: khi nào phải bấm New Chat, và làm thế nào để không mất thông tin quan trọng trước khi reset.
 
 Đây là thói quen ROI cao nhất trong Copilot 2026.
 
@@ -184,6 +208,8 @@ Tối: review → 1 chat fresh, chưa thấy reasoning cũ
 
 ## 4. Thói quen 2: attachments gọn + @workspace scope hẹp
 
+Section này trả lời: gắn context thế nào cho đủ mà không đắt, và khi nào mới được phép dùng `@workspace`.
+
 ### 4.1. Nguyên tắc: gắn ít mà trúng
 
 Copilot VS Code 2026 cho bạn nhiều cách gắn context:
@@ -237,6 +263,8 @@ Lợi ích:
 
 ### 4.2. Khi nào dùng @workspace?
 
+Bảng dưới đây chọn giúp bạn công cụ theo tình huống — đọc cột "Dùng gì" là ra câu trả lời.
+
 | Tình huống | Hiểu nôm na | Ví dụ | Dùng gì | Vì sao |
 |---|---|---|---|---|
 | Fix 1 hàm cụ thể | Đưa đúng 1 trang sách. | Fix `validate()` email có dấu. | `#selection` + `#file` test | Rẻ nhất, chính xác nhất |
@@ -250,6 +278,8 @@ Lợi ích:
 ---
 
 ## 5. Thói quen 3: knowledge base + instructions thay vì paste
+
+Section này trả lời: vì sao paste là "nợ", và thay bằng file instructions hoặc knowledge base thì làm thế nào.
 
 ### 5.1. Vì sao paste lại là nợ?
 
@@ -319,6 +349,8 @@ chỉ lấy bảng orders và payments, tóm tắt 5 bullet quan hệ chính."
 
 ## 6. Thói quen 4: custom agent cô lập + checkpoints
 
+Section này trả lời: tách việc ồn sang chat khác bằng custom agent ra sao, và khi nào thì restore checkpoint thay vì cãi tiếp.
+
 ### 6.1. Custom agent = chat có vai hẹp
 
 VS Code Copilot cho bạn tạo custom agents (chat modes):
@@ -384,6 +416,10 @@ Xem thêm leo thang Ask → Edit → Agent ở [Tips 03](./03-plan-first-workflo
 
 ## 7. Dấu hiệu chat bẩn và cách cứu
 
+Section này trả lời: nhìn vào triệu chứng nào để biết chat đã bẩn, và cứu từng loại ra sao.
+
+Bảng dưới đây là bảng chẩn đoán — tìm cột "Dấu hiệu" giống cảnh bạn đang gặp, rồi lấy nguyên câu ở cột "Cứu ngay".
+
 | Dấu hiệu | Chẩn đoán | Cứu ngay (copy-paste) |
 |---|---|---|
 | Copilot đọc hàng trăm file sau chữ "investigate" | Scope quá rộng | Khoanh lại: `"Chỉ explore src/auth/login*, trả 5 files liên quan nhất"` |
@@ -397,6 +433,8 @@ Xem thêm leo thang Ask → Edit → Agent ở [Tips 03](./03-plan-first-workflo
 ---
 
 ## 8. Walkthrough theo phút: buổi sáng 3 tasks
+
+Section này trả lời: một buổi sáng 3 việc khác nhau thì chia chat theo phút như thế nào.
 
 **Bối cảnh:** bạn có 3 việc: bug giỏ hàng, viết docs API, plan feature payments.
 
@@ -415,7 +453,9 @@ Kết quả: 3 chats gọn (<50% rác mỗi cái) thay vì 1 chat 3 tiếng đ�
 
 ## 9. Bảng tra nhanh: công cụ dọn context Copilot
 
-| Công cụ | Giữ context cũ? | Giữ code? | Tốn requests? | Dùng khi nào? |
+Section này trả lời: mỗi công cụ dọn context giữ gì, tốn gì, dùng khi nào — để chọn trong 5 giây.
+
+| Công cụ | Giữ context cũ? | Giữ code? | Tốn AI Credits? | Dùng khi nào? |
 |---|---|---|---|---|
 | New Chat | Không (xóa 100%) | Có (file giữ) | 0 + đọc lại vài K | Đổi task hoàn toàn |
 | #file / #selection | Chỉ lấy đúng chỗ | Có | Rẻ nhất | Fix 1 hàm, hỏi 1 file |
@@ -431,6 +471,8 @@ Kết quả: 3 chats gọn (<50% rác mỗi cái) thay vì 1 chat 3 tiếng đ�
 
 ## 10. Pitfalls + cách fix (Hiểu nhầm thường gặp)
 
+Section này trả lời: 10 cái bẫy phổ biến nhất khiến chat bẩn, và cách thoát từng cái.
+
 | Pitfall | Vì sao dính | Fix |
 |---|---|---|
 | Nuôi 1 chat 200 turns cho 5 việc | Tiện, ngại new chat | 1 việc 1 chat, new chat giữa việc |
@@ -445,6 +487,8 @@ Kết quả: 3 chats gọn (<50% rác mỗi cái) thay vì 1 chat 3 tiếng đ�
 | Gắn ảnh chụp code thay vì file | Lười copy path | Gắn #file để Copilot đọc text thật |
 
 ### Before / After — prompt dở vs tốt (kết quả khác nhau)
+
+Hai prompt dưới đây cùng 1 việc (fix login) — so kết quả để nhớ vì sao scope quan trọng.
 
 **Before (prompt dở — chat bẩn):**
 
@@ -469,6 +513,8 @@ Trước khi sửa, liệt kê 3 test cases trong src/auth/__tests__/login.test.
 
 ## 11. Bài tập cuối bài
 
+Section này trả lời: làm 3 bài dưới đây để biến lý thuyết thành thói quen — có thời lượng và tiêu chí chấm điểm rõ.
+
 **Bài 1 (15 phút — đo chat hiện tại):**
 
 1. Mở repo bạn hay làm nhất, đếm: bao nhiêu tabs đang mở, chat hiện tại bao nhiêu turns.
@@ -492,11 +538,13 @@ Trước khi sửa, liệt kê 3 test cases trong src/auth/__tests__/login.test.
 
 ## 12. Tham khảo chéo
 
+Section này trả lời: đọc tiếp bài nào sau khi xong bài này, và vì sao.
+
 - Bài tips liên quan:
   - [Tips 02](./02-prompt-engineering.md) — viết prompt gọn để đỡ rác từ đầu
   - [Tips 03](./03-plan-first-workflow.md) — Ask → Edit → Agent leo thang
   - [Tips 05](./05-parallel-agents.md) — fan-out multi-chat đúng cách
-  - [Tips 08](./08-tiet-kiem-premium-requests.md) — model routing + tiết kiệm requests
+  - [Tips 08](./08-tiet-kiem-premium-requests.md) — model routing + tiết kiệm AI Credits
   - [Tips 10](./10-debugging-power-moves.md) — debug không bẩn chat chính
 
 > Mẹo 1 dòng: _files persist, chat thì không — cái gì quan trọng thì save ra file trước khi new chat._

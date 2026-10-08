@@ -1,9 +1,8 @@
 # 05 — Prompt Files & Custom Instructions (Tái Dùng Workflow Lặp Lại)
 
-> Bài 05 của series (tương đương Skills bên Claude Code). Đọc xong bạn viết được
-> `.github/prompts/*.prompt.md` chuẩn (mode/agent/tools frontmatter), custom
-> instructions đúng chỗ, Agent Skills (`.github/skills/*/SKILL.md` 2026), và dùng
-> Copilot Extensions như skills. Thời gian: ~45 phút (bản mở rộng).
+> **Dành cho:** dev đã dùng Copilot Chat ở mức cơ bản (xong bài 03–04) và muốn bớt gõ prompt lặp — không cần biết DevOps hay tự xây tool.
+> **Vấn đề:** việc lặp lại (deploy, review, migrate, sinh test) giờ phải paste lại checklist dài mỗi lần → tốn token, dễ quên bước, team mỗi người một kiểu.
+> **Đọc xong:** viết được `.github/prompts/*.prompt.md` chuẩn (frontmatter `mode`/`tools`/`description`), đặt custom instructions đúng chỗ không loạn, tạo Agent Skill `.github/skills/*/SKILL.md`, và biết khi nào mới cần đóng Copilot Extension. Bài 05 của series (tương đương Skills bên Claude Code). **Thời gian:** ~45 phút (bản mở rộng); chỉ cần tra mục 5–6 thì ~15 phút.
 
 ## Mục lục
 
@@ -23,7 +22,9 @@
 
 ## 1. Prompt file là gì — why, không chỉ what
 
-**Nôm na 1 câu:** Prompt file là **công thức nấu ăn dán trên tủ lạnh** — việc nào lặp lại (deploy, review, migrate) thì viết công thức 1 lần, lần sau gọi `/tên` là Copilot nấu đúng 8 bước, khỏi dặn lại.
+*Section này trả lời: prompt file dùng cho việc gì, và khi nào nên đóng một cái thay vì gõ prompt tự nhiên.*
+
+**Nôm na 1 câu:** Prompt file là **công thức nấu ăn dán trên tủ lạnh** — việc nào lặp lại (deploy, review, migrate) thì viết công thức 1 lần. Lần sau gõ `/tên`, Copilot làm đúng các bước trong công thức, khỏi dặn lại.
 
 **Analogie đời thường:** Như tin nhắn ghim trong nhóm chat gia đình: "đi chợ mua: rau, thịt, mắm..." — thay vì mỗi lần gọi điện dặn lại 10 món (tốn pin, dễ quên), ghim 1 tin là mọi người tự xem.
 
@@ -45,14 +46,24 @@ Copilot: tự chạy đúng 5 bước trong file → báo cáo.
 - Việc lặp >3 lần (deploy/review/migrate/sinh test) → đóng prompt file.
 - Việc 1 lần, hỏi cho biết → prompt tự nhiên, đừng đóng file (phí).
 
-Prompt file = **workflow đóng gói**: 1 file `.github/prompts/<ten>.prompt.md`
-(frontmatter YAML + markdown hướng dẫn). Gọi bằng `/ten` trong Chat, hoặc agent
-tự load khi ngữ cảnh khớp. Khác instructions ở chỗ: instructions load **mọi chat**,
-prompt file chỉ load **khi gọi** → rẻ.
+**Prompt file = workflow đóng gói**, sống trong 1 file `.github/prompts/<ten>.prompt.md`:
 
-- Không tự chạy, không kết nối ra ngoài (khác MCP/extension).
-- Gọi tường minh `/deploy`, `/review-pr` — determinism cao hơn prompt tự nhiên.
-- Vị trí chuẩn 2026:
+- **Dạng file:** khối **frontmatter** (YAML ở đầu file) + thân markdown viết hướng dẫn.
+- **Cách gọi:** gõ `/ten` trong Chat, hoặc agent tự load khi ngữ cảnh khớp.
+- **Khác instructions ở chỗ:** instructions load cho **mọi chat**; prompt file chỉ load **khi gọi** → rẻ hơn.
+
+**"Frontmatter" là gì?** (khái niệm mới gặp ở đây)
+
+1. **Định nghĩa 1 câu:** khối YAML đặt ở đầu file, khai báo metadata của file đó.
+2. **Đời thường:** như nhãn dán trên hồ sơ bệnh án — ghi "thuốc này uống khi nào, ai kê".
+3. **Kỹ thuật:** `mode`, `tools`, `description` — từng field được phân tích ở mục 3.
+
+**Prompt file không làm được gì** (để khỏi nhầm với MCP/extension):
+
+- Không tự chạy, không kết nối ra ngoài — nó chỉ là văn bản Copilot đọc và làm theo.
+- Gọi tường minh `/deploy`, `/review-pr` → kết quả ổn định hơn prompt tự nhiên (cùng input thì Copilot đi cùng quy trình — "deterministic").
+
+**Vị trí chuẩn 2026:**
 
 ```text
 .github/prompts/<ten>.prompt.md     team dung chung, commit git (QUAN TRONG NHAT)
@@ -68,15 +79,17 @@ ls -R .github/prompts/ 2>&1
 
 ### 1.1. Vì sao đây là nâng cấp lớn nhất cho việc lặp lại? (why)
 
-Trước prompt files: mỗi lần deploy/review/migrate bạn paste lại checklist dài vào
-prompt (tốn tokens, dễ quên bước). Sau: checklist sống trong repo, gọi `/deploy`
-1 phát — Copilot tự làm đúng 8 bước, bạn chỉ duyệt.
+*Section này trả lời: đầu tư 1 lần cho prompt file, bạn được gì so với việc viết prompt mới mỗi ngày?*
+
+**Trước prompt files:** mỗi lần deploy/review/migrate, bạn paste lại checklist dài vào prompt. Tốn token, và dễ quên bước giữa chừng.
+
+**Sau:** checklist sống trong repo. Bạn gọi `/deploy` 1 phát — Copilot tự làm đủ các bước, bạn chỉ duyệt.
 
 So sánh với các thứ khác (bài 00):
 
 | Thứ | Nôm na | Khi nào prompt file thắng? | Ai dùng lúc nào |
 |---|---|---|---|
-| `muse-instructions.md` | Nội quy dán tường (đọc mọi ngày) | Checklist chỉ cần lúc deploy → prompt file rẻ hơn | Fact cần mọi chat → instructions |
+| `copilot-instructions.md` | Nội quy dán tường (đọc mọi ngày) | Checklist chỉ cần lúc deploy → prompt file rẻ hơn | Fact cần mọi chat → instructions |
 | Custom agent | Đầu bếp chuyên món (persona + tools) | Prompt file là nội dung agent chạy; agent là "ai chạy" | Cần persona riêng → agent (bài 06) |
 | MCP | Cánh tay vươn ra ngoài (GitHub/DB) | Prompt file chứa *cách dùng* MCP (schema, format) — cặp bài trùng | Cần gọi ngoài → MCP (bài 08) |
 | Extension | Combo đóng hộp bán siêu thị | Prompt file là đơn vị nhỏ nhất trong extension | Share ≥3 repos → extension (bài 09) |
@@ -85,10 +98,12 @@ So sánh với các thứ khác (bài 00):
 
 ## 2. Sơ đồ: instructions vs prompt file vs skill vs extension
 
+*Section này trả lời: 4 khái niệm trên khác nhau ở đâu, để bạn chọn đúng thứ ngay từ câu đầu tiên.*
+
 ```mermaid
 flowchart TB
   U[Bạn gõ] --> Q{Việc gì?}
-  Q -->|Fact mọi chat| I[muse-instructions.md<br/>load luôn]
+  Q -->|Fact mọi chat| I[copilot-instructions.md<br/>load luôn]
   Q -->|Việc lặp, gọi khi cần| P[prompt file /ten<br/>chỉ load khi gọi]
   Q -->|Agent tự cần, khỏi gõ| S[Skill SKILL.md<br/>tự load khi khớp ngữ cảnh]
   Q -->|Share nhiều repos| E[Extension pack<br/>bundle prompts + agents + MCP]
@@ -110,9 +125,18 @@ sequenceDiagram
   C->>U: báo cáo PASS/FAIL + lệnh đã chạy
 ```
 
+Đọc 2 sơ đồ theo 4 nhánh:
+
+- **Fact cần mọi chat** → `copilot-instructions.md`, load ngay khi mở chat.
+- **Việc lặp, gọi khi cần** → prompt file `/ten`, chỉ load khi bạn gõ lệnh.
+- **Agent tự cần, khỏi gõ** → skill `SKILL.md`, tự nạp khi thấy từ khóa khớp.
+- **Share nhiều repo** → extension pack, gom cả 3 thứ trên thành 1 hộp.
+
 ---
 
 ## 3. Giải phẫu .prompt.md (mode/agent/tools frontmatter)
+
+*Section này trả lời: 1 file `.prompt.md` gồm những phần nào, và field nào quyết định cách nó chạy.*
 
 **Nôm na 1 câu:** Mỗi prompt file gồm **đầu (frontmatter: mode là gì, được dùng tools nào, khi nào dùng)** + **thân (Steps đánh số + Cấm + Output mẫu)**.
 
@@ -134,14 +158,19 @@ Nhan `${input}` (vd `/deploy staging`).
 
 1. `git status --short` phai sach, neu khong dung va bao.
 2. Chay migration dry-run truoc, doc output xac nhan khong co destructive change.
-3. Deploy bang lenh team da verify trong `.github/muse-instructions.md`.
+3. Deploy bang lenh team da verify trong `.github/copilot-instructions.md`.
 4. Smoke test endpoints trong `docs/endpoints.md`.
 5. Ghi ket qua theo mau `Dung [PASS/FAIL] + lenh da chay + output tom tat`.
 
 Tham khao: `docs/endpoints.md`. Repo root: `${workspaceFolder}`.
 ```
 
-**Biến dùng được (ai dùng lúc nào):** `${input}` (args sau `/ten`, vd `/deploy staging` → input=staging), `${workspaceFolder}` (repo root để đường dẫn tuyệt đối), `${file}` (file đang mở — dùng khi review file hiện tại), `${selection}` (vùng bôi đen — dùng khi fix đoạn chọn).
+**Biến dùng được (ai dùng lúc nào):**
+
+- `${input}` — thay bằng args sau `/ten`. Vd `/deploy staging` → `input=staging`.
+- `${workspaceFolder}` — repo root; dùng khi cần đường dẫn tuyệt đối.
+- `${file}` — file đang mở; dùng khi review đúng file hiện tại.
+- `${selection}` — vùng bôi đen trong editor; dùng khi fix đoạn bạn vừa chọn.
 
 ```text
 # Verify biến (copy-paste test):
@@ -151,6 +180,8 @@ Tham khao: `docs/endpoints.md`. Repo root: `${workspaceFolder}`.
 ```
 
 ### 3.1. Từng field frontmatter (khi nào dùng)
+
+*Đọc bảng này để trả lời nhanh: field nào quyết định hành vi, và khi nào phải sửa nó.*
 
 | Field | Nôm na | Ý nghĩa | Ví dụ | Ai dùng lúc nào |
 |---|---|---|---|---|
@@ -162,6 +193,8 @@ Tham khao: `docs/endpoints.md`. Repo root: `${workspaceFolder}`.
 
 ### 3.2. Ma trận `mode` × việc (chọn 10 giây)
 
+*Bảng này để bạn chọn `mode` + `tools` không cần suy nghĩ: việc nào được sửa/chạy, việc nào chỉ được đọc.*
+
 | Việc | `mode` | `tools` gợi ý | Ai dùng lúc nào |
 |---|---|---|---|
 | Deploy/ship (sửa + chạy) | `agent` | `read, search, terminal` | Cần chạy lệnh thật |
@@ -172,6 +205,8 @@ Tham khao: `docs/endpoints.md`. Repo root: `${workspaceFolder}`.
 ---
 
 ## 4. 3 prompt files mẫu hoàn chỉnh (copy-paste)
+
+*Section này trả lời: file thật trông ra sao — 3 mẫu dưới đây chạy được ngay, chỉ cần thay `<...>` bằng repo của bạn.*
 
 > Mỗi mẫu chạy được ngay sau khi thay `<...>` bằng repo bạn. Giữ <80 dòng/file.
 > Mỗi mẫu kèm Verify để test ngay.
@@ -197,7 +232,7 @@ Nhan `${input}` (PR number hoac branch, vd `/review-pr 123`).
 
 1. Doc diff (PR hoac branch hien tai): files nao doi, muc dich la gi.
 2. Tim: (a) bug logic, (b) loi security (injection, authz, leak secret),
-   (c) thieu test cho logic moi, (d) pha vo quy uoc trong `.github/muse-instructions.md`.
+   (c) thieu test cho logic moi, (d) pha vo quy uoc trong `.github/copilot-instructions.md`.
 3. KHONG nitpick style (linter lo). Chi bao loi that + file:line cu the.
 4. Ket luan: APPROVE / REQUEST_CHANGES + top 3 van de theo thu tu nghiem trong.
 
@@ -280,16 +315,19 @@ description: 'Xuat xuong: lint + test + review + changelog. Dung khi user noi sh
 
 ## 5. Custom instructions đặt ở đâu (không loạn)
 
+*Section này trả lời: mỗi loại file dán (instructions, prompt, agent, skill) nằm ở đâu, commit hay không, và chọn cái nào trong 10 giây.*
+
 **Nôm na 1 câu:** Nhiều chỗ dán nội quy → phải biết tờ nào dán ở đâu, không thì loạn như nhà 5 remote TV.
 
 Nhiều nơi để được instructions → loạn nếu không có quy ước. Học thuộc bảng này:
 
 | Nơi | File/setting | Commit? | Khi dùng (ai dùng lúc nào) |
 |---|---|---|---|
-| Repo-wide | `.github/muse-instructions.md` | Có | Quy ước mọi task (bài 03) |
+| Repo-wide | `.github/copilot-instructions.md` | Có | Quy ước mọi task (bài 03) |
 | Path-scoped | `.github/instructions/*.instructions.md` | Có | Rules subtree (`applyTo`) |
 | Tái dùng | `.github/prompts/*.prompt.md` | Có | Workflow gọi bằng `/ten` (bài này) |
 | Persona | `.github/agents/*.agent.md` | Có | Custom agent chuyên biệt |
+| Tự nạp | `.github/skills/<ten>/SKILL.md` | Có | Knowledge agent tự load khi khớp (mục 6) |
 | Portable | `AGENTS.md` | Có | Chung nhiều agent (bài 03 mục 5) |
 | Personal | User settings `instructions[].text` | Không | Ngôn ngữ, style cá nhân |
 | Org | Org policy/instructions (Business+) | Admin | Nhiều repo 1 chuẩn |
@@ -297,7 +335,7 @@ Nhiều nơi để được instructions → loạn nếu không có quy ước.
 Quy tắc chọn nhanh (10 giây):
 
 ```text
-- Fact can MOI chat -> muse-instructions.md.
+- Fact can MOI chat -> copilot-instructions.md.
 - Quy tac cho 1 SUBTREE -> *.instructions.md (applyTo).
 - Viec lap lai, goi KHI CAN -> prompt file (/ten).
 - Persona chuyen biet (reviewer chi doc) -> custom agent.
@@ -306,11 +344,21 @@ Quy tắc chọn nhanh (10 giây):
 
 ```bash
 # Kiem tra do phu (copy-paste, chay moi thang):
-ls .github/muse-instructions.md .github/instructions/ .github/prompts/ .github/agents/ 2>&1
-wc -l .github/muse-instructions.md
+ls .github/copilot-instructions.md .github/instructions/ .github/prompts/ .github/agents/ 2>&1
+wc -l .github/copilot-instructions.md
 # Ky vong: instructions <200 dong; prompts/agents moi file <80 dong.
 # Vượt → tách checklist dài từ instructions sang prompt file (bài này).
 ```
+
+**Lưu ý thêm: IDE nào hỗ trợ loại file nào.** Không phải IDE nào cũng chạy đủ 3 loại — bảng dưới lấy từ bảng tính năng Copilot (✓ đầy đủ, P một phần, ✗ không hỗ trợ):
+
+| Tính năng | VS Code | Visual Studio | JetBrains | Eclipse | Xcode | NeoVim |
+|---|---|---|---|---|---|---|
+| Prompt files | ✓ | ✓ | P | ✗ | P | ✗ |
+| Custom instructions | ✓ | ✓ | P | P | P | ✗ |
+| Agent skills | ✓ | ✓ | P | ✗ | ✗ | ✗ |
+
+Ý nghĩa thực tế: team xài VS Code/Visual Studio thì chạy đủ; JetBrains chỉ một phần; Eclipse/Xcode/NeoVim phải có phương án thay (gõ prompt tay hoặc dùng instructions).
 
 ---
 
@@ -318,13 +366,15 @@ wc -l .github/muse-instructions.md
 
 ### 6.1. Skill là gì? (why cần khi đã có prompt files?)
 
+*Section này trả lời: skill khác prompt file thế nào, và vì sao đã có prompt file rồi vẫn cần skill.*
+
 **Nôm na 1 câu:** Skill là **prompt file tự động** — bạn khỏi gõ `/`, agent tự ngửi thấy từ khóa ("deploy", "ship") là tự mở công thức ra làm.
 
 **Analogie:** Prompt file như sách nấu ăn trên kệ (cần với tay lấy). Skill như trợ lý đứng cạnh, nghe bạn nói "nấu phở" là tự mở đúng trang phở.
 
 Chuẩn mở cuối 2025 (Anthropic khởi xướng, ~40 tools hỗ trợ — Copilot 2026 đã đọc):
 1 folder `.github/skills/<ten>/SKILL.md` (frontmatter `name` + `description` + markdown)
-+ files hỗ trợ (`scripts/`, `references/`, `examples/`). Khác prompt file ở chỗ:
++ files hỗ trợ (`scripts/`, `references/`, `examples/`). Copilot tự dò folder skills trong repo (kể cả `.claude/skills/`), nạp khi tới lúc chứ không load từ đầu phiên. Khác prompt file ở chỗ:
 
 | Tiêu chí | Prompt file (`.prompt.md`) | Agent Skill (`SKILL.md`) | Ai dùng lúc nào |
 |---|---|---|---|
@@ -362,6 +412,8 @@ touch .github/skills/deploy-checklist/SKILL.md
 
 ### 6.3. Khi nào skill, khi nào prompt file?
 
+*Đọc block này trước khi viết: tránh viết 2 thứ cùng việc rồi chúng lệch nhau.*
+
 ```text
 - User chu dong go /ten moi lan -> prompt file (deterministic, de nho).
 - Muon agent TU load khi noi "deploy" ma khong can go / -> skill (description match).
@@ -376,6 +428,8 @@ touch .github/skills/deploy-checklist/SKILL.md
 ## 7. Copilot Extensions as skills
 
 ### 7.1. Extension là gì? (why)
+
+*Section này trả lời: khi 3 file lẻ đã đủ, lúc nào mới phải đóng thành extension để chia sẻ team?*
 
 **Nôm na 1 câu:** Extension là **combo đóng hộp** (prompts + agents + MCP) để share 1 phát cho 10 repos, khỏi copy tay từng file.
 
@@ -396,6 +450,8 @@ Extension chua gi (2026):
 
 ### 7.2. Dùng extension như skill (flow team)
 
+*5 bước dưới đây để team dùng chung 1 extension, không mỗi người cài 1 kiểu.*
+
 ```text
 Buoc 1: tim extension team can (Marketplace hoac repo noi bo).
 Buoc 2: cai vao VS Code / approve o org (Business+: admin duyet).
@@ -415,6 +471,8 @@ code --list-extensions | grep -i copilot
 
 ### 7.3. Tự đóng extension nội bộ (khi nào đáng?)
 
+*Bảng này để tech lead quyết: đóng extension ngay, hay dùng cách tạm trước.*
+
 | Dấu hiệu nên đóng extension | Giải pháp tạm (chưa cần extension) | Ai quyết |
 |---|---|---|
 | 3+ repos cùng checklist deploy | Copy prompt file qua 3 repos trước | Tech lead |
@@ -430,6 +488,7 @@ code --list-extensions | grep -i copilot
 ## 8. Walkthrough tạo prompt file từ 0 (5 bước)
 
 > 30 phút, làm 1 lần cho việc team bạn lặp >3 lần (deploy/review/migrate...).
+> 5 bước dưới đây chạy đúng thứ tự: ghi lại → nháp → gắn frontmatter → test → commit.
 
 **Bước 1 — Ghi lại lần làm tay cuối (5 phút):**
 
@@ -491,6 +550,8 @@ Checklist xong khi:
 
 ## 9. Hiểu nhầm thường gặp
 
+*6 câu "nghe hợp lý nhưng sai" dưới đây — đọc trước khi viết file đầu tiên để khỏi sửa lại.*
+
 | Hiểu nhầm | Sự thật |
 |---|---|
 | "Prompt file càng dài càng kỹ" | Sai. >80 dòng → agent bỏ bước. Steps gọn + link sang `docs/` |
@@ -503,6 +564,8 @@ Checklist xong khi:
 ---
 
 ## 10. Pitfalls + bài tập
+
+*Section này trả lời: file thường hỏng ở đâu (8 pitfall), và 4 bài tập để bạn luyện tay trong ~70 phút.*
 
 | Pitfall | Vì sao xảy ra | Fix |
 |---|---|---|
@@ -537,10 +600,12 @@ Chạy lệnh mục 5, liệt kê mọi prompts/skills/agents trong repo. Tìm t
 
 ## 11. Link chéo
 
-- **Bài 00 — Tổng quan**: bản đồ extension — prompt file/skill/extension nằm đâu.
-- **Bài 03 — Instructions**: tách checklist dài từ instructions sang prompt file.
-- **Bài 04 — Chat commands**: `/prompts`, `/skills`, `/agents` — commands gọi files bài này.
-- **Bài 06 (README) — Custom agents**: `.agent.md` dùng prompt files làm nội dung chạy.
-- **Bài 08 (README) — MCP**: prompt file chứa *cách dùng* MCP tools.
-- **Bài 09 (README) — Extensions**: đóng gói bài này thành unit phân phối team.
-- **Bài 10 (README) — Policies**: org duyệt extension nào được cài.
+*Đi tiếp các bài dưới đây nếu bạn cần phần còn lại của bức tranh.*
+
+- **[Bài 00 — Tổng quan](./00-tong-quan-copilot.md)**: bản đồ extension — prompt file/skill/extension nằm đâu.
+- **[Bài 03 — Instructions](./03-instructions-memory-rules.md)**: tách checklist dài từ instructions sang prompt file.
+- **[Bài 04 — Chat commands](./04-chat-commands-toan-tap.md)**: `/prompts`, `/skills`, `/agents` — commands gọi files bài này.
+- **[Bài 06 (README) — Custom agents](./06-custom-agents-parallel.md)**: `.agent.md` dùng prompt files làm nội dung chạy.
+- **[Bài 08 (README) — MCP](./08-mcp-ket-noi-cong-cu-ngoai.md)**: prompt file chứa *cách dùng* MCP tools.
+- **[Bài 09 (README) — Extensions](./09-extensions-marketplaces.md)**: đóng gói bài này thành unit phân phối team.
+- **[Bài 10 (README) — Policies](./10-modes-permissions-availability.md)**: org duyệt extension nào được cài.

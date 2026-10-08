@@ -1,18 +1,23 @@
 # Coding agent assign — Giao issue cho agent làm async
 
-> Nôm na: giao việc cho ca đêm — sáng ngủ dậy có PR chờ review.
+> **Dành cho:** người có issue đã rõ (mục tiêu + phạm vi + lệnh verify) · **Vấn đề:** issue mơ hồ khiến agent làm sai, hoặc 2 agent conflict · **Đọc xong:** giao issue async, sáng ra có PR chờ review (~2 phút)
 
 ## Lệnh làm gì (1 câu nôm na)
 
-Nôm na: giao việc cho ca đêm — sáng ngủ dậy có PR chờ review. Thuộc nhóm lệnh dùng hàng ngày — gắn scope gọn thì 1–2 turns là xong.
+Nôm na: giao việc cho ca đêm — sáng ngủ dậy có PR chờ review. GitHub issue → Assign → Copilot, kèm Mục tiêu / Phạm vi / Lệnh verify; mỗi agent 1 vùng/branch để khỏi conflict.
 
 ## Khi nào dùng
 
+Section này trả lời: issue nào đáng giao cho coding agent, và mẫu issue 4 dòng để không bị làm sai.
+
+- **Cho ai:** tech lead chia việc, người muốn song song nhiều issue.
 - Issue đã rõ (mục tiêu + phạm vi + lệnh verify).
 - Việc độc lập, không cần quyết liên tục.
 - Muốn song song nhiều issues.
 
 ## Cách gọi (copy-paste)
+
+Cách gọi `Coding agent assign` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:
 
 ```bash
 GitHub issue → Assign → Copilot
@@ -22,6 +27,8 @@ Kèm: mục tiêu / phạm vi / lệnh verify
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Coding agent assign`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
 
 ## Ví dụ prompt thật + kết quả mong đợi
+
+Prompt mẫu cho `Coding agent assign` — đổi phần tên file/task cho đúng việc của bạn:
 
 **Prompt thật (copy-paste, nhớ gắn scope trước):**
 
@@ -35,6 +42,8 @@ Issue: “thêm rate-limit /api/login. Phạm vi: apps/api/**. Verify: pnpm --fi
 
 ## Lỗi thường gặp
 
+Ba triệu chứng hay gặp nhất với lệnh này — kèm nhanh cách xử lý:
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Agent làm sai vì issue mơ hồ | Thiếu mục tiêu/phạm vi/verify | Viết issue theo mẫu: Mục tiêu/Phạm vi/Xong khi/Lệnh verify |
@@ -42,6 +51,8 @@ Issue: “thêm rate-limit /api/login. Phạm vi: apps/api/**. Verify: pnpm --fi
 | Giao việc quá to | Issue ôm cả epic | Tách issue nhỏ, mỗi issue 1 PR |
 
 ## Tham khảo
+
+Liên quan — index nhóm, cheatsheet 1 trang và FAQ phòng khi kẹt:
 
 - Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh.
 - Cheatsheet 1 trang: [../../../../CHEATSHEET.md](../../../../CHEATSHEET.md).

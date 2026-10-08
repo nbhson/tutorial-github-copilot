@@ -1,8 +1,9 @@
 # 09 — Extensions & Marketplaces (Đóng Gói Cho Team)
 
-> Bài 09 của series. Đọc xong bạn phân biệt được Copilot Extensions vs VS Code
-> extensions, cài đúng cách, set org policy allow/block + version pin cho team.
-> Thời gian: ~40 phút (bản mở rộng).
+> **Dành cho:** tech lead / admin đóng gói chuẩn tooling cho team, kèm dev mới cài extension lần đầu (Bài 09 của series).
+> **Vấn đề:** mỗi dev cài lẻ, mỗi repo một kiểu setup prompts / MCP / extension. Teammate mới mất cả buổi. Extension lạ thì chạy với quyền của bạn.
+> **Đọc xong:** phân biệt Copilot Extensions vs VS Code extensions, cài + pin version copy-paste, set org policy allow/block + version pin cho team.
+> **Thời gian:** ~40 phút (bản mở rộng)
 
 ## Mục lục
 
@@ -21,9 +22,11 @@
 
 ## 1. Vì sao extensions? (why)
 
-**Nôm na 1 câu:** File `.github/` lẻ giải quyết 1 repo. Extension là **thùng combo đóng sẵn** để 10 repos + người mới đều có cùng 1 chuẩn, update 1 nơi là cả team sync.
+*Section này trả lời: khi nào nên đóng gói `.github/` + `.vscode/` thành extension, và khi nào commit thẳng rẻ hơn.*
 
-**Analogie đời thường:** Như quán phở mở chuỗi: 1 quán thì đầu bếp nêm tay (file lẻ). 10 quán thì phải có gói gia vị đóng sẵn từ trung tâm (extension) — quán nào nấu cũng cùng vị, đổi công thức thì đổi 1 nơi.
+**Nôm na 1 câu:** File `.github/` lẻ chỉ giải quyết 1 repo. Extension là **thùng combo đóng sẵn**. 10 repos và người mới đều dùng chung 1 chuẩn. Update 1 nơi là cả team sync.
+
+**Analogie đời thường:** Như quán phở mở chuỗi. 1 quán thì đầu bếp nêm tay (file lẻ). 10 quán thì phải có gói gia vị đóng sẵn từ trung tâm (extension). Quán nào nấu cũng cùng vị. Đổi công thức thì đổi 1 nơi.
 
 ```text
 Không extensions: teammate mới → clone 5 repos → mỗi repo setup MCP tay +
@@ -42,9 +45,25 @@ Ngưỡng đóng gói extension: cùng 1 bundle dùng ở ≥3 repos HOẶC onbo
 - 1 repo, team nhỏ → commit `.github/` thẳng (bài 05/06), đừng đóng extension.
 - ≥3 repos + onboard liên tục → đóng extension pack / repo template (mục 6).
 
+### 1.1. Bảng thuật ngữ extensions (tra nhanh)
+
+Tra cứu nhanh, không cần đọc từ đầu.
+
+| Thuật ngữ | Là gì (hiểu nôm na) | Ví dụ cụ thể | Khi nào dùng |
+|---|---|---|---|
+| **Copilot Extension** | Nhân viên biết gọi SaaS, ngồi ngay trong Chat | `@sentry list issues` gọi Sentry từ Chat | Cần gọi Linear/Jira/Sentry không mở web |
+| **VS Code extension** | Đồ nghề gắn vào editor (lint, format, MCP) | ESLint, Prettier, GitLens, pack GitHub Copilot | Cần tooling chạy local trong IDE |
+| **Extension pack** | Danh sách đồ nghề bắt buộc cho repo | `.vscode/extensions.json` → VS Code nhắc cài đủ | Mọi repo team khi mở lần đầu |
+| **Marketplace** | Chợ extensions: chợ GitHub (GitHub Apps) và chợ VS Code (editor) | github.com Marketplace vs VS Code Marketplace | Lúc cài, lúc review nguồn extension |
+| **@-mention** | Cách gọi đúng "nhân viên" trong Chat | Gõ `@workspace` hoặc `@linear` | Chọn participant cho câu hỏi |
+| **Version pin** | Chốt extension ở 1 version, không lấy latest mù | `code --install-extension github.copilot-chat@0.26.0` | Giữa sprint, khi không được gãy workflow |
+| **Org policy allow/block** | Bảo vệ cổng chợ: quầy đã vet mới được vào | Allowed extensions: github, linear, sentry | Admin org Business/Enterprise |
+
 ---
 
 ## 2. Sơ đồ: từ file lẻ tới extension pack
+
+*Section này trả lời: cấu trúc đi từ file lẻ trong 1 repo tới extension pack cả team dùng trông ra sao.*
 
 ```mermaid
 flowchart LR
@@ -73,7 +92,9 @@ sequenceDiagram
 
 ## 3. 2 loại extensions — đừng nhầm
 
-**Nôm na 1 câu:** Có 2 chợ khác nhau: **chợ GitHub** bán "người phục vụ biết gọi SaaS" (`@linear`, `@sentry`), **chợ VS Code** bán "đồ nghề cho editor" (lint, format, MCP local).
+*Section này trả lời: cần gọi SaaS từ Chat thì cài chợ nào. Cần tooling editor thì cài chợ nào. Đừng nhầm 2 loại.*
+
+**Nôm na 1 câu:** Có 2 chợ khác nhau. **Chợ GitHub** bán "người phục vụ biết gọi SaaS" (`@linear`, `@sentry`). **Chợ VS Code** bán "đồ nghề cho editor" (lint, format, MCP local).
 
 **Analogie:** Như siêu thị có quầy đồ ăn chín (mua về ăn ngay = Copilot Extension gọi SaaS từ Chat) và quầy dụng cụ bếp (mua về nấu = VS Code extension cài vào editor).
 
@@ -99,12 +120,16 @@ Share chuẩn team cross-repo? → cả 2 + org policy (mục 7).
 
 ## 4. Copilot Extensions: GitHub Apps expose skills cho @-mention
 
-**Nôm na 1 câu:** Copilot Extension là **GitHub App đăng ký quầy riêng** trong Chat — gõ `@tên-quầy` là gọi đúng nhân viên quầy đó (Sentry tra lỗi, Linear tạo task).
+*Section này trả lời: cài Copilot Extension theo flow nào, chọn extension nào cho team, và khi nào phải tự viết extension riêng.*
+
+**Nôm na 1 câu:** Copilot Extension là **GitHub App đăng ký quầy riêng** trong Chat. Gõ `@tên-quầy` là gọi đúng nhân viên quầy đó (Sentry tra lỗi, Linear tạo task).
 
 Copilot Extension = GitHub App đăng ký với Copilot → hiện thành `@-mention`
 trong Chat (VS Code, github.com, mobile).
 
 ### 4.1. Cài + dùng (copy-paste flow)
+
+*Dành cho: mọi dev. Cài 1 lần cho tài khoản, dùng lại ở mọi repo được cấp quyền.*
 
 ```text
 Bước 1: github.com → Marketplace → tìm extension (vd "Sentry", "Linear").
@@ -143,7 +168,9 @@ dạy format "lỗi → root cause → fix" để output đồng đều).
 
 ### 4.3. Viết Copilot Extension đơn giản (khi nào + khung)
 
-**Nôm na:** Tự mở quầy riêng trong chợ — chỉ đáng khi nhà bạn có món độc quyền (API/runbook nội bộ) mà chợ chưa bán, và ≥3 teams ăn.
+*Section này trả lời: khi nào tự mở quầy riêng thay vì dùng extension có sẵn, và khung dựng gồm bước nào.*
+
+**Nôm na:** Tự mở quầy riêng trong chợ. Chỉ đáng khi nhà bạn có món độc quyền (API/runbook nội bộ) mà chợ chưa bán, và ≥3 teams ăn.
 
 ```text
 Khi nào viết extension riêng (thay vì dùng sẵn)?
@@ -165,9 +192,11 @@ Khung (high-level, chi tiết xem docs GitHub "Building Copilot Extensions"):
 
 ## 5. VS Code extensions: Copilot-related packs
 
+*Section này trả lời: pack nào nên commit vào repo, và khi nào dùng pack thay vì dotfiles cá nhân.*
+
 ### 5.1. Pack chuẩn team (copy-paste)
 
-**Nôm na:** Pack là **danh sách đồ nghề bắt buộc** dán ở cửa bếp — ai vào bếp (mở repo) là VS Code nhắc "cài đủ dao thớt này".
+**Nôm na:** Pack là **danh sách đồ nghề bắt buộc** dán ở cửa bếp. Ai vào bếp (mở repo) là VS Code nhắc "cài đủ dao thớt này".
 
 ```json
 // .vscode/extensions.json — VS Code tự gợi ý cài khi mở repo (commit cho team):
@@ -213,6 +242,8 @@ code --list-extensions | grep -i "copilot\|eslint\|prettier"  # verify
 
 ### 5.2. Khi nào extension vs dotfiles?
 
+*Tra cứu nhanh: chọn 1 dòng phù hợp tình huống của bạn rồi làm theo cột cuối.*
+
 | Tình huống | Nôm na chọn gì | Ví dụ | Ai dùng lúc nào |
 |---|---|---|---|
 | 1–2 prompt files, 1 repo | Dán giấy nhớ thẳng lên tủ (commit `.github/`) | Prompt review của 1 project | Team nhỏ, 1 repo |
@@ -225,9 +256,11 @@ code --list-extensions | grep -i "copilot\|eslint\|prettier"  # verify
 
 ## 6. Cài + pin version (copy-paste)
 
+*Section này trả lời: làm sao update extension mà không gãy giữa sprint, và chia sẻ chuẩn team bằng repo template.*
+
 ### 6.1. Pin version (tránh breaking giữa sprint)
 
-**Nôm na 1 câu:** Pin version như **chốt công thức không đổi giữa tuần bán hàng** — update để cuối tuần (cuối sprint), test xong mới đổi.
+**Nôm na 1 câu:** Pin version như **chốt công thức không đổi giữa tuần bán hàng**. Update để cuối tuần (cuối sprint), test xong mới đổi.
 
 ```bash
 # Cài version cụ thể (không lấy latest mù):
@@ -254,11 +287,11 @@ Quy ước team (dán vào wiki — ai giữ: tech lead):
 
 ### 6.2. Repo template (share chuẩn team — thực tế hơn viết extension mới)
 
-**Nôm na:** Template là **khuôn nhà mẫu** — làm nhà mới (repo mới) thì đúc từ khuôn, có sẵn điện nước (instructions, agents, mcp, pack).
+**Nôm na:** Template là **khuôn nhà mẫu**. Làm nhà mới (repo mới) thì đúc từ khuôn. Có sẵn điện nước (instructions, agents, mcp, pack).
 
 ```text
 acme-copilot-template/           # repo template org (Template repository: ON)
-  .github/muse-instructions.md
+  .github/copilot-instructions.md
   .github/instructions/*.instructions.md
   .github/agents/*.agent.md
   .github/prompts/*.prompt.md
@@ -282,7 +315,10 @@ cd new-service && cat .vscode/extensions.json  # verify pack đi kèm
 
 ## 7. Org-level extension policy: allow/block
 
-**Nôm na 1 câu:** Org policy là **bảo vệ cổng chợ** — quầy nào sạch (đã vet) thì cho vào, quầy lạ chạy shell/đọc files thì chặn.
+*Section này trả lời: admin allow/block extension ở đâu, và kiểm tra extension lạ trước khi cho vào org.*
+*Dành cho admin/org owner (Business/Enterprise). Dev thường chỉ xem + request.*
+
+**Nôm na 1 câu:** Org policy là **bảo vệ cổng chợ**. Quầy nào sạch (đã vet) thì cho vào. Quầy lạ chạy shell / đọc files thì chặn.
 
 ```text
 Admin (github.com → Org Settings → Copilot → Policies → Extensions):
@@ -317,6 +353,8 @@ cat /tmp/exts.txt
 
 ## 8. Hiểu nhầm thường gặp
 
+*Bảng tra nhanh, không cần đọc từ đầu. Gặp câu quen thì đọc cột "Sự thật".*
+
 | Hiểu nhầm | Sự thật |
 |---|---|
 | "Copilot Extension và VS Code extension là 1" | Sai. Copilot Extension = GitHub App gọi qua `@` từ Chat. VS Code extension = plugin editor (có thể bundle MCP). Cài 1 đôi khi được 2 |
@@ -329,6 +367,8 @@ cat /tmp/exts.txt
 ---
 
 ## 9. Walkthrough + pitfalls + bài tập
+
+*Section này trả lời: setup chuẩn đi từng bước thế nào, lỗi thường gặp fix ra sao, và làm bài gì để tự kiểm chứng.*
 
 ### 9.1. Walkthrough: setup extensions chuẩn (25 phút)
 
@@ -379,6 +419,8 @@ So với allowlist — cái nào thừa? Gỡ 1 cái và ghi khác biệt startu
 ---
 
 ## 10. Link chéo
+
+*Tra cứu nhanh: nối bài này với các bài còn lại trong series.*
 
 - **Bài 03 — Instructions:** instructions đi kèm extensions (format output `@sentry`).
 - **Bài 05 — Prompt files:** prompt kèm extension (review/triage) cho output đồng đều.

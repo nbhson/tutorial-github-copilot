@@ -1,8 +1,9 @@
 # 15 — Security Stack 5 Tầng Cho Copilot (Defense-in-Depth, Không Tin 1 Lớp Nào)
 
-> Bài 15 series 01. Đọc xong bạn dựng được 5 tầng phòng thủ cho Copilot: content
-> exclusion + duplication detection, secret scanning + push protection, code
-> scanning (CodeQL), Copilot code review gate, và policy/audit. Thời gian: ~45 phút.
+> **Dành cho:** dev đã dùng Copilot (tự verify từng tầng) + admin/org owner (rà policy).
+> **Vấn đề:** 1 lớp bảo mật luôn có lỗ — exclusion sai 1 path là secret lọt vào index, alert bị dismiss không ai biết.
+> **Đọc xong:** dựng + verify được 5 tầng phòng thủ (content exclusion → secret scanning → CodeQL → review gate → policy/audit), chỉ ra được tầng nào team đang yếu và vá thế nào.
+> **Thời gian:** ~45 phút (walkthrough 20 phút ở cuối bài).
 
 ## Mục lục
 
@@ -22,6 +23,8 @@
 
 ## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
 
+*Section này trả lời: 5 thuật ngữ của 5 tầng + 3 khái niệm chính sách mới (managed settings, AI Credits, OTEL) nghĩa là gì. Gặp ở đâu trong bài cũng tra được. Tra cứu nhanh, không cần đọc từ đầu.*
+
 | Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
 |---|---|---|---|---|
 | **Content exclusion** | Danh sách "cấm nhìn": Copilot không được đọc/index files này. | Như phòng khóa trong nhà — giúp việc (Copilot) không được vào. | `**/.env*`, `**/*.pem`, `secrets/**` trong Org Settings → Copilot. | Hỏi `@workspace tìm STRIPE_KEY?` → phải "không thấy/excluded". |
@@ -29,10 +32,15 @@
 | **Secret scanning + push protection** | Camera quét + bảo vệ cửa: phát hiện key lọt, chặn ngay lúc push. | Như máy soi chiếu sân bay: có dao (key) là tuýt còi tại chỗ. | Push chứa `sk-live-...` → bị chặn + hướng dẫn chuyển sang env. | Thử push fake key → phải bị chặn (mục 8 walkthrough). |
 | **CodeQL / Code scanning** | Bác sĩ soi X-quang: tìm SQLi/XSS/path traversal trong PR. | Như kiểm định xe: chưa đạt là chưa cho lăn bánh (merge). | Alert `SQL query built from user input` tại `refund.ts:42`. | PR hiện check `CodeQL` đỏ/xanh; Security tab liệt kê alerts. |
 | **Defense-in-depth** | Không tin 1 lớp nào — 5 lớp chồng nhau, trượt lớp này còn lớp sau đỡ. | Như nhà 5 khóa: cổng + cửa + két + camera + bảo vệ — trộm qua 1 lớp vẫn kẹt. | T1 trượt (exclusion sai) → T2 chặn push → T3 gắn flag → T4 reviewer thấy → T5 truy audit. | Mỗi incident trả lời được "tầng nào trượt + tầng nào đỡ". |
+| **Managed settings (`managed-settings.json`)** | File JSON một nơi, admin siết luật cho mọi client Copilot. | Như nội quy ban quản lý dán ở sảnh — cư dân không tự sửa được. | `permissions.deny/ask/allow`, `allowedMcpServers`, `sandbox`, `telemetry`. | So key với mục 7.3; key sai kiểu dữ liệu thì validator báo lỗi. |
+| **AI Credits** | Đơn vị tính tiền Copilot: 1 credit = $0.01, áp dụng từ 01/06/2026. | Như thẻ nạp phòng gym — mỗi lượt dùng trừ tiền, hết thì mua thêm. | Review Balanced tốn ~$0.25–$5 credit/lần (chưa kể Actions minutes). | github.com/settings/copilot → Usage xem credit theo ngày. |
+| **OTEL (OpenTelemetry)** | Chuẩn mở để Copilot bắn telemetry về endpoint của công ty bạn. | Như camera nhà tự gửi hình về đầu ghi của nhà bạn, không của người khác. | Key `telemetry.endpoint` (OTLP) + `captureContent: false` trong managed settings. | Sau 1 phiên chạy, log phải về đúng endpoint bạn khai. |
 
 ---
 
 ## 1. Vì sao 5 tầng? (why)
+
+*Section này trả lời: vì sao bật mỗi secret scanning là chưa đủ, và quy tắc nào quyết định cách team bạn ứng xử với mỗi sự cố.*
 
 1 lớp bảo mật luôn có lỗ: exclusion cấu hình sai 1 path là secret lọt vào index;
 secret scanning bỏ sót format lạ; CodeQL không bắt logic sai; review người thì
@@ -52,13 +60,15 @@ Có stack:    T1 chặn .env khỏi index → trượt? T2 push protection chặ
 
 ## 2. Bản đồ 5 tầng (nhìn 1 phút hiểu hết)
 
+*Section này trả lời: 5 tầng là gì, mỗi tầng chặn thứ gì, nằm ở đâu trong GitHub, ai sở hữu. Đọc bảng dưới là đủ hình dung trước khi đi chi tiết.*
+
 | Tầng | Hiểu nôm na | Ví dụ | Chặn gì | Ở đâu | Ai sở hữu |
 |---|---|---|---|---|---|
-| **1. Exclusion + duplication** | Khóa phòng + chống đạo văn. | `.env` không vào index; gợi ý trùng GPL bị block. | Copilot đọc file nhạy cảm; gợi ý copy code có license | Copilot settings (org/repo) | Admin + team lead |
+| **1. Exclusion + duplication** | Khóa phòng + chống đạo văn. | `.env` không vào index; gợi ý trùng GPL bị block. | Copilot đọc file nhạy cảm; gợi ý copy code có license | Copilot settings (org/repo — Business/Enterprise) | Admin + team lead |
 | **2. Secret scanning + push protection** | Máy soi + bảo vệ cửa. | Push `sk-live-FAKE` bị chặn tại chỗ. | Key/token lọt vào repo | GitHub Advanced Security | Admin (bật), dev (fix alert) |
 | **3. Code scanning (CodeQL)** | Bác sĩ X-quang. | `query("SELECT ..."+input)` bị gắn cờ SQLi. | Lỗ hổng (SQLi, XSS, path traversal...) | PR checks + `github/codeql` | Team (fix), CI (chặn) |
 | **4. Copilot code review gate** | 2 cặp mắt (máy + người). | Bot review + reviewer fresh verdict PASS. | Bug/logic mà máy + mắt người sót | PR review + required checks | Reviewer + maintainer |
-| **5. Policy + audit** | Sổ trực + camera. | `action:copilot_policy` thấy ai tắt exclusion. | Ai đổi 4 tầng trên, ai dùng gì | Org policy + audit log | Admin |
+| **5. Policy + audit** | Sổ trực + camera. | `action:copilot_policy` thấy ai tắt exclusion. | Ai đổi 4 tầng trên, ai dùng gì | Org/enterprise policy + audit log (giữ 180 ngày) | Admin |
 
 ```text
 # Dòng chảy 1 PR an toàn (5 tầng đi qua):
@@ -66,6 +76,9 @@ Có stack:    T1 chặn .env khỏi index → trượt? T2 push protection chặ
 # T3: CodeQL quét xong xanh → T4: review (người + Copilot) approve →
 # T5: mọi bước ghi audit log. Thiếu 1 tầng là mù 1 mắt.
 ```
+
+Tầng 5 là tầng khóa chốt: 4 tầng trên chỉ sống được chừng nào policy còn đúng.
+Nơi admin chốt luật là `managed-settings.json` (mục 7.3) và audit log (mục 7.2).
 
 ### 2.1. Sơ đồ defense-in-depth 5 lớp (mermaid — BẮT BUỘC)
 
@@ -107,7 +120,11 @@ Giải thích từng bước (kèm ví dụ tấn công mỗi lớp chặn đư�
 
 ## 3. Tầng 1 — Exclusion + duplication detection (copy-paste)
 
+*Section này trả lời: file nào Copilot không được đọc, và làm sao biết chắc nó không đọc. Dev tự verify được, admin dùng checklist.*
+
 ### 3.1. Content exclusion: Copilot không được thấy gì
+
+**Dành cho admin.** Lưu ý plan trước khi làm: **content exclusion là tính năng của Copilot Business/Enterprise**. Cấu hình ở repo, org hoặc enterprise; cấp cha truyền xuống cấp con (repo kế thừa từ org). Role `Maintain` chỉ xem được, không sửa được; cần automate thì dùng REST API.
 
 ```text
 # Checklist admin (github.com → Org Settings → Copilot → Content exclusion):
@@ -146,6 +163,10 @@ git status --porcelain | grep -E "env|pem|key|secrets" || echo "sach: khong file
 # Hỏi admin team bạn đang để Block hay Allow — đừng đoán.
 ```
 
+**Theo mặc định 2026:** với **Copilot Business, chế độ này là `Blocked`** (chặn gợi ý
+khớp public code). Muốn mở thì đổi ở phần **Privacy** của Org Settings — và phải
+được legal đồng ý bằng văn bản. Cá nhân Free/Pro thì chọn được Block hay Allow.
+
 ```bash
 # Khi Copilot báo "matching public code" (đừng click accept mù):
 # 1. Đọc reference URL nó đưa (code gốc license gì? GPL → cân nhắc kỹ).
@@ -156,6 +177,8 @@ git status --porcelain | grep -E "env|pem|key|secrets" || echo "sach: khong file
 ---
 
 ## 4. Tầng 2 — Secret scanning + push protection
+
+*Section này trả lời: bật 2 công tắc nào cho admin, và khi bị chặn thì dev xử lý ra sao — không bypass.*
 
 ### 4.1. Bật 2 công tắc (admin, 5 phút)
 
@@ -194,6 +217,8 @@ echo "pre-commit secrets: sach"
 ---
 
 ## 5. Tầng 3 — Code scanning + CodeQL
+
+*Section này trả lời: bật CodeQL kiểu nào cho hiệu quả/giờ cao nhất, và xử lý alert ra sao cho đúng — fix gốc chứ không suppress cho qua.*
 
 ### 5.1. Bật CodeQL default setup (5 phút, hiệu quả/giờ cao nhất)
 
@@ -234,6 +259,8 @@ npm run lint && npm run typecheck 2>/dev/null || npx tsc --noEmit
 
 ## 6. Tầng 4 — Copilot code review gate
 
+*Section này trả lời: gắn 2 lớp review (máy + người) vào PR kiểu nào, và review tốn bao nhiêu AI Credits để admin budget được.*
+
 ### 6.1. Gắn review vào PR (2 lớp: máy + người)
 
 ```text
@@ -246,6 +273,17 @@ npm run lint && npm run typecheck 2>/dev/null || npx tsc --noEmit
 [ ] Require status checks: CodeQL + tests + secret scanning đều pass
 [ ] Dismiss stale approvals khi push mới (đừng approve bản cũ, merge bản mới)
 ```
+
+**Kinh tế của review gate (AI Credits — usage-based billing từ 01/06/2026):**
+
+- **1 AI credit = $0.01.** Một lần review tốn **AI credits + GitHub Actions minutes** (Actions tính riêng, không nằm trong ước lượng credit).
+- **Effort level:** `Lite` (nhắm đúng, nhanh) tốn **$0.05–$1 credit**; `Balanced` (model reasoning cao, hợp logic phức tạp + kiểm soát bảo mật) tốn **$0.25–$5 credit**.
+- **`Balanced` là mặc định từ 28/09/2026** cho repo/org mới lẫn cũ. Chọn `Lite` tường minh vẫn được giữ.
+- Review mặc định là kiểu **`Comment`** — **không tính là phê duyệt**. Muốn Copilot Approve thì phải cấu hình lại.
+- Tự động review cấu hình được 3 mốc: lần đầu Copilot được gán vào PR, mỗi lần push mới, cả draft PR.
+- Plan hỗ trợ: Pro/Pro+/Max/Business/Enterprise. Free chỉ có "Review selection" trong VS Code.
+- Gọi từ CI: **API REST + GraphQL** (GA 02/10/2026) để request review và đặt effort.
+- Repo-level: **"Allow Copilot to use MCP tools when reviewing pull requests" bật sẵn mặc định** — nghĩa là tool MCP trong repo có thể chạy lúc review.
 
 ### 6.2. Prompt review sâu cho PR nhạy cảm (copy-paste 3 mẫu)
 
@@ -274,6 +312,8 @@ git diff --stat main...HEAD
 
 ## 7. Tầng 5 — Policy + audit (khóa cửa)
 
+*Section này trả lời: admin chốt luật ở đâu, truy vết bằng cách nào, và tầng 5 có "sống" theo định kỳ không. Dev đọc để hiểu vì sao bị chặn; admin đọc để làm theo.*
+
 ### 7.1. Policy checklist (admin, rà hàng quý)
 
 ```text
@@ -284,12 +324,18 @@ git diff --stat main...HEAD
 [ ] Push protection + secret scanning: ON cho MỌI repo (không sót repo mới)
 [ ] CodeQL: default setup cho MỌI repo (repo nào đỏ mãn tính → tech debt ticket)
 [ ] Branch protection main: reviews + checks bắt buộc (không repo nào merge thẳng)
+[ ] managed-settings.json còn đúng? (deny > ask > allow; MCP allow/deny; sandbox)
+[ ] Network allowlist + OTEL endpoint còn đúng? (firewall mở đủ, log về đúng chỗ)
 ```
 
 ### 7.2. Audit log: ai đổi gì (truy incident + rà định kỳ)
 
+**Đọc để tra, không cần nhớ.** Filter mặc định của GitHub là `action:copilot` — ghi lại
+thay đổi plan/settings/policy/license và agent activity trên github.com.
+
 ```bash
 # Xem: github.com → Org/Enterprise Settings → Audit log. Filters dùng nhiều:
+# action:copilot         → umbrella: plan/settings/policy/license + agent activity
 # action:copilot_policy   → ai đổi exclusion/model policy
 # action:secret_scanning  → ai dismiss alert (dismiss bừa là red flag)
 # action:code_scanning    → ai dismiss CodeQL
@@ -302,6 +348,64 @@ gh api /orgs/<ORG>/audit-log --paginate -f per_page=100 \
 # → pivot: ai dismiss nhiều nhất? policy đổi lúc nửa đêm? (hỏi 1 câu là ra chuyện)
 ```
 
+2 giới hạn phải thuộc lòng của audit log:
+
+- **Giữ 180 ngày.** Sự cố cũ hơn thì phải đã stream sang SIEM từ trước.
+- **Không chứa prompt hay session data của client.** Muốn log prompt thì tự gắn hook
+  riêng (vd Copilot CLI events gửi về hệ thống logging của công ty).
+
+### 7.3. Managed settings + network allowlist + OTEL (chốt bằng policy as code)
+
+**Dành cho admin.** Settings local dev sửa được; `managed-settings.json` thì không.
+File này áp cho Copilot CLI, VS Code, GitHub Copilot app, Copilot cloud agent và
+JetBrains IDEs. Chi tiết bảng key ở bài 07 mục 4.3.
+
+```jsonc
+// managed-settings.json — chốt quyền. Thứ tự ưu tiên: deny > ask > allow.
+{
+  "permissions": {
+    "deny": ["shell_exec", "git_push_force"],
+    "ask": ["mcp_tool_call"],
+    "allow": ["file_read"],
+    "disableBypassPermissionsMode": true   // chặn bypass/YOLO mode
+  },
+  "allowedMcpServers": ["github", "playwright"],
+  "deniedMcpServers": ["random-blog-mcp"]  // deny THẮNG allow
+}
+// - Ask không thỏa mãn được bằng bypass/YOLO hay approval đã lưu.
+// - Lệnh chưa khớp rule nào → mặc định chuyển sang HỎI LẠI.
+// - Allowlist hiệu lực = GIAO (intersection) của mọi nguồn cấu hình.
+// - Cả hai danh sách khai [] rỗng = LOCKDOWN: cấm sạch MCP server.
+```
+
+```text
+# Network allowlist (mở firewall đúng chỗ — thiếu domain là Copilot kẹt giữa chừng):
+- https://*.githubcopilot.com/*                        (mọi plan)
+- https://*.individual.githubcopilot.com               (cá nhân)
+- https://*.business.githubcopilot.com                 (Business)
+- https://*.enterprise.githubcopilot.com               (Enterprise)
+- https://github.com/login/*  +  https://collector.github.com/*
+- https://copilot-telemetry.githubusercontent.com/telemetry
+- https://default.exp-tas.com  +  https://origin-tracker.githubusercontent.com   (dò public code)
+- https://*.SUBDOMAIN.ghe.com                          (data residency GHE.com)
+```
+
+```jsonc
+// managed-settings.json — telemetry OTEL: Copilot tự gửi log về hệ thống của bạn.
+{
+  "telemetry": {
+    "enabled": true,
+    "endpoint": "https://otel.yourco.internal/v1/logs",  // OTLP
+    "protocol": "http/protobuf",          // hoặc "http/json"
+    "captureContent": false,              // không nhồi nội dung prompt
+    "lockCaptureContent": true,           // client không tự bật lại được
+    "serviceName": "copilot-cli"
+  }
+}
+```
+
+### 7.4. Vòng lặp quý (admin + tech lead)
+
 ```text
 # Vòng lặp quý (calendar block 30 phút, admin + tech lead):
 # 1. Audit dismiss: secret/CodeQL dismiss nào thiếu lý do? (10 phút)
@@ -312,6 +416,8 @@ gh api /orgs/<ORG>/audit-log --paginate -f per_page=100 \
 ---
 
 ## 8. Walkthrough end-to-end (20 phút)
+
+*Section này trả lời: kiểm chứng cả 5 tầng trong 20 phút, theo đúng thứ tự từ verify local đến audit log. Làm hết là bạn có evidence viết vào báo cáo.*
 
 **Phút 0–5 (tầng 1 — verify exclusion sống):**
 
@@ -352,6 +458,8 @@ git reset HEAD fake-test.env; rm fake-test.env /tmp/fake.env
 
 ## 9. Pitfalls + fix
 
+*Section này trả lời: 10 sai lầm làm 5 tầng thành trang trí, và cách sửa ngay.*
+
 | Pitfall | Vì sao | Fix |
 |---|---|---|
 | Exclude cả `src/` nhầm | Retrieve/index rỗng, team tắt luôn exclusion | Paths tối thiểu (mục 3.1), verify bằng câu hỏi `.env` |
@@ -361,10 +469,15 @@ git reset HEAD fake-test.env; rm fake-test.env /tmp/fake.env
 | CodeQL default rồi quên | Debt cũ tích, alert mới chìm trong cũ | Schedule weekly + ticket debt, high/critical fix trước merge |
 | Repo mới không cover policy | Exclusion/CodeQL sót, hở từ ngày đầu | Checklist new-repo: 5 tầng on trước commit đầu (bài tập 3) |
 | Audit log không ai đọc | Incident không truy được, dismiss bừa không ai biết | Rà quý 30 phút + vòng 15 phút/tuần cùng nhịp bài 13 |
+| Không biết thứ tự deny > ask > allow | Config 2 nơi mâu thuẫn, tưởng cấm mà lại cho qua | Thuộc lòng **deny > ask > allow**; verify bằng tool bị deny (mục 7.3) |
+| Tưởng audit log chứa prompt | Điều tra mất buổi vì dữ liệu không nằm ở đó | Prompt phải tự gắn hook log riêng; audit giữ 180 ngày (mục 7.2) |
+| Firewall chặn thiếu domain Copilot | Copilot kẹt giữa chừng, dev tự mở toang firewall | Dùng network allowlist chuẩn (mục 7.3), không mở wildcard |
 
 ---
 
 ## 10. Bài tập
+
+*Section này trả lời: làm 3 bài dưới đây để có evidence rằng 5 tầng đang chạy thật, không chỉ nằm trên giấy.*
 
 **Bài 1 (15 phút — tầng 1+2):**
 
@@ -382,7 +495,7 @@ git reset HEAD fake-test.env; rm fake-test.env /tmp/fake.env
 
 1. Audit log filter 3 actions (mục 7.2): policy đổi/dismiss lần cuối khi nào, ai?
 2. Viết new-repo checklist 5 tầng cho team (dán wiki): repo mới phải on gì trước commit đầu?
-3. Đặt calendar rà quý 30 phút (mục 7.3) + owner từng tầng.
+3. Đặt calendar rà quý 30 phút (mục 7.4) + owner từng tầng.
 
 > Đạt: chỉ ra được tầng nào của team đang yếu nhất bằng evidence (alerts/audit/
 > thử lửa), và có new-repo checklist + lịch rà quý bằng văn bản.
@@ -391,9 +504,14 @@ git reset HEAD fake-test.env; rm fake-test.env /tmp/fake.env
 
 ## 11. Link chéo
 
+*Section này trả lời: bài nào trong series đi sâu vào từng tầng của bài này.*
+
 - **Bài 03 — Instructions/Memory/Rules**: quy ước secrets (`chỉ đọc env`) viết vào
   instructions để Copilot không bao giờ hardcode key.
-- **Bài 07 — Policies/guardrails**: content exclusion cấu hình chi tiết + ai được đổi.
+- **Bài 07 — Policies/guardrails**: content exclusion cấu hình chi tiết + ai được đổi;
+  bảng key `managed-settings.json` (deny > ask > allow, sandbox, telemetry OTEL).
+- **Bài 08 — MCP kết nối công cụ ngoài**: `allowedMcpServers` / `deniedMcpServers`,
+  network allowlist, sandbox + OTEL — phần "siết tool" của tầng 5.
 - **Bài 10 — Modes/Permissions**: approval ask/deny cho terminal/MCP (gate lúc agent chạy).
 - **Bài 11 — Git/worktrees/checkpoints**: review diff + undo trước khi accept agent edits.
 - **Bài 12 — SDK/CI**: CodeQL + secret scan + tests làm required checks trong pipeline.

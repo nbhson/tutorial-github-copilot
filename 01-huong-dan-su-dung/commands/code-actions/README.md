@@ -1,6 +1,8 @@
 # Nhóm Code Actions (10 lệnh)
 
-> Tác vụ code hàng ngày trên selection/diff: giải thích, fix, tests, docs, tối ưu, refactor, git flow, debug terminal. Đọc 1 dòng rồi click sang README chi tiết.
+> **Dành cho:** dev làm tác vụ code trên selection/diff · **Vấn đề:** 10 lệnh (giải thích, fix, tests, docs, tối ưu, refactor, git flow, debug terminal) nằm rải rác, không biết lệnh nào dùng lúc nào · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi click sang README chi tiết (~2 phút)
+
+Mỗi README chi tiết trả lời 5 câu: **dùng khi nào · cho ai · kết quả ra gì · ví dụ copy-paste · liên quan.**
 
 | Lệnh | Mô tả 1 dòng | Chi tiết |
 |---|---|---|
