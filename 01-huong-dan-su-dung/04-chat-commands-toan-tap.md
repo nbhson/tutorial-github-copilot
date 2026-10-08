@@ -15,7 +15,7 @@
 4. [Nhóm 3 — Code actions (10)](#nhóm-3--code-actions-10)
 5. [Nhóm 4 — System & Knowledge (15)](#nhóm-4--system--knowledge-15)
 6. [Công thức 5 lệnh session đầu (giữ nguyên, làm 1 lần/repo)](#6-công-thức-5-lệnh-session-đầu-giữ-nguyên-làm-1-lầnrepo)
-7. [Lưu ý plan/model gating (premium requests, BYOK)](#7-lưu-ý-planmodel-gating-premium-requests-byok)
+7. [Lưu ý plan/model gating (AI Credits, BYOK)](#7-lưu-ý-planmodel-gating-premium-requests-byok)
 8. [Walkthrough + ví dụ copy-paste](#8-walkthrough--ví-dụ-copy-paste)
 9. [Hiểu nhầm thường gặp + Pitfalls + bài tập](#9-hiểu-nhầm-thường-gặp--pitfalls--bài-tập)
 10. [Link chéo](#10-link-chéo)
@@ -201,11 +201,11 @@ Section này trả lời: mở repo mới thì chạy 5 lệnh nào, theo thứ 
 
 ---
 
-## 7. Lưu ý plan/model gating (premium requests, BYOK)
+## 7. Lưu ý plan/model gating (AI Credits, BYOK)
 
 Section này trả lời: lệnh hoặc model không hiện trong list thì phải kiểm tra gì trước khi kết luận "Copilot hỏng"?
 
-- Thẻ "premium requests" là cách gọi cũ. Từ 01/06/2026, GitHub Copilot dùng **AI Credits**
+- Thẻ "AI Credits" là cách gọi cũ. Từ 01/06/2026, GitHub Copilot dùng **AI Credits**
   (usage-based billing): 1 credit = $0.01, trừ theo model × số token. Code completions không trừ credits.
 - Không thấy lệnh nào → check `/status` + plan trước khi kết luận lệnh không tồn tại.
 - Model mạnh (Claude/GPT-5-class) tốn nhiều credits hơn model rẻ. Hết credits →

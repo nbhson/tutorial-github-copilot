@@ -38,7 +38,7 @@
 | `Edit` (sửa file chỉ định) | `chọn Edit + tick 2 file → "đổi message lỗi sang tiếng Việt" → sửa có kiểm soát` |
 | `Agent` (tự tìm file + chạy tool) | `chọn Agent → "thêm rate-limit cho /api/login + test" → duyệt plan trước khi để nó chạy` |
 | `/model` đổi model | `/model → chọn model rẻ cho /explain, model mạnh cho agent/kiến trúc khó` |
-| `/usage` xem quota | `/usage → xem premium requests đã dùng; hết thì đổi model nhẹ chờ reset` |
+| `/usage` xem quota | `/usage → xem AI Credits đã dùng; hết thì đổi model nhẹ chờ reset` |
 
 ## instructions / prompts / skills / MCP
 

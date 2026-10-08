@@ -1,6 +1,6 @@
 # Tips 08 — Tiết Kiệm Premium Requests: Dùng Copilot Rẻ Mà Vẫn Mạnh
 
-> Copilot 2026 tính theo premium requests, không phải tokens thô. Bài này dạy bạn model routing, phân biệt completions vs chat vs agent, prune MCP/extensions, dùng knowledge base để trả ít mà được nhiều.
+> Copilot 2026 tính theo AI Credits, không phải tokens thô. Bài này dạy bạn model routing, phân biệt completions vs chat vs agent, prune MCP/extensions, dùng knowledge base để trả ít mà được nhiều.
 
 ## Mục lục
 

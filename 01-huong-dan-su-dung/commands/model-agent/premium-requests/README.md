@@ -4,7 +4,7 @@
 
 ## Lệnh làm gì (1 câu nôm na)
 
-Nôm na: xem công-tơ điện — biết đã xài bao nhiêu để khỏi bị cúp giữa tháng. Lưu ý fact mới: từ 01/06/2026 Copilot dùng mô hình **AI Credits** (1 credit = $0.01, usage-based) thay cho “premium requests” cũ; code completion vẫn không tính credit trên các plan trả phí.
+Nôm na: xem công-tơ điện — biết đã xài bao nhiêu để khỏi bị cúp giữa tháng. Lưu ý fact mới: từ 01/06/2026 Copilot dùng mô hình **AI Credits** (1 credit = $0.01, usage-based) thay cho “AI Credits” cũ; code completion vẫn không tính credit trên các plan trả phí.
 
 ## Khi nào dùng
 

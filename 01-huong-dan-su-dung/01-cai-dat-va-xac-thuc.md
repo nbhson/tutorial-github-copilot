@@ -112,7 +112,7 @@ gh copilot --help
 # Kỳ vọng: hiện help, không báo "no Copilot subscription".
 ```
 
-### 2.3. Ai trả tiền cho premium requests?
+### 2.3. Ai trả tiền cho AI Credits?
 
 Section này trả lời: khi nào Copilot "tốn" AI Credits, khi nào gõ thoải mái. Từ 01/06/2026 GitHub chuyển sang usage-based billing (tính theo AI Credits).
 

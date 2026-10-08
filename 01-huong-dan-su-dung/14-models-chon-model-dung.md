@@ -2,7 +2,7 @@
 
 > **Bài 14 series 01.** · **Dành cho:** dev đang chọn model trong picker mỗi ngày, và tech lead/admin muốn gate model + kiểm soát AI Credits cho team.
 > **Vấn đề:** model mạnh nhất không phải lúc nào cũng là model đúng — chọn sai là đốt AI Credits hoặc refactor 3 lần vẫn sai.
-> **Đọc xong:** chọn đúng model cho từng task, hiểu cách tính tiền AI Credits (thay cho "premium requests multiplier"), cấu hình BYOK/policy gate model cho team, và không trả model đắt cho việc model rẻ làm được.
+> **Đọc xong:** chọn đúng model cho từng task, hiểu cách tính tiền AI Credits (thay cho "AI Credits multiplier"), cấu hình BYOK/policy gate model cho team, và không trả model đắt cho việc model rẻ làm được.
 > **Thời gian:** ~40 phút.
 
 ## Mục lục
@@ -280,7 +280,7 @@ Section này trả lời: tiền tính ra sao kể từ 01/06/2026, vì sao "mul
 ### 4.1. Vì sao quota hết nhanh hơn bạn nghĩ
 
 ```text
-Từ 01/06/2026 Copilot tính tiền theo AI Credits — "premium requests multiplier"
+Từ 01/06/2026 Copilot tính tiền theo AI Credits — "AI Credits multiplier"
 là tên mechanism trước đó, cùng cách nghĩ "model đắt tốn gấp nhiều lần model rẻ":
 - 1 AI credit = 0,01 USD. Chi phí 1 lượt = giá per-token của model × số token.
 - Model flagship/reasoning giá per-token cao gấp nhiều lần mini-tier → cùng 1 câu

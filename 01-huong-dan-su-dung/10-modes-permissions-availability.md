@@ -10,7 +10,7 @@
 1. [Vì sao modes + permissions? (why)](#1-vì-sao-modes--permissions-why)
 2. [Sơ đồ: modes + gates + plans](#2-sơ-đồ-modes--gates--plans)
 3. [3 modes: Ask / Edit / Agent](#3-3-modes-ask--edit--agent)
-4. [Model picker + premium requests](#4-model-picker--premium-requests)
+4. [Model picker + AI Credits](#4-model-picker--premium-requests)
 5. [Tool approval: allow / ask / deny (copy-paste)](#5-tool-approval-allow--ask--deny-copy-paste)
 6. [Content exclusion + duplication detection + telemetry](#6-content-exclusion--duplication-detection--telemetry)
 7. [Khác biệt plans: Individual vs Business vs Enterprise](#7-khác-biệt-plans-individual-vs-business-vs-enterprise)
@@ -160,7 +160,7 @@ Bạn kiểm soát bằng:
 
 ---
 
-## 4. Model picker + premium requests
+## 4. Model picker + AI Credits
 
 *Section này trả lời: chọn model nào cho task nào, tiền tính ra sao (AI Credits), và Auto model selection + 3 tier thì để ở đâu.*
 
@@ -423,7 +423,7 @@ Fact cho admin (theo docs GitHub):
 | Khả năng | Nôm na | Individual | Business | Enterprise |
 |---|---|---|---|---|
 | Chat + autocomplete + Edit/Agent modes | Chạy xe cơ bản | ✓ | ✓ | ✓ |
-| Model picker + AI Credits (thẻ cũ: premium requests) | Chọn xe + đổ xăng | ✓ (credits cá nhân) | ✓ (credits gộp org + analytics) | ✓ (credits + custom models/BYOK) |
+| Model picker + AI Credits (thẻ cũ: AI Credits) | Chọn xe + đổ xăng | ✓ (credits cá nhân) | ✓ (credits gộp org + analytics) | ✓ (credits + custom models/BYOK) |
 | Content exclusion | Bịt mắt két sắt | ✗ (cần admin org) | ✓ | ✓ |
 | Org policy (allow/block extensions, MCP, tool approval) | Luật công ty | ✗ | ✓ | ✓ |
 | Audit logs + usage analytics | Camera hành trình | ✗ | ✓ (dashboard org) | ✓ (+ API, SIEM) |

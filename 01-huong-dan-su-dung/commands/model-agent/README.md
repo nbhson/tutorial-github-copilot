@@ -11,7 +11,7 @@ Mỗi README chi tiết trả lời 5 câu: **dùng khi nào · cho ai · kết 
 | `Edit mode` | Vào Edit với files bạn chọn, sửa có kiểm soát | [./edit-mode/README.md](./edit-mode/README.md) |
 | `/agent` | Vào Agent mode: tự tìm file, sửa, chạy terminal | [./agent-mode/README.md](./agent-mode/README.md) |
 | `Custom agent` | Gọi custom agent trong .github/agents/ | [./custom-agent/README.md](./custom-agent/README.md) |
-| `/usage` | Xem premium requests đã dùng (link dashboard) | [./premium-requests/README.md](./premium-requests/README.md) |
+| `/usage` | Xem AI Credits đã dùng (link dashboard) | [./premium-requests/README.md](./premium-requests/README.md) |
 | `Coding agent assign` | Giao issue cho Copilot coding agent xử lý async | [./coding-agent-assign/README.md](./coding-agent-assign/README.md) |
 | `Coding agent PR` | Tóm tắt diff thành PR, review flow issue→PR | [./coding-agent-pr/README.md](./coding-agent-pr/README.md) |
 | `Policy approval` | Xem/duyệt policy, approve chạy lệnh nhạy cảm | [./policy-approval/README.md](./policy-approval/README.md) |

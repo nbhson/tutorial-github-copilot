@@ -78,11 +78,11 @@ Section này trả lời: vì sao model mạnh tốn tiền hơn model rẻ, và
 
 > **Hỏi ngắn gọn:** _Premium multiplier là gì, model nào tốn bao nhiêu?_
 
-**Trả lời 1 câu:** Từ 01/06/2026 không còn gói "premium requests" cố định mỗi tháng — mọi lượt tính bằng AI Credits (1 credit = $0.01), model đắt tốn nhiều Credits hơn còn completions thì không tốn gì.
+**Trả lời 1 câu:** Từ 01/06/2026 không còn gói "AI Credits" cố định mỗi tháng — mọi lượt tính bằng AI Credits (1 credit = $0.01), model đắt tốn nhiều Credits hơn còn completions thì không tốn gì.
 
 **Giải thích chi tiết + ví dụ:** Đây là chỗ hay nhầm nhất sau khi GitHub đổi cách tính tiền:
 
-- **Cách cũ (trước 06/2026):** mỗi plan có quota **premium requests/tháng**. Model thường (multiplier ×1) tốn 1 request; model mạnh (×3, ×5, ×10...) tốn nhiều hơn mỗi lần gọi. Hết quota → chờ reset, trả thêm, hoặc rớt về model thường.
+- **Cách cũ (trước 06/2026):** mỗi plan có quota **AI Credits/tháng**. Model thường (multiplier ×1) tốn 1 request; model mạnh (×3, ×5, ×10...) tốn nhiều hơn mỗi lần gọi. Hết quota → chờ reset, trả thêm, hoặc rớt về model thường.
 - **Cách mới (usage-based billing từ 01/06/2026):** không còn multiplier theo request. **1 AI credit = $0.01 USD**; chi phí mỗi lượt = giá mỗi token của model × số token, quy đổi ra credits.
 - Model đắt hơn (VD Claude Opus 5, GPT-5.5) có giá token cao model rẻ hơn (VD MAI-Code-1.1-Flash, GPT-5.6 Luna) → cùng 1 prompt tốn nhiều Credits hơn — "multiplier" cũ nay hiện qua giá token.
 - **Code completions + next edit suggestions KHÔNG trừ Credits** — không giới hạn trên plan trả phí.

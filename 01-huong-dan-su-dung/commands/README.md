@@ -34,7 +34,7 @@ Chi tiết nhóm: [./model-agent/README.md](./model-agent/README.md)
 | `Edit mode` | Vào Edit với files bạn chọn, sửa có kiểm soát | [./model-agent/edit-mode/README.md](./model-agent/edit-mode/README.md) |
 | `/agent` | Vào Agent mode: tự tìm file, sửa, chạy terminal | [./model-agent/agent-mode/README.md](./model-agent/agent-mode/README.md) |
 | `Custom agent` | Gọi custom agent trong .github/agents/ | [./model-agent/custom-agent/README.md](./model-agent/custom-agent/README.md) |
-| `/usage` | Xem premium requests đã dùng (link dashboard) | [./model-agent/premium-requests/README.md](./model-agent/premium-requests/README.md) |
+| `/usage` | Xem AI Credits đã dùng (link dashboard) | [./model-agent/premium-requests/README.md](./model-agent/premium-requests/README.md) |
 | `Coding agent assign` | Giao issue cho Copilot coding agent xử lý async | [./model-agent/coding-agent-assign/README.md](./model-agent/coding-agent-assign/README.md) |
 | `Coding agent PR` | Tóm tắt diff thành PR, review flow issue→PR | [./model-agent/coding-agent-pr/README.md](./model-agent/coding-agent-pr/README.md) |
 | `Policy approval` | Xem/duyệt policy, approve chạy lệnh nhạy cảm | [./model-agent/policy-approval/README.md](./model-agent/policy-approval/README.md) |

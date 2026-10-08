@@ -11,7 +11,7 @@
 | 05 | Parallel agents | Multi-chat, Coding Agent sessions, worktrees song song | [05-parallel-agents.md](./05-parallel-agents.md) |
 | 06 | Policies & guardrails recipes | Recipes instructions, pre-commit, branch protection, MCP approval | [06-policies-guardrails-recipes.md](./06-policies-guardrails-recipes.md) |
 | 07 | Thiết kế prompts & skills | Prompt files, instructions, skills tái dùng | [07-thiet-ke-prompts-skills.md](./07-thiet-ke-prompts-skills.md) |
-| 08 | Tiết kiệm AI Credits (premium requests) | Model routing, completions vs agent, prune MCP | [08-tiet-kiem-premium-requests.md](./08-tiet-kiem-premium-requests.md) |
+| 08 | Tiết kiệm AI Credits (AI Credits) | Model routing, completions vs agent, prune MCP | [08-tiet-kiem-premium-requests.md](./08-tiet-kiem-premium-requests.md) |
 | 09 | Teamwork chuẩn hóa | Chuẩn hóa cách cả team dùng Copilot | [09-teamwork-chuan-hoa.md](./09-teamwork-chuan-hoa.md) |
 | 10 | Debugging power moves | /fix, test loop, bisect, log→prompt, @terminal | [10-debugging-power-moves.md](./10-debugging-power-moves.md) |
 | 11 | Nâng cao: CLI, Web & Coding Agent | CLI, github.com chat, coding agent, mobile/voice | [11-nang-cao-cli-web-coding-agent.md](./11-nang-cao-cli-web-coding-agent.md) |

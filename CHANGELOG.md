@@ -17,7 +17,7 @@ Bản đầu tiên hoàn chỉnh theo Muse (2026).
   (mỗi lệnh 1 `README.md` 8 mục: cú pháp, cơ chế, ví dụ, rủi ro, workflow, lỗi, tham khảo).
 - `02-tips-thuc-chien/`: 11 bài (01–11: context hygiene, prompt engineering,
   plan-first, verification, parallel tasks, instructions design,
-  tiết kiệm premium requests, teamwork, bảo mật, troubleshooting, nâng cao).
+  tiết kiệm AI Credits, teamwork, bảo mật, troubleshooting, nâng cao).
 - `03-cau-hoi-thuong-gap/`: 10 bài (01–10: tài khoản/pricing, model/context,
   permissions, MCP, instructions, custom agent, troubleshooting, bảo mật, CLI/SDK, coding agent).
 - `templates/`: `.github/muse-instructions.md`, `instructions/` (`*.instructions.md` + `applyTo`),

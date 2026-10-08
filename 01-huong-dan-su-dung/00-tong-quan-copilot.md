@@ -10,7 +10,7 @@
 1. [Copilot là gì? 5 chế độ một tài khoản](#1-copilot-là-gì-5-chế-độ-một-tài-khoản)
 2. [Agentic loop của Copilot deep-dive](#2-agentic-loop-của-copilot-deep-dive-why-không-chỉ-what)
 3. [4 họ tool Copilot](#3-4-họ-tool-copilot)
-4. [Token economics — premium requests đi đâu?](#4-token-economics--premium-requests-đi-đâu)
+4. [Token economics — AI Credits đi đâu?](#4-token-economics--premium-requests-đi-đâu)
 5. [Copilot làm được gì (thực tế)](#5-copilot-làm-được-gì-thực-tế)
 6. [Các bề mặt sử dụng — chọn cái nào?](#6-các-bề-mặt-sử-dụng--chọn-cái-nào)
 7. [Bản đồ extension](#7-bản-đồ-extension-instructions--prompts--agents--skills--mcp--extensions)
@@ -296,7 +296,7 @@ Càng nhiều tools visible → model càng dễ chọn nhầm → giữ 3–6 s
 
 ---
 
-## 4. Token economics — premium requests đi đâu?
+## 4. Token economics — AI Credits đi đâu?
 
 Section này trả lời: tiền của bạn đi theo đường nào, và làm sao ước lượng được 1 task tốn bao nhiêu.
 

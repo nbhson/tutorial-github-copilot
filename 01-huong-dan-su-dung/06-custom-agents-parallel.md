@@ -417,7 +417,7 @@ git worktree list  # xác nhận mỗi session 1 checkout riêng
 
 ---
 
-## 7. Orchestration patterns + cost math (premium requests)
+## 7. Orchestration patterns + cost math (AI Credits)
 
 *Section này trả lời: ghép các agent theo pattern nào cho từng loại task, và ước lượng chi phí AI Credits trước khi fan-out.*
 
@@ -447,13 +447,13 @@ Chat chính chỉ nhận 10 dòng, không bao giờ thấy 2000 dòng gốc.
 Ai dùng: task ồn, đọc nhiều mà nhớ ít.
 ```
 
-### 7.2. Cost math — premium requests multiplier (tính trước khi fan-out)
+### 7.2. Cost math — AI Credits multiplier (tính trước khi fan-out)
 
 > **Cách tính tiền hiện tại là AI Credits** (usage-based billing từ 01/06/2026):
 > **1 AI credit = 0,01 USD.** Chi phí 1 lượt = giá per-token của model × số token, quy đổi ra credits.
 > Model mạnh (Claude Opus, GPT-5.5) tốn nhiều credits. Model rẻ (GPT-5.4 mini) tốn ít.
 > **Code completion và next edit suggestions KHÔNG trừ AI Credits** — không giới hạn trên mọi plan trả phí.
-> Hồi premium requests, model mạnh bị tính multiplier x1–x10. Giờ multiplier biến mất, nhưng model mạnh vẫn đắt hơn model rẻ.
+> Hồi AI Credits, model mạnh bị tính multiplier x1–x10. Giờ multiplier biến mất, nhưng model mạnh vẫn đắt hơn model rẻ.
 > Số liệu chính xác xem usage dashboard — công thức dưới để nhẩm.
 
 ```text
