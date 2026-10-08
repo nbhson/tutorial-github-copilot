@@ -1,4 +1,4 @@
-# Cheatsheet Muse (2026) — 1 trang (lệnh nào cũng có ví dụ mini)
+# Cheatsheet GitHub Copilot (2026) — 1 trang (lệnh nào cũng có ví dụ mini)
 
 > Cách đọc: `lệnh` → ví dụ copy-paste ngay bên cạnh (sau `→`). Gõ `/` (slash), `@` (participant), `#` (biến) trong Chat để xem list khả dụng ở máy bạn.
 

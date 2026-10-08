@@ -1,4 +1,4 @@
-# Changelog — Khóa Học Muse (tiếng Việt)
+# Changelog — Khóa Học GitHub Copilot (tiếng Việt)
 
 ## [Unreleased] — đợt biên tập tài liệu (2026-10-06)
 
@@ -9,7 +9,7 @@
 
 ## [v1.0.0] — 2026-10-05
 
-Bản đầu tiên hoàn chỉnh theo Muse (2026).
+Bản đầu tiên hoàn chỉnh theo GitHub Copilot (2026).
 
 - `01-huong-dan-su-dung/`: 17 bài (00–16: tổng quan, cài đặt, inline completions,
   Chat, Ask/Edit/Agent mode, custom agent, instructions/prompts, skills, MCP,

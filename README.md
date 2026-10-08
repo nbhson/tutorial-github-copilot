@@ -1,6 +1,6 @@
-# Khóa Học Muse — Từ Zero tới Pro (2026)
+# Khóa Học GitHub Copilot — Từ Zero tới Pro (2026)
 
-> Bộ tài liệu tiếng Việt đầy đủ, chi tiết, deep-dive về **Muse (2026)** — verified với docs chính thức `docs.github.com/copilot` và `code.visualstudio.com/docs/copilot`.
+> Bộ tài liệu tiếng Việt đầy đủ, chi tiết, deep-dive về **GitHub Copilot (2026)** — verified với docs chính thức `docs.github.com/copilot` và `code.visualstudio.com/docs/copilot`.
 > Tác giả tổng hợp từ: GitHub Docs, VS Code Copilot docs, best-practices, custom instructions/agents/prompts/skills/MCP guides, và kinh nghiệm thực chiến.
 
 ## Đối tượng
@@ -40,7 +40,7 @@ Quy tắc vàng (nhớ 4 câu này là đủ 80% sức mạnh):
 
 ## Phiên bản & nguồn
 
-- Muse **(2026)**. Lệnh `gh copilot --version` / `gh extension list` để kiểm tra version.
+- GitHub Copilot **(2026)**. Lệnh `gh copilot --version` / `gh extension list` để kiểm tra version.
 - Docs gốc: https://docs.github.com/copilot — VS Code Copilot: https://code.visualstudio.com/docs/copilot
 - Chú ý: model picker GPT-5/Claude/Gemini/o-series, AI Credits, coding agent gán issue.
 

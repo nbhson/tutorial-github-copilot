@@ -1,6 +1,6 @@
 # Templates — copy-paste dùng ngay
 
-> Thư mục này chứa bộ khung `.github/` + `.vscode/` mẫu cho Muse 2026.
+> Thư mục này chứa bộ khung `.github/` + `.vscode/` mẫu cho GitHub Copilot 2026.
 > Copy vào project thật, sửa tên/lệnh/glob cho khớp repo là chạy được.
 > Nguyên tắc: secrets CHỈ qua `${input}` / `${env}` / `${{ secrets.* }}` — KHÔNG hardcode.
 > Chưa rõ MCP gồm những gì? Đọc mục 0 bài [FAQ 04](../../03-cau-hoi-thuong-gap/04-mcp-faq.md) (Tools = hàm gọi như `github.create_pr`, Resources = dữ liệu đọc như `github://repos/.../issues/123`, Prompts = template như review-pr) rồi quay lại copy mẫu dưới đây.
