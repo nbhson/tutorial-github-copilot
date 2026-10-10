@@ -22,6 +22,8 @@ Cách gọi `/usage` — làm đúng theo khối dưới đây, kèm câu kiểm
 ```bash
 /usage
 # hoặc github.com/settings/copilot → quota
+# Kỳ vọng: biết con số đã dùng/còn lại + ngày reset
+# Verify: nói được “còn X, đủ/không đủ tới reset”
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/usage`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

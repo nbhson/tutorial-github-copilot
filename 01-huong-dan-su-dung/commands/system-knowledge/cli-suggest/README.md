@@ -21,6 +21,9 @@ Cách gọi `gh copilot suggest` — làm đúng theo khối dưới đây, kèm
 
 ```bash
 gh copilot suggest "tìm file >100MB trong git history"
+# Kỳ vọng: 1–2 lệnh cụ thể + giải thích flag
+# Verify: chạy lệnh được gợi ý ở chế độ an toàn (--dry-run) thành công
+# Lưu ý: gh copilot ≠ copilot (gh copilot là extension CLI, không phải lệnh copilot riêng)
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `gh copilot suggest`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

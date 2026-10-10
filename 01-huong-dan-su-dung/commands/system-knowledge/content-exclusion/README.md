@@ -22,6 +22,8 @@ Cách gọi `Content exclusion` — làm đúng theo khối dưới đây, kèm 
 ```bash
 settings.json → github.copilot.chat.exclusion
 # hoặc org policy → Content exclusion
+# Kỳ vọng: file nhạy cảm bị loại khỏi context, chỗ khác vẫn gợi ý
+# Verify: test file test có gợi ý + file secrets không — đúng cả 2
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Content exclusion`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

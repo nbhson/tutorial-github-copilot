@@ -11,22 +11,22 @@ File này trả lời mọi câu hỏi "prompt files/agents/skills/instructions 
 ```mermaid
 flowchart TD
     A[Can tai su dung?] --> B{Tan suat?}
-    B -->|Moi file .md| C[muse-instructions.md auto-load]
+    B -->|Moi file .md| C[copilot-instructions.md auto-load]
     B -->|Theo folder| D[*.instructions.md + applyTo]
     B -->|Goi tay| E[*.prompt.md slash]
     B -->|Viec on ao| F[*.agent.md custom agent]
     B -->|Tu kich hoat| G[SKILL.md Agent Skills]
 ```
 
-## Bảng tổng hợp: file nào để ở đâu
+## Bảng tổng hợp: file nào để ở đâu (2026)
 
-| Loại file | Đường dẫn chuẩn | Kích hoạt |
-|---|---|---|
-| Project instructions | `.github/muse-instructions.md` | Tự động mọi chat/completion |
-| Path instructions | `.github/instructions/*.instructions.md` | Tự động khi file khớp `applyTo` |
-| Prompt tái dùng | `.github/prompts/*.prompt.md` | Gọi tay `/tên-prompt` hoặc run |
-| Custom agent | `.github/agents/*.agent.md` | Chọn trong agent picker |
-| Agent Skill 2026 | `.github/skills/<ten>/SKILL.md` | Model tự gọi khi khớp mô tả |
+| Loại file | Đường dẫn chuẩn | Kích hoạt | Trạng thái 2026 |
+|---|---|---|---|
+| Project instructions | `.github/copilot-instructions.md` | Tự động mọi chat/completion | Chính thức |
+| Path instructions | `.github/instructions/*.instructions.md` | Tự động khi file khớp `applyTo` | Chính thức |
+| Agent Skill | `.github/skills/<ten>/SKILL.md` | Model tự gọi khi khớp `description` | **KHUYÊN DUNG (chạy Local + Cloud + CLI)** |
+| Custom agent | `.github/agents/*.agent.md` | Chọn trong agent picker | Chính thức |
+| Prompt tái dùng (legacy) | `.github/prompts/*.prompt.md` | Gọi tay `/tên-prompt` | **Deprecated cho Agent Host** (Local vẫn chạy) |
 
 ---
 
@@ -38,9 +38,9 @@ flowchart TD
 
 **Giải thích chi tiết + ví dụ:**
 
-- **Tự load:** `muse-instructions.md` (mọi lúc) + `*.instructions.md` khớp `applyTo` (khi đụng file tương ứng).
-- **Gọi tay:** `*.prompt.md` (slash command trong chat), custom agent (chọn trong picker rồi chat).
-- **Model tự quyết:** Skills (`SKILL.md` có `description`) — model đọc mô tả skill rồi tự gọi khi task khớp, bạn không cần nhớ tên.
+- **Tự load:** `copilot-instructions.md` (mọi lúc) + `*.instructions.md` khớp `applyTo` (khi đụng file tương ứng).
+- **Gọi tay:** `*.prompt.md` (slash command trong chat — **legacy, deprecated cho Agent Host**), custom agent (chọn trong picker rồi chat).
+- **Model tự quyết:** Skills (`SKILL.md` có `description`) — model đọc mô tả skill rồi tự gọi khi task khớp, bạn không cần nhớ tên. **Chuẩn khuyến nghị 2026 (chạy mọi harness).**
 
 ### Làm thế nào (steps copy-paste)
 
@@ -50,7 +50,7 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # Cây thư mục chuẩn (đứng ở root repo)
 find .github -type f | sort
 # Kỳ vọng:
-# .github/muse-instructions.md
+# .github/copilot-instructions.md
 # .github/instructions/backend-api.instructions.md
 # .github/prompts/review-pr.prompt.md
 # .github/agents/tester.agent.md
@@ -147,9 +147,9 @@ tools: [github-mcp, search, edit]
 
 ---
 
-## 4. `muse-instructions.md` bao nhiêu dòng là vừa, dài quá sao?
+## 4. `copilot-instructions.md` bao nhiêu dòng là vừa, dài quá sao?
 
-> **Hỏi ngắn gọn:** _`muse-instructions.md` bao nhiêu dòng là vừa, dài quá sao?_
+> **Hỏi ngắn gọn:** _`copilot-instructions.md` bao nhiêu dòng là vừa, dài quá sao?_
 
 **Trả lời 1 câu:** 
 
@@ -157,7 +157,7 @@ tools: [github-mcp, search, edit]
 
 - File chính: stack + lệnh verified + rules ALWAYS/NEVER (ngắn gọn).
 - Chi tiết theo path → `instructions/*.instructions.md`.
-- Procedure dài (deploy, add-table) → `prompts/*.prompt.md` hoặc `skills/*/SKILL.md`.
+- Procedure dài (deploy, add-table) → **`.github/skills/<ten>/SKILL.md`** (chuẩn 2026, khuyến nghị). `*.prompt.md` (legacy) vẫn chạy Local.
 
 ### Làm thế nào (steps copy-paste)
 
@@ -165,7 +165,7 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 # Đo độ dài + tìm chỗ cắt
-wc -l .github/muse-instructions.md .github/instructions/*.md
+wc -l .github/copilot-instructions.md .github/instructions/*.md
 # >200 dòng ở file chính -> tách bớt sang instructions con
 ```
 
@@ -210,13 +210,15 @@ ls apps/api/controller.ts 2>/dev/null || find . -name "*.ts" -path "*api*" | hea
 > **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
-## 6. Prompt files (`*.prompt.md`) gọi thế nào, khác gì chat thường?
+## 6. Prompt files (`*.prompt.md`) gọi thế nào, khác gì chat thường? (**legacy**)
 
 > **Hỏi ngắn gọn:** _Prompt files (`*.prompt.md`) gọi thế nào, khác gì chat thường?_
 
 **Trả lời 1 câu:** 
 
 **Giải thích chi tiết + ví dụ:** Prompt file = **kịch bản đóng gói**: frontmatter (`mode`, `agent`, `tools`) + body hướng dẫn từng bước. Gọi bằng `/tên-file` trong chat (không cần `.prompt.md`) hoặc nút Run trong editor.
+
+> **Lưu ý 2026:** Prompt file **deprecated cho Agent Host** (Copilot/Cloud) — chỉ chạy Local/VS Code. Việc mới nên dùng **Agent Skill** (câu 8) vì chạy được mọi harness. Nếu repo bạn chỉ chạy Local và đã có prompt file ổn, giữ tạm — port dần (bài 05 mục 3.3).
 
 Khác chat thường: prompt ép **mode + tools + steps cố định** → kết quả nhất quán giữa các lần, share được cả team.
 
@@ -284,13 +286,13 @@ ls .github/agents/  # explorer.agent.md tester.agent.md security-reviewer.agent.
 
 ---
 
-## 8. Agent Skills 2026 (`SKILL.md`) khác gì prompt/agent?
+## 8. Agent Skills 2026 (`SKILL.md`) khác gì prompt/agent? (chuẩn khuyến nghị)
 
 > **Hỏi ngắn gọn:** _Agent Skills 2026 (`SKILL.md`) khác gì prompt/agent?_
 
 **Trả lời 1 câu:** 
 
-**Giải thích chi tiết + ví dụ:** Skill = gói **mô tả + procedure + tools** theo chuẩn Agent Skills 2026, model **tự phát hiện và gọi** khi task khớp `description` — bạn không cần nhớ tên để gọi. Prompt phải gọi tay; skill thì model tự biết.
+**Giải thích chi tiết + ví dụ:** Skill = gói **mô tả + procedure + tools** theo chuẩn Agent Skills 2026 (chuẩn mở), model **tự phát hiện và gọi** khi task khớp `description` — bạn không cần nhớ tên để gọi. Prompt phải gọi tay (và deprecated cho Cloud); skill thì model tự biết + chạy mọi harness.
 
 Cấu trúc: `.github/skills/<ten>/SKILL.md` với frontmatter `name` + `description` rõ ràng (description càng cụ thể, model càng gọi đúng).
 
@@ -325,7 +327,7 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 
 1. Prompt hiện tại bạn gõ (gần nhất, thắng hết).
 2. `*.instructions.md` khớp path cụ thể (VD `apps/api/**` thắng `**/*`).
-3. `muse-instructions.md` (nền chung).
+3. `copilot-instructions.md` (nền chung).
 4. Org policy (trần cứng — cấm là cấm dù instructions cho phép).
 
 Mâu thuẫn thì cái cụ thể + gần hơn thắng. Vì vậy đừng viết 2 instructions mâu thuẫn nhau cho cùng path.

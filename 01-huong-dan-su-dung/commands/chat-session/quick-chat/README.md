@@ -21,6 +21,7 @@ Cách gọi `Shift+Alt+I (quick chat)` — làm đúng theo khối dưới đây
 
 ```bash
 Shift+Alt+I → nhập câu hỏi → Enter → Esc đóng
+# Kỳ vọng: popup trả lời ngắn ngay trên editor
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Shift+Alt+I (quick chat)`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -33,6 +34,7 @@ Prompt mẫu cho `Shift+Alt+I (quick chat)` — đổi phần tên file/task cho
 
 ```bash
 Shift+Alt+I → “hàm debounce này delay bao nhiêu ms là hợp lý?”
+# Kỳ vọng: popup trả lời ngắn, Esc là về code tiếp
 ```
 
 **Kết quả mong đợi:** Popup trả lời ngắn gọn ngay trên editor; đóng là về code tiếp.

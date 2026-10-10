@@ -1,7 +1,7 @@
 # 09 — Extensions & Marketplaces (Đóng Gói Cho Team)
 
-> **Dành cho:** tech lead / admin đóng gói chuẩn tooling cho team, kèm dev mới cài extension lần đầu (Bài 09 của series).
-> **Vấn đề:** mỗi dev cài lẻ, mỗi repo một kiểu setup prompts / MCP / extension. Teammate mới mất cả buổi. Extension lạ thì chạy với quyền của bạn.
+> **Dành cho:** tech lead / admin đóng gói chuẩn tooling cho team, kèm dev mới cài extension lần đầu (bài 09 của series).
+> **Vấn đề:** mỗi dev cài lẻ, mỗi repo một kiểu setup prompts / MCP / extension → teammate mới mất cả buổi. Extension lạ thì chạy với quyền của bạn.
 > **Đọc xong:** phân biệt Copilot Extensions vs VS Code extensions, cài + pin version copy-paste, set org policy allow/block + version pin cho team.
 > **Thời gian:** ~40 phút (bản mở rộng)
 
@@ -24,21 +24,22 @@
 
 *Section này trả lời: khi nào nên đóng gói `.github/` + `.vscode/` thành extension, và khi nào commit thẳng rẻ hơn.*
 
-**Nôm na 1 câu:** File `.github/` lẻ chỉ giải quyết 1 repo. Extension là **thùng combo đóng sẵn**. 10 repos và người mới đều dùng chung 1 chuẩn. Update 1 nơi là cả team sync.
+**3 lớp khái niệm:**
 
-**Analogie đời thường:** Như quán phở mở chuỗi. 1 quán thì đầu bếp nêm tay (file lẻ). 10 quán thì phải có gói gia vị đóng sẵn từ trung tâm (extension). Quán nào nấu cũng cùng vị. Đổi công thức thì đổi 1 nơi.
+1. **Định nghĩa 1 câu:** File `.github/` lẻ chỉ giải quyết 1 repo; extension là **thùng combo đóng sẵn** — 10 repos và người mới đều dùng chung 1 chuẩn, update 1 nơi là cả team sync.
+2. **Nôm na:** Quán phở mở chuỗi. 1 quán thì đầu bếp nêm tay (file lẻ). 10 quán thì phải có gói gia vị đóng sẵn từ trung tâm (extension). Quán nào nấu cũng cùng vị. Đổi công thức thì đổi 1 nơi.
+3. **Ví dụ thật copy-paste:**
 
 ```text
-Không extensions: teammate mới → clone 5 repos → mỗi repo setup MCP tay +
-  hỏi "prompt review ở đâu?" + cài lẻ từng VS Code extension.
-Có extensions:   teammate mới → cài 1 extension pack org → 5 repos đều có
-  @-mention participants, prompt files, MCP servers kèm.
-Update:          bump extension version 1 nơi → cả team sync.
-# Verify: đếm repos team bạn. ≥3 repos cùng checklist → đáng đóng extension (mục 6).
+ Không extensions: teammate mới → clone 5 repos → mỗi repo setup MCP tay +
+   hỏi "prompt review ở đâu?" + cài lẻ từng VS Code extension.
+ Có extensions:   teammate mới → cài 1 extension pack org → 5 repos đều có
+   @-mention participants, prompt files, MCP servers kèm.
+ Update:          bump extension version 1 nơi → cả team sync.
+ # Verify: đếm repos team bạn. ≥3 repos cùng checklist → đáng đóng extension (mục 6).
 ```
 
-Ngưỡng đóng gói extension: cùng 1 bundle dùng ở ≥3 repos HOẶC onboarding
-≥1 người/tháng. Dưới ngưỡng → commit `.github/` thẳng rẻ hơn.
+**Ngưỡng đóng gói:** cùng 1 bundle dùng ở **≥3 repos HOẶC** onboarding **≥1 người/tháng**. Dưới ngưỡng → commit `.github/` thẳng rẻ hơn.
 
 **Ai dùng lúc nào:**
 
@@ -47,7 +48,7 @@ Ngưỡng đóng gói extension: cùng 1 bundle dùng ở ≥3 repos HOẶC onbo
 
 ### 1.1. Bảng thuật ngữ extensions (tra nhanh)
 
-Tra cứu nhanh, không cần đọc từ đầu.
+*Tra cứu nhanh, không cần đọc từ đầu.*
 
 | Thuật ngữ | Là gì (hiểu nôm na) | Ví dụ cụ thể | Khi nào dùng |
 |---|---|---|---|
@@ -65,6 +66,8 @@ Tra cứu nhanh, không cần đọc từ đầu.
 
 *Section này trả lời: cấu trúc đi từ file lẻ trong 1 repo tới extension pack cả team dùng trông ra sao.*
 
+**Space view — file lẻ gom thành pack, pack rải xuống repo + teammate mới:**
+
 ```mermaid
 flowchart LR
   F1[.github/prompts<br/>1 repo] --> Pack[Extension pack org<br/>1 bundle]
@@ -75,6 +78,8 @@ flowchart LR
   Pack --> R3[repo C]
   Pack --> New[teammate mới<br/>cài 1 được hết]
 ```
+
+**Time view — chuyện gì xảy ra khi teammate mới onboard:**
 
 ```mermaid
 sequenceDiagram
@@ -88,15 +93,19 @@ sequenceDiagram
   N->>N: gõ @sentry / /team-review chạy ngay
 ```
 
+> Nôm na: như hộp gia vị chuỗi quán phở (mục 1) — 1 hộp (pack) rải xuống 10 bếp (repo), ai mở repo là có đủ "đồ nghề" luôn.
+
 ---
 
 ## 3. 2 loại extensions — đừng nhầm
 
 *Section này trả lời: cần gọi SaaS từ Chat thì cài chợ nào. Cần tooling editor thì cài chợ nào. Đừng nhầm 2 loại.*
 
-**Nôm na 1 câu:** Có 2 chợ khác nhau. **Chợ GitHub** bán "người phục vụ biết gọi SaaS" (`@linear`, `@sentry`). **Chợ VS Code** bán "đồ nghề cho editor" (lint, format, MCP local).
+**3 lớp khái niệm:**
 
-**Analogie:** Như siêu thị có quầy đồ ăn chín (mua về ăn ngay = Copilot Extension gọi SaaS từ Chat) và quầy dụng cụ bếp (mua về nấu = VS Code extension cài vào editor).
+1. **Định nghĩa 1 câu:** Có 2 chợ khác nhau — **chợ GitHub** bán "người phục vụ biết gọi SaaS" (`@linear`, `@sentry`), **chợ VS Code** bán "đồ nghề cho editor" (lint, format, MCP local).
+2. **Nôm na:** Siêu thị có 2 quầy: quầy đồ ăn chín (mua về ăn ngay = Copilot Extension gọi SaaS từ Chat) và quầy dụng cụ bếp (mua về nấu = VS Code extension cài vào editor).
+3. **Ví dụ thật copy-paste:**
 
 | Loại | Nôm na là gì | Cài ở đâu | Ví dụ copy-paste | Ai dùng lúc nào |
 |---|---|---|---|---|
@@ -104,16 +113,16 @@ sequenceDiagram
 | **VS Code extensions** | Đồ nghề bếp (dao, thớt) | VS Code Marketplace / `.vscode/extensions.json` | Copilot pack, ESLint, Prettier, GitLens | Cần lint/format/snippets/MCP local |
 
 ```text
-Quan hệ:
-- Copilot Extension (@linear) → gọi từ Chat bằng @-mention, chạy trên GitHub infra.
-- VS Code extension (pack) → cài local, có thể TỰ THÊM MCP servers + participants.
-- 1 VS Code extension có thể wrap 1 Copilot Extension (cài 1 được 2).
+ Quan hệ giữa 2 loại:
+ - Copilot Extension (@linear) → gọi từ Chat bằng @-mention, chạy trên GitHub infra.
+ - VS Code extension (pack) → cài local, có thể TỰ THÊM MCP servers + participants.
+ - 1 VS Code extension có thể wrap 1 Copilot Extension (cài 1 được 2).
 
-Cây quyết định (dán lên wiki):
-Cần gọi SaaS (Linear/Jira/Sentry) từ Chat? → Copilot Extension @-mention.
-Cần tooling editor (lint, format, snippets, MCP local)? → VS Code extension.
-Share chuẩn team cross-repo? → cả 2 + org policy (mục 7).
-# Verify: gõ @ trong Chat → thấy @-mentions nào? Thiếu → chưa cài Copilot Extension.
+ Cây quyết định (dán lên wiki):
+ Cần gọi SaaS (Linear/Jira/Sentry) từ Chat? → Copilot Extension @-mention.
+ Cần tooling editor (lint, format, snippets, MCP local)? → VS Code extension.
+ Share chuẩn team cross-repo? → cả 2 + org policy (mục 7).
+ # Verify: gõ @ trong Chat → thấy @-mentions nào? Thiếu → chưa cài Copilot Extension.
 ```
 
 ---
@@ -124,21 +133,21 @@ Share chuẩn team cross-repo? → cả 2 + org policy (mục 7).
 
 **Nôm na 1 câu:** Copilot Extension là **GitHub App đăng ký quầy riêng** trong Chat. Gõ `@tên-quầy` là gọi đúng nhân viên quầy đó (Sentry tra lỗi, Linear tạo task).
 
-Copilot Extension = GitHub App đăng ký với Copilot → hiện thành `@-mention`
-trong Chat (VS Code, github.com, mobile).
+> Copilot Extension = GitHub App đăng ký với Copilot → hiện thành `@-mention` trong Chat (VS Code, github.com, mobile).
 
 ### 4.1. Cài + dùng (copy-paste flow)
 
 *Dành cho: mọi dev. Cài 1 lần cho tài khoản, dùng lại ở mọi repo được cấp quyền.*
 
 ```text
-Bước 1: github.com → Marketplace → tìm extension (vd "Sentry", "Linear").
-Bước 2: Install → chọn Org/Repos được phép (đừng chọn All repos nếu chưa tin).
-Bước 3: VS Code Chat → gõ "@" → phải thấy @sentry/@linear mới.
-Bước 4: Test: "@sentry list unresolved issues của project X" / "@linear tạo task Y".
-Bước 5: Không hợp → github.com → Settings → Applications → Uninstall/Restrict.
-# Verify: bước 3 phải thấy @-mention mới. Không thấy → reload window + check repo được phép (bước 2).
-# Ai dùng lúc nào: team dùng Linear/Sentry mỗi ngày → cài. Không dùng tracker đó → bỏ (đỡ rác @ list).
+ Bước 1: github.com → Marketplace → tìm extension (vd "Sentry", "Linear").
+ Bước 2: Install → chọn Org/Repos được phép (đừng chọn All repos nếu chưa tin).
+ Bước 3: VS Code Chat → gõ "@" → phải thấy @sentry/@linear mới.
+ Bước 4: Test: "@sentry list unresolved issues của project X" / "@linear tạo task Y".
+ Bước 5: Không hợp → github.com → Settings → Applications → Uninstall/Restrict.
+ # Verify: bước 3 phải thấy @-mention mới. Không thấy → reload window + check repo được phép (bước 2).
+ # Kỳ vọng: 2 prompts trả về dữ liệu thật từ SaaS, không phải "không thấy integration".
+ # Ai dùng lúc nào: team dùng Linear/Sentry mỗi ngày → cài. Không dùng tracker đó → bỏ (đỡ rác @ list).
 ```
 
 ```bash
@@ -160,32 +169,30 @@ gh api orgs/{org}/installations/{id}/repositories --jq '.repositories[] | .full_
 | Notion/Confluence | `@docs` | Tra docs team từ Chat | Docs đã local hết |
 
 ```text
-Quy tắc: ≤5 Copilot Extensions. Quá → "@" list dài, Copilot chọn sai participant.
-Mỗi extension sâu nên có 1 prompt file kèm (vd .github/prompts/triage-sentry.prompt.md
-dạy format "lỗi → root cause → fix" để output đồng đều).
-# Verify: đếm @-mentions team đang có. >5 → prune 1 cái ít dùng nhất.
+ Quy tắc: ≤5 Copilot Extensions. Quá → "@" list dài, Copilot chọn sai participant.
+ Mỗi extension sâu nên có 1 prompt file kèm (vd .github/prompts/triage-sentry.prompt.md
+ dạy format "lỗi → root cause → fix" để output đồng đều).
+ # Verify: đếm @-mentions team đang có. >5 → prune 1 cái ít dùng nhất.
 ```
 
 ### 4.3. Viết Copilot Extension đơn giản (khi nào + khung)
 
-*Section này trả lời: khi nào tự mở quầy riêng thay vì dùng extension có sẵn, và khung dựng gồm bước nào.*
-
-**Nôm na:** Tự mở quầy riêng trong chợ. Chỉ đáng khi nhà bạn có món độc quyền (API/runbook nội bộ) mà chợ chưa bán, và ≥3 teams ăn.
+*Nôm na: tự mở quầy riêng trong chợ. Chỉ đáng khi nhà bạn có món độc quyền (API/runbook nội bộ) mà chợ chưa bán, và ≥3 teams "ăn".*
 
 ```text
-Khi nào viết extension riêng (thay vì dùng sẵn)?
-- Internal API/docs chỉ org bạn có (vd tra runbook nội bộ, deploy staging riêng).
-- Dưới ngưỡng → prompt file + MCP http server là đủ (bài 05/08). Viết extension
-  là GitHub App (manifest, OAuth, hosting) — overhead lớn, chỉ đáng khi ≥3 teams dùng.
-  Ai dùng lúc nào: platform team phục vụ nhiều teams → viết. Team lẻ → dùng sẵn.
+ Khi nào viết extension riêng (thay vì dùng sẵn)?
+ - Internal API/docs chỉ org bạn có (vd tra runbook nội bộ, deploy staging riêng).
+ - Dưới ngưỡng → prompt file + MCP http server là đủ (bài 05/08). Viết extension
+   là GitHub App (manifest, OAuth, hosting) — overhead lớn, chỉ đáng khi ≥3 teams dùng.
+   Ai dùng lúc nào: platform team phục vụ nhiều teams → viết. Team lẻ → dùng sẵn.
 
-Khung (high-level, chi tiết xem docs GitHub "Building Copilot Extensions"):
-1. Tạo GitHub App → enable "Copilot Chat" permission → định nghĩa skills (name,
-   description, input schema — giống agent frontmatter bài 06).
-2. Host endpoint (vd https://copilot-ext.acme.example) nhận Chat requests.
-3. Install vào org test → "@acme ..." → verify → publish private marketplace org.
-4. Secrets (APP_PRIVATE_KEY, WEBHOOK_SECRET) qua hosting env, KHÔNG commit.
-# Verify: "@acme ..." trả lời được trên org test? Chưa → check permission + hosting logs.
+ Khung (high-level, chi tiết xem docs GitHub "Building Copilot Extensions"):
+ 1. Tạo GitHub App → enable "Copilot Chat" permission → định nghĩa skills (name,
+    description, input schema — giống agent frontmatter bài 06).
+ 2. Host endpoint (vd https://copilot-ext.acme.example) nhận Chat requests.
+ 3. Install vào org test → "@acme ..." → verify → publish private marketplace org.
+ 4. Secrets (APP_PRIVATE_KEY, WEBHOOK_SECRET) qua hosting env, KHÔNG commit.
+ # Verify: "@acme ..." trả lời được trên org test? Chưa → check permission + hosting logs.
 ```
 
 ---
@@ -277,12 +284,12 @@ code --list-extensions | xargs -I{} code --install-extension {} --force
 ```
 
 ```text
-Quy ước team (dán vào wiki — ai giữ: tech lead):
-- Pin versions trong wiki table (extension → version → ngày verify).
-- Update cuối sprint. Breaking change (hooks/behavior đổi) → giữ version cũ
-  cho repos production, note lý do.
-- Teammate mới: cài theo table, không cài latest mù.
-# Verify: wiki table có đủ 3 cột? Version local khớp table?
+ Quy ước team (dán vào wiki — ai giữ: tech lead):
+ - Pin versions trong wiki table (extension → version → ngày verify).
+ - Update cuối sprint. Breaking change (hooks/behavior đổi) → giữ version cũ
+   cho repos production, note lý do.
+ - Teammate mới: cài theo table, không cài latest mù.
+ # Verify: wiki table có đủ 3 cột? Version local khớp table?
 ```
 
 ### 6.2. Repo template (share chuẩn team — thực tế hơn viết extension mới)
@@ -290,18 +297,18 @@ Quy ước team (dán vào wiki — ai giữ: tech lead):
 **Nôm na:** Template là **khuôn nhà mẫu**. Làm nhà mới (repo mới) thì đúc từ khuôn. Có sẵn điện nước (instructions, agents, mcp, pack).
 
 ```text
-acme-copilot-template/           # repo template org (Template repository: ON)
-  .github/copilot-instructions.md
-  .github/instructions/*.instructions.md
-  .github/agents/*.agent.md
-  .github/prompts/*.prompt.md
-  .vscode/{mcp.json,settings.json,extensions.json}
-  .husky/pre-commit
-  README.md (onboarding 10 phút)
+ acme-copilot-template/           # repo template org (Template repository: ON)
+   .github/copilot-instructions.md
+   .github/instructions/*.instructions.md
+   .github/agents/*.agent.md
+   .github/prompts/*.prompt.md
+   .vscode/{mcp.json,settings.json,extensions.json}
+   .husky/pre-commit
+   README.md (onboarding 10 phút)
 
-Teammate: New repo → "Use template" → có ngay chuẩn team.
-Update chuẩn: PR vào template → announce → các repos cherry-pick (hoặc script sync).
-# Ai dùng lúc nào: org nhiều repos mới mỗi tháng → dựng template 1 lần, dùng mãi.
+ Teammate: New repo → "Use template" → có ngay chuẩn team.
+ Update chuẩn: PR vào template → announce → các repos cherry-pick (hoặc script sync).
+ # Ai dùng lúc nào: org nhiều repos mới mỗi tháng → dựng template 1 lần, dùng mãi.
 ```
 
 ```bash
@@ -321,15 +328,15 @@ cd new-service && cat .vscode/extensions.json  # verify pack đi kèm
 **Nôm na 1 câu:** Org policy là **bảo vệ cổng chợ**. Quầy nào sạch (đã vet) thì cho vào. Quầy lạ chạy shell / đọc files thì chặn.
 
 ```text
-Admin (github.com → Org Settings → Copilot → Policies → Extensions):
-- Allowed extensions: github, linear, sentry (list rõ, còn lại block).
-- VS Code marketplace: restrict (chỉ extensions đã review) — Enterprise.
-- Audit log: ai cài extension nào, khi nào (review hàng tháng).
-# Ai làm: admin org (Business+). Dev thường chỉ xem + request.
+ Admin (github.com → Org Settings → Copilot → Policies → Extensions):
+ - Allowed extensions: github, linear, sentry (list rõ, còn lại block).
+ - VS Code marketplace: restrict (chỉ extensions đã review) — Enterprise.
+ - Audit log: ai cài extension nào, khi nào (review hàng tháng).
+ # Ai làm: admin org (Business+). Dev thường chỉ xem + request.
 
-Admin (VS Code marketplace org):
-- Private marketplace/allowlist: chỉ pack org + extensions đã vet.
-- Block categories: themes lạ không sao, block extensions chạy shell/network chưa vet.
+ Admin (VS Code marketplace org):
+ - Private marketplace/allowlist: chỉ pack org + extensions đã vet.
+ - Block categories: themes lạ không sao, block extensions chạy shell/network chưa vet.
 ```
 
 ```bash
@@ -341,7 +348,9 @@ cat /tmp/exts.txt
 # Kỳ vọng: list khớp allowlist. Lệch → prune.
 ```
 
-| Checklist review extension lạ (trước khi cài) | Vì sao |
+**Checklist review extension lạ (trước khi cho vào org):**
+
+| Kiểm tra gì | Vì sao |
 |---|---|
 | Đọc permissions (chạy shell? đọc files? gọi mạng?) | Extension chạy với quyền bạn — đọc `.env` được nếu bạn cho |
 | Nguồn: official / org / cá nhân lạ? | Lạ → test repo thử trước |
@@ -373,26 +382,27 @@ cat /tmp/exts.txt
 ### 9.1. Walkthrough: setup extensions chuẩn (25 phút)
 
 ```text
-Bước 1 (5 phút): commit .vscode/extensions.json + settings.json (mục 5.1).
-  Teammate mở repo → VS Code gợi ý cài → bấm Install All.
-  # Verify: mở repo fresh → có popup gợi ý? Không → check file path .vscode/extensions.json.
+ Bước 1 (5 phút): commit .vscode/extensions.json + settings.json (mục 5.1).
+   Teammate mở repo → VS Code gợi ý cài → bấm Install All.
+   # Verify: mở repo fresh → có popup gợi ý? Không → check file path .vscode/extensions.json.
 
-Bước 2 (10 phút): cài 1 Copilot Extension (@linear hoặc @sentry, mục 4.1).
-  Test @-mention 2 prompts. Ghi output có đúng format team?
-  # Verify: gõ @ thấy extension? 2 prompts trả về đúng format?
+ Bước 2 (10 phút): cài 1 Copilot Extension (@linear hoặc @sentry, mục 4.1).
+   Test @-mention 2 prompts. Ghi output có đúng format team?
+   # Verify: gõ @ thấy extension? 2 prompts trả về đúng format?
 
-Bước 3 (5 phút): pin versions (mục 6.1). Ghi table wiki: extension → version.
-  # Verify: table đủ 3 cột (tên, version, ngày verify)?
+ Bước 3 (5 phút): pin versions (mục 6.1). Ghi table wiki: extension → version.
+   # Verify: table đủ 3 cột (tên, version, ngày verify)?
 
-Bước 4 (5 phút): admin set allowlist org (mục 7). Verify extension lạ bị block.
-  # Verify: cài extension ngoài list → bị block + log audit?
+ Bước 4 (5 phút): admin set allowlist org (mục 7). Verify extension lạ bị block.
+   # Verify: cài extension ngoài list → bị block + log audit?
+ # Kỳ vọng cuối: teammate mới clone 1 repo → "Install All" → chạy được @-mention + /prompts ngay.
 ```
 
 ### 9.2. Pitfalls + fix
 
 | Pitfall | Vì sao | Fix |
 |---|---|---|
-| Cài extension lạ, nó đọc `.env` | Không review permissions | Checklist mục 7; content exclusion vẫn lưng (bài 07) |
+| Cài extension lạ, nó đọc `.env` | Không review permissions | Checklist mục 7; content exclusion vẫn làm lưng (bài 07) |
 | 2 formatters conflict (Prettier vs Beautify) | Cài pack + extension lạ | `unwantedRecommendations` + `defaultFormatter` rõ ràng |
 | Update extension giữa sprint gãy workflow | Latest mù | Pin version, update cuối sprint |
 | 10 `@-mentions` → Copilot chọn sai | Tham extensions | ≤5, prune định kỳ |

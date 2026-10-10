@@ -1,7 +1,7 @@
 # 06 — Custom Agents & Chạy Song Song (Parallel Copilot)
 
 > **Dành cho:** dev đã dùng Copilot Chat cơ bản, muốn tách việc ra cho agent riêng và chạy nhiều việc cùng lúc.
-> **Vấn đề:** chat chính làm hết research + code + test → context đầy nhanh, kết quả bị lẫn lộn, không cách nào chạy 2 việc song song.
+> **Vấn đề:** chat chính làm hết research + code + test → context đầy nhanh, kết quả bị lẫn lộn, và bạn không chạy nổi 2 việc cùng lúc.
 > **Đọc xong:** viết được 4 custom agents hoàn chỉnh, chọn đúng `@workspace` vs custom agent trong 30 giây, và chạy song song 3 sessions mà không giẫm chân nhau.
 > **Thời gian:** ~45 phút (bản mở rộng).
 
@@ -13,7 +13,7 @@
 4. [Anatomy file `.agent.md`](#4-anatomy-file-agentmd-frontmatter--body)
 5. [4 agents mẫu hoàn chỉnh (copy-paste)](#5-4-agents-mẫu-hoàn-chỉnh-copy-paste)
 6. [Chạy song song: 3 cách](#6-chạy-song-song-3-cách-copy-paste)
-7. [Orchestration patterns + cost math](#7-orchestration-patterns--cost-math-premium-requests)
+7. [Orchestration patterns + cost math](#7-orchestration-patterns--cost-math-ai-credits)
 8. [Hiểu nhầm thường gặp](#8-hiểu-nhầm-thường-gặp)
 9. [Walkthrough + pitfalls + bài tập](#9-walkthrough-step-by-step)
 10. [Link chéo](#10-link-chéo)
@@ -24,45 +24,41 @@
 
 *Section này trả lời: khi nào nên tách một việc ra cho agent riêng, và bạn được gì so với để chat chính làm tất.*
 
-**Nôm na 1 câu:** Custom agent là **thuê chuyên gia theo việc**. Thay vì 1 ông tổng quát vừa đọc vừa sửa vừa test (rối + ồn), bạn thuê ông trinh sát (chỉ đọc), ông kiến trúc sư (chỉ vẽ plan), ông kiểm định (chỉ test).
+**3 lớp khái niệm:**
 
-**Analogie đời thường:** Như sửa nhà. Bạn (chat chính) là chủ nhà. Thay vì tự leo trèo đo đạc 50 phòng (bẩn + mệt), bạn thuê đội khảo sát (explorer). Họ đo xong đưa bạn tờ giấy 15 dòng: "phòng nào nứt, phòng nào an toàn". Phần ồn (bụi, số đo) ở lại bên đội khảo sát. Nhà bạn (context chat chính) vẫn sạch.
-
-**Ví dụ kỹ thuật copy-paste:**
+1. **Định nghĩa 1 câu:** Custom agent là một "nhân viên" copilot có persona riêng, danh sách tools riêng (khóa trong file config), và model riêng — chạy ở session riêng rồi trả về **tóm tắt**.
+2. **Nôm na:** Như sửa nhà. Bạn (chat chính) là chủ nhà. Thay vì tự leo trèo đo đạc 50 phòng (bẩn + mệt), bạn thuê đội khảo sát (explorer). Họ đo xong đưa bạn tờ giấy 15 dòng: "phòng nào nứt, phòng nào an toàn". Phần ồn (bụi, số đo) ở lại bên đội khảo sát. Nhà bạn (context chat chính) vẫn sạch.
+3. **Ví dụ thật copy-paste:**
 
 ```text
-KHÔNG agent (chat chính đọc 50 files):
-Bạn: "auth flow hoạt động thế nào?"
-Copilot đọc 50 files → context đầy → câu sau hỏi tiếp bị quên/quá tải.
+ KHÔNG agent (chat chính tự đọc 50 files):
+ Bạn: "auth flow hoạt động thế nào?"
+ Copilot đọc 50 files → context đầy → câu hỏi kế tiếp bị quên/quá tải.
 
-CÓ agent (explorer làm ồn thay):
-Bạn: "dùng agent explorer map auth flow, trả summary 15 dòng"
-Explorer đọc 50 files ở session riêng → trả bạn 15 dòng.
-→ Chat chính còn chỗ để implement.
+ CÓ agent (explorer làm ồn thay bạn):
+ Bạn: "dùng agent explorer map auth flow, trả summary 15 dòng"
+ Explorer đọc 50 files ở session riêng → trả bạn đúng 15 dòng.
+ → Chat chính còn trống chỗ để implement.
+ # Verify: mở dashboard usage, so sánh token input của 2 cách trên.
 ```
 
-**Ai dùng lúc nào:**
+**Copilot mặc định là generalist:** bạn hỏi gì nó làm nấy, tools mặc định. Custom agent = generalist + **persona hẹp + tools hẹp + instructions hẹp**. Xong việc nó trả tóm tắt, phần ồn ở lại bên nó.
 
-- Task phụ **đọc nhiều, ồn nhiều, không cần nhớ lâu** → ném sang agent chuyên để chat chính sạch.
-- Task 1 bước ("đọc file X") → hỏi trực tiếp, spawn agent là lỗ (overhead).
-
-GitHub Copilot mặc định là generalist: bạn hỏi gì nó làm nấy. Custom agent là generalist + **persona hẹp + tools hẹp + instructions hẹp**. Xong việc nó trả **tóm tắt**, phần ồn ở lại bên nó.
-
-Lợi ích bạn cảm nhận ngay:
+**Lợi ích bạn cảm nhận ngay:**
 
 - **Giữ context sạch:** explorer đọc 50 files, chat chính chỉ nhận 15 dòng summary.
 - **Enforce chuẩn team:** reviewer luôn check OWASP, tester luôn chạy `pnpm test` focused.
-- **Tái dùng cross-repo:** agents để ở repo hoặc org-level, teammate mới dùng ngay.
+- **Tái dùng cross-repo:** agents để ở repo hoặc org-level, teammate mới clone là dùng ngay.
 - **Tiết kiệm AI Credits:** việc dễ route sang model rẻ, việc khó giữ model mạnh.
 
-Giá phải trả: mỗi lần spawn agent tốn overhead (nạp instructions + tools defs). Task 1 bước ("đọc file X") spawn agent = lỗ. Task research 50 files = lời. Trần thực tế: **3 sessions song song**, quá là bạn không review nổi.
+**Giá phải trả:** mỗi lần spawn agent tốn overhead (nạp instructions + tool definitions). Task 1 bước ("đọc file X") spawn agent = lỗ. Task research 50 files = lời. Trần thực tế: **3 sessions song song** — quá con số đó bạn không review nổi.
 
 ```text
-So sánh nhanh + Verify:
-- Hỏi trực tiếp: "giải thích file auth.ts" → làm luôn, rẻ, nhanh.
-- Custom agent: "research toàn bộ auth module (30 files) rồi tóm tắt" → đáng spawn.
-- Quy tắc: <5 files → hỏi trực tiếp. >10 files hoặc cần persona riêng → custom agent.
-# Verify: đếm files task bạn sắp làm (search đếm). <5 → đừng spawn.
+ Quy tắc chọn nhanh (30 giây, dán lên màn hình):
+ - "Hỏi cho biết 1 file" (<5 files) → hỏi trực tiếp @workspace, đừng spawn.
+ - ">10 files hoặc cần persona/chuẩn riêng" → spawn custom agent.
+ - "Chỉ là làm theo chuẩn X" → viết instructions (bài 03), đừng spawn.
+ # Verify: đếm files task bạn sắp làm (search trước). <5 → hỏi trực tiếp.
 ```
 
 ---
@@ -71,34 +67,48 @@ So sánh nhanh + Verify:
 
 *Section này trả lời: khi nào gõ `@workspace`, khi nào spawn agent, khi nào chỉ cần prompt file. Chọn đúng trong 30 giây.*
 
-**Nôm na 1 câu:** `@workspace` là **hỏi anh bảo vệ tòa nhà** — biết hết, hỏi gì đáp nấy, nhanh. Custom agent là **thuê thám tử** — giao việc 3 ngày, trả báo cáo gọn, có chuẩn riêng.
+**3 lớp khái niệm:**
 
-**Analogie:** Cần biết "phòng 302 ở đâu?" → hỏi bảo vệ (`@workspace`). Cần "điều tra toàn bộ lịch sử 30 hộ tầng 3 trong 1 tuần" → thuê thám tử (explorer agent).
+1. **Định nghĩa 1 câu:** `@workspace` là hỏi nhanh với tools mặc định của bạn; custom agent là giao việc cho một "chuyên gia" đã được khóa tools + persona + model trước.
+2. **Nôm na:** `@workspace` là **hỏi anh bảo vệ tòa nhà** — biết hết, hỏi gì đáp nấy, nhanh. Custom agent là **thuê thám tử** — giao việc 3 ngày, trả báo cáo gọn, có bộ chuẩn riêng. Cần biết "phòng 302 ở đâu?" → hỏi bảo vệ. Cần "điều tra lịch sử 30 hộ tầng 3 trong 1 tuần" → thuê thám tử.
+3. **Ví dụ thật copy-paste:**
+
+```text
+ # @workspace — hỏi nhanh, task 1 lần:
+ @workspace auth flow hoạt động thế nào?
+
+ # Custom agent — việc lặp lại theo chuẩn team:
+ dùng agent explorer map auth flow, trả summary 15 dòng theo format của nó
+```
+
+**Ai dùng lúc nào:**
 
 | Cách | Nôm na là gì | Khi nào | Ví dụ copy-paste | Ai dùng lúc nào |
 |---|---|---|---|---|
 | `@workspace` | Bảo vệ biết hết tòa nhà | Hỏi nhanh, task 1 lần | `@workspace auth flow hoạt động thế nào?` | Task 1 lần, cần đáp ngay |
 | Custom agent | Thám tử thuê theo vụ | Việc lặp lại, cần chuẩn cố định | `dùng agent explorer map auth flow` | Việc lặp mỗi ngày theo chuẩn team |
-| Prompt files (`.prompt.md`) | Tờ checklist in sẵn | Quy trình ngắn, 1 bước | `/review-pr` | Quy trình 1 bước (bài 05) |
-| Coding agent (GitHub) | Đội thi công gửi đi xa | Task độc lập, không cần trông | `Fix issue #123` giao cho agent | Task 30 phút, ra PR draft (bài 11/12) |
+| Prompt files / skills (bài 05) | Checklist in sẵn, lôi ra khi cần | Quy trình ngắn | `/review-pr` (skill 2026) hoặc `.prompt.md` (legacy Local) | Workflow lặp lại |
+| Coding agent (GitHub) | Đội thi công gửi đi xa | Task độc lập, không cần trông | Assign issue #123 cho `copilot` | Task 30 phút, ra PR draft (bài 11/12) |
 
 ```text
-Cây quyết định 30 giây (dán lên màn hình):
-Task 1 lần, hỏi cho biết? → @workspace.
-Việc lặp mỗi ngày theo chuẩn team? → custom agent.
-Quy trình ngắn 1 bước? → prompt file (bài 05).
-Task độc lập 30 phút, không cần trông? → coding agent (bài 11/12).
-Chỉ là "làm theo chuẩn X"? → instructions (bài 03), đừng spawn agent.
-# Verify: task hiện tại của bạn rơi vào nhánh nào? Gọi đúng 1 loại, đừng spawn thừa.
+ Cây quyết định 30 giây (dán lên màn hình):
+ Task 1 lần, hỏi cho biết?              → @workspace.
+ Việc lặp mỗi ngày theo chuẩn team?     → custom agent.
+ Quy trình ngắn 1 bước?                 → skill / prompt file (bài 05).
+ Task độc lập 30 phút, không cần trông? → coding agent (bài 11/12).
+ Chỉ là "làm theo chuẩn X"?             → instructions (bài 03), đừng spawn agent.
+ # Verify: task hiện tại của bạn rơi vào nhánh nào? Gọi đúng 1 loại, đừng spawn thừa.
 ```
 
-Điểm khác biệt quyết định (load-bearing): `@workspace` dùng tools mặc định của bạn. Custom agent **khóa tools** trong frontmatter — dù bạn dụ "sửa luôn giúp anh" thì agent read-only vẫn không sửa được.
+**Điểm khác biệt quyết định (load-bearing):** `@workspace` dùng tools mặc định của bạn. Custom agent **khóa tools** trong frontmatter — dù bạn dụ "sửa luôn giúp anh" thì agent read-only vẫn không sửa được. Đây là guard, không phải bug.
 
 ---
 
 ## 3. Sơ đồ: generalist vs custom agents vs song song
 
 *Section này cho bạn nhìn một lần cấu trúc: chat chính (generalist) nhận việc, bắn ra các agent chuyên biệt, rồi nhận về từng đoạn summary. Đọc hai sơ đồ dưới là đủ hiểu dòng chảy.*
+
+**Space view — ai gọi ai:**
 
 ```mermaid
 flowchart LR
@@ -117,6 +127,8 @@ flowchart LR
   Sum4 --> Main
 ```
 
+**Time view — thứ tự chạy thật (ai chờ ai):**
+
 ```mermaid
 sequenceDiagram
   participant M as Chat chính
@@ -132,26 +144,30 @@ sequenceDiagram
   T-->>M: PASS 12/12
 ```
 
+> Nôm na: như hãng đồ gỗ. Giám đốc (chat chính) không tự cưa gỗ. Giao thợ (agent) đi riêng, mỗi thợ trả về 1 chi tiết, giám đốc lắp ráp.
+
 ---
 
 ## 4. Anatomy file `.agent.md` (frontmatter + body)
 
 *Section này trả lời: 1 file `.agent.md` gồm những phần nào, đặt ở đâu, và viết thế nào để agent chạy đúng ý bạn.*
 
-**Nôm na 1 câu:** File `.agent.md` gồm **thẻ căn cước (frontmatter: tên, khi nào gọi, được dùng tools gì, model nào, trả về kiểu gì)** + **bản mô tả công việc (body: làm mấy bước, output mẫu, cấm gì)**.
+**3 lớp khái niệm:**
 
-**Analogie:** Như hồ sơ nhân viên. Frontmatter là "tên, chức vụ, quyền hạn (được vào kho nào), lương (model rẻ/đắt)". Body là "JD: mỗi sáng làm gì, báo cáo mẫu nào, việc gì cấm".
+1. **Định nghĩa 1 câu:** File `.agent.md` gồm **thẻ căn cước (frontmatter: tên, khi nào gọi, được dùng tools gì, model nào, trả về kiểu gì)** + **bản mô tả công việc (body: làm mấy bước, output mẫu, cấm gì)**.
+2. **Nôm na:** Như hồ sơ nhân viên. Frontmatter là "tên, chức vụ, quyền hạn (được vào kho nào), lương (model rẻ/đắt)". Body là "JD: mỗi sáng làm gì, báo cáo mẫu nào, việc gì cấm".
+3. **Ví dụ thật copy-paste:** khung frontmatter + body ở dưới, cùng 4 agent hoàn chỉnh ở mục 5.
 
-Vị trí (theo thứ tự ưu tiên, 2026):
+**Vị trí file (theo thứ tự ưu tiên, 2026):**
 
 ```text
-.github/agents/<ten>.agent.md     # repo-level, commit cho team (khuyên dùng)
-.vscode/agents/<ten>.agent.md     # legacy VS Code, vẫn chạy
-~/.copilot/agents/<ten>.agent.md  # personal, mọi repo (tùy bản VS Code)
-# Ai dùng lúc nào: team → .github/agents (commit). Cá nhân → ~/.copilot.
+ .github/agents/<ten>.agent.md     # repo-level, commit cho team (khuyên dùng)
+ .vscode/agents/<ten>.agent.md     # legacy VS Code, vẫn chạy
+ ~/.copilot/agents/<ten>.agent.md  # personal, mọi repo (tùy bản VS Code)
+ # Ai dùng lúc nào: team → .github/agents (commit). Cá nhân → ~/.copilot.
 ```
 
-Frontmatter đầy đủ (copy-paste khung):
+**Frontmatter đầy đủ (copy-paste khung):**
 
 ```yaml
 ---
@@ -166,38 +182,41 @@ target: vscode                    # vscode | github-coding-agent | cli
 
 | Field | Nôm na | Bắt buộc? | Ý nghĩa | Ai dùng lúc nào |
 |---|---|---|---|---|
-| `name` | Tên nhân viên | Có | Slug gọi agent (`dùng agent explorer ...`) | Đặt ngắn, động từ rõ (explorer, tester) |
+| `name` | Tên nhân viên | Có | Slug gọi agent (`dùng agent explorer ...`) | Đặt ngắn, dễ nhớ (explorer, tester) |
 | `description` | Khi nào gọi anh này | Có | Quyết định auto-trigger. 1–2 câu, nhiều từ khóa task | Câu đầu chứa từ user nói thật ("research", "review security") |
 | `tools` | Chìa khóa kho | Nên có | Allowlist. Read-only agents khóa `edit` | Sợ sửa nhầm → chỉ cho search/read/grep |
 | `model` | Lương (rẻ/đắt) | Nên có | Route việc dễ → model rẻ, việc khó → model mạnh | Tester/explorer → rẻ; reviewer/planner → mạnh |
 | `handoff` | Cách bàn giao | Tùy | `summary-only` = chỉ trả tóm tắt (giữ chat chính sạch) | Muốn sạch → summary-only; muốn plan file → plan-file |
 | `target` | Làm ở công trường nào | Tùy | Agent chạy ở đâu (VS Code vs coding agent cloud) | Local → vscode; giao cloud → github-coding-agent |
 
-Body = persona + quy trình + output format. Viết như viết skill (bài 05): steps numbered, lệnh cụ thể, output format bắt buộc, non-goals rõ ràng.
+**Body** = persona + quy trình + output format. Viết như viết skill (bài 05): steps đánh số, lệnh cụ thể, output format bắt buộc, non-goals rõ ràng.
 
 ```markdown
-<!-- Khung body chuẩn (copy khung này cho mọi agent mới) -->
-Bạn là <vai trò>. <1 câu tôn chỉ>.
+ <!-- Khung body chuẩn (copy khung này cho mọi agent mới) -->
+ Bạn là <vai trò>. <1 câu tôn chỉ>.
 
-Quy trình:
-1. <bước 1 + lệnh cụ thể>
-2. <bước 2>
-3. <bước 3>
+ Quy trình:
+ 1. <bước 1 + lệnh cụ thể>
+ 2. <bước 2>
+ 3. <bước 3>
 
-Output (bắt buộc, tối đa N dòng):
-- <mục 1>
-- <mục 2>
+ Output (bắt buộc, tối đa N dòng):
+ - <mục 1>
+ - <mục 2>
 
-Cấm:
-- <việc không được làm 1>
-- <việc không được làm 2>
+ Cấm:
+ - <việc không được làm 1>
+ - <việc không được làm 2>
 ```
 
 ```text
-# Verify anatomy (copy-paste):
-# Sau khi tạo .agent.md, mở Chat mới, gõ "/" hoặc "@" → phải thấy agent mới.
-# Chat: "dùng agent <ten> làm <việc>" → check: tools ngoài allowlist có bị chặn? Model đúng?
-# Kỳ vọng: agent chỉ dùng tools cho phép, output đúng format body.
+ # Verify anatomy (copy-paste):
+ # 1. Tạo xong .agent.md → mở Chat MỚI, gõ "/" hoặc "@" → phải thấy agent mới.
+ # 2. Chat: "dùng agent <ten> làm <việc>" → quan sát:
+ #    - tools ngoài allowlist có bị chặn? (thử dụ nó sửa code nếu agent read-only)
+ #    - model đang dùng đúng như frontmatter?
+ #    - output đúng format body?
+ # Kỳ vọng: agent chỉ dùng tools cho phép, output đúng format, không sửa ngoài scope.
 ```
 
 ---
@@ -207,7 +226,6 @@ Cấm:
 *Section này là kho copy-paste. 4 agent dưới đây dùng được ngay cho mọi repo, mỗi agent kèm nôm na và cách verify.*
 
 > Đặt vào `.github/agents/`. Commit. Mở Chat view mới để load.
-> Mỗi agent kèm nôm na + verify.
 
 ### 5.1. Agent 1 — Explorer (read-only research)
 
@@ -240,9 +258,10 @@ Cấm: lan man lịch sử, paste cả file vào report, đề xuất refactor n
 ```
 
 ```text
-# Gọi mẫu (Chat view):
-@workspace / dùng agent explorer tìm mọi file liên quan tới POST /login rate-limit, trả summary theo format của nó
-# Verify: summary ≤30 dòng? Có lan man paste cả file? Có sửa code (phải KHÔNG)?
+ # Gọi mẫu (Chat view):
+ @workspace / dùng agent explorer tìm mọi file liên quan tới POST /login rate-limit, trả summary theo format của nó
+ # Verify: summary ≤30 dòng? Có lan man paste cả file không? Có sửa code không (phải KHÔNG)?
+ # Kỳ vọng: đúng 3 mục output, không 1 dòng code nào bị thay đổi trong repo.
 ```
 
 ### 5.2. Agent 2 — Planner (viết plan, không đụng source)
@@ -273,9 +292,9 @@ Output: path plan file + tóm tắt 10 dòng để chat chính duyệt nhanh.
 ```
 
 ```text
-# Gọi mẫu:
-dùng agent planner viết plan migrate auth từ JWT sang session, ghi vào plans/, không code
-# Verify: có file plans/*.md? Có Goals/Non-goals/Files/Steps/Risks? Có sửa source (phải KHÔNG)?
+ # Gọi mẫu:
+ dùng agent planner viết plan migrate auth từ JWT sang session, ghi vào plans/, không code
+ # Verify: có file plans/*.md? Có đủ Goals/Non-goals/Files/Steps/Risks? Có sửa source không (phải KHÔNG)?
 ```
 
 ### 5.3. Agent 3 — Security reviewer (read-only + git diff)
@@ -307,7 +326,10 @@ Không finding = nói rõ "đã check X, Y, Z — không thấy issue" (đừng 
 ```
 
 ```text
-# Verify: cho reviewer xem PR cố ý có SQL injection → phải bắt được + gắn CRITICAL + file:line.
+ # Verify (test thật, copy-paste):
+ # Tạo PR cố ý có SQL injection (concat string thẳng vào query),
+ # gọi "dùng agent security-reviewer review PR này".
+ # Kỳ vọng: bắt được lỗi + gắn CRITICAL + chỉ đúng file:line.
 ```
 
 ### 5.4. Agent 4 — Tester (chạy test, báo pass/fail)
@@ -326,7 +348,7 @@ handoff: summary-only
 Bạn là tester. Chạy test, báo cáo, không sửa source.
 
 Quy trình:
-1. Đọc muse-instructions.md lấy lệnh test focused (vd `pnpm --filter @acme/api test <path>`).
+1. Đọc copilot-instructions.md lấy lệnh test focused (vd `pnpm --filter @acme/api test <path>`).
 2. Chạy focused trước, full chỉ khi được yêu cầu rõ.
 3. Test flaky (pass/fail ngẫu nhiên) → ghi "FLAKY" + dừng đoán, không argue.
 4. Fail → báo: lệnh chạy, failures (tối đa 10 dòng log quan trọng), 1-line root-cause guess.
@@ -343,12 +365,11 @@ mkdir -p .github/agents
 # Tạo explorer.agent.md, planner.agent.md, security-reviewer.agent.md, tester.agent.md
 # với nội dung trên. Commit + push.
 git add .github/agents && git commit -m "chore: add 4 copilot custom agents" && git push
-# Verify: mở VS Code Chat → gõ "/" hoặc "@" → phải thấy agents mới.
-# Kỳ vọng: 4 agents hiện. Không thấy → chưa mở Chat view mới (cần reload để load).
+# Verify: mở VS Code Chat → gõ "/" hoặc "@" → phải thấy 4 agents mới.
+# Kỳ vọng: đủ 4 agents. Không thấy → mở Chat view mới (nội dung load khi mở).
 ```
 
-> `description` quá dài (>500 ký tự) → auto-trigger kém. Giữ 1–2 câu,
-> chi tiết dồn vào body.
+> **Mẹo:** `description` quá dài (>500 ký tự) → auto-trigger kém. Giữ 1–2 câu, chi tiết dồn vào body.
 
 ---
 
@@ -356,21 +377,22 @@ git add .github/agents && git commit -m "chore: add 4 copilot custom agents" && 
 
 *Section này trả lời: mở bao nhiêu session, mở ở đâu, và làm sao để chúng không giẫm chân nhau. Đọc xong chọn 1 trong 3 cách hợp với việc của bạn.*
 
-**Nôm na:** Như mở 3 bếp cùng nấu. Bếp 1 hầm xương (explorer), bếp 2 xào rau (planner), bạn đứng nêm chính (code tay). Gom lại thành mâm.
+**Nôm na:** Như mở 3 bếp cùng nấu. Bếp 1 hầm xương (explorer), bếp 2 xào rau (planner), bạn đứng nêm món chính (code tay). Xong thì gom lại thành 1 mâm.
 
 ### 6.1. Cách 1 — VS Code multi-chat (nhanh nhất, local)
 
 **Ai dùng lúc nào:** Task research local, cần nhanh, không cần cloud.
 
 ```text
-Chat 1 (explorer): "dùng agent explorer map auth flow, trả 15 dòng"
-Chat 2 (planner):  "dùng agent planner viết plan cho billing refactor"
-Chat 3 (bạn code tay): phần critical
+ Chat 1 (explorer): "dùng agent explorer map auth flow, trả 15 dòng"
+ Chat 2 (planner):  "dùng agent planner viết plan cho billing refactor"
+ Chat 3 (bạn code tay): phần critical
 
-Mở: Ctrl+Shift+I (mở thêm Chat view) → "+" new session.
-Mỗi chat 1 nhiệm vụ, không paste output chat này sang chat kia (giữ sạch).
-Gom: copy 2 summaries vào chat chính → viết plan → implement.
-# Verify: 3 chats độc lập? Chat chính chỉ nhận summaries (không bị ồn 50 files)?
+ Mở: Ctrl+Shift+I (mở thêm Chat view) → "+" new session.
+ Mỗi chat 1 nhiệm vụ, KHÔNG paste output chat này sang chat kia (giữ sạch).
+ Gom: copy 2 summaries vào chat chính → viết plan → implement.
+ # Verify: 3 chats độc lập? Chat chính chỉ nhận summaries (không bị ồn 50 files)?
+ # Kỳ vọng: chat 3 sạch, chỉ có 2 blocks summary gọn.
 ```
 
 ### 6.2. Cách 2 — Multi coding-agent sessions (cloud, cho task độc lập)
@@ -382,7 +404,7 @@ Gom: copy 2 summaries vào chat chính → viết plan → implement.
 gh issue list --repo acme/api --label "ready" --limit 5
 
 # Cách A — từ web: mở issue → Assign to Copilot (button) → mỗi issue 1 session.
-# Cách B — từ CLI (cần gh + extension coding agent):
+# Cách B — từ CLI:
 gh copilot assign 123 --repo acme/api
 gh copilot assign 124 --repo acme/api
 
@@ -390,6 +412,7 @@ gh copilot assign 124 --repo acme/api
 gh copilot status --repo acme/api
 # Mỗi session ra 1 branch copilot/* + 1 PR draft riêng (xem bài 11).
 # Verify: 2 PR drafts riêng? Không chung branch (giẫm nhau)?
+# Kỳ vọng: 2 branches copilot/123..., copilot/124... tách biệt.
 ```
 
 ### 6.3. Cách 3 — Agent Tasks / multi-terminal (local, cho fan-out nhỏ)
@@ -397,13 +420,14 @@ gh copilot status --repo acme/api
 **Ai dùng lúc nào:** Việc ồn nền (đọc logs 2000 dòng) mà bạn vẫn muốn code tay tiếp.
 
 ```text
-VS Code 2026: Chat view → "New Agent Task" (background task) cho việc ồn:
-- Task 1: "đọc toàn bộ logs CI 2000 dòng + tóm tắt 10 dòng"
-- Task 2: "quét docs/ tìm API conventions lỗi thời"
-Bạn tiếp tục code tay, tasks chạy nền, ping khi xong.
+ VS Code 2026: Chat view → "New Agent Task" (background task) cho việc ồn:
+ - Task 1: "đọc toàn bộ logs CI 2000 dòng + tóm tắt 10 dòng"
+ - Task 2: "quét docs/ tìm API conventions lỗi thời"
+ Bạn tiếp tục code tay, tasks chạy nền, ping khi xong.
 
-Nguyên tắc: N ≤ 3 concurrent. Quá là bạn không review nổi + bill AI Credits nổ.
-# Verify: bạn vẫn code được trong lúc tasks chạy? Kết quả tasks chỉ 10 dòng gọn?
+ Nguyên tắc: N ≤ 3 concurrent. Quá là bạn không review nổi + bill AI Credits nổ.
+ # Verify: bạn vẫn code được trong lúc tasks chạy? Kết quả tasks chỉ 10 dòng gọn?
+ # Kỳ vọng: tasks trả về summary ngắn, không đổ 2000 dòng logs vào chat.
 ```
 
 ```bash
@@ -424,63 +448,66 @@ git worktree list  # xác nhận mỗi session 1 checkout riêng
 ### 7.1. 4 patterns thực chiến (nôm na + ai dùng lúc nào)
 
 ```text
-Pattern A — Parallel research (nhanh nhất cho task mới):
-Chat 1: explorer map auth flow. Chat 2: explorer map DB schema.
-→ gom 2 summaries → viết plan → implement.
-Lời khi research >10 files (làm trực tiếp sẽ pollute chat chính).
-Ai dùng: task mới, chưa biết gì về codebase.
+ Pattern A — Parallel research (nhanh nhất cho task mới):
+ Chat 1: explorer map auth flow. Chat 2: explorer map DB schema.
+ → gom 2 summaries → viết plan → implement.
+ Nôm na: 2 thám tử đi riêng 2 hướng, gặp nhau 10 phút tổng hợp.
+ Lời khi research >10 files (làm trực tiếp sẽ ô nhiễm chat chính).
+ Ai dùng: task mới, chưa biết gì về codebase.
 
-Pattern B — Chain (chắc nhất cho task khó):
-explorer → planner → (bạn duyệt) → implement (Agent mode) → tester → reviewer
-→ mỗi stage gate 1 lần. Chậm nhưng ít sai nhất.
-Ai dùng: task khó, multi-file, cần duyệt từng nấc.
+ Pattern B — Chain (chắc nhất cho task khó):
+ explorer → planner → (bạn duyệt) → implement (Agent mode) → tester → reviewer
+ → mỗi stage gate 1 lần. Chậm nhưng ít sai nhất.
+ Nôm na: dây chuyền sản xuất, mỗi công đoạn 1 người ký.
+ Ai dùng: task khó, multi-file, cần duyệt từng nấc.
 
-Pattern C — Adversarial review (chất nhất cho PR quan trọng):
-implementer (viết code) || reviewer fresh-chat (review diff + plan, không biết implementer nghĩ gì)
-→ reviewer không mang định kiến → bắt được lỗi implementer tự mù.
-Reviewer quá khắt → dặn "chỉ flag lỗi thực sự, đừng over-engineer".
-Ai dùng: PR quan trọng chạm auth/payment.
+ Pattern C — Adversarial review (chất nhất cho PR quan trọng):
+ implementer (viết code) || reviewer fresh-chat (review diff + plan, không biết implementer nghĩ gì)
+ → reviewer không mang định kiến → bắt được lỗi implementer tự mù.
+ Reviewer quá khắt → dặn "chỉ flag lỗi thực sự, đừng over-engineer".
+ Ai dùng: PR quan trọng chạm auth/payment.
 
-Pattern D — Isolation (sạch nhất cho task ồn):
-"đọc logs CI 2000 dòng + tóm tắt 10 dòng" → ném sang agent/task nền.
-Chat chính chỉ nhận 10 dòng, không bao giờ thấy 2000 dòng gốc.
-Ai dùng: task ồn, đọc nhiều mà nhớ ít.
+ Pattern D — Isolation (sạch nhất cho task ồn):
+ "đọc logs CI 2000 dòng + tóm tắt 10 dòng" → ném sang agent/task nền.
+ Chat chính chỉ nhận 10 dòng, không bao giờ thấy 2000 dòng gốc.
+ Nôm na: thuê người đi dọn rác, bạn không phải trực tiếp xúc.
+ Ai dùng: task ồn, đọc nhiều mà nhớ ít.
 ```
 
-### 7.2. Cost math — AI Credits multiplier (tính trước khi fan-out)
+### 7.2. Cost math — AI Credits (tính trước khi fan-out)
 
 > **Cách tính tiền hiện tại là AI Credits** (usage-based billing từ 01/06/2026):
 > **1 AI credit = 0,01 USD.** Chi phí 1 lượt = giá per-token của model × số token, quy đổi ra credits.
 > Model mạnh (Claude Opus, GPT-5.5) tốn nhiều credits. Model rẻ (GPT-5.4 mini) tốn ít.
 > **Code completion và next edit suggestions KHÔNG trừ AI Credits** — không giới hạn trên mọi plan trả phí.
-> Hồi AI Credits, model mạnh bị tính multiplier x1–x10. Giờ multiplier biến mất, nhưng model mạnh vẫn đắt hơn model rẻ.
-> Số liệu chính xác xem usage dashboard — công thức dưới để nhẩm.
+> Hồi premium requests, model mạnh bị tính multiplier x1–x10. Giờ multiplier biến mất, nhưng model mạnh vẫn đắt hơn model rẻ.
+> Số liệu chính xác xem usage dashboard — công thức dưới dùng để nhẩm.
 
 ```text
-Công thức nhẩm (đơn vị = AI credit, 1 credit = 0,01 USD):
-  cost_session ≈ số turns × mức credits của model đã chọn
-  total        ≈ N_sessions × cost_session + cost_gom (bạn đọc N summaries)
-  Lưu ý: plan trả phí dùng auto model selection được giảm 10%.
+ Công thức nhẩm (đơn vị = AI credit, 1 credit = 0,01 USD):
+   cost_session ≈ số turns × mức credits của model đã chọn
+   total        ≈ N_sessions × cost_session + cost_gom (bạn đọc N summaries)
+   Lưu ý: plan trả phí dùng auto model selection được giảm 10%.
 
-Ví dụ 1 — 3 sessions song song (2 explorer model rẻ + 1 implement model mạnh):
-  2 × (5 turns × model rẻ) + 1 × (10 turns × model mạnh) ≈ ~13 đơn vị ước tính.
-  Single-chat đọc 50 files trực tiếp: ~15 turns × model mạnh ≈ ~15 đơn vị + pollute context.
-  → Multi rẻ tương đương nhưng chat chính sạch → còn chỗ implement.
+ Ví dụ 1 — 3 sessions song song (2 explorer model rẻ + 1 implement model mạnh):
+   2 × (5 turns × model rẻ) + 1 × (10 turns × model mạnh) ≈ ~13 đơn vị ước tính.
+   Single-chat đọc 50 files trực tiếp: ~15 turns × model mạnh ≈ ~15 đơn vị + ô nhiễm context.
+   → Multi rẻ tương đương nhưng chat chính sạch → còn chỗ implement.
 
-Ví dụ 2 — Task 1 bước ("đọc file X"):
-  spawn agent: overhead + 1 turn. Hỏi trực tiếp: 1 turn.
-  → ĐỪNG spawn. Hỏi @workspace luôn.
+ Ví dụ 2 — Task 1 bước ("đọc file X"):
+   spawn agent: overhead + 1 turn. Hỏi trực tiếp: 1 turn.
+   → ĐỪNG spawn. Hỏi @workspace luôn.
 
-Ví dụ 3 — 5 coding agents overnight:
-  5 × (20 turns × model mạnh) = ~100 đơn vị ước tính + 5 PRs cần review sáng mai.
-  → Đắt tiền + đắt thời gian review. Đáng khi deadline dí, không đáng ngày thường.
+ Ví dụ 3 — 5 coding agents overnight:
+   5 × (20 turns × model mạnh) = ~100 đơn vị ước tính + 5 PRs cần review sáng mai.
+   → Đắt tiền + đắt thời gian review. Đáng khi deadline dí, không đáng ngày thường.
 
-Quy tắc:
-- N ≤ 3 concurrent (trần review của con người).
-- Task <5 files → hỏi trực tiếp, đừng spawn.
-- Luôn route việc dễ (tester, explorer) sang model rẻ trong frontmatter.
-- Check bill: github.com → Settings → Billing → Copilot usage. Hỏi "tuần rồi
-  sessions nào đáng, sessions nào phí?" mỗi thứ 6.
+ Quy tắc:
+ - N ≤ 3 concurrent (trần review của con người).
+ - Task <5 files → hỏi trực tiếp, đừng spawn.
+ - Luôn route việc dễ (tester, explorer) sang model rẻ trong frontmatter.
+ - Check bill: github.com → Settings → Billing → Copilot usage. Mỗi thứ 6 hỏi "tuần rồi
+   sessions nào đáng, sessions nào phí?"
 ```
 
 ```bash
@@ -489,6 +516,7 @@ Quy tắc:
 # Web: github.com/settings/copilot → Usage → AI Credits theo ngày/user.
 # CLI: gh copilot usage --since 2026-09-01  # tùy extension version
 # Verify: tuần rồi model nào ngốn credit nhất? Có session nào dùng model mạnh cho việc dễ (phí)?
+# Kỳ vọng: tester/explorer chạy model rẻ; model mạnh chỉ cho implement/reviewer.
 ```
 
 ---
@@ -503,8 +531,8 @@ Quy tắc:
 | "`@workspace` và custom agent là 1" | Sai. `@workspace` = hỏi nhanh tools mặc định. Agent = khóa tools + persona + chuẩn team |
 | "Cho agent full tools cho mạnh" | Sai. Read-only agents phải khóa `edit` — dù bạn dụ "sửa luôn" cũng không sửa được (đây là guard) |
 | "Chạy 5 sessions cho nhanh" | Sai. Trần 3 — quá là bill nổ + bạn review không xuể + conflict branch |
-| "Description viết dài cho kỹ" | Sai. >500 ký tự → auto-trigger kém. 1-2 câu nhiều từ khóa, chi tiết dồn body |
-| "Reviewer fresh-chat là phí" | Sai. Reviewer không biết implementer nghĩ gì → bắt lỗi mù mà implementer miss (pattern C) |
+| "Description viết dài cho kỹ" | Sai. >500 ký tự → auto-trigger kém. 1–2 câu nhiều từ khóa, chi tiết dồn body |
+| "Reviewer fresh-chat là phí" | Sai. Reviewer không biết implementer nghĩ gì → bắt được lỗi mù mà implementer miss (pattern C) |
 
 ---
 
@@ -515,20 +543,21 @@ Quy tắc:
 ### 9.1. Walkthrough: agent đầu tiên tới parallel (30 phút)
 
 ```text
-Bước 1 (10 phút): mkdir -p .github/agents, copy 2 agents (explorer + tester, mục 5).
-  Commit + push. Mở Chat mới, gọi: "dùng agent explorer tìm files liên quan tới
-  [module bạn đang làm]". Kiểm tra: summary ≤30 dòng? Có lan man?
-  # Verify: summary gọn? Không sửa code?
+ Bước 1 (10 phút): mkdir -p .github/agents, copy 2 agents (explorer + tester, mục 5).
+   Commit + push. Mở Chat mới, gọi: "dùng agent explorer tìm files liên quan tới
+   [module bạn đang làm]". Kiểm tra: summary ≤30 dòng? Có lan man?
+   # Verify: summary gọn? Không sửa code?
 
-Bước 2 (10 phút): test parallel research:
-  Mở 2 Chat views. Chat 1: explorer map auth flow. Chat 2: explorer map DB schema.
-  Gom 2 summaries vào chat 3 → viết plan.
-  # Verify: chat 3 sạch (chỉ summaries, không ồn)?
+ Bước 2 (10 phút): test parallel research:
+   Mở 2 Chat views. Chat 1: explorer map auth flow. Chat 2: explorer map DB schema.
+   Gom 2 summaries vào chat 3 → viết plan.
+   # Verify: chat 3 sạch (chỉ summaries, không ồn)?
 
-Bước 3 (10 phút): test chain + reviewer:
-  "dùng agent planner viết plan cho [task], rồi dùng agent security-reviewer
-  review plan đó". Duyệt plan. Rồi: Agent mode implement → tester chạy focused tests.
-  # Verify: mỗi stage có gate duyệt? Tester báo PASS/FAIL + lệnh reproduce?
+ Bước 3 (10 phút): test chain + reviewer:
+   "dùng agent planner viết plan cho [task], rồi dùng agent security-reviewer
+   review plan đó". Duyệt plan. Rồi: Agent mode implement → tester chạy focused tests.
+   # Verify: mỗi stage có gate duyệt? Tester báo PASS/FAIL + lệnh reproduce?
+ # Kỳ vọng cuối: 3 bước chạy xong, 1 plan được duyệt, 1 task implement + test xanh.
 ```
 
 ### 9.2. Khi nào KHÔNG dùng custom agent
@@ -537,7 +566,7 @@ Bước 3 (10 phút): test chain + reviewer:
 
 | Tình huống | Chọn | Vì sao | Ai dùng lúc nào |
 |---|---|---|---|
-| "Deploy theo checklist" | Prompt file `/deploy` | Knowledge, không cần persona riêng | Việc lặp đơn giản (bài 05) |
+| "Deploy theo checklist" | Skill `deploy` (2026) hoặc prompt file `/deploy` (legacy) | Knowledge, không cần persona riêng | Việc lặp đơn giản (bài 05) |
 | "Đọc file X giải thích" | `@workspace` trực tiếp | 1 turn, spawn phí overhead | Task 1 file |
 | "Hỏi nhanh giữa task" | Chat inline (`Ctrl+I`) | Giữ context, không cần session mới | Fix nhỏ giữa dòng |
 | "Research 30 files" | Explorer agent | Ồn, cần cô lập | Research lớn |
@@ -579,9 +608,9 @@ Tính theo công thức mục 7.2: có đáng không? Thử lại với 1 sessio
 
 *Mỗi dòng là một bài nên mở khi cần. Tra cứu nhanh, không cần đọc từ đầu.*
 
-- **Bài 03 — Instructions, Memory, Rules:** `muse-instructions.md` vs agent body — cái nào cho facts, cái nào cho persona.
+- **Bài 03 — Instructions, Memory, Rules:** `copilot-instructions.md` vs agent body — cái nào cho facts, cái nào cho persona.
 - **Bài 04 — Chat commands:** `@workspace`, `/`, `#file`, model picker dùng kèm agents.
-- **Bài 05 — Prompt files:** prompt file 1 bước vs custom agent multi-bước — khi nào nâng cấp.
+- **Bài 05 — Agent Skills & Custom Instructions:** skill `SKILL.md` (chuẩn 2026) 1 bước vs custom agent multi-bước — khi nào nâng cấp (prompt files `.prompt.md` = legacy Local).
 - **Bài 07 — Policies & guardrails:** khóa `tools` agent + MCP allowlist + content exclusion (defense in depth).
 - **Bài 08 — MCP:** agents gọi MCP tools (github, postgres) — prune servers để agents chọn đúng.
 - **Bài 10 — Modes & permissions:** Ask/Edit/Agent modes + tool approval khi agents chạy.

@@ -1,8 +1,8 @@
-# 14 — Models: Chọn Model Đúng (GPT-5.x / Claude / Gemini / o-series Trên Copilot)
+# 14 — Models: Chọn Model Đúng (GPT-5.x / Claude / Gemini Trên Copilot)
 
-> **Bài 14 series 01.** · **Dành cho:** dev đang chọn model trong picker mỗi ngày, và tech lead/admin muốn gate model + kiểm soát AI Credits cho team.
-> **Vấn đề:** model mạnh nhất không phải lúc nào cũng là model đúng — chọn sai là đốt AI Credits hoặc refactor 3 lần vẫn sai.
-> **Đọc xong:** chọn đúng model cho từng task, hiểu cách tính tiền AI Credits (thay cho "AI Credits multiplier"), cấu hình BYOK/policy gate model cho team, và không trả model đắt cho việc model rẻ làm được.
+> **Bài 14 series 01.** · **Dành cho:** dev chọn model trong picker mỗi ngày + tech lead/admin muốn gate model và kiểm soát AI Credits cho team.
+> **Vấn đề:** model mạnh nhất không phải lúc nào cũng là model đúng — chọn sai là đốt credits hoặc refactor 3 lần vẫn sai.
+> **Đọc xong:** chọn đúng model cho từng task, hiểu cách tính AI Credits, cấu hình BYOK/policy gate model cho team, và không trả tiền model đắt cho việc model rẻ làm được.
 > **Thời gian:** ~40 phút.
 
 ## Mục lục
@@ -23,33 +23,38 @@
 
 ## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
 
-Section này trả lời: 5 khái niệm lõi của bài này (cộng 4 khái niệm bổ sung: AI Credits, auto model selection, auto tier, deprecation) nghĩa là gì, và tự kiểm chứng từng cái ở đâu?
+Section này trả lời: 5 khái niệm lõi (cộng 4 khái niệm bổ sung: AI Credits, auto model selection, auto tier, deprecation) nghĩa là gì, và tự kiểm chứng từng cái ở đâu?
 
-Mỗi dòng có đủ 3 lớp: **hiểu nôm na**, **ví dụ đời thường**, **ví dụ kỹ thuật thật** — cộng cột **verify** để bạn tự kiểm tra.
+Mỗi dòng đủ 3 lớp: **hiểu nôm na**, **ví dụ đời thường**, **ví dụ kỹ thuật thật** — kèm cột **verify** để bạn tự kiểm tra.
 
 | Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
 |---|---|---|---|---|
-| **Model picker** | Nút chọn "bộ não" cho từng chat (rẻ/đắt khác nhau). | Như chọn xe: xe đạp (mini) đi chợ, xe tải (flagship) chở nhà. | Chat view → dropdown góc dưới → `GPT-5.x / Claude Sonnet / Gemini Pro / mini`. | Đổi model → chat mới hiện tên model mới trên header. |
-| **Premium request multiplier** | Hệ số nhân tiền kiểu cũ: model đắt tốn gấp nhiều lần model rẻ. Từ 01/06/2026 chuyển sang AI Credits (mục 4). | Như giá điện giờ cao điểm ×3 — bật điều hòa flagship là hóa đơn bốc. | Mini ×0–0.5, Mid ×1, Flagship ×2–3, Reasoning ×3–5 (khung, tra billing exact). | Billing → Copilot usage xem % đã dùng + tốc độ hết tháng. |
-| **Flagship (GPT-5.x / Opus-tier)** | Bộ não mạnh nhất, hợp việc khó mơ hồ. | Như giáo sư: hỏi khó mới cần, hỏi đường thì phí. | Thiết kế migrate auth 5 files, debug stuck 1h. | Task khó: flagship 1 lần đúng; mini thử 3 lần vẫn sai. |
-| **Reasoning (o-series)** | Bộ não nghĩ lâu, hợp toán/logic/race khó. | Như ngồi thiền 30 phút để giải toán khó — đừng nhờ mua rau. | Tối ưu query, race condition, thuật toán. | Latency cao rõ (chờ lâu) nhưng chain-of-thought dài. |
+| **Model picker** | Nút chọn "bộ não" cho từng chat — model rẻ/đắt khác nhau. | Như chọn xe: xe đạp (mini) đi chợ, xe tải (flagship) chở nhà. | Chat view → dropdown góc dưới → `GPT-5.x / Claude Sonnet / Gemini Pro / mini`. | Đổi model → chat mới hiện tên model mới trên header. |
+| **Premium request multiplier** | Cách nghĩ cũ về tiền: model đắt tốn gấp nhiều lần model rẻ. Từ 01/06/2026 chuyển sang AI Credits (mục 4). | Như giá điện giờ cao điểm ×3 — bật điều hòa flagship là hóa đơn bốc. | Mini ×0–0.5, Mid ×1, Flagship ×2–3, Reasoning ×3–5 (khung, tra billing exact). | Billing → Copilot usage: xem % đã dùng + tốc độ hết tháng. |
+| **Flagship (GPT-5.x / Opus-tier)** | Bộ não mạnh nhất, hợp việc khó, mơ hồ. | Như giáo sư: hỏi khó mới cần, hỏi đường thì phí. | Thiết kế migrate auth 5 files, debug stuck 1h. | Task khó: flagship 1 lần đúng; mini thử 3 lần vẫn sai. |
+| **Reasoning (o-series)** | Bộ não nghĩ lâu, hợp toán/logic/race khó. | Như ngồi thiền 30 phút giải toán khó — đừng nhờ đi mua rau. | Tối ưu query, race condition, thuật toán. | Chờ lâu rõ (latency cao) nhưng chain-of-thought dài. |
 | **BYOK / Model gating** | Công ty tự mang chìa khóa + khóa tủ: ai được dùng model nào. | Như bố giữ két: con nhỏ chỉ lấy ngăn mini, anh lớn mới mở ngăn flagship. | Interns chỉ mini+mid, seniors mới flagship (Org Settings → Policies). | Mở picker → model bị cấm phải không hiện. |
-| **AI Credits** | Đơn vị tính tiền của Copilot từ 01/06/2026 — 1 credit = 0,01 USD. | Như thẻ nạp xăng: xài theo lít, không theo số lần bơm. | Chi phí 1 lượt = giá per-token của model × số token, quy đổi ra credits. | `github.com/settings/copilot` xem credits đã dùng và tốc độ cháy. |
-| **Auto model selection** | Để Copilot tự chọn model cho mỗi lượt thay vì bạn bấm picker. | Như taxi tự chọn tuyến: avoids đường đang kẹt, bạn không phải lái. | 2 hệ thống: health thời gian thực + đánh giá độ phức tạp task → route model. | Trong Chat để model ở "Auto" → terminal/chat in ra model đã dùng. |
+| **AI Credits** | Đơn vị tính tiền của Copilot từ 01/06/2026 — 1 credit = $0.01. | Như thẻ nạp xăng: xài theo lít, không theo số lần bơm. | Chi phí 1 lượt = giá per-token của model × số token, quy đổi ra credits. | `github.com/settings/copilot`: xem credits đã dùng và tốc độ cháy. |
+| **Auto model selection** | Để Copilot tự chọn model cho mỗi lượt, thay vì bạn bấm picker. | Như taxi tự chọn tuyến: né đường kẹt, bạn không phải lái. | 2 hệ thống: health thời gian thực + đánh giá độ phức tạp task → route model. | Để model ở "Auto" → terminal/chat in ra model đã dùng. |
 | **Auto tier** | 3 hướng route trong auto selection: Efficiency (rẻ), Balance (cân), Intelligence (đẹp). | Như chọn chế độ quạt: Eco / Auto / Turbo — cùng cái quạt, khác mục tiêu. | `efficiency` / `balance` / `intelligence` (ra mắt 14/09/2026). | Đổi tier → bill vẫn tính theo model auto chọn, không đổi giá (mục 3.1). |
-| **Deprecation** | Model bị gỡ khỏi Copilot — picker sẽ không còn, phải đổi sang bản thay thế. | Như siêu thị ngưng bán loại nước mắm cũ → nhãn mới thay vào chỗ đó. | 10/02/2026: Gemini 3.5/3.6 Flash, Kimi K2.7 Code, Claude Opus 4.7 bị deprecated. | Mở picker tìm model cũ → không thấy, thấy bản thay thế (mục 2.6). |
+| **Deprecation** | Model bị gỡ khỏi Copilot — picker không còn, phải đổi sang bản thay thế. | Như siêu thị ngưng bán nước mắm cũ → nhãn mới thay vào chỗ đó. | 02/10/2026: Gemini 3.5/3.6 Flash, Kimi K2.7 Code, Claude Opus 4.7 bị deprecated. | Mở picker tìm model cũ → không thấy, thấy bản thay thế (mục 2.6). |
+
+> **Ghi chú plan + credits (tra lại trước khi trả tiền):** 1 AI credit = $0.01.
+> Gói kèm: Pro $10 → 1.500 · Pro+ $39 → 7.000 · Max $100 → 20.000 ·
+> Business $19/seat → 1.900/seat · Enterprise $39/seat → 3.900/seat.
+> Paid usage policy (chi vượt credit kèm theo): **mặc định BẬT** — muốn cap thì tắt.
 
 ---
 
 ## 1. Vì sao chọn model? (why)
 
-Section này trả lời: chọn model ảnh hưởng tới tiền và chất lượng thế nào, và quy tắc vàng nào quyết định model nào?
+Section này trả lời: chọn model ảnh hưởng tới tiền và chất lượng thế nào, và quy tắc vàng nào quyết model nào?
 
 Model mạnh nhất không phải lúc nào cũng là model đúng. Mỗi task có 3 chiều cần cân: **chất lượng suy luận — tốc độ — chi phí (AI Credits)**. Dùng sai chiều là mất credits hoặc mất thời gian:
 
 - Dùng model reasoning đắt sửa typo → tốn gấp 5–10 lần mà kết quả y hệt model rẻ.
-- Dùng model mini thiết kế kiến trúc → thiếu depth, refactor 3 lần vẫn sai, tổng credits cao hơn 1 lần model mạnh đúng ngay.
-- Không hiểu cách tính tiền → shock khi credit tháng hết sau 1 tuần agent mode (mục 4).
+- Dùng model mini thiết kế kiến trúc → thiếu depth, refactor 3 lần vẫn sai, tổng credits cao hơn chạy 1 lần model mạnh đúng ngay.
+- Không hiểu cách tính tiền → shock khi credits tháng hết sau 1 tuần agent mode (mục 4).
 
 Nguyên tắc vàng:
 
@@ -86,7 +91,7 @@ Giải thích từng bước:
 4. **F → G:** Docs, PR description, review wording bị GPT chê "quá máy" → đổi Claude.
 5. **H → I:** Thuật toán/query/race cần thinking dài → o-series, chấp nhận chờ lâu.
 6. **Mặc định J:** Autocomplete, rename, CRUD, test, explore 5 hướng song song → mini rẻ nhất.
-7. **K → L:** Stuck thì leo thang, không nhảy cóc mini→reasoning (đốt credits).
+7. **K → L:** Stuck thì leo thang từng nấc, không nhảy cóc mini→reasoning (đốt credits).
 8. **M:** Ghi 1 dòng team wiki để lần sau route đúng ngay.
 
 > ✅ **Kỳ vọng thấy gì:** đổi model ở picker → header chat hiện tên mới. Billing usage sau 1 tuần cho thấy flagship <30% requests (nếu >50% là routing hỏng).
@@ -98,7 +103,7 @@ Giải thích từng bước:
 
 ## 2. Bản đồ models trên Copilot 2026
 
-Section này trả lời: tháng 10/2026 Copilot có những model nào, model nào vừa bị gỡ, và phân loại theo vai trò để route nhanh là thế nào?
+Section này trả lời: tháng 10/2026 Copilot có những model nào, model nào vừa bị gỡ, và phân loại theo vai trò để route nhanh thế nào?
 
 > Danh sách model đổi theo quý — tra model picker thực tế, đừng học thuộc lòng.
 > Bảng dưới là khung phân loại để bạn route đúng, không phải catalog bất biến.
@@ -156,28 +161,28 @@ tóm tắt, classify) + fan-out: 5 prompt explore song song rẻ hơn 1 flagship
 cover rộng hơn. Lưu ý: context + reasoning yếu hơn — đừng giao kiến trúc.
 ```
 
-### 2.6. Danh sách model 10/2026 + model ngừng hỗ trợ (10/02/2026)
+### 2.6. Danh sách model 10/2026 + model ngừng hỗ trợ (02/10/2026)
 
 Section này trả lời: tên model chính xác đang có trên picker, và 4 model nào vừa bị gỡ để bạn đừng dùng nữa?
 
 ```text
-# Danh sách model trên Copilot — tháng 10/2026 (tra picker thực tế, đổi theo quý)
+# Danh sach model tren Copilot — thang 10/2026 (tra picker thuc te, doi theo quy)
 # OpenAI: GPT-5 mini, GPT-5.3-Codex, GPT-5.4, GPT-5.4 mini, GPT-5.4 nano
-#   (Codex VS Code ext only, Pro+ only), GPT-5.5, GPT-5.6 Luna / Sol / Terra,
+#   (Codex chi co tren VS Code ext, Pro+ only), GPT-5.5, GPT-5.6 Luna / Sol / Terra,
 #   GPT-6 Astra, GPT-6 Luna, GPT-6 Sol, GPT-6.1 Sol.
 # Anthropic: Claude Fable 5, Claude Fable 5.1, Claude Haiku 4.5,
 #   Claude Opus 4.5 / 4.6 / 4.7 / 4.8 (+ fast mode preview) / 5 / 5.5,
 #   Claude Sonnet 4.5 / 4.6 / 5 / 5.5.
 # Google: Gemini 3.1 Pro (public preview), Gemini 3.5 / 3.6 / 3.7 / 3.8 Flash.
 # Microsoft: MAI-Code-1-Flash, MAI-Code-1.1-Flash, Raptor mini (fine-tuned GPT-5 mini).
-# Other: Kimi K2.7 Code, Kimi K3, Grok 4.5, Grok 4.6 (Grok 4.7 thấy trong bảng giá — cần verify).
-# Lưu ý: roster 10/2026 không có dòng "o-series" riêng — lớp reasoning trong bài
-#   ám chỉ nhóm model mạnh nhất (GPT-5.5 / GPT-6.x / Claude Opus 5.x). (cần verify)
+# Other: Kimi K2.7 Code, Kimi K3, Grok 4.5, Grok 4.6 (Grok 4.7 thay trong bang gia — can verify).
+# Luu y: roster 10/2026 khong co dong "o-series" rieng — lop reasoning trong bai
+#   am chi nhom model manh nhat (GPT-5.5 / GPT-6.x / Claude Opus 5.x). (can verify)
 ```
 
-Model deprecated ngày **02/10/2026** — tất cả trải nghiệm Copilot:
+4 model bị deprecated ngày **02/10/2026** — áp mọi trải nghiệm Copilot:
 
-| Model | Deprecated | Replacement |
+| Model | Deprecated | Thay bằng |
 |---|---|---|
 | Gemini 3.5 Flash | 2026-10-02 | Gemini 3.8 Flash |
 | Gemini 3.6 Flash | 2026-10-02 | Gemini 3.8 Flash |
@@ -187,79 +192,81 @@ Model deprecated ngày **02/10/2026** — tất cả trải nghiệm Copilot:
 Sự thật model đáng nhớ (dùng khi review bill + chọn model):
 
 ```text
-# GPT-6 Astra: GA 04/09/2026 — coding tự chủ dài hơi, tự validate đầu ra.
-# GPT-6.1 Sol: GA 29/09/2026 — thiên về agentic/terminal, ít token + ít bước hơn
-#   mỗi task (theo GitHub).
-# Giá per-token (standard context, $/M tokens): input 0,20 USD (MAI-Code-1.1-Flash,
+# GPT-6 Astra: GA 04/09/2026 — coding tu chu dai hoi, tu validate dau ra.
+# GPT-6.1 Sol: GA 29/09/2026 — thien ve agentic/terminal, it token + it buoc hon
+#   moi task (theo GitHub).
+# Gia per-token (standard context, $/M tokens): input 0,20 USD (MAI-Code-1.1-Flash,
 #   GPT-5.6 Luna) → 5,00 USD (GPT-5.5, Claude Opus 4.8, Claude Opus 5);
-#   output 1,20 USD → 30,00 USD (GPT-5.5 cao nhất; Claude ở mức 25 USD).
-#   Chênh lệch ~25× giữa 2 đầu bảng.
-# Ví dụ cache: Claude Opus 5 đọc cache 0,50 USD/M, ghi cache 6,25 USD/M (12,5×).
-# "Goldeneye": model thấy trong log Reddit dưới Auto — chỉ là lời kể, KHÔNG có
+#   output 1,20 USD → 30,00 USD (GPT-5.5 cao nhat; Claude o muc 25 USD).
+#   Chenh lech ~25x giua 2 dau bang.
+# Vi du cache: Claude Opus 5 doc cache 0,50 USD/M, ghi cache 6,25 USD/M (12,5x).
+# "Goldeneye": model thay trong log Reddit duoi Auto — chi la loi ke, KHONG co
 #   trong docs GitHub (UNVERIFIED).
-# Evaluation models: auto có thể trả về model thử nghiệm cho người dùng plan cá
-#   nhân, hiện theo tên bí danh; GitHub nói có thể kém hơn với prompt liên quan
-#   bảo mật; tắt được trong tab AI controls (chỉ cá nhân).
-# Free/Student: chỉ auto model selection, không có model picker tay.
+# Evaluation models: auto co the tra ve model thich nghiem cho user plan ca nhan,
+#   hien theo ten bi danh; GitHub noi co the kem hon voi prompt lien quan
+#   bao mat; tat duoc trong tab AI controls (chi ca nhan).
+# Free/Student: chi co auto model selection, khong co model picker tay.
 ```
 
 ---
 
 ## 3. Model picker: đổi ở đâu, ảnh hưởng gì
 
-Section này trả lời: đổi model ở 3 chỗ nào, nếu để Auto thì chuyện gì xảy ra với 3 tier, và 3 quy tắc giữ nguyên khi đổi?
+Section này trả lời: đổi model ở 3 chỗ nào, để Auto thì chuyện gì xảy ra với 3 tier, và 3 quy tắc giữ nguyên khi đổi?
 
 ```bash
-# Đổi model (3 chỗ):
-# 1. Chat view → model picker (dropdown góc dưới) → chọn mỗi chat mới.
-# 2. Inline completions: model riêng (settings: github.copilot.completions model).
-# 3. Agent coding (github.com assign issue): model chọn lúc tạo job.
+# doi model (3 cho):
+# 1. Chat view → model picker (dropdown goc duoi) → chon moi chat moi.
+# 2. Inline completions: model rieng (settings: github.copilot.completions model).
+# 3. Agent coding (github.com assign issue): model chon luc tao job.
+# Verify: sau khi doi, header chat moi phai hien ten model moi.
 ```
 
 ### 3.1. Auto model selection + 3 tier (efficiency / balance / intelligence)
 
-Để "Auto" là bạn giao quyền chọn model cho Copilot. Hiểu 2 khối dưới đây để không bất ngờ khi bill về.
+Để "Auto" là bạn giao quyền chọn model cho Copilot. Hiểu 2 khối dưới để không bất ngờ khi bill về.
 
 ```text
-# Auto model selection — 2 hệ thống chạy song song:
-# 1. Sức khoẻ/availability thời gian thực → tránh model đang gặp sự cố.
-# 2. Đánh giá độ phức tạp của task → route tới model tối ưu.
-# Route theo ranh giới cache tự nhiên (đổi model giữa chừng phiên tốn hơn là lợi).
-# Không phụ thuộc ngôn ngữ lập trình — route theo task, không theo ngôn ngữ.
-# GA ở: Copilot Chat trên github.com, IDE được hỗ trợ, Copilot CLI,
+# Auto model selection — 2 he thong chay song song:
+# 1. Suc khoe/availability thoi gian thuc → tranh model dang gap su co.
+# 2. Danh gia do phuc tap cua task → route toi model tot nhat.
+# Route theo ranh gioi cache tu nhien (doi model gia duoi phien ton hon la loi).
+# Khong phu thuoc ngon ngu lap trinh — route theo task, khong theo ngon ngu.
+# GA o: Copilot Chat tren github.com, IDE duoc ho tro, Copilot CLI,
 #   Copilot cloud agent, Copilot app.
-# Tôn trọng plan + policy org (allowlist, data residency, FedRAMP, eval-model policy).
+# Ton trong plan + policy org (allowlist, data residency, FedRAMP, eval-model policy).
 ```
 
 ```text
-# 3 tier (ra mắt 14/09/2026) — chọn hướng route trong auto selection:
-# - Efficiency:   ưu tiên chi phí.
-# - Balance:      cân chi phí + chất lượng + độ trễ.
-# - Intelligence: ưu tiên chất lượng.
-# CÙNG một model pool ở cả 3 tier — tier đổi hướng route, KHÔNG đổi danh sách
-#   model, không đổi giá.
-# Tiền vẫn tính theo model auto chọn, KHÔNG phụ thuộc tier.
-# Plan trả phí vẫn được giảm 10% khi dùng auto model selection.
-# Surface hỗ trợ tier: VS Code, Copilot CLI, GitHub Copilot app (đang rollout).
-# GitHub chưa document đường dẫn UI chọn tier + chưa có policy tier cấp org
-#   (cần verify, 10/2026).
+# 3 tier (ra mat 14/09/2026) — chon huong route trong auto selection:
+# - Efficiency:   uu tien chi phi.
+# - Balance:      can chi phi + chat luong + do tre.
+# - Intelligence: uu tien chat luong.
+# CUNG mot model pool o ca 3 tier — tier doi huong route, KHONG doi danh sach
+#   model, khong doi gia.
+# Tien van tinh theo model auto chon, KHONG phu thoc tier.
+# Plan tra phis van duoc giam 10% khi dung auto model selection.
+# Surface ho tro tier: VS Code, Copilot CLI, GitHub Copilot app (dang rollout).
+# GitHub chua document duong dan UI chon tier + chua co policy tier cap org
+#   (can verify, 10/2026).
 ```
 
 ### 3.2. Quy tắc đổi model tay (giữ 3 điều)
 
 ```text
-# Quy tắc đổi model (giữ 3 điều):
-# 1. Đổi theo PHASE, không đổi giữa chừng 1 phase (đỡ mất context/cache).
-#    plan (mạnh) → implement (rẻ) → stuck thì leo lên (mục 7).
-# 2. Mỗi chat mới = cơ hội chọn lại (đừng để flagship dính từ chat cũ sang typo mới).
-# 3. Sau 1 tuần: dashboard model nào ngốn % (bài 13) → adjust default team.
+# Quy tac doi model (giu 3 dieu):
+# 1. DOI theo PHASE, khong doi gia duoi 1 phase (do mat context/cache).
+#    plan (manh) → implement (re) → stuck thi leo len (muc 7).
+# 2. Moi chat moi = co hoi chon lai (dung de flagship di can tu chat cu sang typo moi).
+# 3. Sau 1 tuan: dashboard model nao ngon % (bai 13) → adjust default team.
+# Verify: chay 1 task plan → implement voi 2 tier khac nhau, so credits + quality.
 ```
 
 ```jsonc
-// .vscode/settings.json — default gợi ý cho team (commit, copy-paste khung):
+// .vscode/settings.json — default goi y cho team (commit, copy-paste khung):
 {
-  // Model completions rẻ cho inline (tiết kiệm credits):
-  // "github.copilot.chat.model": "gpt-mini-tier", // tên exact tra picker thực tế
+  // Model completions re cho inline (tiet kiem credits):
+  // "github.copilot.chat.model": "gpt-mini-tier", // ten exact tra picker thuc te
   // "github.copilot.completions.model": "gpt-mini-tier"
 }
 ```
@@ -277,18 +284,20 @@ Section này trả lời: tiền tính ra sao kể từ 01/06/2026, vì sao "mul
 > (usage-based billing từ 01/06/2026) — đọc mọi chữ "quota/multiplier" bên dưới
 > theo nghĩa credits.
 
-### 4.1. Vì sao quota hết nhanh hơn bạn nghĩ
+### 4.1. Vì sao credits cháy nhanh hơn bạn nghĩ
 
 ```text
-Từ 01/06/2026 Copilot tính tiền theo AI Credits — "AI Credits multiplier"
-là tên mechanism trước đó, cùng cách nghĩ "model đắt tốn gấp nhiều lần model rẻ":
-- 1 AI credit = 0,01 USD. Chi phí 1 lượt = giá per-token của model × số token.
-- Model flagship/reasoning giá per-token cao gấp nhiều lần mini-tier → cùng 1 câu
-  hỏi tốn nhiều credits hơn.
-- Agentic = mỗi step 1 lượt gọi → agent 50 steps × flagship = credits bốc hơi.
-- Code completion + next edit suggestions KHÔNG trừ credits (không giới hạn plan trả phí).
-- Dùng auto model selection được giảm 10% (mục 3.1) → cùng task rẻ hơn 10%.
-- Không hiểu cách tính → hết credit tuần 1, 3 tuần còn lại phải dùng model rẻ.
+Tu 01/06/2026 Copilot tinh tien theo AI Credits — "AI Credits multiplier"
+la ten mechanism truoc do, cung cach nghi "model dat ton gap nhieu lan model re":
+- 1 AI credit = $0.01. Chi phi 1 luot = gia per-token cua model × so token.
+- Model flagship/reasoning gia per-token cao gap nhieu lan mini-tier → cung 1 cau
+  hoi ton nhieu credits hon.
+- Agentic = moi step 1 luot goi → agent 50 steps × flagship = credits boc hơi.
+- Code completion + next edit suggestions KHONG tru credits (khong gioi han plan tra phis).
+- Dung auto model selection duoc giam 10% (muc 3.1) → cung task re hon 10%.
+- Khong hieu cach tinh → het credit tuan 1, 3 tuan con lai phai dung model re.
+# Verifying: github.com/settings/copilot → ghi % credits da dung + ngay hien tai.
+# Ky vong: tai toc do hien tai, xem ra cuoi thang con bao nhieu credits.
 ```
 
 ### 4.2. Bảng multiplier minh họa (khung — tra docs hiện hành)
@@ -307,20 +316,21 @@ là tên mechanism trước đó, cùng cách nghĩ "model đắt tốn gấp nh
 > Bảng trên chỉ là cách ước lượng tương đối giữa các tier. Tier auto
 > (efficiency/balance/intelligence) KHÔNG đổi giá — xem mục 3.1.
 
-### 4.3. Giữ quota sống hết tháng (thực hành)
+### 4.3. Giữ credits sống hết tháng (thực hành)
 
 ```text
-1. Default chat = tier giữa/rẻ. Flagship chỉ đích danh khi checklist mục 2.2 đủ 3 ✓.
-2. Agent mode + flagship là combo đốt credits nhanh nhất → agent thì tier giữa trước,
-   stuck mới leo (mục 7).
-3. Explore fan-out bằng mini (5 prompt rẻ) thay vì nhét 20 files vào flagship chat.
-4. Cuối tuần: dashboard AI credits by model (bài 13) → model nào > 50% thì gate.
+1. Default chat = tier gia/re. Flagship chi dich dan khi checklist muc 2.2 du 3 ✓.
+2. Agent mode + flagship la combo dot credits nhanh nhat → agent thi tier gia truoc,
+   stuck moi leo (muc 7).
+3. Explore fan-out bang mini (5 prompt re) thay vi nhét 20 files vao flagship chat.
+4. Cuoi tuan: dashboard AI credits by model (bai 13) → model nao > 50% thi gate.
 ```
 
 ```bash
-# Kiểm tra credits còn bao nhiêu (đừng đoán — xem thật):
+# Kiem tra credits con bao nhieu (dung doan — xem that):
 # VS Code → Copilot status bar / github.com → Settings → Billing → Copilot usage
-# → ghi: đã dùng ?% AI credits, ngày ?/30. Tốc độ này có sống hết tháng không?
+# → ghi: da dung ?% AI credits, ngay ?/30. Toc do nay co song het thang khong?
+# Verify: neun % da dung tren 60% ma van tu tuan thu 2 → dat model thap lai.
 ```
 
 ---
@@ -337,35 +347,36 @@ Section này trả lời: admin gate model bằng những công tắc nào, veri
 
 ```text
 # Checklist admin gate model (github.com → Org/Ent Settings → Copilot → Policies):
-[ ] Model allowlist: team nào × models nào (đừng all-access ngày đầu)
-[ ] Flagship: bật cho seniors/leads, tắt cho interns/bot accounts
-[ ] Reasoning tier: tắt default, mở theo request (đắt + chậm, ít người cần)
-[ ] Review hàng tháng: dashboard by-model (bài 13) → siết/nới 1 model
-[ ] BYOK (nếu có): key rotation lịch + endpoint region đúng compliance
-[ ] Paid usage policy (chi vượt credit kèm theo): MẶC ĐỊNH là BẬT.
-    Muốn cap → tắt đi; user hết limit gửi yêu cầu tăng budget, bạn duyệt
-    hoặc từ chối trong settings (GA Business/Enterprise usage-based billing,
-    trừ enterprise managed users — 09/2026).
-[ ] Managed settings: "model" (model mặc định) + "autoTier" (tier route mặc định,
-    xem mục 3.1) — 2 khóa liên quan trực tiếp tới bill.
+[ ] Model allowlist: team nao × models nao (dung all-access ngay dau)
+[ ] Flagship: bat cho seniors/leads, tat cho interns/bot accounts
+[ ] Reasoning tier: tat default, mo theo request (dat + cham, it nguoi can)
+[ ] Review hang thang: dashboard by-model (bai 13) → siét/nới 1 model
+[ ] BYOK (neu co): key rotation lich + endpoint region dung compliance
+[ ] Paid usage policy (chi vuot credit kem theo): MAC DINH la BAT.
+    Muon cap → tat di; user het limit gui yeu cau tang budget, ban duyet
+    hoach tu choi trong settings (GA Business/Enterprise usage-based billing,
+    tru enterprise managed users — 09/2026).
+[ ] Managed settings: "model" (model mac dinh) + "autoTier" (tier route mac dinh,
+    xem muc 3.1) — 2 khoa lien quan truc tiep toi bill.
 ```
 
 ```bash
-# Verify policy có hiệu lực (máy dev, làm 1 lần):
-# 1. Mở model picker → model bị cấm phải KHÔNG hiện (hiện là policy hỏng).
-# 2. Hỏi admin: "team tôi được models nào?" → đối chiếu picker (lệch thì báo).
+# Verify policy co hieu luc (may dev, lam 1 lan):
+# 1. Mo model picker → model bi cam phai KHONG hien (hien la policy hong).
+# 2. Ho admin: "team toi duoc models nao?" → doi chieu picker (lech thi bao).
+# Verify xong: picker chi con model team duoc phep.
 ```
 
 ```text
-# Template đề xuất model cho team mới (paste vào team wiki):
-# Default: mid-tier · Agent: mid-tier · Flagship: khi checklist 3✓ (mục 2.2)
-# Mini: autocomplete + explore · Reasoning: debug stuck > 1h mới mở
-# Review quota mỗi thứ 2 (15 phút, bài 13 mục 7.3).
+# Template de xuat model cho team moi (paste vao team wiki):
+# Default: mid-tier · Agent: mid-tier · Flagship: khi checklist 3✓ (muc 2.2)
+# Mini: autocomplete + explore · Reasoning: debug stuck > 1h moi mo
+# Review quota moi thu hai (15 phut, bai 13 muc 7.3).
 
-# BYOK theo surface (feature matrix 10/2026): Visual Studio ✓ đầy đủ;
-#   VS Code / JetBrains / Eclipse / Xcode một phần; NeoVim ✗.
-# Hàng rào permissions trong managed settings: deny > ask > allow
-#   (deny luôn thắng; "ask" không bị bypass/YOLO mode làm thỏa).
+# BYOK theo surface (feature matrix 10/2026): Visual Studio ✓ day du;
+#   VS Code / JetBrains / Eclipse / Xcode mot phan; NeoVim ✗.
+# Hang rao permissions trong managed settings: deny > ask > allow
+#   (deny luan thang; "ask" khong bi bypass/YOLO mode lam thoa).
 ```
 
 ---
@@ -389,11 +400,13 @@ Section này trả lời: với 10 nhóm task thường gặp nhất thì model 
 
 > ✅ **Kỳ vọng thấy gì:** sau 1 tuần chạy bảng này, billing cho thấy mini/mid chiếm >70% requests, flagship <30% — credits sống hết tháng.
 
-### Hiểu nhầm thường gặp (file 14)
+### Hiểu nhầm thường gặp (bài 14)
 
-- **Hiểu nhầm:** "Model mạnh nhất là tốt nhất cho mọi task." → **Thật ra:** flagship sửa typo cũng ra chữ y hệt mini mà tốn ×3. Verify: cùng task typo chạy mini vs flagship, so output + thời gian.
-- **Hiểu nhầm:** "Tên model học thuộc 1 lần dùng mãi." → **Thật ra:** tên đổi theo quý. Luôn copy exact từ picker, đừng gõ từ trí nhớ.
-- **Hiểu nhầm:** "Agent + flagship từ đầu cho chắc." → **Thật ra:** đây là combo đốt credits nhanh nhất (50 steps × ×3). Agent mid trước, stuck mới leo.
+| Hiểu nhầm | Sự thật |
+|---|---|
+| "Model mạnh nhất là tốt nhất cho mọi task" | Flagship sửa typo cũng ra chữ y hệt mini mà tốn ×3. Verify: cùng task typo chạy mini vs flagship, so output + thời gian. |
+| "Tên model học thuộc 1 lần dùng mãi" | Tên đổi theo quý. Luôn copy exact từ picker, đừng gõ từ trí nhớ. |
+| "Agent + flagship từ đầu cho chắc" | Combo đốt credits nhanh nhất (50 steps × ×3). Agent mid trước, stuck mới leo. |
 
 ---
 
@@ -404,26 +417,27 @@ Section này trả lời: chia 1 task lớn thành các phase thì model nào đ
 ### 7.1. Nguyên tắc route (3 câu)
 
 ```text
-1. Plan đắt, execute rẻ: flagship plan + mid/mini implement là default task > 3 files.
-2. Fan-out rẻ, main đắt: explore đẩy mini, chat chính giữ mid/flagship.
-3. Stuck thì leo thang: mini 2 lần → mid → flagship → reasoning. Ghi lý do để lần
-   sau route đúng ngay.
+1. Plan dat, execute re: flagship plan + mid/mini implement la default task > 3 files.
+2. Fan-out re, main dat: explore day mini, chat chinh giu mid/flagship.
+3. Stuck thi leo thang: mini 2 lan → mid → flagship → reasoning. Ghi ly do de lan
+   sau route dung ngay.
+# Verify: chay 1 task 3+ files theo kịch bản A, so credits voi lan full-flagship.
 ```
 
 ### 7.2. Kịch bản route mẫu (copy-paste)
 
 ```text
-# Kịch bản A — feature multi-file (default team):
-# Chat 1 (flagship): "plan migrate auth sang session, steps + risks, KHÔNG code"
-# Chat 2 mới (mid-tier): "implement step 1–3 của plan trên" (+ paste plan vào)
-# Stuck > 30p → chat 3 (flagship/reasoning): "đang stuck ở X, log Y, gợi ý?"
+# Kich ban A — feature multi-file (default team):
+# Chat 1 (flagship): "plan migrate auth sang session, steps + risks, KHONG code"
+# Chat 2 moi (mid-tier): "implement step 1–3 cua plan tren" (+ paste plan vao)
+# Stuck > 30p → chat 3 (flagship/reasoning): "dang stuck o X, log Y, goi y?"
 
-# Kịch bản B — explore rẻ:
-# 5 chat mini song song, mỗi chat 1 hướng (auth, db, api, tests, docs) →
-# gom vào chat chính (mid) quyết định. Đừng nhét 20 files vào 1 flagship chat.
+# Kich ban B — explore re:
+# 5 chat mini song song, moi chat 1 huong (auth, db, api, tests, docs) →
+# gom vao chat chinh (mid) quyet dinh. Dung nhét 20 files vao 1 flagship chat.
 
-# Kịch bản C — review quan trọng:
-# Claude-tier review wording + flagship review logic (2 pass, 2 điểm mạnh khác nhau)
+# Kich ban C — review quan trong:
+# Claude-tier review wording + flagship review logic (2 pass, 2 diem manh khac nhau)
 ```
 
 ---
@@ -435,30 +449,32 @@ Section này trả lời: 20 phút nào xác nhận được bạn đã route mo
 **Phút 0–5 (baseline credits):**
 
 ```bash
-# Mở billing usage → ghi % AI credits đã dùng + ngày hiện tại.
-# Mở model picker → liệt kê models team bạn có (chụp màn hình cho team wiki).
+# Mo billing usage → ghi % AI credits da dung + ngay hien tai.
+# Mo model picker → liêt kê models team ban co (chup man hinh cho team wiki).
+# Verify: so credits da dung phu hop voi ngay trong thang (khong chay bat thuong).
 ```
 
 **Phút 5–12 (cùng task, 3 tiers):**
 
 ```text
-# Lấy 1 task nhỏ thật. Chạy 3 chats mới: mini → mid → flagship.
-# Ghi quality + thời gian + (ước tính) credits mỗi tier.
-# Kết luận: tier nào là "đủ"? (kỳ vọng: mini/mid đủ cho task rõ)
+# Lay 1 task nho that. Chay 3 chats moi: mini → mid → flagship.
+# Ghi quality + thoi gian + (uoc tinh) credits moi tier.
+# Ket luan: tier nao la "du"? (ky vong: mini/mid du cho task ro)
 ```
 
 **Phút 12–17 (route theo phase):**
 
 ```text
-# Lấy 1 task 3+ files: chat flagship plan (không code) → chat mới mid implement.
-# So với lần trước làm full-flagship: quality tương đương? credits nhẹ hơn?
+# Lay 1 task 3+ files: chat flagship plan (khong code) → chat moi mid implement.
+# So voi lan truoc lam full-flagship: quality tuong duong? credits nhe hon?
 ```
 
 **Phút 17–20 (gate check):**
 
 ```bash
-# Picker còn model nào team không nên có? → note đề xuất admin (mục 5).
-# Ghi 1 dòng team log: "task X: mini đủ / mid đủ / cần flagship vì Y".
+# Picker con model nao team khong nen co? → note de xuat admin (muc 5).
+# Ghi 1 dong team log: "task X: mini du / mid du / can flagship vi Y".
+# Verify xong: co 1 dong ghi nhan + 1 de xuat (neu picker con model thua).
 ```
 
 ---

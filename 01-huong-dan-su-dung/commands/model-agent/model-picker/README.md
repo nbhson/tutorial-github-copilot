@@ -22,6 +22,8 @@ Cách gọi `/model` — làm đúng theo khối dưới đây, kèm câu kiểm
 ```bash
 /model
 # chọn trong list: rẻ cho việc nhẹ, mạnh cho việc khó
+# Kỳ vọng: câu trả lời khớp độ khó của task, quota không phí
+# Verify: so 2 câu trả lời rẻ vs mạnh cho cùng prompt
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/model`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

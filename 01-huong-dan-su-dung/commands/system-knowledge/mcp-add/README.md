@@ -22,6 +22,8 @@ Cách gọi `MCP add` — làm đúng theo khối dưới đây, kèm câu kiể
 ```bash
 "MCP: Add Server" trong Command Palette
 # hoặc sửa .vscode/mcp.json tay rồi reload
+# Kỳ vọng: server mới connected, secrets qua env không hardcode
+# Verify: grep token thật trong mcp.json — trống + tool chạy được
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `MCP add`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

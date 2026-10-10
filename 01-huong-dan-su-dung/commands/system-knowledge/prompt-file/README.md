@@ -1,6 +1,8 @@
-# /prompts — Liệt kê prompt files tái dùng
+# /prompts — Liệt kê prompt files tái dùng (**legacy**)
 
 > **Dành cho:** team có việc lặp lại (review, deploy, tạo bảng) · **Vấn đề:** mỗi người tự gõ prompt một kiểu, không chuẩn hóa được · **Đọc xong:** gọi prompt file tái dùng đúng form trong 1 lệnh (~2 phút)
+>
+> **Lưu ý 2026:** `/prompts` (`.github/prompts/*.prompt.md`) **deprecated cho Agent Host** (Copilot/Cloud). Ưu tiên **`/skills`** (`.github/skills/<ten>/SKILL.md`, chuẩn mở, chạy mọi harness) — xem [agent-skill](../agent-skill/README.md) + bài 05 mục 3.3 (port prompt → skill).
 
 ## Lệnh làm gì (1 câu nôm na)
 
@@ -21,7 +23,9 @@ Cách gọi `/prompts` — làm đúng theo khối dưới đây, kèm câu ki�
 
 ```bash
 /prompts
-/review-pr “review diff này theo correctness/security/tests”
+# gọi prompt file theo tên, vd /review-pr (legacy — deprecated cho Agent Host)
+# Kỳ vọng: prompt chạy đúng form team, không cần gõ lại cả đoạn
+# Verify: chạy 2 lần cho 2 diff khác nhau — cùng form output
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/prompts`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

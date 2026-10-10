@@ -22,6 +22,7 @@ Cách gọi `/fix` — làm đúng theo khối dưới đây, kèm câu kiểm t
 ```bash
 Bôi đen chỗ lỗi → /fix
 /fix thêm null check cho params, giữ nguyên API shape
+# Kỳ vọng: diff nhỏ đúng chỗ đau, không lan logic khác
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/fix`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/fix` — đổi phần tên file/task cho đúng việc của
 
 ```bash
 (bôi đen dòng lỗi) /fix “thêm null check cho params, giữ nguyên API shape”
+# Verify: chạy test/build/lint cho file vừa sửa — xanh là đạt
 ```
 
 **Kết quả mong đợi:** Diff nhỏ đúng chỗ đau, không lan sang logic khác; test liên quan xanh.

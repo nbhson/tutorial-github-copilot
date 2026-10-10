@@ -22,6 +22,8 @@ Cách gọi `Edit mode` — làm đúng theo khối dưới đây, kèm câu ki�
 ```bash
 Chat → mode Edit → tick files
 “đổi message lỗi sang tiếng Việt, chỉ 2 file đã tick”
+# Kỳ vọng: diff chỉ nằm trong 2 file đã tick, không lan thêm
+# Verify: git diff --stat chỉ hiện files đã tick
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Edit mode`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

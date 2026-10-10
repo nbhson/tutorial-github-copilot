@@ -21,6 +21,9 @@ Cách gọi `gh copilot explain` — làm đúng theo khối dưới đây, kèm
 
 ```bash
 gh copilot explain "docker run -p 5432:5432 postgres"
+# Kỳ vọng: giải thích từng flag + rủi ro trước khi Enter
+# Verify: nói lại được "lệnh này làm gì + rủi ro gì"
+# Lưu ý: gh copilot ≠ copilot (gh copilot là extension CLI, không phải lệnh copilot riêng)
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `gh copilot explain`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

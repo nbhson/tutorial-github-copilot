@@ -22,6 +22,7 @@ Cách gọi `@terminal` — làm đúng theo khối dưới đây, kèm câu ki�
 ```bash
 @terminal
 @terminal giải thích lỗi vừa rồi + gợi ý 2 cách fix
+# Kỳ vọng: nguyên nhân top-1 + fix xếp theo rủi ro
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `@terminal`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `@terminal` — đổi phần tên file/task cho đúng việc 
 
 ```bash
 @terminal “đọc 30 dòng log cuối, nói nguyên nhân top-1 + gợi ý fix ít rủi ro nhất”
+# Verify: áp fix, chạy lại lệnh — hết đỏ là đạt
 ```
 
 **Kết quả mong đợi:** Nguyên nhân top-1 đúng + 1–2 cách fix xếp theo rủi ro; chọn 1 cách làm tiếp.

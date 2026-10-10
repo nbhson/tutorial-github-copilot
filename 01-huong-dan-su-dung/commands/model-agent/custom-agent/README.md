@@ -22,6 +22,8 @@ Cách gọi `Custom agent` — làm đúng theo khối dưới đây, kèm câu 
 ```bash
 Gọi agent trong .github/agents/
 “nhờ explorer vẽ bản đồ file chạm tới auth”
+# Kỳ vọng: sub-agent trả kết quả gọn, chat chính không bị ồn
+# Verify: kết quả paste được vào PR/wiki
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Custom agent`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

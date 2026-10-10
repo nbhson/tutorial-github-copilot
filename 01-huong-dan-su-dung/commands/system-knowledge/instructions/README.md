@@ -22,6 +22,8 @@ Cách gọi `/instructions` — làm đúng theo khối dưới đây, kèm câu
 ```bash
 /instructions
 # liệt kê rules đang áp cho repo/file hiện tại
+# Kỳ vọng: thấy đúng rules (repo-wide + applyTo khớp file)
+# Verify: sửa 1 rule → /new → hỏi lại → model làm theo rule mới
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/instructions`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

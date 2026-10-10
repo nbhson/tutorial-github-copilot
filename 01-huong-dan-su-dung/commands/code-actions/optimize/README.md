@@ -22,6 +22,7 @@ Cách gọi `/optimize` — làm đúng theo khối dưới đây, kèm câu ki�
 ```bash
 Bôi đen đoạn chậm → /optimize
 /optimize giảm N+1 query, giữ nguyên output
+# Kỳ vọng: đề xuất trước/sau + code mới, benchmark chứng minh
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/optimize`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/optimize` — đổi phần tên file/task cho đúng việc 
 
 ```bash
 (bôi đen hàm query) /optimize “giảm N+1 bằng batch, giữ nguyên output — nêu trước/sau complexity”
+# Verify: benchmark trước/sau + test vẫn xanh
 ```
 
 **Kết quả mong đợi:** Đề xuất cụ thể (trước/sau) + code mới; benchmark cải thiện, test vẫn xanh.

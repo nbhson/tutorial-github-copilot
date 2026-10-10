@@ -18,13 +18,15 @@
 
 ---
 
-## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+## 0. Giải ngố thuật ngữ (1 câu + so sánh + ví dụ + verify)
 
-| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
+Mỗi thuật ngữ đủ 3 lớp: **1 câu định nghĩa**, **so sánh đời thường**, **ví dụ copy-paste** — kèm 1 dòng `Verify`.
+
+| Thuật ngữ | Hiểu nôm na (1 câu) | So sánh đời thường | Ví dụ copy-paste | Verify |
 |---|---|---|---|---|
-| **Plan-first** | Vẽ bản đồ trước khi xây — duyệt mới code. | Như xin giấy phép xây nhà: duyệt bản vẽ rồi mới đổ bê tông. | `plan.md` có files sửa/steps/risks/verify → bạn duyệt → Agent implement. | Chưa có plan duyệt mà code là sai quy trình. |
-| **Ask / Edit / Agent / Coding Agent** | 4 nấc quyền từ hỏi → sửa 1 chỗ → sửa nhiều chỗ → robot cloud tự làm. | Như thuê thợ: hỏi giá (Ask) → vá áo (Edit) → sửa nhà (Agent) → giao chìa khóa (Coding Agent). | Hỏi flow → Ask; fix 1 hàm → Edit; multi-files + test → Agent; issue 2h → Coding Agent. | Task >2 steps mà nhảy thẳng Agent là đốt 10 turns. |
-| **plan.md** | Tờ hợp đồng: làm gì, đụng đâu, xong kiểm sao. | Như đơn thuốc: ghi rõ uống gì, mấy viên, tái khám khi nào. | `plan.md` mục 6 mẫu: mục tiêu + files + steps + KHÔNG đụng + verify. | Mọi chat implement đều đọc cùng `plan.md` đã commit. |
+| **Plan-first** | Vẽ bản đồ trước khi xây — duyệt mới code. | Xin giấy phép xây nhà: duyệt bản vẽ rồi mới đổ bê tông. | `plan.md` có files sửa/steps/risks/verify → bạn duyệt → Agent implement. | Chưa có plan duyệt mà code là sai quy trình. |
+| **Ask / Edit / Agent / Coding Agent** | 4 nấc quyền từ hỏi → sửa 1 chỗ → sửa nhiều chỗ → robot cloud tự làm. | Thuê thợ: hỏi giá (Ask) → vá áo (Edit) → sửa nhà (Agent) → giao chìa khóa (Coding Agent). | Hỏi flow → Ask; fix 1 hàm → Edit; multi-files + test → Agent; issue 2h → Coding Agent. | Task >2 steps mà nhảy thẳng Agent là đốt 10 turns. |
+| **plan.md** | Tờ hợp đồng: làm gì, đụng đâu, xong kiểm sao. | Đơn thuốc: ghi rõ uống gì, mấy viên, tái khám khi nào. | `plan.md` mục 6 mẫu: mục tiêu + files + steps + KHÔNG đụng + verify. | Mọi chat implement đều đọc cùng `plan.md` đã commit. |
 
 ```mermaid
 flowchart TD
@@ -61,13 +63,13 @@ Ba nỗi đau kinh điển khi cho Copilot code ngay:
 Plan-first đảo ngược thứ tự:
 
 ```text
-TỆ: prompt → code ngay → sửa 10 turns
-TỐT: prompt → plan 1 turn → bạn duyệt → code theo plan → verify
+TỆ: prompt -> code ngay -> sửa 10 turns
+TỐT: prompt -> plan 1 turn -> bạn duyệt -> code theo plan -> verify
 ```
 
 Lợi ích đo được:
 
-- 1 turn plan (~1 premium request) tránh 10 turns code sai (~10 requests).
+- 1 turn plan (~1 lượt gọi model, tốn vài AI Credits) tránh 10 turns code sai (~10 lượt gọi model).
 - Plan lưu ra `plan.md` → chat nào, người nào, Coding Agent nào cũng tiếp tục được.
 - Bạn vẫn là người quyết định kiến trúc, Copilot chỉ implement.
 
@@ -89,7 +91,7 @@ Leo thang đúng:
 
 ```text
 Luôn bắt đầu thấp nhất có thể.
-Ask không xong → Plan → Edit → Agent → Coding Agent.
+Ask không xong -> Plan -> Edit -> Agent -> Coding Agent.
 Không nhảy từ Ask lên Coding Agent cho task chưa rõ.
 ```
 
@@ -100,6 +102,8 @@ Minh họa leo thang:
 - Plan duyệt rồi, sửa 1 file → Edit.
 - Plan duyệt rồi, sửa 5 files + chạy test → Agent.
 - Plan duyệt rồi, việc độc lập 2 giờ → assign Coding Agent trên issue.
+
+> Lưu ý 2026: ngoài 5 nấc trên, VS Code/CLI còn có persona **Plan** và **Autopilot** (chọn bằng `Shift+Tab` trong CLI, dropdown trong Chat) — Autopilot tự chạy tới xong, vẫn tính AI Credits. Xem [bài 10 mục 3](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
 
 ---
 
@@ -161,7 +165,7 @@ Edit mode (Inline Edit / Quick Chat Edit) chỉ sửa vùng bạn chọn. Rẻ, 
 **Ví dụ 1 — Edit 1 hàm (copy-paste):**
 
 ```text
-# Bôi đen hàm validate() → Ctrl/Cmd+I → gõ:
+# Bôi đen hàm validate() -> Ctrl/Cmd+I -> gõ:
 Fix normalizeEmail crash khi email có dấu, giữ nguyên signature.
 Thêm null-check đầu hàm. Không đụng code ngoài selection.
 ```
@@ -187,7 +191,7 @@ Implement Phase 2 (thêm POST /api/payments/refund):
 - Chỉ sửa files liệt kê trong plan, không thêm file ngoài.
 - Sau mỗi file, chạy lint file đó.
 - Cuối cùng chạy `npm test -- payments` + `npm run build`, dán cả 2 logs.
-- Đỏ sau 3 lần → dừng, báo blocker + file:line.
+- Đỏ sau 3 lần -> dừng, báo blocker + file:line.
 Ràng buộc: đừng đụng src/generated/, đừng commit.
 ```
 
@@ -242,6 +246,8 @@ KHÔNG giao khi:
 - Task <15 phút tự làm nhanh hơn (dùng Edit là xong).
 ```
 
+> Lưu ý 2026: ngoài Coding Agent trên github.com, bạn có thể chạy agent trong terminal bằng 2 CLI: `gh copilot` (gợi ý/explain) và binary `copilot` (agent interactive/plan/autopilot, `/permissions`, `/sandbox`). Xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
+
 Chi tiết CLI + web + mobile xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
 
 ---
@@ -268,8 +274,8 @@ Thêm API refund theo spec section 3, giữ public API cũ.
 | src/payments/__tests__/refund.test.ts | thêm 2 cases >30 ngày | npm test -- payments |
 
 ## 4. Steps
-1. Phase 1: tách types (không đụng logic) → test xanh.
-2. Phase 2: thêm API + tests → test + build xanh.
+1. Phase 1: tách types (không đụng logic) -> test xanh.
+2. Phase 2: thêm API + tests -> test + build xanh.
 3. Phase 3: review + docs.
 
 ## 5. Risks / Edge cases
@@ -325,11 +331,11 @@ Nếu giao Coding Agent: phút 30 bạn assign issue kèm plan.md link, 2 giờ 
 
 ## 8. Bảng tra nhanh: chọn nấc nào?
 
-| Dấu hiệu task | Hiểu nôm na | Ví dụ | Nấc đúng | Prompt mẫu 1 dòng |
+| Dấu hiệu task | So sánh nôm na | Ví dụ | Nấc đúng | Prompt mẫu 1 dòng |
 |---|---|---|---|---|
 | Hỏi, giải thích, research | Mới nghe ngóng, chưa làm. | Flow refund trong `payments/*.ts`? | Ask | `@workspace giải thích flow X, 5 bullet, không sửa` |
 | Task >2 steps / >1 file | Việc lớn, phải vẽ bản đồ. | Thêm `POST /refund` đụng 3 files. | Plan trước | `Trình plan + chờ duyệt, không code` |
-| Fix 1 hàm, rõ ràng | Vá 1 lỗ nhỏ. | Fix `normalizeEmail` crash dấu. | Edit | `Bôi đen → fix trong selection, giữ signature` |
+| Fix 1 hàm, rõ ràng | Vá 1 lỗ nhỏ. | Fix `normalizeEmail` crash dấu. | Edit | `Bôi đen -> fix trong selection, giữ signature` |
 | Multi-files + chạy test | Sửa cả nhà + nghiệm thu. | Refactor auth 5 files + test. | Agent + plan duyệt | `Đọc plan.md, làm Phase N, dán log` |
 | Việc độc lập, spec rõ, 1–2 giờ | Giao khoán đi vắng. | Issue rate-limit có criteria. | Coding Agent | `Assign issue #X, mở PR draft + log xanh` |
 
@@ -350,6 +356,9 @@ Trước khi code: 1) Đọc #file:docs/payment-spec.md + #file:src/payments/ref
 ```
 > Kết quả: 1 turn plan duyệt → 2 chats implement xanh từng phase → Reviewer PASS. Tổng 60 phút, 0 revert lớn. Verify: `plan.md` commit + 2 logs xanh.
 > ✅ **Kỳ vọng thấy gì:** After có plan 7 mục + commit; Before có code ngay + đỏ.
+
+| Dấu hiệu | Nấc | Prompt |
+|---|---|---|
 | Spec mờ | Ask phỏng vấn | `Hỏi tôi tối đa 5 câu rồi mới plan` |
 | Muốn thử 2 hướng | 2 chats Plan song song | Mỗi chat 1 phương án, so pros/cons |
 
@@ -404,6 +413,6 @@ Trước khi code: 1) Đọc #file:docs/payment-spec.md + #file:src/payments/ref
   - [Tips 02](./02-prompt-engineering.md) — 6 mẫu prompt + prompt files
   - [Tips 04](./04-verification-done-that.md) — định nghĩa done + review gate
   - [Tips 05](./05-parallel-agents.md) — song song hóa sau khi có plan
-  - [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — Coding Agent + CLI + web
+  - [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — Coding Agent + 2 CLI + web
 
 > Mẹo 1 dòng: _chưa có plan duyệt thì chưa cho code — 1 turn plan rẻ hơn 10 turns sửa sai._

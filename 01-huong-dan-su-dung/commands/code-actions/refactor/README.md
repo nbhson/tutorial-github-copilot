@@ -22,6 +22,7 @@ Cách gọi `/refactor` — làm đúng theo khối dưới đây, kèm câu ki�
 ```bash
 Bôi đen → /refactor
 /refactor tách hàm này thành 3 hàm nhỏ, giữ nguyên behavior
+# Kỳ vọng: code gọn hơn, tên rõ hơn, test cũ vẫn xanh
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/refactor`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/refactor` — đổi phần tên file/task cho đúng việc 
 
 ```bash
 (bôi đen hàm 100 dòng) /refactor “tách thành validate/process/save, giữ nguyên behavior + có test bao”
+# Verify: chạy full test liên quan — xanh hết là đạt
 ```
 
 **Kết quả mong đợi:** Code gọn hơn, tên rõ hơn; toàn bộ test cũ vẫn xanh (behavior giữ nguyên).

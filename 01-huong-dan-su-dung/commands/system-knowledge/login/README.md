@@ -22,6 +22,8 @@ Cách gọi `/login` — làm đúng theo khối dưới đây, kèm câu kiểm
 ```bash
 /login
 # làm theo popup GitHub → verify bằng /status
+# Kỳ vọng: /status hiện đúng login + plan, gợi ý chạy lại
+# Verify: gõ thử 1 hàm thấy gợi ý
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/login`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

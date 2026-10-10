@@ -17,14 +17,16 @@
 
 ---
 
-## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+## 0. Giải ngố thuật ngữ (1 câu + so sánh + ví dụ + verify)
 
-| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
+Mỗi thuật ngữ đủ 3 lớp: **1 câu định nghĩa**, **so sánh đời thường**, **ví dụ copy-paste** — kèm 1 dòng `Verify`.
+
+| Thuật ngữ | Hiểu nôm na (1 câu) | So sánh đời thường | Ví dụ copy-paste | Verify |
 |---|---|---|---|---|
-| **Done / Evidence** | Xong là phải có hóa đơn (log), không nói miệng. | Như giao hàng: phải có ảnh + chữ ký, không "em gửi rồi (chắc vậy)". | `## Evidence: test log + lint log + git diff --stat` paste trong PR. | Không log = chưa done, dù code nhìn đúng. |
-| **V1→V4** | 4 nấc chắc: nhìn đúng → chạy đúng chỗ → không gãy chỗ khác → người khác tin. | Như nấu ăn: ngửi thơm (V1) → nếm 1 miếng (V2) → cả mâm ok (V3) → khách khen (V4). | Fix 1 hàm cần V2; merge main cần V4. | Merge mà chỉ V2 là thiếu (phải V4). |
-| **Regression test** | Test gác cửa: bug cũ không được quay lại. | Như ổ khóa mới sau khi mất trộm: trộm cũ không vào được nữa. | Test `refund >30 ngày #101` chạy xanh + full scope xanh. | Xóa test để xanh là gian lận (cấm trong prompt). |
-| **Reviewer fresh** | Nhờ người chưa thấy bài làm chấm lại. | Như thi: thí sinh không được tự chấm bài mình. | Chat mới `/team-review` verdict PASS/NEEDS-FIX + `[SEVERITY] file:line`. | Tự review bài mình → LGTM mù. |
+| **Done / Evidence** | Xong là phải có hóa đơn (log), không nói miệng. | Giao hàng: phải có ảnh + chữ ký, không "em gửi rồi (chắc vậy)". | `## Evidence: test log + lint log + git diff --stat` paste trong PR. | Không log = chưa done, dù code nhìn đúng. |
+| **V1→V4** | 4 nấc chắc: nhìn đúng → chạy đúng chỗ → không gãy chỗ khác → người khác tin. | Nấu ăn: ngửi thơm (V1) → nếm 1 miếng (V2) → cả mâm ok (V3) → khách khen (V4). | Fix 1 hàm cần V2; merge main cần V4. | Merge mà chỉ V2 là thiếu (phải V4). |
+| **Regression test** | Test gác cửa: bug cũ không được quay lại. | Ổ khóa mới sau khi mất trộm: trộm cũ không vào được nữa. | Test `refund >30 ngày #101` chạy xanh + full scope xanh. | Xóa test để xanh là gian lận (cấm trong prompt). |
+| **Reviewer fresh** | Nhờ người chưa thấy bài làm chấm lại. | Thi: thí sinh không được tự chấm bài mình. | Chat mới `/team-review` verdict PASS/NEEDS-FIX + `[SEVERITY] file:line`. | Tự review bài mình → LGTM mù. |
 
 ```mermaid
 flowchart TD
@@ -144,7 +146,7 @@ Done khi:
 - [ ] Không sửa/xóa file gốc
 ```
 
-Mẹo team: lưu 4 checklist này vào `.github/prompts/verify-*.prompt.md` để gọi `/verify-bug`, `/verify-feature` (xem [Tips 07](./07-thiet-ke-prompts-skills.md)).
+Mẹo team: lưu 4 checklist này vào `.github/prompts/verify-*.prompt.md` để gọi `/verify-bug`, `/verify-feature` (xem [Tips 07](./07-thiet-ke-prompts-skills.md)). Lưu ý 2026: nếu chạy trên Agent Host/Cloud, nên gói 4 checklist này thành 4 Agent Skills (`SKILL.md`) thay vì prompt files legacy.
 
 ---
 
@@ -152,7 +154,7 @@ Mẹo team: lưu 4 checklist này vào `.github/prompts/verify-*.prompt.md` đ�
 
 ### Công thức 1 câu quyền lực
 
-Thêm câu này vào mọi prompt code, Copilot tự chạy → đọc lỗi → sửa → chạy lại:
+Thêm câu này vào mọi prompt code, Copilot tự chạy → đọc lỗi → sửa → chạy lại.
 
 **Ví dụ 1 — Loop tới xanh (copy-paste):**
 
@@ -233,7 +235,7 @@ Tìm ít nhất 1 HIGH hoặc giải thích vì sao chắc chắn không có HIG
 **Ví dụ 3 — Dùng GitHub Copilot code review (copy-paste setup):**
 
 ```text
-Repo → Settings → Code review → Copilot review: bật cho mọi PR.
+Repo -> Settings -> Code review -> Copilot review: bật cho mọi PR.
 Rule: PR từ Copilot Coding Agent bắt buộc có 1 review người + Copilot review PASS mới merge.
 Branch protection: require status checks (test/lint/build) + require review.
 ```
@@ -243,6 +245,8 @@ Kết hợp:
 - Copilot review tự động quét mỗi PR (rẻ, nhanh).
 - Chat Reviewer fresh soi sâu trước merge (kỹ).
 - Người review cuối chốt (chịu trách nhiệm).
+
+> Lưu ý 2026: review Balanced (mặc định từ 28/09/2026) tốn AI Credits + GitHub Actions minutes. Xem [bài 12 mục 5](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md).
 
 ---
 
@@ -257,7 +261,7 @@ Kết hợp:
 | 10–15 | Loop tới xanh | Nếu đỏ → `"Fix tiếp trong message này, tối đa 3 lần, dán log mỗi lần."` |
 | 15–20 | Mở rộng V3 | `"Chạy thêm npm run lint + npm run build, dán 2 logs. Diff --stat chỉ chạm src/auth/**?"` |
 | 20–28 | Review gate | Mở chat Reviewer fresh → prompt mục 5 → verdict PASS/NEEDS-FIX |
-| 28–30 | Chốt done | Checklist BUG mục 3 tick đủ → commit `fix: normalizeEmail dấu + regression test` |
+| 28–30 | Chốt done | Checklist BUG mục 3 tick đủ → commit `fix: normalizeEmail dau + regression test` |
 
 Tổng 30 phút, có log xanh + review PASS. Không còn should work.
 
@@ -265,7 +269,7 @@ Tổng 30 phút, có log xanh + review PASS. Không còn should work.
 
 ## 7. Bảng tra nhanh: evidence nào cho task nào?
 
-| Task | Hiểu nôm na | Ví dụ | Test | Lint/Build | Diff | Review | Dòng dặn 1 câu |
+| Task | So sánh nôm na | Ví dụ | Test | Lint/Build | Diff | Review | Dòng dặn 1 câu |
 |---|---|---|---|---|---|---|---|
 | Hỏi / research | Chỉ nghe, không làm. | Giải thích `retryWithBackoff`. | Không | Không | Không | Không | `Chỉ trả lời, không sửa` |
 | Fix 1 hàm | Vá 1 lỗ nhỏ. | Fix `validate()` email dấu. | Focused 1 file | Không bắt buộc | --stat | Không bắt buộc | `Chạy focused test + dán log` |
@@ -328,7 +332,7 @@ Cuối message có ## Evidence: log + diff --stat.
 
 **Bài 3 (15 phút — chuẩn hóa team):**
 
-1. Lưu 4 checklist mục 3 thành `.github/prompts/verify-*.prompt.md`.
+1. Lưu 4 checklist mục 3 thành `.github/prompts/verify-*.prompt.md` (hoặc 4 Agent Skills nếu dùng Agent Host).
 2. Thêm vào CONTRIBUTING: mọi PR phải có Evidence (test/lint/build logs).
 3. Bật branch protection: require checks + review (xem Tips 06).
 

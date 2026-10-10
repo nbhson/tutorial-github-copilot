@@ -1,12 +1,16 @@
 # FAQ 04 — MCP FAQ
 
-> Nhóm MCP (Model Context Protocol) · 10 câu hỏi deep-dive · Đọc xong tự khai báo server, fix tools không hiện, giữ secrets an toàn
+> **Dành cho:** dev muốn nối GitHub/DB/browser vào Copilot, đọc được `mcp.json`, và giữ secrets không lộ.
+> **Vấn đề:** "mcp.json viết sao, stdio/sse khác gì, auth thế nào, tools không hiện thì fix sao" — 10 câu hỏi, mỗi câu có giải thích + lệnh copy-paste + ví dụ + khi nào áp dụng.
+> **Đọc xong:** tự khai báo server, fix tools không hiện, giữ secrets an toàn. **Thời gian:** ~14 phút đọc.
 
 File này trả lời mọi câu hỏi "mcp.json viết sao, stdio/sse khác gì, auth thế nào, tools không hiện thì fix sao". Mỗi câu có giải thích + lệnh copy-paste + ví dụ + khi nào áp dụng.
 
 ---
 
 ## Sơ đồ tư duy nhanh (đọc 30 giây)
+
+Section này trả lời: MCP server có 3 loại thành phần (tools/resources/prompts) và copilot gọi chúng như tool built-in.
 
 ```mermaid
 flowchart TD
@@ -26,6 +30,8 @@ flowchart TD
 
 ## Bảng tổng hợp: chọn transport nhanh
 
+Section này trả lời: server của bạn chạy local hay xa → chọn transport nào.
+
 | Transport | Khi nào dùng | Ví dụ |
 |---|---|---|
 | stdio (chạy lệnh local) | Server chạy trên máy bạn (npx, python, binary) | `npx -y @modelcontextprotocol/server-github` |
@@ -36,6 +42,8 @@ flowchart TD
 
 ## 0. MCP server gồm 3 thành phần nào (Tools / Resources / Prompts)? (đồng bộ bài 08)
 
+Section này trả lời: "MCP server chứa gì" — 3 loại, mỗi loại copilot dùng ra sao.
+
 > **Hỏi ngắn gọn:** _MCP server gồm 3 thành phần nào?_
 
 **Trả lời 1 câu:** Mỗi MCP server expose 3 thứ — **Tools** (hàm gọi được), **Resources** (dữ liệu đọc qua URI), **Prompts** (template có sẵn) — đúng như bảng ở [bài 08](../../01-huong-dan-su-dung/08-mcp-ket-noi-cong-cu-ngoai.md).
@@ -44,8 +52,8 @@ flowchart TD
 
 | Thành phần | Là gì (nôm na) | Ví dụ cụ thể | Copilot dùng khi nào |
 |---|---|---|---|
-| **Tools** | Hàm có input/output schema, Copilot _gọi_ để tạo tác động | `github.create_pr`, `github.list_issues`, `postgres.query`, `playwright.navigate` | Bạn bảo “mở PR”, “query DB”, “mở browser test” |
-| **Resources** | Dữ liệu chỉ-đọc, định danh bằng URI, Copilot _đọc_ | `github://repos/acme/api/issues/123`, `postgres://schema/tables/users` | Bạn bảo “đọc issue 123”, “xem schema bảng users” |
+| **Tools** | Hàm có input/output schema, Copilot _gọi_ để tạo tác động | `github.create_pr`, `github.list_issues`, `postgres.query`, `playwright.navigate` | Bạn bảo "mở PR", "query DB", "mở browser test" |
+| **Resources** | Dữ liệu chỉ-đọc, định danh bằng URI, Copilot _đọc_ | `github://repos/acme/api/issues/123`, `postgres://schema/tables/users` | Bạn bảo "đọc issue 123", "xem schema bảng users" |
 | **Prompts** | Template/kịch bản server đóng gói sẵn (tùy server) | `review-pr` (correctness/security/tests), `triage-issue` (label + hỏi thêm info) | Bạn gọi template thay vì viết prompt dài |
 
 Nôm na: **Tools = tay (làm), Resources = mắt (đọc), Prompts = công thức nấu ăn (làm theo bước có sẵn).** Không phải server nào cũng có đủ 3 — hầu hết có Tools, một số có thêm Resources/Prompts.
@@ -58,6 +66,7 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # 1. Hỏi Copilot đang thấy gì (phân biệt tools vs resources)
 # Mở Chat mới, gõ:
 # "@workspace liệt kê MCP tools mày đang thấy (tên + server), và resources đọc được (URI)"
+# Verify: list ra đúng tên tool + URI resource, không có thì server chưa expose loại đó
 # 2. Test từng loại:
 # - Tools: "dùng github tool liệt kê 5 PRs mới nhất repo này"
 # - Resources: "đọc github://repos/<org>/<repo>/issues/1 tóm tắt giúp tôi"
@@ -65,14 +74,17 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # 3. Nếu thiếu 1 loại -> check server docs (không phải server nào cũng expose cả 3)
 ```
 
-> **Nếu vẫn lỗi thì...** xem câu 4 (tools không hiện) + mở `View → Output → MCP` coi log; thiếu Resources/Prompts thường là “tính năng server không có”, không phải bug Copilot.
+> **Nếu vẫn lỗi thì...** xem câu 4 (tools không hiện) + mở `View → Output → MCP` coi log; thiếu Resources/Prompts thường là "tính năng server không có", không phải bug Copilot.
 
 ---
+
 ## 1. `mcp.json` nằm ở đâu, format chuẩn 2026 là gì?
+
+Section này trả lời: 2 vị trí config + format key chuẩn, không nhầm `servers` với `mcpServers`.
 
 > **Hỏi ngắn gọn:** _`mcp.json` nằm ở đâu, format chuẩn 2026 là gì?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** VS Code đọc MCP config ở repo-level (`.vscode/mcp.json`) và user-level (User Settings), key `servers` là chuẩn VS Code — nhầm key `mcpServers` thì im lặng không chạy.
 
 **Giải thích chi tiết + ví dụ:** VS Code đọc MCP config ở 2 chỗ (repo này dùng `.vscode/mcp.json` để share cả team):
 
@@ -105,14 +117,16 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** setup repo mới, hoặc khi thêm server thứ 2, 3 vào repo đã có.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 2. stdio vs SSE/HTTP khác nhau gì, chọn sao?
 
+Section này trả lời: stdio chạy local, SSE nối server xa — chọn theo "1 mình hay team dùng chung".
+
 > **Hỏi ngắn gọn:** _stdio vs SSE/HTTP khác nhau gì, chọn sao?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** stdio = IDE tự spawn process trên máy bạn, SSE/HTTP = IDE nối tới URL server đang chạy — chọn theo server nhẹ (stdio) hay dùng chung team (SSE).
 
 **Giải thích chi tiết + ví dụ:**
 
@@ -135,20 +149,23 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 ```bash
 # Test server xa còn sống không trước khi đổ lỗi cho Copilot
 curl -s -o /dev/null -w "%{http_code}\n" https://mcp.internal.company.com/health
+# Verify: ra 200 = server sống; 000/timeout = server chết hoặc URL sai
 ```
 
 **Ví dụ cụ thể:** team 10 người cùng query docs nội bộ → host 1 SSE server chung thay vì mỗi máy spawn stdio riêng.
 
 > **Khi nào áp dụng:** 1 mình vọc → stdio; team dùng chung / server nặng → SSE.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 3. Auth cho MCP server thế nào (token, headers, OAuth)?
 
+Section này trả lời: 3 cách đưa credentials, xếp theo an toàn tăng dần — cấm hardcode.
+
 > **Hỏi ngắn gọn:** _Auth cho MCP server thế nào (token, headers, OAuth)?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** 3 cách: `${input:...}` (khuyên dùng, không lưu git), env var máy bạn, và hardcode (CẤM) — token vào git là lộ vĩnh viễn.
 
 **Giải thích chi tiết + ví dụ:** 3 cách đưa credentials, xếp theo độ an toàn tăng dần:
 
@@ -164,24 +181,28 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # Cách đúng: token trong env, mcp.json chỉ tham chiếu
 export GITHUB_MCP_TOKEN="ghp_xxxx"   # cho vào ~/.zshrc hoặc 1password shell plugin
 # mcp.json: "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_MCP_TOKEN}" }
+# Verify: echo $GITHUB_MCP_TOKEN ra token thật, chưa commit mcp.json ra git
 
 # Cách sai (đừng làm): "env": { "TOKEN": "ghp_xxxx_truc_tiep" }
 # Quét repo xem có ai hardcode không:
 grep -rn "ghp_\|sk-\|xoxb-" .vscode/mcp.json .github/ 2>/dev/null
+# Verify: grep ra rỗng = sạch; ra dòng thì phải sửa + rotate token
 ```
 
 **Ví dụ cụ thể:** onboarding member mới → họ tự tạo PAT + `export` trong máy → `mcp.json` chung không đổi 1 dòng.
 
 > **Khi nào áp dụng:** mọi `mcp.json` commit vào git — grep check hardcode trước mỗi commit.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 4. Tools không hiện trong Copilot — debug theo thứ tự nào?
 
+Section này trả lời: 5 bước debug, không nhảy cóc — JSON, key, process, reload, log.
+
 > **Hỏi ngắn gọn:** _Tools không hiện trong Copilot — debug theo thứ tự nào?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** 5 bước: validate JSON → check key `servers` → test process → reload IDE → đọc log MCP panel.
 
 **Giải thích chi tiết + ví dụ:** Thứ tự 5 bước (đừng nhảy cóc):
 
@@ -198,26 +219,31 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 ```bash
 # 1. Validate JSON
 python3 -c "import json; json.load(open('.vscode/mcp.json')); print('JSON OK')"
+# Verify: ra "JSON OK", không ra exception
 
 # 2. Test stdio server chạy tay được không
 npx -y @modelcontextprotocol/server-github --help 2>&1 | head -5
+# Verify: ra help, không treo
 
 # 3. Test SSE server
 curl -s -m 10 -o /dev/null -w "%{http_code}\n" https://mcp.internal.company.com/health
+# Verify: ra 200
 ```
 
 **Ví dụ cụ thể:** tools GitHub không hiện → chạy bước 1 thấy `JSON OK` → bước 3 thấy `npx` treo (mạng chặn registry) → fix mạng, không phải lỗi Copilot.
 
 > **Khi nào áp dụng:** mọi ca "hôm qua còn thấy tools, hôm nay mất".
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 5. Secrets trong MCP: env placeholders viết sao cho đúng?
 
+Section này trả lời: quy tắc "commit được = không chứa secret thật" + 2 cách placeholder.
+
 > **Hỏi ngắn gọn:** _Secrets trong MCP: env placeholders viết sao cho đúng?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** `mcp.json` commit được = không chứa secret thật — mọi secret đi qua `${input:...}` hoặc `${env:...}`.
 
 **Giải thích chi tiết + ví dụ:** Quy tắc vàng: **`mcp.json` commit được = không chứa secret thật.** Mọi secret đi qua `${input:...}` hoặc `${env:...}`.
 
@@ -239,20 +265,23 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 export PG_REPLICA_URL="postgres://readonly:xxxx@replica.internal:5432/app"
 # Mở IDE từ terminal để nó hứng env:
 code .
+# Verify: echo $PG_REPLICA_URL ra đúng URL, không có "xxxx" là thật
 ```
 
 **Ví dụ cụ thể:** `templates/.vscode/mcp.json` dùng `${input}` cho cả 3 servers → clone về chạy được ngay, mỗi người nhập token của mình.
 
 > **Khi nào áp dụng:** review mọi PR đụng `mcp.json` — thấy string `ghp_/sk-/postgres://user:pass@` thật là block PR.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 6. MCP postgres trỏ prod — làm sao để không phá data?
 
+Section này trả lời: 3 lớp bảo vệ (read-only, server chỉ query, approval tay) — bật cả 3.
+
 > **Hỏi ngắn gọn:** _MCP postgres trỏ prod — làm sao để không phá data?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** 3 lớp: trỏ read-replica, server chỉ expose query, và tool `exec` luôn approval tay — bật cả 3 thì không phá được data.
 
 **Giải thích chi tiết + ví dụ:** 3 lớp bảo vệ (bật cả 3):
 
@@ -270,25 +299,29 @@ CREATE USER mcp_reader WITH PASSWORD '${MCP_READER_PW}';
 GRANT CONNECT ON DATABASE app TO mcp_reader;
 GRANT USAGE ON SCHEMA public TO mcp_reader;
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO mcp_reader;
+-- Verify: user này query được SELECT, INSERT/DELETE bị từ chối
 ```
 
 ```bash
 # mcp.json trỏ replica + user readonly
 export PG_REPLICA_URL="postgres://mcp_reader:${MCP_READER_PW}@replica.internal:5432/app"
+# Verify: echo $PG_REPLICA_URL ra user readonly + host replica, không phải prod
 ```
 
 **Ví dụ cụ thể:** agent cần "xem schema orders" → query replica thoải mái. Cần migrate → làm tay bằng migration tool, không qua MCP.
 
 > **Khi nào áp dụng:** trước khi khai báo bất kỳ MCP DB nào trỏ môi trường có data thật.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 7. MCP GitHub server dùng để làm gì, cần scope token nào?
 
+Section này trả lời: MCP GitHub cho agent đọc/comment issue, PR, branch — token quyền yếu nhất làm được việc.
+
 > **Hỏi ngắn gọn:** _MCP GitHub server dùng để làm gì, cần scope token nào?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** MCP GitHub cho agent đọc issue/PR/diff, comment, tạo branch — token tối thiểu là fine-grained PAT scope `repo` (read-only nếu chỉ đọc).
 
 **Giải thích chi tiết + ví dụ:** MCP GitHub cho agent: đọc issue/PR, xem diff, comment, tạo branch... (tùy cấu hình). Token tối thiểu: PAT classic `repo` scope, hoặc fine-grained PAT chỉ repo cần thiết.
 
@@ -302,20 +335,23 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # Tạo fine-grained PAT: github.com/settings/tokens -> Fine-grained ->
 # Only select repositories -> chọn repo -> Contents: Read, Issues: Read, PRs: Read/Write
 export GITHUB_MCP_TOKEN="github_pat_xxxx"
+# Verify: gh api --header "Authorization: token $GITHUB_MCP_TOKEN" user ra đúng account
 ```
 
 **Ví dụ cụ thể:** agent chỉ cần đọc issue + diff → PAT read-only. Khi nào cần nó tạo PR mới nâng scope.
 
 > **Khi nào áp dụng:** khi thêm server `github` vào `mcp.json` — tạo PAT riêng cho MCP, đừng reuse PAT deploy.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 8. MCP Playwright (browser) dùng khi nào, nặng không?
 
+Section này trả lời: Playwright cho agent verify UI thật — nặng nhưng cần khi test flow.
+
 > **Hỏi ngắn gọn:** _MCP Playwright (browser) dùng khi nào, nặng không?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Playwright MCP cho agent mở trang, click, chụp screenshot — nặng (RAM ~300–500MB) nhưng cần khi verify UI/E2E thật.
 
 **Giải thích chi tiết + ví dụ:** Playwright MCP cho agent: mở trang, click, chụp màn hình, đọc console errors — để verify UI/E2E thật. Nặng: spawn browser Chromium (~300-500MB RAM), chạy chậm hơn query DB nhiều.
 
@@ -334,20 +370,23 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # Prompt mẫu cho agent dùng browser hiệu quả:
 # "Mở http://localhost:3000/login, login user test@example.com,
 #  chụp màn hình + đọc console errors. Không click nút thanh toán."
+# Verify: agent trả screenshot + list console errors, không tự click nút prod
 ```
 
 **Ví dụ cụ thể:** sửa form login → agent mở browser → login thử → báo console có lỗi `401` → bạn fix tiếp. Đỡ phải tự mở browser F12.
 
 > **Khi nào áp dụng:** task UI cần verify thật; tắt server khi làm backend thuần để nhẹ máy.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 9. Nhiều MCP servers cùng lúc — quản lý sao cho nhẹ?
 
+Section này trả lời: bật 6–7 server stdio cùng lúc = máy yếu; cách gọn = chỉ bật server task cần.
+
 > **Hỏi ngắn gọn:** _Nhiều MCP servers cùng lúc — quản lý sao cho nhẹ?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Mỗi server stdio = 1 process + RAM — bật đúng server task đang làm, server nặng để SSE chung team.
 
 **Giải thích chi tiết + ví dụ:** Mỗi server stdio = 1 process + RAM. Bật 6-7 servers npx cùng lúc → máy yếu đi rõ. Cách gọn:
 
@@ -362,6 +401,7 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 ```bash
 # Xem process MCP nào đang ngốn RAM
 ps aux | grep -i "mcp\|modelcontextprotocol" | grep -v grep
+# Verify: list process + RAM, server nào >500MB thì cân nhắc chuyển SSE
 
 # Tắt tạm server: thêm "_" prefix vào key (VS Code bỏ qua key lạ)
 # "_playwright-disabled": { ... }  -> bật lại thì xóa prefix
@@ -371,14 +411,16 @@ ps aux | grep -i "mcp\|modelcontextprotocol" | grep -v grep
 
 > **Khi nào áp dụng:** khi IDE khởi động chậm / quạt quay mạnh sau khi thêm MCP.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 10. MCP log đọc ở đâu, lỗi nào hay gặp nhất?
 
+Section này trả lời: log ở Output panel, và 4 lỗi top + fix.
+
 > **Hỏi ngắn gọn:** _MCP log đọc ở đâu, lỗi nào hay gặp nhất?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Log ở `View → Output → [MCP server name]`; 4 lỗi top: `ENOENT npx`, `401/403`, `ECONNREFUSED`, `JSON parse error`.
 
 **Giải thích chi tiết + ví dụ:** Log ở: VS Code → View → Output → dropdown chọn tên MCP server. 4 lỗi top:
 
@@ -398,16 +440,19 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 node --version; npx --version
 echo ${GITHUB_MCP_TOKEN:+TOKEN_OK}  # ra TOKEN_OK là env có
 python3 -c "import json; json.load(open('.vscode/mcp.json')); print('JSON OK')"
+# Verify: node version + TOKEN_OK + JSON OK đủ 3 mới đọc log tiếp
 ```
 
 **Ví dụ cụ thể:** log báo `401` server github → `echo ${GITHUB_MCP_TOKEN}` ra rỗng → quên export sau restart → export lại + reload IDE.
 
 > **Khi nào áp dụng:** mọi ca MCP đỏ — đọc log Output panel trước, đoán sau.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)
+
+Section này trả lời: 5 bước check khi mọi cách trên không ăn.
 
 1. `python3 -c "import json;..."` validate `mcp.json`.
 2. Check key `servers` + entry server đúng format.
@@ -417,11 +462,14 @@ python3 -c "import json; json.load(open('.vscode/mcp.json')); print('JSON OK')"
 
 ```bash
 python3 -c "import json; json.load(open('.vscode/mcp.json')); print('JSON OK')" && node --version && curl -s -m 10 -o /dev/null -w "%{http_code}\n" https://mcp.internal.company.com/health
+# Verify: JSON OK + node version + HTTP code (200 = server sống)
 ```
 
 ---
 
 ## Tham khảo chéo
+
+Section này trả lời: đọc tiếp bài nào khi cần đào sâu tool approval, secrets, hay mẫu.
 
 - Tool approval cho MCP: [bài 03](03-modes-permissions.md). Secrets + audit: [bài 09](09-bao-mat-quyen-rieng-tu.md).
 - Mẫu copy ngay: [../templates/.vscode/mcp.json](../templates/.vscode/mcp.json), [../templates/README.md](../templates/README.md).

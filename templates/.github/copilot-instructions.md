@@ -1,6 +1,6 @@
 # Project: <Ten-du-an> — one-liner mô tả
 
-> File này Copilot tự đọc mỗi lần gợi ý/chat. Giữ <200 dòng. Chi tiết theo path → `.github/instructions/`. Procedure dài → `.github/prompts/` hoặc `.github/skills/`.
+> File này Copilot tự đọc mỗi lần gợi ý/chat. Giữ <200 dòng. Chi tiết theo path → `.github/instructions/`. Procedure dài → `.github/skills/` (prompt files deprecated — xem FAQ 06).
 
 ## Tech Stack
 - <Framework + version>, <Ngôn ngữ + version>, <DB>, <lib chính>
@@ -46,4 +46,4 @@
 ---
 Chi tiết backend → `.github/instructions/backend-api.instructions.md`.
 Chi tiết frontend → `.github/instructions/frontend-react.instructions.md`.
-Review PR → `/review-pr` (`.github/prompts/review-pr.prompt.md`).
+Review PR → skill `review-pr` (`.github/skills/review-pr/SKILL.md`).

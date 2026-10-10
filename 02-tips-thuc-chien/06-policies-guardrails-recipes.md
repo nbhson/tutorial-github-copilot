@@ -22,7 +22,7 @@
 
 | Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
 |---|---|---|---|---|
-| **Guardrail** | Dải phân cách: đi lạc là bị chặn. | Như lan can cầu: buồn ngủ lấn làn vẫn không rơi. | `muse-instructions.md` + pre-commit + branch protection + tool approval. | Cố sửa `generated/` → bị chặn ít nhất 1 lớp. |
+| **Guardrail** | Dải phân cách: đi lạc là bị chặn. | Như lan can cầu: buồn ngủ lấn làn vẫn không rơi. | `copilot-instructions.md` + pre-commit + branch protection + tool approval. | Cố sửa `generated/` → bị chặn ít nhất 1 lớp. |
 | **Instructions enforcement** | Luật tự áp: Copilot tự đọc mỗi turn. | Như nội quy dán tường: ai vào phòng đều phải đọc. | `NEVER: không sửa generated/, không commit main`. | Hỏi bừa vẫn thấy Copilot né file cấm. |
 | **Pre-commit / Branch protection** | Khóa cửa nhà (local) + khóa cổng khu (GitHub). | Như cửa nhà + bảo vệ khu: qua 2 lớp mới vào được. | `pre-commit` chặn `generated/`; protection đòi PR + CI xanh. | Thử commit sai → hook báo BLOCKED; thử merge đỏ → GitHub chặn. |
 | **Tool/MCP approval** | Hỏi trước khi cho robot dùng dao. | Như dặn con: dùng kéo phải hỏi mẹ. | `Confirm before running commands: ON`, `rm -rf` blocklist. | Agent chạy lệnh lạ → popup hỏi; lệnh allowlist chạy luôn. |
@@ -70,7 +70,7 @@ Việc quan trọng → bắt người duyệt.
 
 | Lớp | Chặn ở đâu | Ví dụ | Ai giữ |
 |---|---|---|---|
-| 1 | Instructions (tự áp mọi turn) | muse-instructions.md, .instructions.md | Dev / team |
+| 1 | Instructions (tự áp mọi turn) | copilot-instructions.md, .instructions.md | Dev / team |
 | 2 | Local gates (máy bạn) | pre-commit, lint-staged, tool approval | Dev |
 | 3 | Remote gates (GitHub) | Branch protection, required checks, codeowners | Org / maintainer |
 | 4 | Tool/MCP approval | Hỏi trước khi chạy lệnh/MCP | Dev / org policy |
@@ -86,10 +86,10 @@ Lọt 1 lớp không sao, còn 3 lớp sau.
 
 ## 3. Lớp 1: instruction enforcement (luật tự áp)
 
-### Recipe 1 — muse-instructions.md cấm địa (copy-paste)
+### Recipe 1 — copilot-instructions.md cấm địa (copy-paste)
 
 ```markdown
-# .github/muse-instructions.md
+# .github/copilot-instructions.md
 
 ## Cấm địa (NEVER, áp mọi turn)
 - Không sửa `src/generated/`, `dist/`, `*.lock`.
@@ -269,7 +269,7 @@ jobs:
 ```text
 /src/payments/** @team-payments
 /src/auth/** @team-auth
-/.github/muse-instructions.md @tech-leads
+/.github/copilot-instructions.md @tech-leads
 /.github/prompts/** @tech-leads
 ```
 
@@ -333,7 +333,7 @@ Instructions thêm:
 
 | Phút | Lớp | Việc (copy-paste) |
 |---|---|---|
-| 0–10 | Lớp 1 | Tạo `.github/muse-instructions.md` recipe 1 + 2 files `applyTo` recipe 2 |
+| 0–10 | Lớp 1 | Tạo `.github/copilot-instructions.md` recipe 1 + 2 files `applyTo` recipe 2 |
 | 10–20 | Lớp 2 | Thêm `.pre-commit-config.yaml` recipe 4, `pre-commit install`, test commit chặn generated/ |
 | 20–25 | Lớp 2 | Bật tool approval: confirm commands ON, allowlist test/lint/build |
 | 25–35 | Lớp 3 | Thêm `verify.yml` recipe 8, bật branch protection recipe 7 |
@@ -367,7 +367,7 @@ Sau 45 phút: 4 lớp guardrails chạy. Copilot đi lạc → bị chặn ít n
 
 **After (guardrail 4 lớp):**
 ```markdown
-# .github/muse-instructions.md
+# .github/copilot-instructions.md
 - Không sửa `src/generated/`, không commit thẳng main.
 ```
 

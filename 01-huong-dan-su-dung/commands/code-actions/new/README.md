@@ -22,6 +22,7 @@ Cách gọi `/new (code)` — làm đúng theo khối dưới đây, kèm câu k
 ```bash
 /new (code)
 /new viết hàm retry fetch 3 lần, backoff 1s
+# Kỳ vọng: code nháp đúng style repo, review rồi mới giữ
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/new (code)`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/new (code)` — đổi phần tên file/task cho đúng việ
 
 ```bash
 /new “viết hàm fetchWithRetry(url): retry 3 lần, backoff 1s, throw lỗi cuối — theo style repo”
+# Verify: chạy thử + viết 1 test nhanh cho hàm mới
 ```
 
 **Kết quả mong đợi:** Code mới đúng style repo + xử lý lỗi cơ bản; bạn review diff rồi mới giữ.

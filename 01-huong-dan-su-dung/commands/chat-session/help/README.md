@@ -21,6 +21,7 @@ Cách gọi `/help` — làm đúng theo khối dưới đây, kèm câu kiểm 
 
 ```bash
 /help
+# Kỳ vọng: list slash/participant/mode đúng plan + version máy bạn
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/help`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -33,6 +34,7 @@ Prompt mẫu cho `/help` — đổi phần tên file/task cho đúng việc củ
 
 ```bash
 /help
+# Kỳ vọng: danh sách lệnh khả dụng đúng plan + version máy bạn
 ```
 
 **Kết quả mong đợi:** List slash/participant/mode khả dụng đúng plan + version máy bạn.

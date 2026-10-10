@@ -1,6 +1,6 @@
 # 04 — Chat Commands Toàn Tập (Slash, Participants, Variables)
 
-> **Dành cho:** người mới lẫn dev đã dùng Copilot — dùng làm index tra cứu 46 chat commands Copilot 2026.
+> **Dành cho:** người mới lẫn dev đã dùng Copilot — dùng làm index tra cứu 47 chat commands Copilot 2026.
 > **Vấn đề:** gõ prompt tự nhiên dài dòng, tốn turns làm rõ, không biết lệnh nào đang có sẵn.
 > **Đọc xong:** biết chọn đúng nhóm lệnh, chạy được công thức 5 lệnh session đầu, và tự debug khi lệnh "bị mất".
 > **Cách dùng:** tìm nhóm → đọc mô tả 1 dòng → click link sang folder chi tiết.
@@ -11,7 +11,7 @@
 
 1. [Cách đọc index này + why phải học commands](#1-cách-đọc-index-này--why-phải-học-commands)
 2. [Nhóm 1 — Chat session (12)](#nhóm-1--chat-session-12)
-3. [Nhóm 2 — Model & Agent (9)](#nhóm-2--model--agent-9)
+3. [Nhóm 2 — Model & Agent (10)](#nhóm-2--model--agent-10)
 4. [Nhóm 3 — Code actions (10)](#nhóm-3--code-actions-10)
 5. [Nhóm 4 — System & Knowledge (15)](#nhóm-4--system--knowledge-15)
 6. [Công thức 5 lệnh session đầu (giữ nguyên, làm 1 lần/repo)](#6-công-thức-5-lệnh-session-đầu-giữ-nguyên-làm-1-lầnrepo)
@@ -24,11 +24,9 @@
 
 ## 1. Cách đọc index này + why phải học commands
 
-Section này trả lời: 3 ký hiệu `/`, `@`, `#` khác nhau thế nào, và vì sao phải học chúng thay vì gõ tự nhiên mãi?
-
-- Là gì (1 câu): chat commands là 3 ký hiệu — `/` (lệnh), `@` (gọi đúng người), `#` (đưa đúng tài liệu) — giúp gắn scope ngay từ turn 1.
-- Hiểu nôm na: `/` như gọi món theo số (nhanh, chuẩn), `@` như gọi đúng nhân viên (thu ngân / bếp), `#` như đưa đúng hóa đơn cho họ xem.
-- Ví dụ kỹ thuật: gõ `/fix #selection thêm null check` nhanh và rẻ hơn gõ "bạn ơi sửa giúp mình đoạn code này với..." 3 turns làm rõ.
+- **Là gì (1 câu):** chat commands là 3 ký hiệu — `/` (lệnh), `@` (gọi đúng người), `#` (đưa đúng tài liệu) — giúp gắn scope ngay từ turn 1.
+- **Nôm na:** `/` như gọi món theo số (nhanh, chuẩn), `@` như gọi đúng nhân viên (thu ngân / bếp), `#` như đưa đúng hóa đơn cho họ xem.
+- **Ví dụ kỹ thuật:** gõ `/fix #selection thêm null check` nhanh và rẻ hơn gõ "bạn ơi sửa giúp mình đoạn code này với..." 3 turns làm rõ.
 
 ```mermaid
 flowchart TD
@@ -95,9 +93,9 @@ Vì sao học commands thay vì gõ tự nhiên mãi? Câu trả lời ngắn:
 | `Shortcuts` | Liệt kê phím tắt Chat trong IDE này | [./commands/chat-session/shortcuts/README.md](./commands/chat-session/shortcuts/README.md) |
 | `/summarize` | Tóm tắt hội thoại dài thành bản gọn giữ đà task | [./commands/chat-session/summarize/README.md](./commands/chat-session/summarize/README.md) |
 
-## Nhóm 2 — Model & Agent (9)
+## Nhóm 2 — Model & Agent (10)
 
-> **Nhóm này là gì?** Nút đổi "động cơ" (model) và "chế độ lái" (Ask/Edit/Agent).
+> **Nhóm này là gì?** Nút đổi "động cơ" (model), "chế độ lái" (Ask/Edit/Agent) và "nơi chạy" (Session Target: Local/Copilot/Cloud).
 > Hiểu nôm na: như hộp số xe — đường làng đi số thấp (Ask + model rẻ), cao tốc đi số cao (Agent + model mạnh).
 > Ví dụ thật + kết quả mong đợi:
 > ```text
@@ -118,6 +116,7 @@ Vì sao học commands thay vì gõ tự nhiên mãi? Câu trả lời ngắn:
 | `Coding agent` | Giao issue cho Copilot coding agent xử lý async | [./commands/model-agent/coding-agent-assign/README.md](./commands/model-agent/coding-agent-assign/README.md) |
 | `Coding agent PR` | Tóm tắt diff thành PR, review flow issue→PR | [./commands/model-agent/coding-agent-pr/README.md](./commands/model-agent/coding-agent-pr/README.md) |
 | `Policy approval` | Xem/duyệt policy, approve lệnh nhạy cảm | [./commands/model-agent/policy-approval/README.md](./commands/model-agent/policy-approval/README.md) |
+| `Session Target` | Chọn harness + nơi agent chạy: Local/Copilot/Cloud | [./commands/model-agent/session-target/README.md](./commands/model-agent/session-target/README.md) |
 
 ## Nhóm 3 — Code actions (10)
 
@@ -154,7 +153,7 @@ Vì sao học commands thay vì gõ tự nhiên mãi? Câu trả lời ngắn:
 > ```text
 > Prompt thật: /status → /instructions → /mcp (chạy theo thứ tự)
 > Kết quả mong đợi: /status hiện Active + đúng account; /instructions liệt kê
-> muse-instructions.md + files applyTo; /mcp hiện github connected.
+> copilot-instructions.md + files applyTo; /mcp hiện github connected.
 > Verify: nếu /mcp báo disconnected → check .vscode/mcp.json + key, reconnect.
 > Prompt thật: @github Tóm tắt issue #123 (mô tả + comments mới nhất)
 > Kết quả mong đợi: bản tóm tắt 5–7 dòng + ai đang làm. Copy vào task cho /agent.
@@ -163,7 +162,7 @@ Vì sao học commands thay vì gõ tự nhiên mãi? Câu trả lời ngắn:
 | Lệnh | Là gì (hiểu nôm na) + Ví dụ cụ thể | Khi nào dùng + Chi tiết |
 |---|---|---|
 | `/instructions` | Xem/sửa instructions đang load cho repo này | [./commands/system-knowledge/instructions/README.md](./commands/system-knowledge/instructions/README.md) |
-| `/prompts` | Liệt kê prompt files `.github/prompts/` khả dụng | [./commands/system-knowledge/prompt-file/README.md](./commands/system-knowledge/prompt-file/README.md) |
+| `/prompts` | Liệt kê prompt files `.github/prompts/` khả dụng (**legacy** — deprecated cho Agent Host; ưu tiên `/skills`, bài 05) | [./commands/system-knowledge/prompt-file/README.md](./commands/system-knowledge/prompt-file/README.md) |
 | `/skills` | Liệt kê Agent Skills `.github/skills/` khả dụng | [./commands/system-knowledge/agent-skill/README.md](./commands/system-knowledge/agent-skill/README.md) |
 | `/mcp` | Xem MCP servers/tools đang bật, reconnect khi rớt | [./commands/system-knowledge/mcp/README.md](./commands/system-knowledge/mcp/README.md) |
 | `MCP add` | Thêm MCP server mới vào cấu hình | [./commands/system-knowledge/mcp-add/README.md](./commands/system-knowledge/mcp-add/README.md) |
@@ -182,7 +181,7 @@ Vì sao học commands thay vì gõ tự nhiên mãi? Câu trả lời ngắn:
 
 ## 6. Công thức 5 lệnh session đầu (giữ nguyên, làm 1 lần/repo)
 
-Section này trả lời: mở repo mới thì chạy 5 lệnh nào, theo thứ tự nào, mỗi lệnh kiểm tra gì?
+Mở repo mới thì chạy 5 lệnh này, theo đúng thứ tự, mỗi lệnh kiểm tra 1 điểm:
 
 ```text
  /status → /instructions → /mcp → /customAgent → /policy
@@ -203,7 +202,7 @@ Section này trả lời: mở repo mới thì chạy 5 lệnh nào, theo thứ 
 
 ## 7. Lưu ý plan/model gating (AI Credits, BYOK)
 
-Section này trả lời: lệnh hoặc model không hiện trong list thì phải kiểm tra gì trước khi kết luận "Copilot hỏng"?
+Lệnh hoặc model không hiện trong list thì kiểm tra những gì dưới đây trước khi kết luận "Copilot hỏng":
 
 - Thẻ "AI Credits" là cách gọi cũ. Từ 01/06/2026, GitHub Copilot dùng **AI Credits**
   (usage-based billing): 1 credit = $0.01, trừ theo model × số token. Code completions không trừ credits.
@@ -228,8 +227,6 @@ Section này trả lời: lệnh hoặc model không hiện trong list thì ph�
 ---
 
 ## 8. Walkthrough + ví dụ copy-paste
-
-Section này trả lời: dùng lệnh theo flow thật (hỏi → sửa → test → giao task) trông ra sao?
 
 ### 8.1. Flow Ask → Edit → Agent bằng commands (10 phút)
 
@@ -338,8 +335,6 @@ gh copilot suggest "viet commit message conventional commits cho diff hien tai"
 
 ## 9. Hiểu nhầm thường gặp + Pitfalls + bài tập
 
-Section này trả lời: người dùng commands hay sai gì, và tự sửa bằng 4 bài tập nào?
-
 ### 9.0. Hiểu nhầm thường gặp về commands
 
 | Hiểu nhầm | Sự thật | Ví dụ |
@@ -386,6 +381,6 @@ Mở `/model` liệt kê models khả dụng ở plan bạn. So với đồng ng
 - **Bài 01 — Cài đặt**: `/login`, `/status`, `/network`, `/proxy` khi setup báo đỏ.
 - **Bài 02 — Surfaces**: commands nào dùng được trên surface nào (local vs cloud).
 - **Bài 03 — Instructions**: `/instructions` + `applyTo` — file đằng sau commands.
-- **Bài 05 — Prompt files**: prompt files + Agent Skills — commands gọi workflow tái dùng.
+- **Bài 05 — Agent Skills & Custom Instructions**: `SKILL.md` (chuẩn 2026) + port prompt files legacy — commands gọi workflow tái dùng.
 - **Bài 10 — Modes & Permissions**: `policy-approval`, `content-exclusion`, model gating chi tiết.
 - **Bài 11 — Worktrees & Checkpoints**: coding agent assign/PR trong flow issue → PR.

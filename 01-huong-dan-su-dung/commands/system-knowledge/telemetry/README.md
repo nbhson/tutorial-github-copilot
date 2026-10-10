@@ -22,6 +22,8 @@ Cách gọi `Telemetry` — làm đúng theo khối dưới đây, kèm câu ki�
 ```bash
 Settings → “telemetry” / “copilot data”
 # xem trạng thái + bật/tắt theo policy team
+# Kỳ vọng: biết trạng thái on/off + ai quản (cá nhân/org)
+# Verify: đối chiếu settings với policy team — khớp
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Telemetry`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

@@ -22,6 +22,7 @@ Cách gọi `/summarize` — làm đúng theo khối dưới đây, kèm câu ki
 ```bash
 /summarize
 /summarize nén chat này thành 5 gạch + việc còn dở
+# Kỳ vọng: bản tóm tắt gọn: đã làm / đã chốt / còn dở
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/summarize`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/summarize` — đổi phần tên file/task cho đúng việc
 
 ```bash
 /summarize “nén chat này: đã làm gì, quyết định nào đã chốt, còn dở gì”
+# Verify: paste tóm tắt sang chat mới, hỏi tiếp được
 ```
 
 **Kết quả mong đợi:** Bản tóm tắt gọn: đã làm / đã chốt / còn dở + file liên quan; paste sang chat mới là tiếp tục được.

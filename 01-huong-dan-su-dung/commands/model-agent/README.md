@@ -1,6 +1,6 @@
-# Nhóm Model & Agent (9 lệnh)
+# Nhóm Model & Agent (10 lệnh)
 
-> **Dành cho:** người chọn model/chế độ và gọi agent · **Vấn đề:** 9 việc (chọn não, Ask/Edit/Agent, custom/coding agent, soi quota, duyệt policy) không biết bắt đầu từ đâu · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi click sang README chi tiết (~2 phút)
+> **Dành cho:** người chọn model/chế độ và gọi agent · **Vấn đề:** 10 việc (chọn não, Ask/Edit/Agent, chọn nơi chạy, custom/coding agent, soi quota, duyệt policy) không biết bắt đầu từ đâu · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi click sang README chi tiết (~2 phút)
 
 Mỗi README chi tiết trả lời 5 câu: **dùng khi nào · cho ai · kết quả ra gì · ví dụ copy-paste · liên quan.**
 
@@ -15,5 +15,6 @@ Mỗi README chi tiết trả lời 5 câu: **dùng khi nào · cho ai · kết 
 | `Coding agent assign` | Giao issue cho Copilot coding agent xử lý async | [./coding-agent-assign/README.md](./coding-agent-assign/README.md) |
 | `Coding agent PR` | Tóm tắt diff thành PR, review flow issue→PR | [./coding-agent-pr/README.md](./coding-agent-pr/README.md) |
 | `Policy approval` | Xem/duyệt policy, approve chạy lệnh nhạy cảm | [./policy-approval/README.md](./policy-approval/README.md) |
+| `Session Target` | Chọn harness + nơi agent chạy: Local/Copilot/Cloud | [./session-target/README.md](./session-target/README.md) |
 
 Quay về: [../README.md](../README.md) · Bài tổng: [../../04-chat-commands-toan-tap.md](../../04-chat-commands-toan-tap.md)

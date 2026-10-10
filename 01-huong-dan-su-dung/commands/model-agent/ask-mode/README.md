@@ -22,6 +22,8 @@ Cách gọi `Ask mode` — làm đúng theo khối dưới đây, kèm câu ki�
 ```bash
 Chat → dropdown mode → Ask
 “so sánh 2 cách cache, chưa cần sửa code”
+# Kỳ vọng: trả lời phân tích, không file nào bị đổi
+# Verify: git status sạch sau khi hỏi
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Ask mode`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

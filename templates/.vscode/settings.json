@@ -1,6 +1,6 @@
 {
-  // Copilot instruction files: tu dong nap .github/muse-instructions.md + instructions con.
-  // File goc: .github/muse-instructions.md (<200 dong). Chi tiet theo path: .github/instructions/*.instructions.md
+  // Copilot instruction files: tu dong nap .github/copilot-instructions.md (hoac AGENTS.md) + instructions con.
+  // File goc: .github/copilot-instructions.md (<200 dong). Chi tiet theo path: .github/instructions/*.instructions.md
   "github.copilot.chat.codeGeneration.useInstructionFiles": true,
 
   // Content exclusion: Copilot KHONG doc cac path nay (them path nhay cam cua repo vao).

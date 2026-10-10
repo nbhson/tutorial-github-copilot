@@ -22,6 +22,8 @@ Cách gọi `Coding agent assign` — làm đúng theo khối dưới đây, kè
 ```bash
 GitHub issue → Assign → Copilot
 Kèm: mục tiêu / phạm vi / lệnh verify
+# Kỳ vọng: sáng ra có PR chờ review, diff đúng phạm vi, test xanh
+# Verify: PR mở từ branch agent, CI xanh, không đụng file ngoài phạm vi
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Coding agent assign`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

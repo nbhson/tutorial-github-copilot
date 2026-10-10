@@ -1,6 +1,8 @@
-# Tips 07 — Thiết Kế Prompts & Skills Tái Dùng: Viết 1 Lần, Cả Team Hưởng
+# Tips 07 — Thiết Kế Skills & Prompts Tái Dùng: Viết 1 Lần, Cả Team Hưởng
 
-> Prompt gõ tay mỗi lần là nợ. Bài này dạy bạn thiết kế prompt files (`.prompt.md`), instructions (`applyTo` globs) và skills (`SKILL.md`) tái dùng: frontmatter mode/tools, variables, few-shot, versioning.
+> Việc lặp lại gõ tay mỗi lần là nợ. Bài này dạy bạn thiết kế **Agent Skills** (`SKILL.md` — chuẩn khuyến nghị 2026, chạy mọi harness), prompt files (`.prompt.md` — legacy, chỉ Local), instructions (`applyTo` globs): frontmatter, variables, few-shot, versioning.
+>
+> **Lưu ý 2026:** `.prompt.md` (prompt files) **deprecated cho Agent Host** (Copilot/Cloud) — vẫn chạy Local. Việc mới nên ưu tiên **Agent Skill** (`SKILL.md`, chuẩn mở) — chi tiết bài 05. Tips này dạy cả 2, khuyến nghị skill.
 
 ## Mục lục
 
@@ -22,9 +24,9 @@
 
 | Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
 |---|---|---|---|---|
-| **Prompt file (`.prompt.md`)** | Đơn mẫu in sẵn: điền 2 chỗ là gọi được. | Như mẫu đơn xin nghỉ: điền tên + ngày là nộp. | `/team-bug scope=src/payments bug="refund 500"` gọi file `team-bug.prompt.md`. | 3 người gọi cùng prompt ra cùng format. |
+| **Prompt file (`.prompt.md`)** | Đơn mẫu in sẵn: điền 2 chỗ là gọi được. **Legacy — deprecated cho Agent Host (Cloud).** | Như mẫu đơn xin nghỉ: điền tên + ngày là nộp. | `/team-bug scope=src/payments bug="refund 500"` gọi file `team-bug.prompt.md`. | 3 người gọi cùng prompt ra cùng format. (Local only) |
 | **Instructions (`applyTo`)** | Luật dán theo phòng: vào phòng nào áp luật đó. | Như "phòng lab cấm ăn uống" — chỉ áp trong lab. | `applyTo: "src/payments/**"` → refund >30 ngày phải hỏi duyệt. | Sửa file payments thì luật hiện; sửa `auth` thì không. |
-| **Skill (`SKILL.md`)** | Quy trình 5+ bước robot tự biết khi nào dùng. | Như sổ tay PCCC: thấy cháy là mở đúng trang, không cần ai nhắc. | `skills/release/SKILL.md` (bump + changelog + tag + CI). | Nói "release patch" → Copilot tự load procedure. |
+| **Skill (`SKILL.md`)** | Quy trình 5+ bước robot tự biết khi nào dùng. **Chuẩn khuyến nghị 2026 (chạy Local + Cloud + CLI).** | Như sổ tay PCCC: thấy cháy là mở đúng trang, không cần ai nhắc. | `skills/release/SKILL.md` (bump + changelog + tag + CI). | Nói "release patch" → Copilot tự load procedure (mọi harness). |
 | **Variables / Few-shot** | Ô trống + văn mẫu để output đồng nhất. | Như chỗ trống trong đơn + 1 đơn điền mẫu. | `${input:scope}` + `Input: ... / Output đúng: ...`. | Không còn sửa tay mỗi lần gọi. |
 | **Frontmatter (mode/tools)** | Tem dán ngoài: ai được dùng, dùng dao nào. | Như nhãn thuốc: uống khi nào, liều bao nhiêu. | `mode: agent / tools: [search,read,edit,test]`. | Research (`ask`) không sửa code dù bạn nhờ. |
 
@@ -72,7 +74,7 @@ Sau: viết 1 file 30 dòng, gọi `/team-bug` 20 lần, output đồng nhất
 | Loại | File | Kích hoạt | Khi dùng |
 |---|---|---|---|
 | Prompt files | `.github/prompts/*.prompt.md` | Gọi tay `/tên-file` | Task lặp lại: bug, review, research |
-| Instructions | `.github/muse-instructions.md` + `*.instructions.md` | Tự áp mọi turn / theo glob | Luật, convention, cấm địa |
+| Instructions | `.github/copilot-instructions.md` + `*.instructions.md` | Tự áp mọi turn / theo glob | Luật, convention, cấm địa |
 | Skills | `skills/*/SKILL.md` | Copilot tự nhận diện theo mô tả | Procedure nhiều bước: release, migrate |
 
 Phân biệt nhanh:
@@ -87,7 +89,7 @@ Nơi đặt chuẩn Copilot 2026:
 
 ```text
 .github/
-  muse-instructions.md        # luật chung <200 dòng
+  copilot-instructions.md        # luật chung <200 dòng
   instructions/
     payments.instructions.md  # applyTo: src/payments/**
     generated.instructions.md # applyTo: src/generated/**
@@ -102,7 +104,9 @@ skills/
 
 ---
 
-## 3. Prompt files (.prompt.md): mẫu gọi nhanh
+## 3. Prompt files (.prompt.md): mẫu gọi nhanh (**legacy — deprecated cho Agent Host**)
+
+> **2026:** việc mới nên ưu tiên **Agent Skill** (mục 5). Prompt file `.prompt.md` vẫn chạy **Local/VS Code**, nhưng **KHÔNG chạy Cloud/Agent Host**. Repo cũ đã có prompt file → giữ Local, port dần sang skill (bài 05 mục 3.3).
 
 ### Cấu trúc frontmatter chuẩn
 
@@ -205,12 +209,12 @@ Ghi findings ra ${input:outFile:docs/research.md} rồi dừng.
 
 ### Nguyên tắc: chung ở root, riêng theo glob
 
-`.github/muse-instructions.md` (<200 dòng):
+`.github/copilot-instructions.md` (<200 dòng):
 
 **Ví dụ 1 — Instructions gốc (copy-paste):**
 
 ```markdown
-# muse-instructions.md
+# copilot-instructions.md
 
 ## Stack
 - Node 20, TypeScript strict, pnpm.
@@ -382,13 +386,13 @@ Lợi ích:
 | Phút | Việc | Làm gì (copy-paste) |
 |---|---|---|
 | 0–5 | Chọn mẫu | Lấy prompt bug bạn ưng nhất (Tips 02 Mẫu 1) |
-| 5–15 | Viết file | Tạo `.github/prompts/team-bug.prompt.md` theo ví dụ 1 mục 3, thêm variables + few-shot |
-| 15–20 | Test | Gọi `/team-bug scope=src/auth bugDescription="test"` trên bug thật, sửa output chưa chuẩn |
-| 20–25 | Tách luật | Chuyển dòng NEVER chung vào `muse-instructions.md`, chỉ giữ luật riêng bug trong prompt file |
-| 25–30 | Share | Commit + PR, nhờ 1 đồng nghiệp gọi thử, ghi feedback 3 dòng |
-| 30–35 | Version | Thêm vào README team: khi nào dùng /team-bug, khi nào dùng /team-review |
+| 5–15 | Viết file | Tạo `.github/skills/team-bug/SKILL.md` (chuẩn 2026 — chạy Cloud + Local), thêm variables + few-shot. (Local-only: `.github/prompts/team-bug.prompt.md` legacy) |
+| 15–20 | Test | Nói "fix bug scope=src/auth" (KHÔNG gõ /) trên bug thật (skill tự load), sửa output chưa chuẩn |
+| 20–25 | Tách luật | Chuyển dòng NEVER chung vào `copilot-instructions.md`, chỉ giữ luật riêng bug trong skill |
+| 25–30 | Share | Commit + PR, nhờ 1 đồng nghiệp nói trigger thử, ghi feedback 3 dòng |
+| 30–35 | Version | Thêm vào README team: khi nào nói "fix bug" (skill tự load), khi nào review |
 
-Sau 35 phút: team có 1 prompt chuẩn, mọi bug output cùng format.
+Sau 35 phút: team có 1 skill chuẩn (chạy mọi harness), mọi bug output cùng format.
 
 ---
 
@@ -396,14 +400,15 @@ Sau 35 phút: team có 1 prompt chuẩn, mọi bug output cùng format.
 
 | Nhu cầu | Hiểu nôm na | Ví dụ | Dùng gì | File | Gọi thế nào |
 |---|---|---|---|---|---|
-| Task lặp lại (bug/review/research) | Đơn mẫu điền là xong. | Fix bug tuần nào cũng có. | Prompt file | `.github/prompts/*.prompt.md` | `/tên-file var=...` |
-| Luật áp mọi turn | Nội quy dán tường. | Cấm sửa `generated/` mọi lúc. | Root instructions | `muse-instructions.md` | Tự áp, không cần gọi |
+| Task lặp lại (bug/review/research) | Công thức nấu ăn tự động, agent tự mở đúng trang. | Fix bug tuần nào cũng có. | **Skill (2026)** | `.github/skills/<ten>/SKILL.md` | Tự trigger khi khớp description (Local + Cloud) |
+| Task lặp (chỉ Local, việc cũ) | Đơn mẫu in sẵn, gọi tay. **Legacy.** | Repo cũ chưa port. | Prompt file | `.github/prompts/*.prompt.md` | `/tên-file var=...` (Local only) |
+| Luật áp mọi turn | Nội quy dán tường. | Cấm sửa `generated/` mọi lúc. | Root instructions | `copilot-instructions.md` | Tự áp, không cần gọi |
 | Luật riêng 1 module | Nội quy theo phòng. | Riêng `payments/` cần idempotency-key. | Scoped instructions | `*.instructions.md` + applyTo | Tự áp khi chạm glob |
-| Procedure >5 bước | Sổ tay 5+ bước. | Release: bump + changelog + tag + CI. | Skill | `skills/*/SKILL.md` | Tự trigger / gọi tên skill |
+| Procedure >5 bước | Sổ tay 5+ bước, agent tự biết dùng. | Release: bump + changelog + tag + CI. | **Skill** | `skills/*/SKILL.md` | Tự trigger / gọi tên skill |
 | Hỏi 1 lần, không tái dùng | Nói miệng 1 lần. | Hỏi lẻ, không lặp lại. | Chat thường | Không file | Gõ tay + new chat |
-| Gate verify/report | Trạm kiểm soát trước cổng. | Gate trước commit. | Prompt file verify | `verify-*.prompt.md` | `/verify-feature` trước commit |
+| Gate verify/report | Trạm kiểm soát trước cổng. | Gate trước commit. | Skill verify | `skills/verify/SKILL.md` | Tự trigger khi nói "verify" |
 
-> Quy tắc ngón tay: **1 dòng → instructions, 1 task lặp → prompt file, 1 quy trình dài → skill.**
+> Quy tắc ngón tay: **1 dòng → instructions, 1 task lặp → skill (2026) / prompt file (legacy Local), 1 quy trình dài → skill.**
 
 ### Before / After — gõ tay vs đóng gói
 
@@ -449,7 +454,7 @@ Fix bug refund quá 30 ngày bị 500 trong src/payments, nhớ không đụng g
 
 **Bài 2 (20 phút — tách instructions):**
 
-1. Rút gọn `muse-instructions.md` xuống <200 dòng.
+1. Rút gọn `copilot-instructions.md` xuống <200 dòng.
 2. Tách 2 files `applyTo` cho 2 modules bạn hay sai nhất.
 3. Test: nhờ Copilot sửa file trong scope, xem luật riêng có áp không?
 

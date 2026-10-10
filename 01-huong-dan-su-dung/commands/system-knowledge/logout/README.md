@@ -22,6 +22,8 @@ Cách gọi `/logout` — làm đúng theo khối dưới đây, kèm câu kiể
 ```bash
 /logout
 # xong /login lại nếu cần
+# Kỳ vọng: credentials local sạch, máy không còn vào được account bạn
+# Verify: /status báo signed-out
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/logout`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

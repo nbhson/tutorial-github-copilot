@@ -22,6 +22,7 @@ Cách gọi `Ctrl+I (inline chat)` — làm đúng theo khối dưới đây, k�
 ```bash
 Bôi đen code → Ctrl+I (Win/Linux) / Cmd+I (Mac)
 Nhập: thêm null check, giữ nguyên API
+# Kỳ vọng: diff hiện ngay tại chỗ để Accept/Discard
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Ctrl+I (inline chat)`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `Ctrl+I (inline chat)` — đổi phần tên file/task cho đ�
 
 ```bash
 (bôi đen hàm login) Ctrl+I → “thêm null check cho params, giữ nguyên API shape”
+# Kỳ vọng: diff nhỏ đúng đoạn đã chọn, không lan chỗ khác
 ```
 
 **Kết quả mong đợi:** Diff hiện ngay tại chỗ; Accept từng hunk hoặc Discard; code chạy tiếp không gián đoạn.

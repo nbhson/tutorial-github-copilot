@@ -21,6 +21,8 @@ Cách gọi `/status` — làm đúng theo khối dưới đây, kèm câu kiể
 
 ```bash
 /status
+# Kỳ vọng: thấy active/account/plan/model/MCP overview trong 30 giây
+# Verify: nói được "plan X, model Y, login Z"
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/status`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -32,6 +34,8 @@ Prompt mẫu cho `/status` — đổi phần tên file/task cho đúng việc c�
 **Prompt thật (copy-paste, nhớ gắn scope trước):**
 
 ```bash
+# Kỳ vọng: thấy active/account/plan/model/MCP overview trong 30 giây
+# Verify: nói được "plan X, model Y, login Z"
 /status
 ```
 

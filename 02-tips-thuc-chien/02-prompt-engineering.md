@@ -10,7 +10,7 @@
 - [4. Sáu mẫu prompt theo task (copy-paste)](#4-sáu-mẫu-prompt-theo-task-copy-paste)
 - [5. Few-shot với prompt files (.prompt.md)](#5-few-shot-với-prompt-files-promptmd)
 - [6. Walkthrough: từ prompt tệ tới prompt tốt](#6-walkthrough-từ-prompt-tệ-tới-prompt-tốt)
-- [7. Bảng sai→sửa](#7-bảng-saisửa)
+- [7. Bảng sai→ sửa](#7-bảng-saisửa)
 - [8. Non-coder guide](#8-non-coder-guide)
 - [9. Checklist trước khi Enter](#9-checklist-trước-khi-enter)
 - [10. Pitfalls + fix](#10-pitfalls--fix)
@@ -19,15 +19,17 @@
 
 ---
 
-## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+## 0. Giải ngố thuật ngữ (1 câu + so sánh + ví dụ + verify)
 
-| Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
+Mỗi thuật ngữ đủ 3 lớp: **1 câu định nghĩa**, **so sánh đời thường**, **ví dụ copy-paste** — kèm 1 dòng `Verify`.
+
+| Thuật ngữ | Hiểu nôm na (1 câu) | So sánh đời thường | Ví dụ copy-paste | Verify |
 |---|---|---|---|---|
-| **Scope** | Khoanh vùng: chỉ được đụng files này. | Như khoanh đất xây nhà: ngoài vạch là đất hàng xóm, đụng là kiện. | `Scope src/payments/*.ts, đừng đụng src/legacy/`. | `git diff --stat` chỉ hiện files trong scope. |
-| **End-state** | Trạng thái xong trông thế nào (không phải làm gì). | Như đặt món: "cho 1 phở bò tái" thay vì "nấu gì ngon ngon". | `Top 5 complaints: quote + count + segment, markdown table`. | Output khớp đúng format + số liệu, không chung chung. |
-| **Success criteria / Verify** | Cách chứng minh xong thật (lệnh + log). | Như biên lai: không hóa đơn là chưa trả tiền. | `Done = npm test -- payments xanh + dán log`. | Thấy log xanh paste trong chat/PR, không phải "should work". |
-| **Ràng buộc phủ định (NEVER)** | Danh sách cấm địa: đừng đụng X. | Như dặn trẻ: "đừng thò tay ổ điện, đừng mở cửa người lạ". | `Đừng đụng src/generated/, đừng commit main, đừng thêm dep`. | Diff không có file cấm; commit thẳng main bị chặn. |
-| **Few-shot** | Cho 1 ví dụ đúng để Copilot bắt chước. | Như cho văn mẫu trước khi viết: đọc mẫu là biết dàn bài. | Cuối `.prompt.md` có `Input: ... / Output đúng: ...`. | 3 lần gọi cùng prompt ra cùng format. |
+| **Scope** | Khoanh vùng: chỉ được đụng files này. | Khoanh đất xây nhà: ngoài vạch là đất hàng xóm, đụng là kiện. | `Scope src/payments/*.ts, đừng đụng src/legacy/`. | `git diff --stat` chỉ hiện files trong scope. |
+| **End-state** | Trạng thái xong trông thế nào (không phải làm gì). | Đặt món: "1 phở bò tái" thay vì "nấu gì ngon ngon". | `Top 5 complaints: quote + count + segment, markdown table`. | Output khớp đúng format + số liệu, không chung chung. |
+| **Success criteria / Verify** | Cách chứng minh xong thật (lệnh + log). | Biên lai: không hóa đơn là chưa trả tiền. | `Done = npm test -- payments xanh + dán log`. | Thấy log xanh paste trong chat/PR, không phải "should work". |
+| **Ràng buộc phủ định (NEVER)** | Danh sách cấm địa: đừng đụng X. | Dặn trẻ: "đừng thò tay ổ điện, đừng mở cửa người lạ". | `Đừng đụng src/generated/, đừng commit main, đừng thêm dep`. | Diff không có file cấm; commit thẳng main bị chặn. |
+| **Few-shot** | Cho 1 ví dụ đúng để Copilot bắt chước. | Cho văn mẫu trước khi viết: đọc mẫu là biết dàn bài. | Cuối `.prompt.md` có `Input: ... / Output đúng: ...`. | 3 lần gọi cùng prompt ra cùng format. |
 
 ```mermaid
 flowchart LR
@@ -64,8 +66,8 @@ Mỗi prompt tốt làm 3 việc:
 
 ### 1.3. Đắt rẻ của prompt
 
-- Viết prompt kỹ 2 phút → tiết kiệm 20 phút restore checkpoint + retry.
-- Prompt ẩu 10 giây → 5 turns cãi nhau, mỗi turn gánh thêm rác.
+- Viết prompt kỹ 2 phút → tiết kiệm 20 phút restore checkpoint + retry (tốn AI Credits).
+- Prompt ẩu 10 giây → 5 turns cãi nhau, mỗi turn gánh thêm rác + credits.
 - Plan-first ([Tips 03](./03-plan-first-workflow.md)) chính là prompt đắt cho task lớn: trả 1 turn plan để tránh 10 turns code sai.
 
 ---
@@ -172,7 +174,7 @@ Model cần biết **cấm địa**. Không dặn là nó sẽ đụng.
 "Không tạo file mới nếu chưa hỏi. Không xóa test cũ để cho xanh."
 ```
 
-Mẹo: gom ràng buộc chung vào `.github/muse-instructions.md`, chỉ để ràng buộc riêng task trong prompt.
+Mẹo: gom ràng buộc chung vào `.github/copilot-instructions.md` (chuẩn 2026, <200 dòng), chỉ để ràng buộc riêng task trong prompt.
 
 ---
 
@@ -193,7 +195,7 @@ Ràng buộc: đừng đụng <liệt kê cấm địa>.
 Ví dụ điền sẵn:
 
 ```text
-BUG: Login email có dấu bị 500. Steps: nhập "tên@vidu.vn" → bấm login → 500.
+BUG: Login email có dấu bị 500. Steps: nhập "ten@vidu.vn" -> bấm login -> 500.
 Log: TypeError normalizeEmail ở #file:src/auth/login.ts:42.
 Tìm root cause trong file đó, fix tối thiểu, thêm regression test,
 chạy npm test -- auth và dán log. Đừng đổi API, đừng đụng generated/.
@@ -258,6 +260,7 @@ Output: table + 3 bullet insight + confidence 1 dòng.
 ### 5.1. Vì sao cần prompt files?
 
 - Viết mẫu 6 lần → lần 7 vẫn gõ lại. Lưu vào `.github/prompts/*.prompt.md`, gọi `/tên-file`, team dùng chung.
+- **Lưu ý 2026:** prompt files `.prompt.md` đang deprecated trên Agent Host (Cloud) — vẫn chạy trên Local/VS Code. Khuyến nghị chuyển việc lặp lại sang **Agent Skills** (`SKILL.md`, chuẩn mở, portable mọi harness). Xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 
 ### 5.2. Cấu trúc prompt file chuẩn
 
@@ -281,7 +284,7 @@ Fix bug mô tả trong ${input:bugDescription} tại ${input:scope}.
 
 ## Ràng buộc
 - Đừng đụng src/generated/, đừng commit thẳng main.
-- Đỏ sau 3 lần → dừng và báo blocker.
+- Đỏ sau 3 lần -> dừng và báo blocker.
 ```
 
 Gọi:
@@ -358,7 +361,7 @@ Bài học:
 
 ---
 
-## 7. Bảng sai→sửa
+## 7. Bảng sai→ sửa
 
 | Sai (prompt ẩu) | Hiểu nôm na | Ví dụ cụ thể | Vì sao hỏng | Sửa (copy ý này) |
 |---|---|---|---|---|
@@ -370,7 +373,7 @@ Bài học:
 | `"làm cho nhanh"` | Bảo thợ ẩu cho kịp giờ. | Model xóa test để xanh cho nhanh. | Model cắt test, cắt verify | Đổi thành làm tối thiểu nhưng test phải xanh, dán log |
 | Không ràng buộc phủ định | Không rào, bò ăn lúa hàng xóm. | Sửa luôn `generated/` + push thẳng main. | Sửa lan sang file cấm | Liệt kê NEVER: generated/, schema, main, dep mới |
 | Không format output | Nhận thư tay dài 5 trang khó đọc. | Prose 100 dòng không table. | Nhận prose dài khó review | Ép format: table / checklist / file:line |
-| Không dùng prompt files | Mỗi lần nấu 1 công thức mới. | 5 người 5 kiểu prompt bug. | Mỗi lần gõ một kiểu | Lưu vào .github/prompts/*.prompt.md, gọi /tên-file |
+| Không dùng prompt files | Mỗi lần nấu 1 công thức mới. | 5 người 5 kiểu prompt bug. | Mỗi lần gõ một kiểu | Lưu vào `.github/prompts/*.prompt.md` (Local) hoặc chuyển sang Agent Skills (chuẩn 2026) |
 
 ### Before / After — prompt dở vs tốt (bắt buộc)
 
@@ -411,7 +414,7 @@ Cùng công thức 4 thành phần, chỉ thay từ ngữ:
 **Prompt khởi động cho người mới (copy-paste):**
 
 ```text
-"Phỏng vấn tôi để hiểu project này, rồi tạo muse-instructions.md.
+"Phỏng vấn tôi để hiểu project này, rồi tạo copilot-instructions.md.
 Hỏi từng câu một: project làm gì, dữ liệu ở đâu, output muốn gì,
 cái gì không được đụng. Khi đủ thì sinh file <100 dòng."
 ```
@@ -458,7 +461,7 @@ Mỗi lý do kèm 2 quotes + số lượng. Output table.
 | Output prose dài 100 dòng | Khó review, khó diff | Ép format: table / checklist / file:line |
 | File khổng lồ ném nguyên | Quên rule, lan man | Tóm tắt, chat chính chỉ nhận outline |
 | Hỏi lại cùng câu 3 lần | Model không hiểu ý | Viết lại bằng end-state + ví dụ input/output mẫu |
-| Prompt files thiếu variables | Mỗi lần vẫn phải sửa tay | Dùng ${input:...} + description rõ |
+| Prompt files thiếu variables | Mỗi lần vẫn phải sửa tay | Dùng `${input:...}` + description rõ |
 
 ---
 
@@ -481,6 +484,7 @@ Mỗi lý do kèm 2 quotes + số lượng. Output table.
 - Lấy prompt bạn dùng >2 lần/tuần, lưu thành `.github/prompts/team-bug.prompt.md`.
 - Thêm frontmatter mode/tools/description + 1 ví dụ few-shot.
 - Nhờ 1 đồng nghiệp gọi `/team-bug` và cho feedback: output có đồng nhất không?
+- Nếu team dùng Agent Host/Cloud: chuyển bản mẫu thành Agent Skill (`SKILL.md`) theo [Tips 07](./07-thiet-ke-prompts-skills.md).
 
 > Đạt: sau 1 tuần, ≥80% prompts của bạn có scope + verify + NEVER mà không cần cố nhớ.
 
@@ -492,7 +496,7 @@ Mỗi lý do kèm 2 quotes + số lượng. Output table.
   - [Tips 01](./01-context-hygiene.md) — scope gọn + chat sạch
   - [Tips 03](./03-plan-first-workflow.md) — Ask → Edit → Agent leo thang
   - [Tips 04](./04-verification-done-that.md) — done criteria + review gate
-  - [Tips 07](./07-thiet-ke-prompts-skills.md) — thiết kế prompt files tái dùng
+  - [Tips 07](./07-thiet-ke-prompts-skills.md) — thiết kế prompt files tái dùng + Agent Skills chuẩn 2026
   - [Tips 10](./10-debugging-power-moves.md) — log → prompt khi debug
 
 > Mẹo 1 dòng: _mỗi prompt đều trả lời 4 câu: files nào, ra cái gì, chi tiết nào, format nào — thiếu 1 là lệch 1 hướng._

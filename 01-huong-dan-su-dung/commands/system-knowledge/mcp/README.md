@@ -21,7 +21,9 @@ Cách gọi `/mcp` — làm đúng theo khối dưới đây, kèm câu kiểm t
 
 ```bash
 /mcp
-/mcp liệt kê servers/tools đang bật
+# liệt kê servers/tools đang bật
+# Kỳ vọng: thấy list servers connected + tools khả dụng
+# Verify: test 1 tool thật (list PRs/query/test browser) chạy được
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/mcp`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

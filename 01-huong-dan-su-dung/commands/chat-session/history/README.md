@@ -22,6 +22,7 @@ Cách gọi `/history` — làm đúng theo khối dưới đây, kèm câu ki�
 ```bash
 /history
 # hoặc Ctrl+Shift+P → “Chat: Show History”
+# Kỳ vọng: danh sách chat cũ theo thời gian hiện ra
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/history`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/history` — đổi phần tên file/task cho đúng việc c
 
 ```bash
 /history — tìm chat “refactor login hôm qua” mở lại
+# Kỳ vọng: thấy đúng phiên, mở là tiếp tục được
 ```
 
 **Kết quả mong đợi:** Thấy list chats cũ theo thời gian; mở lại đúng phiên, tiếp tục không cần giải thích lại.

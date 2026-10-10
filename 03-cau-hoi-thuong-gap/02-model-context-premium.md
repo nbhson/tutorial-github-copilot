@@ -50,7 +50,7 @@ Section này trả lời: model đổi ở 3 chỗ nào trong IDE, và đổi ch
 
 - **Completions (gõ code):** theo setting `github.copilot.completions.model` hoặc model mặc định của extension — thường không cần đổi.
 - **Chat sidebar:** dropdown trên cùng khung chat → chọn model cho conversation đó.
-- **Agent/Edit mode:** model chọn trong chat + `muse-instructions.md` có thể gợi ý model phù hợp (nhưng không ép được).
+- **Agent/Edit mode:** model chọn trong chat + `copilot-instructions.md` có thể gợi ý model phù hợp (nhưng không ép được).
 
 Đổi model chat không ảnh hưởng completions và ngược lại.
 
@@ -62,6 +62,7 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # VS Code settings.json: ghim model completions (nếu muốn)
 # Mở Command Palette -> "Preferences: Open User Settings (JSON)" rồi thêm:
 # { "github.copilot.completions.model": "<model-id>" }
+# Verify: reload IDE, gõ code -> suggestions vẫn chạy với model bạn ghim
 # Chat model: đổi bằng dropdown trong Chat view (không có lệnh CLI)
 ```
 
@@ -69,7 +70,7 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** mỗi khi mở chat mới — chọn model theo độ khó việc, đừng để mặc định mãi.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 2. Premium multiplier là gì, model nào tốn bao nhiêu?
@@ -98,6 +99,7 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 ```bash
 # Không có CLI xem hạn mức; check web:
 # https://github.com/settings/copilot -> "AI Credits usage"
+# Verify: bạn thấy cột usage + số credits còn lại trong chu kỳ hiện tại
 # Kinh nghiệm: đầu tháng check 1 lần, giữa tháng check 1 lần
 ```
 
@@ -105,7 +107,7 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** khi chat báo "AI Credits limit reached" — xem lại mình đã đốt Credits vào việc gì.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 3. Context window là gì, Copilot nhét gì vào context?
@@ -116,7 +118,7 @@ Section này trả lời: context gồm những thứ gì, và khi nào nó đ�
 
 **Trả lời 1 câu:** Context là toàn bộ code + instructions + kết quả tool mà Copilot đọc mỗi lần gợi ý, tràn context thì gợi ý tệ và agent quên đầu bài.
 
-**Giải thích chi tiết + ví dụ:** Context = lượng code + instructions Copilot đọc mỗi lần gợi ý. Gồm: file đang mở (vùng quanh con trỏ), file liên quan (imports, file mở gần đây), `#file` / `#selection` bạn attach trong chat, `muse-instructions.md` + instructions khớp `applyTo`, và (Agent mode) kết quả tool calls.
+**Giải thích chi tiết + ví dụ:** Context = lượng code + instructions Copilot đọc mỗi lần gợi ý. Gồm: file đang mở (vùng quanh con trỏ), file liên quan (imports, file mở gần đây), `#file` / `#selection` bạn attach trong chat, `copilot-instructions.md` + instructions khớp `applyTo`, và (Agent mode) kết quả tool calls.
 
 Tràn context → gợi ý tệ, chat quên đầu bài, agent lặp vòng.
 
@@ -128,16 +130,18 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # Trong Chat: gắn file cụ thể thay vì để Copilot tự đoán
 # #file:src/auth/login.ts giải thích hàm này làm gì
 # #selection refactor đoạn này sang async/await
+# Verify: copilot trả lời đúng nội dung file đã attach, không lan man
 
 # Kiểm tra instructions nào đang ăn vào context:
 # VS Code -> Copilot Chat -> "..." -> xem referenced files
+# Verify: danh sách file khớp đúng context bạn mước hiện tại
 ```
 
 **Ví dụ cụ thể:** hỏi về hàm `login` mà Copilot trả lời lan man → chat mới + `#file:src/auth/login.ts` → câu trả lời gọn, đúng file.
 
 > **Khi nào áp dụng:** mỗi khi câu trả lời "lạc đề" — 80% là context nhiễu, không phải model dốt.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 4. Tràn context thì làm gì (chat dài, agent lặp)?
@@ -164,13 +168,14 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # 1. Ctrl+Shift+P -> "Chat: New Chat"
 # 2. Gõ tóm tắt bối cảnh 5 dòng vào chat mới
 # 3. Attach lại đúng 1-2 file cần thiết bằng #file
+# Verify: chat mới trả lời đúng trọng tâm + agent không lặp vòng nữa
 ```
 
 **Ví dụ cụ thể:** agent refactor 20 file chạy 30 phút chưa xong → dừng, chia 3 đợt (models → api → tests), mỗi đợt 1 chat mới.
 
 > **Khi nào áp dụng:** ngay khi thấy agent lặp lần 3 cùng 1 lỗi — đừng để nó đốt Credits vô ích.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 5. BYOK (Bring Your Own Key) là gì, Copilot có hỗ trợ không?
@@ -192,6 +197,7 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 ```bash
 # Kiểm tra org có bật Azure OpenAI integration không (admin, web UI):
 # Org Settings -> Copilot -> Policies -> Models
+# Verify: mục Models có dòng "Azure OpenAI" đã cấu hình tenant
 # Dev thường: không cần làm gì — BYOK là việc của admin
 ```
 
@@ -199,7 +205,7 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** khi compliance hỏi "data đi đâu" — trả lời bằng cấu hình org, xem [bài 09](09-bao-mat-quyen-rieng-tu.md).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 6. Nên dùng model nào cho việc nào (khuyến nghị thực tế)?
@@ -225,13 +231,14 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # Mẫu chat mở đầu để ép scope trước khi chọn model mạnh:
 # "Đọc #file:src/auth/login.ts và #file:src/auth/session.ts,
 #  liệt kê 3 chỗ có thể gây race condition. Chưa cần sửa."
+# Verify: model trả lời đúng 3 điểm, không đi sửa code — đủ scope rồi mới nâng model
 ```
 
 **Ví dụ cụ thể:** cần refactor auth (khó) → chat mới + model mạnh + attach 2 file. Hỏi cú pháp `map` (dễ) → model nhẹ.
 
 > **Khi nào áp dụng:** trước mỗi task >15 phút — dành 10 giây chọn model đúng, tiết kiệm hàng chục lượt tốn Credits.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 7. Completions vs Chat vs Agent tốn quota khác nhau ra sao?
@@ -260,13 +267,14 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # 1. Gõ -> Tab (completions, không tốn Credits)
 # 2. Không ra -> hỏi chat 1 câu gọn (tốn ít)
 # 3. Việc multi-file -> mới bật Agent mode (tốn nhất)
+# Verify: cuối tuần check usage, agent call chiếm <50% tổng chi
 ```
 
 **Ví dụ cụ thể:** đổi tên biến 10 chỗ → dùng IDE rename (0 Credits) thay vì nhờ agent (nhiều lượt tốn Credits).
 
 > **Khi nào áp dụng:** cuối chu kỳ khi Credits đỏ — chuyển 80% việc về completions + chat nhẹ.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 8. Sao cùng 1 prompt mà hôm nay dở hơn hôm qua?
@@ -293,13 +301,14 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # 1. Chat mới + cùng prompt + cùng model -> còn dở không?
 # 2. Tắt .github/instructions custom tạm -> khá hơn không?
 # 3. https://github.com/settings/copilot -> Credits còn không?
+# Verify: bước nào làm thay đổi chất lượng -> đó là root cause
 ```
 
 **Ví dụ cụ thể:** team thêm `frontend-react.instructions.md` với `applyTo: **` → mọi chat backend cũng bị nhồi React context → chất lượng tụt. Fix: sửa `applyTo` cho hẹp (xem [bài 06](06-prompts-agents-instructions.md)).
 
 > **Khi nào áp dụng:** khi "hôm qua còn ngon" — đừng đổi model vội, check context trước.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 9. Có khóa model cố định cho cả team được không?
@@ -308,19 +317,19 @@ Section này trả lời: khóa model cho cả team được ở 2 mức nào, m
 
 > **Hỏi ngắn gọn:** _Có khóa model cố định cho cả team được không?_
 
-**Trả lời 1 câu:** Được — admin khóa bằng org allowlist (ép buộc) và team ghi khuyến nghị vào `muse-instructions.md` (không ép được).
+**Trả lời 1 câu:** Được — admin khóa bằng org allowlist (ép buộc) và team ghi khuyến nghị vào `copilot-instructions.md` (không ép được).
 
 **Giải thích chi tiết + ví dụ:** Được, ở 2 mức:
 
 - **Org policy (admin):** allowlist model nào được dùng → mọi member chỉ thấy model đó (Business/Enterprise).
-- **Repo convention:** ghi vào `muse-instructions.md` ("dùng model X cho review") — chỉ là khuyến nghị, không ép được.
+- **Repo convention:** ghi vào `copilot-instructions.md` ("dùng model X cho review") — chỉ là khuyến nghị, không ép được.
 
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```markdown
-<!-- Đoạn mẫu trong .github/muse-instructions.md -->
+<!-- Đoạn mẫu trong .github/copilot-instructions.md -->
 ## Model guidance (khuyến nghị, không ép buộc)
 - Chat hằng ngày: model mặc định.
 - Review PR / refactor auth: model mạnh nhất hiện có.
@@ -330,7 +339,7 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** khi bill Credits của team tăng đột biến — khóa allowlist + training 10 phút về chọn model.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 10. Dùng Copilot hết quota giữa tháng thì chữa cháy sao?
@@ -356,13 +365,14 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # Check ngày reset hạn mức (web UI):
 # https://github.com/settings/copilot -> Billing cycle ends ...
 # Tính toán: Credits còn lại / số ngày còn lại = ngân sách/ngày
+# Verify: số ngân sách/ngày đủ cho việc khó hôm nay thì yên tâm
 ```
 
 **Ví dụ cụ thể:** còn 100 Credits mà 10 ngày nữa mới reset → 10/ngày: chỉ bật model mạnh cho task blocker, còn lại model nhẹ.
 
 > **Khi nào áp dụng:** ngay khi nhận cảnh báo Credits 80% — đừng đợi cạn mới tiết kiệm.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)

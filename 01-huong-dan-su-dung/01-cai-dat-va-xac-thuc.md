@@ -21,11 +21,9 @@
 
 ## 1. Vì sao Copilot 2026 khác trước? (why)
 
-Section này trả lời: Copilot 2026 đã đổi bản chất ra sao, và vì sao chỉ "cài extension" thôi là chưa đủ để bắt đầu dùng.
-
-- Là gì (1 câu): Copilot 2026 là hệ multi-model + multi-surface, không còn là 1 extension gợi ý code.
-- Hiểu nôm na: ngày xưa là xe số 1 tốc độ; nay là xe tay ga có 3 chế độ lái (GPT/Claude/Gemini) + chạy được cả đường phố (IDE) lẫn cao tốc (cloud).
-- Ví dụ kỹ thuật: cùng prompt "thêm rate-limit", chọn GPT-mini ra code đơn giản, chọn Claude ra code + test + giải thích trade-off.
+- **Là gì (1 câu):** Copilot 2026 là hệ multi-model + multi-surface, không còn là 1 extension gợi ý code.
+- **Nôm na:** ngày xưa là xe số 1 tốc độ; nay là xe tay ga có 3 chế độ lái (GPT/Claude/Gemini) + chạy được cả đường phố (IDE) lẫn cao tốc (cloud).
+- **Ví dụ kỹ thuật:** cùng prompt "thêm rate-limit", chọn GPT-mini ra code đơn giản, chọn Claude ra code + test + giải thích trade-off.
 
 ```mermaid
 flowchart TD
@@ -65,19 +63,18 @@ Từ 2025–2026:
 
 ## 2. Plans + trial: chọn gói nào?
 
-Section này trả lời: có những plan nào, bạn nên chọn plan nào theo vai trò, đăng ký trial ra sao, và ai chi trả AI Credits khi dùng model mạnh.
-
 ### 2.1. Bảng quyết định (why)
 
-> **Plan là gì?** Định nghĩa: plan là gói trả phí quyết định bạn có bao nhiêu AI Credits (hạn mức dùng) + dùng được model nào.
-> Hiểu nôm na: như gói cước điện thoại — gói rẻ nghe gọi cơ bản, gói doanh nghiệp có thêm roaming + quản lý.
-> Ví dụ kỹ thuật: Pro hết AI Credits giữa tháng thì agent mode báo quota; Business thì admin mua thêm seats cho team.
+> **Plan là gì (3 lớp)?**
+> - 1 câu: plan là gói trả phí quyết định bạn có bao nhiêu AI Credits (hạn mức dùng) + dùng được model nào.
+> - Nôm na: như gói cước điện thoại — gói rẻ nghe gọi cơ bản, gói doanh nghiệp có thêm roaming + quản lý.
+> - Ví dụ: Pro hết AI Credits giữa tháng thì agent mode báo quota; Business thì admin mua thêm seats cho team.
 
 | Bạn là ai | Chọn | Được gì | Lưu ý |
 |---|---|---|---|
 | Cá nhân thử lần đầu | Trial (check github.com/copilot) | Dùng thử giới hạn | Hết trial phải chọn plan trả phí |
 | Sinh viên / giáo viên | Student / Teacher | Free + credits allowance | Không thấy ưu đãi thì xác thực email trường |
-| Dev cá nhân | Pro / Pro+ / Max | AI Credits cá nhân + full IDE + CLI | Credis nhiều nhất ở Max; mua thêm nếu cháy |
+| Dev cá nhân | Pro / Pro+ / Max | AI Credits cá nhân + full IDE + CLI | Credits nhiều nhất ở Max; mua thêm nếu cháy |
 | Team 5–50 người | Business | Credits pooled team + org policy + usage dashboard | Admin quản lý seats, content exclusion |
 | Corp / compliance | Enterprise | BYOK, audit log, policy chi tiết | Cần admin setup SSO + policy |
 
@@ -114,7 +111,7 @@ gh copilot --help
 
 ### 2.3. Ai trả tiền cho AI Credits?
 
-Section này trả lời: khi nào Copilot "tốn" AI Credits, khi nào gõ thoải mái. Từ 01/06/2026 GitHub chuyển sang usage-based billing (tính theo AI Credits).
+Khi nào Copilot "tốn" AI Credits, khi nào gõ thoải mái. Từ 01/06/2026 GitHub chuyển sang usage-based billing (tính theo AI Credits).
 
 - Agent mode với model mạnh (Claude / GPT-5.5+ / GPT-6-class...) tốn nhiều AI Credits hơn: chi phí = giá mỗi token của model × số token, quy đổi sang credits.
 - Coding agent trên github.com cũng trừ credits (mỗi task cloud = nhiều lượt truy cập).
@@ -129,16 +126,15 @@ Section này trả lời: khi nào Copilot "tốn" AI Credits, khi nào gõ tho�
 
 ## 3. VS Code setup (mạnh nhất)
 
-Section này dành cho bạn dùng VS Code: hướng dẫn cài extension theo đúng thứ tự, verify bằng lệnh + mắt thường, và bật settings quan trọng.
-
 VS Code là bề mặt mạnh nhất 2026: agent mode full tools + MCP + custom agents
 + prompt files. Cài theo thứ tự dưới đây.
 
 ### 3.1. Step-by-step (copy-paste)
 
-> **OAuth login là gì?** Định nghĩa: OAuth là cách VS Code nhờ GitHub xác nhận "đúng là bạn" mà không cần bạn gõ mật khẩu vào VS Code.
-> Hiểu nôm na: như dùng CCCD để lễ tân cấp thẻ thang máy — lễ tân (GitHub) xác nhận, VS Code chỉ giữ thẻ (token).
-> Ví dụ kỹ thuật: click "Sign in" → browser mở `github.com/login/oauth` → bấm Allow → VS Code nhận token lưu local.
+> **OAuth login là gì (3 lớp)?**
+> - 1 câu: OAuth là cách VS Code nhờ GitHub xác nhận "đúng là bạn" mà không cần bạn gõ mật khẩu vào VS Code.
+> - Nôm na: như dùng CCCD để lễ tân cấp thẻ thang máy — lễ tân (GitHub) xác nhận, VS Code chỉ giữ thẻ (token).
+> - Ví dụ: click "Sign in" → browser mở `github.com/login/oauth` → bấm Allow → VS Code nhận token lưu local.
 
 ```bash
 # 1. Cài VS Code mới nhất (>= 1.90 để có agent mode ổn định):
@@ -191,13 +187,11 @@ Verify bằng mắt (3 giây):
 ```
 
 > `useInstructionFiles: true` là quan trọng nhất — bật thì
-> `.github/muse-instructions.md` mới được load (chi tiết bài 03).
+> `.github/copilot-instructions.md` mới được load (chi tiết bài 03).
 
 ---
 
 ## 4. JetBrains / Visual Studio / Neovim
-
-Section này dành cho bạn dùng IDE khác VS Code: cài từng bề mặt thế nào, verify ra sao, và biết giới hạn của mỗi nơi để chọn đúng chỗ làm việc.
 
 ### 4.1. JetBrains (IntelliJ / PyCharm / WebStorm...)
 
@@ -211,7 +205,7 @@ Section này dành cho bạn dùng IDE khác VS Code: cài từng bề mặt th�
 ```bash
 # Lưu ý JetBrains 2026:
 # - Agent mode có nhưng không full tools như VS Code (terminal tool hạn chế hơn).
-# - Repo config (.github/muse-instructions.md) vẫn dùng được.
+# - Repo config (.github/copilot-instructions.md) vẫn dùng được.
 # - Task phức tạp (multi-file + terminal) -> làm trên VS Code hoặc github.com agent.
 ```
 
@@ -253,8 +247,6 @@ git clone https://github.com/github/copilot.vim.git ~/.config/nvim/pack/github/s
 ---
 
 ## 5. Copilot CLI (`gh copilot`)
-
-Section này dành cho bạn hay làm việc trong terminal: cài GitHub CLI + extension, và thuộc 2 lệnh chiếm 90% thời gian dùng CLI.
 
 ### 5.1. Vì sao cần CLI? (why)
 
@@ -313,8 +305,6 @@ cpe "awk '{print $2}' access.log | sort | uniq -c | sort -rn | head"
 
 ## 6. Login, verify, session đầu tiên (walkthrough)
 
-Section này dành cho mọi IDE: hướng dẫn login đúng tài khoản, chạy verify tổng, rồi làm session đầu tiên chuẩn trong 15 phút.
-
 ### 6.1. Login đúng cách
 
 ```text
@@ -356,15 +346,13 @@ Bước 2 (3 phút): chọn Mode = Agent, chọn model mặc định team dùng.
 Bước 3 (5 phút): gõ prompt khôn:
 "Đọc README + package.json, tóm tắt: project này là gì,
 chạy dev bằng lệnh nào, test bằng lệnh nào. Không sửa gì, chỉ trả lời."
-Bước 4 (3 phút): lưu kết quả vào .github/muse-instructions.md (mẫu ở bài 00 mục 8).
+Bước 4 (3 phút): lưu kết quả vào .github/copilot-instructions.md (mẫu ở bài 00 mục 8).
 Bước 5 (2 phút): mở chat mới, hỏi lại câu cũ để kiểm tra instructions có load không.
 ```
 
 ---
 
 ## 7. Duplicate install + update
-
-Section này dành cho bạn gặp triệu chứng "ghost text lúc có lúc không" sau khi update: nhận diện bản cài trùng, gỡ bản thừa và cập nhật đúng cách.
 
 ### 7.1. Duplicate install (2 bản song song)
 
@@ -405,8 +393,6 @@ gh copilot --version
 ---
 
 ## 8. Checklist, pitfalls, bài tập
-
-Section này dành cho bạn muốn chắc chắn mọi thứ chạy: checklist cuối, bảng thuật ngữ tra nhanh, hiểu nhầm + lỗi hay gặp, và 4 bài tập củng cố.
 
 ### 8.1. Checklist sau cài đặt (copy-paste)
 
@@ -468,7 +454,7 @@ Dùng `gh copilot suggest` giải 3 việc thật của bạn (git cleanup, dock
 Chạy thử lệnh được gợi ý trong thư mục test trước. Alias `cps/cpe` vào shell config.
 
 **Bài 4 (15 phút) — Session đầu chuẩn:**
-Trên 1 repo thật, chạy đủ walkthrough mục 6.3. Lưu `muse-instructions.md` nháp
+Trên 1 repo thật, chạy đủ walkthrough mục 6.3. Lưu `copilot-instructions.md` nháp
 đầu tiên. Liệt kê 3 rules bạn đã viết.
 
 ---
@@ -477,7 +463,7 @@ Trên 1 repo thật, chạy đủ walkthrough mục 6.3. Lưu `muse-instructions
 
 - **Bài 00 — Tổng quan**: nếu chưa phân biệt Ask/Edit/Agent, quay lại đọc trước.
 - **Bài 02 — Surfaces**: chọn VS Code/JetBrains/github.com/CLI cho từng task.
-- **Bài 03 — Instructions**: file `muse-instructions.md` vừa tạo cần cắt <200 dòng.
+- **Bài 03 — Instructions**: file `copilot-instructions.md` vừa tạo cần cắt <200 dòng.
 - **Bài 04 — Chat commands**: tra cứu `/`, `@`, `#` và công thức 5 lệnh đầu.
 - **Bài 05 — Prompt files**: đóng gói checklist lặp lại thành `/deploy`.
 - **Bài 10 (README) — Policies & BYOK**: quota, model gating, content exclusion.

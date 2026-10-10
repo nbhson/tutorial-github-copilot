@@ -18,14 +18,16 @@
 
 ---
 
-## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+## 0. Giải ngố thuật ngữ (1 câu + so sánh + ví dụ + verify)
 
-| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
+Mỗi thuật ngữ đủ 3 lớp: **1 câu định nghĩa**, **so sánh đời thường**, **ví dụ copy-paste** — kèm 1 dòng `Verify`.
+
+| Thuật ngữ | Hiểu nôm na (1 câu) | So sánh đời thường | Ví dụ copy-paste | Verify |
 |---|---|---|---|---|
-| **Fan-out / Fan-in** | Chia việc ra nhiều nhánh rồi gộp lại. | Như 3 người cùng nấu 3 món rồi dọn 1 mâm. | 3 chats research `auth/payments/cart` → chat thứ 4 gộp thành plan. | Chat chính chỉ nhận 3 files summary, không nhận log dài. |
-| **Multi-chat** | Mở nhiều chat cùng lúc, mỗi chat 1 việc. | Như mở 3 cửa sổ chat với 3 trợ lý khác nhau. | Chat A `auth`, B `payments`, C `cart` chạy song song 20 phút. | 30 phút xong 3 modules (tuần tự mất 60 phút). |
-| **Worktree** | Phòng riêng cho mỗi nhánh code. | Như mỗi đầu bếp 1 bếp riêng — không tranh dao. | `git worktree add ../proj-auth feature/auth-fix` + `code ../proj-auth`. | 2 VS Code windows, `git diff` mỗi bên chỉ scope mình. |
-| **Output contract** | Quy định nhánh chỉ trả gì (3 bullet + evidence). | Như bắt shipper chỉ giao hóa đơn gọn, không chở cả kho. | Mỗi nhánh trả: quyết định 3 bullet + `file:line` + log xanh. | Chat chính không phình (>50% rác là vi phạm). |
+| **Fan-out / Fan-in** | Chia việc ra nhiều nhánh rồi gộp lại. | 3 người cùng nấu 3 món rồi dọn 1 mâm. | 3 chats research `auth/payments/cart` → chat thứ 4 gộp thành plan. | Chat chính chỉ nhận 3 files summary, không nhận log dài. |
+| **Multi-chat** | Mở nhiều chat cùng lúc, mỗi chat 1 việc. | Mở 3 cửa sổ chat với 3 trợ lý khác nhau. | Chat A `auth`, B `payments`, C `cart` chạy song song 20 phút. | 30 phút xong 3 modules (tuần tự mất 60 phút). |
+| **Worktree** | Phòng riêng cho mỗi nhánh code. | Mỗi đầu bếp 1 bếp riêng — không tranh dao. | `git worktree add ../proj-auth feature/auth-fix` + `code ../proj-auth`. | 2 VS Code windows, `git diff` mỗi bên chỉ scope mình. |
+| **Output contract** | Quy định nhánh chỉ trả gì (3 bullet + evidence). | Bắt shipper chỉ giao hóa đơn gọn, không chở cả kho. | Mỗi nhánh trả: quyết định 3 bullet + `file:line` + log xanh. | Chat chính không phình (>50% rác là vi phạm). |
 
 ```mermaid
 flowchart TD
@@ -58,12 +60,13 @@ Làm tuần tự với Copilot rất phí:
 Nguyên tắc:
 
 ```text
-Việc độc lập → song song.
-Việc phụ thuộc (B cần kết quả A) → tuần tự.
-Việc cùng files → không song song (sẽ conflict).
+Việc độc lập -> song song.
+Việc phụ thuộc (B cần kết quả A) -> tuần tự.
+Việc cùng files -> không song song (sẽ conflict).
 ```
 
 > Rule: **song song theo module/files, không song song trên cùng 1 file.**
+> Lưu ý 2026: song song nhiều session = nhiều AI Credits cùng lúc chạy — kiểm tra dashboard trước khi fan-out (xem [Tips 08](./08-tiet-kiem-premium-requests.md)).
 
 ---
 
@@ -71,8 +74,8 @@ Việc cùng files → không song song (sẽ conflict).
 
 | Kiểu | Cô lập gì | Tốn gì | Khi dùng |
 |---|---|---|---|
-| Multi-chat | Context mỗi chat | Thêm requests | Research, plan 2 phương án |
-| Coding Agent sessions | Branch + CI riêng | Thêm minutes/requests | 2–3 issues độc lập |
+| Multi-chat | Context mỗi chat | Thêm requests (AI Credits) | Research, plan 2 phương án |
+| Coding Agent sessions | Branch + CI riêng | Thêm minutes + AI Credits | 2–3 issues độc lập |
 | Worktrees | Thư mục + branch riêng | Disk + setup | Song song code local nặng |
 | Custom agents | Vai (Planner/Reviewer/Tester) | Overhead nhỏ | Chia vai trong 1 task |
 
@@ -84,6 +87,8 @@ Sơ đồ fan-out chuẩn:
 ```
 
 Chat chính giữ gọn, chỉ nhận summary từ các nhánh (xem [Tips 01](./01-context-hygiene.md)).
+
+> Lưu ý 2026: ngoài 4 kiểu trên, Copilot SDK (public preview 01/10/2026) cho phép dàn dựng dynamic workflows đa-agent bằng code — chạy qua Copilot CLI (experimental) hoặc App. Xem [bài 12 mục 2](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md).
 
 ---
 
@@ -102,9 +107,9 @@ Chat C: "@workspace Chỉ trong src/cart/*.ts: flow voucher hiện tại 5 bulle
 Chạy 3 chats cùng lúc, mỗi chat ghi findings ra file riêng:
 
 ```text
-Chat A → ghi ra docs/research-auth.md
-Chat B → ghi ra docs/research-payments.md
-Chat C → ghi ra docs/research-cart.md
+Chat A -> ghi ra docs/research-auth.md
+Chat B -> ghi ra docs/research-payments.md
+Chat C -> ghi ra docs/research-cart.md
 ```
 
 Rồi mở chat chính thứ 4:
@@ -140,8 +145,8 @@ Dùng khi có 2–3 issues độc lập, spec rõ, khác modules.
 **Ví dụ 1 — Giao 2 issues song song (copy-paste):**
 
 ```markdown
-Issue #101 (auth): fix normalizeEmail dấu, scope src/auth/**, done = npm test -- auth xanh.
-Issue #102 (cart): fix total voucher 0đ, scope src/cart/**, done = npm test -- cart xanh.
+Issue #101 (auth): fix normalizeEmail dau, scope src/auth/**, done = npm test -- auth xanh.
+Issue #102 (cart): fix total voucher 0d, scope src/cart/**, done = npm test -- cart xanh.
 ```
 
 Assign cả 2 cho Copilot cùng lúc. Mỗi session tự:
@@ -167,9 +172,11 @@ Lặp lại cho #102 với scope ngược lại. Câu `Không đụng scope kia`
 ```text
 - [ ] Mỗi session 1 issue + 1 scope không giao nhau?
 - [ ] Mỗi PR có log xanh + diff --stat đúng scope?
-- [ ] Session nào đỏ sau 3 lần → dừng, comment blocker?
+- [ ] Session nào đỏ sau 3 lần -> dừng, comment blocker?
 - [ ] Merge tuần tự, chạy full test sau mỗi merge?
 ```
+
+> Lưu ý 2026: bạn cũng có thể chạy 2–3 sessions trong terminal bằng Copilot CLI (binary `copilot`, 3 chế độ interactive/plan/autopilot, `/permissions`, `--max-ai-credits`) thay vì chỉ github.com. Xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
 
 Chi tiết assign + CLI xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
 
@@ -180,11 +187,11 @@ Chi tiết assign + CLI xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
 Khi bạn muốn chạy 2 Agents local cùng lúc mà không conflict files.
 
 ```bash
-# Tạo 2 worktrees từ main
+# Tao 2 worktrees tu main
 git worktree add ../proj-auth feature/auth-fix
 git worktree add ../proj-cart feature/cart-fix
 
-# Mở mỗi worktree 1 cửa sổ VS Code riêng
+# Mo moi worktree 1 cua so VS Code rieng
 code ../proj-auth
 code ../proj-cart
 ```
@@ -199,7 +206,7 @@ VS Code B (../proj-cart): "Đọc plan.md Phase cart. Chỉ làm trong worktree 
 **Ví dụ 2 — Gộp worktrees (copy-paste lệnh):**
 
 ```bash
-# Sau khi cả 2 xanh, gộp về main
+# Sau khi ca 2 xanh, gop ve main
 git checkout main
 git merge feature/auth-fix --no-ff -m "merge: auth fix (verified)"
 npm test -- auth
@@ -212,11 +219,13 @@ git worktree remove ../proj-cart
 **Ví dụ 3 — Khi nào KHÔNG cần worktrees:**
 
 ```text
-KHÔNG cần khi:
-- Chỉ research/hỏi (dùng multi-chat là đủ).
-- Task <30 phút, 1 Agent làm nhanh hơn setup.
-- Máy yếu, mở 2 VS Code nặng quá → dùng Coding Agent cloud thay.
+KHONG can khi:
+- Chi research/hoi (dung multi-chat la du).
+- Task <30 phut, 1 Agent lam nhanh hon setup.
+- May yeu, mo 2 VS Code nang qua -> dung Coding Agent cloud thay.
 ```
+
+> Lưu ý 2026: checkpoints + worktrees là 2 công cụ "quay lại" khác nhau — worktrees cho 2 nhánh chạy song song, checkpoints cho 1 nhánh undo. Xem [bài 11](../01-huong-dan-su-dung/11-git-worktrees-checkpoints.md).
 
 ---
 
@@ -229,15 +238,15 @@ Chia 1 task thành vai: Planner lập plan, Tester viết test, Reviewer soi.
 ```markdown
 ---
 name: Planner
-description: Lập plan, không code.
+description: Lap plan, khong code.
 ---
 ---
 name: Tester
-description: Chỉ viết/chạy test cho payments.
+description: Chi viet/chay test cho payments.
 ---
 ---
 name: Reviewer
-description: Chỉ review, không sửa.
+description: Chi review, khong sua.
 ---
 ```
 
@@ -245,7 +254,7 @@ Chạy:
 
 ```text
 @Planner Đọc src/payments/ + docs/payment-spec.md, trình plan 3 phases, chờ duyệt.
-# Duyệt xong:
+# Duyet xong:
 @Tester Viết regression tests cho Phase 2 theo plan.md, chạy npm test -- payments, dán log.
 # Code xong:
 @Reviewer Review diff vs plan.md, [SEVERITY] file:line, verdict PASS/NEEDS-FIX.
@@ -254,11 +263,11 @@ Chạy:
 **Ví dụ 2 — Output contract để gộp rẻ (copy-paste):**
 
 ```text
-Mọi agent nhánh chỉ trả về:
-1. Quyết định (3 bullet)
+Moi agent nanh chi tra ve:
+1. Quyet dinh (3 bullet)
 2. Evidence (file:line + log xanh)
-3. Blocker (nếu có, 1 dòng)
-Không dump log dài, không paste code nguyên file.
+3. Blocker (neu co, 1 dong)
+Khong dump log dai, khong paste code nguyen file.
 ```
 
 Vì main chat chỉ nhận summary gọn → không phình context.
@@ -288,13 +297,13 @@ Gộp: chạy full test, nếu đỏ thì Tester + Implementer cùng đọc #tes
 
 Tuần tự sẽ mất 60 phút. Song song mất 30 phút, chất lượng tương đương vì modules độc lập.
 
-Nếu có 2 issues độc lập: phút 30 assign 2 Coding Agent sessions, đi uống cà phê, quay lại review 2 PR drafts.
+Nếu có 2 issues độc lập: phút 30 assign 2 Coding Agent sessions (github.com hoặc 2 terminal bằng Copilot CLI), đi uống cà phê, quay lại review 2 PR drafts.
 
 ---
 
 ## 8. Bảng tra nhanh: chọn kiểu nào?
 
-| Tình huống | Hiểu nôm na | Ví dụ | Kiểu đúng | Số lượng tối đa gợi ý |
+| Tình huống | So sánh nôm na | Ví dụ | Kiểu đúng | Số lượng tối đa gợi ý |
 |---|---|---|---|---|
 | Research 2–4 modules độc lập | Trinh sát 3 nhà cùng lúc. | `auth + payments + cart`. | Multi-chat | 3 chats + 1 chat gộp |
 | Thử 2 hướng fix | Thử 2 đường, giữ đường thắng. | If-guard vs tách module voucher. | 2 chats plan | 2 chats, chat chính chọn 1 |
@@ -337,7 +346,7 @@ Chat chính: "Đọc 2 files research-*.md, gộp table Module/Flow/Risks + plan
 | Merge 2 nhánh cùng lúc | Main đỏ không biết do ai | Merge tuần tự, full test sau mỗi merge |
 | Worktrees quên cleanup | Disk đầy, branch rác | Remove worktree + xóa branch sau merge |
 | Song song task phụ thuộc | B làm sai vì A chưa xong | Vẽ dependency trước: B cần A → tuần tự |
-| Quá nhiều sessions | Tốn requests/minutes, review không xuể | Tối đa 2–3 song song, review xong mới fan-out tiếp |
+| Quá nhiều sessions | Tốn AI Credits/minutes, review không xuể | Tối đa 2–3 song song, review xong mới fan-out tiếp |
 | Không save findings ra file | Chat gộp quên hết | Mỗi nhánh ghi ra docs/research-*.md |
 
 ---
@@ -372,7 +381,7 @@ Chat chính: "Đọc 2 files research-*.md, gộp table Module/Flow/Risks + plan
   - [Tips 01](./01-context-hygiene.md) — chat chính gọn, nhánh chỉ trả summary
   - [Tips 03](./03-plan-first-workflow.md) — có plan duyệt mới fan-out implement
   - [Tips 04](./04-verification-done-that.md) — mỗi nhánh đều phải dán log xanh
-  - [Tips 08](./08-tiet-kiem-premium-requests.md) — fan-out tốn requests, khi nào đáng?
-  - [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — Coding Agent sessions + CLI
+  - [Tips 08](./08-tiet-kiem-premium-requests.md) — fan-out tốn AI Credits, khi nào đáng?
+  - [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — Coding Agent sessions + 2 CLI (gh copilot, copilot)
 
 > Mẹo 1 dòng: _việc độc lập + khác files thì song song, cùng file hoặc phụ thuộc thì tuần tự — luôn có chat chính gộp._

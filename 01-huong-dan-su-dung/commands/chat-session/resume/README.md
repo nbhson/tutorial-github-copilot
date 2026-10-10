@@ -22,6 +22,7 @@ Cách gọi `/resume` — làm đúng theo khối dưới đây, kèm câu kiể
 ```bash
 /resume
 # hoặc /history → chọn phiên → tiếp tục
+# Kỳ vọng: phiên cũ mở lại đúng chỗ dừng
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/resume`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/resume` — đổi phần tên file/task cho đúng việc c�
 
 ```bash
 /resume phiên “thêm rate-limit cho /api/login” hôm qua
+# Verify: nhắn “tiếp tục bước 3”, model làm đúng bước 3
 ```
 
 **Kết quả mong đợi:** Phiên cũ mở lại đúng chỗ dừng; hỏi tiếp không cần giải thích lại từ đầu.

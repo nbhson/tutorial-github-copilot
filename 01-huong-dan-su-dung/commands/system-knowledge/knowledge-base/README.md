@@ -22,6 +22,8 @@ Cách gọi `Knowledge base` — làm đúng theo khối dưới đây, kèm câ
 ```bash
 Hỏi qua Chat/MCP docs nội bộ
 “theo wiki team, deploy staging gồm mấy bước?”
+# Kỳ vọng: câu trả lời kèm nguồn (file/wiki/section), không bịa
+# Verify: mở nguồn được trích — khớp là đạt
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Knowledge base`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

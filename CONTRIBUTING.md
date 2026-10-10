@@ -1,6 +1,6 @@
 # Đóng góp cho Khóa Học GitHub Copilot
 
-Cảm ơn bạn muốn đóng góp! Repo này là tài liệu tiếng Việt, mọi code block copy-paste được.
+Cảm ơn bạn muốn đóng góp! Repo này là tài liệu tiếng Việt, mọi code block đều copy-paste được.
 Đọc 5 phút file này trước khi mở PR để bài mới "khớp format, không phải sửa lại".
 
 ## Cách thêm bài mới đúng format

@@ -22,6 +22,7 @@ Cách gọi `Shortcuts` — làm đúng theo khối dưới đây, kèm câu ki�
 ```bash
 VS Code → Ctrl+K Ctrl+S → search “copilot chat”
 Ctrl+I inline · Ctrl+Shift+I quick · Ctrl+Alt+I chat view · Tab nhận · Esc từ chối
+# Kỳ vọng: đủ danh sách phím, chỉ gán lại cái xung đột
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Shortcuts`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `Shortcuts` — đổi phần tên file/task cho đúng việc 
 
 ```bash
 Mở Keyboard Shortcuts, search “copilot”, ghi lại 5 phím mình dùng nhất
+# Verify: làm 1 task chỉ dùng phím, không chạm chuột
 ```
 
 **Kết quả mong đợi:** Thuộc 5 phím core; thao tác chat/inline/receive/dismiss không cần chuột.

@@ -6,6 +6,8 @@
 
 Nôm na: giao chìa khóa cho đội thợ — tự tìm phòng, tự làm, bạn duyệt cuối. Chat → mode Agent; bắt agent “đề xuất plan, chờ duyệt” trước khi code và commit git tay trước khi chạy.
 
+> **UI mới (2026):** Agent tách 3 persona — **Interactive** (dừng hỏi mỗi thay đổi, ≈ Agent + `ask`), **Plan** (chỉ lập kế hoạch, không sửa code), **Autopilot** (tự chạy tới xong, ≈ Agent + `Allow all`). Autopilot chỉ dùng trong worktree riêng + đã bật sandbox. Chi tiết: [10-modes-permissions-availability.md mục 3.2](../../../10-modes-permissions-availability.md).
+
 ## Khi nào dùng
 
 Section này trả lời: task nào đáng giao cho Agent, và 3 quy tắc giữ agent trong phạm vi.
@@ -22,6 +24,8 @@ Cách gọi `/agent (Agent mode)` — làm đúng theo khối dưới đây, kè
 ```bash
 Chat → mode Agent
 “thêm rate-limit cho /api/login + test; duyệt plan trước khi code”
+# Kỳ vọng: agent liệt kê file + plan trước, chờ duyệt, không code tự ý
+# Verify: git log mới nhất là commit của bạn (checkpoint), diff agent gọn trong scope
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/agent (Agent mode)`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

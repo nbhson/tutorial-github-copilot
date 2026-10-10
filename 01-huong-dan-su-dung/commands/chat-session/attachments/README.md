@@ -23,6 +23,7 @@ Cách gọi `Attach / #file` — làm đúng theo khối dưới đây, kèm câ
 #file → chọn file
 @workspace → hỏi cross-file
 Kéo-thả file/ảnh vào Chat input
+# Verify: model nhắc được tên file đã đọc trong câu trả lời
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Attach / #file`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -35,6 +36,7 @@ Prompt mẫu cho `Attach / #file` — đổi phần tên file/task cho đúng vi
 
 ```bash
 @workspace “hàm login nằm ở file nào, ai gọi nó?” + attach #file src/auth/login.ts
+# Kỳ vọng: model liệt kê đúng file đã đọc, không đoán mò
 ```
 
 **Kết quả mong đợi:** Model liệt kê đúng file đã đọc + trả lời trúng scope; không sửa sai file.

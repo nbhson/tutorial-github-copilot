@@ -22,6 +22,7 @@ Cách gọi `/tests` — làm đúng theo khối dưới đây, kèm câu kiểm
 ```bash
 Bôi đen hàm → /tests
 /tests sinh test theo mẫu repo, mock DB
+# Kỳ vọng: file test chạy xanh, cover đúng nhánh vừa sửa
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/tests`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/tests` — đổi phần tên file/task cho đúng việc c�
 
 ```bash
 (bôi đen hàm tính phí) /tests “sinh 3 cases: thường, biên, null — mock DB theo mẫu repo”
+# Verify: chạy test mới — xanh + cover nhánh vừa sửa
 ```
 
 **Kết quả mong đợi:** File test theo đúng framework/mẫu repo; chạy xanh ngay hoặc sửa nhỏ là xanh.

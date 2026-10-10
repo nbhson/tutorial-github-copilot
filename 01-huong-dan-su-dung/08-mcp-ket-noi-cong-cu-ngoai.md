@@ -1,13 +1,11 @@
 # 08 — MCP: Kết Nối Copilot Tới Thế Giới Ngoài (GitHub, DB, Browser...)
 
 > **Dành cho:** người mới dùng Copilot Chat trong VS Code; tech lead / admin muốn chuẩn hóa MCP cho team.
-> **Vấn đề:** Copilot giỏi ở trong repo, nhưng "mù" với mọi thứ ngoài repo (PR, issue, DB, web, ticket).
-> **Đọc xong:** bạn setup được từng server GitHub/Playwright/Postgres/Fetch/Linear
-> qua `.vscode/mcp.json`, hiểu Tools/Resources/Prompts (3 thành phần của 1 MCP server),
-> hiểu tools approval, và prune MCP gọn ≤6 servers.
-> Bài 08 của series. Thời gian: ~50 phút (bản mở rộng, giải thích nôm na).
+> **Vấn đề:** Copilot giỏi trong repo, nhưng "mù" với mọi thứ ngoài repo (PR, issue, DB, web, ticket).
+> **Đọc xong:** setup được từng server GitHub/Playwright/Postgres/Fetch/Linear qua `.vscode/mcp.json`, hiểu Tools/Resources/Prompts (3 thành phần của 1 MCP server), hiểu tools approval, và prune MCP gọn ≤6 servers.
+> **Thời gian:** ~50 phút (bản mở rộng).
 
-**Thuật ngữ nhanh (Glossary) — mỗi thuật ngữ 3 lớp: định nghĩa, ví dụ đời thường, ví dụ kỹ thuật.**
+## Thuật ngữ nhanh (Glossary) — mỗi thuật ngữ 3 lớp: định nghĩa, ví dụ đời thường, ví dụ kỹ thuật
 
 | Thuật ngữ | Định nghĩa 1 câu | Ví dụ đời thường | Ví dụ kỹ thuật |
 |---|---|---|---|
@@ -43,26 +41,25 @@
 
 *Section này trả lời: MCP là gì, khi nào PHẢI cài, và khi nào KHÔNG nên cài.*
 
-**Nôm na 1 câu:** MCP (Model Context Protocol) là **chuẩn cắm chung** để Copilot (AI ngồi trong VS Code) gọi ra thế giới ngoài (GitHub, database, browser, Linear...) mà không cần mỗi hãng viết 1 kiểu tích hợp riêng.
+**3 lớp khái niệm:**
 
-Nói cách khác: không có MCP thì mỗi tích hợp là 1 lối đi riêng. Có MCP thì mọi AI cùng nói 1 ngôn ngữ với mọi công cụ.
-
-**Analogie đời thường — 2 analogie:**
-
-1. **Ổ cắm USB:** Trước đây mỗi điện thoại 1 loại sạc (Nokia, Samsung, iPhone cũ...). USB-C ra đời → 1 chuẩn cắm cho mọi máy. MCP cũng vậy: trước đây mỗi AI phải viết plugin riêng cho GitHub/DB/browser. Giờ MCP Server viết 1 lần theo chuẩn MCP → Copilot, Claude, Cursor... đều cắm vào dùng được.
-2. **Anh bồi bàn (waiter) gọi bếp:** Bạn (user) = khách. Copilot Chat = bồi bàn. MCP Server = bếp (bếp GitHub, bếp Postgres, bếp Browser). Bạn không vào bếp tự nấu — bạn gọi bồi bàn: "cho anh 5 PRs mới nhất". Bồi bàn (Copilot) viết phiếu (gọi Tool), đưa xuống bếp (MCP Server), bếp làm xong đưa đĩa lên (trả JSON), bồi bàn bưng ra + trình bày đẹp cho bạn.
-
-**Ví dụ kỹ thuật copy-paste (nhìn 1 lần là hiểu MCP để làm gì):**
+1. **Định nghĩa 1 câu:** MCP (Model Context Protocol) là **chuẩn cắm chung** để Copilot (AI ngồi trong VS Code) gọi ra thế giới ngoài (GitHub, database, browser, Linear...) mà không cần mỗi hãng viết 1 kiểu tích hợp riêng.
+2. **Nôm na (2 analogie):**
+   - **Ổ cắm USB:** Trước đây mỗi điện thoại 1 loại sạc (Nokia, Samsung, iPhone cũ...). USB-C ra đời → 1 chuẩn cắm cho mọi máy. MCP cũng vậy: trước đây mỗi AI phải viết plugin riêng cho GitHub/DB/browser. Giờ MCP Server viết 1 lần theo chuẩn MCP → Copilot, Claude, Cursor... đều cắm vào dùng được.
+   - **Anh bồi bàn gọi bếp:** Bạn = khách. Copilot Chat = bồi bàn. MCP Server = bếp (bếp GitHub, bếp Postgres, bếp Browser). Bạn không vào bếp tự nấu — bạn gọi bồi bàn: "cho anh 5 PRs mới nhất". Bồi bàn viết phiếu (gọi Tool), đưa xuống bếp (MCP Server), bếp làm xong đưa đĩa lên (trả JSON), bồi bàn bưng ra + trình bày đẹp cho bạn.
+3. **Ví dụ thật copy-paste (nhìn 1 lần là hiểu MCP làm gì):**
 
 ```text
-KHÔNG MCP:
-Bạn: "PR #123 đang bàn gì?"
-Copilot: "Em không thấy GitHub, anh paste diff vào đây đi." → bạn copy-paste tay.
+ KHÔNG MCP:
+ Bạn: "PR #123 đang bàn gì?"
+ Copilot: "Em không thấy GitHub, anh paste diff vào đây đi." → bạn copy-paste tay.
 
-CÓ MCP (server github):
-Bạn: "Tóm tắt PR #123 repo acme/api, mỗi thay đổi 1 dòng"
-Copilot (tự gọi github MCP): đọc PR thật trên github.com → trả lời 5 dòng.
-→ Bạn KHÔNG paste gì cả.
+ CÓ MCP (server github):
+ Bạn: "Tóm tắt PR #123 repo acme/api, mỗi thay đổi 1 dòng"
+ Copilot (tự gọi github MCP): đọc PR thật trên github.com → trả lời 5 dòng.
+ → Bạn KHÔNG paste gì cả.
+ # Verify: chạy câu trên khi chưa có MCP server (thấy Copilot xin paste)
+ # và khi có (thấy Copilot tự trả lời từ GitHub thật) — đối chiếu 2 kết quả.
 ```
 
 **Ai dùng lúc nào:**
@@ -73,11 +70,11 @@ Copilot (tự gọi github MCP): đọc PR thật trên github.com → trả l�
 - Công thức nhớ: **MCP = reach (vươn tay ra ngoài), instructions/skills = cách dùng reach đó cho đúng** (schema DB nào, message-format nào, quy ước repo nào).
 
 ```text
-# Verify bạn đã hiểu MCP (tự check 30 giây):
-# Hỏi: "Task này dữ liệu ở đâu?"
-# - Trong repo → không MCP, dùng @workspace + instructions.
-# - Ngoài repo (GitHub/DB/browser/SaaS) → cần MCP server tương ứng.
-# Kỳ vọng: phân biệt được 2 trường hợp trên, không cài MCP "cho oai".
+ # Verify bạn đã hiểu MCP (tự check 30 giây):
+ # Hỏi: "Task này dữ liệu ở đâu?"
+ # - Trong repo → không MCP, dùng @workspace + instructions.
+ # - Ngoài repo (GitHub/DB/browser/SaaS) → cần MCP server tương ứng.
+ # Kỳ vọng: phân biệt được 2 trường hợp trên, không cài MCP "cho oai".
 ```
 
 ```mermaid
@@ -98,9 +95,11 @@ flowchart LR
 
 *Section này trả lời: trong 1 lời gọi MCP có 4 nhân vật, và ai làm việc gì thật trên máy.*
 
-**Nôm na 1 câu:** Có 4 nhân vật: bạn gõ → Copilot Chat nghĩ ("cần gọi bếp nào?") → MCP Client (shipper trong VS Code) chuyển lời → MCP Server (bếp) làm thật với hệ ngoài rồi trả kết quả về.
+**3 lớp khái niệm:**
 
-**Analogie:** Như gọi GrabFood: bạn (user) bấm app → tổng đài Grab (Copilot Chat) điều tài → tài xế (MCP Client) chạy tới quán → quán (MCP Server) nấu + đưa món từ kho (hệ ngoài: GitHub/DB/web).
+1. **Định nghĩa 1 câu:** 1 lời gọi MCP đi qua 4 nhân vật — bạn gõ → Copilot Chat suy luận ("cần gọi bếp nào?") → MCP Client (shipper trong VS Code) chuyển lời → MCP Server (bếp) làm thật với hệ ngoài rồi trả kết quả về.
+2. **Nôm na:** Như gọi GrabFood: bạn (user) bấm app → tổng đài Grab (Copilot Chat) điều tài → tài xế (MCP Client) chạy tới quán → quán (MCP Server) nấu + đưa món từ kho (hệ ngoài: GitHub/DB/web).
+3. **Bảng nhân vật thật (ai là gì, ai tạo, ai gọi):**
 
 | Nhân vật | Là file/process gì thật | Ai tạo ra nó | Ai gọi nó |
 |---|---|---|---|
@@ -109,7 +108,7 @@ flowchart LR
 | **MCP Server** | Process riêng (vd `npx server-github`), bạn khai trong `mcp.json` | Cộng đồng/hãng viết (npm package, binary, URL remote) | MCP Client spawn (stdio) hoặc gọi HTTP/SSE |
 | **Hệ ngoài** | github.com, Postgres, Chrome, Linear... | Đã tồn tại sẵn | Chỉ MCP Server nói chuyện trực tiếp (giữ token, connection) |
 
-**Ví dụ kỹ thuật copy-paste — nhìn process thật:**
+**Ví dụ kỹ thuật copy-paste — nhìn process thật trên máy:**
 
 ```bash
 # Khi VS Code khởi động, với mcp.json mục 4, nó spawn:
@@ -146,13 +145,15 @@ flowchart TB
 
 *Section này trả lời: từ lúc bạn gõ prompt đến lúc Copilot trả lời có những bước nào, và bước nào cần bạn bấm Allow.*
 
-**Nôm na 1 câu:** 1 câu hỏi của bạn được Copilot tách thành 6 bước: hiểu ý → hỏi danh sách tools → chọn đúng tool → xin phép bạn (approval) → gọi bếp làm → nhận JSON rồi kể lại bằng tiếng người.
+**3 lớp khái niệm:**
 
-**Ví dụ end-to-end thật (copy-paste để test):**
+1. **Định nghĩa 1 câu:** 1 câu hỏi của bạn được Copilot tách thành 6 bước: hiểu ý → hỏi danh sách tools → chọn đúng tool → xin phép bạn (approval) → gọi bếp làm → nhận JSON rồi kể lại bằng tiếng người.
+2. **Nôm na:** Như nhà hàng: khách gọi món (1) → bồi bàn hỏi bếp có món gì (2) → chọn món (3) → hỏi khách cho phép không (4) → bếp nấu (5) → bưng ra trình bày (6).
+3. **Ví dụ end-to-end thật (copy-paste để test):**
 
 ```text
-Bạn gõ trong Chat:
-> @workspace liệt kê 5 PRs mở gần nhất của repo này + tóm tắt mỗi PR 1 dòng
+ Bạn gõ trong Chat:
+ > @workspace liệt kê 5 PRs mở gần nhất của repo này + tóm tắt mỗi PR 1 dòng
 ```
 
 ```mermaid
@@ -188,12 +189,12 @@ sequenceDiagram
 6. **Trình bày:** Server trả JSON thô → model tóm tắt thành 5 dòng tiếng người. **Model không bao giờ cầm token GitHub** — token nằm ở Server process.
 
 ```text
-# Verify sequence này (copy-paste):
-# 1. VS Code → Ctrl+Shift+P → "MCP: List Servers" → github phải Connected.
-# 2. Chat: "@workspace liệt kê MCP tools mày đang thấy" → phải kể ra list_prs, get_pr...
-# 3. Chat: "liệt kê 5 PRs mở gần nhất của repo này" → quan sát popup approval + kết quả 5 dòng.
-# Kỳ vọng: bước 1 Connected, bước 2 kể đúng tools, bước 3 ra 5 PRs thật.
-# Không được → server disconnected (token hết hạn) hoặc approval deny (mục 6).
+ # Verify sequence này (copy-paste):
+ # 1. VS Code → Ctrl+Shift+P → "MCP: List Servers" → github phải Connected.
+ # 2. Chat: "@workspace liệt kê MCP tools mày đang thấy" → phải kể ra list_prs, get_pr...
+ # 3. Chat: "liệt kê 5 PRs mở gần nhất của repo này" → quan sát popup approval + kết quả 5 dòng.
+ # Kỳ vọng: bước 1 Connected, bước 2 kể đúng tools, bước 3 ra 5 PRs thật.
+ # Không được → server disconnected (token hết hạn) hoặc approval deny (mục 6).
 ```
 
 ---
@@ -202,17 +203,19 @@ sequenceDiagram
 
 *Section này trả lời: khai server ở file nào, và 3 cách kết nối (transport) khác nhau dùng khi nào.*
 
-**Nôm na 1 câu:** `mcp.json` là **danh bạ bếp** — khai mỗi bếp ở đâu, gọi bằng cách nào (spawn local hay gọi URL remote), secrets lấy từ đâu.
+**3 lớp khái niệm:**
 
-**Analogie:** Như danh bạ GrabFood lưu quán yêu thích: quán gần nhà (stdio — nấu tại bếp local), quán ở xa giao qua app (http/sse — gọi qua mạng).
+1. **Định nghĩa 1 câu:** `mcp.json` là file khai báo "danh bạ bếp" — mỗi bếp ở đâu, gọi bằng cách nào (spawn local hay gọi URL remote), secrets lấy từ đâu.
+2. **Nôm na:** Như danh bạ GrabFood lưu quán yêu thích: quán gần nhà (stdio — nấu tại bếp local), quán ở xa giao qua app (http/sse — gọi qua mạng).
+3. **Ví dụ thật copy-paste:** khung đầy đủ ở dưới (giữ nguyên, chỉ thêm comment giải thích).
 
 **Vị trí file khai server (theo docs 2026 — mỗi bề mặt đọc 1 chỗ, chưa có format chung duy nhất):**
 
 ```text
-.vscode/mcp.json           # workspace/repo-level, key "servers", commit cho team (KHÔNG secrets! Chỉ ${VAR})
-mcp.json / .mcp.json (root repo) # portable, key "mcpServers"; 1 số bản cũ fallback — ưu tiên .vscode/mcp.json
-~/.copilot/mcp-config.json # portable user profile, key "mcpServers" (viết tắt $COPILOT_HOME/mcp-config.json)
-~/.vscode/mcp.json        # personal global (tùy bản VS Code, cho token cá nhân)
+ .vscode/mcp.json           # workspace/repo-level, key "servers", commit cho team (KHÔNG secrets! Chỉ ${VAR})
+ mcp.json / .mcp.json (root repo) # portable, key "mcpServers"; 1 số bản cũ fallback — ưu tiên .vscode/mcp.json
+ ~/.copilot/mcp-config.json # portable user profile, key "mcpServers" (viết tắt $COPILOT_HOME/mcp-config.json)
+ ~/.vscode/mcp.json        # personal global (tùy bản VS Code, cho token cá nhân)
 ```
 
 **Lưu ý thêm về vị trí:**
@@ -227,7 +230,7 @@ mcp.json / .mcp.json (root repo) # portable, key "mcpServers"; 1 số bản cũ 
 - Servers token cá nhân (linear/notion của mỗi người) → personal config (không commit). Ghi rõ trong README để teammate mới không hỏi lại.
 - Coding agent cloud & code review: chỉ gọi được MCP **tools** (không có resources/prompts), và chưa hỗ trợ remote MCP dùng OAuth.
 
-**Ví dụ kỹ thuật copy-paste — khung đầy đủ (giữ nguyên toàn bộ, chỉ thêm comment giải thích):**
+**Khung đầy đủ (copy-paste, giữ nguyên — chỉ cần thay env):**
 
 ```json
 {
@@ -289,7 +292,7 @@ grep -rniE "ghp_|gho_|sk-|xox-|password\s*[:=]" .vscode/mcp.json; echo "exit=$? 
 
 *Section này trả lời: 1 MCP server gồm những gì, và tại sao nhớ được công thức "Tools = tay, Resources = mắt, Prompts = công thức".*
 
-> **Đây là phần user phàn nàn — giải thích lại từ đầu, mỗi thành phần 1 tiểu mục riêng.**
+> **Đây là phần hay bị hỏi nhất — giải thích lại từ đầu, mỗi thành phần 1 tiểu mục riêng.**
 > Nhớ công thức: **Tools = tay (làm), Resources = mắt (đọc), Prompts = công thức nấu sẵn.**
 
 ```mermaid
@@ -307,13 +310,11 @@ flowchart LR
 
 ### 5.1. Tools — hàm Copilot gọi (tay để LÀM)
 
-*Tiểu mục này trả lời: tool là gì, và Copilot dùng tool khi nào.*
+**3 lớp khái niệm:**
 
-**Nôm na 1 câu:** Tools là **các nút bấm / hàm** mà Copilot được phép bấm, mỗi nút có tờ hướng dẫn (input schema: cần params gì, kiểu gì).
-
-**Analogie:** Như menu bếp có nút "Tạo PR", "Chạy SQL", "Click nút web". Bồi bàn (Copilot) đọc menu rồi bấm đúng nút + điền phiếu (params).
-
-**Ví dụ kỹ thuật copy-paste — JSON schema thật (rút gọn từ server github thật):**
+1. **Định nghĩa 1 câu:** Tools là **các nút bấm / hàm** mà Copilot được phép bấm, mỗi nút có tờ hướng dẫn (input schema: cần params gì, kiểu gì).
+2. **Nôm na:** Menu bếp có nút "Tạo PR", "Chạy SQL", "Click nút web". Bồi bàn (Copilot) đọc menu rồi bấm đúng nút + điền phiếu (params).
+3. **Ví dụ thật (JSON schema rút gọn từ server github thật):**
 
 ```json
 // Copilot thấy cái này sau tools/list (bạn không gõ tay, nhưng HIỂU để debug):
@@ -350,7 +351,7 @@ flowchart LR
 }
 ```
 
-**Ví dụ JSON-RPC `tools/list` rút gọn (để bạn hình dung server expose gì):**
+**JSON-RPC `tools/list` rút gọn (để bạn hình dung server expose gì):**
 
 ```json
 // MCP Client gửi:
@@ -374,28 +375,26 @@ flowchart LR
 - Tools **có side effects** (tạo PR, chạy query write, click browser) luôn đi qua approval ask/deny (mục 6).
 
 ```text
-# Verify Tools (copy-paste):
-# Chat: "@workspace server github đang expose tools gì? Kể tên + 1 câu mỗi tool."
-# Kỳ vọng: kể ra list_prs, get_pr, create_pr... kèm mô tả.
-# Không kể được → server disconnected hoặc chưa reload sau sửa mcp.json.
+ # Verify Tools (copy-paste):
+ # Chat: "@workspace server github đang expose tools gì? Kể tên + 1 câu mỗi tool."
+ # Kỳ vọng: kể ra list_prs, get_pr, create_pr... kèm mô tả.
+ # Không kể được → server disconnected hoặc chưa reload sau sửa mcp.json.
 ```
 
 ### 5.2. Resources — dữ liệu đọc (mắt để XEM, địa chỉ bằng URI)
 
-*Tiểu mục này trả lời: resource là gì, và nó khác tool ở điểm nào.*
+**3 lớp khái niệm:**
 
-**Nôm na 1 câu:** Resources là **tài liệu/mắt đọc** mà server cho Copilot xem, mỗi tài liệu có địa chỉ URI (như link) để Copilot mở ra đọc, **không có side effects** (chỉ đọc, không sửa).
-
-**Analogie:** Như thư viện: mỗi cuốn sách có mã số kệ (`github://repos/acme/api/issues/123`). Bồi bàn không vào kho lục — đưa mã số cho thủ thư (Server), thủ thư mang sách ra.
-
-**Ví dụ kỹ thuật copy-paste — URI thật + cách Copilot đọc:**
+1. **Định nghĩa 1 câu:** Resources là **tài liệu / mắt đọc** mà server cho Copilot xem, mỗi tài liệu có địa chỉ URI (như link) để Copilot mở ra đọc, **không có side effects** (chỉ đọc, không sửa).
+2. **Nôm na:** Thư viện: mỗi cuốn sách có mã số kệ (`github://repos/acme/api/issues/123`). Bồi bàn không vào kho lục — đưa mã số cho thủ thư (Server), thủ thư mang sách ra.
+3. **Ví dụ thật:**
 
 ```text
-URI thật (mỗi server quy ước riêng, docs của server liệt kê):
-github://repos/acme/api/issues/123          → issue #123 repo acme/api
-github://repos/acme/api/pulls/456/diff      → diff PR #456
-postgres://acme_dev/tables/orders/schema    → schema table orders (tùy server)
-docs://runbook/deploy-staging               → runbook nội bộ (server docs riêng)
+ URI thật (mỗi server quy ước riêng, docs của server liệt kê):
+ github://repos/acme/api/issues/123          → issue #123 repo acme/api
+ github://repos/acme/api/pulls/456/diff      → diff PR #456
+ postgres://acme_dev/tables/orders/schema    → schema table orders (tùy server)
+ docs://runbook/deploy-staging               → runbook nội bộ (server docs riêng)
 ```
 
 ```json
@@ -415,21 +414,19 @@ docs://runbook/deploy-staging               → runbook nội bộ (server docs 
 - Khác Tools ở chỗ: Tools = **hàm có params** (làm gì đó), Resources = **địa chỉ URI** (xem cái gì đó). Nhiều server chỉ expose Tools (không có Resources) — vẫn chạy tốt.
 
 ```text
-# Verify Resources (copy-paste):
-# Chat: "@workspace server github có resources gì? Liệt kê URI mẫu."
-# Kỳ vọng: kể URI dạng github://... Nếu server không expose resources → trả lời "chỉ có tools".
-# Đây là bình thường — không phải lỗi. Tools mới là bắt buộc, Resources/Prompts là tùy chọn.
+ # Verify Resources (copy-paste):
+ # Chat: "@workspace server github có resources gì? Liệt kê URI mẫu."
+ # Kỳ vọng: kể URI dạng github://... Nếu server không expose resources → trả lời "chỉ có tools".
+ # Đây là bình thường — không phải lỗi. Tools mới là bắt buộc, Resources/Prompts là tùy chọn.
 ```
 
 ### 5.3. Prompts — templates server expose (công thức nấu sẵn)
 
-*Tiểu mục này trả lời: prompt của server là gì, và khi nào nên dùng nó thay prompt file của team.*
+**3 lớp khái niệm:**
 
-**Nôm na 1 câu:** Prompts là **câu lệnh mẫu / công thức** mà tác giả server soạn sẵn ("review PR theo 4 bước này", "triage issue theo format kia"), để bạn/Copilot gọi 1 phát là chạy đúng chuẩn, khỏi nghĩ.
-
-**Analogie:** Như gói gia vị pha sẵn cho món phở: thay vì tự nêm từng thìa, bạn xé 1 gói là đúng vị. Server đưa gói gia vị (prompt template), Copilot pha theo.
-
-**Ví dụ kỹ thuật copy-paste — prompt template thật:**
+1. **Định nghĩa 1 câu:** Prompts là **câu lệnh mẫu / công thức** mà tác giả server soạn sẵn ("review PR theo 4 bước này"), để bạn/Copilot gọi 1 phát là chạy đúng chuẩn, khỏi nghĩ.
+2. **Nôm na:** Gói gia vị pha sẵn cho món phở: thay vì tự nêm từng thìa, bạn xé 1 gói là đúng vị. Server đưa gói gia vị (prompt template), Copilot pha theo.
+3. **Ví dụ thật (prompt template):**
 
 ```text
 // Server expose prompt tên "review-pr" (tùy server, không phải server nào cũng có):
@@ -449,10 +446,10 @@ docs://runbook/deploy-staging               → runbook nội bộ (server docs 
 - Khi nào dùng Prompts vs prompt files repo? Prompt files repo = **chuẩn team bạn** (commit git, chỉnh được). Prompts của server = **chuẩn tác giả server** (dùng ngay, không chỉnh). Team nghiêm túc → copy ý từ server prompt vào `.github/prompts/` của mình để chỉnh theo team.
 
 ```text
-# Verify Prompts (copy-paste):
-# Chat: "gõ / xem có prompts nào từ MCP servers không? Liệt kê."
-# Kỳ vọng: thấy prompt files repo (.github/prompts/) + (nếu server có) prompts server.
-# Không thấy prompts server → bình thường (nhiều server không expose prompts).
+ # Verify Prompts (copy-paste):
+ # Chat: "gõ / xem có prompts nào từ MCP servers không? Liệt kê."
+ # Kỳ vọng: thấy prompt files repo (.github/prompts/) + (nếu server có) prompts server.
+ # Không thấy prompts server → bình thường (nhiều server không expose prompts).
 ```
 
 ```mermaid
@@ -469,11 +466,11 @@ flowchart TD
 
 *Section này trả lời: khi nào Copilot tự chạy, khi nào phải hỏi bạn, khi nào bị cấm — và admin chốt bằng gì.*
 
-**Nôm na 1 câu:** Approval là **người gác cổng**: mỗi lần Copilot muốn bấm nút (Tool), gác cổng tra sổ (rules) → cho qua luôn (allow) / hỏi bạn 1 click (ask) / cấm hẳn (deny).
+**3 lớp khái niệm:**
 
-**Analogie:** Như bố mẹ dặn con: "xem TV (read) cứ xem, ra đường (browser/terminal) phải hỏi, sờ ổ điện (prod DB/deploy) thì cấm".
-
-**Ví dụ kỹ thuật copy-paste (giữ nguyên, thêm giải thích ai dùng lúc nào):**
+1. **Định nghĩa 1 câu:** Approval là cơ chế **gác cổng**: mỗi lần Copilot muốn bấm nút (Tool), gác cổng tra sổ (rules) → cho qua luôn (allow) / hỏi bạn 1 click (ask) / cấm hẳn (deny).
+2. **Nôm na:** Bố mẹ dặn con: "xem TV (read) cứ xem, ra đường (browser/terminal) phải hỏi, sờ ổ điện (prod DB/deploy) thì cấm".
+3. **Ví dụ thật copy-paste:**
 
 ```jsonc
 // .vscode/settings.json — approval theo server/tool (commit cho team)
@@ -483,23 +480,23 @@ flowchart TD
     "github": "allow",            // GitHub MCP: cho qua (đọc PR/issues) — read-only, an toàn
     "fetch": "allow",             // fetch web: cho qua — đọc docs, an toàn
     "playwright": "ask",          // browser automation: hỏi trước (click có side effects)
-    "postgres-dev": "ask",         // DB dev: hỏi trước (query sai tốn tiền, write nguy hiểm)
+    "postgres-dev": "ask",        // DB dev: hỏi trước (query sai tốn tiền, write nguy hiểm)
     "postgres-prod": "deny"       // DB prod: cấm hẳn (không tạo server prod nếu không cần)
   }
 }
 ```
 
 ```text
-Org-level (admin, ai dùng lúc nào: team Business+ cần chuẩn chung):
-github.com → Org Settings → Copilot → Policies → MCP:
-- Allowlist servers: chỉ github, fetch, linear được dùng. Server lạ → block ở client.
-- Default tool approval: terminal/browser = ask cho cả org.
-- Audit: xem logs MCP tool calls theo user/repo (Business/Enterprise).
+ Org-level (admin, ai dùng lúc nào: team Business+ cần chuẩn chung):
+ github.com → Org Settings → Copilot → Policies → MCP:
+ - Allowlist servers: chỉ github, fetch, linear được dùng. Server lạ → block ở client.
+ - Default tool approval: terminal/browser = ask cho cả org.
+ - Audit: xem logs MCP tool calls theo user/repo (Business/Enterprise).
 
-Quy tắc team (thuộc lòng):
-- Read-only tools (github read, fetch, linear read) → allow.
-- Side-effect tools (browser click, DB write, post message) → ask.
-- Prod/destructive (prod DB, deploy, xóa) → deny + không tạo server.
+ Quy tắc team (thuộc lòng):
+ - Read-only tools (github read, fetch, linear read) → allow.
+ - Side-effect tools (browser click, DB write, post message) → ask.
+ - Prod/destructive (prod DB, deploy, xóa) → deny + không tạo server.
 ```
 
 **Thứ tự ưu tiên — thuộc lòng: `deny` > `ask` > `allow`.** Đây là luật của enterprise managed settings (`managed-settings.json`):
@@ -529,11 +526,11 @@ Quy tắc team (thuộc lòng):
 - **Telemetry OTEL (OpenTelemetry):** khóa `telemetry` trong managed_settings — `enabled`, `endpoint` (OTLP), `protocol` (`http/json` hoặc `http/protobuf`), `captureContent`, `lockCaptureContent`, `serviceName`, `resourceAttributes`, `headers`. Dùng khi công ty bạn muốn Copilot tự gửi log về hệ thống quan sát (observability) của mình.
 
 ```text
-# Verify approval (copy-paste, 2 phút):
-# 1. Chat read-only: "liệt kê 5 PRs" → phải chạy luôn (allow, không popup).
-# 2. Chat side-effect: "mở http://localhost:3000 bằng browser" → phải popup Ask.
-# 3. Chat deny: gọi tool postgres-prod (nếu có) → phải báo "blocked by policy".
-# Kỳ vọng: 1 chạy luôn, 2 hỏi, 3 cấm. Sai → check .vscode/settings.json + org policy đè.
+ # Verify approval (copy-paste, 2 phút):
+ # 1. Chat read-only: "liệt kê 5 PRs" → phải chạy luôn (allow, không popup).
+ # 2. Chat side-effect: "mở http://localhost:3000 bằng browser" → phải popup Ask.
+ # 3. Chat deny: gọi tool postgres-prod (nếu có) → phải báo "blocked by policy".
+ # Kỳ vọng: 1 chạy luôn, 2 hỏi, 3 cấm. Sai → check .vscode/settings.json + org policy đè.
 ```
 
 ---
@@ -541,8 +538,6 @@ Quy tắc team (thuộc lòng):
 ## 7. Setup từng server day-one (copy-paste)
 
 *Section này trả lời: 5 server đầu tiên cài theo thứ tự nào, lệnh nào copy-paste, và ai thì nên bỏ qua server đó.*
-
-> Giữ nguyên toàn bộ steps, chỉ thêm nôm na + ai dùng lúc nào + verify cho mỗi server.
 
 ### 7.1. GitHub (impact cao nhất — cài đầu tiên)
 
@@ -565,9 +560,7 @@ gh auth status   # phải thấy Logged in (hoặc curl check token scope)
 
 ### 7.2. Playwright (browser automation — Copilot NHÌN UI)
 
-**Nôm na:** Bếp browser mở Chrome thật, chụp màn hình web bạn đang code, rồi nhận xét "nút này lệch, form này lỗi".
-
-**Analogie:** Như nhờ bạn ngồi cạnh nhìn màn hình giúp: "ê xem trang login tao vừa code có ổn không?".
+**Nôm na:** Bếp browser mở Chrome thật, chụp màn hình web bạn đang code, rồi nhận xét "nút này lệch, form này lỗi". Như nhờ bạn ngồi cạnh nhìn màn hình giúp: "ê xem trang login tao vừa code có ổn không?".
 
 **Ai dùng lúc nào:** Team có web app cần test UI. App không UI (API thuần, docs-only) → prune (bỏ).
 
@@ -582,8 +575,7 @@ pnpm dev &
 # Kỳ vọng: Copilot mở browser thật + ảnh screenshot + 3-5 nhận xét UI.
 ```
 
-> Playwright stdio KHÔNG theo lên coding agent cloud — cloud cần browser MCP
-> remote hoặc nhờ agent chụp artifact CI (xem bài 12).
+> Playwright stdio KHÔNG theo lên coding agent cloud — cloud cần browser MCP remote hoặc nhờ agent chụp artifact CI (xem bài 12).
 
 ### 7.3. Postgres (đọc schema + query — KHÔNG commit password)
 
@@ -602,11 +594,11 @@ export DATABASE_URL="postgresql://dev@localhost:5432/acme_dev"  # dev only!
 ```
 
 ```text
-Quy tắc an toàn DB (thuộc lòng):
-- Dev DB: cho read + (cân nhắc) write qua instructions giới hạn.
-- Prod DB: KHÔNG tạo server prod trong mcp.json team. Cần thì personal + read-only + approval deny write.
-- Không bao giờ paste connection string prod vào chat/mcp.json committed.
-- Kèm instructions .github/instructions/db.instructions.md: "prod CHỈ SELECT + WHERE + LIMIT".
+ Quy tắc an toàn DB (thuộc lòng):
+ - Dev DB: cho read + (cân nhắc) write qua instructions giới hạn.
+ - Prod DB: KHÔNG tạo server prod trong mcp.json team. Cần thì personal + read-only + approval deny write.
+ - Không bao giờ paste connection string prod vào chat/mcp.json committed.
+ - Kèm instructions .github/instructions/db.instructions.md: "prod CHỈ SELECT + WHERE + LIMIT".
 ```
 
 ```markdown
@@ -652,9 +644,9 @@ export NOTION_API_KEY="..."    # Notion → Integrations → New integration
 ```
 
 ```text
-Quy ước team (dán vào README):
-servers dùng chung không secrets (github, fetch, playwright) → .vscode/mcp.json (commit).
-servers token cá nhân (linear, notion) → personal config (không commit).
+ Quy ước team (dán vào README):
+ servers dùng chung không secrets (github, fetch, playwright) → .vscode/mcp.json (commit).
+ servers token cá nhân (linear, notion) → personal config (không commit).
 ```
 
 ---
@@ -665,24 +657,26 @@ servers token cá nhân (linear, notion) → personal config (không commit).
 
 ### 8.1. Secrets matrix (thuộc lòng)
 
-**Nôm na 1 câu:** Secrets (token, password) **luôn đi qua biến môi trường `${VAR}`**, không bao giờ gõ chữ thật vào file commit.
+**3 lớp khái niệm:**
 
-**Analogie:** Như không khắc mật khẩu két lên cửa két — mật khẩu để trong đầu (env), cửa chỉ ghi "hỏi chủ nhà".
+1. **Định nghĩa 1 câu:** Secrets (token, password) **luôn đi qua biến môi trường `${VAR}`**, không bao giờ gõ chữ thật vào file commit.
+2. **Nôm na:** Không khắc mật khẩu két lên cửa két — mật khẩu để trong đầu (env), cửa chỉ ghi "hỏi chủ nhà".
+3. **Ví dụ thật:**
 
 ```text
-ĐƯỢC (secrets qua env — commit an toàn):
-  "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}" }
-  "args": ["...server-postgres", "${DATABASE_URL}"]
-  "headers": { "Authorization": "Bearer ${LINEAR_API_KEY}" }
+ ĐƯỢC (secrets qua env — commit an toàn):
+   "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}" }
+   "args": ["...server-postgres", "${DATABASE_URL}"]
+   "headers": { "Authorization": "Bearer ${LINEAR_API_KEY}" }
 
-CẤM (paste trực tiếp — lộ khi commit, phải rotate ngay):
-  "env": { "TOKEN": "ghp_abc123..." }          → lộ khi commit
-  "args": ["postgresql://user:PASS@host/db"]   → lộ khi commit
-  "headers": { "Authorization": "Bearer sk-.." } → lộ khi commit
+ CẤM (paste trực tiếp — lộ khi commit, phải rotate ngay):
+   "env": { "TOKEN": "ghp_abc123..." }          → lộ khi commit
+   "args": ["postgresql://user:PASS@host/db"]   → lộ khi commit
+   "headers": { "Authorization": "Bearer sk-.." } → lộ khi commit
 
-Audit 1 dòng (chạy trước mỗi PR — copy-paste):
-  grep -rniE "ghp_|gho_|sk-|xox-|password\s*[:=]" .vscode/mcp.json; echo "exit=$? (1 = sạch)"
-# Kỳ vọng: exit=1 (sạch). exit=0 → CÓ LỘ, git rm + rotate creds ngay (bài 07).
+ Audit 1 dòng (chạy trước mỗi PR — copy-paste):
+   grep -rniE "ghp_|gho_|sk-|xox-|password\s*[:=]" .vscode/mcp.json; echo "exit=$? (1 = sạch)"
+ # Kỳ vọng: exit=1 (sạch). exit=0 → CÓ LỘ, git rm + rotate creds ngay (bài 07).
 ```
 
 ```bash
@@ -700,16 +694,16 @@ export GITHUB_TOKEN="$(gh auth token)"  # lấy từ gh CLI, không lưu plainte
 **Ai dùng lúc nào:** Người mới (cài nhanh), hoặc tìm server chuẩn thay vì copy JSON trôi nổi trên mạng.
 
 ```text
-VS Code → Ctrl+Shift+P → "MCP: Browse Servers" (marketplace/registry):
-- Bước 1: Browse → chọn server (github, playwright, postgres...) → Install.
-- Bước 2: VS Code tự chèn vào mcp.json → bạn thay secrets bằng ${ENV} (mục 8.1).
-- Bước 3: "MCP: List Servers" → connected? Chat test 1 prompt.
-- Org: admin có thể allow/block từng server trong marketplace (Policies → MCP).
-- Verify: sau Install, mcp.json có thêm block server mới + grep secrets vẫn sạch.
+ VS Code → Ctrl+Shift+P → "MCP: Browse Servers" (marketplace/registry):
+ - Bước 1: Browse → chọn server (github, playwright, postgres...) → Install.
+ - Bước 2: VS Code tự chèn vào mcp.json → bạn thay secrets bằng ${ENV} (mục 8.1).
+ - Bước 3: "MCP: List Servers" → connected? Chat test 1 prompt.
+ - Org: admin có thể allow/block từng server trong marketplace (Policies → MCP).
+ - Verify: sau Install, mcp.json có thêm block server mới + grep secrets vẫn sạch.
 
-Khác extensions (bài 09): MCP server = 1 tool provider (1 bếp).
-Extension = có thể bundle MCP + chat participants + commands (1 combo).
-Cài extension Copilot-related có thể tự thêm MCP (cài 1 được 2 — review URL/secrets).
+ Khác extensions (bài 09): MCP server = 1 tool provider (1 bếp).
+ Extension = có thể bundle MCP + chat participants + commands (1 combo).
+ Cài extension Copilot-related có thể tự thêm MCP (cài 1 được 2 — review URL/secrets).
 ```
 
 **Ngoài chợ trong VS Code, còn 2 chỗ lấy server chuẩn:**
@@ -741,12 +735,12 @@ Cài extension Copilot-related có thể tự thêm MCP (cài 1 được 2 — r
 ### 9.2. Prune flow định kỳ (2 tuần/lần, 10 phút — copy-paste)
 
 ```text
-Bước 1: mở "MCP: List Servers" → server nào disconnected lâu? Ghi lại.
-Bước 2: tự hỏi: 2 tuần rồi có gọi server X không? Không → disable 1 tuần.
-  VS Code: mcp.json → xóa/comment server → reload. Không ai kêu → xóa hẳn.
-Bước 3: audit tools: "@workspace liệt kê MCP tools mày đang thấy" → server nào thừa?
-Bước 4: audit secrets: grep secrets (mục 8.1) → phải trống (exit=1).
-# Kỳ vọng: còn 3-6 servers connected, tools gọn, secrets sạch.
+ Bước 1: mở "MCP: List Servers" → server nào disconnected lâu? Ghi lại.
+ Bước 2: tự hỏi: 2 tuần rồi có gọi server X không? Không → disable 1 tuần.
+   VS Code: mcp.json → xóa/comment server → reload. Không ai kêu → xóa hẳn.
+ Bước 3: audit tools: "@workspace liệt kê MCP tools mày đang thấy" → server nào thừa?
+ Bước 4: audit secrets: grep secrets (mục 8.1) → phải trống (exit=1).
+ # Kỳ vọng: còn 3-6 servers connected, tools gọn, secrets sạch.
 ```
 
 ### 9.3. Checklist MCP khỏe
@@ -758,7 +752,7 @@ Bước 4: audit secrets: grep secrets (mục 8.1) → phải trống (exit=1).
 - [ ] Tool approval đúng: read → allow, side-effect → ask, prod → deny.
 - [ ] Coding agent cloud: cấu hình lại MCP remote (stdio local không theo lên cloud — bài 12).
 
-### 9.4. Pitfalls + fix (giữ nguyên + thêm giải thích)
+### 9.4. Pitfalls + fix
 
 | Pitfall | Vì sao | Fix |
 |---|---|---|
@@ -769,7 +763,7 @@ Bước 4: audit secrets: grep secrets (mục 8.1) → phải trống (exit=1).
 | Không instructions kèm → Copilot query sai schema | MCP không biết conventions team | Viết `db.instructions.md` (mục 7.3) |
 | Approval `allow` hết cho tiện | Lười bấm Allow | Side-effect giữ `ask`; chỉ read-only mới `allow` (mục 6) |
 
-### 9.5. Bài tập thực hành (giữ nguyên)
+### 9.5. Bài tập thực hành
 
 **Bài 1 (15 phút):** Cài GitHub server (mục 7.1). Test 3 prompts: list PRs,
 đọc issue, search code. Ghi tools Copilot đã gọi (list_prs? get_pr? search_code?).
@@ -783,22 +777,22 @@ screenshot + nhận xét UI.
 **Bài 4 (10 phút):** Chạy prune flow (mục 9.2): tìm server 0 calls → disable.
 Audit `mcp.json` secrets bằng grep (mục 8.1). Ghi exit code (phải =1).
 
-### 9.6. Walkthrough: thêm server đầu tiên (10 phút — giữ nguyên)
+### 9.6. Walkthrough: thêm server đầu tiên (10 phút)
 
 ```text
-Bước 1: copy khung mcp.json (mục 4) vào .vscode/mcp.json, giữ lại github + fetch.
-Bước 2: export GITHUB_TOKEN (mục 7.1). Reload VS Code.
-Bước 3: Ctrl+Shift+P → "MCP: List Servers" → github phải Connected.
-Bước 4: Chat test: "liệt kê 5 PRs mở gần nhất". Được → thêm servers tiếp theo.
-Bước 5: Commit mcp.json (grep secrets trống, exit=1) + settings approval (mục 6).
-# Kỳ vọng cuối: 2 servers connected, Chat liệt kê được PRs thật, grep sạch.
+ Bước 1: copy khung mcp.json (mục 4) vào .vscode/mcp.json, giữ lại github + fetch.
+ Bước 2: export GITHUB_TOKEN (mục 7.1). Reload VS Code.
+ Bước 3: Ctrl+Shift+P → "MCP: List Servers" → github phải Connected.
+ Bước 4: Chat test: "liệt kê 5 PRs mở gần nhất". Được → thêm servers tiếp theo.
+ Bước 5: Commit mcp.json (grep secrets trống, exit=1) + settings approval (mục 6).
+ # Kỳ vọng cuối: 2 servers connected, Chat liệt kê được PRs thật, grep sạch.
 ```
 
 ---
 
 ## 10. Hiểu nhầm thường gặp
 
-*Section này trả lời: 7 hiểu nhầm về MCP hay gặp nhất, và sự thật tương ứng. Tra cứu nhanh, không cần đọc từ đầu.*
+*Tra cứu nhanh, không cần đọc từ đầu. Gặp câu nào quen thì đọc cột "Sự thật".*
 
 | Hiểu nhầm | Sự thật |
 |---|---|
@@ -814,7 +808,7 @@ Bước 5: Commit mcp.json (grep secrets trống, exit=1) + settings approval (m
 
 ## 11. Link chéo
 
-*Section này trả lời: bài nào trong series liên quan trực tiếp tới MCP, đọc tiếp theo hướng nào.*
+*Đọc tiếp theo hướng các bài liên quan trực tiếp tới MCP.*
 
 - **Bài 03 — Instructions:** instructions kèm MCP (schema DB, format Slack).
 - **Bài 05 — Prompt files:** prompt tái dùng gọi MCP (review-pr, triage-issue).

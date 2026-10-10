@@ -22,6 +22,7 @@ Cách gọi `/export` — làm đúng theo khối dưới đây, kèm câu kiể
 ```bash
 /export
 /export lưu chat này ra docs/chat-refactor-login.md
+# Kỳ vọng: file markdown sạch, không lọt secrets
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/export`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/export` — đổi phần tên file/task cho đúng việc c�
 
 ```bash
 /export lưu chat này ra file markdown để tôi đưa vào wiki
+# Kỳ vọng: file .md đầy đủ turns, secrets đã soát
 ```
 
 **Kết quả mong đợi:** File markdown chứa đủ turns + code blocks; share được, secrets đã soát.

@@ -22,6 +22,7 @@ Cách gọi `Restore checkpoint` — làm đúng theo khối dưới đây, kèm
 ```bash
 Chat view → timeline/checkpoints → Restore
 # hoặc Undo từng edit (Ctrl+Z) nếu mới sửa ít
+# Verify: git diff sạch trở lại sau restore
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Restore checkpoint`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `Restore checkpoint` — đổi phần tên file/task cho đún
 
 ```bash
 Agent sửa sai 5 file → Restore checkpoint “trước khi chạy agent sáng nay”
+# Kỳ vọng: code về đúng trạng thái trước, git diff sạch
 ```
 
 **Kết quả mong đợi:** Code về đúng trạng thái checkpoint; git diff sạch lại; thử hướng mới từ điểm an toàn.

@@ -23,6 +23,7 @@ Cách gọi `/new` — làm đúng theo khối dưới đây, kèm câu kiểm t
 ```bash
 /new
 /new bắt đầu task refactor login, cho checklist 5 bước
+# Kỳ vọng: chat trắng sạch, history cũ không lẫn
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/new`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -35,6 +36,7 @@ Prompt mẫu cho `/new` — đổi phần tên file/task cho đúng việc của
 
 ```bash
 /new bắt đầu task refactor login, cho tôi checklist 5 bước
+# Verify: hỏi tiếp 1 câu, model không nhắc chuyện chat cũ
 ```
 
 **Kết quả mong đợi:** Chat trắng + checklist 5 bước đúng scope; history cũ không lẫn vào.

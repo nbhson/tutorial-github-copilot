@@ -77,13 +77,14 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # Xem plan hiện tại của account (cần gh CLI đã login)
 gh api user --jq '{login, plan: .plan.name}'
 gh api /user/copilot_seat_details --jq . 2>/dev/null || echo "Chua co seat hoac API chua mo"
+# Verify: kết quả cho thấy login + tên plan, không phải 404
 ```
 
 **Ví dụ cụ thể:** bạn trả Pro nhưng công ty mua Business. Khi join org, seat Business đè lên — policy org (VD chặn `*.pem`) thắng setting cá nhân của bạn.
 
 > **Khi nào áp dụng:** luôn xác định plan NGAY từ đầu vì nó khóa hạn mức Credits (câu 2), policy (bài 05), và quyền riêng tư (bài 09).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 2. Trial hoạt động thế nào, hết trial thì sao?
@@ -109,13 +110,14 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # Không có lệnh CLI xem trial; check trên web:
 # https://github.com/settings/copilot -> xem "Trial ends on ..."
 # Đặt reminder trước 3 ngày để quyết định mua/hủy
+# Verify: trang hiện "Trial ends on" + ngày cụ thể trước mắt bạn
 ```
 
 **Ví dụ cụ thể:** admin bật Business trial ngày 1/10 → set reminder 27/10 review: giữ thì add billing, không thì `Settings → Billing → Cancel trial` + export audit log trước khi mất.
 
 > **Khi nào áp dụng:** trước khi onboarding team >5 người — luôn trial Business trước, đừng mua blind.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 3. Seat là gì, admin assign / thu hồi seat thế nào?
@@ -139,17 +141,19 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 ```bash
 # Admin: xem ai đang giữ seat (cần org owner + gh CLI)
 gh api orgs/<ORG>/copilot/billing/seats --jq '.seats[] | {login: .assignee.login, plan}'
+# Verify: mỗi dòng ra login của 1 dev + plan (Business/Enterprise)
 
 # Admin: assign seat cho 1 team (via web UI hoặc API)
 gh api -X POST orgs/<ORG>/copilot/billing/selected_teams \
   -f selected_teams='["team-slug"]'
+# Verify: chạy lệnh trên, response không lỗi + dev trong team thấy copilot chạy
 ```
 
 **Ví dụ cụ thể:** org 50 dev nhưng chỉ mua 20 seats → tạo team `copilot-pilot` 20 người, assign seat cho team đó, còn lại chờ đợt 2.
 
 > **Khi nào áp dụng:** khi có dev báo "Copilot đòi mua dù đã join org" — 90% là chưa được assign seat.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 4. Cài đặt thế nào cho sạch: VS Code / JetBrains / Neovim / CLI?
@@ -175,20 +179,23 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # VS Code CLI: cài extension chính chủ
 code --install-extension GitHub.copilot
 code --install-extension GitHub.copilot-chat
+# Verify: code --list-extensions | grep -i copilot ra đúng 2 dòng
 
 # GitHub CLI + copilot extension
 gh extension install github/gh-copilot
 gh copilot --help
+# Verify: ra giúp đỡ của gh copilot, không phải "command not found"
 
 # Neovim (copilot.vim): trong nvim
 # :Copilot setup  -> mở browser auth -> :Copilot status
+# Verify: :Copilot status hiện "Authenticated as <login>"
 ```
 
 **Ví dụ cụ thể:** máy mới → cài VS Code extensions + `gh` + `gh-copilot` là đủ 95% nhu cầu (IDE + terminal).
 
 > **Khi nào áp dụng:** máy mới, hoặc khi suggestions chập chờn do cài 2 plugin đè nhau.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 5. Sign-in / sign-out / đổi account (cá nhân ↔ công ty) thế nào?
@@ -213,17 +220,19 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # Kiểm tra account đang dùng cho gh + copilot
 gh auth status
 gh api user --jq .login
+# Verify: login hiện là account bạn MƯỢC muốn dùng (khác thì cần đổi)
 
 # Đổi account: logout rồi login lại
 gh auth logout
 gh auth login --web -h github.com
+# Verify: gh api user --jq .login ra login mới sau khi login xong
 ```
 
 **Ví dụ cụ thể:** freelancer có 2 account (cá nhân + client). Dùng `gh auth switch --user <login>` hoặc 2 VS Code profile riêng để khỏi lẫn seat/bill.
 
 > **Khi nào áp dụng:** đầu mỗi máy mới, mỗi khi bill sai, và khi policy org "không ăn" (thường do sai account).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 6. Policy của org đè lên setting cá nhân ra sao?
@@ -246,13 +255,14 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 # Không có lệnh xem policy từ client; check trên web:
 # https://github.com/organizations/<ORG>/settings/copilot -> Policies tab
 # Dev: nếu nghi bị policy đè, hỏi admin chụp màn hình Policies tab
+# Verify: Policies tab có list rule + toggle, không có "all members" bị tắt
 ```
 
 **Ví dụ cụ thể:** bạn bật "Allow all models" nhưng picker chỉ hiện GPT, thiếu Claude — vì admin set model allowlist. Fix duy nhất: nhờ admin mở thêm.
 
 > **Khi nào áp dụng:** mọi trường hợp "em bật rồi mà không có tác dụng" trong org Business/Enterprise. Chi tiết xem [bài 05](05-policies-guardrails-faq.md).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 7. Lỗi cài đặt kinh điển: extension xung đột, version cũ, PATH thiếu `gh`?
@@ -276,6 +286,7 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 ```bash
 # VS Code: liệt kê extension copilot đang cài
 code --list-extensions | grep -i copilot
+# Verify: nên ra đúng 2 dòng (GitHub.copilot + GitHub.copilot-chat), thêm = conflict
 
 # Gỡ bản lạ, giữ chính chủ
 code --uninstall-extension <ten-la>
@@ -283,13 +294,14 @@ code --install-extension GitHub.copilot GitHub.copilot-chat
 
 # Kiểm tra gh + copilot extension
 gh --version && gh extension list | grep copilot
+# Verify: gh --version ra số, extension list có "github/gh-copilot"
 ```
 
 **Ví dụ cụ thể:** `code --list-extensions | grep -i copilot` ra 3 dòng (1 chính chủ + 2 fork) → gỡ 2 fork, reload IDE, suggestions chạy lại ngay.
 
 > **Khi nào áp dụng:** khi suggestions/chat đột nhiên chết sau update IDE hoặc sau khi vọc extension.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 8. Bắt đầu repo mới: 5 việc setup đầu repo là gì?
@@ -303,7 +315,7 @@ Section này trả lời: vừa clone/ tạo repo xong thì phải làm 5 việc
 **Giải thích chi tiết + ví dụ:** Thứ tự chuẩn cho repo vừa clone / vừa tạo (làm 1 lần, hưởng cả dự án):
 
 1. Mở repo trong IDE, verify Copilot suggestions chạy (gõ 1 hàm đơn giản).
-2. Copy `.github/muse-instructions.md` từ `templates/` (bài này bước 9).
+2. Copy `.github/copilot-instructions.md` từ `templates/` (bài này bước 9).
 3. Thêm `.github/instructions/*.instructions.md` theo stack (backend/frontend...).
 4. Thêm `.vscode/mcp.json` nếu cần data ngoài repo (DB, docs...).
 5. Thêm `.vscode/settings.json` với content exclusion cho path nhạy cảm.
@@ -317,19 +329,19 @@ cd ~/code/my-repo && code .
 
 # Trong IDE: gõ thử 1 hàm để verify suggestions
 # def add(a, b):  -> chờ gợi ý xám -> Tab để nhận
-```
+# Verify: suggestions hiện + nhận Tab thành code thật
 
-```bash
 # Copy khung templates (đứng ở root repo đích)
 cp -r /path/to/tutorial-copilot/templates/.github ./
 cp -r /path/to/tutorial-copilot/templates/.vscode ./
+# Verify: ls .github/ .vscode/ thấy đủ file, không thiếu
 ```
 
-**Ví dụ repo trống:** chưa có code để Copilot học pattern → `muse-instructions.md` càng quan trọng (khai stack + conventions ngay từ đầu).
+**Ví dụ repo trống:** chưa có code để Copilot học pattern → `copilot-instructions.md` càng quan trọng (khai stack + conventions ngay từ đầu).
 
 > **Khi nào áp dụng:** mọi repo chưa từng dùng Copilot. Team thì commit `.github/` + `.vscode/` để người sau khỏi setup lại.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 9. Project mới tinh thì copy `templates/` thế nào?
@@ -348,15 +360,16 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```bash
 ls /path/to/tutorial-copilot/templates/
-cp /path/to/tutorial-copilot/templates/.github/muse-instructions.md ./.github/muse-instructions.md
+cp /path/to/tutorial-copilot/templates/.github/copilot-instructions.md ./.github/copilot-instructions.md
 # Mở file, sửa: stack, lệnh test/lint/build, cấu trúc thư mục, quy ước branch
+# Verify: grep "npm test" trong file → nếu repo bạn dùng pnpm, sửa dòng đó
 ```
 
 **Ví dụ cụ thể:** template ghi `npm test`; bạn dùng `pnpm` → sửa ngay dòng đó. Sai 1 dòng này, Copilot gợi ý sai lệnh cả tháng.
 
 > **Khi nào áp dụng:** `git init` vừa xong, chưa có file nào. Sau khi code lên hình, bổ sung instructions theo path.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 10. Báo lỗi / nhờ hỗ trợ từ GitHub thế nào?
@@ -380,6 +393,7 @@ code --version
 code --list-extensions | grep -i copilot
 # VS Code: Output panel -> chọn "GitHub Copilot" -> copy đoạn lỗi
 # + ghi rõ: plan (Individual/Business), file log: https://github.com/settings/copilot
+# Verify: đủ 3 dòng version + đoạn log → paste vào issue
 ```
 
 **Ví dụ report chuẩn:**
@@ -392,7 +406,7 @@ Kèm: extension versions + Output log đoạn lỗi + đã thử reload/re-login
 
 > **Khi nào áp dụng:** khi đã đi hết thứ tự debug ([bài 08](08-loi-thuong-gap-troubleshooting.md)) mà vẫn lỗi.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)
@@ -407,6 +421,7 @@ Section này trả lời: khi đã thử mọi cách ở trên mà vẫn kẹt t
 
 ```bash
 gh auth status && gh --version && code --list-extensions | grep -i copilot
+# Verify: auth OK + version hiện tại + chỉ đúng 2 extension copilot
 ```
 
 ---

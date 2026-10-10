@@ -21,6 +21,7 @@ Cách gọi `/clear` — làm đúng theo khối dưới đây, kèm câu kiểm
 
 ```bash
 /clear
+# Kỳ vọng: turns cũ biến mất, instructions + MCP vẫn còn
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/clear`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -33,6 +34,7 @@ Prompt mẫu cho `/clear` — đổi phần tên file/task cho đúng việc c�
 
 ```bash
 /clear
+# Verify: hỏi tiếp 1 câu, model không nhắc chuyện cũ nữa
 ```
 
 **Kết quả mong đợi:** Turns cũ biến mất, instructions + MCP servers vẫn còn; chat nhẹ lại.

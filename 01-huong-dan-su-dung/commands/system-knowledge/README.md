@@ -7,7 +7,7 @@ Mỗi README chi tiết trả lời 5 câu: **dùng khi nào · cho ai · kết 
 | Lệnh | Mô tả 1 dòng | Chi tiết |
 |---|---|---|
 | `/instructions` | Xem/sửa instructions đang load cho repo này | [./instructions/README.md](./instructions/README.md) |
-| `/prompts` | Liệt kê prompt files .github/prompts/ khả dụng | [./prompt-file/README.md](./prompt-file/README.md) |
+| `/prompts` | Liệt kê prompt files .github/prompts/ khả dụng (**legacy**, deprecated Agent Host) | [./prompt-file/README.md](./prompt-file/README.md) |
 | `/skills` | Liệt kê Agent Skills .github/skills/ khả dụng | [./agent-skill/README.md](./agent-skill/README.md) |
 | `/mcp` | Xem MCP servers/tools đang bật, reconnect khi rớt | [./mcp/README.md](./mcp/README.md) |
 | `MCP add` | Thêm MCP server mới vào cấu hình | [./mcp-add/README.md](./mcp-add/README.md) |

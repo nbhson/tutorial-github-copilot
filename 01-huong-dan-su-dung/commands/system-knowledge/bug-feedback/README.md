@@ -22,6 +22,8 @@ Cách gọi `/feedback + /bug` — làm đúng theo khối dưới đây, kèm c
 ```bash
 /feedback tốt/xấu + lý do
 /bug “mô tả + bước lặp + version”
+# Kỳ vọng: GitHub nhận đủ context để tái hiện bug
+# Verify: nhận được confirm/tham chiếu issue
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/feedback + /bug`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

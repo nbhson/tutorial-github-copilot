@@ -22,6 +22,8 @@ Cách gọi `/skills` — làm đúng theo khối dưới đây, kèm câu kiể
 ```bash
 /skills
 # rồi nhờ việc thường: “review PR giúp tôi” → model tự gọi skill
+# Kỳ vọng: model tự kích hoạt đúng skill, output chuẩn
+# Verify: model báo đã dùng skill X; không cần gõ /review-pr
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/skills`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

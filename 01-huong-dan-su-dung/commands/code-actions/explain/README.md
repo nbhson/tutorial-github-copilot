@@ -22,6 +22,7 @@ Cách gọi `/explain` — làm đúng theo khối dưới đây, kèm câu ki�
 ```bash
 Bôi đen code → /explain
 /explain giải thích như cho intern mới
+# Kỳ vọng: từng bước + input/output + edge case
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/explain`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/explain` — đổi phần tên file/task cho đúng việc c
 
 ```bash
 (bôi đen 20 dòng middleware) /explain “giải thích từng bước + vẽ flow bằng chữ”
+# Verify: tự giải thích lại bằng lời mình + chỉ ra 1 edge case
 ```
 
 **Kết quả mong đợi:** Giải thích từng bước đúng logic + chỉ ra input/output + edge case; hiểu để review/sửa tiếp.

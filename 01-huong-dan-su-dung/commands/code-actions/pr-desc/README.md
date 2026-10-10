@@ -22,6 +22,7 @@ Cách gọi `/pr` — làm đúng theo khối dưới đây, kèm câu kiểm tr
 ```bash
 /pr
 /pr tóm tắt diff thành title + body + checklist test
+# Kỳ vọng: title conventional + body Đổi gì / Vì sao / Test
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/pr`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/pr` — đổi phần tên file/task cho đúng việc của 
 
 ```bash
 /pr “tóm tắt diff này: title conventional, body có Đổi gì / Vì sao / Test, checklist đã chạy”
+# Verify: teammate đọc body 1 phút không cần hỏi thêm
 ```
 
 **Kết quả mong đợi:** PR title + body rõ (đổi gì, vì sao, test, rủi ro); reviewer đọc 1 phút hiểu.

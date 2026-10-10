@@ -22,6 +22,8 @@ Cách gọi `/extensions` — làm đúng theo khối dưới đây, kèm câu k
 ```bash
 /extensions
 # hoặc Ctrl+Shift+X → search Copilot
+# Kỳ vọng: list đã cài/active rõ ràng, không còn extension thừa
+# Verify: chat/inline chạy ổn sau khi dọn
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/extensions`. Không thấy → đọc `/status` + plan trước khi kết luận bug.

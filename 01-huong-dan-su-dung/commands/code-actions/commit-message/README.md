@@ -22,6 +22,7 @@ Cách gọi `/commit` — làm đúng theo khối dưới đây, kèm câu kiể
 ```bash
 Stage changes → /commit
 /commit theo conventional, tiếng Anh, <72 chars
+# Kỳ vọng: message feat/fix(scope): ... + body ngắn
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/commit`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/commit` — đổi phần tên file/task cho đúng việc c�
 
 ```bash
 /commit “viết message conventional từ staged diff, tiếng Anh, dòng đầu <72 chars”
+# Verify: đọc message 5 giây là hiểu đổi gì + vì sao
 ```
 
 **Kết quả mong đợi:** Message feat/fix(scope): ... + body ngắn; commit log sạch, CI parse được.

@@ -1,8 +1,8 @@
-# Commands — Index tra cứu 46 lệnh Copilot 2026
+# Commands — Index tra cứu 47 lệnh Copilot 2026
 
-> **Dành cho:** ai cần tra nhanh 1 trong 46 lệnh Copilot 2026 · **Vấn đề:** 46 lệnh chia 4 nhóm, mỗi dòng là 1 lệnh + link sang folder chi tiết, không biết mở file nào · **Đọc xong:** tìm đúng lệnh trong bảng rồi mở README chi tiết trả lời 5 câu: dùng khi nào · cho ai · kết quả ra gì · ví dụ copy-paste · liên quan (~3 phút)
+> **Dành cho:** ai cần tra nhanh 1 trong 47 lệnh Copilot 2026 · **Vấn đề:** 47 lệnh chia 4 nhóm, mỗi dòng là 1 lệnh + link sang folder chi tiết, không biết mở file nào · **Đọc xong:** tìm đúng lệnh trong bảng rồi mở README chi tiết trả lời 5 câu: dùng khi nào · cho ai · kết quả ra gì · ví dụ copy-paste · liên quan (~3 phút)
 
-**Cách dùng:** tìm nhóm → đọc mô tả 1 dòng → click link sang folder chi tiết (`./<nhóm>/<slug>/README.md`). Gõ `/` (slash), `@` (participant), `#` (variable) trong Chat input để xem list khả dụng **ở môi trường của bạn** (khác plan/model/version sẽ khác). Mỗi README chi tiết giữ nguyên format 6 phần: tên lệnh + 1 câu nôm na, khi nào dùng, cách gọi (code block phím tắt/slash), ví dụ prompt thật + kết quả mong đợi, lỗi thường gặp, tham khảo. Tiếng Việt, ví dụ riêng từng lệnh.
+**Cách dùng (nôm na):** coi đây như mục lục — tìm nhóm → đọc mô tả 1 dòng → click link sang folder chi tiết (`./<nhóm>/<slug>/README.md`). Trong Chat input, gõ `/` (slash), `@` (participant), `#` (variable) để xem list khả dụng **ở môi trường của bạn** — khác plan/model/version thì list cũng khác. Mỗi README chi tiết giữ nguyên format 6 phần: tên lệnh + 1 câu nôm na, khi nào dùng, cách gọi (code block phím tắt/slash), ví dụ prompt thật + kết quả mong đợi, lỗi thường gặp, tham khảo. Tiếng Việt, ví dụ riêng từng lệnh.
 
 ## Nhóm 1 — Chat session (12)
 
@@ -23,7 +23,7 @@ Chi tiết nhóm: [./chat-session/README.md](./chat-session/README.md)
 | `Shortcuts` | Liệt kê phím tắt Chat trong IDE này | [./chat-session/shortcuts/README.md](./chat-session/shortcuts/README.md) |
 | `/summarize` | Tóm tắt hội thoại dài thành bản gọn giữ đà task | [./chat-session/summarize/README.md](./chat-session/summarize/README.md) |
 
-## Nhóm 2 — Model & Agent (9)
+## Nhóm 2 — Model & Agent (10)
 
 Chi tiết nhóm: [./model-agent/README.md](./model-agent/README.md)
 
@@ -38,6 +38,7 @@ Chi tiết nhóm: [./model-agent/README.md](./model-agent/README.md)
 | `Coding agent assign` | Giao issue cho Copilot coding agent xử lý async | [./model-agent/coding-agent-assign/README.md](./model-agent/coding-agent-assign/README.md) |
 | `Coding agent PR` | Tóm tắt diff thành PR, review flow issue→PR | [./model-agent/coding-agent-pr/README.md](./model-agent/coding-agent-pr/README.md) |
 | `Policy approval` | Xem/duyệt policy, approve chạy lệnh nhạy cảm | [./model-agent/policy-approval/README.md](./model-agent/policy-approval/README.md) |
+| `Session Target` | Chọn harness + nơi agent chạy: Local/Copilot/Cloud | [./model-agent/session-target/README.md](./model-agent/session-target/README.md) |
 
 ## Nhóm 3 — Code actions (10)
 
@@ -63,8 +64,8 @@ Chi tiết nhóm: [./system-knowledge/README.md](./system-knowledge/README.md)
 | Lệnh | Mô tả 1 dòng | Chi tiết |
 |---|---|---|
 | `/instructions` | Xem/sửa instructions đang load cho repo này | [./system-knowledge/instructions/README.md](./system-knowledge/instructions/README.md) |
-| `/prompts` | Liệt kê prompt files .github/prompts/ khả dụng | [./system-knowledge/prompt-file/README.md](./system-knowledge/prompt-file/README.md) |
-| `/skills` | Liệt kê Agent Skills .github/skills/ khả dụng | [./system-knowledge/agent-skill/README.md](./system-knowledge/agent-skill/README.md) |
+| `/prompts` | Liệt kê prompt files `.github/prompts/` khả dụng — **legacy**: deprecated cho Agent Host, chỉ Local; việc mới dùng `/skills` (bài 05) | [./system-knowledge/prompt-file/README.md](./system-knowledge/prompt-file/README.md) |
+| `/skills` | Liệt kê Agent Skills `.github/skills/` khả dụng — chuẩn khuyến nghị 2026, model tự gọi khi task khớp | [./system-knowledge/agent-skill/README.md](./system-knowledge/agent-skill/README.md) |
 | `/mcp` | Xem MCP servers/tools đang bật, reconnect khi rớt | [./system-knowledge/mcp/README.md](./system-knowledge/mcp/README.md) |
 | `MCP add` | Thêm MCP server mới vào cấu hình | [./system-knowledge/mcp-add/README.md](./system-knowledge/mcp-add/README.md) |
 | `/extensions` | Quản lý Copilot Extensions đã cài | [./system-knowledge/extensions/README.md](./system-knowledge/extensions/README.md) |
@@ -78,10 +79,11 @@ Chi tiết nhóm: [./system-knowledge/README.md](./system-knowledge/README.md)
 | `gh copilot suggest` | Gợi ý lệnh CLI trong terminal (gh copilot) | [./system-knowledge/cli-suggest/README.md](./system-knowledge/cli-suggest/README.md) |
 | `gh copilot explain` | Giải thích lệnh CLI vừa chạy/gặp | [./system-knowledge/cli-explain/README.md](./system-knowledge/cli-explain/README.md) |
 
-## Công thức session đầu (giữ nguyên, 1 lần/repo)
+## Công thức session đầu (làm 1 lần mỗi repo mới)
 
 ```text
-/status → /instructions → /mcp → custom agent → /policy
+/status (sống chưa?) → /instructions (đọc đúng rule chưa?) → /mcp (server nào đang bật?)
+→ gọi custom agent (nếu có) → /policy (nới/thắt lệnh chạy)
 ```
 
 > Mẹo 1 dòng: _chat mới mỗi task (`/new`), gắn scope mọi prompt (`#file`/`@workspace`), review diff trước khi Accept._

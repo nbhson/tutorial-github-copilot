@@ -22,6 +22,7 @@ Cách gọi `/doc` — làm đúng theo khối dưới đây, kèm câu kiểm t
 ```bash
 Bôi đen hàm → /doc
 /doc viết JSDoc gồm params + example
+# Kỳ vọng: docstring đủ @param/@returns + example chạy được
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/doc`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
@@ -34,6 +35,7 @@ Prompt mẫu cho `/doc` — đổi phần tên file/task cho đúng việc của
 
 ```bash
 (bôi đen hàm parse) /doc “viết JSDoc: mô tả, @param, @returns, 1 example chạy được”
+# Verify: copy example trong docs chạy thử — chạy được là đạt
 ```
 
 **Kết quả mong đợi:** Docstring đúng chuẩn repo (params/returns/example); example copy chạy được.

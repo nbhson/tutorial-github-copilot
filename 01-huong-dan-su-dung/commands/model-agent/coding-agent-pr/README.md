@@ -21,6 +21,8 @@ Cách gọi `Coding agent PR` — làm đúng theo khối dưới đây, kèm c�
 
 ```bash
 Mở PR agent → đọc tóm tắt + CI → review diff → merge/revert
+# Kỳ vọng: merge xong staging chạy ổn, không nợ review
+# Verify: staging xanh sau merge; revert gọn nếu sai
 ```
 
 > Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Coding agent PR`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
