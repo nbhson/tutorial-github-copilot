@@ -15,6 +15,12 @@ Section này trả lời: khi nào nên Deny thay vì Allow, và cách phân bi�
 - Muốn set baseline allow/ask/deny cho team.
 - Khi nghi policy org đang chặn.
 
+| Mức | Ý nghĩa | Khi nào dùng |
+|---|---|---|
+| Allow | Cho chạy luôn, không hỏi lại | Tool chỉ-đọc (đọc file/grep/list) hoặc lệnh lành đã tin |
+| Ask | Hỏi bạn trước mỗi lần chạy | Lệnh ghi/xóa/MCP chưa chắc — mặc định an toàn |
+| Deny | Chặn hẳn, không cho chạy | Lệnh destructive: rm, force-push, migration prod |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `Policy approval` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

@@ -17,6 +17,12 @@ Section này trả lời: task nào đáng giao cho Agent, và 3 quy tắc giữ
 - Chưa biết chạm file nào, cần agent tìm.
 - Multi-step: sửa + chạy lệnh + sửa tiếp.
 
+| Mode | Đặc điểm | Khi nào dùng |
+|---|---|---|
+| Ask | Chỉ đọc, không sửa file | Hỏi/khảo sát/so sánh phương án trước khi đụng code |
+| Edit | Sửa đúng files bạn tick, có kiểm soát | Đã biết sửa 1–5 file, muốn review từng hunk |
+| Agent | Tự tìm file, sửa, chạy terminal | Task mở nhiều bước, chưa biết chạm file nào |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `/agent (Agent mode)` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

@@ -108,6 +108,13 @@ printf 'def add(a, b):\n' > /tmp/copilot-test.py && code /tmp/copilot-test.py
 - `model unavailable` → model đang incident hoặc org tắt: đổi model khác.
 - `something went wrong / 500` → thử chat mới; còn lỗi thì chờ + báo GitHub status.
 
+| Message | Nghĩa | Cách xử nhanh |
+|---|---|---|
+| `quota exhausted` | Hết AI Credits/premium | Đổi model nhẹ, chờ reset (check `github.com/settings/copilot`) |
+| `model unavailable` | Model đang incident hoặc org tắt | Đổi model khác trong picker |
+| `something went wrong / 500` | Lỗi tạm phía server | Mở chat mới; còn lỗi thì chờ + xem githubstatus |
+| Khi nào dùng | — | Đọc đúng message trước khi kết luận "Copilot sập" |
+
 > **Khi nào áp dụng:** trước khi kết luận "Copilot sập" — đổi model + chat mới loại trừ 80% ca. Chat Agent mode (2026) tốn AI Credits theo turn — quota exhausted giữa task agent thì chuyển sang model nhẹ hơn thay vì đợi.
 
 ```bash

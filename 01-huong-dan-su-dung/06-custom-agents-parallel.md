@@ -189,6 +189,14 @@ target: vscode                    # vscode | github-coding-agent | cli
 | `handoff` | Cách bàn giao | Tùy | `summary-only` = chỉ trả tóm tắt (giữ chat chính sạch) | Muốn sạch → summary-only; muốn plan file → plan-file |
 | `target` | Làm ở công trường nào | Tùy | Agent chạy ở đâu (VS Code vs coding agent cloud) | Local → vscode; giao cloud → github-coding-agent |
 
+**`handoff` — 3 kiểu bàn giao (chọn theo mức sạch chat chính cần):**
+
+| Giá trị `handoff` | Nôm na | Chat chính nhận gì | Khi nào dùng |
+|---|---|---|---|
+| `summary-only` | Thám tử chỉ đưa tờ tóm tắt | Vài dòng summary | Giữ chat chính sạch (explorer/reviewer/tester) |
+| `full` | Thám tử dẫn ra tận hiện trường | Toàn bộ nội dung agent thấy | Cần xem chi tiết để tự quyết |
+| `plan-file` | Kiến trúc sư giao bản vẽ ra file | Path file plan + tóm tắt 10 dòng | Task multi-file cần duyệt trước khi code (planner) |
+
 **Body** = persona + quy trình + output format. Viết như viết skill (bài 05): steps đánh số, lệnh cụ thể, output format bắt buộc, non-goals rõ ràng.
 
 ```markdown
@@ -378,6 +386,14 @@ git add .github/agents && git commit -m "chore: add 4 copilot custom agents" && 
 *Section này trả lời: mở bao nhiêu session, mở ở đâu, và làm sao để chúng không giẫm chân nhau. Đọc xong chọn 1 trong 3 cách hợp với việc của bạn.*
 
 **Nôm na:** Như mở 3 bếp cùng nấu. Bếp 1 hầm xương (explorer), bếp 2 xào rau (planner), bạn đứng nêm món chính (code tay). Xong thì gom lại thành 1 mâm.
+
+**Chọn cách nào (bảng 10 giây):**
+
+| Cách | Nôm na | Chạy ở đâu | Hợp với việc gì | Khi nào dùng |
+|---|---|---|---|---|
+| 1 — VS Code multi-chat | Mở 3 bếp ngay trong nhà | Local (máy bạn) | Research local, cần nhanh | Bạn ngồi máy, muốn xem kết quả ngay (mục 6.1) |
+| 2 — Multi coding-agent sessions | Gửi đội thi công đi xa | Cloud (github.com) | 2 issues độc lập, mỗi issue ra 1 PR draft | Giao qua đêm, sáng review PRs (mục 6.2) |
+| 3 — Agent Tasks / multi-terminal | Thuê người dọn rác chạy nền | Local (background task) | Việc ồn nền (đọc logs 2000 dòng) | Bạn vẫn muốn code tay tiếp (mục 6.3) |
 
 ### 6.1. Cách 1 — VS Code multi-chat (nhanh nhất, local)
 

@@ -204,6 +204,14 @@ cat /tmp/suggest.txt
 
 > **Tip CI an toàn:** luôn `pin` cờ non-interactive của bản CLI bạn dùng + test local trước khi đẩy lên runner.
 
+Copilot CLI độc lập có 3 chế độ agent (chọn bằng `Shift+Tab` hoặc `copilot --mode`) — chọn đúng chế độ trước khi script hoá vào CI:
+
+| Chế độ | Hiểu nôm na | Khi nào dùng |
+|---|---|---|
+| **interactive** | Hỏi–đáp từng bước, bạn xác nhận mỗi hành động. | Debug, việc cần kiểm soát từng lệnh — mặc định khi chạy tay. |
+| **plan** | Chỉ lập kế hoạch, chưa sửa file. | Chia nhỏ issue lớn trước khi implement (`copilot --plan`). |
+| **autopilot** | Tự chạy tới xong, không hỏi. | Task đã có spec rõ — bọc sandbox + cap `--max-ai-credits` (mục 5.1). |
+
 ---
 
 ## 4. 2 GitHub Actions workflow hoàn chỉnh

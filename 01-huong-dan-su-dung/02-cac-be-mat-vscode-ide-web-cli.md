@@ -116,6 +116,8 @@ Up/Down trong input   lịch sử prompt (dùng lại prompt cũ sửa nhanh)
 > **Session Target (Copilot / Local / Cloud...) khác gì model picker?**
 >
 > Thanh **Session Target** ở đáy khung Chat chọn **harness** (ai thực thi tool) và **nơi chạy** — khác hẳn model picker (chọn "não").
+>
+> **Nôm na:** model picker = chọn **tài xế**; Session Target = chọn **loại xe + nơi chạy** — cùng tài xế nhưng chạy phố (local) hay cao tốc (cloud).
 
 | Target | Chạy ở đâu | Hợp việc |
 |---|---|---|

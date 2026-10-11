@@ -15,6 +15,12 @@ Section này trả lời: khi nào đổi model, và vì sao đổi model không
 - Việc khó (agent/kiến trúc) → model mạnh.
 - Model hiện tại trả lời dở → đổi thử.
 
+| Lựa chọn | Đặc điểm | Khi nào dùng |
+|---|---|---|
+| Model rẻ (nhẹ) | Trả lời nhanh, tốn ít AI Credits | Việc nhẹ: explain/doc, hỏi đáp, sửa nhỏ |
+| Model mạnh | Chất lượng cao hơn, tốn nhiều AI Credits | Việc khó: agent, kiến trúc, debug lạ |
+| Auto | Copilot tự chọn model theo độ khó task | Khi chưa chắc — để Copilot cân, khỏi phải nghĩ |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `/model` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

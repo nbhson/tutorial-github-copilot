@@ -365,6 +365,16 @@ Chính sách Copilot nằm ở **AI controls tab (enterprise)** và **org settin
 
 > Mối quan hệ với Copilot hooks: pre-commit chặn **lúc commit** (điểm dừng rõ ràng); Copilot hooks in-process (bài 17) chặn **tool call trong agent loop**. Hai thứ bổ trợ nhau, không thay thế nhau.
 
+**Chọn recipe nào (theo stack team):**
+
+| Recipe | Nôm na | Cần cài gì | Mạnh nhất ở đâu | Khi nào dùng |
+|---|---|---|---|---|
+| A — husky + lint-staged | Máy soi gọn, chỉ soi vali vừa đóng | `pnpm add -D husky lint-staged prettier eslint` | Auto-format + lint chỉ files staged (nhanh) | Team Node đơn ngôn ngữ (mục 6.1) |
+| B — pre-commit framework | Máy soi đa năng + máy dò secret | `pip install pre-commit` + `.pre-commit-config.yaml` | Đa ngôn ngữ + block secrets (gitleaks) | Team Node + Python + Go cần chặn secret (mục 6.2) |
+| C — git hook thuần | Tự làm cổng chắn, khỏi mua máy | Không cần package (chỉ shell) | Block push main/master, không dependency | Muốn chặn push main mà không cài gì (mục 6.3) |
+
+> Chốt: chọn 1 recipe làm chuẩn — đừng chạy A + B song song (lint 2 lần, chậm commit).
+
 ### 6.1. Recipe A — husky + lint-staged (Node, phổ biến nhất)
 
 **Ai dùng lúc nào:** Team Node, muốn auto-format + lint chỉ files staged (nhanh).

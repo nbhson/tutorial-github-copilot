@@ -203,6 +203,24 @@ Autopilot = tự duyệt tool + tự lặp tới xong. Bọc an toàn trước k
 # TUYỆT ĐỐI không Autopilot trên repo chưa có test hoặc git chưa sạch.
 ```
 
+### 3.2.1. Phân biệt Autopilot vs Allow all (2 khái niệm dễ gộp nhất)
+
+*Section này trả lời: Autopilot và Allow all khác nhau ở đâu — vì sao chúng là 2 chiều cấu hình riêng, không phải một.*
+
+**Nôm na:** Autopilot = **mức tự chủ của tài xế** (agent tự chạy tới đích, tự xử lý tình huống dọc đường). Allow all = **cửa soát vé mở toang** (miễn phê duyệt mọi tool). Một cái nói agent *tự đi bao xa*; một cái nói agent *được làm gì mà không cần hỏi*.
+
+| Tiêu chí | **Autopilot** | **Allow all** |
+|---|---|---|
+| Bản chất | Agent mode — mức tự chủ cao | Permission level — tắt phê duyệt tool |
+| Nơi chọn | Dropdown agent (Interactive/Plan/Autopilot) | Picker Permissions (Manual/Assisted/Allow all) |
+| Mục tiêu | Tự hoàn thành task tới đích | Bỏ popup xác nhận của tool |
+| Tự tiếp tục sau lỗi | **Có** — có cơ chế thử lại + tiếp tục | **Không** — chỉ bỏ popup, không tự bảo đảm xong task |
+| Tự phê duyệt tool | Có (đi kèm) | Có |
+| Sandbox còn tác dụng? | **Có**, nếu bật và áp dụng | **Có**, nếu bật và áp dụng |
+| Khi dùng | Task dài, tin scope, đã bật sandbox + git sạch | Chỉ trong môi trường cô lập, hiểu rõ rủi ro |
+
+> **1 câu chốt:** Autopilot quyết định "agent tự chủ tới đâu"; Allow all quyết định "agent khỏi xin phép". Hai chiều cấu hình khác nhau — có thể bật riêng, và cả hai vẫn nên bọc bằng **sandbox + worktree riêng + git sạch** (mục 5.4).
+
 > **Tên gọi song song (cần verify):** UI mới gộp "Agent" thành 3 persona **Interactive / Plan / Autopilot**; nhiều IDE/plan vẫn hiện **Ask / Edit / Agent**. Bài này giữ cả 2 cách gọi — IDE bạn hiện mode nào thì chọn theo menu thực tế và tra bảng ánh xạ ở trên.
 
 ### 3.3. Session Target / harness: chọn "nơi agent chạy" (Copilot / Local / Cloud)
@@ -478,6 +496,13 @@ CLI parity (Copilot CLI):
 *Section này trả lời: "Sandboxing for terminal" và "Configure auto-accept countdown" trong picker Permissions là gì, đặt ở đâu, và khi nào bật.*
 
 **Nôm na:** Sandboxing = nhốt terminal của agent vào "chuồng kính" giới hạn file + mạng; lệnh chạy TRONG chuồng được auto-approve vì đã bị giới hạn. Auto-accept countdown = đồng hồ đếm ngược tự nhận edit sau N giây nếu bạn không phản hồi.
+
+| Sandbox | Nghĩa là gì | Hệ quả |
+|---|---|---|
+| **Tắt** (mặc định) | Terminal không bị lớp cách ly này giới hạn | Các quy tắc permission/approval khác vẫn áp dụng; lệnh cần duyệt vẫn hỏi |
+| **Bật** | Giới hạn file/thư mục + mạng mà tiến trình terminal được hỗ trợ truy cập | Lệnh TRONG chuồng auto-approve (đã bị giới hạn); an toàn hơn khi cho agent chạy lệnh tự động |
+
+> **3 điều đừng quên:** (1) Sandbox **không phải máy ảo**, không thay thế bảo mật hệ thống; (2) bật sandbox **không** mặc định chặn hết mạng — xem `allowNetwork`; (3) sandbox terminal **không** tự bao phủ mọi thao tác sửa file hay mọi tool khác của agent.
 
 ```jsonc
 // .vscode/settings.json (một số setting có thể bị org quản lý — hỏi admin):

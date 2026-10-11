@@ -218,6 +218,13 @@ sequenceDiagram
  ~/.vscode/mcp.json        # personal global (tùy bản VS Code, cho token cá nhân)
 ```
 
+| Vị trí | Key JSON | Phạm vi | Khi nào dùng | Commit? |
+|---|---|---|---|---|
+| `.vscode/mcp.json` | `servers` | Workspace/repo | Server dùng chung team (github, fetch, playwright) | Có — nhưng chỉ `${VAR}`, KHÔNG secrets |
+| `mcp.json` / `.mcp.json` (root repo) | `mcpServers` | Repo, portable | Bản cũ fallback / CLI đọc (ưu tiên `.vscode/mcp.json` nếu có) | Tùy |
+| `~/.copilot/mcp-config.json` | `mcpServers` | User profile portable | Server token cá nhân, dùng trên mọi máy | Không |
+| `~/.vscode/mcp.json` | — | Personal global (VS Code) | Token cá nhân chỉ cho máy này | Không |
+
 **Lưu ý thêm về vị trí:**
 
 - Copilot CLI đọc `~/.mcp-config.json` + `.mcp.json` ở repo. Từ CLI v1.0.39, CLI **không còn đọc** `.vscode/mcp.json` (đổi BREAKING).
@@ -711,6 +718,13 @@ export GITHUB_TOKEN="$(gh auth token)"  # lấy từ gh CLI, không lưu plainte
 - **GitHub MCP Registry** ở docs.github.com (MCP Registry) — danh sách server do GitHub chuẩn hóa.
 - **Cấu hình ngay trên github.com:** Settings → Copilot → MCP servers (JSON `mcpServers`, bắt buộc mảng `tools`, kiểu `local|stdio|http|sse`, secret prefix `COPILOT_MCP_`).
 - GitHub MCP server có 2 dạng: remote hosted `https://api.githubcopilot.com/mcp/`, hoặc local qua docker `ghcr.io/github/github-mcp-server`. Chọn toolset bằng URL path `/x/{toolset}` hoặc header `X-MCP-Toolsets`; đọc-thuần qua `/readonly` hoặc `X-MCP-Readonly: true`.
+
+| Tiêu chí | Remote hosted | Local (Docker) |
+|---|---|---|
+| Endpoint | `https://api.githubcopilot.com/mcp/` | `ghcr.io/github/github-mcp-server` |
+| Cần gì để chạy | Chỉ URL + auth (không cài binary) | Docker chạy trên máy |
+| Chọn toolset / read-only | Path `/x/{toolset}`, `/readonly`; header `X-MCP-Toolsets`, `X-MCP-Readonly: true` | Cùng cơ chế toolset/read-only của GitHub MCP server |
+| Khi nào dùng | Muốn dùng ngay, môi trường cloud/không có Docker | Muốn tự host/offline, kiểm soát process local |
 
 ---
 

@@ -45,6 +45,13 @@ flowchart LR
 
 2026: AI Credits là đơn vị tính phí, không liên quan trực tiếp đến training — nhưng nếu tắt training thì quota AI Credits vẫn được giữ nguyên.
 
+| Tiêu chí | Individual/Pro | Business/Enterprise |
+|---|---|---|
+| Dùng code train model | Có thể (trừ khi opt-out) | Không (cam kết điều khoản thương mại) |
+| Kiểm soát ở đâu | `github.com/settings/copilot` (tự tắt) | Org policy |
+| Mặc định | Cần chủ động tắt snippet training | An toàn theo hợp đồng |
+| Khi nào dùng | Cá nhân / code không NDA | Code NDA, compliance, sản phẩm công ty |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -73,6 +80,14 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 **Giải thích chi tiết + ví dụ:** Nôm na: chặn "nghĩ như người khác đã nghĩ" — đoạn code quá giống public thì Copilot không gợi ý. Filter chặn Copilot gợi ý đoạn code **trùng khớp dài** với public code (VD >150 ký tự quanh match) — giảm rủi ro dính license người khác. Bật ở `github.com/settings/copilot` (cá nhân) hoặc org policy (ép cả org).
 
 Trade-off: bật → ít gợi ý dài "ngon ăn sẵn" hơn 1 chút; tắt → năng suất cao hơn nhưng tự chịu trách nhiệm license. 2026: repo có LICENSE nên cân nhắc bật Block khi product closed-source.
+
+| Tiêu chí | Bật (Block) | Tắt (Allow) |
+|---|---|---|
+| Chặn gợi ý trùng public >150 ký tự | Có | Không |
+| Rủi ro license | Thấp (giảm dính GPL) | Tự chịu trách nhiệm |
+| Năng suất | Thấp hơn một chút | Cao hơn |
+| Cách bật | `settings/copilot` hoặc org policy (ép cả org) | Mặc định |
+| Khi nào dùng | Product closed-source, code NDA | Prototype cá nhân, repo open-source |
 
 ### Làm thế nào (steps copy-paste)
 
@@ -270,6 +285,13 @@ git rm --cached <file> && echo "<file>" >> .gitignore && git commit -m "chore(se
 - Không bao giờ paste token vào chat (nó vào context server).
 
 2026: Copilot CLI và coding agent cloud dùng `GITHUB_TOKEN` ephemeral; token cá nhân chỉ cho MCP local.
+
+| Tiêu chí | PAT fine-grained (MCP local) | `GITHUB_TOKEN` ephemeral |
+|---|---|---|
+| Dùng cho | MCP local, CLI cá nhân | CI (Actions), coding agent cloud |
+| Quyền | Tối thiểu, chỉ repo cần | Cấp tự động theo job |
+| Hạn | 30-90 ngày, tự xoay | Hết khi job xong |
+| Khi nào dùng | Máy dev cần MCP gọi GitHub | Pipeline/agent, không dùng PAT cá nhân |
 
 ### Làm thế nào (steps copy-paste)
 

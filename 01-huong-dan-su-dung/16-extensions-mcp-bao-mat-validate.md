@@ -311,6 +311,15 @@ toolset đúng mức, policy đúng chỗ. Sai 1 điểm là tool không chạy 
 # - Tim server dang tin: GitHub MCP Registry (curated discovery)
 ```
 
+Bảng tra nhanh nơi đặt cấu hình MCP (mục A):
+
+| Nơi đặt | File | Key | Khi nào dùng |
+|---|---|---|---|
+| VS Code (workspace) | `.vscode/mcp.json` | `servers` | Cấu hình theo workspace, dev tự đặt |
+| Cả repo (portable) | `.mcp.json` (root) | `mcpServers` | Commit cho cả team dùng chung |
+| Copilot CLI | `~/.mcp-config.json` + `.mcp.json` (project) | — | Chạy bằng Copilot CLI (từ v1.0.39 bỏ đọc `.vscode/mcp.json`) |
+| User profile | `~/.copilot/mcp-config.json` | — | Cấu hình cá nhân, không commit |
+
 Verify sau khi cấu hình: mở Chat → MCP panel → đếm server và tool list. Server không
 có trong allowlist, hoặc tool 🔴 không nằm ở `deny` → config sai, quay lại mục 4.3.
 

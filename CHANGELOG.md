@@ -1,5 +1,14 @@
 # Changelog — Khóa Học GitHub Copilot (tiếng Việt)
 
+## [Unreleased] — Rà soát dễ hiểu + bổ sung bảng so sánh (2026-10-11)
+
+- **Review toàn bộ file .md:** với mỗi chỗ 2+ lựa chọn đang mô tả bằng văn xuôi, bổ sung **bảng so sánh có cột "Khi nào dùng"**; với khái niệm then chốt còn thiếu, bổ sung **lớp "Nôm na" (so sánh đời thường)**. Thuần bổ sung — không xóa nội dung, không đổi tên heading, giữ nguyên mọi anchor link.
+- **Bảng so sánh mới tiêu biểu:**
+  - `01-huong-dan-su-dung/10-modes-permissions-availability.md`: **Autopilot vs Allow all** (2 chiều cấu hình dễ gộp), **Sandbox bật/tắt**.
+  - `01-huong-dan-su-dung/17-agent-customizations-hub.md`: **4 thành phần dễ nhầm** (Instructions/Skills/Agents/Hooks) + **MCP/Tool/Permissions/Hook**.
+  - `03-cau-hoi-thuong-gap/06-prompts-agents-instructions.md`: **điền 10 ô "Trả lời 1 câu" đang bị để trống** (khớp template FAQ) + 2 bảng so sánh (prompt/chat; prompt/agent/skill).
+  - Các bài 00–16, `02-tips-thuc-chien/01–11`, FAQ `03/01–10`, và các trang lệnh `commands/**`: thêm bảng so sánh ở mục còn thiếu (vd plan, model tier, worktree pattern, mức approval, Session Target, transport MCP...).
+
 ## [Unreleased] — CẬP NHẬT SỰ KIỆN 2026-10-09 (rename `muse-instructions.md` → `copilot-instructions.md`, hooks in-process, prompt files deprecated)
 
 - **Sửa naming (toàn repo):** đổi tên file template `templates/.github/muse-instructions.md` → `templates/.github/copilot-instructions.md`; thay toàn bộ ~100 tham chiếu `muse-instructions.md` bằng `copilot-instructions.md` (khớp filename `.github/copilot-instructions.md` chính thức trong docs GitHub 2026).

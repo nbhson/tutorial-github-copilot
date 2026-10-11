@@ -15,6 +15,14 @@ Section này trả lời: lúc nào bắt buộc phải đính kèm, và đính 
 - Muốn model đọc đúng file thay vì đoán.
 - Đính kèm ảnh lỗi UI, log terminal.
 
+> Chọn nhanh cách gắn scope:
+
+| Cách | Hỏi được gì | Khi nào dùng |
+|---|---|---|
+| `#file` | Đúng 1 file cụ thể | Sửa/hỏi trong phạm vi 1 file, cần chính xác cao |
+| `@workspace` | Quan hệ xuyên file trong repo | “Hàm này ai gọi”, tìm định nghĩa rải nhiều file |
+| Kéo-thả file/ảnh | File/ảnh ngoài editor (log, ảnh UI) | Cần đưa bằng chứng log/screenshot cho model |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `Attach / #file` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

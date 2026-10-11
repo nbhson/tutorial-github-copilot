@@ -15,6 +15,13 @@ Section này trả lời: khi nào nghi exclusion, và cách phân biệt “b�
 - “Chỗ có chỗ không gợi ý” (nghi exclusion).
 - Audit bảo mật.
 
+> Hai mức cấu hình exclusion:
+
+| Mức | Đặt ở đâu | Khi nào dùng |
+|---|---|---|
+| Local (máy bạn) | `settings.json` → `github.copilot.chat.exclusion` | Chỉnh nhanh cho repo cá nhân, org chưa set policy |
+| Org policy (admin) | Org settings → Content exclusion | Chuẩn chung cả org; đè setting local |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `Content exclusion` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

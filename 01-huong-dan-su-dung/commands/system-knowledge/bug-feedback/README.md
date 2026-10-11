@@ -15,6 +15,13 @@ Section này trả lời: khi nào nên báo, và context nào khiến bug đư�
 - Gặp bug lặp lại được.
 - Muốn GitHub cải thiện tính năng.
 
+> `/feedback` vs `/bug`:
+
+| Lệnh | Gửi gì | Khi nào dùng |
+|---|---|---|
+| `/feedback` | Vote tốt/xấu + lý do | Câu trả lời hay/dở, muốn góp ý nhanh |
+| `/bug` | Mô tả + bước lặp + version | Bug lặp lại được, cần GitHub tái hiện |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `/feedback + /bug` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

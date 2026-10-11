@@ -122,6 +122,16 @@ Khi nào Copilot "tốn" AI Credits, khi nào gõ thoải mái. Từ 01/06/2026 
 - Admin Business/Enterprise xem usage theo user tại org settings → ai cháy credits
   nhiều nhất lộ ngay (chi tiết bài 10 trong README).
 
+> **Hoạt động nào tốn AI Credits? (tra nhanh)**
+>
+> | Hoạt động | Tốn AI Credits? | Ghi chú |
+> |---|---|---|
+> | Autocomplete (ghost text) + next edit suggestions | Không | Miễn phí mọi plan trả phí; Free giới hạn 2.000 completions/tháng |
+> | Agent mode + model mạnh (Claude/GPT-5.5+) | Có (nhiều) | Chi phí = giá token model × số token |
+> | Coding agent trên github.com | Có | Mỗi task cloud = nhiều lượt truy cập |
+> | Auto model selection | Có, nhưng giảm 10% | Áp cho Copilot Chat, CLI, app, cloud agent |
+> | Vượt hạn mức credits trong gói | Có | Tính vào additional usage budget (admin cài spend cap nếu muốn giới hạn) |
+
 ---
 
 ## 3. VS Code setup (mạnh nhất)
@@ -192,6 +202,15 @@ Verify bằng mắt (3 giây):
 ---
 
 ## 4. JetBrains / Visual Studio / Neovim
+
+> **Chọn IDE nào? (tra nhanh cài đặt + verify)**
+>
+> | Tiêu chí | VS Code | JetBrains | Visual Studio | Neovim |
+> |---|---|---|---|---|
+> | Cài extension | Marketplace "GitHub Copilot" | Settings → Plugins → Marketplace | Manage Extensions (VS 2022 17.8+) | `copilot.vim` |
+> | Verify | Status bar active + ghost text Tab | Ghost text + Chat tool window | Ghost text + View → Copilot Chat | `:Copilot status` = Enabled |
+> | Agent mode | Full tools (đọc/sửa/terminal/MCP) | Hạn chế (terminal tool yếu) | Hạn chế (terminal tool yếu) | Không full |
+> | Khi nào dùng | Mặc định; task multi-file + terminal | Dev Java/Kotlin/Python/Go hàng ngày | Dev .NET/C++ hàng ngày | Gõ nhanh, fix nhỏ |
 
 ### 4.1. JetBrains (IntelliJ / PyCharm / WebStorm...)
 

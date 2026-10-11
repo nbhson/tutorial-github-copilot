@@ -246,6 +246,12 @@ Kết hợp:
 - Chat Reviewer fresh soi sâu trước merge (kỹ).
 - Người review cuối chốt (chịu trách nhiệm).
 
+| Nguồn review | So sánh nôm na | Ví dụ | Khi nào dùng |
+|---|---|---|---|
+| Copilot code review | Máy quét cổng tự động. | Bật cho mọi PR mới. | Mọi PR, chạy tự động trước khi người xem |
+| Chat Reviewer fresh | Nhờ người mới soi kỹ bài làm. | Feature/refactor cần verdict PASS/NEEDS-FIX. | Diff rủi ro, soi sâu trước merge |
+| Người review cuối | Thủ trưởng ký duyệt. | Merge main, release. | Luôn là người chốt chịu trách nhiệm |
+
 > Lưu ý 2026: review Balanced (mặc định từ 28/09/2026) tốn AI Credits + GitHub Actions minutes. Xem [bài 12 mục 5](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md).
 
 ---

@@ -183,6 +183,13 @@ gh pr list --author "app/copilot" --state open
 2. **CI đỏ:** đọc log check đầu tiên đỏ → comment vào PR bảo agent fix ("fix `lint` job: ...").
 3. **PR sai scope:** agent sửa lố → request changes liệt kê file cần revert, hoặc checkout PR về sửa tay.
 
+| Ca | Triệu chứng | Cách xử |
+|---|---|---|
+| Conflict với main | Base branch trôi trong lúc agent làm | `gh pr checkout` → rebase lên `origin/main` → `git push --force-with-lease` (hoặc bảo agent rebase) |
+| CI đỏ | Check/job đỏ trên PR | Đọc log job đỏ đầu tiên rồi comment `@copilot` bảo fix cụ thể |
+| PR sai scope | Agent sửa file ngoài issue | Request changes liệt kê file cần revert, hoặc checkout về sửa tay |
+| Khi nào dùng | — | Mọi PR agent trước khi merge: check scope + CI + test |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -292,6 +299,13 @@ gh copilot assign 124 --repo acme/api
 
 Luôn đọc PR timeline trước khi tiếp quản để biết agent đã làm tới đâu. 2026: cả 2 chiều đều chạy trên cùng 1 branch `copilot/issue-<N>`, không cần đổi tool.
 
+| Tiêu chí | Người tiếp quản agent | Agent tiếp quản người |
+|---|---|---|
+| Ai làm tiếp | Bạn (dev) | Coding agent (`@copilot`) |
+| Cách làm | `gh pr checkout <NUM>` → sửa → `git push` | Comment `@copilot` + yêu cầu cụ thể trong PR/issue |
+| Branch | Giữ branch `copilot/issue-<N>` | Cùng branch, agent push thêm commit |
+| Khi nào dùng | Agent lặp lần 3 không xong | Cần fix nhỏ mà agent tự làm được |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -325,6 +339,14 @@ gh pr comment <NUM> --body "@copilot fix loi lint o src/auth/login.ts dong 42"
 **Giải thích chi tiết + ví dụ:** Nôm na: PR nhỏ + test xanh = tin được như đồng nghiệp đáng tin; PR to + không test = xem như junior mới vào. Tin khi: scope hẹp + có test xanh + diff nhỏ (<300 dòng) + không chạm auth/infra. Không tin (review kỹ từng dòng) khi: diff to, chạm migration/infra, không có test, agent tự "sáng tạo" thêm scope.
 
 Thước đo team: tỉ lệ PR agent merge không sửa (target >60% sau 1 tháng fine-tune issue template). 2026: track bằng dashboard AI Credits ở `github.com/settings/copilot` — PR nào tốn nhiều credits nhất thì review kỹ trước.
+
+| Tiêu chí | Tin (review nhanh) | Không tin (review từng dòng) |
+|---|---|---|
+| Scope | Hẹp, đúng trong issue | Lố, tự mở rộng |
+| Test | Có test xanh | Không có test |
+| Diff | Nhỏ (<300 dòng) | To (>500 dòng / >10 file) |
+| Vùng chạm | Không chạm auth/infra | Chạm migration/infra/auth |
+| Khi nào dùng | Review 5 phút rồi merge | Checkout review từng hunk |
 
 ### Làm thế nào (steps copy-paste)
 

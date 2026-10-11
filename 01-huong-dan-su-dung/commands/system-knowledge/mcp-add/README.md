@@ -15,6 +15,13 @@ Section này trả lời: khi nào thêm server, và 3 bẫy hay gặp nhất (s
 - Thêm server nội bộ team (http/sse).
 - Thay server cũ hỏng.
 
+> Chọn transport khi thêm server:
+
+| Transport | Config cần | Khi nào dùng |
+|---|---|---|
+| stdio (local) | `command` + `args` | Server chạy trên máy bạn (npx, binary nội bộ) |
+| http/sse (remote) | `url` + `headers` | Server dùng chung team, không muốn mỗi máy spawn riêng |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `MCP add` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

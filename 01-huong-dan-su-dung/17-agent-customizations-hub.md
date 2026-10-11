@@ -161,6 +161,21 @@ Luật tầng (nhớ 1 câu):
 # Verify: rule nào team phàn nàn "agent hay quên" → chuyển từ instructions sang hook.
 ```
 
+### 5.1. Bảng phân biệt 4 thành phần dễ nhầm nhất
+
+*Section này trả lời: Instructions / Skills / Agents / Hooks khác nhau ở câu hỏi nào — tra bảng này khi chưa biết nên tạo file loại nào.*
+
+**Nôm na:** mỗi thành phần trả lời **một câu hỏi khác nhau** — chọn theo câu hỏi bạn đang có, đừng chọn theo tên nghe na ná nhau.
+
+| Thành phần | Trả lời câu hỏi | File sống ở đâu | Ví dụ |
+|---|---|---|---|
+| **Instructions** | Agent phải tuân theo **quy tắc** nào? (agent *có thể* quên) | `.github/copilot-instructions.md`, `*.instructions.md` | "Không thêm dependency nếu chưa giải thích lý do" |
+| **Skills** | Việc này **nên làm theo quy trình nào**? | `.github/skills/<ten>/SKILL.md` | Quy trình audit performance Vue 3 (checklist nhiều bước) |
+| **Agents** | **Ai** chịu trách nhiệm cho việc này? | `.github/agents/<ten>.agent.md` | `security-reviewer` (chỉ đọc + comment, cấm sửa) |
+| **Hooks** | Hệ thống **tự động làm gì** khi có sự kiện? (chạy tất định) | `.github/hooks/*.json` | `PostToolUse` → chạy `prettier` sau khi agent sửa file |
+
+> **Mẹo phân biệt nhanh:** Instructions + Skills dẫn dắt model (model *có thể* quên); Hooks chạy **tất định** (bất kể model nhớ hay không); Agents gói instructions + tool + model thành một **persona**. Còn **MCP/Tools** bổ sung *khả năng làm việc*, **Plugins** *đóng gói* các thành phần để phân phối.
+
 ---
 
 ## 6. 7 cards Explore chi tiết
@@ -275,6 +290,15 @@ Luật tầng (nhớ 1 câu):
 # tự do — chạy hay không do permission level + approval (bài 10 mục 5.3/5.4) quyết.
 # Tool ít + đúng việc → agent chọn chuẩn hơn, ít hành động thừa, đỡ tốn context.
 ```
+
+**Phân biệt MCP Server / Tool / Permissions / Hook (4 khái niệm hay gộp):**
+
+| Khái niệm | Trả lời | Ví dụ |
+|---|---|---|
+| **MCP Server** | **Nguồn** cung cấp một nhóm tool/tài nguyên | Server `github` phơi ra `create_pr`, `list_issues` |
+| **Tool** | **Một hành động** cụ thể agent gọi được | `read`, `edit`, `terminal`, `mcp__github__create_pr` |
+| **Permissions** | Hành động nào **cần phê duyệt / bị giới hạn** | `deny > ask > allow`; Manual/Assisted/Allow all (bài 10) |
+| **Hook** | Logic chạy **tất định tại một sự kiện** | `PreToolUse` chặn lệnh nguy hiểm trước khi chạy |
 
 ---
 

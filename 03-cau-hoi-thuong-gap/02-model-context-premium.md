@@ -54,6 +54,12 @@ Section này trả lời: model đổi ở 3 chỗ nào trong IDE, và đổi ch
 
 Đổi model chat không ảnh hưởng completions và ngược lại.
 
+| Vị trí | Đổi model ở đâu | Ảnh hưởng tới | Khi nào dùng |
+|---|---|---|---|
+| Completions (gõ code) | Setting `github.copilot.completions.model` | Chỉ gợi ý xám | Ghim model completions cố định |
+| Chat sidebar | Dropdown trên khung chat | Chỉ conversation đó | Chọn model theo độ khó câu hỏi |
+| Agent/Edit mode | Model trong chat + `copilot-instructions.md` | Phiên agent/edit | Gợi ý model phù hợp (không ép được) |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -89,6 +95,14 @@ Section này trả lời: vì sao model mạnh tốn tiền hơn model rẻ, và
 - **Code completions + next edit suggestions KHÔNG trừ Credits** — không giới hạn trên plan trả phí.
 - Plan trả phí dùng **auto model selection được giảm 10%**.
 - Hết credits base + flex → dùng tiếp tính vào **additional usage budget** (spend cap cấu hình được).
+
+| Tiêu chí | Cách cũ (trước 06/2026) | Cách mới (usage-based từ 01/06/2026) |
+|---|---|---|
+| Đơn vị tính | Quota AI Credits/tháng + multiplier theo request | 1 AI credit = $0.01; giá token × số token |
+| Model mạnh | Multiplier ×3, ×5, ×10... theo request | Giá token cao hơn → tốn nhiều credits hơn |
+| Hết quota | Chờ reset / trả thêm / rớt model thường | Tính vào additional usage budget (spend cap) |
+| Auto model selection | — | Giảm 10% |
+| Khi nào dùng | Tham chiếu tài liệu cũ | Cách tính áp dụng từ 06/2026 |
 
 Quy tắc thực tế: **gõ code (completions) = 0 Credits, chat 1 câu tốn theo tokens, agent mode nhiều lượt tool-call → tốn nhất.**
 
@@ -258,6 +272,13 @@ Section này trả lời: 3 cách dùng Copilot tốn Credits theo thứ tự n�
 
 Vì vậy: gõ tay được thì đừng chat; chat được thì đừng agent.
 
+| Cách dùng | Tốn AI Credits? | Mức độ | Khi nào dùng |
+|---|---|---|---|
+| Completions (gợi ý xám) | Không | 0 | Gõ code hàng ngày |
+| Chat 1 câu | Có (theo token) | Thấp | Hỏi/giải thích, việc nhỏ |
+| Edit mode | Có (chat + apply) | Trung bình | Sửa file cụ thể trong scope |
+| Agent mode | Có (nhiều tool-call) | Cao nhất | Task multi-file, refactor |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -323,6 +344,11 @@ Section này trả lời: khóa model cho cả team được ở 2 mức nào, m
 
 - **Org policy (admin):** allowlist model nào được dùng → mọi member chỉ thấy model đó (Business/Enterprise).
 - **Repo convention:** ghi vào `copilot-instructions.md` ("dùng model X cho review") — chỉ là khuyến nghị, không ép được.
+
+| Mức | Ai set | Ép buộc? | Khi nào dùng |
+|---|---|---|---|
+| Org policy (admin) | Admin Business/Enterprise | Có (allowlist) | Muốn khóa model cứng cho cả team |
+| Repo convention (`copilot-instructions.md`) | Team, commit vào repo | Không (khuyến nghị) | Hướng dẫn mềm theo task |
 
 ### Làm thế nào (steps copy-paste)
 

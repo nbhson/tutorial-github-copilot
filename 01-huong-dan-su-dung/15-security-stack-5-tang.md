@@ -170,6 +170,13 @@ git status --porcelain | grep -E "env|pem|key|secrets" || echo "sach: khong file
 khớp public code). Muốn mở thì đổi ở phần **Privacy** của Org Settings — và phải
 được legal đồng ý bằng văn bản. Cá nhân Free/Pro thì chọn được Block hay Allow.
 
+| Tiêu chí | Block | Allow |
+|---|---|---|
+| Hành vi | Chặn gợi ý khớp public code | Cho phép nhưng gắn cảnh báo nguồn + link gốc |
+| Phù hợp với | Team closed-source | Team open-source |
+| Mặc định 2026 | Copilot Business = `Blocked` (mở phải legal đồng ý) | Free/Pro tự chọn |
+| Khi nào dùng | Không muốn code public lẫn vào repo kín | Chấp nhận code public, chỉ cần cảnh báo để tự cân nhắc license |
+
 ```bash
 # Khi Copilot bao "matching public code" (dung click accept mu):
 # 1. Doc reference URL no dua (code goc license gi? GPL → can nac ky).
@@ -289,6 +296,13 @@ npm run lint && npm run typecheck 2>/dev/null || npx tsc --noEmit
 - Plan hỗ trợ: Pro/Pro+/Max/Business/Enterprise. Free chỉ có "Review selection" trong VS Code.
 - Gọi từ CI: **API REST + GraphQL** (GA 02/10/2026) để request review và đặt effort.
 - Repo-level: **"Allow Copilot to use MCP tools when reviewing pull requests" bật sẵn mặc định** — nghĩa là tool MCP trong repo có thể chạy lúc review.
+
+| Tiêu chí | Lite | Balanced |
+|---|---|---|
+| Độ sâu | Nhắm đúng, nhanh | Model reasoning cao hơn, soi logic phức tạp |
+| Chi phí/lần | ~$0.05–$1 credit | ~$0.25–$5 credit |
+| Mặc định | Chọn tường minh mới dùng | Mặc định từ 28/09/2026 |
+| Khi nào dùng | PR nhỏ, style/format, repo ít rủi ro | PR payments/auth, logic phức tạp, security-critical |
 
 ### 6.2. Prompt review sâu cho PR nhạy cảm (copy-paste 3 mẫu)
 

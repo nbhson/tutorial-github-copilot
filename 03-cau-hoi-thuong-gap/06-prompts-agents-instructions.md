@@ -34,7 +34,7 @@ flowchart TD
 
 > **Hỏi ngắn gọn:** _File nào Copilot tự load, file nào phải gọi tay?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Copilot tự load `copilot-instructions.md` (mọi lúc) và `*.instructions.md` khớp `applyTo`; `*.prompt.md` và custom agent phải gọi/chọn tay, còn skill thì model tự gọi theo `description`.
 
 **Giải thích chi tiết + ví dụ:**
 
@@ -68,7 +68,7 @@ find .github -type f | sort
 
 > **Hỏi ngắn gọn:** _`applyTo` viết sao cho đúng (glob hay sai nhất)?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** `applyTo` là glob phải khớp đúng root thật của repo (thường cần `**/` đầu và quote khi có `*`), nên viết theo `ls`/`find` thật chứ đừng đoán.
 
 **Giải thích chi tiết + ví dụ:** `applyTo` là glob quyết định instructions nào "ăn" vào file nào. Sai phổ biến:
 
@@ -104,7 +104,7 @@ ls apps/api/**/*.ts 2>/dev/null | head -5   # nếu rỗng -> glob sai
 
 > **Hỏi ngắn gọn:** _Frontmatter lỗi — các bẫy phổ biến?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Frontmatter lỗi thường do thiếu cặp `---` mở/đóng, sai tên key (phải là `applyTo` camelCase), quên quote glob, hoặc liệt kê `tools` không tồn tại.
 
 **Giải thích chi tiết + ví dụ:** Frontmatter = block `---` đầu file chứa metadata (`mode`, `agent`, `tools`, `applyTo`, `description`). Bẫy top:
 
@@ -151,7 +151,7 @@ tools: [github-mcp, search, edit]
 
 > **Hỏi ngắn gọn:** _`copilot-instructions.md` bao nhiêu dòng là vừa, dài quá sao?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Giữ file chính dưới ~200 dòng, phần dài tách sang `*.instructions.md` theo path hoặc `SKILL.md` cho procedure.
 
 **Giải thích chi tiết + ví dụ:** Giữ **<200 dòng**. Dài quá → context phình, phần cuối bị cắt, quan trọng chìm. Cách gọn:
 
@@ -180,7 +180,7 @@ wc -l .github/copilot-instructions.md .github/instructions/*.md
 
 > **Hỏi ngắn gọn:** _Instructions không load — checklist 6 bước?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Đi đúng 6 bước: tên file/đường dẫn → `applyTo` đúng glob → file có khớp glob → reload IDE → mở chat mới → hỏi admin về org policy.
 
 **Giải thích chi tiết + ví dụ:** Đi đúng thứ tự:
 
@@ -214,13 +214,22 @@ ls apps/api/controller.ts 2>/dev/null || find . -name "*.ts" -path "*api*" | hea
 
 > **Hỏi ngắn gọn:** _Prompt files (`*.prompt.md`) gọi thế nào, khác gì chat thường?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Prompt file là kịch bản đóng gói (frontmatter + body từng bước) gọi bằng `/tên-file`, khác chat thường ở chỗ ép mode + tools + steps cố định nên kết quả nhất quán và share được cả team.
 
 **Giải thích chi tiết + ví dụ:** Prompt file = **kịch bản đóng gói**: frontmatter (`mode`, `agent`, `tools`) + body hướng dẫn từng bước. Gọi bằng `/tên-file` trong chat (không cần `.prompt.md`) hoặc nút Run trong editor.
 
 > **Lưu ý 2026:** Prompt file **deprecated cho Agent Host** (Copilot/Cloud) — chỉ chạy Local/VS Code. Việc mới nên dùng **Agent Skill** (câu 8) vì chạy được mọi harness. Nếu repo bạn chỉ chạy Local và đã có prompt file ổn, giữ tạm — port dần (bài 05 mục 3.3).
 
 Khác chat thường: prompt ép **mode + tools + steps cố định** → kết quả nhất quán giữa các lần, share được cả team.
+
+| Tiêu chí | Prompt file (`*.prompt.md`) | Chat thường |
+|---|---|---|
+| Cách gọi | Gõ `/tên-file` (không cần đuôi) | Gõ câu hỏi tự do |
+| Mode + tools | Ép cố định trong frontmatter | Tùy ngữ cảnh, đổi mỗi lần |
+| Các bước | Kịch bản từng bước cố định | Bạn tự viết mỗi lần |
+| Kết quả | Nhất quán giữa các lần | Thay đổi theo cách hỏi |
+| Chia sẻ team | Có (commit vào repo) | Không (chỉ trong chat) |
+| Khi nào dùng | Việc lặp >3 lần/tuần (review, deploy, tạo table) | Hỏi ad-hoc, task 1 lần |
 
 ### Làm thế nào (steps copy-paste)
 
@@ -254,7 +263,7 @@ tools: [search, edit]
 
 > **Hỏi ngắn gọn:** _Custom agent (`*.agent.md`) viết sao, khi nào cần?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Custom agent là persona chuyên môn (`description` + `tools` giới hạn) nên cần khi muốn tách việc hoặc ép kỷ luật, còn task 1-2 file thì chat thường + instructions là đủ.
 
 **Giải thích chi tiết + ví dụ:** Custom agent = persona chuyên môn (explorer chỉ-đọc, tester chạy test, security-reviewer soi bảo mật) với `description` + `tools` giới hạn. Cần khi: muốn tách việc (đọc ồn giao explorer), hoặc ép kỷ luật (tester chỉ báo PASS/FAIL).
 
@@ -290,11 +299,19 @@ ls .github/agents/  # explorer.agent.md tester.agent.md security-reviewer.agent.
 
 > **Hỏi ngắn gọn:** _Agent Skills 2026 (`SKILL.md`) khác gì prompt/agent?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Skill (`SKILL.md`) là gói mô tả + procedure + tools mà model tự phát hiện và gọi theo `description`, chạy mọi harness — khác prompt (gọi tay, deprecated cho Cloud) và custom agent (phải chọn trong picker).
 
 **Giải thích chi tiết + ví dụ:** Skill = gói **mô tả + procedure + tools** theo chuẩn Agent Skills 2026 (chuẩn mở), model **tự phát hiện và gọi** khi task khớp `description` — bạn không cần nhớ tên để gọi. Prompt phải gọi tay (và deprecated cho Cloud); skill thì model tự biết + chạy mọi harness.
 
 Cấu trúc: `.github/skills/<ten>/SKILL.md` với frontmatter `name` + `description` rõ ràng (description càng cụ thể, model càng gọi đúng).
+
+| Tiêu chí | Prompt file (legacy) | Custom agent | Agent Skill (chuẩn 2026) |
+|---|---|---|---|
+| Cách kích hoạt | Gọi tay `/tên` | Chọn trong agent picker | Model tự gọi theo `description` |
+| Đóng gói | Kịch bản steps | Persona + `tools` | Mô tả + procedure + tools |
+| Chạy ở đâu | Local/VS Code | Harness có picker | Mọi harness (Local + Cloud + CLI) |
+| Trạng thái 2026 | Deprecated cho Agent Host | Chính thức | Khuyến nghị |
+| Khi nào dùng | Việc lặp đã có sẵn, chỉ chạy Local | Tách việc / ép kỷ luật theo vai | Procedure tự áp, không cần nhớ tên lệnh |
 
 ### Làm thế nào (steps copy-paste)
 
@@ -321,7 +338,7 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 
 > **Hỏi ngắn gọn:** _Thứ tự ưu tiên khi nhiều instructions cùng khớp 1 file?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Thứ tự mạnh→yếu là prompt hiện tại > `*.instructions.md` khớp path cụ thể > `copilot-instructions.md` > org policy (trần cứng), và cái cụ thể/gần hơn luôn thắng.
 
 **Giải thích chi tiết + ví dụ:** Thứ tự (mạnh → yếu, gần thắng xa):
 
@@ -354,7 +371,7 @@ grep -h "applyTo" .github/instructions/*.md
 
 > **Hỏi ngắn gọn:** _Test instructions mới thêm có hiệu quả không?_
 
-**Trả lời 1 câu:** 
+**Trả lời 1 câu:** Chạy 3 test — test load (chat mới hỏi quy tắc), test hành vi (task vi phạm phải bị từ chối), test nhiễu (task ngoài scope không bị ảnh hưởng).
 
 **Giải thích chi tiết + ví dụ:** 3 test nhanh sau khi thêm/sửa:
 

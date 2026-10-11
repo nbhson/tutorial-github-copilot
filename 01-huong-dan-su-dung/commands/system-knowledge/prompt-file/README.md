@@ -17,6 +17,13 @@ Section này trả lời: việc nào nên dồn vào prompt file, và vì sao t
 - Muốn chuẩn hóa cách cả team ra lệnh.
 - Tạo prompt mới từ prompt hay cũ.
 
+> `/prompts` vs `/skills` (2026):
+
+| Cách | File | Khi nào dùng |
+|---|---|---|
+| `/prompts` (legacy) | `.github/prompts/*.prompt.md` | Repo cũ còn dùng, bạn chủ động gõ tên prompt |
+| `/skills` (ưu tiên) | `.github/skills/<ten>/SKILL.md` | Muốn model tự kích hoạt, chạy mọi harness |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `/prompts` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

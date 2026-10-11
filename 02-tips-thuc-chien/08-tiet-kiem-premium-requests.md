@@ -168,6 +168,16 @@ KHÔNG đáng:
 
 ## 4. Completions vs Chat vs Agent
 
+> **Nôm na:** Tab (completions) là gõ tắt rẻ nhất, Chat là hỏi/sửa có kiểm soát, Agent là thuê thợ làm nhiều bước. Chọn theo bảng:
+
+| Tiêu chí | Completions (Tab) | Chat (Ask/Edit) | Agent |
+|---|---|---|---|
+| Tốn credits | ~0 (rẻ nhất) | Thấp (1 turn) | Cao (turn + tool calls + retry) |
+| Sửa code | Không — chỉ chèn gợi ý | Có — Edit 1 chỗ | Có — đa file + chạy lệnh |
+| Phạm vi | 1 dòng đang gõ | 1 file/đoạn bôi đen | Nhiều file + terminal |
+| Khi nào dùng | Boilerplate, import, test lặp | Hỏi/lý giải, fix 1 chỗ | Task >2 steps, multi-files, cần test |
+| Tránh khi | Cần reasoning/đa file | Multi-files phức tạp | Hỏi vặt, task <15 phút Edit xong |
+
 ### Completions: Tab là vua
 
 - Gõ tên hàm → Tab nhận gợi ý, không tốn chat turn.
@@ -257,6 +267,8 @@ Tuần sau áp routing + prune, so 2 tuần: requests giảm? chất lượng gi
 ---
 
 ## 6. Knowledge base: trả 1 lần, dùng mãi
+
+> **Nôm na:** Knowledge base là tủ hồ sơ chung của team — Copilot tự mở đọc khi cần, khỏi paste spec lại mỗi chat.
 
 Paste spec 200 dòng vào 20 chats = trả 20 lần.
 

@@ -122,6 +122,12 @@ Section này trả lời: Copilot 2026 có hooks in-process nhưng chỉ preview
 2. **gitleaks/trufflehog:** quét secret trong staged files.
 3. **GitHub push protection:** chặn push chứa secret đã biết (secret scanning).
 
+| Lớp | Công cụ | Chặn gì | Chặn ở đâu | Khi nào dùng |
+|---|---|---|---|---|
+| Pre-commit framework | `pre-commit` | Lint/format/test nhanh | Local (git hook) | Mọi commit |
+| Secret scan | gitleaks/trufflehog | Secret trong staged files | Local (git hook) | Repo có secret/thanh toán |
+| Push protection | GitHub secret scanning | Secret đã biết lúc push | GitHub server | Bật mặc định mọi repo |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -210,6 +216,11 @@ Section này trả lời: 2 tính năng GitHub (Business/Enterprise full) — c�
 
 Bật ở `Repo/Org → Settings → Code security → Secret scanning + Push protection`.
 
+| Tính năng | Phát hiện/chặn khi nào | Chặn ở đâu | Khi nào dùng |
+|---|---|---|---|
+| Secret scanning | Quét repo tìm secret đã lộ | GitHub server (alert) | Bật mặc định mọi repo |
+| Push protection | Chặn ngay lúc `git push` | GitHub server | Bật cùng secret scanning |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -247,6 +258,11 @@ Section này trả lời: kết hợp commitlint (local) + status check (CI) —
 **Trả lời 1 câu:** Kết hợp commitlint hook local + status check CI — commit sai thì hook chặn ngay, lọt qua thì PR không merge được.
 
 **Giải thích chi tiết + ví dụ:** Kết hợp: **commitlint hook local** + **status check CI**. Agent tạo commit message sai → hook local sửa/báo ngay; lọt qua local → CI check đỏ, PR không merge được.
+
+| Cơ chế | Chặn ở đâu | Tốc độ báo | Khi nào dùng |
+|---|---|---|---|
+| commitlint hook local | Local | Ngay khi commit | Mọi repo dùng conventional commits |
+| Status check CI | GitHub server (PR) | Sau khi push/PR | Ép cả người lẫn agent trước merge |
 
 ### Làm thế nào (steps copy-paste)
 
@@ -323,6 +339,12 @@ Section này trả lời: 3 nguồn log — git, GitHub audit log, PR timeline.
 - **Git history:** `git log` — commit của agent thường có `Co-authored-by: Copilot` hoặc author bot.
 - **GitHub audit log (org):** `Org → Settings → Audit log` — ai bật/tắt policy, ai assign seat.
 - **PR timeline:** coding agent ghi comment từng bước (plan → changes → test results).
+
+| Nguồn | Xem ở đâu | Trả lời câu hỏi gì | Khi nào dùng |
+|---|---|---|---|
+| Git history | `git log` | Ai/agent commit gì | Truy vết thay đổi code |
+| GitHub audit log (org) | `Org → Settings → Audit log` | Ai bật/tắt policy, assign seat | Compliance org |
+| PR timeline | PR comments | Agent đã làm gì theo bước | Review PR agent |
 
 ### Làm thế nào (steps copy-paste)
 

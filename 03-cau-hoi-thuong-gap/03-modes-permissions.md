@@ -81,6 +81,12 @@ Section này trả lời: copilot xin phép mỗi tool call, và bạn quyết �
 
 Hỏi hoài thường do: task agent rộng (nhiều tool calls), hoặc bạn chưa bật "allow for workspace" cho lệnh an toàn (VD `npm test`).
 
+| Lựa chọn | Nghĩa | Có nhớ cho lần sau? | Khi nào dùng |
+|---|---|---|---|
+| Allow once | Cho chạy đúng 1 lần | Không | Lệnh hiếm gặp, chưa chắc an toàn |
+| Allow for session/workspace | Nhớ cho phiên/workspace | Có | Lệnh an toàn lặp lại (`npm test`, `git diff`) |
+| Deny | Cấm chạy | Có | Lệnh nguy hiểm (`rm -rf`, `git push --force`) |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -384,6 +390,15 @@ Section này trả lời: UI mới đặt tên lại 2 nhóm (persona + permissi
 - **Persona (dropdown agent):** **Interactive** (dừng hỏi mỗi thay đổi) — **Plan** (chỉ lập kế hoạch, không sửa code) — **Autopilot** (tự chạy tới xong, tự trả lời câu hỏi làm rõ). Tương đương: Interactive ≈ Agent + `ask`; Autopilot ≈ Agent + `Allow all`.
 - **Permission level (picker Permissions):** **Manual permissions** (mặc định, hỏi theo cấu hình) — **Assisted permissions** (Experimental: LLM judge chấm rủi ro từng tool call) — **Allow all** (tự duyệt hết). Manual vẫn tôn trọng bộ `allow/ask/deny`; Assisted và Allow all thì override.
 
+| Nhóm | Lựa chọn | Tương đương cũ | Hành vi | Khi nào dùng |
+|---|---|---|---|---|
+| Persona | Interactive | Agent + `ask` | Dừng hỏi mỗi thay đổi | Mặc định an toàn, code có kiểm soát |
+| Persona | Plan | Plan-first | Chỉ lập kế hoạch, không sửa code | Task lớn cần duyệt kế hoạch trước |
+| Persona | Autopilot | Agent + `Allow all` | Tự chạy tới xong, tự trả lời câu hỏi | Worktree riêng + sandbox bật |
+| Permission | Manual | Bộ `allow/ask/deny` | Hỏi theo cấu hình | Mặc định |
+| Permission | Assisted (Experimental) | — | LLM judge chấm rủi ro từng tool call | Muốn tự duyệt nhưng vẫn chấm rủi ro |
+| Permission | Allow all | — | Tự duyệt hết | Chỉ khi đã bật sandbox + git sạch |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -427,6 +442,13 @@ Section này trả lời: model là "não", Session Target là "nơi chạy" —
 - **Claude / Codex** — harness của provider (nếu cài).
 
 Handoff đổi target giữa phiên và mang theo context (chỉ khởi tạo được từ session Local). Trong session Copilot gõ `/delegate` để đẩy sang Cloud.
+
+| Target | Chạy ở đâu | Thấy tool/context local? | Nhiều session song song? | Khi nào dùng |
+|---|---|---|---|---|
+| Local | Extension host VS Code | Có | Không (trong cửa sổ VS Code) | Việc tay cần sửa + chạy test trong editor |
+| Copilot | Agent Host (Copilot SDK), chạy nền | — | Có | Muốn background/nhiều phiên song song |
+| Cloud | Hạ tầng remote, làm 1 repo → PR | Không | — | Giao hẳn task để nhận PR |
+| Claude / Codex | Harness của provider (nếu cài) | Tùy harness | Tùy | Khi cài harness provider |
 
 ### Làm thế nào (steps copy-paste)
 

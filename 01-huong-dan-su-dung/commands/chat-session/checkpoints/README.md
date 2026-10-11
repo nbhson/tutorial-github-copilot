@@ -15,6 +15,14 @@ Section này trả lời: khi nào nên bấm Undo cho cả phiên, và làm sao
 - Muốn thử 2 hướng khác nhau từ cùng 1 điểm.
 - Trước khi giao task mạo hiểm cho agent.
 
+> Chọn nhanh cách quay lui:
+
+| Cách | Quay được gì | Khi nào dùng |
+|---|---|---|
+| Restore checkpoint | Cả workspace + chat history về mốc đã lưu | Agent sửa lan nhiều file, muốn thử hướng khác từ điểm an toàn |
+| Undo từng edit (`Ctrl+Z`) | Vài edit vừa thực hiện | Mới sửa ít, lỗi ngay ở bước cuối |
+| Commit git tay | Mốc do bạn tự tạo | Session quá ngắn / tính năng checkpoint tắt, cần mốc chắc |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `Restore checkpoint` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

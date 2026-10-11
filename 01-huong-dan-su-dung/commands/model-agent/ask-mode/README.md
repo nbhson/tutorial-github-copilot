@@ -15,6 +15,12 @@ Section này trả lời: khi nào dừng ở Ask, và khi nào nên leo thang s
 - So sánh phương án, chưa muốn sửa.
 - Review: hỏi “đoạn này làm gì, rủi ro gì?”.
 
+| Mode | Đặc điểm | Khi nào dùng |
+|---|---|---|
+| Ask | Chỉ đọc, không sửa file | Hỏi/khảo sát/so sánh phương án trước khi đụng code |
+| Edit | Sửa đúng files bạn tick, có kiểm soát | Đã biết sửa 1–5 file, muốn review từng hunk |
+| Agent | Tự tìm file, sửa, chạy terminal | Task mở nhiều bước, chưa biết chạm file nào |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `Ask mode` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

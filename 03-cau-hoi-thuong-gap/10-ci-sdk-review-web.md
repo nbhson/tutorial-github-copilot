@@ -182,6 +182,13 @@ grep -rn "dangerously-skip\|skip-verification\|echo.*secrets\.\|print.*secrets\.
 
 Không dùng khi: task 1 lần, ad-hoc — mở chat nhanh hơn viết app. 2026: SDK bọc cả Copilot CLI và cung cấp sessions + permissions + custom tools + events; là nền của dynamic workflows (public preview 01/10/2026).
 
+| Tiêu chí | Copilot SDK | Chat (trong IDE) |
+|---|---|---|
+| Ai gọi | App của bạn (code) | Bạn gõ tay |
+| Nhúng vào hệ thống | Có (bot Slack, dashboard, tool migrate) | Không |
+| Công setup | Cao (viết app + token + log quota) | Thấp (mở chat là chạy) |
+| Khi nào dùng | Logic lặp lại, không muốn người mở IDE | Task 1 lần, ad-hoc |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -212,6 +219,14 @@ export COPILOT_SDK_TOKEN="${COPILOT_SDK_TOKEN:?thieu token}"
 
 **Giải thích chi tiết + ví dụ:** Nôm na: bot là đồng nghiệp đọc draft trước, bạn là reviewer cuối cùng — bot bắt lỗi nhỏ, bạn bắt lỗi lớn. 2 lớp: **(a)** GitHub Copilot code review (tích hợp PR → review từng diff, setting ở repo/org), **(b)** workflow custom `copilot-review.yml` (linh hoạt checklist team). Tin ở mức **reviewer đầu tiên**: bắt lỗi style, null-check, thiếu test; quyết định merge vẫn do người. 2026: chi phí review tính bằng GitHub Actions minutes (ngoài AI Credits, xem [bài 01](01-tai-khoan-pricing-cai-dat.md)).
 
+| Tiêu chí | Copilot code review (tích hợp PR) | Workflow custom `copilot-review.yml` |
+|---|---|---|
+| Bật ở đâu | Repo Settings → Code security | Thêm file vào `.github/workflows/` |
+| Làm gì | Review từng diff, comment tự động | Chạy lint/test + gọi Copilot CLI review |
+| Tùy biến | Thấp (theo GitHub) | Cao (checklist riêng của team) |
+| Chi phí | Theo seat/plan | GitHub Actions minutes |
+| Khi nào dùng | Bật mặc định mọi repo | Team có chuẩn review riêng |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -241,6 +256,13 @@ gh pr view <NUM> --comments | head -40
 **Giải thích chi tiết + ví dụ:** Nôm na: văn phòng mini trong browser — đọc được repo, tạo được PR, nhưng không cầm búa được (multi-file, MCP local). Web = chat Copilot trên browser, gắn với repo GitHub (đọc code trực tiếp, tạo PR từ chat). Dùng khi: máy khác không có IDE, review nhanh PR trên web, hỏi về repo public mà không muốn clone.
 
 Giới hạn: không sửa multi-file mượt như IDE, không có MCP local, quota chung với account. 2026: Web có thể assign coding agent + xem coding agent status (xem [bài 07](07-custom-agents-coding-agent-workflows.md) câu 4).
+
+| Tiêu chí | Web (`github.com/copilot`) | IDE (VS Code...) |
+|---|---|---|
+| Sửa multi-file | Không mượt | Có |
+| MCP local | Không | Có |
+| Repo public chưa clone | Hỏi được ngay | Phải clone |
+| Khi nào dùng | Ngoài IDE, review/hỏi nhanh trên web | Làm việc nặng, refactor nhiều file |
 
 ### Làm thế nào (steps copy-paste)
 

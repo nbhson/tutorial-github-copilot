@@ -153,6 +153,15 @@ Gemini-tier: context window rất dài → monorepo khổng lồ, "tóm tắt c�
 task cross-file rộng. Đổi sang khi model khác kêu thiếu context.
 ```
 
+Chọn Claude hay Gemini — so nhanh:
+
+| Tiêu chí | Claude-tier | Gemini-tier |
+|---|---|---|
+| Thế mạnh | Viết lách + giải thích, review wording tinh tế, giữ style | Context window rất dài, task cross-file rộng |
+| Điểm yếu | Context ngắn hơn Gemini | Văn "máy" hơn Claude ở review tinh tế |
+| Dấu hiệu đổi sang | Model khác trả lời cộc/quá "máy" | Model khác kêu thiếu context |
+| Khi nào dùng | Docs, PR description, review comments | Tóm tắt monorepo, hỏi xuyên nhiều package |
+
 ### 2.5. Mini/Flash-tier — việc nhỏ + fan-out
 
 ```text
@@ -250,6 +259,15 @@ Section này trả lời: đổi model ở 3 chỗ nào, để Auto thì chuyệ
 # GitHub chua document duong dan UI chon tier + chua co policy tier cap org
 #   (can verify, 10/2026).
 ```
+
+So sánh nhanh 3 tier (chọn hướng route, không đổi giá):
+
+| Tiêu chí | Efficiency | Balance | Intelligence |
+|---|---|---|---|
+| Ưu tiên | Chi phí | Cân bằng chi phí + chất lượng + độ trễ | Chất lượng |
+| Pool model | Cùng 1 pool | Cùng 1 pool | Cùng 1 pool |
+| Ảnh hưởng giá | Không (tính theo model Auto chọn) | Không | Không |
+| Khi nào dùng | Ngân sách chặt, việc rõ + rẻ | Mặc định cho hầu hết team | Task khó/quan trọng, ưu tiên chất lượng |
 
 ### 3.2. Quy tắc đổi model tay (giữ 3 điều)
 

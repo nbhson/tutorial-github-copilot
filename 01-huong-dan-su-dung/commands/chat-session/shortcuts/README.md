@@ -15,6 +15,14 @@ Section này trả lời: cần thuộc phím nào, và xử lý thế nào khi 
 - Phím tắt mặc định xung đột với layout máy.
 - Onboard: phát cho member mới 1 tờ shortcuts.
 
+> Chọn nhanh cách gọi Chat bằng phím:
+
+| Phím | Mở ra | Khi nào dùng |
+|---|---|---|
+| `Ctrl+I` | Inline chat tại dòng code | Sửa 5–20 dòng ngay chỗ đang đọc |
+| `Ctrl+Shift+I` | Quick chat (popup) | Hỏi nhanh 30 giây, không cần lưu lịch sử |
+| `Ctrl+Alt+I` | Chat view đầy đủ | Việc dài, cần context + tool ngoài |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `Shortcuts` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

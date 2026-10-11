@@ -15,6 +15,15 @@ Section này trả lời: khi nào cần kiểm tra công tắc này, và ranh g
 - Audit quyền riêng tư.
 - Thắc mắc “code có bị dùng train không”.
 
+> Phân biệt nhanh các khái niệm hay bị lẫn:
+
+| Khái niệm | Là gì | Khi nào dùng |
+|---|---|---|
+| Telemetry | Consent thu thập dữ liệu để cải thiện sản phẩm | Onboard máy, audit quyền riêng tư |
+| Train (training) | Code của bạn có bị dùng để huấn luyện model hay không | Trả lời “code có bị train không” |
+| Duplication | Kiểm tra trùng với code public | Lo license/copyright khi code trùng |
+| `/status` | Trạng thái account/plan/model (không phải consent) | Cần biết máy đang ở plan/model nào |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `Telemetry` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

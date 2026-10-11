@@ -336,6 +336,21 @@ chỉ lấy bảng orders và payments, tóm tắt 5 bullet quan hệ chính."
 
 > Lưu ý 2026: prompt files (`.prompt.md`) đang deprecated trên Agent Host — việc lặp nên chuyển sang **Agent Skills** (`SKILL.md`, chuẩn mở). Xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 
+### 5.3. Knowledge base hay custom instructions — dùng cái nào?
+
+Hai chỗ để "nhớ hộ" bạn luật/spec — khác vai, đừng lẫn:
+
+| Tiêu chí | Knowledge base (`@docs`) | Custom instructions (`.github/copilot-instructions.md`) |
+|---|---|---|
+| Đựng gì | Spec, chính sách, ADR, wiki dài | Luật code, stack, lệnh hay dùng, cấm địa |
+| Nơi sống | GitHub repo Settings (đám mây) | Trong repo, cạnh code (VS Code) |
+| Cách dùng | Gọi `@payments-docs <câu hỏi>` khi cần | Tự nạp mọi turn, không cần gọi |
+| Độ dài hợp lý | Dài bao nhiêu cũng được (truy hồi theo câu hỏi) | Ngắn, <200 dòng, front-load luật hay sai |
+| **Khi nào dùng** | Hỏi spec/chính sách mà không muốn paste | Áp luật code mọi turn cho mọi chat |
+| Verify | Trả lời kèm link file nguồn, không paste | New chat vẫn nhớ luật ngay turn 1 |
+
+> Quy tắc ngón tay: **cần tra cứu → knowledge base; cần tự nhớ mọi turn → custom instructions.**
+
 ---
 
 ## 6. Thói quen 4: custom agent cô lập + checkpoints

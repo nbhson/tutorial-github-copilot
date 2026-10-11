@@ -229,6 +229,11 @@ Tổng: 7 turns, bạn chỉ gõ 1 prompt + bấm 1 lần duyệt.
 
 > **Câu hỏi:** 1 task agent tốn bao nhiêu tiền, và làm sao không bị cháy túi?
 
+> **AI Credits là gì (3 lớp):**
+> - 1 câu: AI Credits là đơn vị đo tiền dùng Copilot — 1 credit = 0,01 USD, trừ theo model × số token.
+> - Nôm na: như thẻ điện thoại trả trước — gọi càng lâu, máy càng "xịn" (model mạnh) thì càng nhanh hết tiền.
+> - Ví dụ: cùng 1 task agent 10 turns, model rẻ tốn vài chục credits, model mạnh tốn gấp 5–10 lần.
+
 ### 4.1. Bốn điều cần biết (không cần nhớ gì thêm)
 
 1. **1 AI Credit = 0,01 USD.** Chi phí = (giá token model × số token) quy đổi ra credits.

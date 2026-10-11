@@ -110,6 +110,14 @@ sequenceDiagram
 
 **Index ở đâu?** Local embeddings (Individual: index trên máy bạn) hoặc GitHub-hosted index (Business/Enterprise: index phía GitHub, cập nhật khi push). Enterprise có thêm knowledge bases (docs ngoài code).
 
+| Tiêu chí | Local (Individual) | GitHub-hosted (Business/Enterprise) |
+|---|---|---|
+| Index ở đâu | Trên máy bạn | Phía GitHub |
+| Cập nhật index | Khi mở VS Code / build local | Khi push lên repo |
+| Ai dùng chung | Một mình bạn | Cả org/team |
+| Thêm docs ngoài code | Không | Có (knowledge bases — mục 5) |
+| Khi nào dùng | Repo nhỏ, làm 1 máy | Team/monorepo cần index chung + knowledge base |
+
 ### 2.1. Khi nào `@workspace` thắng `#file` (bảng)
 
 | Nhu cầu | Hiểu nôm na | `#file` / mở tay | `@workspace` |

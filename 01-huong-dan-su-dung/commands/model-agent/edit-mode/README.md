@@ -15,6 +15,12 @@ Section này trả lời: khi nào chọn Edit thay vì Agent, và làm sao khô
 - Sửa vừa: đổi message, thêm validation, refactor nhỏ.
 - Muốn kiểm soát chặt file nào được chạm.
 
+| Mode | Đặc điểm | Khi nào dùng |
+|---|---|---|
+| Ask | Chỉ đọc, không sửa file | Hỏi/khảo sát/so sánh phương án trước khi đụng code |
+| Edit | Sửa đúng files bạn tick, có kiểm soát | Đã biết sửa 1–5 file, muốn review từng hunk |
+| Agent | Tự tìm file, sửa, chạy terminal | Task mở nhiều bước, chưa biết chạm file nào |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `Edit mode` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

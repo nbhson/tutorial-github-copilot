@@ -15,6 +15,14 @@ Section này trả lời: khi nào cần skill thay vì prompt file, và làm sa
 - Chuẩn hóa kỹ năng team (không phụ thuộc nhớ tên).
 - So sánh skill vs prompt/agent để chọn đúng.
 
+> Prompt vs Skill vs Agent:
+
+| Cách | Ai gọi | Khi nào dùng |
+|---|---|---|
+| Prompt (`/prompts`) | Bạn gõ tay tên prompt | Việc lặp lại muốn chủ động gọi, kiểm soát từng lần |
+| Skill (`/skills`) | Model tự kích hoạt theo mô tả | Muốn model tự chọn cách làm chuẩn, không cần nhớ tên |
+| Agent | Người chạy như một “đồng nghiệp” riêng | Việc dài, cần persona/permission riêng |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `/skills` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

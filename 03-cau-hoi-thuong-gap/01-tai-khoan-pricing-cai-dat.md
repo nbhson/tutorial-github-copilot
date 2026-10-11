@@ -59,6 +59,15 @@ Section này trả lời: các plan khác nhau ở đâu, giá và hạn mức C
 - **Business ($19/user/tháng):** 1.900 credits/seat/tháng, Credits **pooled cả org** (không chia cứng từng ghế). Thêm org management, policy control (content exclusion, model allowlist), audit cơ bản, IP indemnity (cần verify). Seat do admin assign. Hợp công ty vừa.
 - **Enterprise ($39/user/tháng):** 3.900 credits/seat/tháng, pooled. Thêm SSO/SAML bắt buộc, audit logs đầy đủ, data residency / ZDR tương đương, review & approve coding-agent PR, SLA. Hợp corp, bank, gov.
 
+| Tiêu chí | Free | Pro | Pro+ | Max | Business | Enterprise |
+|---|---|---|---|---|---|---|
+| Giá | $0 | $10/tháng | $39/tháng | $100/tháng | $19/user/tháng | $39/user/tháng |
+| Credits/tháng | allowance (chưa công bố) | 1.500 (1.000 + 500) | 7.000 (3.900 + 3.100) | 20.000 (10.000 + 10.000) | 1.900/seat (pooled) | 3.900/seat (pooled) |
+| Credits gộp cả org? | Không | Không | Không | Không | Có | Có |
+| Ai quản | Bạn | Bạn | Bạn | Bạn | Admin org | Admin org |
+| Điểm thêm | Auto model; 2.000 completions/tháng | — | Ưu tiên model mới | Pair-programmer full-time | Policy + audit cơ bản | SSO/SAML, audit đầy đủ, SLA |
+| Khi nào dùng | Thử nhẹ | Side-project | Xài nhiều model mạnh | Dùng hàng ngày như pair-programmer | Công ty vừa | Corp, bank, gov |
+
 Quy tắc tính tiền cần nhớ:
 
 - **Code completions và next edit suggestions KHÔNG trừ AI Credits** — không giới hạn trên mọi plan trả phí.
@@ -171,6 +180,13 @@ Section này trả lời: cài thứ tự gì, giữ extension nào, và làm sa
 - **Neovim:** `github/copilot.vim` hoặc `zbirenbaum/copilot.lua`, auth bằng `:Copilot auth`.
 - **CLI:** `gh extension install github/gh-copilot` → dùng `gh copilot suggest` / `gh copilot explain`. Bản CLI độc lập 2026 là binary `copilot` (có `copilot init`, slash command `/mcp`, `/usage`) — xem [bài 10](10-ci-sdk-review-web.md).
 
+| Bề mặt | Cài gì | Cách auth | Khi nào dùng |
+|---|---|---|---|
+| VS Code | `GitHub.copilot` + `GitHub.copilot-chat` | Command Palette → Sign in to GitHub | IDE chính, dùng hàng ngày |
+| JetBrains | Plugin `GitHub Copilot` (Marketplace) | Login qua browser | Team dùng IntelliJ/PyCharm |
+| Neovim | `github/copilot.vim` hoặc `zbirenbaum/copilot.lua` | `:Copilot auth` | Dev terminal-first |
+| CLI | `gh extension install github/gh-copilot` (hoặc binary `copilot`) | `gh auth login` / `copilot init` | Thao tác terminal, script |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -211,6 +227,12 @@ Section này trả lời: đổi tài khoản GitHub đang dùng cho Copilot ở
 - **VS Code:** `Ctrl+Shift+P → "Sign out of GitHub"` rồi sign-in lại account đúng.
 - **gh CLI:** `gh auth login` / `gh auth logout`, check bằng `gh auth status`.
 - **JetBrains:** `Settings → GitHub → Remove account → Add lại`.
+
+| Bề mặt | Đổi account thế nào | Kiểm tra bằng | Khi nào dùng |
+|---|---|---|---|
+| VS Code | `Ctrl+Shift+P → "Sign out of GitHub"` rồi sign-in lại | Status bar Copilot | Máy công ty login nhầm account |
+| gh CLI | `gh auth login` / `gh auth logout` (hoặc `gh auth switch --user <login>`) | `gh auth status` | Đổi account cho terminal/CLI |
+| JetBrains | `Settings → GitHub → Remove account → Add lại` | Plugin hiện account mới | Đổi account trong IntelliJ/PyCharm |
 
 ### Làm thế nào (steps copy-paste)
 

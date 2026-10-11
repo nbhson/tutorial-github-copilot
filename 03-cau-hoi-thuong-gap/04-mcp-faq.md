@@ -93,6 +93,11 @@ Section này trả lời: 2 vị trí config + format key chuẩn, không nhầm
 
 Format chuẩn: key `servers` (VS Code) — một số tool cũ dùng `mcpServers`, nếu copy config mẫu mà không hiện thì đổi key cho khớp client.
 
+| Vị trí | File/key | Commit vào git? | Đè nhau? | Khi nào dùng |
+|---|---|---|---|---|
+| Repo-level | `.vscode/mcp.json` (key `servers`) | Có — share cả team | Bị user-level đè | Setup server chung cho team |
+| User-level | VS Code User Settings (`mcp.servers`) | Không | Đè lên repo | Config riêng cho máy bạn |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -133,6 +138,15 @@ Section này trả lời: stdio chạy local, SSE nối server xa — chọn the
 - **stdio:** IDE tự spawn process (`command` + `args`) trên máy bạn, nói chuyện qua stdin/stdout. Hợp server nhẹ (npx package, script python). Không cần mạng, nhưng tốn RAM máy bạn và chết theo IDE.
 - **SSE/HTTP:** IDE kết nối tới URL server đang chạy (team host hoặc cloud). Hợp DB/tool dùng chung, server nặng (browser automation pool). Cần mạng + auth, nhưng share được cả team.
 
+| Tiêu chí | stdio | SSE/HTTP |
+|---|---|---|
+| Chạy ở đâu | IDE tự spawn process trên máy bạn | Server chạy sẵn ở xa (team/cloud) |
+| Cần mạng? | Không | Có |
+| Tốn RAM máy bạn? | Có (chết theo IDE) | Không (server riêng) |
+| Share team? | Không | Có |
+| Hợp với | Server nhẹ (npx, script python) | DB/tool dùng chung, server nặng |
+| Khi nào dùng | 1 mình vọc | Team dùng chung / server nặng |
+
 ### Làm thế nào (steps copy-paste)
 
 Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
@@ -172,6 +186,12 @@ Section này trả lời: 3 cách đưa credentials, xếp theo an toàn tăng d
 1. **`${input:...}` prompt** (khuyên dùng cho repo share): IDE hỏi khi khởi động, không lưu vào git. Kèm `"password": true` để ẩn.
 2. **Env var máy bạn:** `"env": { "TOKEN": "${env:MY_TOKEN}" }` — token nằm trong shell profile, không vào repo.
 3. **Hardcode trong mcp.json — CẤM:** token vào git là lộ vĩnh viễn (kể cả xóa commit sau).
+
+| Cách | An toàn | Lưu ở đâu | Khi nào dùng |
+|---|---|---|---|
+| `${input:...}` | Cao (khuyên dùng) | IDE hỏi lúc start, không vào git | Repo share cho team |
+| `${env:...}` | Trung bình–cao | Shell profile máy bạn | Token riêng mỗi dev |
+| Hardcode trong `mcp.json` | CẤM | Trong git → lộ vĩnh viễn | Không bao giờ |
 
 ### Làm thế nào (steps copy-paste)
 

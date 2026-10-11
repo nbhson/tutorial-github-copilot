@@ -15,6 +15,13 @@ Section này trả lời: khi nào mở bảng điện, và 3 lý do tools hay m
 - Tools MCP đột nhiên mất.
 - Trước khi nhờ việc cần tool ngoài (PR/DB/browser).
 
+> `/mcp` vs `MCP add`:
+
+| Việc | Lệnh | Khi nào dùng |
+|---|---|---|
+| Xem/reconnect server đang bật | `/mcp` | Đầu session, nghi tool rớt |
+| Thêm/sửa server mới vào config | `MCP add` (`.vscode/mcp.json`) | Cần tool ngoài mới (github/playwright/postgres) |
+
 ## Cách gọi (copy-paste)
 
 Cách gọi `/mcp` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:

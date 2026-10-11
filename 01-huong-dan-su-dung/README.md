@@ -44,7 +44,7 @@ Muốn nhảy cóc? Bảng dưới đây mô tả đúng 1 dòng mỗi bài — 
 
 Phần này dùng để tra nhanh khi đang làm việc — không cần đọc từ đầu.
 
-- Tổng số: **46** thư mục lệnh (`find 01-huong-dan-su-dung/commands -mindepth 2 -type d | wc -l`).
+- Tổng số: **47** thư mục lệnh (`find 01-huong-dan-su-dung/commands -mindepth 3 -name README.md | wc -l`).
 - Index đầy đủ theo 4 nhóm: [commands/README.md](./commands/README.md)
 - Ví dụ tra cứu nhanh: [commands/chat-session/new-chat/README.md](./commands/chat-session/new-chat/README.md)
   (thay `new-chat` bằng slug bất kỳ, vd `./commands/model-agent/agent-mode/README.md`, `./commands/system-knowledge/instructions/README.md`).

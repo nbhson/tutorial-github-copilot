@@ -203,6 +203,12 @@ git worktree prune && git worktree list             # Verify: sạch
 
 > **Câu hỏi:** khi nào dùng pattern nào — 2 features song song, thử 2 phương án, hay bạn code + agent cloud fan-out?
 
+| Pattern | Nôm na | Khi nào dùng | Công cụ chính |
+|---|---|---|---|
+| **A — 2 features song song** | 2 thợ 2 phòng, mỗi người 1 việc | Có 2 task độc lập cần làm cùng lúc | 2 worktree + 2 branch `feat/*` |
+| **B — Thử 2 phương án (spike)** | Cắm 2 mầm, giữ cây khỏe hơn | Chưa biết hướng nào đúng, cần so sánh rồi chọn | 2 worktree + 2 branch `spike/*` |
+| **C — Bạn local + agent cloud fan-out** | Bạn giữ việc chính, thuê robot làm việc phụ | Vừa code tay vừa giao issue cho coding agent | 1 worktree local + branch `copilot/*` (cloud tự tạo) |
+
 ### Pattern A — 2 features song song (phổ biến nhất)
 
 ```bash
