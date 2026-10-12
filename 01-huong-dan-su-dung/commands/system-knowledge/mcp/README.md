@@ -2,18 +2,20 @@
 
 > **Dành cho:** dev dùng tool ngoài (GitHub, DB, browser) qua MCP · **Vấn đề:** tools đột nhiên mất, không biết server nào đang rớt · **Đọc xong:** xem trạng thái servers/tools và test lại bằng 1 lệnh thật (~2 phút)
 
-## Lệnh làm gì (1 câu nôm na)
+## 1 câu nôm na
 
-Nôm na: bảng điện tổng — xem cầu dao nào đang bật, cái nào nhảy. Session đầu mỗi repo nên chạy `/mcp` 1 lần: setup GitHub (và DB nếu có), test bằng 1 câu hỏi nhỏ.
+`/mcp` là bảng điện tổng của nhà: nhìn một cái là biết cầu dao nào đang bật, cái nào vừa nhảy. Nó liệt kê MCP servers + tools đang khả dụng và cho reconnect khi rớt. Thói quen tốt: session đầu tiên trên mỗi repo chạy `/mcp` một lần — setup GitHub (và DB nếu có), rồi test bằng một câu hỏi nhỏ.
 
-## Khi nào dùng
+## Vì sao dùng /mcp?
 
-Section này trả lời: khi nào mở bảng điện, và 3 lý do tools hay mất (sai key, auth, server crash).
+MCP server chạy **ngoài** VS Code: nó có thể rớt mạng, hết hạn token, hoặc crash sau khi bạn cập nhật gì đó. Không có `/mcp`, bạn chỉ thấy “sao Copilot không mở được PR nữa” mà không biết vì server chưa lên. Lệnh này là cách nhanh nhất để trả lời “server nào sống, tool nào có” *trước khi* bạn nhờ nó làm việc cần dữ liệu ngoài.
 
-- **Cho ai:** mọi người bắt đầu session mới trên repo, admin config MCP cho team.
-- Session đầu mỗi repo (setup 1 lần).
-- Tools MCP đột nhiên mất.
-- Trước khi nhờ việc cần tool ngoài (PR/DB/browser).
+**Nếu bỏ qua thì sao?** Bạn sẽ đổ lỗi cho model trong khi lỗi nằm ở tầng kết nối (token hết hạn, `npx` không chạy). Check `/mcp` trước, đoán sau.
+
+## Khi nào dùng / khi nào đừng
+
+- **Dùng khi:** session đầu mỗi repo (setup một lần); tools MCP đột nhiên mất; trước khi nhờ việc cần tool ngoài (PR/DB/browser).
+- **ĐỪNG dùng khi:** bạn cần **thêm hoặc sửa** server mới — việc đó là `MCP add` (xem [../mcp-add/README.md](../mcp-add/README.md)), không phải `/mcp`.
 
 > `/mcp` vs `MCP add`:
 
@@ -24,47 +26,86 @@ Section này trả lời: khi nào mở bảng điện, và 3 lý do tools hay m
 
 ## Cách gọi (copy-paste)
 
-Cách gọi `/mcp` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:
-
 ```bash
 /mcp
 # liệt kê servers/tools đang bật
 # Kỳ vọng: thấy list servers connected + tools khả dụng
-# Verify: test 1 tool thật (list PRs/query/test browser) chạy được
+# Verify: test 1 tool thật (list PRs / query / test browser) chạy được
 ```
 
-> Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/mcp`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
+> Không thấy `/mcp` trong list khi gõ `/`? Kiểm `/status` + plan trước khi kết luận lỗi công cụ.
 
-## Ví dụ prompt thật + kết quả mong đợi
+## Ví dụ thật
 
-Prompt mẫu cho `/mcp` — đổi phần tên file/task cho đúng việc của bạn:
-
-**Prompt thật (copy-paste, nhớ gắn scope trước):**
+Nghiệp vụ: bạn cần Copilot đọc PR trên GitHub, nhưng vừa nâng cấp gì đó nên không rõ server còn sống không.
 
 ```bash
-/mcp “liệt kê servers/tools đang bật” → rồi “dùng github tool liệt kê 5 PRs mới nhất”
+/mcp
+# Đọc kết quả: server "github" có connected? tool list_prs/create_prs có trong list?
+
+# Rồi test bằng 1 câu NHỎ (đừng test bằng việc lớn):
+"dùng github tool liệt kê 5 PRs mới nhất"
+# → trả về đúng 5 PR = server sống, tool chạy thật.
+# → báo "tool không khả dụng" = quay lại xem /mcp, server đang rớt.
 ```
 
-**Kết quả mong đợi:** Thấy list servers connected + tools; test 1 tool nhỏ thành công.
+**Kết quả mong đợi:** thấy list servers connected + tools khả dụng; test một tool nhỏ chạy thành công.
 
-**Cách verify:** 1 tool thật (list PRs/query/test browser) chạy được là đạt.
+**✅ Verify:** một tool thật (list PRs / query / test browser) chạy được là đạt.
+
+## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)
+
+**❌ SAI — nhờ việc lớn trong khi chưa kiểm kết nối:**
+
+```text
+"tạo PR cho branch này" → model báo lỗi tool → tưởng Copilot hỏng,
+thực ra server MCP chưa lên.
+```
+
+**✅ ĐÚNG — kiểm bảng điện rồi test bằng câu nhỏ trước:**
+
+```text
+/mcp → thấy github connected? → "liệt kê 5 PRs mới nhất" → chạy được
+→ lúc đó mới nhờ việc thật.
+```
+
+**Bài học:** kiểm kết nối bằng một việc **nhỏ** trước; fail ở việc lớn không cho bạn biết lỗi nằm ở tầng nào.
 
 ## Lỗi thường gặp
 
-Ba triệu chứng hay gặp nhất với lệnh này — kèm nhanh cách xử lý:
-
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
-| Tools không hiện | Sai key servers/mcpServers / server crash | So key với mẫu + xem Output → MCP log |
-| Auth fail | Token sai/thiếu env | Token qua ${input}/env, không hardcode; test lại |
-| Server nặng (playwright) | Mỗi máy spawn riêng | Team share 1 remote http/sse server |
+| Tools không hiện | Sai key (`servers`/`mcpServers`) hoặc server crash | So key với mẫu + xem Output → MCP log |
+| Auth fail | Token sai/thiếu env | Token qua `${input}`/env, không hardcode; test lại |
+| Server nặng (playwright) | Mỗi máy spawn riêng | Team share 1 remote `http`/`sse` server |
+
+## So sánh với Claude Code
+
+| Việc | Copilot (`/mcp`) | Claude Code | Ghi chú |
+|---|---|---|---|
+| Xem server/tool đang bật | Có `/mcp` liệt kê + reconnect | Có MCP, quản lý qua CLI/cấu hình | Cùng chuẩn giao thức MCP |
+| Khai báo server | `.vscode/mcp.json` | Cấu hình MCP riêng của Claude Code | Cùng ý tưởng, khác chỗ đặt file |
+| Tool gọi ra trong chat | `mcp__<server>__<tool>` | `mcp__<server>__<tool>` | Cách gọi tool nhất quán giữa hai bên |
+
+## Best practices (kèm "vì sao")
+
+- **Chạy `/mcp` đầu mỗi session trên repo.** *Vì sao?* Server chạy ngoài nên có thể rớt giữa các session — kiểm một lần rẻ hơn debug cả tiếng.
+- **Test bằng việc nhỏ trước.** *Vì sao?* Một câu nhỏ phân biệt được “lỗi kết nối” với “lỗi task”, còn việc lớn thì cả hai đều trông giống nhau.
+- **Giữ 3–6 servers.** *Vì sao?* Càng nhiều tool, model càng dễ chọn nhầm.
+- **Token luôn qua `${input}`/env.** *Vì sao?* File config nằm trong repo — hardcode là lộ.
+- **Server nặng cho team thì dùng remote chung.** *Vì sao?* Đỡ mỗi máy phải spawn một server riêng, và cấu hình nhất quán hơn.
+
+## Bài tập nhỏ
+
+1. **(5 phút)** Chạy `/mcp` trên repo đang làm; ghi lại có bao nhiêu server `connected` và bao nhiêu tool.
+2. **(10 phút)** Test một tool nhỏ (list PRs hoặc query 1 dòng) để xác nhận kết nối thật sự sống.
+3. **(10 phút)** Cố tình đặt sai 1 key trong `.vscode/mcp.json`, xem `/mcp` báo gì, rồi sửa lại cho đúng.
 
 ## Tham khảo
 
-Liên quan — index nhóm, cheatsheet 1 trang và FAQ phòng khi kẹt:
-
-- Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh.
+- Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh System & Knowledge.
 - Cheatsheet 1 trang: [../../../../CHEATSHEET.md](../../../../CHEATSHEET.md).
 - Kẹt thì tra [FAQ troubleshooting](../../../../03-cau-hoi-thuong-gap/08-loi-thuong-gap-troubleshooting.md).
+- Thêm/sửa server (khác với xem ở đây): [../mcp-add/README.md](../mcp-add/README.md).
 
-> Mẹo 1 dòng: _gắn scope trước (`#file`/`@workspace`), review diff sau, đừng bao giờ Accept mù._
+> **Chốt:** `/mcp` không phải để “khoe server xịn”, mà để bạn biết chắc đường ra ngoài còn thông — kiểm trước một câu nhỏ, đỡ đổ oan cho model.

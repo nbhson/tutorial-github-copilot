@@ -5,8 +5,17 @@
 > **Đọc xong:** dựng + verify được 5 tầng phòng thủ (content exclusion → secret scanning → CodeQL → review gate → policy/audit), chỉ ra được tầng nào team đang yếu và vá thế nào.
 > **Thời gian:** ~45 phút (walkthrough 20 phút ở cuối bài).
 
+## Mục tiêu bài học
+
+- Hiểu **defense-in-depth**: vì sao 1 lớp luôn có lỗ và 5 tầng chồng nhau mới đỡ được.
+- Dựng được **tầng 1** (content exclusion + duplication detection) và tự verify nó sống.
+- Bật + xử lý đúng **tầng 2 + 3** (secret scanning/push protection, CodeQL) — không bypass, không suppress cho qua.
+- Gắn được **tầng 4** (review gate máy + người) và biết nó tốn bao nhiêu AI Credits.
+- Chốt bằng **tầng 5** (policy as code + audit log) và chỉ ra được tầng nào team đang yếu nhất bằng evidence.
+
 ## Mục lục
 
+0. [Giải ngố thuật ngữ](#0-giải-ngố-thuật-ngữ-1-câu--analogie--verify)
 1. [Vì sao 5 tầng? (why)](#1-vì-sao-5-tầng-why)
 2. [Bản đồ 5 tầng (nhìn 1 phút hiểu hết)](#2-bản-đồ-5-tầng-nhìn-1-phút-hiểu-hết)
 3. [Tầng 1 — Exclusion + duplication detection (copy-paste)](#3-tầng-1--exclusion--duplication-detection-copy-paste)
@@ -16,14 +25,16 @@
 7. [Tầng 5 — Policy + audit (khóa cửa)](#7-tầng-5--policy--audit-khóa-cửa)
 8. [Walkthrough end-to-end (20 phút)](#8-walkthrough-end-to-end-20-phút)
 9. [Pitfalls + fix](#9-pitfalls--fix)
-10. [Bài tập](#10-bài-tập)
+- [So sánh với Claude Code](#so-sánh-với-claude-code)
+- [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
+10. [Bài tập nhỏ](#10-bài-tập-nhỏ)
 11. [Link chéo](#11-link-chéo)
 
 ---
 
 ## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
 
-*Section này trả lời: 5 thuật ngữ của 5 tầng + 3 khái niệm chính sách (managed settings, AI Credits, OTEL) nghĩa là gì. Gặp ở đâu trong bài cũng tra được. Tra cứu nhanh, không cần đọc từ đầu.*
+8 thuật ngữ của 5 tầng + 3 khái niệm chính sách (managed settings, AI Credits, OTEL). Gặp ở đâu trong bài cũng tra được — tra cứu nhanh, không cần đọc từ đầu.
 
 | Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
 |---|---|---|---|---|
@@ -40,7 +51,7 @@
 
 ## 1. Vì sao 5 tầng? (why)
 
-*Section này trả lời: vì sao bật mỗi secret scanning là chưa đủ, và quy tắc nào quyết định cách team bạn ứng xử với mỗi sự cố.*
+Vì sao bật mỗi secret scanning là chưa đủ, và quy tắc nào quyết định cách team bạn ứng xử với mỗi sự cố.
 
 **1 câu:** 1 lớp bảo mật luôn có lỗ — defense-in-depth là xếp 5 lớp chồng nhau, lớp này trượt thì lớp sau đỡ.
 **Nôm na:** như nhà 5 ổ khóa: trộm phá được cổng thì kẹt cửa, phá cửa thì kẹt két, phá két thì camera + bảo vệ vẫn thấy.
@@ -49,6 +60,10 @@
 Mỗi lớp riêng lẻ đều bị xuyên được: exclusion cấu hình sai 1 path là secret lọt vào index;
 secret scanning bỏ sót format lạ; CodeQL không bắt logic sai; review người thì
 mệt bỏ qua; policy không audit thì trang trí. Vì vậy:
+
+**Vì sao quan trọng?** Bạn không kiểm soát được việc một lớp có trượt hay không — chỉ kiểm soát được *có bao nhiêu lớp đỡ phía sau*. Bỏ 1 tầng không phải "tiết kiệm công" mà là mở toang một đường; secret lọt 6 tháng mới biết là kịch bản tốn kém nhất (revoke + xoá history + đổi key).
+
+**Nếu làm sai thì sao?** Bật lẻ tẻ (ví dụ chỉ secret scanning) rồi tin là an toàn: exclusion sai path vẫn để Copilot đọc `.env`, CodeQL không bắt logic sai, review người mệt bỏ qua, và không ai audit. Sự cố xảy ra thì không truy được "tầng nào trượt". Cách tránh: coi 5 tầng như một gói, mỗi tầng có người sở hữu, và mỗi incident phải trả lời được "tầng nào trượt + tầng nào đỡ".
 
 ```text
 Khong stack:  Copilot doc .env → goi y key vao code → push len GitHub → lo 6 thang moi biet
@@ -63,7 +78,7 @@ Co stack:    T1 chan .env khoi index → truot? T2 push protection chan push →
 
 ## 2. Bản đồ 5 tầng (nhìn 1 phút hiểu hết)
 
-*Section này trả lời: 5 tầng là gì, mỗi tầng chặn thứ gì, nằm ở đâu trong GitHub, ai sở hữu. Đọc bảng dưới là đủ hình dung trước khi đi chi tiết.*
+5 tầng là gì, mỗi tầng chặn thứ gì, nằm ở đâu trong GitHub, ai sở hữu. Đọc bảng dưới là đủ hình dung trước khi đi chi tiết.
 
 | Tầng | Hiểu nôm na | Ví dụ | Chặn gì | Ở đâu | Ai sở hữu |
 |---|---|---|---|---|---|
@@ -123,7 +138,7 @@ Giải thích từng bước (kèm ví dụ tấn công mỗi lớp chặn đư�
 
 ## 3. Tầng 1 — Exclusion + duplication detection (copy-paste)
 
-*Section này trả lời: file nào Copilot không được đọc, và làm sao biết chắc nó không đọc. Dev tự verify được, admin dùng checklist.*
+File nào Copilot không được đọc, và làm sao biết chắc nó không đọc. Dev tự verify được, admin dùng checklist.
 
 ### 3.1. Content exclusion: Copilot không được thấy gì
 
@@ -188,7 +203,7 @@ khớp public code). Muốn mở thì đổi ở phần **Privacy** của Org Se
 
 ## 4. Tầng 2 — Secret scanning + push protection
 
-*Section này trả lời: bật 2 công tắc nào cho admin, và khi bị chặn thì dev xử lý ra sao — không bypass.*
+Bật 2 công tắc nào cho admin, và khi bị chặn thì dev xử lý ra sao — không bypass.
 
 ### 4.1. Bật 2 công tắc (admin, 5 phút)
 
@@ -229,7 +244,7 @@ echo "pre-commit secrets: sach"
 
 ## 5. Tầng 3 — Code scanning + CodeQL
 
-*Section này trả lời: bật CodeQL kiểu nào cho hiệu quả/giờ cao nhất, và xử lý alert ra sao cho đúng — fix gốc chứ không suppress cho qua.*
+Bật CodeQL kiểu nào cho hiệu quả/giờ cao nhất, và xử lý alert ra sao cho đúng — fix gốc chứ không suppress cho qua.
 
 ### 5.1. Bật CodeQL default setup (5 phút, hiệu quả/giờ cao nhất)
 
@@ -271,7 +286,7 @@ npm run lint && npm run typecheck 2>/dev/null || npx tsc --noEmit
 
 ## 6. Tầng 4 — Copilot code review gate
 
-*Section này trả lời: gắn 2 lớp review (máy + người) vào PR kiểu nào, và review tốn bao nhiêu AI Credits để admin budget được.*
+Gắn 2 lớp review (máy + người) vào PR kiểu nào, và review tốn bao nhiêu AI Credits để admin budget được.
 
 ### 6.1. Gắn review vào PR (2 lớp: máy + người)
 
@@ -331,7 +346,7 @@ git diff --stat main...HEAD
 
 ## 7. Tầng 5 — Policy + audit (khóa cửa)
 
-*Section này trả lời: admin chốt luật ở đâu, truy vết bằng cách nào, và tầng 5 có "sống" theo định kỳ không. Dev đọc để hiểu vì sao bị chặn; admin đọc để làm theo.*
+Admin chốt luật ở đâu, truy vết bằng cách nào, và tầng 5 có "sống" theo định kỳ không. Dev đọc để hiểu vì sao bị chặn; admin đọc để làm theo.
 
 ### 7.1. Policy checklist (admin, rà hàng quý)
 
@@ -438,7 +453,7 @@ JetBrains IDEs. Chi tiết bảng key ở bài 07 mục 4.3.
 
 ## 8. Walkthrough end-to-end (20 phút)
 
-*Section này trả lời: kiểm chứng cả 5 tầng trong 20 phút, theo đúng thứ tự từ verify local đến audit log. Làm hết là bạn có evidence viết vào báo cáo.*
+Kiểm chứng cả 5 tầng trong 20 phút, theo đúng thứ tự từ verify local đến audit log. Làm hết là bạn có evidence viết vào báo cáo.
 
 **Phút 0–5 (tầng 1 — verify exclusion sống):**
 
@@ -479,7 +494,7 @@ git reset HEAD fake-test.env; rm fake-test.env /tmp/fake.env
 
 ## 9. Pitfalls + fix
 
-*Section này trả lời: 10 sai lầm làm 5 tầng thành trang trí, và cách sửa ngay.*
+10 sai lầm làm 5 tầng thành trang trí, và cách sửa ngay.
 
 | Pitfall | Vì sao | Fix |
 |---|---|---|
@@ -494,11 +509,62 @@ git reset HEAD fake-test.env; rm fake-test.env /tmp/fake.env
 | Tưởng audit log chứa prompt | Điều tra mất buổi vì dữ liệu không nằm ở đó | Prompt phải tự gắn hook log riêng; audit giữ 180 ngày (mục 7.2) |
 | Firewall chặn thiếu domain Copilot | Copilot kẹt giữa chừng, dev tự mở toang firewall | Dùng network allowlist chuẩn (mục 7.3), không mở wildcard |
 
+### Ba pitfall nhìn là nhớ (❌ SAI / ✅ ĐÚNG)
+
+**1. Bypass push protection cho xong việc**
+
+```text
+❌ SAI: Push bị chặn → bấm "bypass" để push tiếp cho kịp deadline
+✅ ĐÚNG: Đọc thông báo (loại secret/file/dòng), chuyển key sang env rồi push lại (mục 4.2)
+```
+**Bài học:** bypass chỉ dời sự cố sang tương lai, lúc đó phải revoke key + xoá history — tốn gấp 10 lần.
+
+**2. Dismiss CodeQL/secret alert không lý do**
+
+```text
+❌ SAI: Alert nhiều quá → dismiss hàng loạt cho sạch tab
+✅ ĐÚNG: Chỉ dismiss khi chứng minh false positive + ghi lý do + reviewer đồng ý; còn lại fix gốc
+```
+**Bài học:** audit log ghi lại ai dismiss. Dismiss bừa là lỗ hổng sống trong main và là "red flag" khi rà quý.
+
+**3. Tin Copilot review 100%**
+
+```text
+❌ SAI: Bot review PASS → merge luôn, không đọc từng comment
+✅ ĐÚNG: Coi Copilot như junior: đọc từng comment, đúng thì sửa, sai thì ghi lý do bác (mẫu 6.2)
+```
+**Bài học:** Copilot review đúng khoảng 70%, bịa khoảng 30%. Người reviewer mới là người quyết định cuối.
+
 ---
 
-## 10. Bài tập
+## So sánh với Claude Code
 
-*Section này trả lời: làm 3 bài dưới đây để có evidence rằng 5 tầng đang chạy thật, không chỉ nằm trên giấy.*
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Content exclusion | Có (Business/Enterprise), cấu hình ở org/repo | Không có content exclusion cấp org; giới hạn bằng quyền + ignore | Cùng ý "đừng để agent đọc secret", khác cơ chế |
+| Secret scanning + push protection | GitHub Advanced Security (chặn lúc push) | Không phải phần của Claude Code; dùng pre-commit hook + CI | Cùng tư tưởng: chặn key trước khi lên repo |
+| Code scanning (CodeQL) | GitHub CodeQL chạy trong PR checks | Không có tương đương trực tiếp; dùng SAST riêng trong CI | CodeQL gắn sẵn vào GitHub, lợi thế của hệ GitHub |
+| Review gate | Copilot code review + required reviewers/checks | Bạn tự review hoặc dựng CI riêng | Cả hai: người vẫn là mắt cuối |
+| Policy as code | `managed-settings.json` (deny > ask > allow) + audit log | `.claude/settings.json` (permissions) — cùng tư tưởng policy as code | Khác tên file, cùng nguyên tắc "admin siết ở 1 nơi" |
+
+> Copilot mạnh ở chỗ có sẵn hệ sinh thái GitHub (Advanced Security + CodeQL + audit log) nên 5 tầng gắn liền nhau. Claude Code không có tầng tương đương trực tiếp cho content exclusion/CodeQL — bạn phải tự dựng bằng quyền, hook và CI. Nếu đổi công cụ, phần "bảo mật hệ thống" là phần phải mapping lại nhiều nhất.
+
+---
+
+## Best practices (kèm "vì sao")
+
+- **Coi 5 tầng là một gói, đừng bật lẻ.** *Vì sao?* Mỗi lớp đều bị xuyên được; chỉ có lớp sau đỡ lớp trước.
+- **Mỗi incident phải trả lời "tầng nào trượt + tầng nào đỡ".** *Vì sao?* Không chỉ ra được tầng yếu thì lần sau lại trượt đúng chỗ đó.
+- **Verify từng tầng bằng hành động, không bằng niềm tin.** *Vì sao?* Exclusion "cấu hình rồi" vẫn có thể sai path; chỉ câu hỏi `@workspace` + push fake key mới chứng minh nó sống.
+- **Không bao giờ bypass push protection.** *Vì sao?* Revoke key + xoá history tốn gấp 10 lần so với chuyển key sang env rồi push lại.
+- **Dismiss alert phải kèm lý do + reviewer đồng ý.** *Vì sao?* Dismiss bừa để lại lỗ hổng sống trong main và hiện tên trên audit log.
+- **Đối chiếu Copilot review, đừng tin 100%.** *Vì sao?* Bot đúng ~70%, bịa ~30% — merge theo bot là cách phổ biến nhất để lọt bug tưởng đã review.
+- **Repo mới: bật đủ 5 tầng trước commit đầu.** *Vì sao?* Hở từ ngày đầu thì mọi commit sau đều nằm trên nền không an toàn.
+- **Rà quý 30 phút + vòng 15 phút/tuần.** *Vì sao?* Exclusion drift và dismiss bừa tích dần; phát hiện sớm rẻ hơn xử lý sự cố.
+
+---
+
+## 10. Bài tập nhỏ
 
 **Bài 1 (15 phút — tầng 1+2):**
 
@@ -525,8 +591,6 @@ git reset HEAD fake-test.env; rm fake-test.env /tmp/fake.env
 
 ## 11. Link chéo
 
-*Section này trả lời: bài nào trong series đi sâu vào từng tầng của bài này.*
-
 - **Bài 03 — Instructions/Memory/Rules**: quy ước secrets (`chỉ đọc env`) viết vào
   instructions để Copilot không bao giờ hardcode key.
 - **Bài 07 — Policies/guardrails**: content exclusion cấu hình chi tiết + ai được đổi;
@@ -539,3 +603,5 @@ git reset HEAD fake-test.env; rm fake-test.env /tmp/fake.env
 - **Bài 13 — Indexing & Telemetry**: exclusion ảnh hưởng index; dashboard theo dõi blocks.
 - **Bài 14 — Models**: model allowlist là 1 phần policy tầng 5.
 - **Bài 16 — Extensions/MCP validate**: tools ngoài có tuân thủ 5 tầng không?
+
+> **Chốt bài 15:** không có tầng nào đủ mạnh để tin một mình — 5 tầng chỉ đáng giá khi mỗi tầng có người sở hữu, được verify bằng hành động thật, và mỗi sự cố đều trả lời được "tầng nào trượt, tầng nào đỡ".

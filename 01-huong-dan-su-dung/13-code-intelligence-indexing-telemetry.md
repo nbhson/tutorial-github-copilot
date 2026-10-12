@@ -5,6 +5,14 @@
 > **Đọc xong:** bật được codebase indexing (Business/Enterprise), dùng `@workspace` + semantic search đúng cách, nối knowledge base, hiểu synergy LSP + Copilot, và đọc được audit log + usage dashboard.
 > **Thời gian:** ~45 phút.
 
+## Mục tiêu bài học
+
+- Giải thích được vì sao index và telemetry là hai lớp giải quyết hai vấn đề khác nhau, không phải một.
+- Dùng `@workspace` + semantic search để hỏi cả repo mà không bị trả lời chung chung.
+- Bật và cấu hình codebase indexing (Business/Enterprise), gồm cả content exclusion trước khi bật.
+- Biết khi nào cần knowledge base và vì sao LSP là lớp kiểm chứng bắt buộc cho retrieve.
+- Đọc được audit log + usage dashboard và biến số liệu thành đúng 1 hành động mỗi tuần.
+
 ## Mục lục
 
 1. [Giới ngố 9 khái niệm (2 phút)](#0-giới-ngố-9-khái-niệm-2-phút)
@@ -17,14 +25,14 @@
 8. [Audit logs + usage dashboards](#7-audit-logs--usage-dashboards)
 9. [Walkthrough end-to-end (20 phút)](#8-walkthrough-end-to-end-20-phút)
 10. [Pitfalls + fix](#9-pitfalls--fix)
-11. [Bài tập](#10-bài-tập)
+11. [Bài tập nhỏ](#10-bài-tập-nhỏ)
 12. [Link chéo](#11-link-chéo)
 
 ---
 
 ## 0. Giới ngố 9 khái niệm (2 phút)
 
-Mỗi khái niệm đủ 3 lớp: **1 câu định nghĩa**, **so sánh đời thường**, **ví dụ kỹ thuật thật** — kèm cột Verify để bạn tự kiểm chứng thay vì tin lời.
+Chín khái niệm bạn sẽ gặp xuyên suốt bài. Mỗi khái niệm đủ 3 lớp — **1 câu định nghĩa**, **so sánh đời thường**, **ví dụ kỹ thuật thật** — kèm cột Verify để bạn tự kiểm chứng thay vì tin lời.
 
 | Khái niệm | 1 câu định nghĩa | So sánh nôm na | Ví dụ kỹ thuật thật | Verify |
 |---|---|---|---|---|
@@ -38,11 +46,15 @@ Mỗi khái niệm đủ 3 lớp: **1 câu định nghĩa**, **so sánh đời t
 | **Content exclusion** | Danh sách path bị cấm khỏi index — Copilot không thấy, không retrieve. | Dán băng đen lên camera: máy quay không ghi chỗ đó. | Admin đặt `**/.env*`, `**/secrets/**` trên github.com (mục 3.3). | Hỏi `@workspace` chuỗi trong `.env` → phải trả "excluded". |
 | **OpenTelemetry export** | Tiêu chuẩn bắn số liệu (logs/metrics) ra hệ giám sát riêng. | Camera gửi phim về đầu ghi của khách, không để trong thẻ nhớ máy. | `managed-settings.json` → `telemetry.endpoint` (OTLP), `protocol`, `captureContent` (mục 7.4). | Admin trỏ endpoint của mình → thấy dòng telemetry đến. |
 
+**Vì sao quan trọng?** Bạn không cần thuộc hết chín thứ này, nhưng nếu lẫn "index" với "knowledge base", hoặc tưởng "telemetry" là "audit log", bạn sẽ đi tìm dữ liệu sai chỗ và kết luận sai về team mình.
+
+**Nếu làm sai thì sao?** Ví dụ: bật indexing trước khi cấu hình content exclusion → `.env` và private keys lọt vào index (mục 3.3). Hoặc đọc dashboard nhưng không action → metrics chỉ là bộ sưu tập, credits vẫn cháy.
+
 ---
 
 ## 1. Vì sao index + telemetry? (why)
 
-> **Câu hỏi then chốt:** vì sao phải bật index và đọc telemetry, thay vì để hai thứ chạy tự nhiên rồi chịu kết quả?
+Câu hỏi then chốt: **vì sao phải bật index và đọc telemetry, thay vì để hai thứ chạy tự nhiên rồi chịu kết quả?**
 
 Không index, Copilot chỉ đọc 2–3 file bạn đang mở. Hỏi "auth flow chạy qua mấy lớp?" nó đoán thiếu domain/db layer. Hệ quả: bạn phải paste file từng cái vào chat, context phình, trả lời vẫn thiếu.
 
@@ -62,6 +74,10 @@ Có telemetry:    dashboard: agent mode × model mạnh = 70% AI Credits → bi�
 ```
 
 > **Quy tắc:** repo > 50 files mà chưa bật indexing là tự handicap. AI Credits hết mà chưa nhìn dashboard là đoán mò.
+
+**Vì sao quan trọng?** Index quyết định *chất lượng câu trả lời*, telemetry quyết định *ai đang tiêu tiền*. Bỏ một trong hai là bạn hoặc trả lời sai, hoặc trả tiền mù.
+
+**Nếu làm sai thì sao?** Coi nhẹ index → cứ tưởng model "dở", nhưng thật ra bạn chưa cho nó thấy repo. Coi nhẹ telemetry → biết credits hết chỉ khi nhận hóa đơn, lúc đó không còn kịp gate model.
 
 ### 1.1. Sơ đồ `@workspace` retrieve
 
@@ -94,7 +110,7 @@ sequenceDiagram
 
 ## 2. `@workspace` hoạt động thế nào
 
-> **Câu hỏi:** `@workspace` lấy dữ liệu từ đâu, khi nào nó thắng `#file`, và giới hạn bạn phải chấp nhận?
+Câu hỏi: `@workspace` lấy dữ liệu từ đâu, khi nào nó thắng `#file`, và giới hạn bạn phải chấp nhận?
 
 **1 câu định nghĩa:** `@workspace` là chat participant đại diện cho cả repo — bạn gõ `@workspace <câu hỏi>`, Copilot KHÔNG đọc toàn bộ repo mà retrieve top chunks liên quan từ index (embeddings + keyword hybrid), rồi đưa vào context trả lời.
 
@@ -148,7 +164,7 @@ sequenceDiagram
 
 ## 3. Bật codebase indexing Business/Enterprise (copy-paste)
 
-> **Câu hỏi:** bật index ở đâu, cấu hình gì TRƯỚC khi bật, và verify exclusion có thật sự hiệu lực? Mục 3.2–3.3 cho admin/org owner; mục 3.4 dev tự làm trên máy.
+Câu hỏi: bật index ở đâu, cấu hình gì TRƯỚC khi bật, và verify exclusion có thật sự hiệu lực? Mục 3.2–3.3 cho admin/org owner; mục 3.4 dev tự làm trên máy.
 
 ### 3.1. Kiểm tra plan + trạng thái index
 
@@ -209,7 +225,7 @@ git check-ignore -v dist/bundle.js node_modules/.package-lock.json
 
 ## 4. Semantic search: hỏi cả repo đúng cách
 
-> **Câu hỏi:** hỏi `@workspace` thế nào để trả lời đúng ngay lần đầu, và debug ở đâu khi nó trả lời sai?
+Câu hỏi: hỏi `@workspace` thế nào để trả lời đúng ngay lần đầu, và debug ở đâu khi nó trả lời sai?
 
 ### 4.1. Công thức hỏi (4 mẫu copy-paste)
 
@@ -268,7 +284,7 @@ git log --oneline -3
 
 ## 5. Knowledge bases: ký ức team dùng chung
 
-> **Câu hỏi:** khi nào cần một tủ docs riêng cho Copilot trích, và tạo/triển khai theo thứ tự nào? Dành cho admin Enterprise.
+Câu hỏi: khi nào cần một tủ docs riêng cho Copilot trích, và tạo/triển khai theo thứ tự nào? Dành cho admin Enterprise.
 
 **1 câu định nghĩa:** knowledge base (Enterprise) là tập docs ngoài code (markdown, wiki, ADRs, runbooks) được index riêng — Copilot retrieve khi bạn hỏi. Code trả lời "làm gì", knowledge base trả lời "vì sao làm thế".
 
@@ -301,7 +317,7 @@ những quy ước nào (error format, logging, auth)? Liệt kê checklist.
 
 ## 6. LSP + Copilot synergy
 
-> **Câu hỏi:** vì sao bật Language Server song song với Copilot lại cho kết quả chính xác hơn, và workflow 5 bước trông ra sao?
+Câu hỏi: vì sao bật Language Server song song với Copilot lại cho kết quả chính xác hơn, và workflow 5 bước trông ra sao?
 
 **1 câu định nghĩa:** Copilot completions + chat đọc text; Language Server (LSP) hiểu types/symbols. Bật cả hai = Copilot gợi ý khớp type, `@workspace` jump chính xác.
 
@@ -342,7 +358,7 @@ type signature tại đó (dùng hover/LSP info). Chỗ nào truyền sai type?"
 
 ## 7. Audit logs + usage dashboards
 
-> **Câu hỏi:** đọc dữ liệu nào để biết ai làm gì (audit log) và AI Credits đi đâu (dashboard), rồi biến thành hành động hằng tuần? Dành cho admin/org owner + tech lead.
+Câu hỏi: đọc dữ liệu nào để biết ai làm gì (audit log) và AI Credits đi đâu (dashboard), rồi biến thành hành động hằng tuần? Dành cho admin/org owner + tech lead.
 
 ### 7.1. Audit logs: ai làm gì (admin)
 
@@ -390,7 +406,7 @@ gh api /orgs/<ORG>/audit-log --paginate -f per_page=100 \
 
 ### 7.4. Telemetry/OpenTelemetry + budget controls (admin/org owner)
 
-> **Câu hỏi:** ngoài dashboard sẵn có, số liệu còn gửi về hệ thống giám sát của bạn bằng cách nào, và chặn chi phí vượt kế hoạch bằng công tắc nào?
+Câu hỏi: ngoài dashboard sẵn có, số liệu còn gửi về hệ thống giám sát của bạn bằng cách nào, và chặn chi phí vượt kế hoạch bằng công tắc nào?
 
 **a) Giới hạn của audit log (biết trước để khỏi kỳ vọng sai):**
 
@@ -442,7 +458,7 @@ gh api /orgs/<ORG>/audit-log --paginate -f per_page=100 \
 
 ## 8. Walkthrough end-to-end (20 phút)
 
-> **Câu hỏi:** thứ tự 20 phút nào biến mọi lý thuyết ở trên thành kết quả thật trên repo của bạn?
+Câu hỏi: thứ tự 20 phút nào biến mọi lý thuyết ở trên thành kết quả thật trên repo của bạn?
 
 **Phút 0–5 (verify index):**
 
@@ -482,7 +498,7 @@ code --list-extensions | grep -i -E "pylance|go|rust-analyzer"
 
 ## 9. Pitfalls + fix
 
-> **Câu hỏi:** 7 lỗi hay gặp nhất khi dùng index + telemetry, và fix từng cái bằng gì?
+Câu hỏi: 7 lỗi hay gặp nhất khi dùng index + telemetry, và fix từng cái bằng gì?
 
 | Pitfall | Vì sao | Fix |
 |---|---|---|
@@ -494,11 +510,61 @@ code --list-extensions | grep -i -E "pylance|go|rust-analyzer"
 | Tin `@workspace` thay LSP verify | Retrieve sai file, sửa nhầm chỗ | F12/LSP jump + Problems panel verify trước khi sửa |
 | Dashboard đẹp không action | AI Credits vẫn hết, ngốn vẫn ngốn | Mỗi tuần fix top 1 ngốn (mục 7.3) |
 
+## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)
+
+**1. Hỏi `@workspace` ngay sau khi push**
+
+```text
+❌ SAI: vừa git push xong đã hỏi "@workspace hàm mới của tôi nằm đâu?" → "không thấy"
+✅ ĐÚNG: chờ ~5 phút cho index, hoặc hỏi thẳng "#file src/new-file.ts"
+```
+**Bài học:** index là ảnh chụp có độ trễ — code mới nhất phải đưa vào bằng `#file`, đừng kết luận "Copilot dở".
+
+**2. Tin `@workspace` mà bỏ qua LSP**
+
+```text
+❌ SAI: retrieve ra 1 file → sửa luôn theo lời Copilot
+✅ ĐÚNG: F12 jump tới định nghĩa thật + xem Problems panel trước khi sửa
+```
+**Bài học:** retrieve có thể trả file *gần đúng*; chỉ LSP mới xác nhận đúng symbol/type — hai lớp này bù nhau.
+
+**3. Dashboard đẹp mà không hành động**
+
+```text
+❌ SAI: mở usage dashboard, gật gù "à model X ngốn", rồi đóng tab
+✅ ĐÚNG: mỗi tuần fix đúng 1 cái (gate model / hẹp scope / training) + đo lại sau 1 tuần
+```
+**Bài học:** metrics không kèm action chỉ là bộ sưu tập số — credits vẫn cháy như cũ.
+
+## Best practices (kèm "vì sao")
+
+- **Repo > 50 files thì bật indexing trước khi phàn nàn `@workspace`.** *Vì sao?* Không có index, Copilot chỉ thấy vài file đang mở — câu trả lời thiếu là hệ quả tất yếu, không phải model dở.
+- **Cấu hình content exclusion TRƯỚC khi bật index.** *Vì sao?* Index là ảnh chụp; để `.env`/private key lọt vào rồi mới nghĩ tới exclusion là đã quá muộn.
+- **Mỗi câu hỏi chỉ 1 flow, kèm scope đường dẫn.** *Vì sao?* Retrieve chỉ lấy top-K chunks — hỏi "giải thích cả repo" là tự ép nó trả lời thiếu.
+- **Luôn verify retrieve bằng LSP (F12 + Problems panel).** *Vì sao?* Copilot đọc text, LSP hiểu type — dùng cả hai thì không sửa nhầm chỗ.
+- **Viết docs trước khi tạo knowledge base.** *Vì sao?* Base rỗng thì retrieve ra chung chung; docs (ADR, runbook) chính là "ký ức" cần nạp.
+- **Mỗi tuần fix đúng 1 mục từ dashboard.** *Vì sao?* Đây là vòng lặp 15 phút duy nhất biến số liệu thành hành động — làm ít mà đều thì credits mới giảm thật.
+- **Chỉ mở package đang làm trong monorepo.** *Vì sao?* Mở cả root làm retrieve nhiễu và context phình, khiến index local cũng chậm hơn ~10x.
+
+## So sánh với Claude Code
+
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Hiểu cả repo | Codebase indexing (Business/Enterprise) + `@workspace` | Agentic search (grep/glob toàn repo khi cần) | Copilot dựa vào index dựng sẵn; Claude Code dò file theo yêu cầu, không cần index cấp org |
+| Docs ngoài code (knowledge base) | Enterprise knowledge bases | **Không có tương đương trực tiếp** — docs để trong repo, đọc qua `CLAUDE.md`/`.claude/` | Copilot có base riêng gán theo repo; Claude Code dựa vào file trong repo |
+| Content exclusion cấp org | Cấu hình server-side trên github.com | Không có tương đương cấp org; giới hạn qua quyền/ignore trong repo | Copilot chặn *trước khi index*; Claude Code chặn ở phía truy cập |
+| Semantic search | Index vector + keyword hybrid | Tìm kiếm agentic theo ngữ cảnh, không có index hybrid cấp org | Cùng mục tiêu: tìm theo ý nghĩa, khác cơ chế |
+| LSP tích hợp | VS Code/LSP: F12, F2, Problems panel | IDE extension có diagnostics; CLI dựa vào chạy tool trong terminal | Cả hai đều nên dùng LSP làm lớp kiểm chứng |
+| Audit log / usage dashboard | GitHub org/enterprise audit log + usage | Anthropic Console: usage/analytics + audit log (Enterprise) — *cần verify* | Cùng nhu cầu "ai làm gì / tiền đi đâu"; tên màn hình khác |
+| OpenTelemetry export | `managed-settings.json` → `telemetry.endpoint` | Claude Code có hỗ trợ OpenTelemetry — *cần verify* | Cả hai hướng tới đưa số liệu về hệ giám sát riêng |
+
+> Đọc bảng này thế nào: phần **index + knowledge base + exclusion cấp org** là nơi Copilot (Business/Enterprise) có cấu hình quản trị rõ ràng hơn; Claude Code mạnh ở việc *dò file theo yêu cầu* mà không cần dựng index trước. Với LSP và telemetry, cả hai đều coi đây là lớp kiểm chứng / quan sát, không phải nguồn chân lý.
+
 ---
 
-## 10. Bài tập
+## 10. Bài tập nhỏ
 
-> **Câu hỏi:** làm 3 bài nào để tự mình thấy index + LSP + telemetry hiệu quả, thay vì chỉ tin lời bài viết?
+Câu hỏi: làm 3 bài nào để tự mình thấy index + LSP + telemetry hiệu quả, thay vì chỉ tin lời bài viết?
 
 **Bài 1 (20 phút — `@workspace` + scope):**
 
@@ -534,3 +600,5 @@ code --list-extensions | grep -i -E "pylance|go|rust-analyzer"
 | Model nào ngốn AI Credits trên dashboard → gate lại | [14 — Models](./14-models-chon-model-dung.md) |
 | Exclusion là tầng 1, secret scanning là tầng 2 | [15 — Security 5 tầng](./15-security-stack-5-tang.md) |
 | Tools retrieve thêm có đáng tin không (validate) | [16 — Extensions/MCP validate](./16-extensions-mcp-bao-mat-validate.md) |
+
+> **Chốt bài 13:** index cho Copilot cái mục lục của repo, telemetry cho bạn cái hóa đơn của team — và cả hai đều vô dụng nếu bạn không verify bằng LSP rồi biến số liệu thành đúng một hành động mỗi tuần.

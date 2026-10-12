@@ -1,63 +1,94 @@
 # gh copilot suggest — Gợi ý lệnh CLI trong terminal
 
-> **Dành cho:** dev quên cú pháp git/docker/gh/kubectl · **Vấn đề:** muốn lệnh 1 dòng mà gõ nhớ sai flag thì nguy hiểm · **Đọc xong:** ra lệnh + giải thích flag, chạy dry-run trước (~2 phút)
+> **Dành cho:** dev quên cú pháp git/docker/gh/kubectl · **Vấn đề:** muốn lệnh 1 dòng mà nhớ sai flag thì nguy hiểm · **Đọc xong:** ra lệnh + giải thích flag, chạy dry-run trước (~2 phút)
 
-## Lệnh làm gì (1 câu nôm na)
+## 1 câu nôm na
 
-Nôm na: hỏi đường cho dân terminal — “đi tới đó thì gõ gì?”. `gh copilot suggest “...”` trả 1–2 lệnh kèm giải thích; chưa cài thì chạy `gh extension install github/gh-copilot`.
+`gh copilot suggest` giống như hỏi đường ngay trong terminal — "muốn làm việc này thì gõ lệnh gì?". Bạn mô tả bằng lời, nó trả về 1–2 lệnh cụ thể kèm giải thích flag. Nếu máy chưa có thì cài bằng `gh extension install github/gh-copilot`.
 
-## Khi nào dùng
+> Phân biệt rõ: `gh copilot` là **gh extension** (chỉ gợi ý/giải thích lệnh shell), **không phải** `copilot` — CLI agent riêng chạy task cả đoạn trong terminal. Hai thứ khác nhau, đừng lẫn.
 
-Section này trả lời: khi nào hỏi terminal, và quy tắc “hiểu flag rồi mới chạy”.
+## Vì sao dùng gh copilot suggest?
 
-- **Cho ai:** người sống trong terminal, người học lệnh mới.
-- Quên cú pháp git/docker/gh/kubectl.
-- Muốn lệnh 1 dòng làm việc lạ.
-- Học lệnh mới an toàn (hiểu rồi mới chạy).
+Vì cú pháp git/docker/gh/kubectl rất dễ nhớ nhầm flag — mà sai flag thì nguy hiểm thật (xóa nhầm, force nhầm). Hỏi trước rồi mới chạy, bạn vừa có lệnh đúng vừa hiểu từng flag nghĩa gì, thay vì copy từ mạng về chạy mù.
+
+**Nếu làm sai thì sao?** Cái bẫy lớn nhất là tin 100% rồi chạy thẳng, đặc biệt với lệnh có tính phá hủy (`rm`, `--force`, `reset --hard`). Gợi ý sai OS cũng hay gặp: lệnh Linux đưa cho Mac/Windows. Nên luôn hiểu từng flag + dry-run trước.
+
+## Khi nào dùng / khi nào đừng
+
+- **Dùng khi:** quên cú pháp git/docker/gh/kubectl; cần lệnh một dòng làm việc lạ; muốn học lệnh mới an toàn (hiểu rồi mới chạy).
+- **Cho ai:** người sống trong terminal, người đang học lệnh mới.
+- **ĐỪNG dùng khi:** bạn cần agent sửa code/đọc repo — đó là việc của `copilot` (CLI agent) hoặc Agent mode trong IDE, không phải `gh copilot`.
 
 ## Cách gọi (copy-paste)
 
-Cách gọi `gh copilot suggest` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:
-
 ```bash
+# Cài nếu chưa có:
+gh extension install github/gh-copilot
+
 gh copilot suggest "tìm file >100MB trong git history"
 # Kỳ vọng: 1–2 lệnh cụ thể + giải thích flag
 # Verify: chạy lệnh được gợi ý ở chế độ an toàn (--dry-run) thành công
 # Lưu ý: gh copilot ≠ copilot (gh copilot là extension CLI, không phải lệnh copilot riêng)
 ```
 
-> Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `gh copilot suggest`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
+> Không thấy `gh copilot` thì kiểm tra bằng `gh extension list` trước khi kết luận là bug.
 
-## Ví dụ prompt thật + kết quả mong đợi
+## Ví dụ thật
 
-Prompt mẫu cho `gh copilot suggest` — đổi phần tên file/task cho đúng việc của bạn:
-
-**Prompt thật (copy-paste, nhớ gắn scope trước):**
+Nghiệp vụ: dọn dẹp máy — xóa các branch local đã merge vào main nhưng quên đúng cú pháp.
 
 ```bash
 gh copilot suggest “xóa branch đã merge trừ main/develop”
+# Đọc lệnh + giải thích flag → chạy thử bản an toàn trước:
+#   git branch --merged | grep -v ... | xargs git branch -d   # -d (không -D) để không xóa branch chưa merge
 ```
 
-**Kết quả mong đợi:** Được 1–2 lệnh cụ thể + giải thích flag; chạy thử với --dry-run trước.
+**Kết quả mong đợi:** Được 1–2 lệnh cụ thể kèm giải thích flag; bạn chạy thử bản an toàn (ví dụ `-d` thay `-D`, hoặc `--dry-run`) trước.
 
-**Cách verify:** Chạy lệnh được gợi ý (chế độ an toàn) thành công là đạt.
+**✅ Verify:** Chạy lệnh được gợi ý ở chế độ an toàn thành công là đạt. Không chắc thì hỏi lại flag trước khi chạy bản thật.
+
+## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)
+
+❌ SAI: copy lệnh gợi ý rồi Enter thẳng, nhất là lệnh có `rm -rf`, `--force`, `reset --hard`.
+
+✅ ĐÚNG: đọc giải thích từng flag + chạy bản dry-run/an toàn trước (`git branch -d` thay `-D`, thêm `--dry-run`), xác nhận đúng mới chạy thật.
+
+**Bài học:** `gh copilot suggest` cho bạn lệnh, không cho bạn sự an toàn. Cái an toàn do bạn đọc flag và dry-run mà có.
 
 ## Lỗi thường gặp
 
-Ba triệu chứng hay gặp nhất với lệnh này — kèm nhanh cách xử lý:
-
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
-| Chạy luôn lệnh nguy hiểm | Tin 100% | Hiểu từng flag + dry-run trước; cấm rm -rf/force mù |
-| gh copilot not found | Chưa cài extension | gh extension install github/gh-copilot |
-| Gợi ý sai OS | Lệnh Linux trên Mac/Win | Nêu OS trong prompt |
+| Chạy thẳng lệnh nguy hiểm | Tin 100% | Hiểu từng flag + dry-run trước; cấm `rm -rf`/force mù |
+| `gh copilot: not found` | Chưa cài extension | `gh extension install github/gh-copilot` |
+| Gợi ý sai OS | Lệnh Linux trên Mac/Win | Nêu rõ OS trong prompt |
+
+## So sánh với Claude Code
+
+| Việc | Copilot (`gh copilot suggest`) | Claude Code | Ghi chú |
+|---|---|---|---|
+| Gợi ý lệnh shell | gh extension, gợi ý + giải thích flag | Là agent đầy đủ trong terminal, không phải công cụ tra lệnh | Khác mục đích: một cái tra lệnh, một cái làm việc |
+| Chạy lệnh | Bạn tự copy + chạy | Agent chạy trong terminal | Copilot tách "gợi ý" khỏi "chạy" → bạn kiểm soát hơn |
+| Kiểm chứng | Bạn chạy dry-run | Bạn review lệnh agent đề xuất | Cả hai: bạn vẫn là người chịu trách nhiệm |
+
+## Best practices (kèm "vì sao")
+
+- **Nêu rõ OS trong prompt.** *Vì sao?* Cú pháp Mac/Linux/Windows khác nhau; thiếu OS là nguồn lỗi số một.
+- **Đọc giải thích flag trước khi chạy.** *Vì sao?* Hiểu flag mới phát hiện được lệnh phá hủy trá hình.
+- **Chạy bản an toàn trước (`--dry-run`, `-d` thay `-D`).** *Vì sao?* Sai thì chỉ mất vài giây, không mất dữ liệu.
+- **Đừng lẫn `gh copilot` với `copilot`.** *Vì sao?* Cái này tra lệnh, cái kia là agent — gọi nhầm thì thấy "sao nó không sửa file".
+
+## Bài tập nhỏ
+
+1. **(5 phút)** Hỏi `gh copilot suggest` một lệnh git bạn hay quên, đọc giải thích flag, rồi chạy bản an toàn để xác nhận.
+2. **(10 phút)** Cố tình hỏi một lệnh phá hủy (`rm`, `--force`); tập thói quen dừng lại, giải thích từng flag rồi mới quyết định chạy.
 
 ## Tham khảo
 
-Liên quan — index nhóm, cheatsheet 1 trang và FAQ phòng khi kẹt:
-
-- Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh.
+- Index nhóm: [../README.md](../README.md).
 - Cheatsheet 1 trang: [../../../../CHEATSHEET.md](../../../../CHEATSHEET.md).
+- Phân biệt `gh copilot` vs `copilot`: [../../../../02-tips-thuc-chien/11-nang-cao-cli-web-coding-agent.md](../../../../02-tips-thuc-chien/11-nang-cao-cli-web-coding-agent.md).
 - Kẹt thì tra [FAQ troubleshooting](../../../../03-cau-hoi-thuong-gap/08-loi-thuong-gap-troubleshooting.md).
 
-> Mẹo 1 dòng: _gắn scope trước (`#file`/`@workspace`), review diff sau, đừng bao giờ Accept mù._
+> Chốt: `gh copilot suggest` giỏi nhất ở việc biến câu tiếng người thành lệnh shell — nhưng quyền quyết định bấm Enter vẫn nằm ở bạn, sau khi đã hiểu từng flag.

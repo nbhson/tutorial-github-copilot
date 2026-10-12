@@ -1,8 +1,14 @@
 # Cheatsheet GitHub Copilot (2026) — 1 trang (lệnh nào cũng có ví dụ mini)
 
-> Cách đọc: `lệnh` → ví dụ copy-paste ngay bên cạnh (sau `→`). Trong Chat, gõ `/` (slash), `@` (participant), `#` (biến) để xem list khả dụng ở máy bạn.
+> **Dành cho:** bạn đang giữa task và cần tra nhanh · **Tra xong:** biết gõ gì, ở đâu, và tốn bao nhiêu (~5 phút).
+
+Đừng đọc file này từ đầu. Nó là một bảng tra, không phải bài học: đang ở terminal thì nhảy xuống **CLI**, đang trong VS Code thì xem **VS Code Chat**, sắp giao việc lớn thì xem **Modes** và **Coding agent + Review**, lo tiền thì xem **AI Credits**. Mỗi dòng đều có ví dụ mini bên cạnh để copy-paste luôn, khỏi phải đoán cú pháp.
+
+> **Cách đọc:** `lệnh` → ví dụ copy-paste ngay bên cạnh (sau `→`). Trong Chat, gõ `/` (slash), `@` (participant), `#` (biến) để xem list khả dụng ở máy bạn.
 
 ## CLI (terminal)
+
+*Khi nào dùng:* bạn đang đứng ở terminal và muốn sinh/giải thích một lệnh shell, hoặc giao hẳn task cho CLI agent — không cần mở IDE.
 
 | Lệnh | Ví dụ mini |
 |---|---|
@@ -14,6 +20,8 @@
 > Lưu ý: có **2 CLI khác nhau** — `gh copilot` (suggest/explain shell) vs `copilot` (agent terminal, 3 chế độ). Đừng nhầm.
 
 ## VS Code Chat (hỏi + sửa)
+
+*Khi nào dùng:* bạn đang trong editor. Hỏi cho hiểu thì dùng mấy lệnh nhẹ (`/explain`, quick chat); muốn nó đụng vào code thì mới tới `/fix`, `/tests`, `Ctrl+I` — và luôn đọc diff trước khi Accept.
 
 | Phím tắt / lệnh | Ví dụ mini |
 |---|---|
@@ -34,6 +42,8 @@
 
 ## Modes (Ask → Edit → Agent leo thang)
 
+*Khi nào dùng:* chọn chế độ **trước** khi viết prompt — sai chế độ thì prompt hay cỡ nào cũng vô ích.
+
 > Quy tắc: việc nhỏ thì chế độ nhẹ. Chỉ leo lên chế độ mạnh khi chế độ dưới không kham nổi.
 
 | Mode | Ví dụ mini |
@@ -49,6 +59,8 @@
 | `/usage` xem quota | `/usage → xem AI Credits đã dùng; hết thì đổi model nhẹ chờ reset` |
 
 ## instructions / prompts / skills / MCP
+
+*Khi nào dùng:* khi bạn cần agent nhớ một quy ước, chạy một workflow lặp lại, hoặc nối tới hệ thống ngoài repo. Câu hỏi tự vấn: việc này có đúng **mọi chat** không? Có → `copilot-instructions.md`. Chỉ đúng **một thư mục** → `*.instructions.md`. Chỉ đúng **lúc cần** → prompt file/skill.
 
 | Cái gì | Ví dụ mini |
 |---|---|
@@ -67,14 +79,18 @@
 
 ## Coding agent + Review
 
+*Khi nào dùng:* khi bạn muốn việc chạy ngoài máy — assign issue để nó tự mở PR, hoặc bắt nó rà diff trước khi bạn merge.
+
 | Việc | Ví dụ mini |
 |---|---|
 | Giao issue cho agent | `trên GitHub: assign issue cho Copilot → nó tự tạo branch + PR → bạn review → merge` |
 | Review tự động | `mở PR → Copilot comment "thiếu test cho nhánh null" → sửa trước khi merge` |
 | `/review` trong Chat | `/review "check diff này về security + missing tests" → review trước khi đẩy` |
-| Policy là luật chặn cuối | `policy chặn `*.pem` → dù prompt bảo đọc, Copilot vẫn từ chối (xem FAQ 05)` |
+| Policy là luật chặn cuối | `policy` chặn `*.pem` → dù prompt bảo đọc, Copilot vẫn từ chối (xem FAQ 05) |
 
 ## AI Credits (tính tiền)
+
+*Khi nào dùng:* khi thấy hoá đơn tăng nhanh, hoặc trước khi giao một task agent dài — tra bảng này để biết chỗ nào tốn nhất.
 
 > Nôm na: mỗi lần gọi model = trả tiền theo token, quy ra "credit". 1 credit = $0.01. Code completion (gợi ý dòng tiếp) thì miễn phí.
 
@@ -85,6 +101,8 @@
 | Auto model selection | `mặc định, được giảm 10% credits (plan trả phí); 3 tier: Efficiency/Balance/Intelligence (14/09/2026)` |
 
 ## Model roster (10/2026 — verify với picker)
+
+*Khi nào dùng:* trước khi chọn model cho một task — model đổi liên tục nên đừng tin trí nhớ, mở picker đối chiếu.
 
 > Bảng này đổi theo thời gian. Khi dùng, mở model picker trong Chat để đối chiếu list hiện tại.
 
@@ -99,6 +117,8 @@
 
 ## Hooks in-process (preview, Local)
 
+*Khi nào dùng:* khi bạn muốn "chèn cửa kiểm tra" vào giữa vòng lặp agent — ví dụ chặn lệnh nguy hiểm trước khi nó chạy, hoặc tự format sau khi nó sửa file.
+
 > Nôm na: hooks = "cửa kiểm tra" chạy ngay trong quá trình agent làm việc (chạy local, chưa phải preview cho mọi bề mặt). Bạn gắn một script vào event `PreToolUse` (trước khi agent chạy tool) hoặc `PostToolUse` (sau khi chạy xong).
 
 | Lệnh / file | Ví dụ mini |
@@ -107,6 +127,48 @@
 | `/create-hook` | `"/create-hook chạy prettier sau mỗi lần agent sửa file" → sinh hook vào .github/hooks/` |
 | `/hooks` | `mở card Hooks trong Customizations hub — xem hook đang bật` |
 
+## 3 cạm bẫy hay gặp khi tra nhanh
+
+**1. Nhầm hai CLI với nhau**
+
+```text
+❌ SAI: gõ `copilot suggest "..."` rồi thắc mắc sao không có gợi ý shell
+✅ ĐÚNG: `gh copilot suggest` để sinh lệnh shell; `copilot -p "..."` để giao task cho CLI agent
+```
+**Bài học:** `gh copilot` và `copilot` là hai thứ khác nhau — nhìn tên gần giống nhưng một cái chỉ nói về shell, một cái là agent.
+
+**2. Dùng `*.prompt.md` cho Agent Host**
+
+```text
+❌ SAI: thêm prompt file mới rồi kỳ vọng nó chạy trên Agent Host
+✅ ĐÚNG: prompt file là legacy cho Agent Host → port sang Skill; repo cũ Local vẫn chạy được (FAQ 06)
+```
+**Bài học:** prompt file vẫn dùng tốt ở môi trường Local, nhưng đừng xây workflow mới dựa trên nó.
+
+**3. Hardcode token trong `mcp.json`**
+
+```text
+❌ SAI: dán thẳng token vào .vscode/mcp.json rồi commit
+✅ ĐÚNG: để token đi qua `${input}` / `${env}`, copy mẫu ở templates/README.md
+```
+**Bài học:** secrets trong file config là lỗi bảo mật kinh điển; nguyên tắc của repo là secrets chỉ đi qua biến.
+
+## So sánh với Claude Code
+
+> Nếu bạn quen Claude Code, phần lớn khái niệm chuyển sang Copilot gần như 1-1 — chỉ khác *tên file* và *nơi chạy*.
+
+| Việc | GitHub Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Cấu hình repo | `.github/copilot-instructions.md` + `AGENTS.md` | `CLAUDE.md` + `.claude/` | Cùng tư tưởng: file trong repo là "luật" |
+| Agent mode | Ask → Edit → Agent (leo thang) | Mặc định là agent | Claude Code agentic mặc định; Copilot leo thang từng bước |
+| Slash command tự tạo | Prompt files / Skills | `.claude/commands/` | Tương đương về ý tưởng |
+| MCP (tool ngoài) | `.vscode/mcp.json` | Có | Cùng chuẩn giao thức |
+| Chọn model | Đổi ngay trong Chat: GPT / Claude / Gemini | Gắn với model Anthropic (Claude) | Copilot cho chọn "bộ não"; Claude Code nhất quán 1 nhà |
+| Autocomplete | Có (điểm mạnh, miễn phí credits) | Không phải trọng tâm | Copilot mạnh ở gõ code từng dòng |
+| Kiểm chứng (verify) | Bạn là người chạy test | Bạn là người chạy test | **Không agent nào tự chịu trách nhiệm đúng/sai** |
+
 ## Tra cứu chi tiết
 
 Index 47 lệnh: [01-huong-dan-su-dung/commands/README.md](01-huong-dan-su-dung/commands/README.md) · Hỏi đáp: [03-cau-hoi-thuong-gap/README.md](03-cau-hoi-thuong-gap/README.md) · Mẫu copy-paste: [templates/README.md](templates/README.md)
+
+> **Chốt:** tra cheatsheet chỉ để bạn gõ đúng cú pháp — thắng hay thua vẫn nằm ở ba việc: chọn đúng chế độ cho đúng cỡ việc, giữ context sạch, và bắt Copilot chạy lệnh verify. Tra xong một dòng ở đây thì quay lại làm việc, đừng đọc hết trang rồi quên mất task.

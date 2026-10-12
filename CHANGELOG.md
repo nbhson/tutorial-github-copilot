@@ -1,5 +1,23 @@
 # Changelog — Khóa Học GitHub Copilot (tiếng Việt)
 
+## [Unreleased] — Viết lại toàn bộ tài liệu "hết robot" theo STYLE.md (2026-10-12)
+
+- **Chuẩn mới:** thêm [`STYLE.md`](./STYLE.md) — khuôn viết "dễ hiểu" (3 lớp: định nghĩa → nôm na → ví dụ; "Vì sao quan trọng?"; "Nếu làm sai thì sao?"; pitfall ❌ SAI/✅ ĐÚNG + "Bài học:"; best practices kèm "vì sao"; bảng so sánh Claude Code; bài tập nhỏ; câu chốt riêng từng file) + **danh sách câu cấm** (mùi văn template/robot). `CONTRIBUTING.md` trỏ về STYLE.md và mô tả format lệnh mới.
+- **Phạm vi:** viết lại **99 file `.md` nội dung** (toàn bộ trừ `templates/.github/**` — vốn là mẫu copy-paste, không phải bài giảng — và chính STYLE.md/CONTRIBUTING.md/CHANGELOG.md).
+- **Bỏ văn robot lặp giữa các file:** "Section này trả lời...", "làm đúng theo khối dưới đây", "Prompt mẫu cho `<X>` — ...", "Mẹo 1 dòng: _gắn scope trước ... Accept mù_" copy y hệt mọi file; gộp/khử khối minh họa bị nhân bản trùng trong FAQ. Thay bằng nội dung riêng từng file.
+- **Giữ nguyên nội dung:** sự thật 2026 (hooks in-process, prompt files deprecated → Agent Skills, AI Credits 1 credit = $0.01 + code completion free, model roster/deprecations 02/10/2026), mọi bảng dữ liệu, index/anchor/link và cấu trúc 5 phần của FAQ.
+- **Hai file vàng (mẫu chuẩn):**
+  - Bài học: `01-huong-dan-su-dung/00-tong-quan-copilot.md` — "Mục tiêu bài học", mục 1.4 "Copilot vs Claude Code", 9.3 pitfall ❌/✅, 9.4 best practices kèm "vì sao".
+  - Lệnh: `01-huong-dan-su-dung/commands/code-actions/fix/README.md`.
+- **Các đợt (wave):**
+  - Bài học: `01-huong-dan-su-dung/` bài 00–17 + `README.md` nhóm.
+  - Tips: `02-tips-thuc-chien/` 11 bài (01–11) + `README.md`.
+  - FAQ: `03-cau-hoi-thuong-gap/` 10 bài (01–10) + `README.md` (giữ cấu trúc 5 phần/câu hỏi).
+  - Lệnh: toàn bộ `01-huong-dan-su-dung/commands/**` (47 lệnh: chat-session 12, model-agent 10, code-actions 9, system-knowledge 15) + index nhóm + group README (chat-session/model-agent/code-actions/system-knowledge) + `commands/README.md`.
+  - Gốc: `README.md`, `CHEATSHEET.md`, `templates/README.md`.
+- **Bảng so sánh Claude Code:** mỗi khái niệm lớn/lệnh có bảng đối chiếu Claude Code dựa trên sự thật kiểm chứng được; chỗ không có tương đương thì ghi rõ (không bịa).
+- **Ghi chú:** toàn bộ thay đổi **chưa commit** (working tree).
+
 ## [Unreleased] — Rà soát dễ hiểu + bổ sung bảng so sánh (2026-10-11)
 
 - **Review toàn bộ file .md:** với mỗi chỗ 2+ lựa chọn đang mô tả bằng văn xuôi, bổ sung **bảng so sánh có cột "Khi nào dùng"**; với khái niệm then chốt còn thiếu, bổ sung **lớp "Nôm na" (so sánh đời thường)**. Thuần bổ sung — không xóa nội dung, không đổi tên heading, giữ nguyên mọi anchor link.

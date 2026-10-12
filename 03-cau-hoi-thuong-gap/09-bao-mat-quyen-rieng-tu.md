@@ -2,7 +2,15 @@
 
 > Nhóm Security & Privacy · 10 câu hỏi deep-dive · Đọc xong trả lời được "code có bị train không, secret lộ thì sao, audit ở đâu"
 
-File này trả lời mọi câu hỏi "training exclusion, duplication detection, secret scanning, audit logs, ZDR tương đương". Mỗi câu có giải thích + lệnh copy-paste + ví dụ + khi nào áp dụng.
+Bảo mật Copilot không phải một nút bật/tắt — nó là chuỗi quyết định: code có bị train không, gợi ý có dính license người khác không, secret lỡ lộ thì xử từ đâu, ai làm gì ghi ở đâu. Bài này trả lời 10 câu đó, kèm lệnh copy-paste, ví dụ thật và lúc nào nên áp dụng.
+
+## Mục tiêu bài học
+
+- Trả lời được câu hỏi compliance hay bị hỏi nhất: **Individual vs Business/Enterprise khác nhau ở quyền dữ liệu nào**.
+- Xử lý đúng thứ tự khi **lộ secret**: xoay key trước, dọn history sau — và biết vì sao không được làm ngược.
+- Biết **3 tầng log** (org audit, repo events, git history) để truy "ai đã bật/tắt/merge gì".
+- Phân biệt **exclusion, `.gitignore`, secret manager** — lớp nào chặn gì, và vì sao exclusion không cứu được file đã vào git.
+- Có **checklist 5-6 mục** trước khi public repo hoặc mở agent cho repo chứa data nhạy cảm.
 
 ---
 
@@ -52,9 +60,9 @@ flowchart LR
 | Mặc định | Cần chủ động tắt snippet training | An toàn theo hợp đồng |
 | Khi nào dùng | Cá nhân / code không NDA | Code NDA, compliance, sản phẩm công ty |
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào (copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Mở thẳng trang settings và bỏ tick — việc này không có CLI:
 
 ```bash
 # Khong co CLI; check + tat tren web:
@@ -68,7 +76,8 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** setup máy mới (check 1 lần), và trước khi làm code NDA/compliance.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) mở lại `github.com/settings/copilot` xác nhận tick đã lưu, (2) đổi model (`/model`) rồi thử lại để loại trừ nguyên nhân khác, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue kèm ảnh chụp settings.
+
 ---
 
 ## 2. Duplication detection là gì, bật sao?
@@ -89,9 +98,9 @@ Trade-off: bật → ít gợi ý dài "ngon ăn sẵn" hơn 1 chút; tắt → 
 | Cách bật | `settings/copilot` hoặc org policy (ép cả org) | Mặc định |
 | Khi nào dùng | Product closed-source, code NDA | Prototype cá nhân, repo open-source |
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào (copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Kiểm tra repo có LICENSE rồi bật filter trên web:
 
 ```bash
 # Check nhanh repo co file LICENSE khong (lien quan trach nhem license)
@@ -104,7 +113,8 @@ ls LICENSE* 2>/dev/null || echo "Chua co LICENSE - them di"
 
 > **Khi nào áp dụng:** bật mặc định mọi account; org closed-source thì ép bằng policy.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) kiểm tra lại org policy có ghi đè setting cá nhân không (1 file/selection thử), (2) đổi model (`/model`) rồi thử lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue kèm ảnh chụp setting.
+
 ---
 
 ## 3. Lỡ commit secret thì xử lý sao (xoay + xóa)?
@@ -115,9 +125,9 @@ ls LICENSE* 2>/dev/null || echo "Chua co LICENSE - them di"
 
 **Giải thích chi tiết + ví dụ:** Nôm na: chìa khóa rơi ngoài đường — phải đổi ổ khóa trước, sau đó mới lau sàn. Thứ tự BẮT BUỘC: **xoay/revoke key TRƯỚC, dọn history SAU.** Xóa commit mà không xoay key = key vẫn sống trong tay kẻ đã clone. Secret đã push lên GitHub coi như đã lộ. 2026: AI Credits không liên quan đến việc này — đây là quy trình bảo mật thuần.
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào (copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Xử lý đúng thứ tự — xoay key trước, dọn git sau:
 
 ```bash
 # 1. Revoke/rotate TREN DASHBOARD provider truoc (Stripe/GitHub/AWS...) - lam bang tay ngay
@@ -137,7 +147,8 @@ gh api repos/<OWNER>/<REPO>/secret-scanning/alerts --jq '.[] | {secret_type, sta
 
 > **Khi nào áp dụng:** ngay khi phát hiện — xoay key tính bằng phút, dọn history tính bằng giờ.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) xác nhận lại key đã revoke trên dashboard provider (không phải chỉ xóa file), (2) chạy `gitleaks detect` lại với scope repo, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) báo admin/security team nếu key chạm prod/customer data.
+
 ---
 
 ## 4. Secret scanning + push protection (nhắc lại, góc bảo mật)?
@@ -153,9 +164,9 @@ gh api repos/<OWNER>/<REPO>/secret-scanning/alerts --jq '.[] | {secret_type, sta
 
 2026: org Enterprise có thể ép push protection cho mọi repo, không chỉ repo public.
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào (copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Ưu tiên alert còn sống trước, dọn sau:
 
 ```bash
 # Uu tien xu ly alert con 'active' truoc
@@ -172,7 +183,8 @@ gh api repos/<OWNER>/<REPO>/secret-scanning/alerts/<N> -X PATCH -f state='resolv
 
 > **Khi nào áp dụng:** review Security tab hàng tuần; alert `active` = xử lý trong ngày.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) lọc lại alert `state=="open"` để chắc không bỏ sót cái nào, (2) kiểm tra rule push protection đã bật cho repo chưa, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin/security team kèm danh sách alert.
+
 ---
 
 ## 5. Audit logs xem ở đâu (ai bật/tắt gì, khi nào)?
@@ -189,9 +201,9 @@ gh api repos/<OWNER>/<REPO>/secret-scanning/alerts/<N> -X PATCH -f state='resolv
 
 2026: Enterprise có data residency + audit đầy đủ — Business có audit cơ bản.
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào (copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Kéo audit log qua API (cần quyền admin/org owner):
 
 ```bash
 # Org audit log qua API (can admin/org owner)
@@ -209,7 +221,8 @@ gh api repos/<OWNER>/<REPO>/events --jq '.[] | {type, actor: .actor.login, creat
 
 > **Khi nào áp dụng:** postmortem, compliance audit định kỳ, và khi policy "tự đổi" không rõ ai đổi.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) kiểm tra bạn có quyền org owner/admin không (1 file/selection thử một query nhỏ), (2) thử lọc `phrase=` theo action cụ thể, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue kèm log truy vấn.
+
 ---
 
 ## 6. ZDR tương đương trên Copilot/Enterprise là gì?
@@ -222,9 +235,9 @@ gh api repos/<OWNER>/<REPO>/events --jq '.[] | {type, actor: .actor.login, creat
 
 Cần thì hỏi admin 3 câu: (1) data residency region nào, (2) retention bao lâu, (3) có Azure routing không. Trả lời khách hàng bằng văn bản hợp đồng, không đoán. 2026: ZDR tương đương yêu cầu Enterprise plan + cấu hình Azure routing, không có trên Business.
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào (copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Đây là việc hỏi admin rồi ghi vào hồ sơ compliance — dev không tự check được:
 
 ```bash
 # Dev khong tu check duoc; hoi admin va ghi vao ho so compliance:
@@ -238,7 +251,8 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** presales/compliance questionnaire — trả lời sau khi có xác nhận admin, không hứa miệng.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) gom đủ 3 câu trả lời (plan, residency, training) trước khi hứa với khách, (2) đối chiếu với văn bản hợp đồng thay vì lời nói, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc leo lên kênh compliance.
+
 ---
 
 ## 7. Content exclusion cho file nhạy cảm (nhắc lại, góc bảo mật)?
@@ -251,9 +265,9 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.gitignore` → exclusion → scanning. 2026: có thể thêm exclusion cho cả Agent Skills, MCP config, hooks preview (`.github/skills/`, `.mcp.json`, `.github/hooks/`).
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào (copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Kiểm tra xem file nhạy cảm có đang bị git track không:
 
 ```bash
 # Kiem tra file nhay cam co dang bi track khong
@@ -269,7 +283,8 @@ git rm --cached <file> && echo "<file>" >> .gitignore && git commit -m "chore(se
 
 > **Khi nào áp dụng:** audit nhanh mỗi sprint; gate trong CI càng tốt (fail nếu phát hiện file nhạy cảm bị track).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) chạy lại grep để chắc không sót file nhạy cảm nào, (2) thêm gate CI chặn file nhạy cảm bị track, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) báo admin/security team nếu file chạm prod/customer data.
+
 ---
 
 ## 8. Token/PAT dùng cho Copilot/MCP quản lý sao cho an toàn?
@@ -293,9 +308,9 @@ git rm --cached <file> && echo "<file>" >> .gitignore && git commit -m "chore(se
 | Hạn | 30-90 ngày, tự xoay | Hết khi job xong |
 | Khi nào dùng | Máy dev cần MCP gọi GitHub | Pipeline/agent, không dùng PAT cá nhân |
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào (copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Dọn token và quét hardcode trong repo:
 
 ```bash
 # Liệt kê token của bạn để dọn cái thừa/hết hạn
@@ -311,7 +326,8 @@ grep -rEn "ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk-live-[A-Za-z0-9]
 
 > **Khi nào áp dụng:** onboarding (cấp token đúng), offboarding (revoke), và định kỳ 90 ngày.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) revoke token cũ rồi cấp lại fine-grained đúng scope, (2) quét lại grep xem còn hardcode không, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin/security team nếu token từng bị lộ.
+
 ---
 
 ## 9. Review PR của coding agent về mặt bảo mật?
@@ -322,9 +338,9 @@ grep -rEn "ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk-live-[A-Za-z0-9]
 
 **Giải thích chi tiết + ví dụ:** Nôm na: PR agent cũng phải qua cổng an ninh như PR người, chỉ thêm 2 check riêng: agent có sửa lố (file ngoài issue?) và có thêm lib lạ (không rõ nguồn?) không. PR agent phải qua cùng gate bảo mật như người: secret scan, required review, security-reviewer khi chạm auth/payment (xem [bài 07](07-custom-agents-coding-agent-workflows.md) câu 3). Thêm 2 check riêng cho agent: **scope có lố không** (file ngoài issue?) và **dependency mới có lạ không** (`package.json` thêm lib không rõ nguồn?). 2026: 2 CLI (`gh copilot` + binary `copilot`) đều có thể tạo PR — review không phụ thuộc CLI nào tạo.
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào (copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Soi PR agent xem có thêm file/dependency lạ không:
 
 ```bash
 # Check PR agent co them dependency/file la khong
@@ -338,7 +354,8 @@ git diff main...copilot/issue-N -- package.json pnpm-lock.yaml
 
 > **Khi nào áp dụng:** mọi PR agent — check dependency là bước riêng, đừng chỉ đọc code.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) so `gh pr diff --name-only` với scope issue để bắt file sửa lố, (2) kiểm tra lock file thay đổi ngoài dự kiến, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) gắn security-reviewer khi PR chạm auth/payment.
+
 ---
 
 ## 10. Checklist bảo mật trước khi public / mở rộng repo?
@@ -357,9 +374,9 @@ git diff main...copilot/issue-N -- package.json pnpm-lock.yaml
 
 2026: thêm item 6 (tùy repo): Agent Skills + hooks preview (nếu có) phải được review trước khi public, vì chúng là code chạy trên máy dev.
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào (copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Chạy 3 lệnh verify trước khi public:
 
 ```bash
 gitleaks detect --verbose
@@ -375,7 +392,8 @@ gh api repos/<OWNER>/<REPO>/secret-scanning/alerts --jq '[.[] | select(.state=="
 
 > **Khi nào áp dụng:** trước public, trước M&A due-diligence, và trước khi bật agent cho repo chứa data nhạy cảm.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) resolve alert open rồi chạy lại 3 lệnh, (2) xoay nốt token/key từng lộ, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) báo admin/security team trước khi public.
+
 ---
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)
@@ -393,9 +411,34 @@ gitleaks detect --verbose && git ls-files | grep -Ei "pem$|key$|\.env$"
 
 ---
 
+## So sánh với Claude Code
+
+| Việc | GitHub Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Dùng code để train model | Individual/Pro: có thể (trừ khi opt-out); Business/Enterprise: không | Theo điều khoản thương mại của Anthropic, dữ liệu API/Claude Code không dùng train mặc định (tự verify theo docs Anthropic) | Cả hai đều nên tự kiểm tra data controls, đừng đoán |
+| Bật/tắt quyền dữ liệu | `github.com/settings/copilot` + org policy | Cấu hình ở Anthropic console (data settings) | Khác bề mặt, cùng ý tưởng: bạn là người quyết |
+| Chặn gợi ý trùng public code | Duplication detection filter (Block/Allow) | Không có bộ lọc tương đương dựng sẵn | Copilot có riêng filter public-code match |
+| Secret scanning / push protection | Tính năng nền tảng GitHub | Không có tương đương trực tiếp trong Claude Code — dùng hook/quét riêng (gitleaks...) | Đây là tính năng GitHub, không phải Copilot |
+| Audit log | Org audit log của GitHub | Theo dõi/analytics ở Anthropic console | Dev thường phải hỏi admin mới xem được |
+| Content exclusion | Content exclusion 2 mức (+ `.copilotignore`) | `.claudeignore` / permission deny | Cùng tư tưởng: chặn model đọc file nhạy cảm |
+| Zero data retention | Tương đương bằng combo Enterprise (residency + retention ngắn + Azure routing) | Claude Code Enterprise có ZDR theo thỏa thuận | Cả hai: xác nhận bằng văn bản hợp đồng, không hứa miệng |
+
+> **Đọc bảng này thế nào:** vài thứ Copilot "có sẵn" thực ra là tính năng nền tảng GitHub (secret scanning, push protection, audit log) — Claude Code không có tương đương trực tiếp, phải tự dựng bằng hook/quét riêng. Ngược lại, tư tưởng gốc giống nhau: dữ liệu phải do bạn kiểm soát, file nhạy cảm phải bị chặn, và mọi thứ phải truy được.
+
+## Best practices (kèm "vì sao")
+
+- **Xoay/revoke secret ngay khi lộ, trước khi dọn history.** *Vì sao?* Ai đã clone vẫn giữ key; xóa commit không thu hồi được key.
+- **Secret vào manager (Vault/1Password/AWS Secrets), không vào git.** *Vì sao?* Repo là nơi khó kiểm soát nhất; manager cho phép thu hồi + xoay tự động.
+- **Mỗi mục đích một token, quyền tối thiểu, hạn ngắn.** *Vì sao?* Token lộ thì thiệt hại bị giới hạn đúng phạm vi đó.
+- **Không bao giờ paste token vào chat.** *Vì sao?* Token vào context server, không thu hồi được.
+- **Bật duplication filter + push protection + secret scanning.** *Vì sao?* Ba lớp này chặn rủi ro license + lộ secret trước khi tới repo.
+- **Review dependency mới trong mọi PR agent.** *Vì sao?* Lib lạ là vector tấn công phổ biến, agent dễ thêm mà không ai để ý.
+
+---
+
 ## Tham khảo chéo
 
 - Exclusion cấu hình: [bài 03](03-modes-permissions.md). Guardrails + scanning: [bài 05](05-policies-guardrails-faq.md).
 - MCP secrets: [bài 04](04-mcp-faq.md). CI/review: [bài 10](10-ci-sdk-review-web.md).
 
-> Mẹo 1 dòng: _xoay key trước dọn sau, secret vào manager chứ không vào git, và exclusion là lớp phụ sau gitignore._
+> **Chốt FAQ 09:** bảo mật Copilot gói trong 3 câu — xoay key trước dọn sau, secret vào manager chứ không vào git, và exclusion chỉ là lớp phụ sau `.gitignore` + scanning. Nhớ thêm: PR agent cũng phải soi dependency như PR người.

@@ -1,9 +1,17 @@
 # 00 — Tổng Quan Copilot: Từ Autocomplete Tới Agent
 
-> **Dành cho:** người mới dùng GitHub Copilot, và dev đã quen gõ autocomplete nhưng chưa thử agent.
+> **Dành cho:** người mới dùng GitHub Copilot, và dev đã quen autocomplete nhưng chưa thử agent.
 > **Vấn đề:** một tài khoản có nhiều cách làm việc khác nhau — cái nào dùng khi nào, vòng lặp agent chạy ra sao, tốn bao nhiêu AI Credits.
 > **Đọc xong:** phân biệt được 5 chế độ, giải thích được vòng lặp agent cho đồng nghiệp trong 2 phút, ước lượng được AI Credits, và làm xong task đầu tiên.
-> **Thời gian:** ~25 phút.
+> **Thời gian:** ~25 phút đọc + ~30 phút làm bài tập cuối bài.
+
+## Mục tiêu bài học
+
+- Phân biệt **5 chế độ** (Autocomplete, Chat/Ask, Edit, Agent, Coding agent) và biết chế độ nào hợp việc nào.
+- Hiểu **vòng lặp agent 4 bước** và vì sao model không tự chạm vào máy bạn.
+- Biết **4 họ tool** agent dùng, để không bất ngờ khi thấy nó mở file/chạy lệnh.
+- Ước lượng được **AI Credits** và biết 3 hành động cắt phí lớn nhất.
+- Làm xong **walkthrough 5 bước**: từ mở Chat tới 1 task agent chạy thật.
 
 ## Mục lục
 
@@ -23,7 +31,7 @@
 
 ## 1. Copilot là gì? 5 chế độ một tài khoản
 
-**Câu trả lời nhanh:** GitHub Copilot là dev AI bên cạnh bạn. Nó không phải 1 công cụ duy nhất, mà là 5 "động cơ" khác nhau chạy chung 1 tài khoản. Bạn chọn động cơ phù hợp với kích thước việc.
+**Câu trả lời nhanh:** GitHub Copilot là dev AI đứng cạnh bạn. Nó không phải 1 công cụ duy nhất mà là 5 "động cơ" khác nhau chạy chung 1 tài khoản. Bạn chọn động cơ theo kích thước việc.
 
 | Chế độ | Bạn làm gì | Nó làm gì | Ví dụ |
 |---|---|---|---|
@@ -36,27 +44,29 @@
 > **Nhớ ngay:** autocomplete đoán **dòng tiếp theo**. Agent giải **cả việc**.
 > Khác nhau: bạn có cần nó tự đi tìm file và chạy test không? Có → Agent. Không → chế độ khác.
 
-### 1.0. Mỗi chế độ là gì (nôm na + ví dụ)
+**Vì sao quan trọng?** 90% thất vọng với Copilot đến từ **chọn sai chế độ**, không phải model dở. Giao task mở cho Ask mode → nó chỉ trả lời chữ, bạn tưởng "Copilot không sửa được file". Ngược lại, dùng Agent cho việc sửa 1 dòng → nó đi đọc 20 file, tốn credits vô ích.
 
-> Quy tắc của series này: mọi khái niệm đều có 3 lớp — **1 câu định nghĩa**, **so sánh đời thường**, **ví dụ code thật**. Không thấy đủ 3 lớp = chưa đủ rõ.
+### 1.0. Mỗi chế độ là gì (1 câu + nôm na + ví dụ)
+
+> Quy tắc series này: mọi khái niệm đều đủ 3 lớp — **1 câu định nghĩa**, **so sánh đời thường**, **ví dụ code thật**. Không thấy đủ 3 lớp = chưa đủ rõ.
 
 **Autocomplete (ghost text)**
-- 1 câu: copilot đoán dòng code tiếp theo, hiện mờ phía con trỏ.
+- 1 câu: Copilot đoán dòng code tiếp theo, hiện mờ phía con trỏ.
 - Nôm na: như gợi ý từ trên bàn phím điện thoại, nhưng cho code.
-- Ví dụ: gõ `def fetch_user(user_id:` → hiện `try: return db.query(...) except NotFound: raise ...` → bấm `Tab` nhận, `Esc` bỏ.
+- Ví dụ: gõ `def fetch_user(user_id:` → hiện `try: return db.query(...) except NotFound: raise ...` → `Tab` nhận, `Esc` bỏ.
 
 **Chat — Ask mode**
-- 1 câu: bạn hỏi, copilot trả lời chữ + snippet, không đụng file.
+- 1 câu: bạn hỏi, Copilot trả lời chữ + snippet, không đụng file.
 - Nôm na: hỏi thầy giáo "đoạn này nghĩa là gì?" — thầy giảng, thầy không cầm tay bạn sửa.
 - Ví dụ: bôi đen hàm `login()` → hỏi "Giải thích từng nhánh if trong hàm này?".
 
 **Edit mode**
-- 1 câu: bạn chọn 2–3 file, copilot sửa đúng trong đó.
+- 1 câu: bạn chọn 2–3 file, Copilot sửa đúng trong đó.
 - Nôm na: đưa thợ 3 viên gạch cụ thể, nói "trát lại 3 viên này".
 - Ví dụ: chọn `login.ts` + `auth.ts` → "Thêm null check cho `customerId`".
 
 **Agent mode**
-- 1 câu: bạn giao task, copilot tự tìm file, sửa, chạy terminal, lặp lại tới khi xong.
+- 1 câu: bạn giao task, Copilot tự tìm file, sửa, chạy terminal, lặp tới khi xong.
 - Nôm na: giao chìa khóa nhà cho thợ — tự tìm phòng hỏng, tự mua vật liệu, tự nghiệm thu.
 - Ví dụ: "Trong `apps/api`, POST /orders crash khi thiếu `customerId`. Tìm nguyên nhân, fix, thêm test, chạy `npm test`."
 
@@ -102,12 +112,31 @@ Tìm root cause, fix, thêm regression test, chạy npm test -- --filter api.
 
 ### 1.3. Vì sao 2026 khác 2023?
 
-- 2023: copilot = autocomplete + chat đơn giản.
+- 2023: Copilot = autocomplete + chat đơn giản.
 - 2024–2025: thêm Edit, Agent mode, coding agent.
 - 2026: đổi model được ngay trong Chat (GPT/Claude/Gemini), thêm Skills, MCP, custom agents, prompt files.
 
 **Hệ quả:** cùng 1 prompt, model khác + chế độ khác = kết quả khác hẳn.
 Học cách chọn chế độ đúng *trước* khi học tối ưu prompt.
+
+### 1.4. Copilot vs Claude Code — khác nhau ở đâu?
+
+Cả hai đều là "agent code", nhưng khác "nhà" và cách phân phối. Bảng này để bạn biết mình đang ở đâu khi đổi công cụ:
+
+| Việc | GitHub Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Chạy ở đâu | VS Code / JetBrains / Neovim / github.com / CLI | CLI trong terminal (và IDE extension) | Copilot phủ nhiều bề mặt hơn; Claude Code "terminal-first" |
+| Autocomplete | Có (điểm mạnh, miễn phí credits) | Không phải trọng tâm | Copilot mạnh ở gõ code từng dòng |
+| Chọn model | Đổi ngay trong Chat: GPT / Claude / Gemini | Gắn với model Anthropic (Claude) | Copilot cho chọn "bộ não"; Claude Code nhất quán 1 nhà |
+| Cấu hình repo | `.github/copilot-instructions.md` + `AGENTS.md` | `CLAUDE.md` + `.claude/` | Cùng tư tưởng: file trong repo là "luật" |
+| Agent mode | Có (Ask/Edit/Agent + personas) | Có (mặc định là agent) | Claude Code mặc định agentic; Copilot leo thang từng bước |
+| Slash command tự tạo | Prompt files / Skills | `.claude/commands/` | Tương đương về ý tưởng |
+| MCP (tool ngoài) | Có (`.vscode/mcp.json`) | Có | Cùng chuẩn giao thức |
+| Kiểm chứng (verify) | Bạn là người chạy test | Bạn là người chạy test | **Không agent nào tự chịu trách nhiệm đúng/sai** |
+
+> **Đọc bảng này thế nào:** nếu bạn quen Claude Code, phần lớn khái niệm chuyển sang Copilot gần như 1-1 (instructions, agent loop, MCP, slash command) — chỉ khác *tên file* và *nơi chạy*. Phần Copilot hơn hẳn là **autocomplete + chọn model trong 1 tài khoản**; phần Claude Code mạnh là **agentic mặc định + terminal-first**.
+
+**Nếu nhầm thì sao?** Nhiều người nghĩ "Copilot = autocomplete" (kiểu 2023) nên không thử Agent, hoặc nghĩ "Claude Code không có instructions trong repo" — cả hai đều sai và làm mất nửa sức mạnh công cụ.
 
 ---
 
@@ -137,6 +166,8 @@ BƯỚC 4 — KIỂM TRA (đủ chưa?)
 >
 > Nôm na: model = kiến trúc sư vẽ bản vẽ. VS Code = đội thợ cầm búa + máy khoan.
 > Kiến trúc sư không bao giờ tự ra công trường.
+
+**Vì sao quan trọng?** Hiểu vòng lặp này thì bạn hiểu luôn: (a) vì sao policy chặn lệnh lại nằm ở VS Code chứ không ở model; (b) vì sao chat dài thì agent "quên đầu bài" (context đầy); (c) vì sao phải có lệnh verify — model chỉ *đọc kết quả*, không tự biết đúng/sai.
 
 ### 2.2. Vì sao phải tách model và VS Code?
 
@@ -326,11 +357,13 @@ gh copilot explain "docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
 > **Tin tốt:** hành vi agent *giống nhau mọi nơi*. Bạn học 1 lần, dùng ở bất cứ đâu.
 > Chi tiết so sánh từng bề mặt: [bài 02](./02-cac-be-mat-vscode-ide-web-cli.md).
 
+> **Nếu chọn sai bề mặt thì sao?** Ví dụ: bạn muốn sửa code trong IDE mà lại đi dùng Copilot CLI (chỉ suggest/explain lệnh shell) → sẽ thấy "sao nó không sửa file". Cùng thương hiệu Copilot nhưng mỗi bề mặt có việc riêng — đọc bảng trên trước khi phàn nàn.
+
 ---
 
 ## 7. Bản đồ extension: 7 thứ hay bị nhầm lẫn
 
-> Đây là 7 khái niệm "mở rộng" copilot. Nghe na ná nhau, nhưng mỗi thứ có *một* công việc riêng.
+> Đây là 7 khái niệm "mở rộng" Copilot. Nghe na ná nhau, nhưng mỗi thứ có *một* công việc riêng.
 
 | Thứ | Là gì (nôm na) | Ví dụ | Dùng khi nào |
 |---|---|---|---|
@@ -350,6 +383,8 @@ gh copilot explain "docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
 - Persona chuyên biệt → custom agent (bài 06)
 - Hệ thống ngoài → MCP (bài 08)
 
+> **Nếu nhầm thì sao?** Nhét mọi thứ vào `copilot-instructions.md` (cả checklist 15 bước) → nạp lại *mỗi turn*, tốn credits + loãng trọng tâm. Cái gì "chỉ đúng lúc cần" thì để prompt file/skill, đừng để trong instructions.
+
 ---
 
 ## 8. Walkthrough 5 bước cho người mới
@@ -365,9 +400,9 @@ gh copilot explain "docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres
 code /path/to/repo-cua-ban
 ```
 
-**Bước 2 — Kiểm tra copilot đọc đúng repo (5 phút)**
+**Bước 2 — Kiểm tra Copilot đọc đúng repo (5 phút)**
 
-Mục tiêu: *không phải hỏi cho vui*, mà kiểm tra copilot biết repo bạn trước khi bạn tin nó.
+Mục tiêu: *không phải hỏi cho vui*, mà kiểm tra Copilot biết repo bạn trước khi bạn tin nó.
 
 ```text
 Gõ trong Chat:
@@ -375,7 +410,7 @@ Gõ trong Chat:
 chạy dev bằng lệnh nào, test bằng lệnh nào. Không sửa gì, chỉ trả lời."
 ```
 
-Nếu câu trả lời sai → copilot chưa đọc đúng. Fix trước khi đi tiếp.
+Nếu câu trả lời sai → Copilot chưa đọc đúng. Fix trước khi đi tiếp.
 
 **Bước 3 — Viết instructions tối thiểu (5 phút)**
 
@@ -424,7 +459,7 @@ Quan sát: nó đọc file → sửa → chạy lệnh → đọc output → s�
 
 ## 9. Hiểu nhầm thường gặp + Pitfalls + cách fix
 
-> Nguyên tắc: khi copilot làm sai, **đây thường là do bạn setup**, không phải nó "dở".
+> Nguyên tắc: khi Copilot làm sai, **đây thường là do bạn setup**, không phải nó "dở".
 
 ### 9.1. Năm hiểu nhầm hay gặp nhất
 
@@ -446,13 +481,49 @@ Quan sát: nó đọc file → sửa → chạy lệnh → đọc output → s�
 | Cháy credits nhanh | Cắt instructions, dùng model rẻ cho task dễ, mở chat mới mỗi task |
 | MCP `disconnected` | Kiểm tra `npx` chạy được không, check key/token |
 
+### 9.3. Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+
+**1. Giao task mở cho Ask mode**
+
+```text
+❌ SAI: (Ask mode) "Sửa bug login giúp tôi"   → nó chỉ trả lời chữ, không đụng file
+✅ ĐÚNG: (Agent mode, có scope) "Trong src/auth, fix login email có dấu bị 500,
+        chạy npm test -- auth, báo cáo diff."
+```
+**Bài học:** chọn chế độ *trước* khi viết prompt. Sai chế độ thì prompt hay cỡ nào cũng vô ích.
+
+**2. Tin lời "đã xong" mà không chạy verify**
+
+```text
+❌ SAI: "Xong chưa?" → "Rồi, đã sửa nhé!" → bạn đi deploy
+✅ ĐÚNG: "Chạy npm test -- auth rồi dán output cho tôi." → đọc log mới tin
+```
+**Bài học:** agent chỉ *đọc* kết quả tool; tính đúng do lệnh verify quyết định, không do lời nói.
+
+**3. Nhét mọi thứ vào instructions**
+
+```text
+❌ SAI: copilot-instructions.md 600 dòng, gồm cả checklist deploy 15 bước
+✅ ĐÚNG: instructions <200 dòng (luật + lệnh hay dùng); checklist deploy tách ra prompt file/skill
+```
+**Bài học:** instructions nạp lại mỗi turn — cái gì "chỉ đúng lúc cần" thì đừng để ở đó.
+
+### 9.4. Best practices (kèm "vì sao")
+
+- **Chọn chế độ theo kích thước việc, không theo thói quen.** *Vì sao?* Autocomplete rẻ nhất, Agent đắt nhất — dùng sai chế độ là cách đốt credits nhanh nhất.
+- **Một task = một chat sạch.** *Vì sao?* Chat dài làm rule bị loãng (attention dilution) và agent quên đầu bài.
+- **Mọi task code phải có lệnh verify chạy thật.** *Vì sao?* Đây là thứ duy nhất phân biệt "sửa đúng" và "agent tự khen".
+- **Giữ instructions ngắn (<200 dòng), front-load luật hay sai.** *Vì sao?* Nạp mỗi turn; gọn mà đúng chỗ rẻ và hiệu quả hơn dài.
+- **Model rẻ cho việc dễ, model mạnh cho việc khó.** *Vì sao?* Giá chênh 5–10 lần; giải thích code không cần flagship.
+- **Review từng hunk diff trước khi Accept.** *Vì sao?* Accept all là cách phổ biến nhất để mang bug vào repo mà không biết.
+
 ---
 
 ## 10. Bài tập thực hành
 
 **Bài 1 (15 phút) — Trace 1 vòng lặp thật**
 
-Giao task nhỏ ở Agent mode. Khi xong, hỏi copilot:
+Giao task nhỏ ở Agent mode. Khi xong, hỏi Copilot:
 *"Liệt kê từng turn: bạn nghĩ gì, gọi tool gì, thấy kết quả gì."*
 So sánh với sơ đồ mục 2. Ghi lại số turns + tool calls.
 
@@ -485,3 +556,11 @@ Làm đủ 5 bước mục 8 trên 1 repo thật. Lưu chat lại. Liệt kê 3 
 | Nối DB / Slack / GitHub vào agent | [08 — MCP](./08-mcp-ket-noi-cong-cu-ngoai.md) |
 | Coding agent trên cloud | [11 — Git worktrees & checkpoints](./11-git-worktrees-checkpoints.md) (scope agent) + [12 — SDK/CI (mục 5.1 assign issue)](./12-copilot-sdk-ci-cd-automation.md) |
 | Hub Customizations 2026 (mới) | [17 — Agent Customizations Hub](./17-agent-customizations-hub.md) |
+
+## Reference
+
+- GitHub Copilot docs: https://docs.github.com/copilot
+- VS Code Copilot docs: https://code.visualstudio.com/docs/copilot
+- Billing / AI Credits: https://github.com/settings/copilot
+
+> **Chốt cả bài:** Copilot không phải 1 công cụ mà là 5 "động cơ" — chọn đúng động cơ cho đúng cỡ việc, giữ context sạch, và luôn bắt nó chạy lệnh verify. Làm đúng 3 điều đó là bạn đã ở top 10% người dùng Copilot.

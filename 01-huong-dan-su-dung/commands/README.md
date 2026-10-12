@@ -1,8 +1,16 @@
 # Commands — Index tra cứu 47 lệnh Copilot 2026
 
-> **Dành cho:** ai cần tra nhanh 1 trong 47 lệnh Copilot 2026 · **Vấn đề:** 47 lệnh chia 4 nhóm, mỗi dòng là 1 lệnh + link sang folder chi tiết, không biết mở file nào · **Đọc xong:** tìm đúng lệnh trong bảng rồi mở README chi tiết trả lời 5 câu: dùng khi nào · cho ai · kết quả ra gì · ví dụ copy-paste · liên quan (~3 phút)
+> **Dành cho:** ai cần tra nhanh 1 trong 47 lệnh Copilot 2026 · **Đọc xong:** tìm đúng lệnh trong bảng rồi mở README chi tiết của nó (~3 phút).
 
-**Cách dùng (nôm na):** coi đây như mục lục — tìm nhóm → đọc mô tả 1 dòng → click link sang folder chi tiết (`./<nhóm>/<slug>/README.md`). Trong Chat input, gõ `/` (slash), `@` (participant), `#` (variable) để xem list khả dụng **ở môi trường của bạn** — khác plan/model/version thì list cũng khác. Mỗi README chi tiết giữ nguyên format 6 phần: tên lệnh + 1 câu nôm na, khi nào dùng, cách gọi (code block phím tắt/slash), ví dụ prompt thật + kết quả mong đợi, lỗi thường gặp, tham khảo. Tiếng Việt, ví dụ riêng từng lệnh.
+Toàn bộ 47 lệnh Chat chia thành 4 nhóm, mỗi nhóm là một kiểu việc khác nhau. Bạn dùng file này như tấm bản đồ: đọc tên nhóm → lướt cột "Mô tả 1 dòng" → bấm link sang README chi tiết để biết cách gọi, ví dụ và lỗi hay gặp.
+
+**Tra thế nào cho nhanh?** Bốn nhóm tương ứng bốn câu hỏi: *"quản lý cuộc trò chuyện"* → Chat session; *"đổi model hoặc giao việc cho agent"* → Model & Agent; *"thao tác trên code đang chọn"* → Code actions; *"cấu hình hệ thống/tri thức"* → System & Knowledge.
+
+Một lưu ý đừng bỏ qua: danh sách này là bản đồ lý thuyết. Máy bạn thật sự có lệnh nào thì gõ `/` (slash), `@` (participant), `#` (variable) ngay trong ô Chat để xem — plan, model và version khác nhau thì danh sách hiện ra cũng khác.
+
+**Vì sao phải tra thay vì đoán?** 47 lệnh nhìn qua tưởng giống nhau, nhưng gọi nhầm thì tốn thời gian hơn cả gõ prompt tay. Ví dụ `/clear` và `/new` đều "dọn" hội thoại, nhưng một cái giữ instructions, một cái xóa sạch — chọn sai là đứt mạch làm việc.
+
+**Nếu làm sai?** Đừng dùng index này để *học* một lệnh. Nó chỉ giúp bạn *định vị*. Muốn hiểu sâu thì mở README chi tiết của đúng lệnh đó.
 
 ## Nhóm 1 — Chat session (12)
 
@@ -86,4 +94,16 @@ Chi tiết nhóm: [./system-knowledge/README.md](./system-knowledge/README.md)
 → gọi custom agent (nếu có) → /policy (nới/thắt lệnh chạy)
 ```
 
-> Mẹo 1 dòng: _chat mới mỗi task (`/new`), gắn scope mọi prompt (`#file`/`@workspace`), review diff trước khi Accept._
+## So sánh với Claude Code
+
+| Việc | Copilot | Claude Code |
+|---|---|---|
+| Xem danh sách lệnh khả dụng | Gõ `/` trong ô Chat | Gõ `/` trong session |
+| Tài liệu tra cứu | Index này + 4 README nhóm | Trang docs "Commands" chính thức |
+| Chia nhóm lệnh | 4 nhóm cố định theo chủ đề | Không chia nhóm cố định; tài liệu gom theo chức năng |
+| Mở rộng lệnh riêng | Prompt files (`.github/prompts/`, legacy) hoặc Agent Skills (`/skills`) | Custom slash commands trong `.claude/commands/` hoặc Skills |
+| Gợi ý/giải thích lệnh shell (`gh copilot suggest`/`explain`) | Có, qua GitHub CLI extension | Không có tương đương trực tiếp — Claude Code là một agent CLI, không phải công cụ gợi ý shell riêng |
+
+Quay về: [../README.md](../README.md) · Bài tổng: [../04-chat-commands-toan-tap.md](../04-chat-commands-toan-tap.md)
+
+> 47 lệnh nghe nhiều, nhưng nắm 4 thói quen — `/new` mỗi task, gắn scope bằng `#file`, chọn đúng mode, review diff trước khi Accept — là bạn đã dùng đúng phần lớn rồi.

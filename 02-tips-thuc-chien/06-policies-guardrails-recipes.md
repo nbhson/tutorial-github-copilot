@@ -1,11 +1,22 @@
 # Tips 06 — Policies & Guardrails: Recipes Chống Copilot Đi Lạc
 
-> Copilot ngoan hay hư là do guardrails của bạn. Bài này cho bạn recipes tương đương hooks: instruction enforcement, pre-commit, branch protection, MCP/tool approval — copy-paste là dùng ngay.
+> **Dành cho:** dev / tech lead đang mỏi miệng vì phải nhắc Copilot "đừng sửa cái này, đừng commit main nhé". · **Vấn đề:** Copilot quên luật sau vài chục turns, sửa lan sang `generated/`, commit thẳng main, chạy lệnh nguy hiểm, gọi MCP bừa — mà không ai chặn giúp bạn lúc 2h sáng. · **Đọc xong:** dựng được 4 lớp guardrails tự chạy (instructions → local gate → CI → MCP approval) bằng 12 recipe copy-paste. · **Thời gian:** ~20 phút đọc + ~45 phút dựng theo walkthrough.
+
+Copilot ngoan hay hư phần lớn là do guardrails của bạn. Copilot **không có sẵn cơ chế hooks** như một số agent khác, nên bài này ghép các recipe **tương đương hooks**: instruction enforcement, pre-commit, branch protection, MCP/tool approval — copy-paste là dùng ngay.
+
+## Mục tiêu bài học
+
+- Hiểu vì sao **nhắc miệng vô dụng**, và guardrail chặn được gì mà lời dặn không chặn nổi.
+- Phân biệt **4 lớp guardrails**, biết lớp nào chặn ở đâu, ai chịu trách nhiệm giữ.
+- Copy-paste được **12 recipe**: instructions cấm địa, pre-commit, CI gate, CODEOWNERS, MCP approval, secret hygiene.
+- Dựng trọn bộ guardrails trong **45 phút** và tự kiểm chứng bằng cách cố tình làm sai 3 kiểu.
 
 ## Mục lục
 
+- [0. Giải ngố thuật ngữ (1 câu + analogie + verify)](#0-giải-ngố-thuật-ngữ-1-câu--analogie--verify)
 - [1. Vì sao cần guardrails?](#1-vì-sao-cần-guardrails)
 - [2. Cơ chế: 4 lớp guardrails Copilot](#2-cơ-chế-4-lớp-guardrails-copilot)
+- [So sánh với Claude Code](#so-sánh-với-claude-code)
 - [3. Lớp 1: instruction enforcement (luật tự áp)](#3-lớp-1-instruction-enforcement-luật-tự-áp)
 - [4. Lớp 2: pre-commit + local gates](#4-lớp-2-pre-commit--local-gates)
 - [5. Lớp 3: branch protection + CI gates](#5-lớp-3-branch-protection--ci-gates)
@@ -13,6 +24,7 @@
 - [7. Walkthrough theo phút: dựng guardrails 45 phút](#7-walkthrough-theo-phút-dựng-guardrails-45-phút)
 - [8. Bảng tra nhanh: recipe nào cho lỗi nào?](#8-bảng-tra-nhanh-recipe-nào-cho-lỗi-nào)
 - [9. Pitfalls + cách fix](#9-pitfalls--cách-fix)
+- [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
 - [10. Bài tập cuối bài](#10-bài-tập-cuối-bài)
 - [11. Tham khảo chéo](#11-tham-khảo-chéo)
 
@@ -41,6 +53,10 @@ flowchart TD
 
 Giải thích: 4 lớp chồng nhau — lọt 1 lớp không sao, còn 3 lớp sau. Luật nhắc miệng 2 lần thì viết thành file (recipe), không nhắc lần 3.
 
+**Vì sao quan trọng?** Bốn khái niệm này là 4 tấm giáp lồng vào nhau, mỗi tấm đặt ở một tầng khác nhau. Nếu bạn tưởng chúng thay thế được cho nhau, bạn sẽ kỳ vọng sai kiểu: viết "đừng chạy `rm -rf`" vào instructions rồi tin là chặn được — không, instructions chỉ *dặn miệng*, phải có **tool approval** mới chặn thật lúc lệnh sắp chạy.
+
+**Nếu làm sai thì sao?** Dồn hết vào một lớp là hở đúng chỗ lớp đó trấn: chỉ dựa vào instructions → Copilot quên sau ~20 turns; chỉ dựa vào pre-commit → máy đồng nghiệp chưa cài hook vẫn đẩy rác lên; chỉ dựa vào CI → code bẩn đã nằm trên branch rồi mới bị chặn.
+
 > ✅ **Kỳ vọng thấy gì:** sau 45 phút dựng (mục 7), thử cố ý sai (sửa `generated/`, commit main, `rm -rf`) đều bị chặn + log BLOCKED.
 
 ---
@@ -64,6 +80,10 @@ Việc quan trọng → bắt người duyệt.
 
 > Rule: **luật nào bạn phải nhắc >2 lần thì viết thành guardrail, đừng nhắc miệng nữa.**
 
+**Vì sao quan trọng?** Nhắc miệng chỉ sống trong một phiên chat. Hết phiên — hoặc sang turn thứ 20 — Copilot không còn nhớ, còn bạn thì đã mỏi. Guardrail đổi "lời nhắc" thành "cái chốt": không phụ thuộc trí nhớ của model, cũng không phụ thuộc bạn có mặt hay không.
+
+**Nếu làm sai thì sao?** Không có guardrail, chi phí không nằm ở lúc Copilot sai mà ở lúc bạn dọn: mỗi lần nó sửa `generated/` bạn mất ~30 phút revert, và không ai chặn giúp khi bạn ngủ. Ngược lại, guardrail quá chặt ngay từ đầu (đòi 3 review, pre-commit 10 phút) thì team sẽ bypass bằng `--no-verify` — thành ra còn tệ hơn không có.
+
 ---
 
 ## 2. Cơ chế: 4 lớp guardrails Copilot
@@ -82,9 +102,29 @@ Instructions dặn đừng → local gate chặn nếu vẫn làm → CI gate ch
 Lọt 1 lớp không sao, còn 3 lớp sau.
 ```
 
+Ý tưởng cốt lõi giống "phòng thủ nhiều lớp" (defense in depth): lớp 1 rẻ và mềm nhất, lớp 3–4 đắt và cứng nhất. Bạn không cần lớp nào hoàn hảo — bạn cần **không lớp nào là điểm chết duy nhất**.
+
+---
+
+## So sánh với Claude Code
+
+Cả hai đều là agent code, nhưng "bộ đồ nghề" để dựng guardrail khác nhau đôi chút:
+
+| Việc | GitHub Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Luật tự áp mọi turn | `.github/copilot-instructions.md` + `*.instructions.md` (`applyTo` glob) | `CLAUDE.md` (phân cấp theo thư mục) | Cùng tư tưởng: file trong repo là "luật" |
+| Chặn lệnh nguy hiểm | VS Code "Confirm before running commands" + allow/block list | Permission allow/deny + **hooks vòng đời** (PreToolUse...) | Claude Code có hook native; Copilot phải ghép git hook + CI để tương đương |
+| Gate trước commit | `pre-commit` (git hook) | `pre-commit` / hook native | Công cụ git, cả hai dùng chung |
+| Gate trên GitHub | Branch protection + required checks + CODEOWNERS | Branch protection + required checks + CODEOWNERS | Không phụ thuộc agent — dùng chung hạ tầng GitHub |
+| Duyệt tool/MCP | Settings → MCP `auto-approve: OFF` | Permission cho MCP tool | Cùng tư tưởng: hỏi trước khi cấp quyền ghi/remote |
+
+> **Đọc bảng này thế nào:** phần *instructions*, *pre-commit*, *branch protection* gần như chuyển 1-1 giữa hai công cụ — chỉ khác tên file và nơi đặt. Khác biệt thật nằm ở **hooks**: Claude Code có sẵn hệ hook vòng đời để chèn logic trước/sau mỗi tool call; Copilot không có hook native, nên bài này xây "tương đương hooks" từ 4 lớp ghép lại.
+
 ---
 
 ## 3. Lớp 1: instruction enforcement (luật tự áp)
+
+Lớp rẻ nhất và mềm nhất: dặn Copilot bằng file, để nó tự đọc mỗi turn. Nhược điểm đúng bằng ưu điểm — nó chỉ "dặn", model vẫn có thể quên; nên đừng giao việc sống còn cho mỗi lớp này.
 
 ### Recipe 1 — copilot-instructions.md cấm địa (copy-paste)
 
@@ -156,6 +196,8 @@ Chi tiết thiết kế xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 ---
 
 ## 4. Lớp 2: pre-commit + local gates
+
+Lớp này chặn ngay trên máy bạn, trước khi code kịp rời máy. Nguyên tắc: **gate nhanh để ở local, gate nặng để cho CI** — nếu bắt local chờ 10 phút mỗi commit, dev sẽ tìm cách lách.
 
 ### Recipe 4 — pre-commit chặn rác (copy-paste)
 
@@ -229,6 +271,8 @@ Từ giờ Agent muốn chạy lệnh lạ → popup hỏi bạn. Lệnh trong a
 
 ## 5. Lớp 3: branch protection + CI gates
 
+Lớp cứng nhất, nằm ngoài tầm với của Copilot: dù nó có sửa bậy trong máy, code vẫn phải qua cổng GitHub mới vào `main`. Đây là lớp "người chốt" đáng tin nhất vì không phụ thuộc máy ai.
+
 ### Recipe 7 — Branch protection chuẩn (copy-paste checklist)
 
 ```text
@@ -284,6 +328,8 @@ Org policy (GitHub Org → Copilot → Policies):
 ---
 
 ## 6. Lớp 4: MCP / tool approval
+
+MCP mở đường cho Copilot ra thế giới ngoài (DB, deploy, web) — cũng là nơi dễ rò secret nhất. Lớp này nguyên tắc là **mặc định từ chối, chỉ mở đúng cái cần**.
 
 ### Recipe 10 — Prune MCP/extensions (copy-paste audit)
 
@@ -356,6 +402,8 @@ Sau 45 phút: 4 lớp guardrails chạy. Copilot đi lạc → bị chặn ít n
 | Thiếu test/lint/build | Nộp bài không chấm. | PR không log xanh. | Recipe 5 + 8 CI required | 2 + 3 |
 | PR không ai review | Tự chấm điểm mình 10. | Merge không review. | Recipe 7 + 9 CODEOWNERS | 3 |
 | MCP gọi bừa, rò secret | Đưa chìa két cho người lạ. | MCP đọc `.env` gửi ra ngoài. | Recipe 10 + 11 + 12 | 4 |
+| Instructions bị sửa bừa | Ai cũng tự đổi luật thì luật vô nghĩa. | PR tự ý đổi `copilot-instructions.md` không ai duyệt. | Recipe 9 CODEOWNERS cho prompts | 3 |
+| Diff chạm file cấm | Sửa lén ra ngoài phạm vi cho phép. | Diff có `src/generated/` dù không xin phép. | Recipe 8 diff-check step | 3 |
 
 ### Before / After — nhắc miệng vs guardrail
 
@@ -379,8 +427,6 @@ git diff --cached --name-only | grep "src/generated/" && echo BLOCKED
 
 > Kết quả: nhắc 0 lần (file tự dặn), cố sai thì pre-commit chặn local, lọt thì CI chặn merge. 1 tháng 0 incident. Verify: thử sai cố ý 3 lần đều bị chặn.
 > ✅ **Kỳ vọng thấy gì:** `pre-commit run` xanh; commit sai hiện `BLOCKED: đừng sửa generated/`.
-| Instructions bị sửa bừa | Recipe 9 CODEOWNERS cho prompts | 3 |
-| Diff chạm file cấm | Recipe 8 diff-check step | 3 |
 
 > Quy tắc ngón tay: **lỗi lặp lại 2 lần → viết thành recipe, đừng nhắc miệng lần 3.**
 
@@ -399,6 +445,43 @@ git diff --cached --name-only | grep "src/generated/" && echo BLOCKED
 | Guardrails chỉ trên máy bạn | Người khác vẫn đi lạc | Commit instructions/prompts/CI vào repo (xem Tips 09) |
 | Quên audit định kỳ | Guardrails mục dần | Lịch monthly: audit MCP + instructions + CI |
 | Secret lọt vào chat | Rò rỉ token | Recipe 12 + gitignore + review PR kiểm tra |
+
+### Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+
+**1. Dặn suông thay vì cài chốt**
+
+```text
+❌ SAI: nhắc miệng "đừng sửa generated/ nhé" (lần thứ 5 trong tuần)
+✅ ĐÚNG: Recipe 4 — hook no-generated chặn ở pre-commit + BLOCKED log
+```
+**Bài học:** lời nhắc sống trong 1 phiên; cái chốt sống trong repo. Việc lặp lại thì cài chốt, đừng dặn lại.
+
+**2. Tin instructions chặn được lệnh nguy hiểm**
+
+```text
+❌ SAI: viết "đừng chạy rm -rf" vào instructions rồi cho Agent chạy lệnh tự do
+✅ ĐÚNG: Recipe 6 — Confirm before running commands ON + blocklist rm -rf *
+```
+**Bài học:** instructions chỉ *dặn miệng*; chặn lệnh thật phải nằm ở lớp tool approval.
+
+**3. Siết quá chặt ngay từ đầu**
+
+```text
+❌ SAI: bật pre-commit 10 phút + đòi 3 review cho repo mới → dev bypass --no-verify
+✅ ĐÚNG: gate nhanh ở local, gate nặng ở CI; bật 1 review + CI trước, chặt dần
+```
+**Bài học:** guardrail bị bypass còn tệ hơn không có — chọn độ chặt sao cho team chịu đi qua nó.
+
+---
+
+## Best practices (kèm "vì sao")
+
+- **Luật nào nhắc >2 lần thì viết thành recipe.** *Vì sao?* Nhắc miệng không ai chặn lúc 2h sáng; file thì chặn, và chặn giống nhau cho cả team.
+- **Gate nhanh ở local, gate nặng để CI.** *Vì sao?* Pre-commit 10 phút sẽ bị bypass bằng `--no-verify`; giữ local nhẹ để người ta còn muốn đi qua nó.
+- **Bắt đầu nhẹ rồi siết dần (1 review + CI trước).** *Vì sao?* Branch protection quá chặt ngay từ đầu khiến team kêu không làm được, rồi tìm đường lách.
+- **Allowlist lệnh an toàn, chỉ hỏi lệnh lạ.** *Vì sao?* Hỏi mọi lệnh → agent chậm, bạn bấm mỏi tay, và cuối cùng ai cũng bấm "Allow all" cho xong.
+- **Commit instructions/prompts/CI vào repo, đừng để trên máy bạn.** *Vì sao?* Guardrail chỉ trên máy bạn thì đồng nghiệp vẫn đi lạc; file trong repo mới là luật chung.
+- **Audit định kỳ mỗi tháng (MCP + instructions + CI).** *Vì sao?* Guardrail không ai nhìn sẽ mục dần: server mọc thêm, instructions phình ra, hook bị tắt lúc nào không biết.
 
 ---
 
@@ -435,4 +518,4 @@ git diff --cached --name-only | grep "src/generated/" && echo BLOCKED
   - [Tips 09](./09-teamwork-chuan-hoa.md) — chuẩn hóa guardrails cho cả team
   - [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — policy cho Coding Agent cloud
 
-> Mẹo 1 dòng: _luật nhắc 2 lần thì viết thành guardrail — chặn trước bằng instructions, khóa sau bằng CI._
+> Chốt bài này: guardrail không phải để bắt Copilot bớt thông minh, mà để bạn **không phải có mặt lúc 2h sáng** — luật nhắc 2 lần thì cài chốt, chặn trước bằng instructions và khóa sau bằng CI.

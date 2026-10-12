@@ -5,6 +5,13 @@
 > **Đọc xong:** chọn đúng surface cho từng task, biết code chạy ở đâu + config nào được dùng, setup được coding agent trên github.com và Copilot trong Windows Terminal/GH Desktop.
 > **Thời gian:** ~30 phút. *(Bài 02 của series)*
 
+## Mục tiêu bài học
+
+- Trả lời được trong 10 giây, cho mỗi task: **code chạy ở đâu và config nào được dùng**.
+- Phân biệt **local agent** vs **coding agent cloud** và biết task nào hợp bên nào.
+- Setup được **coding agent** trên github.com (từ issue → branch → PR) và biết cách review PR nó mở.
+- Dùng **Copilot CLI** an toàn: `explain` trước, chạy sau, với lệnh nguy hiểm.
+
 ## Mục lục
 
 1. [Vì sao nhiều bề mặt? (why)](#1-vì-sao-nhiều-bề-mặt-why)
@@ -15,11 +22,16 @@
 6. [Copilot CLI deep-dive](#6-copilot-cli-deep-dive)
 7. [Bảng so sánh tổng + walkthrough chọn surface theo task](#7-bảng-so-sánh-tổng--walkthrough-chọn-surface-theo-task)
 8. [Pitfalls + bài tập](#8-pitfalls--bài-tập)
-9. [Link chéo](#9-link-chéo)
+9. [So sánh với Claude Code](#so-sánh-với-claude-code)
+10. [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
+11. [Bài tập nhỏ](#bài-tập-nhỏ)
+12. [Link chéo](#9-link-chéo)
 
 ---
 
 ## 1. Vì sao nhiều bề mặt? (why)
+
+Cùng một Copilot, nhưng bạn gặp nó ở nhiều "quầy" khác nhau: trong IDE, trên web GitHub, trong terminal, trên điện thoại. Mỗi quầy có việc riêng.
 
 - **Là gì (1 câu):** "bề mặt" (surface) là nơi bạn gặp Copilot — VS Code, web, terminal, điện thoại.
 - **Nôm na:** như cùng 1 đầu bếp nhưng có nhiều quầy: quầy tại bàn (VS Code), giao tận nhà (coding agent cloud), quầy take-away (CLI).
@@ -49,6 +61,10 @@ github.com chat + coding agent -> code chạy TRÊN GITHUB CLOUD,
 Vì sao GitHub tách? Task 5 phút (fix typo) cần latency thấp → local.
 Task 2 giờ (migrate, refactor 50 files) cần máy chạy tiếp khi bạn gập laptop
 → cloud coding agent. Không có surface nào thắng mọi trường hợp.
+
+**Vì sao quan trọng?** "Code chạy ở đâu" quyết định agent thấy được gì. Local agent thấy `.env`, DB và MCP trên máy bạn; cloud chỉ thấy repo + CI. Hiểu điều này giúp bạn giao đúng việc cho đúng nơi ngay lần đầu.
+
+**Nếu làm sai thì sao?** Giao coding agent một task cần DB local thì nó chạy mà không thấy DB → fail chắc chắn, tốn thời gian review. Ngược lại, việc 5 phút mà đẩy lên cloud thì chờ lâu hơn tự làm.
 
 ---
 
@@ -179,6 +195,10 @@ Khi chuyển: cần MCP + custom agents đầy đủ -> sang VS Code.
 
 > Quy tắc team: Neovim/VS/JetBrains để gõ + hỏi nhanh. VS Code để agent.
 > Đừng cố ép agent mode ở IDE yếu — chuyển surface rẻ hơn cãi với tool.
+
+**Vì sao quan trọng?** Cùng là Copilot nhưng harness khác nhau. VS Code có đủ terminal/MCP tool để agent tự chạy test; các IDE còn lại thiếu vài tool nên task mở sẽ yếu hơn. Biết giới hạn này giúp bạn không mất niềm tin vào tool đúng.
+
+**Nếu làm sai thì sao?** Cố dùng JetBrains/Neovim cho task multi-file + terminal rồi đổ lỗi "Copilot dở" — trong khi việc đó chỉ cần mở VS Code là xong.
 
 ---
 
@@ -348,8 +368,6 @@ gh copilot suggest "chay migration prisma tren staging (dry-run truoc)"
 
 ### 7.1b. Bảng thuật ngữ bề mặt (tra nhanh)
 
-Tra cứu nhanh, không cần đọc từ đầu.
-
 | Thuật ngữ | Là gì (hiểu nôm na) | Ví dụ cụ thể | Khi nào dùng |
 |---|---|---|---|
 | **Surface** | Quầy gặp đầu bếp: VS Code, web, CLI, mobile | VS Code = quầy tại bàn, CLI = quầy take-away | Khi chọn nơi làm việc |
@@ -395,6 +413,22 @@ Task 5: "Review PR của coding agent lúc đang cafe" -> github.com chat / Mobi
 
 ---
 
+## So sánh với Claude Code
+
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Bề mặt chính | IDE (VS Code/JetBrains/VS/Neovim) + github.com + CLI + mobile | CLI terminal là chính, có thêm IDE extension | Copilot phủ nhiều bề mặt hơn |
+| Chạy ở đâu | Local (IDE/CLI) hoặc cloud (coding agent) | Chủ yếu local trong terminal/IDE | Copilot có coding agent cloud gắn issue → PR; Claude Code không có tương đương trực tiếp cho luồng đó |
+| Config repo | `.github/` + `.vscode/` + `AGENTS.md` | `CLAUDE.md` + `AGENTS.md` + `.claude/` | Cùng tư tưởng: file trong repo là "luật" |
+| Mobile / web chat | github.com chat + GitHub Mobile | Không có tương đương trực tiếp tính đến thời điểm viết | Copilot phủ mobile/web |
+| CLI | `gh copilot suggest` / `explain` (chỉ gợi ý lệnh) | `claude` CLI là agent đầy đủ | Khác mục đích: một cái tra lệnh, một cái làm việc |
+| MCP (tool ngoài) | Có (`.vscode/mcp.json`) | Có | Cùng chuẩn giao thức |
+| Kiểm chứng | Bạn tự chạy test/CI | Bạn tự chạy test/CI | Không agent nào tự chịu trách nhiệm đúng/sai |
+
+> Nếu bạn quen Claude Code: tư tưởng "repo config + MCP + agent loop" chuyển sang Copilot gần như 1-1. Khác biệt lớn nhất là Copilot có **nhiều bề mặt** (IDE, cloud coding agent, mobile) còn Claude Code **terminal-first**.
+
+---
+
 ## 8. Hiểu nhầm thường gặp + Pitfalls + bài tập
 
 ### 8.0. Hiểu nhầm thường gặp về bề mặt
@@ -425,23 +459,54 @@ Task 5: "Review PR của coding agent lúc đang cafe" -> github.com chat / Mobi
 | Chạy lệnh CLI gợi ý mà không explain | Tin suggest 100% | Luôn `explain` + test khô (`head`/dry-run) trước |
 | Mở task mới trên chat coding-agent cũ | History dài làm agent loạn | Issue mới cho task mới, PR riêng từng task |
 
-### 8.2. Bài tập thực hành
+### 8.2. Pitfall: ❌ SAI / ✅ ĐÚNG
 
-**Bài 1 (15 phút) — So sánh Ask/Edit/Agent:**
-Cùng 1 task nhỏ ("thêm null check cho hàm login"), chạy lần lượt 3 modes trong
-VS Code. Ghi lại: mode nào sửa đúng nhất, tốn mấy turns, diff khác nhau ra sao.
+**1. Giao task cần môi trường local cho cloud**
 
-**Bài 2 (20 phút) — Coding agent end-to-end:**
-Tạo 1 issue test (scope 1–2 files, có lệnh verify), assign cho copilot, review PR
-nó mở. Liệt kê 3 điểm nó làm tốt + 3 điểm bạn phải sửa tay.
+```text
+❌ SAI: assign coding agent "chạy migration + test với DB local của tôi"
+✅ ĐÚNG: task cần DB/.env -> làm ở VS Code local; task độc lập, CI-verify được -> mới giao cloud
+```
 
-**Bài 3 (15 phút) — CLI drill:**
-Giải 3 việc terminal thật bằng `suggest` + `explain` (git cleanup, tìm file lớn,
-nén backup). Ghi lại lệnh nào chạy được ngay, lệnh nào phải sửa tay.
+**Bài học:** cloud không thấy `.env`/DB máy bạn — chọn bề mặt theo "code chạy ở đâu", không theo tiện tay.
 
-**Bài 4 (15 phút) — Chọn surface:**
-Lấy 5 tasks thật của team bạn tuần này, điền vào bảng mục 7.1: mỗi task hợp
-surface nào? Vì sao? Đối chiếu với đồng nghiệp xem có đồng thuận không.
+**2. Ép agent mode ở IDE thiếu tool rồi kết luận "Copilot dở"**
+
+```text
+❌ SAI: cố chạy task multi-file + terminal trong Neovim/JetBrains rồi chê tool yếu
+✅ ĐÚNG: gõ/hỏi nhanh ở IDE đó, chuyển task khó sang VS Code agent
+```
+
+**Bài học:** "yếu" thường là do harness thiếu tool, không phải model kém — đổi surface rẻ hơn cãi với tool.
+
+**3. Chạy lệnh CLI gợi ý mà không kiểm**
+
+```text
+❌ SAI: copy lệnh `find ... -delete` từ suggest rồi Enter luôn
+✅ ĐÚNG: `gh copilot explain "..."` + chạy khô (`| head`) trước, xác nhận đúng mới chạy thật
+```
+
+**Bài học:** `suggest` là gợi ý, không đảm bảo đúng — một flag sai có thể xóa dữ liệu.
+
+---
+
+## Best practices (kèm "vì sao")
+
+- **Chọn surface theo "code chạy ở đâu".** *Vì sao?* Task cần `.env`/DB local mà giao cloud là fail chắc; tự hỏi 10 giây trước khi mở tool.
+- **Task đã biết chỗ đau ở lại IDE; task mở đẩy sang Agent/VS Code.** *Vì sao?* Đổi surface đúng rẻ hơn cố ép agent mode trong IDE thiếu terminal tool.
+- **Coding agent chỉ nhận task verify được bằng CI.** *Vì sao?* Cloud không thấy môi trường máy bạn, nên chỉ task độc lập + test tự động mới an toàn để giao.
+- **`explain` trước, `run` sau với lệnh CLI nguy hiểm.** *Vì sao?* `suggest` có thể sinh `rm`/`find -delete` sai; đọc kỹ rẻ hơn khôi phục dữ liệu.
+- **Một task = một issue/PR trên coding agent.** *Vì sao?* History chat dài làm agent loạn; tách issue giữ context sạch và review dễ hơn.
+- **Mobile/web để đọc và review, không để viết code.** *Vì sao?* Thiếu diff tốt, không chạy terminal local — viết code nghiêm túc cần IDE.
+
+---
+
+## Bài tập nhỏ
+
+1. **(15 phút) So sánh Ask/Edit/Agent:** Cùng 1 task nhỏ ("thêm null check cho hàm login"), chạy lần lượt 3 modes trong VS Code. Ghi lại: mode nào sửa đúng nhất, tốn mấy turns, diff khác nhau ra sao.
+2. **(20 phút) Coding agent end-to-end:** Tạo 1 issue test (scope 1–2 files, có lệnh verify), assign cho copilot, review PR nó mở. Liệt kê 3 điểm nó làm tốt + 3 điểm bạn phải sửa tay.
+3. **(15 phút) CLI drill:** Giải 3 việc terminal thật bằng `suggest` + `explain` (git cleanup, tìm file lớn, nén backup). Ghi lại lệnh nào chạy được ngay, lệnh nào phải sửa tay.
+4. **(15 phút) Chọn surface:** Lấy 5 tasks thật của team bạn tuần này, điền vào bảng mục 7.1: mỗi task hợp surface nào? Vì sao? Đối chiếu với đồng nghiệp xem có đồng thuận không.
 
 ---
 
@@ -454,3 +519,12 @@ surface nào? Vì sao? Đối chiếu với đồng nghiệp xem có đồng thu
 - **Bài 05 — Prompt files**: mang checklist theo mọi surface qua repo files.
 - **Bài 11 (README) — Coding agent & GitHub flow**: giao issue → PR chi tiết.
 - **Bài 12 (README) — CLI & Terminal automation**: `gh copilot` trong pipeline.
+
+## Reference
+
+- GitHub Copilot docs: https://docs.github.com/copilot
+- VS Code Copilot docs: https://code.visualstudio.com/docs/copilot
+- Copilot coding agent: https://docs.github.com/copilot/using-github-copilot/coding-agent
+- GitHub CLI Copilot extension: https://github.com/github/gh-copilot
+
+> **Chốt bài 02:** Trước mỗi task, tự hỏi "code chạy ở đâu và agent thấy được gì" — trả lời xong là bạn đã chọn đúng quầy. Local cho việc cần môi trường máy bạn, cloud cho việc độc lập chạy qua đêm, CLI cho việc tra lệnh.

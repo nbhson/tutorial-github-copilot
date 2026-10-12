@@ -4,7 +4,7 @@
 > **Vấn đề:** 10 nhóm câu hỏi lặp đi lặp lại (tài khoản, model, MCP, policy, lỗi...) khiến bạn phải tìm documentation khắp nơi.
 > **Đọc xong:** mở đúng file trong 30 giây, trả lời được ngay nhờ mục "Trả lời 1 câu". **Thời gian:** ~5 phút đọc mục lục.
 
-Mỗi bài gồm ~10 câu hỏi, mỗi câu theo cấu trúc cố định: **Hỏi ngắn gọn → Trả lời 1 câu → Giải thích chi tiết + ví dụ → Làm thế nào (steps copy-paste) → Khi nào áp dụng → Nếu vẫn lỗi thì...**. Bận thì đọc "Trả lời 1 câu" + sơ đồ mermaid đầu file; rảnh thì làm theo steps.
+Coi nhóm này như một tủ thuốc, không phải cuốn sách để đọc từ đầu tới cuối: bạn tra triệu chứng, tìm đúng "ngăn", lấy đúng bài. Mỗi bài gồm ~10 câu hỏi, mỗi câu theo cấu trúc cố định: **Hỏi ngắn gọn → Trả lời 1 câu → Giải thích chi tiết + ví dụ → Làm thế nào → Nếu vẫn lỗi thì...**. Bận thì chỉ đọc "Trả lời 1 câu" + sơ đồ mermaid đầu file; rảnh thì làm theo steps.
 
 | # | Chủ đề | Link |
 |---|--------|------|
@@ -21,7 +21,7 @@ Mỗi bài gồm ~10 câu hỏi, mỗi câu theo cấu trúc cố định: **H�
 
 ## Gặp lỗi X → đọc bài nào?
 
-Section này trả lời: với triệu chứng bạn đang gặp, nên mở file nào trong 10 bài. Tra cứu nhanh, không cần đọc từ đầu.
+Không cần đọc từ đầu: bắt đúng triệu chứng bạn đang gặp, rồi nhảy thẳng tới bài tương ứng.
 
 - Không đăng nhập / thắc mắc giá / seat / trial / policy chặn → **bài 01**
 - Model nào ngon, chi phí AI Credits, tràn context, BYOK → **bài 02**
@@ -33,3 +33,20 @@ Section này trả lời: với triệu chứng bạn đang gặp, nên mở fil
 - Copilot offline, mất gợi ý, chat error, CLI fail → **bài 08** trước
 - Sợ lộ code, training, secret scanning, audit logs, ZDR → **bài 09**
 - Actions + coding agent, SDK, auto review, bản Web/Mobile → **bài 10**
+
+## So sánh với Claude Code
+
+| Việc | GitHub Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Tra cứu theo triệu chứng | 10 bài FAQ + bảng "lỗi nào đọc câu nào" | Docs Anthropic theo chủ đề + `/help` trong phiên | Cùng cách tra: tìm đúng chỗ, đừng đọc tuần tự |
+| Hỏi ngay trong công cụ | Copilot Chat, `/help`, `/status` | `/help`, hỏi trực tiếp trong phiên terminal | Cả hai đều có trợ giúp tại chỗ |
+| Luật repo | `.github/copilot-instructions.md` + `AGENTS.md` | `CLAUDE.md` | Cùng tư tưởng: file trong repo là "luật" |
+| Cấu hình MCP | `.vscode/mcp.json` (CLI 2026: `~/.mcp-config.json` + `.mcp.json`) | `.mcp.json` + cấu hình user | Cùng chuẩn giao thức, khác đường dẫn |
+| Tài khoản & quota | Gói cá nhân/team + AI Credits (1 credit = $0.01) | Theo gói Claude/subscription hoặc API key | Đơn vị đo khác nhau — đọc bài 01/02 để tính |
+| Debug lỗi | Bảng lỗi + thứ tự debug 7 bước (bài 08) | Log phiên terminal + docs troubleshooting Anthropic | Thứ tự "auth → mạng → version → phiên mới" gần giống nhau |
+
+> **Đọc bảng này thế nào:** phần lớn khái niệm chuyển gần 1-1 (luật trong repo, MCP, slash command), chỉ khác *tên file* và *bề mặt chạy*. Điểm khác đáng nhớ: Copilot có sẵn bảng lỗi + chỉ báo trực quan (status bar) trong khi Claude Code terminal-first — lỗi hiện ngay nơi bạn gõ lệnh.
+
+Quay về: [../README.md](../README.md) · Bài tổng: [../01-huong-dan-su-dung/00-tong-quan-copilot.md](../01-huong-dan-su-dung/00-tong-quan-copilot.md).
+
+> **Chốt nhóm FAQ:** tra đúng triệu chứng, đọc "Trả lời 1 câu" trước, rồi mới làm theo steps — 10 bài này để bạn tự gỡ phần lớn ca kẹt mà không phải chờ ai.

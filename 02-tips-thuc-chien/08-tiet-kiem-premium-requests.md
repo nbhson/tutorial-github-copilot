@@ -1,6 +1,16 @@
 # Tips 08 — Tiết Kiệm Premium Requests: Dùng Copilot Rẻ Mà Vẫn Mạnh
 
+> **Dành cho:** người thấy credits tụt nhanh mà không rõ tiền đi đâu · **Vấn đề:** việc gì cũng dùng Agent mode + model mạnh nhất, hết quota giữa tháng · **Đọc xong:** route đúng việc sang đúng chế độ/model, prune MCP, đóng gói knowledge base — giảm 30–50% credits mà chất lượng không tụt · **Thời gian:** ~20 phút đọc + ~50 phút làm bài tập.
+>
 > Copilot 2026 tính theo **AI Credits** (không phải premium requests cũ). Bài này dạy bạn model routing, phân biệt completions vs chat vs agent, prune MCP/extensions, dùng knowledge base để trả ít mà được nhiều.
+
+## Mục tiêu bài học
+
+- Phân biệt **thang tốn** completions → Ask → Edit → Agent → Coding Agent, và biết khi nào mới leo thang.
+- Có **bảng routing** để gán đúng model/chế độ cho từng cỡ việc, thay vì việc gì cũng Agent mạnh.
+- Ước lượng được **cái gì tốn credits** (`turns × tokens × hệ số model`) và cách cắt từng thành phần.
+- Biết **prune MCP/extensions**, giữ chat gọn, và đóng gói knowledge base/prompt files để "trả 1 lần, dùng mãi".
+- Làm xong **audit 50 phút**: có bảng routing dán lên wiki + dashboard credits tuần sau thấp hơn.
 
 ## Mục lục
 
@@ -43,6 +53,8 @@ flowchart TD
 
 Giải thích: Tab trước, Ask/Edit sau, Agent khi đáng, Coding Agent khi rảnh tay. 1 turn plan mạnh tránh 10 turns sửa sai (đáng tiền); hỏi vặt bằng Agent mạnh là đốt credits.
 
+**Vì sao quan trọng?** Không nắm thang tốn thì bạn mặc định việc gì cũng Agent + model mạnh — đó chính là cách đốt credits nhanh nhất. **Nếu làm sai?** Bạn trả tiền cho reasoning nặng ở những việc gõ vài ký tự + Tab là xong, rồi hết quota đúng lúc cần model mạnh cho việc khó thật.
+
 > ✅ **Kỳ vọng thấy gì:** sau routing 1 tuần, credits/tuần giảm 30–50% mà test xanh + review PASS giữ nguyên.
 
 ---
@@ -64,6 +76,8 @@ Sau routing + prune: 200 requests/tuan, chat luong tuong duong.
 ```
 
 > Rule: **việc rẻ thì dùng cách rẻ. Credits model mạnh để dành cho plan + implement khó.**
+
+**Nếu làm sai thì sao?** Đốt hết quota giữa tháng, đến đoạn cần model mạnh để plan/refactor thì lại phải dùng model base "hẻo" — chất lượng tụt đúng lúc quan trọng nhất.
 
 ---
 
@@ -95,6 +109,8 @@ Giảm 1 trong 3 là rẻ:
 - Giảm hệ số model: việc dễ dùng model nhẹ.
 
 Xem chat gọn ở [Tips 01](./01-context-hygiene.md), prompt tốt ở [Tips 02](./02-prompt-engineering.md).
+
+**Vì sao quan trọng?** Công thức này cho bạn 3 "núm vặn" cụ thể thay vì cảm giác mơ hồ "sao tháng này tốn thế". **Nếu làm sai?** Bạn chỉ chỉnh 1 núm (ví dụ đổi model) mà quên 2 núm còn lại (turns và tokens) — vẫn tốn như cũ mà không hiểu vì sao.
 
 ---
 
@@ -164,6 +180,8 @@ KHÔNG đáng:
 # Ky vong: 1 credit cho viec manh phai co 10 lan gia tri, nguoc lai la dot.
 ```
 
+**Vì sao quan trọng?** Routing biến "chọn model" từ cảm tính thành quy tắc: cỡ việc quyết định model, không phải thói quen. **Nếu làm sai?** Bạn vừa đắt vừa chậm — việc nhỏ chạy flagship lâu hơn, việc lớn chạy model nhẹ thì phải retry nhiều lần.
+
 ---
 
 ## 4. Completions vs Chat vs Agent
@@ -224,6 +242,8 @@ TỆ (Agent, đắt): Agent đọc 20 files để giải thích 1 hàm.
 - [ ] Task <15 phút Edit xong? → đừng bật Agent.
 # Ky vong: di qua het 4 o moi lan bat agent, tranh do credits vo von.
 ```
+
+**Vì sao quan trọng?** Ba chế độ này chênh nhau cả chục lần về chi phí; chọn đúng chế độ tiết kiệm nhiều hơn mọi mẹo tối ưu prompt. **Nếu làm sai?** Bạn viết prompt hoàn hảo nhưng giao cho Agent một việc Edit 5 giây là xong — prompt hay mấy cũng vô ích.
 
 ---
 
@@ -306,6 +326,8 @@ Luu `.github/skills/team-bug/SKILL.md` (chuan 2026, chay Local + Cloud) — hoac
 
 Chi tiết xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 
+**Nếu làm sai thì sao?** Không đóng gói thì mỗi lần dùng lại paste lại — vừa tốn tokens vừa dễ lệch nhau (mỗi chat một phiên bản spec). Đóng gói sai chỗ (nhét cả checklist dài vào instructions) thì lại nạp lại mỗi turn, càng tốn hơn.
+
 ---
 
 ## 7. Walkthrough theo phút: audit 1 tuần
@@ -344,6 +366,21 @@ Mục tiêu: giảm 30–50% requests mà V3/V4 verify vẫn giữ (xem [Tips 04
 
 ---
 
+## So sánh với Claude Code
+
+| Việc | Copilot (nhóm này) | Claude Code | Ghi chú |
+|---|---|---|---|
+| Cơ chế tính tiền | AI Credits (1 credit = 0,01 USD), trừ theo model × token | Gói subscription (Pro/Max) với hạn mức theo cửa sổ usage | Khác bản chất: Copilot trả theo mức dùng, Claude theo quota gói |
+| Completions (Tab) | Có, gần như miễn phí credits | Không phải trọng tâm | Copilot có "vua" gõ code từng dòng |
+| Chọn model | Đổi ngay trong Chat: GPT / Claude / Gemini | `/model` chọn trong nhóm model Anthropic | Copilot cho chọn nhiều nhà cung cấp hơn |
+| Giữ context gọn | New Chat + `#file`/`#selection` | `/clear` + `/compact` | Cùng mục tiêu: đừng nuôi một phiên quá dài |
+| Đóng gói tri thức | Knowledge base + `.github/copilot-instructions.md` | `CLAUDE.md` + file trong `.claude/` | Cùng tư tưởng: viết 1 lần, tái dùng nhiều lần |
+| Prune công cụ ngoài | MCP servers (giữ ≤6) | MCP servers trong `.mcp.json` | Cả hai đều cần prune để giảm overhead mỗi lượt |
+
+> **Đọc bảng này thế nào:** nguyên tắc tối ưu (việc dễ dùng cách rẻ, giữ context gọn, đóng gói cái lặp lại) giống hệt nhau — chỉ khác *đơn vị đo tiền*. Copilot đo bằng AI Credits theo từng lượt; Claude Code đo bằng hạn mức gói, nên bạn không "thấy" từng request tốn bao nhiêu — càng phải đo bằng thói quen.
+
+---
+
 ## 9. Pitfalls + cách fix
 
 | Pitfall | Triệu chứng | Fix |
@@ -358,6 +395,41 @@ Mục tiêu: giảm 30–50% requests mà V3/V4 verify vẫn giữ (xem [Tips 04
 | Giao Coding Agent việc 15 phút | Đắt + chờ lâu | Edit local nhanh hơn |
 | Tắt completions | Mọi việc đều thành chat | Bật completions, Tab trước khi chat |
 | Không đo usage | Không biết tốn đâu | Xem usage weekly, audit 50 phút mục 7 |
+
+### Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+
+**1. Hỏi vặt bằng Agent mạnh**
+
+```text
+❌ SAI: (Agent + model mạnh) "@workspace hàm này làm gì?" → quét cả repo, đọc 20 file.
+✅ ĐÚNG: (Ask + model nhẹ) "Giải thích #selection 3 bullet, không sửa." → 1 turn rẻ.
+```
+**Bài học:** câu hỏi càng nhỏ thì chế độ càng nhẹ — dùng Ask/`#selection` cho việc hiểu code, để Agent mạnh cho việc khó thật.
+
+**2. Nuôi 1 chat qua nhiều task**
+
+```text
+❌ SAI: giữ nguyên 1 chat từ task A sang task B, mỗi turn gánh rác của task trước.
+✅ ĐÚNG: xong 1 task → New Chat; task mới mở chat mới, chỉ mang context cần thiết.
+```
+**Bài học:** mỗi turn gửi lại toàn bộ history — chat càng dài thì mỗi request càng đắt và càng dễ lạc.
+
+**3. Paste spec dài vào từng chat**
+
+```text
+❌ SAI: mỗi chat dán lại spec 200 dòng → trả 20 lần cho cùng một nội dung.
+✅ ĐÚNG: đưa spec vào knowledge base / instructions → viết 1 lần, mọi chat tự đọc.
+```
+**Bài học:** nội dung lặp lại nhiều lần thì đóng gói (knowledge base/instructions/prompt file), đừng paste tay.
+
+## Best practices (kèm "vì sao")
+
+- **Tab trước, chat sau.** *Vì sao?* Completions gần như miễn phí credits — gõ `function sum(` + Tab rẻ hơn hẳn việc mở chat "viết hàm cộng".
+- **Việc dễ dùng model nhẹ, việc khó mới leo model mạnh.** *Vì sao?* Giá chênh 5–10 lần; giải thích code không cần flagship.
+- **Một task = một chat sạch.** *Vì sao?* History cũ được gửi lại mỗi turn, làm request sau đắt dần và dễ lạc trọng tâm.
+- **Giữ MCP ≤ 6 servers, audit mỗi tháng.** *Vì sao?* Mỗi server cõng thêm tool defs vào *mọi* request, kể cả khi bạn không dùng.
+- **Cái gì lặp lại thì đóng gói (knowledge base / instructions / prompt file).** *Vì sao?* Viết 1 lần rồi tái dùng rẻ hơn paste lại N lần.
+- **Đo usage hằng tuần.** *Vì sao?* Không đo thì không biết tiền đi đâu, cũng không biết routing có thực sự hiệu quả.
 
 ---
 
@@ -399,4 +471,4 @@ Mục tiêu: giảm 30–50% requests mà V3/V4 verify vẫn giữ (xem [Tips 04
   - [08 — MCP](../01-huong-dan-su-dung/08-mcp-ket-noi-cong-cu-ngoai.md) — prune ở đâu, giữ mấy servers
   - [17 — Agent Customizations Hub](../01-huong-dan-su-dung/17-agent-customizations-hub.md) — skill/agent M
 
-> Mẹo 1 dòng: _việc rẻ thì dùng cách rẻ — Tab trước, Ask/Edit sau, Agent mạnh để dành cho plan khó._
+> **Chốt Tips 08:** credits không mất vì bạn dùng Copilot nhiều, mà vì bạn dùng *sai cỡ việc*. Giữ đúng thứ tự Tab → Ask/Edit → Agent → Coding Agent, và đóng gói những gì lặp lại — bạn sẽ tiết kiệm gần một nửa mà chất lượng đầu ra không đổi.

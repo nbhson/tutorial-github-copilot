@@ -1,13 +1,24 @@
 # Tips 07 — Thiết Kế Skills & Prompts Tái Dùng: Viết 1 Lần, Cả Team Hưởng
 
+> **Dành cho:** team 2 người trở lên đang fix bug / review / release mỗi người một kiểu. · **Vấn đề:** prompt gõ tay lặp lại mỗi lần, output không đồng nhất, đồng nghiệp hỏi "prompt hôm qua đâu?" mà bạn không nhớ. · **Đọc xong:** đóng gói được prompt files, instructions và Agent Skills để cả team gọi ra cùng một format. · **Thời gian:** ~20 phút đọc + ~35 phút làm walkthrough cuối bài.
+
 > Việc lặp lại gõ tay mỗi lần là nợ. Bài này dạy bạn thiết kế **Agent Skills** (`SKILL.md` — chuẩn khuyến nghị 2026, chạy mọi harness), prompt files (`.prompt.md` — legacy, chỉ Local), instructions (`applyTo` globs): frontmatter, variables, few-shot, versioning.
 >
 > **Lưu ý 2026:** `.prompt.md` (prompt files) **deprecated cho Agent Host** (Copilot/Cloud) — vẫn chạy Local. Việc mới nên ưu tiên **Agent Skill** (`SKILL.md`, chuẩn mở) — chi tiết bài 05. Tips này dạy cả 2, khuyến nghị skill.
 
+## Mục tiêu bài học
+
+- Phân biệt **3 loại tài sản tái dùng**: prompt file (legacy), instructions, Agent Skill — và biết khi nào dùng loại nào.
+- Hiểu **vì sao `.prompt.md` bị deprecated cho Agent Host** năm 2026, và vì sao việc mới nên làm bằng `SKILL.md`.
+- Viết được frontmatter, variables (`${input:...}`), few-shot cho một tài sản tái dùng chuẩn.
+- Đóng gói xong **1 skill chạy cả Local + Cloud** trong 35 phút và test trên task thật.
+
 ## Mục lục
 
+- [0. Giải ngố thuật ngữ (1 câu + analogie + verify)](#0-giải-ngố-thuật-ngữ-1-câu--analogie--verify)
 - [1. Vì sao phải tái dùng?](#1-vì-sao-phải-tái-dùng)
 - [2. Cơ chế: 3 loại tài sản tái dùng](#2-cơ-chế-3-loại-tài-sản-tái-dùng)
+- [So sánh với Claude Code](#so-sánh-với-claude-code)
 - [3. Prompt files (.prompt.md): mẫu gọi nhanh](#3-prompt-files-promptmd-mẫu-gọi-nhanh)
 - [4. Instructions: luật tự áp theo scope](#4-instructions-luật-tự-áp-theo-scope)
 - [5. Skills (SKILL.md): procedure nhiều bước](#5-skills-skillmd-procedure-nhiều-bước)
@@ -15,6 +26,7 @@
 - [7. Walkthrough theo phút: đóng gói 1 prompt team](#7-walkthrough-theo-phút-đóng-gói-1-prompt-team)
 - [8. Bảng tra nhanh: dùng loại nào?](#8-bảng-tra-nhanh-dùng-loại-nào)
 - [9. Pitfalls + cách fix](#9-pitfalls--cách-fix)
+- [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
 - [10. Bài tập cuối bài](#10-bài-tập-cuối-bài)
 - [11. Tham khảo chéo](#11-tham-khảo-chéo)
 
@@ -45,6 +57,10 @@ flowchart TD
 
 Giải thích: 1 dòng → instructions; 1 task lặp → prompt file (<60 dòng + variables + 1 few-shot); quy trình dài → skill. Mọi thứ commit vào repo + PR review.
 
+**Vì sao quan trọng?** Ba loại này không thay thế nhau — chúng trả lời ba câu hỏi khác nhau: "luật này áp *mọi lúc* không?" (instructions), "việc này *lặp lại* không?" (prompt file), "quy trình này *dài* không?" (skill). Chọn sai loại thì công cụ chạy, nhưng bạn vẫn phải gõ tay — đúng cái nợ bạn muốn xóa.
+
+**Nếu làm sai thì sao?** Nhét luật 1 dòng vào prompt file → mỗi lần phải nhớ gọi; nhét quy trình 10 bước vào prompt file → file phình, Copilot quên nửa sau; nhét task lặp vào instructions → nạp lại mỗi turn, tốn credit và loãng trọng tâm. Đây là lý do về sau bạn sẽ thấy pitfall "file 200 dòng" và "10 prompt files trùng nhau" quay lại ám.
+
 > ✅ **Kỳ vọng thấy gì:** gọi `/team-bug scope=... bug=...` → output đủ Steps + Ràng buộc + Evidence, không thiếu mục.
 
 ---
@@ -66,6 +82,10 @@ Sau: viết 1 file 30 dòng, gọi `/team-bug` 20 lần, output đồng nhất
 ```
 
 > Rule: **prompt dùng >2 lần thì đóng gói thành file. Luật áp mọi turn thì thành instructions.**
+
+**Vì sao quan trọng?** Nợ prompt không nằm ở việc gõ 10 dòng — nằm ở chỗ mỗi lần gõ bạn *sót một dòng khác nhau*. Sót "nhớ chạy test" ở lần này, sót "đừng sửa test cho xanh" ở lần khác. Đóng gói biến những dòng dễ sót thành một file cố định, gọi ra là có đủ.
+
+**Nếu làm sai thì sao?** Không đóng gói, chi phí tăng theo *bình phương người dùng*: 5 người × 20 lần = 100 lần gõ, 100 dị bản, review mệt gấp nhiều lần viết. Và khi có bug do prompt thiếu, bạn không biết sửa ở đâu vì chẳng có "file chuẩn" nào để sửa.
 
 ---
 
@@ -101,6 +121,23 @@ skills/
   release/SKILL.md
   migrate-db/SKILL.md
 ```
+
+---
+
+## So sánh với Claude Code
+
+Phần này hữu ích nhất khi bạn (hoặc đồng nghiệp) đã quen Claude Code và muốn biết khái niệm nào chuyển được sang Copilot:
+
+| Việc | GitHub Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Prompt tái dùng | `.prompt.md` (legacy) hoặc Skill | `.claude/commands/*.md` (slash command) | Cùng ý tưởng: file markdown để trong repo, gọi ra khi cần |
+| Truyền tham số | `${input:tên}`, `${selection}`, `${file}` | `$ARGUMENTS`, `$1` / `$2` | Cú pháp khác, ý tưởng giống: đừng sửa tay mỗi lần |
+| Giới hạn quyền/tools | frontmatter `mode` + `tools` | frontmatter `allowed-tools` | Cùng tư tưởng: research thì cấm `edit` |
+| Luật tự áp | `.github/copilot-instructions.md` | `CLAUDE.md` | Cùng tư tưởng: file trong repo là "luật" |
+| Luật theo scope | `*.instructions.md` + `applyTo` glob | `CLAUDE.md` phân cấp theo thư mục | Copilot có glob `applyTo`; Claude Code theo cây thư mục |
+| Skill | `SKILL.md` | `SKILL.md` | **Chuẩn chung Agent Skills — cùng định dạng `SKILL.md`, chuyển qua lại được** |
+
+> **Đọc bảng này thế nào:** phần lớn khái niệm chuyển gần như 1-1, chỉ khác *tên file* và *cú pháp biến*. Riêng **`SKILL.md` là chuẩn chung** (Agent Skills) — nên skill viết cho Copilot về lý thuyết dùng được ở harness khác hỗ trợ cùng chuẩn, không phải viết lại. Đây là lý do 2026 việc mới nên ưu tiên skill thay vì `.prompt.md` gắn cứng vào Local.
 
 ---
 
@@ -442,6 +479,43 @@ Fix bug refund quá 30 ngày bị 500 trong src/payments, nhớ không đụng g
 | Viết xong không test | Team gọi bị lỗi | Test trên task thật + 1 đồng nghiệp thử trước khi share |
 | 10 prompt files trùng nhau | Không biết dùng cái nào | Gộp trùng, mỗi task 1 file, README index |
 
+### Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+
+**1. Viết skill bằng việc mới nhưng lại chọn `.prompt.md`**
+
+```text
+❌ SAI: tạo .github/prompts/release.prompt.md cho quy trình 8 bước (chỉ chạy Local)
+✅ ĐÚNG: tạo skills/release/SKILL.md (SKILL.md — chuẩn chung, chạy cả Cloud)
+```
+**Bài học:** 2026 việc mới ưu tiên Skill; `.prompt.md` chỉ giữ cho repo cũ chạy Local, port dần.
+
+**2. Mô tả skill chung chung**
+
+```text
+❌ SAI: description: "Giúp dev"  → Copilot không biết khi nào load
+✅ ĐÚNG: description: "Dùng khi cần release version mới: bump, changelog, tag, verify CI."
+```
+**Bài học:** description là *trigger*, không phải lời giới thiệu — phải nêu use-case + keyword để Copilot tự nhận diện.
+
+**3. Nhét luật chung vào file con**
+
+```text
+❌ SAI: lặp "không commit main" trong cả 5 file *.instructions.md
+✅ ĐÚNG: luật chung để ở copilot-instructions.md, file con chỉ giữ luật riêng scope
+```
+**Bài học:** chung ở root, riêng theo glob — sửa 1 chỗ thay vì 5 chỗ, tránh lệch nhau.
+
+---
+
+## Best practices (kèm "vì sao")
+
+- **Một task lặp = một file; đừng nhồi nhiều task vào một file.** *Vì sao?* File 200 dòng làm Copilot quên nửa sau, còn 10 file trùng nhau thì không ai biết dùng cái nào.
+- **Root instructions <200 dòng, luật riêng tách `applyTo`.** *Vì sao?* Instructions nạp lại mỗi turn — dài là chậm và loãng trọng tâm.
+- **Luôn có variables + 1 few-shot.** *Vì sao?* Variables để khỏi sửa tay mỗi lần; few-shot để output đồng nhất và Copilot bớt "sáng tạo bừa".
+- **Mô tả skill bằng use-case + trigger keyword.** *Vì sao?* Description chung chung → skill không bao giờ tự trigger, coi như không tồn tại.
+- **Commit `.github/` + `skills/` vào repo và review qua PR.** *Vì sao?* Không commit thì mỗi máy một bản, đồng nghiệp không dùng được, bản "chuẩn" trên máy ai cũng không rõ.
+- **Test trên task thật trước khi share cho team.** *Vì sao?* Viết xong không test → đồng nghiệp gọi bị lỗi, uy tín file tự dặn sụp ngay lần đầu.
+
 ---
 
 ## 10. Bài tập cuối bài
@@ -477,4 +551,4 @@ Fix bug refund quá 30 ngày bị 500 trong src/payments, nhớ không đụng g
   - [Tips 09](./09-teamwork-chuan-hoa.md) — commit + share cho team
   - [Tips 03](./03-plan-first-workflow.md) — plan prompt file
 
-> Mẹo 1 dòng: _prompt dùng 2 lần thì đóng gói — 1 dòng thành instructions, 1 task thành prompt file, 1 quy trình thành skill._
+> Chốt bài này: prompt gõ 2 lần là đã thành nợ — 1 dòng thì để instructions, 1 task lặp thì đóng gói thành file, còn quy trình dài thì viết `SKILL.md` để chuẩn chung dùng lại được ở mọi harness.

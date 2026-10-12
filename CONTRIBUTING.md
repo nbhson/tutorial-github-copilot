@@ -3,6 +3,8 @@
 Cảm ơn bạn muốn đóng góp! Repo này là tài liệu tiếng Việt, mọi code block đều copy-paste được.
 Đọc 5 phút file này trước khi mở PR để bài mới "khớp format, không phải sửa lại".
 
+> **Quan trọng — khuôn "dễ hiểu":** mọi file `.md` phải viết theo [`STYLE.md`](./STYLE.md) (khái niệm đi kèm "vì sao quan trọng" + "nếu làm sai thì sao", pitfall ❌ SAI/✅ ĐÚNG, best practices kèm "vì sao", bảng so sánh Claude Code). STYLE.md cũng liệt kê **danh sách câu cấm** — tránh lặp lại văn template kiểu "Section này trả lời..." hay "Mẹo 1 dòng" giống nhau ở mọi file.
+
 ## Cách thêm bài mới đúng format
 
 ### Bài trong `01-huong-dan-su-dung/` (deep-dive `NN-ten-bai.md`)
@@ -27,14 +29,9 @@ Cảm ơn bạn muốn đóng góp! Repo này là tài liệu tiếng Việt, m�
 
 ### Lệnh mới trong `01-huong-dan-su-dung/commands/<nhóm>/<slug>/README.md`
 
-- 1 folder = 1 lệnh, chỉ 1 file `README.md`. Độ dài 30–200 dòng (tối thiểu 30–50 dòng súc tích, tối đa ~200).
-- Format chuẩn 6 phần (bắt chước `commands/code-actions/fix/README.md` bản mới):
-  1. `# /tên-lệnh — mô tả 1 dòng` + 1 câu nôm na "lệnh làm gì".
-  2. `## Khi nào dùng` (3–5 gạch đầu dòng: dùng khi nào / không dùng khi nào).
-  3. `## Cách gọi` (code block phím tắt/slash + kèm scope `#file`/`@workspace`).
-  4. `## Ví dụ prompt thật + kết quả mong đợi` (≥1 prompt copy-paste được + mô tả kết quả + cách verify).
-  5. `## Lỗi thường gặp` (bảng triệu chứng → nguyên nhân → fix).
-  6. `## Tham khảo` (link index nhóm + bài tổng quan liên quan).
+- 1 folder = 1 lệnh, chỉ 1 file `README.md`. Độ dài 60–200 dòng.
+- Format chuẩn theo [`STYLE.md`](./STYLE.md) mục 4 (khuôn "dễ hiểu"), gồm: tiêu đề 1 dòng + `> Dành cho/Đọc xong` → 1 câu nôm na → **Vì sao dùng lệnh này** → Khi nào dùng / đừng → Cách gọi (copy-paste) → Ví dụ thật + kết quả + verify → Nếu làm sai (❌ SAI / ✅ ĐÚNG) → Lỗi thường gặp → **So sánh Claude Code** → Best practices (kèm "vì sao") → Bài tập nhỏ → Tham khảo.
+- File vàng để nhìn mẫu: `commands/code-actions/fix/README.md`.
 - Ví dụ phải riêng cho từng lệnh (cấm copy-paste ví dụ chung cho mọi lệnh). Ghi rõ mode nào dùng được (Ask/Edit/Agent) và cách kiểm tra bằng `/` trong Chat.
 
 ## Quy ước đặt tên & văn phong
@@ -42,7 +39,7 @@ Cảm ơn bạn muốn đóng góp! Repo này là tài liệu tiếng Việt, m�
 - File/kebab-case không dấu: `NN-ten-tieng-viet.md`, folder lệnh 1 từ: `fix/`.
 - Tiếng Việt, xưng "bạn", code comments tiếng Việt không dấu (tránh lỗi encoding CI).
 - Tiêu đề bài 01: `# NN — Tên Bài (...)`. Tips 02: `# Tips NN — Tên (...)`.
-- Không sửa nội dung file `.md` hiện có khi thêm bài mới (trừ link index ở lượt dọn riêng).
+- Không sửa nội dung file `.md` hiện có khi thêm bài mới (trừ link index ở lượt dọn riêng, hoặc đợt viết lại có ghi rõ trong PR + CHANGELOG).
 
 ## PR checklist (tick hết mới merge)
 
@@ -53,4 +50,4 @@ Cảm ơn bạn muốn đóng góp! Repo này là tài liệu tiếng Việt, m�
 - [ ] Lệnh mới: đủ 6 phần + ví dụ riêng từng lệnh + mode hỗ trợ + cách kiểm tra `/`.
 - [ ] Workflow YAML mới: parse được (`python -c "import yaml..."`), secrets qua env,
       không hardcode token.
-- [ ] Không sửa file `.md` cũ (diff chỉ chứa file mới, trừ khi PR ghi rõ lý do).
+- [ ] Không sửa file `.md` cũ (diff chỉ chứa file mới, trừ đợt viết lại có ghi rõ lý do).

@@ -4,13 +4,18 @@
 > **Vấn đề:** "instruction không ăn thì fix sao, dựng pre-commit + branch protection, guardrail lệnh nguy hiểm trong CI" — 10 câu hỏi, mỗi câu có giải thích + lệnh copy-paste + ví dụ + khi nào áp dụng.
 > **Đọc xong:** biết instruction không ăn thì fix sao, dựng pre-commit + branch protection. **Thời gian:** ~15 phút đọc.
 
-File này là "hooks + guardrails" của Copilot: instruction không ăn, Copilot hooks in-process (preview, Local — bài 17), pre-commit, branch protection. Mỗi câu có giải thích + lệnh copy-paste + ví dụ + khi nào áp dụng.
+File này là "hooks + guardrails" của Copilot: instruction không ăn, Copilot hooks in-process (preview, Local — bài 17), pre-commit, branch protection. Điểm chung của các câu hỏi dưới đây gói trong một câu: quy tắc nào chỉ nên *nhắc*, và quy tắc nào phải *khóa cứng* ở server.
 
----
+## Mục tiêu bài học
+
+- Phân biệt **khuyến nghị** (instructions) và **luật cứng** (policy / branch protection / secret scanning) — biết khi nào phải nâng cấp.
+- Viết câu cấm dạng ALWAYS/NEVER đủ cụ thể để Copilot không bỏ qua.
+- Dựng được 3 lớp chặn commit xấu: pre-commit, secret scan, GitHub push protection.
+- Biết hooks in-process 2026 mạnh tới đâu (**preview, Local-only, chưa phải security boundary**) để không ỉ lại vào nó.
 
 ## Sơ đồ tư duy nhanh (đọc 30 giây)
 
-Section này trả lời: quy tắc "cấm" của bạn viết ở tầng nào — khuyến nghị (instructions) hay luật cứng (policy/protection), và khi nào chuyển từ khuyến nghị sang luật.
+Quy tắc "cấm" của bạn nằm ở tầng nào — khuyến nghị (instructions) hay luật cứng (policy/protection) — và khi nào chuyển từ khuyến nghị sang luật.
 
 ```mermaid
 flowchart LR
@@ -23,7 +28,7 @@ flowchart LR
 
 ## Bảng tổng hợp: guardrail nào chặn ở đâu
 
-Section này trả lời: muốn chặn hành vi nào → công cụ nào, chặn ở tầng nào (IDE, local, GitHub server).
+Muốn chặn hành vi nào → dùng công cụ nào, chặn ở tầng nào (IDE, local, GitHub server).
 
 | Muốn chặn | Công cụ | Chặn ở tầng |
 |---|---|---|
@@ -37,8 +42,6 @@ Section này trả lời: muốn chặn hành vi nào → công cụ nào, chặ
 
 ## 1. Instruction "không ăn" — vì sao Copilot vẫn làm điều cấm?
 
-Section này trả lời: 5 nguyên nhân "instruction không ăn", check theo thứ tự.
-
 > **Hỏi ngắn gọn:** _Instruction "không ăn" — vì sao Copilot vẫn làm điều cấm?_
 
 **Trả lời 1 câu:** 5 nguyên nhân: file đặt sai chỗ, `applyTo` sai glob, câu cấm mơ hồ, prompt đè instruction, context tràn — check theo đúng thứ tự.
@@ -51,9 +54,11 @@ Section này trả lời: 5 nguyên nhân "instruction không ăn", check theo t
 4. **Prompt task đè instruction:** user bảo "sửa luôn migration" → model nghe prompt gần hơn.
 5. **Context tràn** → instructions bị cắt khỏi window (xem [bài 02](02-model-context-premium.md)).
 
-### Làm thế nào (steps copy-paste)
+**Vì sao quan trọng?** Hầu hết "Copilot không nghe lời" thật ra nằm ở khâu cấu hình chứ không phải model cố tình cãi. Kiểm đúng thứ tự này giúp bạn sửa gốc thay vì viết lại câu cấm nhiều lần.
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+**Nếu làm sai?** Bạn đi tăng cường độ câu chữ ("KHÔNG, TUYỆT ĐỐI KHÔNG...") trong khi lỗi thật là file nằm sai thư mục hoặc `applyTo` không khớp — câu cấm có mạnh đến mấy cũng không bao giờ được nạp.
+
+### Làm thế nào (steps copy-paste)
 
 ```bash
 # Checklist file có đúng chỗ không
@@ -70,12 +75,11 @@ wc -l .github/copilot-instructions.md  # nên <200 dòng, dài quá bị cắt
 
 > **Khi nào áp dụng:** mọi ca "em đã ghi rồi mà nó không nghe" — check vị trí + độ cụ thể trước.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (1) hỏi lại Copilot để chắc nó load đúng file; (2) đổi model (`/model`) rồi thử lại; (3) nếu context dài làm file bị cắt thì rút instructions ngắn lại; (4) hỏi admin vì org policy có thể đang đè lên cấu hình của bạn.
+
 ---
 
 ## 2. Viết quy tắc "cấm" sao cho Copilot nghe lời?
-
-Section này trả lời: công thức "động từ mạnh + phạm vi + hậu quả" cho câu cấm.
 
 > **Hỏi ngắn gọn:** _Viết quy tắc "cấm" sao cho Copilot nghe lời?_
 
@@ -88,9 +92,9 @@ Section này trả lời: công thức "động từ mạnh + phạm vi + hậu 
 - Yếu: "Nhớ chạy test."
 - Mạnh: "ALWAYS chạy `npm test -- <file-lien-quan>` sau mỗi sửa. Không báo PASS thì không kết luận xong."
 
-### Làm thế nào (steps copy-paste)
+**Vì sao quan trọng?** Model chỉ tuân theo thứ nó *kiểm chứng được*. "Cẩn thận" là lời khuyên không đo được; "NEVER sửa path X" là mệnh lệnh có ranh giới rõ, và kèm hướng thay thế thì nó biết phải làm gì thay vì tự đoán.
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+### Làm thế nào (steps copy-paste)
 
 ```markdown
 <!-- Mẫu block Rules trong .github/copilot-instructions.md -->
@@ -105,12 +109,11 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** khi viết/sửa mọi instruction — mỗi quy tắc phải có động từ ALWAYS/NEVER + path/lệnh cụ thể.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (1) đối chiếu câu bạn viết với mẫu ALWAYS/NEVER; (2) hỏi Copilot "liệt kê 3 quy tắc bắt buộc trong instructions" xem nó có đọc tới; (3) dời rule quan trọng lên top file; (4) vẫn lọt thì nâng nó lên guardrail server (câu 4–5).
+
 ---
 
 ## 3. Pre-commit tương đương: chặn commit xấu thế nào?
-
-Section này trả lời: Copilot 2026 có hooks in-process nhưng chỉ preview Local — layer deterministic là git hooks + push protection.
 
 > **Hỏi ngắn gọn:** _Pre-commit tương đương: chặn commit xấu thế nào?_
 
@@ -128,9 +131,11 @@ Section này trả lời: Copilot 2026 có hooks in-process nhưng chỉ preview
 | Secret scan | gitleaks/trufflehog | Secret trong staged files | Local (git hook) | Repo có secret/thanh toán |
 | Push protection | GitHub secret scanning | Secret đã biết lúc push | GitHub server | Bật mặc định mọi repo |
 
-### Làm thế nào (steps copy-paste)
+**Vì sao quan trọng?** Hooks in-process của Copilot chặn được *một tool call*, nhưng config do dev giữ và mới ở mức preview — không phải hàng rào cứng. Muốn "không thể tắt được" thì phải dựa vào git hook + server, là những thứ chạy *ngoài* model.
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+**Nếu làm sai?** Tin "Copilot có PreToolUse rồi thì khỏi cần pre-commit" → khi model (hoặc một plugin) xin chạy ngoài hook, không có lớp nào chặn commit xấu — secret và lint lỗi vào thẳng repo.
+
+### Làm thế nào (steps copy-paste)
 
 ```bash
 # Cài pre-commit + hook secret scan
@@ -160,12 +165,11 @@ gitleaks protect --staged --verbose
 
 > **Khi nào áp dụng:** setup repo mới (cùng đợt copy `templates/`), và bắt buộc cho repo có secret/thanh toán.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (1) kiểm `pre-commit install` đã chạy chưa; (2) chạy tay `gitleaks protect --staged --verbose` xem hook có bắt; (3) nếu hook local đã pass mà vẫn muốn chặn tuyệt đối thì bật push protection (câu 5); (4) dán log hook khi nhờ admin.
+
 ---
 
 ## 4. Branch protection: chặn push main + ép review thế nào?
-
-Section này trả lời: tạo ruleset bảo vệ `main` bằng gh CLI.
 
 > **Hỏi ngắn gọn:** _Branch protection: chặn push main + ép review thế nào?_
 
@@ -178,9 +182,9 @@ Section này trả lời: tạo ruleset bảo vệ `main` bằng gh CLI.
 - **Block force pushes + deletions:** chống mất history.
 - (Nâng cao) **Require Copilot code review** (xem [bài 10](10-ci-sdk-review-web.md)).
 
-### Làm thế nào (steps copy-paste)
+**Vì sao quan trọng?** Đây là lớp "law" thật sự: dù agent hay người, muốn vào `main` đều phải qua PR + CI xanh. Nó không phụ thuộc model có "nhớ" luật hay không.
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+### Làm thế nào (steps copy-paste)
 
 ```bash
 # Tạo ruleset bằng gh CLI (thay <OWNER>/<REPO>)
@@ -198,12 +202,11 @@ gh api repos/<OWNER>/<REPO>/rulesets --jq '.[].name'
 
 > **Khi nào áp dụng:** mọi repo team >1 người — dựng trước khi onboarding Copilot coding agent (nó cũng phải tuân ruleset).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (1) kiểm bạn có quyền admin trên repo; (2) đọc lại payload `rules` xem `target`/`conditions` có đúng branch; (3) nếu API trả lỗi, dán response khi mở issue; (4) hỏi org owner vì ruleset org-level có thể đè.
+
 ---
 
 ## 5. Secret scanning + push protection bật thế nào?
-
-Section này trả lời: 2 tính năng GitHub (Business/Enterprise full) — cách bật + xử lý khi lỡ commit secret.
 
 > **Hỏi ngắn gọn:** _Secret scanning + push protection bật thế nào?_
 
@@ -221,9 +224,9 @@ Bật ở `Repo/Org → Settings → Code security → Secret scanning + Push pr
 | Secret scanning | Quét repo tìm secret đã lộ | GitHub server (alert) | Bật mặc định mọi repo |
 | Push protection | Chặn ngay lúc `git push` | GitHub server | Bật cùng secret scanning |
 
-### Làm thế nào (steps copy-paste)
+**Vì sao quan trọng?** Secret lộ một lần là phải rotate; chặn ngay ở cổng push rẻ hơn nhiều so với dọn hậu quả sau khi nó đã nằm trong history và các bản clone.
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+### Làm thế nào (steps copy-paste)
 
 ```bash
 # Kiểm tra alerts secret đã lộ
@@ -246,12 +249,11 @@ git rm --cached secrets/leaked.key && git commit -m "chore: remove leaked secret
 
 > **Khi nào áp dụng:** bật mặc định mọi repo; khi bị chặn push thì đọc kỹ thông báo (nó chỉ đúng file:dòng).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (1) xác nhận tính năng có trên plan (Business/Enterprise full); (2) đọc kỹ thông báo block — nó chỉ đúng file:dòng; (3) rotate key trước khi xóa; (4) hỏi admin nếu repo/org đã tắt tính năng.
+
 ---
 
 ## 6. Ép conventional commits / lint trước khi agent commit?
-
-Section này trả lời: kết hợp commitlint (local) + status check (CI) — agent commit sai thì hook chặn + CI đỏ.
 
 > **Hỏi ngắn gọn:** _Ép conventional commits / lint trước khi agent commit?_
 
@@ -264,9 +266,9 @@ Section này trả lời: kết hợp commitlint (local) + status check (CI) —
 | commitlint hook local | Local | Ngay khi commit | Mọi repo dùng conventional commits |
 | Status check CI | GitHub server (PR) | Sau khi push/PR | Ép cả người lẫn agent trước merge |
 
-### Làm thế nào (steps copy-paste)
+**Vì sao quan trọng?** Agent và người thường commit theo thói quen khác nhau; nếu không có một chuẩn chung được ép tự động, git log sẽ loạn và việc sinh changelog/release trở nên khó.
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+### Làm thế nào (steps copy-paste)
 
 ```bash
 # Thêm commitlint vào pre-commit (đoạn thêm vào .pre-commit-config.yaml)
@@ -295,12 +297,11 @@ jobs:
 
 > **Khi nào áp dụng:** khi log git của team loạn do agent + người commit kiểu khác nhau.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (1) chạy `git commit` thử xem commitlint có bắt; (2) kiểm `stages: [commit-msg]`; (3) nếu local pass mà CI đỏ thì xem status check đã được bắt buộc trong ruleset chưa; (4) đọc log CI khi nhờ admin.
+
 ---
 
 ## 7. Giới hạn coding agent: chỉ cho nó đụng repo/branch nào?
-
-Section này trả lời: admin cấu hình org policy + dev ghi rõ scope trong issue.
 
 > **Hỏi ngắn gọn:** _Giới hạn coding agent: chỉ cho nó đụng repo/branch nào?_
 
@@ -308,9 +309,9 @@ Section này trả lời: admin cấu hình org policy + dev ghi rõ scope trong
 
 **Giải thích chi tiết + ví dụ:** Admin (Enterprise) cấu hình ở org policy: coding agent bật cho repo nào, chạy trên branch nào, có tự tạo PR không. Dev thường: tôn trọng bằng cách assign task đúng repo + ghi rõ branch trong prompt/issue.
 
-### Làm thế nào (steps copy-paste)
+**Vì sao quan trọng?** Coding agent chạy trên cloud, ngoài tầm mắt bạn. Giới hạn phạm vi ở org policy (admin) và ghi rõ scope trong issue (dev) là hai lớp giữ cho nó chỉ động vào đúng chỗ.
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+### Làm thế nào (steps copy-paste)
 
 ```bash
 # Khi giao việc cho coding agent (trong issue), ghi rõ phạm vi:
@@ -323,12 +324,11 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** khi mở rộng coding agent từ pilot ra toàn org — mở từng đợt + ruleset đi kèm.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (1) ghi rõ repo + branch base trong issue; (2) kiểm agent có được bật cho repo đó không; (3) nếu báo "not enabled" thì hỏi admin mở pilot; (4) đọc PR của agent xem nó có lan ra ngoài scope.
+
 ---
 
 ## 8. Audit: biết ai/agent đã làm gì?
-
-Section này trả lời: 3 nguồn log — git, GitHub audit log, PR timeline.
 
 > **Hỏi ngắn gọn:** _Audit: biết ai/agent đã làm gì?_
 
@@ -346,9 +346,9 @@ Section này trả lời: 3 nguồn log — git, GitHub audit log, PR timeline.
 | GitHub audit log (org) | `Org → Settings → Audit log` | Ai bật/tắt policy, assign seat | Compliance org |
 | PR timeline | PR comments | Agent đã làm gì theo bước | Review PR agent |
 
-### Làm thế nào (steps copy-paste)
+**Vì sao quan trọng?** Khi có sự cố, "thay đổi này từ đâu ra" phải trả lời được bằng log chứ không bằng phỏng đoán — nhất là khi thủ phạm có thể là một agent không ngồi cạnh bạn.
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+### Làm thế nào (steps copy-paste)
 
 ```bash
 # Tìm commit do agent tạo
@@ -365,22 +365,21 @@ gh api orgs/<ORG>/audit-log --jq '.[] | {action, actor, created_at}' | head -20
 
 > **Khi nào áp dụng:** postmortem, review PR agent, và khi compliance hỏi "thay đổi này từ đâu ra".
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (1) thử lọc theo path/file; (2) kiểm tên actor của bot; (3) nếu audit log trống thì có thể bạn thiếu quyền admin/org; (4) hỏi admin xuất log.
+
 ---
 
 ## 9. Guardrail cho lệnh nguy hiểm trong CI (không dangerously-skip)?
-
-Section này trả lời: workflow gọi Copilot CLI phải secrets qua `${{ secrets }}`, không skip-verification.
 
 > **Hỏi ngắn gọn:** _Guardrail cho lệnh nguy hiểm trong CI (không dangerously-skip)?_
 
 **Trả lời 1 câu:** Secrets qua `${{ secrets.* }}` → env, KHÔNG `echo` secret, KHÔNG skip-verification flag; job đụng prod dùng `environment:` + required reviewers.
 
-**Giải thích chi tiết + ví dụ:** Workflow gọi Copilot CLI phải: secrets qua `${{ secrets.* }}` → env, KHÔNG `echo` secret, KHÔNG dùng flag skip-verification/bypass. Dùng `environment:` + required reviewers cho job đụng prod (xem mẫu `templates/.github/workflows/`).
+**Giải thích chi tiết + ví dụ:** Workflow gọi Copilot CLI phải: secrets qua `${{ secrets }}` (cụ thể `${{ secrets.* }}`) → env, KHÔNG `echo` secret, KHÔNG dùng flag skip-verification/bypass. Dùng `environment:` + required reviewers cho job đụng prod (xem mẫu `templates/.github/workflows/`).
+
+**Vì sao quan trọng?** CI là nơi có sẵn token/quyền, nên một dòng `echo` secret hay một flag bypass là đủ để lộ credential hoặc bỏ qua toàn bộ cổng kiểm. Đây là nơi guardrail phải chặt nhất.
 
 ### Làm thế nào (steps copy-paste)
-
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 ```yaml
 # Mẫu đúng (trích templates/.github/workflows/copilot-review.yml)
@@ -400,12 +399,11 @@ jobs:
 
 > **Khi nào áp dụng:** mọi workflow có Copilot CLI — review quyền `permissions:` tối thiểu trước khi merge workflow.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (1) rà lại `permissions:` tối thiểu; (2) xác nhận secrets đi qua `${{ secrets.* }}` chứ không bị echo; (3) job prod phải có `environment:` + required reviewers; (4) dán log workflow khi nhờ review.
+
 ---
 
 ## 10. Checklist guardrails cho repo mới (5 phút)?
-
-Section này trả lời: 6 tick phải đủ trước khi bật coding agent.
 
 > **Hỏi ngắn gọn:** _Checklist guardrails cho repo mới (5 phút)?_
 
@@ -420,9 +418,9 @@ Section này trả lời: 6 tick phải đủ trước khi bật coding agent.
 5. [ ] CI lint/test chạy trên PR (status check).
 6. [ ] `mcp.json` không hardcode secret.
 
-### Làm thế nào (steps copy-paste)
+**Vì sao quan trọng?** Đây là definition-of-done trước khi bật coding agent: thiếu một tick nào là mở một đường cho agent (hoặc người) lách qua guardrail.
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+### Làm thế nào (steps copy-paste)
 
 ```bash
 # Script check nhanh (đứng ở root repo)
@@ -436,12 +434,13 @@ gh api repos/<OWNER>/<REPO>/rulesets --jq '.[].name'
 
 > **Khi nào áp dụng:** definition-of-done cho mọi repo mới trước khi bật coding agent.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (1) chạy lại script check; (2) đối chiếu 6 tick còn thiếu; (3) mỗi tick thiếu trỏ về câu tương ứng ở trên; (4) hoàn tất đủ 6 mới onboarding team.
+
 ---
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)
 
-Section này trả lời: 5 bước check khi mọi layer guardrail không ăn.
+5 bước check khi mọi layer guardrail không ăn:
 
 1. Instruction sai chỗ/sai glob? (`ls .github/`, xem [bài 06](06-prompts-agents-instructions.md)).
 2. Quy tắc viết mơ hồ? → viết lại ALWAYS/NEVER + path cụ thể.
@@ -451,11 +450,37 @@ Section này trả lời: 5 bước check khi mọi layer guardrail không ăn.
 
 ---
 
-## Tham khảo chéo
+## So sánh với Claude Code
 
-Section này trả lời: đọc tiếp bài nào để đào sâu instructions, exclusion, secrets.
+Cả hai đều cho chèn hook vào giữa vòng chạy tool, nhưng độ "cứng" và nơi đặt guardrail khác nhau. Bảng này chỉ so những điểm chắc chắn.
+
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Hook chặn tool call in-process | `.github/hooks/*.json`, events `PreToolUse`/`PostToolUse`... | Hooks in-process (PreToolUse/PostToolUse) | Cùng ý tưởng: chen vào giữa tool call |
+| Độ chín của hook | **Preview, chỉ chạy Local**, tôn trọng allow/ask/deny, dev sửa được file hook | Hook đã có trong tài liệu chính thức | Copilot semi-law vì config dev giữ; **chưa phải security boundary** |
+| Pre-commit / linter | Git hook local, chạy ngoài model | Cũng là git hook local, chạy ngoài model | Giống nhau: hook không phụ thuộc model |
+| Instructions kiểu cấm | `copilot-instructions.md` + `*.instructions.md` | `CLAUDE.md` + `.claude/` | Cả hai: file trong repo là "luật mềm" |
+| Lớp server (branch protection, push protection, required reviewers) | Có sẵn trên GitHub | Không có tầng tương đương trực tiếp — phải mượn platform của bạn | Đây là cách Copilot biến rule thành "law" |
+
+> **Đọc bảng này thế nào:** phần "hooks" gần như tương đương về ý tưởng, nhưng Copilot hooks vẫn ở chế độ **preview + Local-only** nên đừng coi nó là security boundary. Lợi thế lớn của Copilot là có **lớp server GitHub** (branch protection, push protection, review gate) để biến rule thành law — Claude Code không có tầng đó, phải mượn platform của bạn.
+
+---
+
+## Best practices (kèm "Vì sao?")
+
+- **Cái gì chỉ nên nhắc thì để instructions, cái gì tuyệt đối không được phạm thì khóa ở server.** *Vì sao?* Instructions có thể bị cắt khi context dài; chỉ ruleset/push protection mới là thứ không ai override được.
+- **Viết câu cấm kèm path/lệnh cụ thể.** *Vì sao?* "Cẩn thận" không kiểm chứng được; "NEVER sửa `db/migrations/**`" mới có ranh giới để tuân.
+- **Đừng coi hooks in-process là security boundary.** *Vì sao?* Nó mới ở preview, chỉ chạy Local, dev sửa được file hook, và model còn xin chạy ngoài được.
+- **Pre-commit chỉ lint staged files, đúng ext.** *Vì sao?* Lint cả repo làm mỗi commit chậm hơn 5 giây — dev sẽ tìm cách tắt hook và bạn mất luôn lớp bảo vệ.
+- **Bật push protection + secret scanning mặc định mọi repo.** *Vì sao?* Secret lộ một lần là phải rotate; chặn ngay ở cổng push rẻ hơn dọn hậu quả.
+- **Lỡ commit secret thì rotate trước, xóa history sau.** *Vì sao?* Xóa commit không rút token khỏi fork/clone đã có — token vẫn còn sống ở nơi khác.
+- **Dựng ruleset bảo vệ `main` trước khi onboarding coding agent.** *Vì sao?* Agent cũng phải tuân ruleset; dựng sau nghĩa là lúc đầu nó có thể đẩy thẳng main.
+
+---
+
+## Tham khảo chéo
 
 - Instructions viết đúng: [bài 06](06-prompts-agents-instructions.md). Content exclusion: [bài 03](03-modes-permissions.md).
 - Secrets + audit sâu: [bài 09](09-bao-mat-quyen-rieng-tu.md). CI workflows mẫu: [bài 10](10-ci-sdk-review-web.md) + [../templates/README.md](../templates/README.md).
 
-> Mẹo 1 dòng: _khuyến nghị để trong instructions, ép buộc để ở server (ruleset + checks + push protection)._
+> Cái gì chỉ nên là lời nhắc thì để trong instructions; cái gì tuyệt đối không được phạm thì phải khóa ở server — bạn không thể mặc cả với một lớp server bằng một câu prompt.

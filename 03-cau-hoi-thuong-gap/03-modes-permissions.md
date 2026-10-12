@@ -4,13 +4,20 @@
 > **Vấn đề:** "Ask/Edit/Agent khác gì, sao Copilot cứ hỏi approve, content exclusion là gì" — 12 câu hỏi, mỗi câu có giải thích + lệnh copy-paste + ví dụ + khi nào áp dụng.
 > **Đọc xong:** phân biệt được 3 mode + UI mới (Interactive/Plan/Autopilot, Manual/Assisted/Allow all, Session Target Copilot/Local/Cloud), hết bị approval chặn, biết exclusion. **Thời gian:** ~15 phút đọc.
 
-File này trả lời mọi câu hỏi "Ask/Edit/Agent khác gì, sao Copilot cứ hỏi approve, content exclusion là gì". Mỗi câu có giải thích + lệnh copy-paste + ví dụ + khi nào áp dụng.
+12 câu dưới đây gỡ đúng một mớ bối rối: **"Ask/Edit/Agent khác gì, sao Copilot cứ hỏi approve, content exclusion là gì"**. Mỗi câu gồm giải thích + lệnh copy-paste + ví dụ + lúc nào nên áp dụng.
 
----
+> **Nếu làm sai thì sao?** Bật Agent cho việc Ask làm được thì vừa tốn Credits vừa tăng rủi ro; allow-always cho lệnh phá hoại thì một lần `rm -rf` là đủ để mất cả buổi; còn attach nhầm secret vào chat thì nội dung đó đã rời khỏi máy bạn. Ba cái bẫy này lặp lại ở gần như mọi câu hỏi phía dưới.
+
+## Mục tiêu bài học
+
+- Phân biệt **3 mode** theo *quyền hành động* (không phải theo độ thông minh) và chọn mode yếu nhất đủ làm việc.
+- Hiểu **approval** và **permission level** để hết bị chặn giữa chừng mà vẫn an toàn.
+- Biết **content exclusion** 2 mức và vì sao mức org thắng mức cá nhân.
+- Đọc được **UI 2026** (persona + permission) và **Session Target** mà không nhầm với model picker.
 
 ## Sơ đồ tư duy nhanh (đọc 30 giây)
 
-Section này trả lời: 1 task đến → chọn mode nào, approval thế nào, không bị kẹt giữa chừng.
+Một task đến → chọn mode nào, approval xử ra sao, làm sao không bị kẹt giữa chừng.
 
 ```mermaid
 flowchart LR
@@ -25,7 +32,7 @@ flowchart LR
 
 ## Bảng tổng hợp: chọn mode nhanh
 
-Section này trả lời: task của bạn thuộc loại nào, chọn mode nào, và copilot được phép làm gì trong mode đó.
+Task của bạn thuộc loại nào, chọn mode nào, và Copilot được phép làm gì trong mode đó.
 
 | Mode | Copilot được làm gì | Khi nào dùng |
 |---|---|---|
@@ -33,13 +40,11 @@ Section này trả lời: task của bạn thuộc loại nào, chọn mode nào
 | Edit (chỉnh sửa) | Sửa file trong scope bạn chỉ định | Sửa 1 vài file cụ thể |
 | Agent (tự hành động) | Đọc + sửa nhiều file + chạy lệnh (có approval) | Task multi-file, refactor, feature |
 
-> **UI mới (2026):** agent chia 3 persona **Interactive / Plan / Autopilot** (≈ Agent+ask / Plan-first / Agent+Allow all) và picker **Permissions: Manual / Assisted / Allow all**. Ánh xạ + cách bọc an toàn: [bài 10 mục 3.2, 5.3, 5.4](../../01-huong-dan-su-dung/10-modes-permissions-availability.md) và Q11 bên dưới.
+> **UI mới (2026):** agent chia 3 persona **Interactive / Plan / Autopilot** (≈ Agent+ask / Plan-first / Agent+Allow all) và picker **Permissions: Manual / Assisted / Allow all**. Ánh xạ + cách bọc an toàn: [bài 10 mục 3.2, 5.3, 5.4](../01-huong-dan-su-dung/10-modes-permissions-availability.md) và Q11 bên dưới.
 
 ---
 
 ## 1. Ask / Edit / Agent khác nhau gì?
-
-Section này trả lời: 3 mode khác nhau ở quyền hành động, không phải ở thông minh.
 
 > **Hỏi ngắn gọn:** _Ask / Edit / Agent khác nhau gì?_
 
@@ -53,7 +58,7 @@ Section này trả lời: 3 mode khác nhau ở quyền hành động, không ph
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Đổi mode ngay trước khi gõ prompt — thao tác trong IDE, không có lệnh CLI:
 
 ```bash
 # Đổi mode trong VS Code: dropdown cạnh nút Send trong Chat view
@@ -66,16 +71,14 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** luôn chọn mode YẾU NHẤT làm được việc — đừng bật Agent cho việc Ask làm được (tốn quota + rủi ro).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (chọn đúng mode mà không thấy khác biệt): (1) xác nhận label mode đã đổi trước khi gửi prompt, (2) kiểm tra prompt có hợp mode không — Ask sẽ không sửa file dù bạn yêu cầu, (3) nếu cần sửa nhiều file mà Edit không lan tới, nâng lên Agent, (4) reload IDE nếu dropdown không phản hồi — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 2. Tool approval là gì, sao Copilot cứ hỏi "Allow" hoài?
 
-Section này trả lời: copilot xin phép mỗi tool call, và bạn quyết định nhớ hay không nhớ.
-
 > **Hỏi ngắn gọn:** _Tool approval là gì, sao Copilot cứ hỏi "Allow" hoài?_
 
-**Trả lời 1 câu:** Approval là copilot xin phép trước khi chạy tool nhạy cảm (terminal, mạng, MCP) — bạn chọn Allow once, Allow for workspace, hoặc Deny.
+**Trả lời 1 câu:** Approval là Copilot xin phép trước khi chạy tool nhạy cảm (terminal, mạng, MCP) — bạn chọn Allow once, Allow for workspace, hoặc Deny.
 
 **Giải thích chi tiết + ví dụ:** Approval = Copilot xin phép trước khi làm việc nhạy cảm: chạy lệnh terminal, sửa file ngoài scope, truy cập mạng/MCP... Bạn có 3 lựa chọn: **Allow once** (1 lần), **Allow for session/workspace** (nhớ), **Deny** (cấm).
 
@@ -89,7 +92,7 @@ Hỏi hoài thường do: task agent rộng (nhiều tool calls), hoặc bạn c
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Duyệt nhanh cho lệnh an toàn, giữ chốt tay cho lệnh nguy hiểm:
 
 ```bash
 # Trong approval prompt: chọn "Allow for workspace" cho lệnh an toàn:
@@ -102,16 +105,14 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** đầu mỗi task agent — duyệt nhanh lệnh an toàn, giữ phê duyệt tay cho lệnh nguy hiểm.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (duyệt rồi mà vẫn hỏi mãi): (1) kiểm tra bạn chọn "Allow for workspace" chứ không phải "Allow once", (2) mở workspace mới thì bộ nhớ approval reset — duyệt lại, (3) nếu chỉ một lệnh bị hỏi hoài, thử thêm nó vào prompt đầu task như allowlist, (4) xem permission level hiện tại (Q11) có đang chặn không — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 3. Content exclusion là gì, cấu hình ở đâu?
 
-Section này trả lời: cách "cấm copilot đọc file" ở 2 mức, và cấu hình ở đâu.
-
 > **Hỏi ngắn gọn:** _Content exclusion là gì, cấu hình ở đâu?_
 
-**Trả lời 1 câu:** Content exclusion là danh sách path copilot không được đọc, có 2 mức: cá nhân (`.vscode/settings.json`) và org (admin), và mức org thắng mức cá nhân.
+**Trả lời 1 câu:** Content exclusion là danh sách path Copilot không được đọc, có 2 mức: cá nhân (`.vscode/settings.json`) và org (admin), và mức org thắng mức cá nhân.
 
 **Giải thích chi tiết + ví dụ:** Content exclusion = danh sách path Copilot **không được đọc/không gợi ý** (VD `*.pem`, `secrets/`, `contracts/`). Có 2 mức:
 
@@ -120,7 +121,7 @@ Section này trả lời: cách "cấm copilot đọc file" ở 2 mức, và c�
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Khai báo exclusion ở cấp repo trước, rồi admin bổ sung ở cấp org nếu cần:
 
 ```json
 // .vscode/settings.json (mẫu repo, xem templates/)
@@ -139,12 +140,10 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** ngay khi repo có secret/key/hợp đồng — exclusion trước, code sau. Chi tiết [bài 09](09-bao-mat-quyen-rieng-tu.md).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (Copilot vẫn đọc được file đáng lẽ bị chặn): (1) kiểm tra pattern có khớp đúng path thật không, (2) nhớ mức org thắng mức cá nhân — nếu org cho phép thì setting riêng vô hiệu, (3) file đã nằm trong git thì exclusion không cứu được, phải xử lý ở tầng secret, (4) hỏi admin xác nhận rule đã lưu — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 4. Agent sửa nhầm file thì xử lý sao (undo / checkpoint)?
-
-Section này trả lời: 3 lớp cứu hộ khi agent phá, dùng theo thứ tự từ nhẹ đến nặng.
 
 > **Hỏi ngắn gọn:** _Agent sửa nhầm file thì xử lý sao (undo / checkpoint)?_
 
@@ -158,7 +157,7 @@ Section này trả lời: 3 lớp cứu hộ khi agent phá, dùng theo thứ t�
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Kiểm tra agent đã đụng gì trước khi hoàn tác — đừng undo mù:
 
 ```bash
 # Xem agent đã sửa gì
@@ -178,12 +177,10 @@ git stash -u
 
 > **Khi nào áp dụng:** sau mỗi task agent — `git diff --stat` trước khi commit là thói quen bắt buộc.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (undo xong vẫn còn dấu vết lạ): (1) `git status --short` xem còn file nào chưa xử, (2) kiểm tra file mới tạo mà bạn chưa biết — phải xóa tay, (3) nếu đã commit rồi thì dùng `git revert` thay vì checkout, (4) mở chat mới và dặn rõ file không được đụng trước khi chạy lại — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 5. Cho agent chạy lệnh terminal an toàn thế nào?
-
-Section này trả lời: nguyên tắc allowlist/blocklist lệnh terminal, và câu mẫu ghi vào prompt.
 
 > **Hỏi ngắn gọn:** _Cho agent chạy lệnh terminal an toàn thế nào?_
 
@@ -197,7 +194,7 @@ Section này trả lời: nguyên tắc allowlist/blocklist lệnh terminal, và
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Dặn ranh giới ngay trong prompt đầu task để bớt phải approve về sau:
 
 ```bash
 # Dặn agent ngay trong prompt đầu task:
@@ -210,12 +207,10 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** mọi task agent — 1 dòng giới hạn lệnh trong prompt đầu tiết kiệm 10 lần approve sau.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (agent vẫn chạy lệnh ngoài danh sách): (1) dừng ngay và đọc log xem lệnh nào lọt, (2) bổ sung lệnh đó vào blocklist trong prompt, (3) kiểm tra permission level có đang "Allow all" không, (4) siết lại bằng `Deny` cho lệnh nguy hiểm — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 6. Edit mode sửa lan sang file khác — chặn thế nào?
-
-Section này trả lời: vì sao edit lan, và cách ép nó chỉ sửa đúng file bạn chọn.
 
 > **Hỏi ngắn gọn:** _Edit mode sửa lan sang file khác — chặn thế nào?_
 
@@ -227,7 +222,7 @@ Chặn bằng: attach đúng file cần sửa, nêu rõ file được/không đ�
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Viết prompt Edit theo mẫu "chỉ file này, không đụng file kia":
 
 ```bash
 # Prompt Edit chuẩn (chỉ rõ phạm vi):
@@ -241,12 +236,10 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** mỗi khi dùng Edit — scope hẹp = diff gọn = review nhanh.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (đã ghi rõ file mà vẫn lan): (1) kiểm tra working set có dính folder nào không, (2) đóng các tab file không liên quan trước khi gọi Edit, (3) Undo rồi thử lại với `#selection` đúng đoạn, (4) nếu vẫn lan, chuyển sang sửa tay cho chắc — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 7. Ask mode đọc được gì, có sợ lộ file nhạy cảm không?
-
-Section này trả lời: ask chỉ đọc thứ bạn attach, không tự quét repo — nhưng attach nhầm secret là lộ.
 
 > **Hỏi ngắn gọn:** _Ask mode đọc được gì, có sợ lộ file nhạy cảm không?_
 
@@ -258,7 +251,7 @@ Vì vậy: đừng bao giờ `#file` secret vào chat, dù là Ask.
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Check nhanh 3 giây trước khi attach — file này có đang bị git track không:
 
 ```bash
 # Trước khi attach file vào chat, check nhanh:
@@ -271,12 +264,10 @@ git check-ignore secrets/stripe.key && echo "IGNORED" || echo "COI CHUNG: file n
 
 > **Khi nào áp dụng:** mỗi lần attach file — 3 giây check tên file có chứa `secret/key/token/pem` không.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (lỡ attach secret rồi): (1) coi như secret đã lộ và **xoay key ngay**, (2) xóa secret khỏi chat, (3) thêm path đó vào content exclusion (Q3) để lần sau bị chặn, (4) rà lại git history xem file đã commit chưa — xem [bài 09](09-bao-mat-quyen-rieng-tu.md).
 ---
 
 ## 8. Permissions của MCP tools quản lý thế nào?
-
-Section này trả lời: tool MCP cũng có approval, và cách tắt server nguy hiểm.
 
 > **Hỏi ngắn gọn:** _Permissions của MCP tools quản lý thế nào?_
 
@@ -288,7 +279,7 @@ Tool MCP nguy hiểm (VD `db.exec("DROP...")`, `github.merge_pr`) → không bao
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Tắt tạm server nguy hiểm bằng cách trỏ nó về chỗ vô hại, rồi mở lại khi cần:
 
 ```json
 // .vscode/mcp.json: tắt tạm 1 server nguy hiểm
@@ -305,12 +296,10 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** khi thêm MCP server mới — luôn trỏ read-only/replica trước, mở write sau. Chi tiết [bài 04](04-mcp-faq.md).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (tool MCP không xin approval hoặc tự chạy): (1) kiểm tra permission level có đang "Allow all" không, (2) rà lại đã từng bấm allow-workspace cho tool đó chưa, (3) mở `mcp.json` xác nhận connection trỏ đúng replica, (4) tắt hẳn server nếu không tin — xem [bài 04](04-mcp-faq.md) và "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 9. Team thống nhất permissions baseline thế nào?
-
-Section này trả lời: 3 lớp baseline permissions trong repo để mọi dev giống nhau.
 
 > **Hỏi ngắn gọn:** _Team thống nhất permissions baseline thế nào?_
 
@@ -324,7 +313,7 @@ Section này trả lời: 3 lớp baseline permissions trong repo để mọi de
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Ghi baseline vào instructions bằng một khối markdown ngắn, dễ review:
 
 ```markdown
 <!-- Đoạn mẫu trong .github/copilot-instructions.md -->
@@ -338,12 +327,10 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** khi team >3 người dùng Copilot — baseline trong repo đỡ cãi nhau về "sao máy em nó tự push".
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (máy một người vẫn khác cả team): (1) xác nhận họ đã pull bản `settings.json` + instructions mới nhất, (2) kiểm tra không có settings cá nhân ghi đè, (3) với org, nhớ policy có thể đè lên baseline, (4) ghi rõ baseline vào review checklist của PR — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 10. Khi nào KHÔNG nên dùng Agent mode?
-
-Section này trả lời: 5 trường hợp agent không hợp, dùng Ask/Edit hoặc làm tay thay.
 
 > **Hỏi ngắn gọn:** _Khi nào KHÔNG nên dùng Agent mode?_
 
@@ -359,7 +346,7 @@ Section này trả lời: 5 trường hợp agent không hợp, dùng Ask/Edit h
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Chạy checklist 3 tick trước khi bật Agent — thiếu 1 tick thì đổi cách làm:
 
 ```bash
 # Checklist trước khi bật Agent:
@@ -374,12 +361,10 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** trước nút bật Agent — 10 giây checklist tránh 1 giờ dọn hậu quả.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (đã bật Agent rồi mới nhận ra không nên): (1) Cancel ngay, (2) `git diff --stat` xem nó đụng những đâu, (3) `git checkout` hoàn tác file ngoài ý muốn, (4) lần sau chuyển sang Edit cho phạm vi hẹp — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 11. UI mới: Interactive/Plan/Autopilot + Manual/Assisted/Allow all khác gì?
-
-Section này trả lời: UI mới đặt tên lại 2 nhóm (persona + permission level), không phải 2 tính năng mới.
 
 > **Hỏi ngắn gọn:** _UI mới có Interactive/Plan/Autopilot với Manual/Assisted/Allow all — khác gì Ask/Edit/Agent và allow/ask/deny cũ?_
 
@@ -401,7 +386,7 @@ Section này trả lời: UI mới đặt tên lại 2 nhóm (persona + permissi
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Chỉnh persona/permission ở cả VS Code và CLI, và bọc an toàn trước khi dùng chế độ tự duyệt:
 
 ```bash
 # VS Code: dropdown agent (Interactive/Plan/Autopilot) + picker Permissions (Manual/Assisted/Allow all)
@@ -421,14 +406,12 @@ copilot --mode=plan            # bắt đầu ở Plan
 
 **Ví dụ cụ thể:** task dài refactor 8 file → chọn **Plan** để duyệt kế hoạch, rồi chuyển **Interactive** để code có kiểm soát. Chỉ dùng **Autopilot** trong worktree riêng + sandbox bật.
 
-> **Khi nào áp dụng:** Plan cho task mở/lớn; Interactive là mặc định an toàn; Autopilot/Allow all chỉ khi đã bật sandbox + git sạch. Chi tiết [bài 10 mục 3.2, 5.3, 5.4](../../01-huong-dan-su-dung/10-modes-permissions-availability.md).
+> **Khi nào áp dụng:** Plan cho task mở/lớn; Interactive là mặc định an toàn; Autopilot/Allow all chỉ khi đã bật sandbox + git sạch. Chi tiết [bài 10 mục 3.2, 5.3, 5.4](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (đổi persona/permission mà hành vi không đổi): (1) kiểm tra picker thật sự đã áp (CLI: `/permissions show`), (2) nhớ Autopilot chỉ hợp lý khi sandbox bật + worktree riêng, (3) xác nhận org policy không ghi đè lựa chọn, (4) quay về Interactive để có kiểm soát — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 12. Session Target (Copilot/Local/Cloud) và harness là gì?
-
-Section này trả lời: model là "não", Session Target là "nơi chạy" — 2 thứ khác nhau.
 
 > **Hỏi ngắn gọn:** _Session Target Copilot/Local/Cloud khác gì model picker?_
 
@@ -452,7 +435,7 @@ Handoff đổi target giữa phiên và mang theo context (chỉ khởi tạo đ
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Đổi target ở đáy khung Chat, và handoff sang Cloud khi muốn nhận PR:
 
 ```bash
 # VS Code: đáy khung Chat → Session Target → chọn Local / Copilot / Cloud / Claude / Codex
@@ -462,14 +445,40 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 **Ví dụ cụ thể:** việc tay cần sửa + chạy test trong editor → **Local**. Muốn chạy nền nhiều task song song → **Copilot**. Task gọn giao hẳn để nhận PR → **Cloud**.
 
-> **Khi nào áp dụng:** mặc định Local; Copilot khi muốn background/nhiều phiên; Cloud khi giao hẳn. Chi tiết [bài 10 mục 3.3](../../01-huong-dan-su-dung/10-modes-permissions-availability.md).
+> **Khi nào áp dụng:** mặc định Local; Copilot khi muốn background/nhiều phiên; Cloud khi giao hẳn. Chi tiết [bài 10 mục 3.3](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (task không chạy đúng target): (1) đối chiếu target với loại việc — Cloud không thấy tool/context local nên đừng giao việc cần file local, (2) handoff chỉ khởi tạo được từ session Local, (3) trong session Copilot dùng `/delegate` để chuyển sang Cloud, (4) mở lại session ở cửa sổ/browser khác nếu là target Copilot — xem "Vẫn lỗi thì sao?" cuối file.
+---
+
+## So sánh với Claude Code
+
+Cả hai đều cho agent "làm hộ", nhưng khác cách leo thang quyền và cách chặn vùng cấm:
+
+| Việc | GitHub Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Mức tự chủ | Ask / Edit / Agent + persona Interactive/Plan/Autopilot | Mặc định là agent, có plan mode | Copilot leo thang từng bước; Claude agentic mặc định |
+| Duyệt hành động nhạy cảm | Approval Allow once/workspace/Deny + Permissions Manual/Assisted/Allow all | Có permission mode, hỏi trước hành động nhạy cảm | Cùng tư tưởng: việc nguy hiểm phải xin phép |
+| Chặn đọc file nhạy cảm | Content exclusion 2 mức (IDE + org) | Không có tương đương org-level trực tiếp — kiểm tra tài liệu Anthropic | Không bịa: cơ chế khác nhau, đừng giả định giống nhau |
+| Lập kế hoạch trước khi code | Persona Plan | Plan mode | Gần như tương đương |
+| Chạy nền / giao PR | Session Target Copilot (nền) và Cloud (mở PR) | Chạy trong terminal/CI tùy setup | Khác cơ chế triển khai |
+
+> **Đọc bảng này thế nào:** tư tưởng cốt lõi — "mode yếu nhất làm được việc", "duyệt trước việc nguy hiểm", "lập plan trước khi sửa" — chuyển sang Claude Code gần như 1-1. Riêng **content exclusion cấp org** là thứ Copilot có mà Claude Code không có tương đương trực tiếp, nên đừng giả định hai bên chặn file giống nhau.
+
+## Best practices (kèm "vì sao")
+
+- **Chọn mode yếu nhất làm được việc.** *Vì sao?* Đỡ tốn Credits và ít rủi ro; Agent là mức đắt và nguy hiểm nhất.
+- **Allow for workspace cho lệnh an toàn lặp lại, Deny cho lệnh phá hoại.** *Vì sao?* Bớt bị approval chặn mà vẫn giữ chốt an toàn ở chỗ thật sự nguy.
+- **Khóa scope trong prompt: file được/không được đụng + lệnh được chạy.** *Vì sao?* Diff gọn hơn và giảm số vòng approve.
+- **`git diff --stat` sau mỗi task agent.** *Vì sao?* Phát hiện ngay agent sửa lan trước khi commit.
+- **Chạy checklist trước khi bật Agent (test xanh, git sạch, scope <10 file).** *Vì sao?* Không có lưới an toàn thì "sửa xong hỏng ngầm" rất khó thấy.
+- **Cấu hình content exclusion trước khi commit secret.** *Vì sao?* Exclusion là lớp phòng thủ, không thay được `.gitignore` + secret manager.
+- **Commit baseline permissions vào repo.** *Vì sao?* Mọi dev giống nhau từ phút 1, khỏi cãi "sao máy em nó tự push".
+
 ---
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)
 
-Section này trả lời: 5 bước check khi copilot "bướng" về permission/mode.
+Copilot "bướng" về permission/mode thì chạy đúng 5 bước này theo thứ tự.
 
 1. Check đang ở mode nào (Ask/Edit/Agent) — đúng mode chưa.
 2. Xem approval history: có Deny nhầm lệnh cần thiết không.
@@ -477,14 +486,21 @@ Section này trả lời: 5 bước check khi copilot "bướng" về permission
 4. Check content exclusion có chặn file bạn cần không.
 5. Vẫn kẹt → chat mới + prompt ghi rõ phạm vi file + lệnh được chạy.
 
+```bash
+# Xác nhận nhanh trước khi kết luận — chỉ tốn vài giây:
+git status --short          # có file nào agent đã đụng không
+# VS Code: xem mode + Permissions + Session Target ở khung Chat
+# Verify: biết chắc mode/target/permission hiện tại trước khi đổi thứ khác
+```
+
 ---
 
 ## Tham khảo chéo
 
-Section này trả lời: đọc tiếp bài nào về tool approval, scope, hay exclusion.
+Kẹt đúng chỗ nào thì đọc tiếp bài đó, đừng đọc tràn.
 
 - MCP tools approval: [bài 04](04-mcp-faq.md). Prompt/instructions scope: [bài 06](06-prompts-agents-instructions.md).
 - Agent workflows: [bài 07](07-custom-agents-coding-agent-workflows.md). Bảo mật exclusion: [bài 09](09-bao-mat-quyen-rieng-tu.md).
 - Templates: [../templates/README.md](../templates/README.md).
 
-> Mẹo 1 dòng: _mode yếu nhất làm được việc + prompt ghi rõ file được đụng và lệnh được chạy._
+> **Chốt bài:** Thứ tự an toàn luôn giống nhau — chọn mode yếu nhất đủ việc, khóa scope bằng prompt, để lệnh an toàn tự chạy còn lệnh phá hoại phải hỏi tay. Làm đúng ba điều đó thì approval hết phiền mà bạn vẫn không bao giờ bị agent "vượt mặt".

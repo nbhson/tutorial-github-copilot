@@ -1,8 +1,14 @@
 # Nhóm Chat Session (12 lệnh)
 
-> **Dành cho:** ai cần quản lý vòng đời hội thoại trong Chat · **Vấn đề:** 12 lệnh nằm rải rác, không biết lệnh nào dùng lúc nào · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi click sang README chi tiết (~2 phút)
+> **Dành cho:** ai cần quản lý vòng đời một cuộc trò chuyện trong Chat · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi bấm sang README chi tiết (~2 phút).
 
-Mỗi README chi tiết trả lời 5 câu: **dùng khi nào · cho ai · kết quả ra gì · ví dụ copy-paste · liên quan.** Nội dung nhóm này: mở mới, xóa, tra cứu, export, checkpoint, gắn scope.
+Nhóm này lo phần "hậu cần" của Chat: bắt đầu một phiên mới, dọn context, tìm lại phiên cũ, lưu lại để chia sẻ, và gắn file vào prompt. Nói cách khác — nó không giúp bạn viết code giỏi hơn, nhưng nó quyết định model có *nhớ đúng chuyện* và *đọc đúng file* hay không.
+
+**Tra thế nào?** Tự hỏi bạn đang ở bước nào của một phiên: *mở đầu* (`/new`), *đang lỡ dài* (`/clear`, `/summarize`), *muốn tìm lại* (`/history`, `/resume`), *muốn lưu/gửi* (`/export`), *muốn chèn context* (`Attach / #file`), hay *vừa bị agent sửa hỏng* (`Restore checkpoint`).
+
+**Vì sao quan trọng?** Chat không có "nút hoàn tác" tự động cho hội thoại. Nếu cứ để một phiên chạy mãi qua nhiều task, context cũ rác dần và model bắt đầu lẫn giữa việc cũ với việc mới. Quản phiên tốt là cách rẻ nhất để câu trả lời sắc lại.
+
+**Nếu làm sai?** Hai lỗi hay gặp: (1) nhầm `/clear` với `/new` — một cái giữ instructions, một cái xóa hết; (2) gắn cả repo vào prompt thay vì đúng file — vừa tốn token vừa loãng ngữ cảnh.
 
 | Lệnh | Mô tả 1 dòng | Chi tiết |
 |---|---|---|
@@ -19,4 +25,19 @@ Mỗi README chi tiết trả lời 5 câu: **dùng khi nào · cho ai · kết 
 | `Shortcuts` | Liệt kê phím tắt Chat trong IDE này | [./shortcuts/README.md](./shortcuts/README.md) |
 | `/summarize` | Tóm tắt hội thoại dài thành bản gọn giữ đà task | [./summarize/README.md](./summarize/README.md) |
 
+## So sánh với Claude Code
+
+| Việc | Copilot | Claude Code |
+|---|---|---|
+| Bắt đầu phiên mới | `/new` | Dùng `/clear` để làm mới; không có `/new` riêng |
+| Dọn context nhưng giữ rule | `/clear` | `/clear` (xóa hội thoại, giữ memory/CLAUDE.md) |
+| Nén hội thoại dài | `/summarize` | `/compact` |
+| Tìm lại/tiếp tục phiên cũ | `/history`, `/resume` | `/resume` |
+| Chat inline trong editor | `Ctrl+I`, `Shift+Alt+I` | Không có tương đương trực tiếp — Claude Code chạy trong terminal, không có chat inline trong editor theo cách này |
+| Quay lui khi agent sửa sai | `Restore checkpoint` | `/rewind` (auto-checkpoint mỗi prompt) |
+| Gắn file vào prompt | `Attach` / `#file` | Mention `@file` |
+| Export hội thoại | `/export` | Không có lệnh export built-in ổn định — thường phải copy thủ công |
+
 Quay về: [../README.md](../README.md) · Bài tổng: [../../04-chat-commands-toan-tap.md](../../04-chat-commands-toan-tap.md)
+
+> Phiên chat cũng giống bàn làm việc: dọn trước khi làm việc mới thì tìm đồ nhanh hơn nhiều — `/new` mỗi task là thói quen rẻ nhất mà hiệu quả nhất trong cả nhóm này.

@@ -1,6 +1,16 @@
 # Tips 11 — Nâng Cao: Copilot CLI, Web, Coding Agent, Mobile & Voice
 
+> **Dành cho:** dev muốn làm việc ngoài VS Code — terminal, web, điện thoại, khi đang đi đường · **Vấn đề:** chỉ biết mỗi VS Code nên rời máy là "tê liệt", hoặc nhầm `gh copilot` với `copilot` · **Đọc xong:** dùng được 5 mặt của Copilot 2026, giao việc cho Coding Agent qua cloud, review/duyệt trên web + mobile · **Thời gian:** ~20 phút đọc + ~50 phút làm bài tập.
+>
 > VS Code chỉ là 1 mặt của Copilot 2026. Bài này mở 4 mặt còn lại: Copilot CLI trong terminal (2 thứ: `gh copilot` và `copilot`), github.com chat, Coding Agent assign issue, và mobile/github.dev/voice khi xa máy — kèm recipes leo thang.
+
+## Mục tiêu bài học
+
+- Phân biệt **5 mặt** của Copilot 2026 (VS Code, CLI, Web, Coding Agent, Mobile/dev/voice) và biết mặt nào mạnh việc gì.
+- Phân biệt được **`gh copilot`** (gh extension, suggest/explain) và **`copilot`** (CLI agent 3 chế độ) — thứ hay bị nhầm nhất.
+- Viết được **issue để assign Coding Agent** (mục tiêu + scope + done) và theo dõi nó trên web.
+- Biết **leo thang đa mặt trận**: mobile giao → cloud code → web review → VS Code verify → mobile duyệt.
+- Làm được cả vòng **issue → PR → merge** mà không cần ngồi máy liên tục, guardrails vẫn giữ.
 
 ## Mục lục
 
@@ -39,6 +49,8 @@ flowchart LR
 
 Giải thích: xa máy thì giao + duyệt nhẹ; ngồi máy thì code sâu + verify nặng (test/lint/build local + Reviewer fresh). Spec mờ thì chưa giao; task 15 phút thì Edit local nhanh hơn.
 
+**Vì sao quan trọng?** Biết cả 5 mặt thì bạn không bị chặn khi rời máy, mà guardrails vẫn giữ nguyên — công việc không dồn lại một chỗ. **Nếu làm sai?** Giao việc cho cloud khi spec còn mờ thì 2 tiếng sau nhận về PR sai hướng, về công ty phải sửa + revert còn tốn hơn tự làm.
+
 > ✅ **Kỳ vọng thấy gì:** `gh copilot --version` xanh; issue assign xong hiện branch `copilot/*` + PR draft + comment tiến độ agent.
 
 ---
@@ -55,6 +67,8 @@ VS Code tuyệt vời khi bạn ngồi máy, nhưng:
 Mỗi mặt có sức mạnh riêng. Biết cả 5, bạn làm việc mọi lúc mà vẫn giữ guardrails.
 
 > Rule: **nặng thì VS Code Agent, nhanh thì CLI/web, xa máy thì mobile + Coding Agent cloud.**
+
+**Nếu làm sai thì sao?** Cố code nặng (refactor, debug sâu) trên điện thoại thì vừa chậm vừa dễ sai — việc thuộc về VS Code lại bị làm ở nơi thiếu công cụ verify.
 
 ---
 
@@ -77,6 +91,8 @@ Sơ đồ leo thang:
 ```
 
 Bạn không cần ngồi máy cả vòng.
+
+**Vì sao quan trọng?** Mỗi mặt có "điểm mạnh/yếu" khác nhau — chọn mặt đúng việc thì nhanh, chọn sai thì chậm mà vẫn phải làm lại. **Nếu làm sai?** Dùng web cho task cần test local nặng, hoặc dùng mobile để review sâu — đều là ép mặt yếu làm việc mạnh.
 
 ---
 
@@ -155,6 +171,8 @@ Khi nào dùng cái nào:
 
 > ✅ **Kỳ vọng thấy gì:** `copilot --help` liệt kê 3 chế độ; chạy 1 task plan → duyệt plan → code → verify local.
 
+**Nếu làm sai thì sao?** Nhầm hai CLI là lỗi phổ biến nhất: muốn agent làm cả task lại đi gõ `gh copilot` (chỉ suggest/explain), hoặc muốn hỏi lệnh nhanh lại mở `copilot` (khởi động agent cả đoạn) — vừa chậm vừa tốn.
+
 ---
 
 ## 4. github.com chat + Coding Agent
@@ -219,6 +237,8 @@ KHONG GIAO: spec mờ, đụng nhiều team, task 15 phút Edit xong.
 
 Chi tiết plan-first ở [Tips 03](./03-plan-first-workflow.md), gates ở [Tips 06](./06-policies-guardrails-recipes.md).
 
+**Vì sao quan trọng?** Coding Agent chạy bất đồng bộ — bạn giao rồi làm việc khác, nên "chất lượng đầu vào" (spec + scope + done) quyết định toàn bộ kết quả. **Nếu làm sai?** Giao issue một dòng "fix refund" thì agent tự đoán mọi thứ, PR về sai hướng và bạn mất thêm thời gian gỡ.
+
 ---
 
 ## 5. Mobile, github.dev & voice
@@ -265,6 +285,8 @@ Nói: "Tạo issue fix bug refund quá 30 ngày bị 500, scope payments, done l
 ```
 
 Mẹo voice: nói ngắn, 1 việc 1 lệnh, xong kiểm tra text trước khi gửi (voice hay nghe nhầm tên file).
+
+**Nếu làm sai thì sao?** Voice nghe nhầm tên file → sửa nhầm chỗ; github.dev trên máy mượn mà mở `.env` → rò secret. Đây là hai cái bẫy hay gặp nhất khi rời máy chính.
 
 ---
 
@@ -357,6 +379,22 @@ gh pr checkout 123 && npm test -- payments && npm run lint && npm run build
 
 ---
 
+## So sánh với Claude Code
+
+| Việc | Copilot (nhóm này) | Claude Code | Ghi chú |
+|---|---|---|---|
+| CLI ở terminal | 2 CLI: `gh copilot` (suggest/explain) + `copilot` (agent 3 chế độ) | 1 CLI agent, terminal-first là chính | Copilot tách "chỉ đường" và "lái cả chuyến"; Claude Code gộp 1 |
+| Plan mode trên CLI | `copilot --plan` | Plan mode (xoay bằng phím tắt) | Cùng ý tưởng: duyệt plan trước khi code |
+| Web chat trên repo/PR | `@copilot` trong comment | Có tích hợp GitHub app để nhận việc qua issue/PR | Cú pháp gọi khác nhau; cùng mục tiêu review/giao việc trên web |
+| Coding Agent cloud | Assign issue → branch `copilot/*` + PR draft | Session cloud làm việc bất đồng bộ | Cùng mô hình "giao việc chạy nền rồi quay lại review" |
+| IDE trên trình duyệt | `github.dev` | Không có tương đương trực tiếp | github.dev là VS Code chạy web của GitHub |
+| App mobile để giao/duyệt | GitHub mobile app | Không có app code trực tiếp (dùng web) | Copilot có mặt mobile dựng sẵn |
+| Voice/dictation | Voice → prompt (mobile / VS Code) | Dictation phụ thuộc hệ điều hành | Không có tương đương trực tiếp trong Claude Code |
+
+> **Đọc bảng này thế nào:** điểm chung lớn nhất là mô hình "giao việc cloud → review trên web (PR) → verify local". Khác biệt rõ nhất: Copilot có **2 CLI tách biệt** và **github.dev/mobile/voice** dựng sẵn; Claude Code terminal-first và không có tương đương trực tiếp cho mấy mặt đó.
+
+---
+
 ## 9. Pitfalls + cách fix
 
 | Pitfall | Triệu chứng | Fix |
@@ -371,6 +409,41 @@ gh pr checkout 123 && npm test -- payments && npm run lint && npm run build
 | Quên bật protection | Agent merge bừa | Require PR + checks + review (Tips 06) |
 | Không theo dõi agent | Agent kẹt 2h không biết | Bật notification issue, check 30p/lần, dừng khi blocker |
 | Dùng web cho task local nặng | Thiếu test local | Web để hỏi/review, VS Code để test/build cuối |
+
+### Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+
+**1. Giao Coding Agent khi spec chưa rõ**
+
+```text
+❌ SAI: issue "fix refund" một dòng → assign agent → 2h sau PR sai hướng, conflict scope.
+✅ ĐÚNG: issue có Mục tiêu + Scope (src/payments/, không đụng generated/) + Done checklist mới assign.
+```
+**Bài học:** agent cloud chạy bất đồng bộ — chất lượng spec đầu vào quyết định toàn bộ kết quả, không có ai sửa hướng giữa chừng.
+
+**2. Nhầm `gh copilot` với `copilot`**
+
+```text
+❌ SAI: muốn agent refactor cả module lại gõ `gh copilot suggest "refactor auth"` → chỉ nhận gợi ý lệnh shell.
+✅ ĐÚNG: việc shell dùng `gh copilot`; việc agent cả đoạn dùng `copilot --plan "refactor auth"`.
+```
+**Bài học:** hai CLI hai việc — `gh copilot` chỉ đường, `copilot` lái cả chuyến; nhầm là chậm và tốn.
+
+**3. Duyệt merge lớn trên điện thoại**
+
+```text
+❌ SAI: PR lớn sửa payments, đọc lướt trên mobile rồi merge → Lọt HIGH bug.
+✅ ĐÚNG: mobile chỉ duyệt khi Copilot + /team-review PASS; PR lớn để về máy chạy local + review sâu.
+```
+**Bài học:** mobile để duyệt *nhanh*, không để duyệt *sâu* — việc rủi ro cao thì để nơi có đủ công cụ verify.
+
+## Best practices (kèm "vì sao")
+
+- **Chọn mặt theo tình huống, không theo thói quen.** *Vì sao?* Mỗi mặt có điểm mạnh/yếu riêng; ép mặt yếu làm việc mạnh là chậm và dễ sai.
+- **Chỉ giao Coding Agent khi có spec rõ + scope + done.** *Vì sao?* Nó chạy bất đồng bộ 1–2h, bạn không sửa hướng được giữa chừng.
+- **Luôn verify local trước khi merge.** *Vì sao?* Cloud CI xanh không thay được việc bạn chạy test/build trên máy mình.
+- **`gh copilot` để hỏi lệnh, `copilot` để chạy agent.** *Vì sao?* Nhầm hai CLI là lỗi phổ biến nhất, làm chậm cả hai việc.
+- **Revise/Cancel mọi gợi ý CLI nguy hiểm.** *Vì sao?* `rm`, `reset --hard`, `push --force` một lần Run mù là mất data không lấy lại được.
+- **Theo dõi agent mỗi ~30 phút, dừng khi có blocker.** *Vì sao?* Agent kẹt 2h không ai biết là lãng phí cloud credits lớn nhất.
 
 ---
 
@@ -412,4 +485,4 @@ gh pr checkout 123 && npm test -- payments && npm run lint && npm run build
   - [02 — Các bề mặt (CLI)](../01-huong-dan-su-dung/02-cac-be-mat-vscode-ide-web-cli.md) — cài đặt gh copilot
   - [12 — Copilot SDK/CI](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md) — assign issue tự động
 
-> Mẹo 1 dòng: _ngồi máy thì code sâu, xa máy thì giao cloud + duyệt nhẹ — spec rõ mới giao, về máy mới merge._
+> **Chốt Tips 11:** Copilot 2026 không phải một app mà là một vòng tròn 5 mặt — xa máy thì giao cloud + duyệt nhẹ, ngồi máy thì code sâu + verify nặng. Nhớ kỹ: `gh copilot` chỉ đường, `copilot` lái cả chuyến, và spec rõ mới giao.

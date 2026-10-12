@@ -2,7 +2,14 @@
 
 > Nhóm Sửa lỗi · 10 câu hỏi deep-dive · Đọc xong tự fix 90% ca, biết thứ tự debug chuẩn
 
-File này trả lời mọi câu hỏi "Copilot offline, no suggestions, chat error, CLI fail, thứ tự debug". Mỗi câu có giải thích + lệnh copy-paste + ví dụ + khi nào áp dụng.
+Copilot "chết" theo đủ kiểu: status bar đỏ Offline, gõ mãi không ra gợi ý xám, chat báo `quota exhausted`, `gh copilot` command not found. Bài này gom 10 ca hay gặp nhất — mỗi ca có cách chẩn đoán, lệnh copy-paste, ví dụ thật và lúc nào nên áp dụng.
+
+## Mục tiêu bài học
+
+- Tự fix được **~90% ca Copilot "chết"** ngay trên máy mình, không cần chờ ai.
+- Phân biệt **10 nhóm triệu chứng**: offline, no suggestions, chat error/quota, CLI fail, MCP mất, instructions không ăn, agent lặp, hỏng sau update, policy chặn, và "không rõ nguyên nhân".
+- Chạy đúng **thứ tự debug 7 bước** — không nhảy cóc, biết dừng ở đâu để chuyển lên admin/Support.
+- Nhận ra khi nào **policy/seat** là thủ phạm thật, thay vì vọc tiếp config local cho mệt.
 
 ---
 
@@ -46,6 +53,8 @@ flowchart TD
 
 > **Khi nào áp dụng:** ngay khi status bar đỏ Offline — check mạng trước, config sau. Khi status bar Offline, cả 2 CLI (gh copilot + binary copilot) + coding agent cloud vẫn hoạt động nếu có mạng — chỉ IDE bị ảnh hưởng.
 
+### Làm thế nào (copy-paste)
+
 ```bash
 # 1. Mang toi GitHub con khong
 curl -s -m 10 -o /dev/null -w "%{http_code}\n" https://api.github.com
@@ -60,9 +69,8 @@ curl -s https://www.githubstatus.com/api/v2/status.json | head -c 300; echo
 
 **Ví dụ cụ thể:** máy công ty qua proxy → `api.github.com` timeout dù web vẫn mở (proxy chỉ allow browser) → xin IT whitelist `*.github.com` + `*.githubcopilot.com`.
 
-> **Khi nào áp dụng:** ngay khi status bar đỏ Offline — check mạng trước, config sau.
+**Nếu vẫn lỗi thì...** (1) mở web GitHub bằng chính máy đó để loại trừ mạng, (2) đổi model (`/model`) hoặc mở chat mới rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue kèm log + ảnh chụp lỗi.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 2. No suggestions (gõ không ra gợi ý xám)?
@@ -82,6 +90,8 @@ curl -s https://www.githubstatus.com/api/v2/status.json | head -c 300; echo
 
 > **Khi nào áp dụng:** mọi ca "chỗ có chỗ không" — so sánh file lỗi vs file test để khoanh vùng. 2026: exclusion có 2 mức (file + content), xem [bài 03](03-modes-permissions.md) câu 3 — mức content chặn cả file nằm trong thư mục exclusion.
 
+### Làm thế nào (copy-paste)
+
 ```bash
 # Trong VS Code: Ctrl+Shift+P -> "Copilot: Check Status" / "Enable Completions"
 # Test voi file moi:
@@ -91,9 +101,8 @@ printf 'def add(a, b):\n' > /tmp/copilot-test.py && code /tmp/copilot-test.py
 
 **Ví dụ cụ thể:** chỉ file `secrets/` không gợi ý, chỗ khác có → đúng ý exclusion, không phải lỗi.
 
-> **Khi nào áp dụng:** mọi ca "chỗ có chỗ không" — so sánh file lỗi vs file test để khoanh vùng.
+**Nếu vẫn lỗi thì...** (1) thử file hello-world ngoài repo để loại trừ context dự án, (2) restart IDE rồi sign-in lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue kèm log + ảnh chụp lỗi.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 3. Chat error / quota exhausted / model unavailable?
@@ -117,6 +126,8 @@ printf 'def add(a, b):\n' > /tmp/copilot-test.py && code /tmp/copilot-test.py
 
 > **Khi nào áp dụng:** trước khi kết luận "Copilot sập" — đổi model + chat mới loại trừ 80% ca. Chat Agent mode (2026) tốn AI Credits theo turn — quota exhausted giữa task agent thì chuyển sang model nhẹ hơn thay vì đợi.
 
+### Làm thế nào (copy-paste)
+
 ```bash
 # Khong co CLI; thao tac:
 # 1. Mo chat moi (Ctrl+Shift+P -> "Chat: New Chat")
@@ -128,9 +139,8 @@ printf 'def add(a, b):\n' > /tmp/copilot-test.py && code /tmp/copilot-test.py
 
 **Ví dụ cụ thể:** chat báo `model unavailable` cho Claude → đổi sang GPT trong picker → chạy ngay → lỗi do model, không phải account.
 
-> **Khi nào áp dụng:** trước khi kết luận "Copilot sập" — đổi model + chat mới loại trừ 80% ca.
+**Nếu vẫn lỗi thì...** (1) mở chat mới với scope gọn hơn (1 file/selection), (2) đổi tiếp sang model khác (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue kèm log + ảnh chụp lỗi.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 4. `gh copilot` CLI fail (command not found / auth)?
@@ -147,11 +157,7 @@ printf 'def add(a, b):\n' > /tmp/copilot-test.py && code /tmp/copilot-test.py
 | `auth failed` | `gh` chưa login / token hết | `gh auth login --web` |
 | `No seat` | Account không có seat | Xin admin assign (bài 01) |
 
-| Lỗi | Nghĩa | Fix |
-|---|---|---|
-| `unknown command "copilot"` | Chưa cài extension | `gh extension install github/gh-copilot` |
-| `auth failed` | `gh` chưa login / token hết | `gh auth login --web` |
-| `No seat` | Account không có seat | Xin admin assign (bài 01) |
+### Làm thế nào (copy-paste)
 
 ```bash
 gh --version
@@ -165,7 +171,8 @@ gh copilot suggest "list files by size" --no-interactive 2>&1 | head -10
 
 > **Khi nào áp dụng:** khi CLI chết mà IDE vẫn sống (hoặc ngược lại) — fix auth từng thằng riêng.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) chạy lại `gh auth status` xem token còn hạn không, (2) cài lại extension `gh-copilot` rồi đổi model (`/model`) nếu vẫn lỗi, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin về seat hoặc mở issue kèm log + ảnh chụp lỗi.
+
 ---
 
 ## 5. MCP tools đột nhiên mất — thứ tự check?
@@ -175,6 +182,8 @@ gh copilot suggest "list files by size" --no-interactive 2>&1 | head -10
 **Trả lời 1 câu:** MCP tools mất luôn theo thứ tự: validate JSON config, test transport (token/env), reload IDE, đọc Output log — không sửa config vội.
 
 **Giải thích chi tiết + ví dụ:** Nôm na: ki-ốt (MCP server) ngoài siêu thị bị mất — lần lượt kiểm tra: hợp đồng (JSON), mạng (env/token), cửa hàng (IDE reload), rồi mới đọc nhật ký (log). Xem chi tiết [bài 04](04-mcp-faq.md). Tóm tắt 30 giây: validate JSON → test transport → check token → reload IDE → đọc Output log. 2026: Copilot CLI từ v1.0.39 **không còn đọc** `.vscode/mcp.json` (breaking) — CLI dùng `~/.mcp-config.json` + `.mcp.json`.
+
+### Làm thế nào (copy-paste)
 
 ```bash
 python3 -c "import json; json.load(open('.vscode/mcp.json')); print('JSON OK')"
@@ -188,7 +197,8 @@ node --version
 
 > **Khi nào áp dụng:** mọi ca MCP đỏ — đừng sửa config vội, check env + JSON trước.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) validate lại JSON rồi reload IDE lần nữa, (2) check token/env còn hợp lệ rồi đổi model (`/model`) thử, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue kèm log Output của MCP server.
+
 ---
 
 ## 6. Completions gợi ý sai chuẩn team dù đã có instructions?
@@ -199,19 +209,13 @@ node --version
 
 **Giải thích chi tiết + ví dụ:** Nôm na: autocomplete là thợ tay nghề — nó học theo mẫu (pattern gần) chứ không đọc nội quy (quy tắc xa). Completions (gõ tay) đọc ít context hơn chat — nó có thể bỏ qua instructions dài. Fix: giữ quy tắc quan trọng NGẮN + đặt ví dụ code mẫu ngay trong instructions (model bắt chước pattern gần hơn là đọc quy tắc xa).
 
+> **Khi nào áp dụng:** khi chat đúng mà gõ tay sai — bổ sung ví dụ code, đừng viết thêm chữ. 2026: không nhét ví dụ vào prompt files (legacy, deprecated cho Agent Host) — đặt trong `copilot-instructions.md` hoặc Agent Skill (chuẩn 2026) để chạy mọi harness (xem [bài 05](../01-huong-dan-su-dung/05-prompt-files-custom-instructions.md)).
+
+### Làm thế nào (copy-paste)
+
 ```markdown
 <!-- Trong .github/copilot-instructions.md (chuẩn 2026, read moi chat)
      Vi cu the thuan Quy tac chung -->
-## Chuẩn error (copy pattern này)
-```ts
-return res.status(400).json({ code: "BAD_INPUT", message, requestId });
-```
-```
-
-> **Khi nào áp dụng:** khi chat đúng mà gõ tay sai — bổ sung ví dụ code, đừng viết thêm chữ. 2026: không nhét ví dụ vào prompt files (legacy, deprecated cho Agent Host) — đặt trong `copilot-instructions.md` hoặc Agent Skill (chuẩn 2026) để chạy mọi harness (xem [bài 05](05-prompt-files-custom-instructions.md)).
-
-```markdown
-<!-- Trong instructions: vi cu the thu Quy tac chung -->
 ## Chuẩn error (copy pattern này)
 ```ts
 return res.status(400).json({ code: "BAD_INPUT", message, requestId });
@@ -225,9 +229,8 @@ return res.status(400).json({ code: "BAD_INPUT", message, requestId });
 
 **Ví dụ cụ thể:** quy tắc "dùng error shape chuẩn" không ăn ở completions → thêm đoạn code mẫu 3 dòng → gợi ý xám bắt đầu ra đúng shape.
 
-> **Khi nào áp dụng:** khi chat đúng mà gõ tay sai — bổ sung ví dụ code, đừng viết thêm chữ.
+**Nếu vẫn lỗi thì...** (1) thu hẹp ví dụ mẫu còn 1 pattern ngắn gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi gõ thử lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue kèm log + ảnh chụp lỗi.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 
 ## 7. Agent lặp vòng / đơ / chạy mãi không xong?
@@ -237,6 +240,8 @@ return res.status(400).json({ code: "BAD_INPUT", message, requestId });
 **Trả lời 1 câu:** Agent lặp vòng khi cùng 1 lỗi lặp 3 lần hoặc task nhỏ chạy >20 phút — xử lý bằng cách Cancel → đọc log vòng cuối → chia task nhỏ → chạy lại từng phần, không để chạy tiếp.
 
 **Giải thích chi tiết + ví dụ:** Nôm na: thợ cứ lặp 1 thao tác sai 3 lần là bạn đứng ra — không để thợ tự "biết đâu được". Dấu hiệu cần can thiệp: lặp cùng lỗi 3 lần, chạy >20 phút task nhỏ, tool calls toàn retry. Xử lý: **Dừng (Cancel) → đọc log vòng cuối → chia task → chạy lại từng phần.** Đừng để chạy tiếp "biết đâu được" — chỉ đốt AI Credits (2026: quota đo bằng credits, xem [bài 02](02-model-context-premium.md)).
+
+### Làm thế nào (copy-paste)
 
 ```bash
 # Sau khi Cancel agent:
@@ -250,7 +255,8 @@ git diff --stat      # danh gia: giu phan dung, bo phan loan
 
 > **Khi nào áp dụng:** quy tắc "lặp 3 lần thì dừng" cho mọi agent (local lẫn coding agent).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) chia task nhỏ hơn nữa (1 file/selection) rồi chạy lại, (2) đổi model (`/model`) rồi thử lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue kèm log vòng lặp + ảnh chụp lỗi.
+
 ---
 
 ## 8. Sau update IDE/extension thì hỏng?
@@ -260,6 +266,8 @@ git diff --stat      # danh gia: giu phan dung, bo phan loan
 **Trả lời 1 câu:** Hỏng sau update là do lệch version giữa IDE mới và extension cũ (hoặc ngược lại) — fix bằng cách update cả IDE + extension lên mới nhất, reload, sign-in lại.
 
 **Giải thích chi tiết + ví dụ:** Nôm na: đổi motor mới mà gắn vào khung xe cũ — không khớp. Update lệch phiên bản: IDE mới + extension cũ (hoặc ngược lại) → API không khớp → suggestions/chat chết. Fix: update CẢ IDE + extension lên mới nhất, reload, sign-in lại.
+
+### Làm thế nào (copy-paste)
 
 ```bash
 code --version
@@ -273,7 +281,8 @@ code --list-extensions --show-versions | grep -i copilot
 
 > **Khi nào áp dụng:** sau mọi đợt auto-update — nếu Copilot chết ngay sau update thì 99% do lệch version.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) gỡ rồi cài lại extension Copilot, (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue kèm version IDE + extension.
+
 ---
 
 ## 9. Nghi org policy chặn nhưng không chắc?
@@ -283,6 +292,8 @@ code --list-extensions --show-versions | grep -i copilot
 **Trả lời 1 câu:** Khi setting tự revert, model picker thiếu, chat báo "disabled by administrator" thì 99% là org policy chặn — dev không xem được policy, phải hỏi admin chụp Policies tab.
 
 **Giải thích chi tiết + ví dụ:** Nôm na: bạn nghi công ty khóa ổ điện nhưng không thấy khóa — phải gọi điện hỏi điện. Dấu hiệu policy chặn: setting tự revert, model picker thiếu, chat báo "disabled by administrator", coding agent "not enabled". Dev không xem được policy — phải hỏi admin chụp `Org Settings → Copilot → Policies`. 2026: policy có thể khóa cả Agent Skills, MCP, hooks preview — hỏi admin đủ cả 3 (xem [bài 05](05-policies-guardrails-faq.md)).
+
+### Làm thế nào (copy-paste)
 
 ```bash
 # Dev tu check gian tiep:
@@ -297,7 +308,8 @@ gh api user --jq .login
 
 > **Khi nào áp dụng:** khi mọi fix local đều vô hiệu — chuyển sang kênh admin, đừng vọc tiếp.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) thử lại ở 1 repo/selection khác để loại trừ scope, (2) đổi model (`/model`) xem có bị chặn luôn không, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) — đây là kênh đúng cho ca này.
+
 ---
 
 ## 10. Thứ tự debug tổng (không rõ nguyên nhân)?
@@ -316,6 +328,8 @@ gh api user --jq .login
 6. Tắt instructions/MCP custom tạm (loại trừ config — 2026: tạm tắt cả Agent Skills + hooks).
 7. Hỏi admin (policy/seat) → báo GitHub Support kèm log.
 
+### Làm thế nào (copy-paste)
+
 ```bash
 gh auth status
 curl -s -m 10 -o /dev/null -w "api:%{http_code}\n" https://api.github.com
@@ -329,7 +343,8 @@ python3 -c "import json; json.load(open('.vscode/mcp.json')); print('MCP JSON OK
 
 > **Khi nào áp dụng:** mọi ca "lỗi lạ" — chạy từ trên xuống, không nhảy cóc, ghi lại kết quả từng bước để báo admin/Support.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+**Nếu vẫn lỗi thì...** (1) chạy lại script với scope gọn hơn (1 file/selection) và ghi lại từng dòng, (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" ngay dưới đây, (4) hỏi admin (policy/seat) hoặc mở issue kèm log + ảnh chụp.
+
 ---
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)
@@ -346,9 +361,33 @@ gh auth status && code --version && code --list-extensions --show-versions | gre
 
 ---
 
+## So sánh với Claude Code
+
+| Việc | GitHub Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Số bề mặt có thể "chết" | VS Code / JetBrains / Neovim / web / 2 CLI (`gh copilot` + `copilot`) | Terminal-first (+ extension IDE) | Copilot nhiều "cửa" nên lỗi rải nhiều nơi — nhớ đang debug thằng nào |
+| Đổi model để loại trừ lỗi | `/model` trong Chat, đổi ngay giữa phiên | Gắn model Anthropic, đổi qua cấu hình | Đổi model là cách nhanh nhất để biết "lỗi do model hay không" |
+| Trạng thái kết nối | Status bar báo Offline + `/status` | Lỗi hiện ngay trong phiên terminal | Copilot có chỉ báo trực quan; Claude Code đọc log terminal |
+| Auth IDE vs CLI | IDE và CLI (`gh`) có auth riêng | Một `claude` auth; Actions dùng secret riêng | Copilot hay bị "IDE sống, CLI chết" — fix auth từng thằng |
+| File cấu hình MCP | `.vscode/mcp.json` (CLI 2026: `~/.mcp-config.json` + `.mcp.json`) | `.mcp.json` + cấu hình user | Cùng chuẩn MCP, khác đường dẫn — đừng copy path máy này sang máy kia |
+| Kiểm soát doanh nghiệp | Org policy (Business/Enterprise) — dev không tự xem | Cấu hình enterprise/console Anthropic | Cả hai: dev thường phải hỏi admin mới thấy policy thật |
+
+> **Đọc bảng này thế nào:** thứ tự debug gần như giống hệt nhau (auth → mạng → version → phiên mới → cấu hình → admin). Khác biệt lớn nhất: Copilot có nhiều bề mặt + thanh trạng thái nên bạn phải xác định đang lỗi ở "cửa" nào; Claude Code terminal-first nên lỗi hiện ngay tại nơi bạn gõ lệnh.
+
+## Best practices (kèm "vì sao")
+
+- **Check auth + mạng trước khi vọc config.** *Vì sao?* Hai lớp này gây phần lớn ca "Copilot chết"; sửa config khi mạng hỏng chỉ làm rối thêm.
+- **Ghi lại kết quả từng bước debug.** *Vì sao?* Khi phải leo lên admin/Support, log + version + ảnh chụp là thứ duy nhất giúp họ khoanh vùng thay vì hỏi lại.
+- **Lỗi lạ thì tái hiện bằng file hello-world sạch.** *Vì sao?* Loại trừ context dự án trước khi kết luận extension hỏng.
+- **Sau mỗi lần auto-update, để mắt Copilot.** *Vì sao?* Lệch version IDE/extension là nguyên nhân số 1 của "tự nhiên hỏng".
+- **MCP đỏ thì check JSON + env trước khi sửa config.** *Vì sao?* JSON hỏng hoặc token rỗng chiếm phần lớn ca; sửa config "cho chắc" dễ làm hỏng thêm.
+- **Agent lặp 3 lần thì Cancel, không chạy tiếp.** *Vì sao?* Chạy tiếp chỉ đốt AI Credits, phần dở còn lại cũng phải làm lại từ đầu.
+
+---
+
 ## Tham khảo chéo
 
 - Auth/seat: [bài 01](01-tai-khoan-pricing-cai-dat.md). Quota/model: [bài 02](02-model-context-premium.md).
 - MCP: [bài 04](04-mcp-faq.md). Instructions: [bài 06](06-prompts-agents-instructions.md). Policy: [bài 05](05-policies-guardrails-faq.md).
 
-> Mẹo 1 dòng: _auth → mạng → version → sign-in lại → chat mới → tắt custom → hỏi admin — đúng thứ tự, không nhảy cóc._
+> **Chốt FAQ 08:** Copilot "chết" hiếm khi do model — 90% nằm ở auth, mạng, version, scope hoặc policy. Chạy đúng thứ tự debug, ghi lại từng bước, và chỉ leo lên admin/Support khi đã có log + version + ảnh chụp trong tay.

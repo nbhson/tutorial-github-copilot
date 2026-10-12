@@ -4,13 +4,20 @@
 > **Vấn đề:** "dùng GitHub Copilot 2026 thì cần tài khoản gì, tốn bao nhiêu, cài sao cho sạch" — trả lời theo 10 câu hỏi deep-dive.
 > **Đọc xong:** tự chọn plan, xin seat, bật trial, cài sạch trong ~10 phút. **Thời gian:** ~10 phút đọc.
 
-File này trả lời mọi câu hỏi "dùng GitHub Copilot 2026 thì cần tài khoản gì, tốn bao nhiêu, cài sao cho sạch". Mỗi câu có giải thích + lệnh copy-paste + ví dụ + khi nào áp dụng.
+10 câu hỏi dưới đây cùng xoay quanh một câu lớn: **"dùng GitHub Copilot 2026 thì cần tài khoản gì, tốn bao nhiêu, cài sao cho sạch"**. Mỗi câu đều có giải thích + lệnh copy-paste + ví dụ, kèm phần "Khi nào áp dụng" để bạn biết lúc nào nên mở lại đọc.
 
----
+> **Nếu làm sai thì sao?** Chọn sai plan thì hoặc trả thừa tiền, hoặc cạn Credits giữa tháng; cài trùng extension thì suggestions chết mà không rõ lý do; login nhầm account thì policy org "không ăn" và bill đi sai chỗ. Ba lỗi này gần như bao trùm toàn bộ các ca "Copilot của em không chạy".
+
+## Mục tiêu bài học
+
+- Chọn đúng plan (Free / Pro / Pro+ / Max / Business / Enterprise) và biết mình thuộc nhóm nào.
+- Phân biệt seat, trial và quyền admin — không còn bối rối khi org mua hộ.
+- Cài sạch đúng 1 extension chính chủ mỗi IDE + CLI, và biết cách đổi account cho đúng.
+- Tự xử 3 lỗi cài đặt kinh điển: extension đè nhau, IDE quá cũ, thiếu `gh`.
 
 ## Sơ đồ tư duy nhanh (đọc 30 giây)
 
-Section này trả lời: bạn thuộc nhóm người nào → đi vào plan và đường cài nào cho đúng, không cần đọc cả bài.
+Bạn thuộc nhóm người nào thì đi thẳng vào plan và đường cài tương ứng, không cần đọc cả bài.
 
 ```mermaid
 flowchart LR
@@ -27,7 +34,7 @@ flowchart LR
 
 ## Bảng tổng hợp: chọn đường vào nhanh
 
-Section này trả lời: bạn là ai → cần plan nào, cài thế nào, và việc đầu tiên phải làm là gì. Tra cứu nhanh, không cần đọc từ đầu.
+Bạn là ai → cần plan nào, cài thế nào, việc đầu tiên phải làm là gì. Tra bảng này trước khi đọc chi tiết.
 
 | Bạn là ai | Plan cần | Cài thế nào | Việc đầu tiên |
 |---|---|---|---|
@@ -41,8 +48,6 @@ Section này trả lời: bạn là ai → cần plan nào, cài thế nào, và
 ---
 
 ## 1. Các plan Individual / Pro / Business / Enterprise khác nhau gì?
-
-Section này trả lời: các plan khác nhau ở đâu, giá và hạn mức Credits ra sao, và bạn nên chọn gói nào.
 
 > **Hỏi ngắn gọn:** _Các plan Individual / Pro / Business / Enterprise khác nhau gì?_
 
@@ -80,7 +85,7 @@ Quy tắc tính tiền cần nhớ:
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Chạy trong terminal để biết mình đang ở plan nào (cần `gh` đã login):
 
 ```bash
 # Xem plan hiện tại của account (cần gh CLI đã login)
@@ -93,12 +98,10 @@ gh api /user/copilot_seat_details --jq . 2>/dev/null || echo "Chua co seat hoac 
 
 > **Khi nào áp dụng:** luôn xác định plan NGAY từ đầu vì nó khóa hạn mức Credits (câu 2), policy (bài 05), và quyền riêng tư (bài 09).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (không thấy plan, không rõ mình thuộc gói nào): (1) chạy lại `gh auth status` xem có đúng account không, (2) mở `github.com/settings/copilot` để đối chiếu plan thật thay vì đoán theo email, (3) nếu là org thì hỏi admin seat đã gán chưa, (4) vẫn mù mờ thì mở issue kèm ảnh chụp trang settings — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 2. Trial hoạt động thế nào, hết trial thì sao?
-
-Section này trả lời: dùng thử miễn phí được gì, và khi hạn mức dùng hết thì chuyện gì xảy ra.
 
 > **Hỏi ngắn gọn:** _Trial hoạt động thế nào, hết trial thì sao?_
 
@@ -113,7 +116,7 @@ Hết trial: Free → suggestions dừng, chat báo hạn mức; Business trial 
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Không có lệnh CLI xem trial — phải vào web và tự đặt mốc thời gian:
 
 ```bash
 # Không có lệnh CLI xem trial; check trên web:
@@ -126,12 +129,10 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** trước khi onboarding team >5 người — luôn trial Business trước, đừng mua blind.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (trial không bật được, hoặc hết hạn bất ngờ): (1) xác nhận bạn là admin/owner org — dev thường không tự bật được trial, (2) kiểm tra org chưa từng dùng trial trước đó, (3) đọc kỹ "Trial ends on" trước khi nói "tự nhiên mất", (4) hỏi owner/billing manager hoặc mở ticket — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 3. Seat là gì, admin assign / thu hồi seat thế nào?
-
-Section này trả lời: seat là gì, ai được cấp, và quản lý cấp/thu hồi ở đâu.
 
 > **Hỏi ngắn gọn:** _Seat là gì, admin assign / thu hồi seat thế nào?_
 
@@ -145,7 +146,7 @@ Credits của org được **pooled ở mức billing entity** — không chia c
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Dành cho admin org (cần org owner + `gh` CLI):
 
 ```bash
 # Admin: xem ai đang giữ seat (cần org owner + gh CLI)
@@ -162,12 +163,10 @@ gh api -X POST orgs/<ORG>/copilot/billing/selected_teams \
 
 > **Khi nào áp dụng:** khi có dev báo "Copilot đòi mua dù đã join org" — 90% là chưa được assign seat.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (đã join org mà vẫn "No seat available"): (1) nhờ admin chạy lại lệnh liệt kê seats xem tên bạn có trong đó không, (2) kiểm tra bạn thuộc đúng team được assign (allow-all vs selected teams), (3) nếu tên có mà vẫn không chạy, sign-out → sign-in lại trong IDE, (4) hết seat thật thì phải chờ mua thêm — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 4. Cài đặt thế nào cho sạch: VS Code / JetBrains / Neovim / CLI?
-
-Section này trả lời: cài thứ tự gì, giữ extension nào, và làm sao để không cài trùng đè nhau.
 
 > **Hỏi ngắn gọn:** _Cài đặt thế nào cho sạch: VS Code / JetBrains / Neovim / CLI?_
 
@@ -189,7 +188,7 @@ Section này trả lời: cài thứ tự gì, giữ extension nào, và làm sa
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Máy mới thì cài theo đúng thứ tự này để tránh cài chồng:
 
 ```bash
 # VS Code CLI: cài extension chính chủ
@@ -211,12 +210,10 @@ gh copilot --help
 
 > **Khi nào áp dụng:** máy mới, hoặc khi suggestions chập chờn do cài 2 plugin đè nhau.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (cài xong mà suggestions không hiện): (1) kiểm tra `code --list-extensions | grep -i copilot` có đúng 2 dòng chính chủ, (2) reload cửa sổ IDE, (3) với Neovim chạy `:Copilot status` xem đã auth chưa, (4) gỡ hết bản lạ rồi cài lại — xem câu 7 và "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 5. Sign-in / sign-out / đổi account (cá nhân ↔ công ty) thế nào?
-
-Section này trả lời: đổi tài khoản GitHub đang dùng cho Copilot ở từng bề mặt, và khi nào cần đổi.
 
 > **Hỏi ngắn gọn:** _Sign-in / sign-out / đổi account (cá nhân ↔ công ty) thế nào?_
 
@@ -236,7 +233,7 @@ Section này trả lời: đổi tài khoản GitHub đang dùng cho Copilot ở
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Kiểm tra trước, rồi mới đổi — tránh logout nhầm account đang cần:
 
 ```bash
 # Kiểm tra account đang dùng cho gh + copilot
@@ -254,12 +251,10 @@ gh auth login --web -h github.com
 
 > **Khi nào áp dụng:** đầu mỗi máy mới, mỗi khi bill sai, và khi policy org "không ăn" (thường do sai account).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (đổi account rồi mà Copilot vẫn như cũ): (1) thoát hẳn IDE rồi mở lại, vì extension đôi khi giữ token cũ, (2) chạy `gh auth status` xác nhận đúng account active, (3) xóa credential GitHub cũ trong OS keychain nếu vẫn dính, (4) báo admin xác nhận seat nằm ở account mới — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 6. Policy của org đè lên setting cá nhân ra sao?
-
-Section này trả lời: setting cá nhân và policy org cái nào thắng, và cách kiểm tra mình có đang bị policy đè không.
 
 > **Hỏi ngắn gọn:** _Policy của org đè lên setting cá nhân ra sao?_
 
@@ -271,7 +266,7 @@ Triệu chứng: setting tự revert sau restart, model picker thiếu model, ch
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Dev không tự xem được policy từ client — phải hỏi admin hoặc vào web:
 
 ```bash
 # Không có lệnh xem policy từ client; check trên web:
@@ -284,12 +279,10 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** mọi trường hợp "em bật rồi mà không có tác dụng" trong org Business/Enterprise. Chi tiết xem [bài 05](05-policies-guardrails-faq.md).
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (setting cứ tự tắt, không rõ ai chặn): (1) so sánh setting của bạn với ảnh chụp Policies tab của admin, (2) xác nhận bạn đang login đúng account trong org, (3) thử trên một máy khác để loại trừ lỗi local, (4) nhờ admin đổi policy thay vì cố lách — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 7. Lỗi cài đặt kinh điển: extension xung đột, version cũ, PATH thiếu `gh`?
-
-Section này trả lời: 3 lỗi cài đặt gặp nhiều nhất và cách fix từng cái theo thứ tự.
 
 > **Hỏi ngắn gọn:** _Lỗi cài đặt kinh điển: extension xung đột, version cũ, PATH thiếu `gh`?_
 
@@ -303,7 +296,7 @@ Section này trả lời: 3 lỗi cài đặt gặp nhiều nhất và cách fix
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Dò đúng lỗi trước khi sửa — 3 lệnh dưới cho bạn biết đang vướng cái nào:
 
 ```bash
 # VS Code: liệt kê extension copilot đang cài
@@ -323,12 +316,10 @@ gh --version && gh extension list | grep copilot
 
 > **Khi nào áp dụng:** khi suggestions/chat đột nhiên chết sau update IDE hoặc sau khi vọc extension.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (gỡ xong vẫn không chạy): (1) update VS Code lên bản mới nhất rồi reload, (2) nếu là CLI, xác nhận `gh` cài trước khi add extension `gh-copilot`, (3) xem `Output → GitHub Copilot` tìm dòng lỗi cụ thể, (4) gỡ sạch rồi cài lại từ đầu — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 8. Bắt đầu repo mới: 5 việc setup đầu repo là gì?
-
-Section này trả lời: vừa clone/ tạo repo xong thì phải làm 5 việc nào, theo đúng thứ tự.
 
 > **Hỏi ngắn gọn:** _Bắt đầu repo mới: 5 việc setup đầu repo là gì?_
 
@@ -344,7 +335,7 @@ Section này trả lời: vừa clone/ tạo repo xong thì phải làm 5 việc
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Làm lần lượt 5 việc, mỗi việc verify một lần để biết dừng ở đâu nếu hỏng:
 
 ```bash
 cd ~/code/my-repo && code .
@@ -363,12 +354,10 @@ cp -r /path/to/tutorial-copilot/templates/.vscode ./
 
 > **Khi nào áp dụng:** mọi repo chưa từng dùng Copilot. Team thì commit `.github/` + `.vscode/` để người sau khỏi setup lại.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (setup xong mà Copilot vẫn đoán sai repo): (1) verify bước 1 — nếu suggestions không chạy thì lỗi ở đâu đó khác (quay lại câu 4, 7), (2) mở `copilot-instructions.md` xác nhận đã sửa theo stack thật, (3) kiểm tra file nằm đúng `.github/` ở root repo, (4) thử hỏi Copilot "tóm tắt README + package.json" để xem nó đọc đúng chưa — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 9. Project mới tinh thì copy `templates/` thế nào?
-
-Section này trả lời: repo chưa có code thì copy template ra sao và phải sửa gì cho khớp stack thật.
 
 > **Hỏi ngắn gọn:** _Project mới tinh thì copy `templates/` thế nào?_
 
@@ -378,7 +367,7 @@ Section này trả lời: repo chưa có code thì copy template ra sao và ph�
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Copy khung rồi sửa ngay những chỗ dễ sai nhất, đừng để nguyên template:
 
 ```bash
 ls /path/to/tutorial-copilot/templates/
@@ -391,12 +380,10 @@ cp /path/to/tutorial-copilot/templates/.github/copilot-instructions.md ./.github
 
 > **Khi nào áp dụng:** `git init` vừa xong, chưa có file nào. Sau khi code lên hình, bổ sung instructions theo path.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (Copilot gợi ý sai lệnh/stack): (1) `grep` lại các lệnh test/lint/build trong file xem còn sót ví dụ của template không, (2) so cấu trúc thư mục thật với phần mô tả trong instructions, (3) bổ sung `.github/instructions/*.instructions.md` khi repo đã có code, (4) hỏi Copilot "repo này test bằng lệnh nào" để lộ chỗ sai — xem "Vẫn lỗi thì sao?" cuối file.
 ---
 
 ## 10. Báo lỗi / nhờ hỗ trợ từ GitHub thế nào?
-
-Section này trả lời: gửi báo lỗi ở đâu và phải kèm thông tin gì để được xử lý nhanh.
 
 > **Hỏi ngắn gọn:** _Báo lỗi / nhờ hỗ trợ từ GitHub thế nào?_
 
@@ -406,7 +393,7 @@ Section này trả lời: gửi báo lỗi ở đâu và phải kèm thông tin 
 
 ### Làm thế nào (steps copy-paste)
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Thu thập đủ bằng chứng trước khi gửi, đừng bắt người ta hỏi lại:
 
 ```bash
 # Thu thập info trước khi báo lỗi
@@ -428,12 +415,39 @@ Kèm: extension versions + Output log đoạn lỗi + đã thử reload/re-login
 
 > **Khi nào áp dụng:** khi đã đi hết thứ tự debug ([bài 08](08-loi-thuong-gap-troubleshooting.md)) mà vẫn lỗi.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra "Vẫn lỗi thì sao?" cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** (gửi report mà không ai phản hồi): (1) đảm bảo report có đủ plan + version + log thay vì chỉ "nó không chạy", (2) với Business/Enterprise dùng Support ticket thay vì Discussions, (3) thử tái hiện trên repo tối giản để dễ khoanh vùng, (4) bổ sung ảnh chụp/nơi tái hiện rồi cập nhật issue — xem "Vẫn lỗi thì sao?" cuối file.
+---
+
+## So sánh với Claude Code
+
+Cả hai đều xoay quanh chuyện "trả tiền cho AI viết code", nhưng hệ billing và cách cấp quyền khác nhau. Biết bảng này để bạn không so số trực tiếp giữa hai nhà:
+
+| Việc | GitHub Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Nhà cung cấp & gói | GitHub: Free / Pro / Pro+ / Max / Business / Enterprise | Anthropic: dùng quota Claude Pro/Max hoặc API key | Hai hệ billing tách biệt, không dùng chung |
+| Đơn vị đo chi phí | AI Credits (1 credit = $0.01), tính theo token | Tính theo token qua subscription/API Anthropic | Cách quy đổi khác nhau, đừng so con số trực tiếp |
+| Bậc dùng thử | Có plan Free (2.000 completions/tháng) | Claude Code cần subscription Anthropic hoặc API key | Người mới thử Copilot Free dễ hơn |
+| Seat theo tổ chức | Business/Enterprise gán seat, Credits pooled cả org | Quản lý theo team/enterprise phía Anthropic | Cùng ý tưởng "admin cấp quyền", khác UI |
+| Cài đặt đa bề mặt | VS Code / JetBrains / Neovim / CLI / web | Chủ yếu CLI + một số IDE extension | Copilot phủ nhiều bề mặt hơn |
+| Đổi model | Đổi ngay trong Chat (GPT / Claude / Gemini) | Gắn với model Anthropic (Claude) | Copilot cho chọn "bộ não"; Claude Code nhất quán 1 nhà |
+
+> **Đọc bảng này thế nào:** phần "cài sạch, đúng account, commit config vào repo" áp dụng y hệt cho cả hai — chỉ khác tên nhà cung cấp và nơi quản seat. Phần bạn không thể chuyển thẳng 1-1 là **đơn vị billing**: credits của Copilot và quota/API của Anthropic không quy đổi cho nhau, nên đừng lấy số credits so với số token.
+
+## Best practices (kèm "vì sao")
+
+- **Xác định plan trước khi viết dòng code đầu tiên.** *Vì sao?* Plan khóa hạn mức Credits, policy và quyền riêng tư — biết sai từ đầu đỡ phải debug ngược.
+- **Giữ đúng 1 extension Copilot chính chủ mỗi IDE.** *Vì sao?* Hai bản đè nhau là nguyên nhân số 1 của suggestions chập chờn.
+- **Chọn plan theo mức dùng thật, không theo "cho oai".** *Vì sao?* Pro+/Max chỉ đáng khi bạn thực sự dùng agent và model mạnh mỗi ngày.
+- **Team thì trial Business 30 ngày trước khi mua.** *Vì sao?* Onboarding tốn thời gian — dùng thử để kiểm policy/SSO thay vì mua mù.
+- **Luôn set reminder trước ngày trial hết hạn.** *Vì sao?* Business trial tự chuyển sang trả phí nếu bạn không chủ động hủy.
+- **Commit `.github/` + `.vscode/` cho cả team.** *Vì sao?* Người sau clone về là có ngay instructions/exclusion, không setup lại từ đầu.
+- **Kiểm account đang login trước khi báo lỗi.** *Vì sao?* Sai account giải thích phần lớn ca "policy không ăn / bill sai chỗ".
+
 ---
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)
 
-Section này trả lời: khi đã thử mọi cách ở trên mà vẫn kẹt thì chạy 5 bước nào, theo đúng thứ tự.
+Đã thử mọi cách ở trên mà vẫn kẹt thì chạy đúng 5 bước này, **không nhảy cóc** — bước trước xác nhận xong mới sang bước sau.
 
 1. `gh auth status` — đúng account chưa, seat còn không.
 2. `code --list-extensions | grep -i copilot` — chỉ còn bản chính chủ.
@@ -450,10 +464,10 @@ gh auth status && gh --version && code --list-extensions | grep -i copilot
 
 ## Tham khảo chéo
 
-Section này trả lời: đọc tiếp bài nào nếu cần đào sâu hơn chủ đề trong file này.
+Cần đào sâu thêm chủ đề trong file này thì đi tiếp theo các hướng sau.
 
 - Bài tiếp theo: [02-model-context-premium.md](02-model-context-premium.md) (chọn model + giữ context), [bài 08](08-loi-thuong-gap-troubleshooting.md) (bảng lỗi full).
 - Policy chi tiết: [bài 05](05-policies-guardrails-faq.md). Bảo mật: [bài 09](09-bao-mat-quyen-rieng-tu.md).
 - Templates copy ngay: [../templates/README.md](../templates/README.md).
 
-> Mẹo 1 dòng: _xác định plan trước, giữ đúng 1 extension chính chủ, và sai account là nguyên nhân của 50% lỗi "không chạy"._
+> **Chốt bài:** Tài khoản là gốc — plan đúng, một extension sạch, một account đúng. Xong ba việc đó thì phần lớn lỗi "Copilot không chạy" biến mất trước cả khi bạn kịp mở Chat.

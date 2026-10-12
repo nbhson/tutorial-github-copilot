@@ -6,6 +6,14 @@
 >
 > **Lưu ý 2026:** `.prompt.md` (prompt files) **deprecated cho Agent Host sessions** (Copilot/Cloud) — vẫn chạy trên Local/VS Code nhưng việc mới nên ưu tiên **Agent Skills** (`SKILL.md`, chuẩn mở, port mọi nơi). Bài này dạy cả 2, khuyến nghị skill cho việc mới.
 
+## Mục tiêu bài học
+
+- Viết được **1 Agent Skill** `.github/skills/<ten>/SKILL.md` đúng chuẩn 2026, agent tự load khi khớp từ khóa.
+- Phân biệt **instructions vs skill vs agent vs plugin** và biết chọn đúng thứ cho từng việc.
+- **Port prompt file cũ** (`.prompt.md`) sang skill để chạy được cả Local lẫn Cloud.
+- Biết khi nào mới cần **Agent Plugin** (≥3 repos cùng chuẩn) thay vì skill lẻ.
+- Test được skill theo vòng "nói từ khóa, KHÔNG gõ `/`" và commit để cả team dùng.
+
 ## Mục lục
 
 1. [Agent Skill là gì — why, không chỉ what (prompt file: legacy)](#1-agent-skill-là-gì--why-không-chỉ-what-prompt-file-legacy)
@@ -18,13 +26,15 @@
 8. [Walkthrough tạo Agent Skill từ 0 (5 bước, 2026)](#8-walkthrough-tạo-agent-skill-từ-0-5-bước-2026)
 9. [Hiểu nhầm thường gặp](#9-hiểu-nhầm-thường-gặp)
 10. [Pitfalls + bài tập](#10-pitfalls--bài-tập)
-11. [Link chéo](#11-link-chéo)
+11. [So sánh với Claude Code](#so-sánh-với-claude-code)
+12. [Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)](#lỗi-thường-gặp--sai--đúng)
+13. [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
+14. [Bài tập nhỏ](#bài-tập-nhỏ)
+15. [Link chéo](#11-link-chéo)
 
 ---
 
 ## 1. Agent Skill là gì — why, không chỉ what (prompt file: legacy)
-
-*Section này trả lời: Agent Skill dùng cho việc gì, và khi nào nên viết 1 skill thay vì gõ prompt tự nhiên hoặc dùng prompt file cũ.*
 
 **Nôm na 1 câu:** Agent Skill là **sổ tay nghề chuẩn, tự động** — việc nào lặp lại (deploy, review, migrate) thì ghi công thức 1 lần trong `SKILL.md`. Agent tự "ngửi" thấy bạn nói "deploy" là tự mở đúng trang sổ, khỏi dặn lại, khỏi gõ `/`.
 
@@ -47,6 +57,10 @@ Agent: tự load SKILL.md đúng ngữ cảnh → chạy 5 bước → báo cáo
 
 - Việc lặp >3 lần (deploy/review/migrate/sinh test) → đóng Agent Skill.
 - Việc 1 lần, hỏi cho biết → prompt tự nhiên, đừng đóng file (phí).
+
+**Vì sao quan trọng?** Việc lặp lại là chỗ tốn thời gian và dễ sai nhất. Đóng nó thành skill 1 lần thì mọi lần sau agent tự chạy đủ bước, cả team dùng chung một chuẩn thay vì mỗi người paste một kiểu — và chạy được trên mọi harness nhờ chuẩn mở.
+
+**Nếu làm sai thì sao?** `SKILL.md` dài như wiki (>100 dòng) → agent bỏ bước giữa chừng; `description` chung chung → skill không bao giờ tự load; để secret trong skill rồi commit → lộ key. Cách tránh: body <100 dòng, câu đầu `description` phải chứa từ khóa user nói thật, secret chỉ ghi "lấy từ 1Password <tên>".
 
 **Agent Skill = workflow + knowledge đóng gói**, sống trong 1 folder `.github/skills/<ten>/SKILL.md`:
 
@@ -86,8 +100,6 @@ ls .github/prompts/*.prompt.md 2>&1   # còn nào thì port sang skill
 
 ### 1.1. Vì sao Agent Skill là nâng cấp lớn nhất cho việc lặp lại? (why)
 
-*Section này trả lời: đầu tư 1 lần cho Agent Skill, bạn được gì so với việc viết prompt mới mỗi ngày hay dùng prompt file cũ?*
-
 **Trước skill:** mỗi lần deploy/review/migrate, bạn paste lại checklist dài vào prompt (hoặc gõ `/ten` cho prompt file). Tốn token, và dễ quên bước giữa chừng. Prompt file `.prompt.md` giờ deprecated cho Agent Host (Copilot/Cloud) — chỉ còn chạy Local.
 
 **Sau:** checklist sống trong `SKILL.md`. Bạn chỉ cần nói "deploy staging" (không cần gõ `/`) — agent tự load, làm đủ các bước, bạn chỉ duyệt. Chạy được trên mọi harness (Local, Copilot, Cloud, CLI, app) nhờ chuẩn mở.
@@ -104,8 +116,6 @@ So sánh với các thứ khác (bài 00):
 ---
 
 ## 2. Sơ đồ: instructions vs skill vs agent vs extension
-
-*Section này trả lời: 4 khái niệm trên khác nhau ở đâu, để bạn chọn đúng thứ ngay từ câu đầu tiên.*
 
 ```mermaid
 flowchart TB
@@ -142,8 +152,6 @@ sequenceDiagram
 ---
 
 ## 3. Giải phẫu SKILL.md (2026 — khuyến nghị)
-
-*Section này trả lời: 1 Agent Skill gồm những phần nào, và field nào quyết định cách nó tự load.*
 
 **Nôm na 1 câu:** Mỗi Agent Skill là **1 folder** gồm **`SKILL.md` (frontmatter: tên + description = khi nào khớp) + thân markdown (Steps)** + files phụ trợ (`scripts/`, `references/`, `examples/`). Agent *tự* mở folder này khi thấy từ khóa khớp description.
 
@@ -185,8 +193,6 @@ description: 'Deploy staging/prod voi checklist migrate + smoke test.
 
 ### 3.1. Từng field frontmatter SKILL.md (khi nào dùng)
 
-*Đọc bảng này để trả lời nhanh: field nào quyết định hành vi, và khi nào phải sửa nó.*
-
 | Field | Nôm na | Ý nghĩa | Ví dụ | Ai dùng lúc nào |
 |---|---|---|---|---|
 | `name` | Tên gói mì (duy nhất) | `kebab-case`, khớp tên folder | `deploy-checklist` | Đặt 1 lần, không đổi (skill trigger theo name) |
@@ -198,8 +204,6 @@ description: 'Deploy staging/prod voi checklist migrate + smoke test.
 
 ### 3.2. Ma trận việc × chọn thứ nào (10 giây)
 
-*Table này để bạn chọn giữa skill / prompt file (legacy) / instructions không cần suy nghĩ.*
-
 | Việc | 2026 (khuyến nghị) | Legacy (vẫn chạy Local) | Ai dùng lúc nào |
 |---|---|---|---|
 | Fact mọi chat | `copilot-instructions.md` | cùng trái | Quy ước team |
@@ -209,8 +213,6 @@ description: 'Deploy staging/prod voi checklist migrate + smoke test.
 | Share 3+ repos | Agent Plugin (bài 09) | Extension pack | Team đa repo |
 
 ### 3.3. Port prompt file cũ sang skill (migration 5 phút)
-
-*Đọc nếu repo bạn còn `.github/prompts/*.prompt.md` — port sang skill để chạy được Cloud/Agent Host.*
 
 ```bash
 # Bước 1: tạo folder skill mới (đặt cạnh prompt cũ):
@@ -234,8 +236,6 @@ rm .github/prompts/deploy.prompt.md
 ---
 
 ## 4. 3 Agent Skills mẫu hoàn chỉnh (copy-paste, 2026)
-
-*Section này trả lời: skill thật trông ra sao — 3 mẫu dưới đây chạy được ngay trên Local + Cloud + CLI, chỉ cần thay `<...>` bằng repo của bạn.*
 
 > Mỗi mẫu là **1 folder** `.github/skills/<ten>/` chứa `SKILL.md` + (tuỳ chọn) `scripts/`, `references/`, `examples/`. Giữ `SKILL.md` <100 dòng. Mỗi mẫu kèm Verify.
 
@@ -395,8 +395,6 @@ description: 'Xuat xuong: lint + test + review + changelog.
 
 ## 5. Custom instructions + skills đặt ở đâu (không loạn)
 
-*Section này trả lời: mỗi loại file (instructions, skill, agent, prompt legacy) nằm ở đâu, commit hay không, và chọn cái nào trong 10 giây.*
-
 **Nôm na 1 câu:** nhiều chỗ dán nội quy → phải biết tờ nào dán ở đâu, không thì loạn như nhà 5 remote TV.
 
 | Nơi | File/setting | Commit? | Trạng thái 2026 | Khi dùng (ai dùng lúc nào) |
@@ -446,8 +444,6 @@ wc -l .github/copilot-instructions.md
 
 ### 6.1. Skill khác prompt file cũ ở đâu (bảng so sánh)
 
-*Section này trả lời: đã có prompt file, vì sao 2026 vẫn cần skill, và chọn cái nào khi nào.*
-
 **Nôm na 1 câu:** Skill là **prompt file tự động + chuẩn mở** — bạn khỏi gõ `/`, agent tự ngửi thấy từ khóa ("deploy", "ship") là tự mở công thức ra làm. Chạy được trên Local, Cloud, CLI, app (vì chuẩn mở, không phải riêng Copilot).
 
 **Analogie:** Prompt file như sách nấu ăn trên kệ (cần với tay lấy, chỉ bếp nhà bạn dùng được). Skill như công ty F&B bán công thức — bếp nào cũng đọc được (VS Code, CLI, app, agent cloud), và tự động mở đúng trang khi nghe "nấu phở".
@@ -479,8 +475,6 @@ touch .github/skills/deploy-checklist/SKILL.md
 
 ### 6.3. Khi nào skill, khi nào giữ prompt file cũ?
 
-*Đọc block này trước khi viết: tránh viết 2 thứ cùng việc rồi chúng lệch nhau.*
-
 ```text
 - Viec MOI (tinh tu nay) -> Agent Skill (chay moi harness, chuan mo).
 - Viec cu Local (prompt file .prompt.md da ton tai) -> giu Local, port thang sau (muc 3.3).
@@ -496,8 +490,6 @@ touch .github/skills/deploy-checklist/SKILL.md
 ## 7. Agent Plugins: đóng gói skill + agent + MCP để share
 
 ### 7.1. Plugin là gì? (why)
-
-*Section này trả lời: khi 3 skill/agent lẻ đã đủ, lúc nào mới phải đóng thành plugin để chia sẻ team?*
 
 **Nôm na 1 câu:** Agent Plugin là **hộp bữa trưa đóng sẵn** (skills + agents + MCP config) để share 1 phát cho 10 repos, khỏi copy tay từng folder.
 
@@ -520,8 +512,6 @@ Plugin chua gi (2026 — Agent Plugins 1.0, chuan mo):
 
 ### 7.2. Dùng plugin như skill (flow team)
 
-*5 bước dưới đây để team dùng chung 1 plugin, không mỗi người cài 1 kiểu.*
-
 ```text
 Buoc 1: tim plugin team can (Marketplace hoac repo noi bo).
 Buoc 2: cai trong Agent Customizations hub (bai 17) hoac chat.customizations.marketplace.enabled.
@@ -539,8 +529,6 @@ Buoc 5: chot 1 chuan (khong giu 2 workflow song song gay loan).
 ```
 
 ### 7.3. Tự đóng plugin nội bộ (khi nào đáng?)
-
-*Bảng này để tech lead quyết: đóng plugin ngay, hay dùng cách tạm trước.*
 
 | Dấu hiệu nên đóng plugin | Giải pháp tạm (chưa cần plugin) | Ai quyết |
 |---|---|---|
@@ -629,8 +617,6 @@ Checklist xong khi:
 
 ## 9. Hiểu nhầm thường gặp
 
-*6 câu "nghe hợp lý nhưng sai" dưới đây — đọc trước khi viết skill đầu tiên để khỏi sửa lại.*
-
 | Hiểu nhầm | Sự thật |
 |---|---|
 | "Prompt file `.prompt.md` vẫn là chuẩn, skill là tuỳ chọn" | Đổi. 2026: **skill là khuyến nghị**, prompt file deprecated cho Agent Host (Cloud). Việc mới → skill |
@@ -644,8 +630,6 @@ Checklist xong khi:
 
 ## 10. Pitfalls + bài tập
 
-*Section này trả lời: skill thường hỏng ở đâu (8 pitfall), và 4 bài tập để bạn luyện tay trong ~70 phút.*
-
 | Pitfall | Vì sao xảy ra | Fix |
 |---|---|---|
 | `SKILL.md` 200 dòng copy wiki | Nhét cả tài liệu vào body | Body <100 dòng, tài liệu dài → `references/` + 1 dòng link |
@@ -657,29 +641,74 @@ Checklist xong khi:
 | Để secret trong skill + commit | Paste `.env` mẫu cho "tiện" | Chỉ ghi "lấy từ 1Password <tên>", KHÔNG paste giá trị |
 | Chạy skill trên Cloud nhưng skill chỉ viết cho Local | Prompt file cũ không chạy Cloud (deprecated) | Port sang skill chuẩn mở (mục 3.3) — skill chạy mọi harness |
 
-### Bài tập thực hành
+---
 
-**Bài 1 (20 phút) — Skill đầu tay:**
-Lấy việc team bạn lặp >3 lần (deploy/review/migrate...), tạo `.github/skills/<ten>/SKILL.md`
-theo mẫu mục 4. Test: nói từ khóa (KHÔNG gõ `/`) xem agent có tự load không. Ghi số turns trước/sau.
+## So sánh với Claude Code
 
-**Bài 2 (15 phút) — Description trigger drill:**
-Lấy skill bài 1, cố tình xóa 1 từ khóa trigger trong `description`, chạy lại → ghi khác biệt.
-Đổi lại đúng + thêm 1 từ khóa user hay nói. Giải thích 2 câu vì sao description quan trọng nhất.
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| File luật trong repo | `.github/copilot-instructions.md` + `AGENTS.md` | `CLAUDE.md` + `.claude/` | Cùng tư tưởng: file trong repo là "luật" |
+| Tái dùng workflow | Agent Skills `.github/skills/<ten>/SKILL.md` (agent tự load) | Slash command `.claude/commands/*.md` (gõ tường minh) + Agent Skills `SKILL.md` | Cùng chuẩn mở `SKILL.md`; khác đường dẫn và tên file |
+| Ai khởi xướng chuẩn skill | Copilot 2026 đọc chuẩn mở (đọc cả `.claude/skills/`) | Anthropic khởi xướng Agent Skills (~40 tools) | Skill viết 1 lần chạy nhiều agent |
+| Custom agent (persona) | `.github/agents/*.agent.md` | Subagent trong `.claude/agents/` | Cùng ý tưởng: persona + tools + scope |
+| Đóng gói share | Agent Plugins 1.0 (`plugin.json`: skills + agents + MCP) | Plugin tương tự | Cùng mục tiêu: share 1 phát cho nhiều repo |
+| Prompt file `.prompt.md` | Legacy — deprecated cho Agent Host (Local vẫn chạy) | Không có tương đương trực tiếp (dùng `.claude/commands/`) | Việc mới → port sang `SKILL.md` |
 
-**Bài 3 (20 phút) — Port prompt file cũ sang skill:**
-Lấy 1 `.github/prompts/<ten>.prompt.md` sẵn có, port thành `.github/skills/<ten>/SKILL.md` (mục 3.3).
-Xóa prompt file cũ sau khi skill pass test. Test cả Local + (nếu có) Cloud.
+Cách đọc bảng: nếu bạn quen Claude Code, phần lớn khái niệm chuyển sang Copilot gần như 1-1 (instructions, skill, agent, plugin). Khác chính là **tên file và thư mục** (`.github/` vs `.claude/`). Chuẩn `SKILL.md` là điểm chung: viết 1 lần, chạy trên cả hai.
 
-**Bài 4 (15 phút) — Dedupe:**
-Chạy lệnh mục 5, liệt kê mọi skills/prompts/agents trong repo. Tìm trùng lặp
-(2 files cùng việc). Gộp hoặc xóa, giữ 1 chuẩn duy nhất (skill cho việc 2026) cho team.
+## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
+
+**1. Viết `description` chung chung**
+
+```text
+❌ SAI: description: 'Hỗ trợ deploy'   → agent không biết khi nào load, skill không bao giờ trigger.
+✅ ĐÚNG: description: 'Deploy staging/prod. Dung khi user noi deploy, release, ship, xuat ban.'
+```
+**Bài học:** `description` là trigger, không phải khẩu hiệu — câu đầu phải chứa đúng từ khóa user hay nói.
+
+**2. Nhồi cả wiki vào `SKILL.md`**
+
+```text
+❌ SAI: SKILL.md 200 dòng dán cả tài liệu API → agent bỏ bước giữa chừng.
+✅ ĐÚNG: body <100 dòng (Steps + NEVER + Output mẫu); tài liệu dài đẩy sang references/.
+```
+**Bài học:** skill càng dài càng dễ bị bỏ bước — chi tiết dài để `references/`, body chỉ giữ công thức.
+
+**3. Giữ 2 bản cùng việc (skill + prompt file cũ)**
+
+```text
+❌ SAI: vừa có .github/prompts/deploy.prompt.md vừa có .github/skills/deploy-checklist/SKILL.md
+✅ ĐÚNG: port prompt file → skill (mục 3.3), xóa prompt cũ sau khi skill pass test.
+```
+**Bài học:** MỘT việc MỘT nơi — để 2 bản là chúng lệch nhau (drift) rồi không ai biết bản nào đúng.
+
+**4. Để secret trong skill rồi commit**
+
+```text
+❌ SAI: dán .env / token thẳng vào SKILL.md cho "tiện".
+✅ ĐÚNG: chỉ ghi "lấy từ 1Password <tên>", không paste giá trị.
+```
+**Bài học:** skill nằm trong git và agent host — secret trong đó là lộ. Secret luôn lấy từ nguồn ngoài.
+
+## Best practices (kèm "vì sao")
+
+- **Câu đầu `description` = đúng từ khóa user sẽ nói.** *Vì sao?* Description là cơ chế trigger; thiếu từ khóa thì skill không bao giờ tự load, dù nội dung hay cỡ nào.
+- **Giữ `SKILL.md` <100 dòng, tài liệu dài đẩy sang `references/`.** *Vì sao?* Agent bỏ bước khi file quá dài; thân file chỉ nên là công thức, không phải wiki.
+- **Step phải chạy được và có lệnh verify.** *Vì sao?* Skill là workflow để agent thực thi — step mơ hồ thì agent đoán, còn lệnh verify mới quyết định "pass".
+- **Một việc một nơi: skill hoặc prompt file, không cả hai.** *Vì sao?* Hai bản cùng việc sẽ lệch nhau; giữ 1 chuẩn để cả team chạy giống nhau.
+- **Port việc cũ sang skill để chạy mọi harness.** *Vì sao?* Prompt file deprecated cho Agent Host (Cloud); skill chạy được Local + Cloud + CLI + app.
+- **Chỉ đóng plugin khi ≥3 repos cùng chuẩn.** *Vì sao?* 1 repo thì skill lẻ + instructions đã đủ; plugin chỉ đáng khi có scale.
+
+## Bài tập nhỏ
+
+1. **(20 phút) — Skill đầu tay:** Lấy việc team bạn lặp >3 lần (deploy/review/migrate...), tạo `.github/skills/<ten>/SKILL.md` theo mẫu mục 4. Test: nói từ khóa (KHÔNG gõ `/`) xem agent có tự load không. Ghi số turns trước/sau.
+2. **(15 phút) — Description trigger drill:** Lấy skill bài 1, cố tình xóa 1 từ khóa trigger trong `description`, chạy lại → ghi khác biệt. Đổi lại đúng + thêm 1 từ khóa user hay nói. Giải thích 2 câu vì sao description quan trọng nhất.
+3. **(20 phút) — Port prompt file cũ sang skill:** Lấy 1 `.github/prompts/<ten>.prompt.md` sẵn có, port thành `.github/skills/<ten>/SKILL.md` (mục 3.3). Xóa prompt file cũ sau khi skill pass test. Test cả Local + (nếu có) Cloud.
+4. **(15 phút) — Dedupe:** Chạy lệnh mục 5, liệt kê mọi skills/prompts/agents trong repo. Tìm trùng lặp (2 files cùng việc). Gộp hoặc xóa, giữ 1 chuẩn duy nhất (skill cho việc 2026) cho team.
 
 ---
 
 ## 11. Link chéo
-
-*Đi tiếp các bài dưới đây nếu bạn cần phần còn lại của bức tranh.*
 
 - **[Bài 00 — Tổng quan](./00-tong-quan-copilot.md)**: bản đồ extension — skill/agent/plugin nằm đâu.
 - **[Bài 03 — Instructions](./03-instructions-memory-rules.md)**: tách checklist dài từ instructions sang skill.
@@ -689,3 +718,11 @@ Chạy lệnh mục 5, liệt kê mọi skills/prompts/agents trong repo. Tìm t
 - **[Bài 09 — Agent Plugins](./09-extensions-marketplaces.md)**: đóng gói skill + agent + MCP thành plugin chuẩn mở.
 - **[Bài 10 — Policies](./10-modes-permissions-availability.md)**: org duyệt plugin/skill nào được cài.
 - **[Bài 17 — Agent Customizations Hub](./17-agent-customizations-hub.md)**: hub quản lý Skills/Plugins/Agents/MCP/Hooks + migrations (prompt→skill).
+
+## Reference
+
+- GitHub Copilot docs: https://docs.github.com/copilot
+- VS Code Copilot docs: https://code.visualstudio.com/docs/copilot
+- Billing / AI Credits: https://github.com/settings/copilot
+
+> **Chốt bài 05:** đừng dạy lại agent mỗi lần — viết công thức một lần vào `SKILL.md`, để `description` đúng từ khóa, rồi agent tự mở đúng trang khi bạn cần. Đó là cách biến việc lặp lại thành tài sản của cả team.

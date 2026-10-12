@@ -1,23 +1,23 @@
 # /login — Đăng nhập GitHub cho Copilot
 
-> **Dành cho:** người mới cài, đổi máy hoặc đổi account · **Vấn đề:** token hết hạn làm Copilot im lặng, không gợi ý gì · **Đọc xong:** login đúng account và tự verify bằng `/status` (~2 phút)
+> **Dành cho:** người mới cài, người đổi máy hoặc đổi account · **Vấn đề:** token hết hạn làm Copilot im lặng, không gợi ý gì · **Đọc xong:** đăng nhập đúng account và tự verify bằng `/status` (~2 phút)
 
-## Lệnh làm gì (1 câu nôm na)
+## 1 câu nôm na
 
-Nôm na: xuất trình thẻ nhân viên để vào tòa nhà. `/login` → làm theo popup GitHub → verify bằng `/status`; có 2 account thì logout trước rồi login lại đúng account cần dùng.
+`/login` giống như xuất trình thẻ nhân viên để vào tòa nhà. Bạn gọi lệnh, làm theo popup đăng nhập GitHub, rồi kiểm tra lại bằng `/status`. Nếu máy có hai account (cá nhân + công ty), hãy logout trước rồi login lại đúng account bạn cần.
 
-## Khi nào dùng
+## Vì sao dùng /login?
 
-Section này trả lời: khi nào cần login lại, và vì sao login xong vẫn chưa có gợi ý.
+Vì Copilot im lặng khi token hết hạn hoặc khi bạn login sai account — không có thông báo rõ ràng, chỉ là không thấy gợi ý nào. `/login` là cách nhanh nhất để cấp lại quyền, và verify bằng `/status` để chắc chắn đã vào đúng account/plan.
 
-- **Cho ai:** người mới cài, người đổi máy/account, người debug “Copilot không chạy”.
-- Mới cài / đổi máy.
-- Token hết hạn, Copilot silent fail.
-- Đổi account cá nhân ↔ công ty.
+**Nếu làm sai thì sao?** Login xong vẫn không có gợi ý là chuyện thường, vì còn hai nguyên nhân khác: chưa được cấp seat, hoặc file bị content exclusion. Đừng vội kết luận "login hỏng" — kiểm tra tiếp seat + exclusion + `/status`.
+
+## Khi nào dùng / khi nào đừng
+
+- **Dùng khi:** mới cài / đổi máy; token hết hạn (Copilot silent fail); đổi account cá nhân ↔ công ty.
+- **ĐỪNG dùng như:** cách để chọn account khi bạn có hai account mà chưa logout — cache token cũ dễ khiến bạn đăng nhập nhầm. Hãy [`/logout`](../logout/README.md) trước rồi login lại.
 
 ## Cách gọi (copy-paste)
-
-Cách gọi `/login` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:
 
 ```bash
 /login
@@ -26,38 +26,64 @@ Cách gọi `/login` — làm đúng theo khối dưới đây, kèm câu kiểm
 # Verify: gõ thử 1 hàm thấy gợi ý
 ```
 
-> Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `/login`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
+> Gõ `/` trong Chat để kiểm tra `/login` có trong list không. Không thấy thì xem plan/model trước.
 
-## Ví dụ prompt thật + kết quả mong đợi
+## Ví dụ thật
 
-Prompt mẫu cho `/login` — đổi phần tên file/task cho đúng việc của bạn:
-
-**Prompt thật (copy-paste, nhớ gắn scope trước):**
+Nghiệp vụ: sáng nay Copilot không gợi ý gì sau khi bạn đổi sang laptop công ty.
 
 ```bash
-/login → sign-in GitHub → /status thấy account đúng → gõ thử 1 hàm thấy gợi ý
+# 1. /login
+# 2. Làm theo popup → sign in đúng account công ty
+# 3. /status  → xác nhận login + plan
+# 4. Mở 1 file TypeScript, gõ nửa hàm xem ghost text có hiện lại không
 ```
 
-**Kết quả mong đợi:** Login đúng account; /status hiện đúng login + plan; gợi ý chạy.
+**Kết quả mong đợi:** Đăng nhập đúng account; `/status` hiện đúng login + plan; gợi ý ghost text chạy lại.
 
-**Cách verify:** Gợi ý + chat đều chạy sau login là đạt.
+**✅ Verify:** Ghost text + Chat đều chạy sau login là đạt. Chỉ một cái chạy thì xem tiếp seat/exclusion.
+
+## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)
+
+❌ SAI: Máy có 2 account, bạn `/login` luôn mà không logout → đăng nhập nhầm account, sai quota/policy.
+
+✅ ĐÚNG: `/logout` trước → `/login` → làm theo popup đúng account cần dùng → `/status` xác nhận.
+
+**Bài học:** hai account là cái bẫy hay gặp nhất. Thứ tự đúng là logout rồi login, không phải login chồng lên cache cũ.
 
 ## Lỗi thường gặp
 
-Ba triệu chứng hay gặp nhất với lệnh này — kèm nhanh cách xử lý:
-
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
-| Login nhầm account | 2 GitHub accounts | /logout rồi /login lại đúng account |
-| Popup bị chặn | Browser/proxy chặn | Mở browser mặc định, tắt chặn popup tạm |
-| Login xong vẫn không gợi ý | Chưa có seat / exclusion | Check seat + exclusion + /status |
+| Login nhầm account | Máy có 2 GitHub account | `/logout` rồi `/login` lại đúng account |
+| Popup đăng nhập bị chặn | Browser/proxy chặn popup | Mở browser mặc định, tắt chặn popup tạm thời |
+| Login xong vẫn không gợi ý | Chưa có seat / file bị exclusion | Kiểm tra seat + content exclusion + `/status` |
+
+## So sánh với Claude Code
+
+| Việc | Copilot (`/login`) | Claude Code | Ghi chú |
+|---|---|---|---|
+| Cách xác thực | OAuth qua tài khoản GitHub | Đăng nhập Anthropic hoặc dùng API key | Khác nhà cung cấp, cùng ý tưởng "1 login dùng nhiều bề mặt" |
+| Đổi account | Logout rồi login lại | Đổi key/account trong config | Cả hai đều khuyên đổi sạch thay vì chồng |
+| Kiểm chứng sau login | `/status` + thử ghost text | Chạy thử một prompt | Bạn vẫn là người verify |
+
+## Best practices (kèm "vì sao")
+
+- **Có 2 account thì logout trước khi login lại.** *Vì sao?* Token cũ còn cache dễ khiến bạn vào nhầm account mà không biết.
+- **Login xong luôn chạy `/status`.** *Vì sao?* Đăng nhập "thành công" chưa chắc đúng account/plan — verify mới biết.
+- **Popup bị chặn thì đổi browser mặc định.** *Vì sao?* OAuth cần mở đúng URL callback trong browser mặc định; proxy/chặn popup là nguyên nhân phổ biến.
+- **Không có gợi ý thì kiểm tra seat + exclusion trước khi login lại.** *Vì sao?* Login đúng rồi mà thiếu seat thì vẫn im lặng — login lại vô ích.
+
+## Bài tập nhỏ
+
+1. **(5 phút)** Chạy `/login` rồi `/status`, ghi lại account/plan. Nếu có 2 account, thử logout rồi login lại account còn lại để thấy khác biệt.
+2. **(10 phút)** Mô phỏng lỗi "login xong không gợi ý": kiểm tra seat + content exclusion rồi ghi lại phát hiện.
 
 ## Tham khảo
 
-Liên quan — index nhóm, cheatsheet 1 trang và FAQ phòng khi kẹt:
-
-- Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh.
+- Index nhóm: [../README.md](../README.md).
 - Cheatsheet 1 trang: [../../../../CHEATSHEET.md](../../../../CHEATSHEET.md).
+- Cài đặt + xác thực chi tiết: [../../../01-cai-dat-va-xac-thuc.md](../../../01-cai-dat-va-xac-thuc.md).
 - Kẹt thì tra [FAQ troubleshooting](../../../../03-cau-hoi-thuong-gap/08-loi-thuong-gap-troubleshooting.md).
 
-> Mẹo 1 dòng: _gắn scope trước (`#file`/`@workspace`), review diff sau, đừng bao giờ Accept mù._
+> Chốt: `/login` chỉ là bước mở cửa — nếu đăng nhập đúng rồi mà Copilot vẫn im, vấn đề nằm ở seat hoặc exclusion, đừng quay lại đăng nhập tiếp.

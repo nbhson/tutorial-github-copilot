@@ -1,6 +1,16 @@
 # Tips 09 — Teamwork Chuẩn Hóa: Cả Team Dùng Copilot Một Kiểu
 
+> **Dành cho:** tech lead / dev muốn cả team dùng Copilot giống nhau · **Vấn đề:** 5 người 5 kiểu prompt, luật nằm trong đầu 1 người, người mới mò 2 tuần · **Đọc xong:** commit instructions/skills/prompts/agents vào repo, dựng org policy + review workflow, và viết được onboarding 30 phút cho người mới · **Thời gian:** ~20 phút đọc + ~60 phút chuẩn hóa 1 repo.
+>
 > Copilot cá nhân nhanh, Copilot team mới mạnh. Bài này dạy bạn commit instructions/skills/prompts/agents vào repo, org policy, review workflow, và onboarding 30 phút cho người mới.
+
+## Mục tiêu bài học
+
+- Biết **4 tài sản** cần commit vào repo (instructions, skills/prompts, custom agents, gates) và ai chịu trách nhiệm từng thứ.
+- Dựng được **org policy + branch protection + CODEOWNERS** để luật không nằm trong đầu ai.
+- Chạy được **review 3 lớp** cho PR từ Copilot: bot quét → reviewer fresh → người CODEOWNERS chốt.
+- Viết được **onboarding 30 phút** để người mới tự mở PR đầu tiên không cần hỏi.
+- Làm xong **walkthrough 60 phút**: repo có `.github/` + `verify.yml` + `CODEOWNERS` + `copilot-onboarding.md`.
 
 ## Mục lục
 
@@ -40,6 +50,8 @@ flowchart TD
 
 Giải thích: luật nằm trong repo (không nằm trong đầu ai). Mọi đổi qua PR + lead review. Bắt đầu nhẹ (1 review + CI), chặt dần theo incidents.
 
+**Vì sao quan trọng?** Cá nhân giỏi chỉ giúp 1 người; chuẩn hóa giúp cả team hưởng cùng một mức chất lượng mà không phải nhắc miệng. **Nếu làm sai?** Bạn dựng gates quá chặt ngay ngày đầu — team thấy phiền rồi bypass bằng `--no-verify`, thế là guardrails thành vô dụng.
+
 > ✅ **Kỳ vọng thấy gì:** sau 60 phút (mục 7), repo có `.github/` + `verify.yml` + `CODEOWNERS` + `copilot-onboarding.md`; PR mới có Evidence logs.
 
 ---
@@ -63,6 +75,8 @@ Luat doi → sua 1 file trong repo, ca team huong.
 ```
 
 > Rule: **cái gì team phải nhớ thì viết ra file và commit. Trí nhớ không phải hệ thống.**
+
+**Nếu làm sai thì sao?** Không chuẩn hóa, mỗi lần có người mới là mỗi lần bạn phải ngồi kèm — "trí nhớ hệ thống" thực chất là một người làm bộ nhớ sống, người đó nghỉ là cả team loạn.
 
 ---
 
@@ -103,6 +117,8 @@ docs/
 ```
 
 Tất cả commit vào git → clone repo là có, không cần setup miệng.
+
+**Vì sao quan trọng?** Chia tài sản theo mục đích (luật chung vs luật module vs quy trình vs gate) giúp mỗi file một việc, sửa không lan. **Nếu làm sai?** Gộp hết vào 1 file instructions khổng lồ — không ai đọc nổi, càng sửa càng rối.
 
 > ✅ **Kỳ vọng thấy gì:** `git clone` xong, mọi máy chạy Copilot đều có đủ bộ rules/skills/gates trên.
 
@@ -184,6 +200,8 @@ Versioning:
 - Mọi thay đổi qua PR, mô tả lý do + ví dụ trước/sau.
 - Tag `skills-v1.2` khi release để rollback nhanh.
 
+**Nếu làm sai thì sao?** Sửa skills/instructions trực tiếp không qua PR thì mỗi máy một bản, không ai biết bản nào đúng — lúc cần rollback cũng không có mốc để quay về.
+
 ---
 
 ## 4. Org policy + branch protection
@@ -233,6 +251,8 @@ Repo → Settings → Branches → main:
 ```
 
 > ✅ **Kỳ vọng thấy gì:** protection + CODEOWNERS + CONTRIBUTING đã commit; PR mới tự động tag owner và chặn merge thiếu review.
+
+**Vì sao quan trọng?** Policy + protection là "luật cứng" — không phụ thuộc vào việc ai có nhớ hay không. **Nếu làm sai?** Bật protection quá sớm với 3 reviewers cho mọi PR nhỏ, team sẽ thấy chậm và tìm cách lách thay vì tuân theo.
 
 ---
 
@@ -293,6 +313,8 @@ Closes #101 — refund quá 30 ngày bị 500.
 - [ ] Không đụng generated/schema/main
 - [ ] Người review lớp 3: @...
 ```
+
+**Nếu làm sai thì sao?** 3 lớp là để HIGH bug không lọt tới người. Bỏ 1 lớp (ví dụ merge luôn sau lớp 1) thì bug tốn kém nhất sẽ rơi đúng xuống prod — nơi sửa đắt nhất.
 
 ---
 
@@ -392,6 +414,22 @@ Nguoi moi doc docs/copilot-onboarding.md 30 phut → PR dau co log xanh.
 
 ---
 
+## So sánh với Claude Code
+
+| Việc | Copilot (nhóm này) | Claude Code | Ghi chú |
+|---|---|---|---|
+| Luật chung trong repo | `.github/copilot-instructions.md` | `CLAUDE.md` | Cùng tư tưởng "file trong repo là luật" |
+| Luật riêng 1 module | `*.instructions.md` với `applyTo` | Chia `CLAUDE.md` theo thư mục / import trong `CLAUDE.md` | Copilot có glob `applyTo` dựng sẵn |
+| Đóng gói quy trình | Agent Skills (`.github/skills/<ten>/SKILL.md`, chuẩn 2026) | Slash commands `.claude/commands/` | Cùng ý tưởng, khác tên file |
+| Persona chuyên biệt | Custom agents `.github/agents/*.md` | Subagents `.claude/agents/` | Cùng khái niệm persona + giới hạn tool |
+| Gates CI/branch | `verify.yml` + `CODEOWNERS` + branch protection | GitHub Actions + branch protection (chung), hooks trong `.claude/settings.json` | Phần CI/protection là hạ tầng GitHub chung, không riêng Copilot |
+| Org policy tập trung | GitHub Org → Settings → Copilot → Policies | Quản lý qua Anthropic Console (team/enterprise) | Claude Code không có tương đương trực tiếp trong repo |
+| Onboarding người mới | `docs/copilot-onboarding.md` | `CLAUDE.md` + docs riêng | Ai cũng cần một file onboarding đọc 30 phút |
+
+> **Đọc bảng này thế nào:** phần "luật nằm trong repo" gần như 1-1 giữa hai bên (chỉ khác `.github/` vs `.claude/`). Khác biệt thật nằm ở **org policy** — Copilot có màn hình policy ở cấp Org, còn Claude Code quản ở console của Anthropic, không có file tương đương trong repo.
+
+---
+
 ## 9. Pitfalls + cách fix
 
 | Pitfall | Triệu chứng | Fix |
@@ -405,6 +443,41 @@ Nguoi moi doc docs/copilot-onboarding.md 30 phut → PR dau co log xanh.
 | Knowledge base cũ | Copilot trả lời theo spec cũ | Owner + ngày review mỗi quarter |
 | Review qua loa | PR Copilot lọt bug | Checklist mục 5 + ai merge người chịu |
 | Sửa skills không PR | Mỗi máy một bản | Bắt buộc PR + CI + 1 review cho .github/** |
+
+### Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+
+**1. Luật để trong đầu một người**
+
+```text
+❌ SAI: "cấm sửa generated/ nhớ nhé" — nói miệng trong standup, người mới không biết.
+✅ ĐÚNG: ghi vào .github/copilot-instructions.md + thêm check trong verify.yml, commit qua PR.
+```
+**Bài học:** trí nhớ không phải hệ thống — cái gì team phải nhớ thì viết ra file và commit, rồi để CI nhắc thay người.
+
+**2. Dựng gates quá chặt ngay ngày đầu**
+
+```text
+❌ SAI: bật 3 reviewers + 5 checks cho mọi PR (kể cả sửa typo) → team thấy phiền, lách bằng --no-verify.
+✅ ĐÚNG: bắt đầu 1 review + test/lint; gặp incident nào thì siết thêm đúng chỗ đó.
+```
+**Bài học:** guardrails bị bypass còn tệ hơn không có guardrails — hãy bắt đầu nhẹ rồi chặt dần theo dữ liệu incident.
+
+**3. Mỗi người giữ một bản skill/instructions**
+
+```text
+❌ SAI: ai cũng sửa file trên máy mình rồi dùng riêng → PR mỗi kiểu, review cãi nhau.
+✅ ĐÚNG: mọi thay đổi `.github/**` qua PR + 1 review; tag version để rollback.
+```
+**Bài học:** nguồn sự thật phải là 1 bản trong git, không phải bản trên máy từng người.
+
+## Best practices (kèm "vì sao")
+
+- **Luật lặp lại >2 lần thì đưa vào file.** *Vì sao?* Nói miệng thì người vắng mặt không biết, người mới càng không — file thì ai clone cũng có.
+- **Giữ instructions <200 dòng, chi tiết tách sang file riêng.** *Vì sao?* Instructions nạp lại mỗi chat; quá dài thì không ai đọc và tốn context.
+- **Mọi thay đổi `.github/**` phải qua PR + 1 review.** *Vì sao?* Đây là "luật của team" — sửa lén trên máy là mầm mống mỗi máy một bản.
+- **Bắt đầu gates nhẹ, siết dần theo incidents.** *Vì sao?* Gate bị bypass vì quá phiền sẽ vô hiệu hóa toàn bộ guardrails.
+- **Đo monthly: credits, retry, incidents, SLA review.** *Vì sao?* Không đo thì không biết chuẩn hóa có thực sự giúp team hay chỉ thêm việc.
+- **Onboarding 30 phút + buddy 2 PR đầu.** *Vì sao?* Người mới tự chạy được PR đầu thì team không phải kèm miệng từng người.
 
 ---
 
@@ -445,4 +518,4 @@ Nguoi moi doc docs/copilot-onboarding.md 30 phut → PR dau co log xanh.
   - [03 — Instructions + memory + rules](../01-huong-dan-su-dung/03-instructions-memory-rules.md) — viết instructions
   - [17 — Agent Customizations Hub](../01-huong-dan-su-dung/17-agent-customizations-hub.md) — hub skill/agent/MCP 2026
 
-> Mẹo 1 dòng: _team mạnh khi luật nằm trong repo, không nằm trong đầu ai — commit hết, onboarding 30 phút._
+> **Chốt Tips 09:** team mạnh không phải vì mỗi người giỏi, mà vì luật nằm trong repo chứ không nằm trong đầu ai. Commit 4 tài sản, bắt đầu gates nhẹ, và để onboarding 30 phút chứng minh hệ thống tự chạy — đó mới là chuẩn hóa thật.

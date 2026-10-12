@@ -5,8 +5,17 @@
 > **Đọc xong:** chọn đúng model cho từng task, hiểu cách tính AI Credits, cấu hình BYOK/policy gate model cho team, và không trả tiền model đắt cho việc model rẻ làm được.
 > **Thời gian:** ~40 phút.
 
+## Mục tiêu bài học
+
+- Phân biệt **4 nhóm model** trên Copilot (flagship, reasoning, Claude/Gemini, mini/flash) và biết nhóm nào hợp việc nào.
+- Ước lượng được tiền: **1 AI credit = $0.01**, vì sao flagship × agent mode đốt nhanh, cách giữ credits sống hết tháng.
+- Cấu hình được **model picker**, **auto tier**, và (nếu là admin) **BYOK + policy gate** model cho team.
+- Tự route model theo phase (**plan đắt → execute rẻ → stuck leo thang**) và verify bằng billing dashboard.
+- Nắm các mốc model bị gỡ để không gọi tên model đã chết.
+
 ## Mục lục
 
+0. [Giải ngố thuật ngữ](#0-giải-ngố-thuật-ngữ-1-câu--analogie--verify)
 1. [Vì sao chọn model? (why)](#1-vì-sao-chọn-model-why)
 2. [Bản đồ models trên Copilot 2026](#2-bản-đồ-models-trên-copilot-2026)
 3. [Model picker: đổi ở đâu, ảnh hưởng gì](#3-model-picker-đổi-ở-đâu-ảnh-hưởng-gì)
@@ -16,16 +25,16 @@
 7. [Route theo phase + agent routing](#7-route-theo-phase--agent-routing)
 8. [Walkthrough end-to-end (20 phút)](#8-walkthrough-end-to-end-20-phút)
 9. [Pitfalls + fix](#9-pitfalls--fix)
-10. [Bài tập](#10-bài-tập)
+- [So sánh với Claude Code](#so-sánh-với-claude-code)
+- [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
+10. [Bài tập nhỏ](#10-bài-tập-nhỏ)
 11. [Link chéo](#11-link-chéo)
 
 ---
 
 ## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
 
-Section này trả lời: 5 khái niệm lõi (cộng 4 khái niệm bổ sung: AI Credits, auto model selection, auto tier, deprecation) nghĩa là gì, và tự kiểm chứng từng cái ở đâu?
-
-Mỗi dòng đủ 3 lớp: **hiểu nôm na**, **ví dụ đời thường**, **ví dụ kỹ thuật thật** — kèm cột **verify** để bạn tự kiểm tra.
+Trước khi chọn model, nắm 9 thuật ngữ bạn sẽ gặp suốt bài. Mỗi dòng đủ 3 lớp — **hiểu nôm na**, **ví dụ đời thường**, **ví dụ kỹ thuật thật** — kèm cột **verify** để bạn tự kiểm tra thay vì tin lời.
 
 | Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
 |---|---|---|---|---|
@@ -48,13 +57,15 @@ Mỗi dòng đủ 3 lớp: **hiểu nôm na**, **ví dụ đời thường**, **
 
 ## 1. Vì sao chọn model? (why)
 
-Section này trả lời: chọn model ảnh hưởng tới tiền và chất lượng thế nào, và quy tắc vàng nào quyết model nào?
-
 Model mạnh nhất không phải lúc nào cũng là model đúng. Mỗi task có 3 chiều cần cân: **chất lượng suy luận — tốc độ — chi phí (AI Credits)**. Dùng sai chiều là mất credits hoặc mất thời gian:
 
 - Dùng model reasoning đắt sửa typo → tốn gấp 5–10 lần mà kết quả y hệt model rẻ.
 - Dùng model mini thiết kế kiến trúc → thiếu depth, refactor 3 lần vẫn sai, tổng credits cao hơn chạy 1 lần model mạnh đúng ngay.
 - Không hiểu cách tính tiền → shock khi credits tháng hết sau 1 tuần agent mode (mục 4).
+
+**Vì sao quan trọng?** Đây là quyết định bạn lặp lại mỗi chat mà không để ý. Chọn đúng model là cách rẻ nhất để vừa có kết quả tốt vừa không cháy túi — không có prompt nào cứu được một lần chọn sai tier.
+
+**Nếu làm sai thì sao?** Default sẵn model đắt nhất: tuần đầu credits nổ, ba tuần sau bạn phải hạ xuống model rẻ cho cả việc khó, rồi lại refactor nhiều lần. Ngược lại, dùng mini cho việc kiến trúc: tiết kiệm vài credit nhưng làm lại 3 lần còn tốn hơn. Cách tránh: chỉ gọi flagship khi đủ checklist ở mục 2.2, còn lại để tier giữa/rẻ.
 
 Nguyên tắc vàng:
 
@@ -103,7 +114,7 @@ Giải thích từng bước:
 
 ## 2. Bản đồ models trên Copilot 2026
 
-Section này trả lời: tháng 10/2026 Copilot có những model nào, model nào vừa bị gỡ, và phân loại theo vai trò để route nhanh thế nào?
+Tháng 10/2026 Copilot có nhiều model trải theo vai trò: flagship để nghĩ sâu, reasoning để giải toán, Claude/Gemini để viết và đọc dài, mini/flash để làm việc nhỏ. Phân loại theo vai trò giúp bạn route nhanh. Cũng trong mục này là danh sách model vừa bị gỡ.
 
 > Danh sách model đổi theo quý — tra model picker thực tế, đừng học thuộc lòng.
 > Bảng dưới là khung phân loại để bạn route đúng, không phải catalog bất biến.
@@ -172,7 +183,7 @@ cover rộng hơn. Lưu ý: context + reasoning yếu hơn — đừng giao ki�
 
 ### 2.6. Danh sách model 10/2026 + model ngừng hỗ trợ (02/10/2026)
 
-Section này trả lời: tên model chính xác đang có trên picker, và 4 model nào vừa bị gỡ để bạn đừng dùng nữa?
+Đây là tên model chính xác đang có trên picker tháng 10/2026, kèm 4 model vừa bị gỡ để bạn đừng gọi tên cũ nữa.
 
 ```text
 # Danh sach model tren Copilot — thang 10/2026 (tra picker thuc te, doi theo quy)
@@ -221,7 +232,7 @@ Sự thật model đáng nhớ (dùng khi review bill + chọn model):
 
 ## 3. Model picker: đổi ở đâu, ảnh hưởng gì
 
-Section này trả lời: đổi model ở 3 chỗ nào, để Auto thì chuyện gì xảy ra với 3 tier, và 3 quy tắc giữ nguyên khi đổi?
+Có 3 chỗ đổi model. Để "Auto" thì Copilot tự route theo 3 tier — cần biết để không bất ngờ khi bill về. Và đổi model tay thì phải giữ 3 quy tắc.
 
 ```bash
 # doi model (3 cho):
@@ -296,7 +307,7 @@ So sánh nhanh 3 tier (chọn hướng route, không đổi giá):
 
 ## 4. Premium requests multiplier (tiền thật)
 
-Section này trả lời: tiền tính ra sao kể từ 01/06/2026, vì sao "multiplier" giờ chỉ là cách nghĩ nhanh, và làm sao giữ credits sống hết tháng?
+Tiền tính ra sao kể từ 01/06/2026, vì sao "multiplier" giờ chỉ là cách nghĩ nhanh, và làm sao giữ credits sống hết tháng.
 
 > Tên mục giữ theo mục lục. Cơ chế tính tiền hiện hành là **AI Credits**
 > (usage-based billing từ 01/06/2026) — đọc mọi chữ "quota/multiplier" bên dưới
@@ -355,7 +366,7 @@ la ten mechanism truoc do, cung cach nghi "model dat ton gap nhieu lan model re"
 
 ## 5. BYOK + enterprise policy: gate model cho team
 
-Section này trả lời: admin gate model bằng những công tắc nào, verify ở đâu, và chặn chi phí vượt kế hoạch bằng gì? Dành cho admin/org owner; dev đọc để đối chiếu picker với policy.
+Dành cho admin/org owner; dev đọc để đối chiếu picker với policy. Admin gate model bằng những công tắc dưới đây — verify ở picker, và chặn chi phí vượt kế hoạch bằng paid usage policy.
 
 - **BYOK (Bring Your Own Key) là gì?** Enterprise dùng Azure/OpenAI key riêng cho
   Copilot thay vì GitHub-hosted models — data residency + billing riêng + model
@@ -401,7 +412,7 @@ Section này trả lời: admin gate model bằng những công tắc nào, veri
 
 ## 6. Khi nào dùng model nào (bảng dán tường)
 
-Section này trả lời: với 10 nhóm task thường gặp nhất thì model nào đủ, vì sao? Cột "Model" là tên VAI TRÒ — tên chính thức tháng 10/2026 xem mục 2.6.
+10 nhóm task thường gặp nhất, model nào đủ, và vì sao. Cột "Model" là tên VAI TRÒ — tên chính thức tháng 10/2026 xem mục 2.6.
 
 | Task | Hiểu nôm na | Ví dụ cụ thể | Model | Vì sao |
 |---|---|---|---|---|
@@ -430,7 +441,7 @@ Section này trả lời: với 10 nhóm task thường gặp nhất thì model 
 
 ## 7. Route theo phase + agent routing
 
-Section này trả lời: chia 1 task lớn thành các phase thì model nào đi phase nào, và 3 kịch bản mẫu dán được vào team wiki?
+Chia 1 task lớn thành các phase thì model nào đi phase nào, kèm 3 kịch bản mẫu dán được vào team wiki.
 
 ### 7.1. Nguyên tắc route (3 câu)
 
@@ -462,7 +473,7 @@ Section này trả lời: chia 1 task lớn thành các phase thì model nào đ
 
 ## 8. Walkthrough end-to-end (20 phút)
 
-Section này trả lời: 20 phút nào xác nhận được bạn đã route model đúng và credits đang sống khỏe?
+20 phút để xác nhận bạn đã route model đúng và credits đang sống khỏe.
 
 **Phút 0–5 (baseline credits):**
 
@@ -499,7 +510,7 @@ Section này trả lời: 20 phút nào xác nhận được bạn đã route mo
 
 ## 9. Pitfalls + fix
 
-Section này trả lời: 9 lỗi hay gặp nhất khi chọn model, và fix từng cái bằng gì?
+9 lỗi hay gặp nhất khi chọn model, và fix từng cái bằng gì.
 
 | Pitfall | Vì sao | Fix |
 |---|---|---|
@@ -513,11 +524,61 @@ Section này trả lời: 9 lỗi hay gặp nhất khi chọn model, và fix t�
 | Policy gate nhưng không verify | Model cấm vẫn hiện, team dùng lậu | Check picker + hỏi admin đối chiếu (mục 5) |
 | Không review credits hàng tuần | Ngốn cả tháng mới biết | Block 15 phút thứ 2 (bài 13 mục 7.3) |
 
+### Ba pitfall nhìn là nhớ (❌ SAI / ✅ ĐÚNG)
+
+**1. Default model đắt nhất cho mọi chat**
+
+```text
+❌ SAI: Mọi chat để flagship (GPT-5.x/Opus) → sửa typo, rename cũng chạy giá ×3
+✅ ĐÚNG: Default mid/mini; để flagship làm default chỉ khi phần lớn task là thiết kế/refactor
+```
+**Bài học:** flagship chỉ đáng tiền khi task cần depth. Việc cơ học thì model nào cũng ra chữ như nhau, nhưng bill thì khác.
+
+**2. Gõ tên model từ trí nhớ**
+
+```text
+❌ SAI: "github.copilot.chat.model": "gemini-3.5-flash" (đã deprecated 02/10/2026) → model not found
+✅ ĐÚNG: Mở picker, copy đúng tên còn hiện (vd "Gemini 3.8 Flash") rồi dán vào settings
+```
+**Bài học:** tên model đổi theo quý, và model bị gỡ vẫn "biết tên" trong trí nhớ bạn nhưng không còn trên picker.
+
+**3. Agent mode + flagship ngay từ đầu**
+
+```text
+❌ SAI: Giao task multi-file cho agent + flagship → 50 steps × giá flagship = credits bốc hơi
+✅ ĐÚNG: Agent chạy mid-tier trước; stuck > 30p mới leo lên flagship/reasoning (mục 7)
+```
+**Bài học:** agent nhân chi phí theo số bước. Tier cao × nhiều bước là công thức đốt credits nhanh nhất.
+
 ---
 
-## 10. Bài tập
+## So sánh với Claude Code
 
-Section này trả lời: làm 4 bài nào để tự mình thấy tier nào đủ cho task nào, và gate model đã thật sự hiệu lực?
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Chọn model | Picker đổi ngay trong Chat: GPT / Claude / Gemini | Gắn với model Anthropic (Claude) | Copilot cho chọn "bộ não"; Claude Code nhất quán 1 nhà |
+| Auto chọn model | Auto model selection + 3 tier (efficiency/balance/intelligence) | Không có tương đương trực tiếp (10/2026) | Copilot route tự động theo task + health |
+| Gate model cho team | Org/Enterprise policy allowlist model | Không có đối chiếu trực tiếp trong bài này | Copilot hợp bài toán quản trị đa model |
+| BYOK / data residency | BYOK (Azure/OpenAI key riêng) cho Enterprise | Phụ thuộc provider Anthropic; chi tiết cần tra docs Anthropic | Đừng assume data đi đâu — hỏi admin/provider |
+| Kiểm chứng chi phí | Billing/usage dashboard (AI Credits, gom theo model) | Bạn tự quản chi phí theo provider/plan | Cả hai: bạn là người đọc số, không phải model |
+
+> Claude Code không có "model picker đa nhà trong 1 tài khoản" như Copilot — nó gắn với model Anthropic. Ngược lại, Copilot không có tương đương trực tiếp cho auto tier; nếu bạn quen Claude Code thì phần "chọn model" là điểm phải học lại nhiều nhất.
+
+---
+
+## Best practices (kèm "vì sao")
+
+- **Default chat ở tier giữa/rẻ, chỉ gọi flagship đích danh.** *Vì sao?* Flagship sửa việc cơ học cũng ra cùng kết quả nhưng tốn ×2–3 — default sai là đốt credits cả tháng.
+- **Plan đắt, execute rẻ.** *Vì sao?* Bước quyết định (kiến trúc) mới cần depth; bước thi công theo plan rõ ràng thì tier giữa đủ.
+- **Stuck thì leo 1 nấc, đừng nhảy cóc.** *Vì sao?* Nhảy thẳng mini→reasoning tốn credits mà bỏ qua tier giữa rẻ hơn, thường đã đủ.
+- **Đổi model theo phase, không đổi giữa phase.** *Vì sao?* Đổi giữa phiên mất context/cache — trả giá đắt hơn là lợi.
+- **Copy tên model từ picker hiện tại.** *Vì sao?* Tên đổi theo quý; gõ từ trí nhớ dễ trúng model đã bị gỡ → `model not found`.
+- **Review credits mỗi tuần bằng dashboard by-model.** *Vì sao?* Chỉ nhìn tên model mà quên giá per-token × số bước agentic là công thức shock bill cuối tháng.
+- **Để Auto + nhận 10% giảm giá khi không cần chọn tay.** *Vì sao?* Auto chọn model theo task và health, lại rẻ hơn 10% — nhưng vẫn verify model nó chọn qua log/terminal.
+
+---
+
+## 10. Bài tập nhỏ
 
 **Bài 1 (15 phút — 3 tiers, 1 task):**
 
@@ -546,8 +607,6 @@ Section này trả lời: làm 4 bài nào để tự mình thấy tier nào đ�
 
 ## 11. Link chéo
 
-Section này trả lời: bài nào đọc tiếp khi cần đi sâu từng chủ đề dưới đây?
-
 - **Bài 04 — Chat commands toàn tập**: model picker đổi ở đâu, công thức 5 lệnh đầu.
 - **Bài 06 — Custom agents & Agent mode**: agent nào × model nào, fan-out mini rẻ.
 - **Bài 07 — Policies/guardrails**: gate models + content exclusion cho org.
@@ -556,3 +615,5 @@ Section này trả lời: bài nào đọc tiếp khi cần đi sâu từng ch�
 - **Bài 13 — Indexing & Telemetry**: dashboard by-model/by-user, vòng lặp 15 phút/tuần.
 - **Bài 15 — Security 5 tầng**: model policy là tầng 5, exclusion là tầng 1.
 - **Bài 16 — Extensions/MCP validate**: tools ngoài có tuân thủ model policy không?
+
+> **Chốt bài 14:** model đúng không phải model mạnh nhất mà là model *đủ* cho task — plan bằng flagship, thi công bằng tier giữa, việc cơ học bằng mini, và để dashboard nói thay bạn rằng credits còn sống hết tháng.

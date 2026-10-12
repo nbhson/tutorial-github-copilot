@@ -5,6 +5,14 @@
 > **Đọc xong:** audit được mọi extension/MCP server trước khi cài qua 5 bước — publisher trust, permissions, tools audit, sandbox, allowlist — plus bảng permission matrix và policy enforcement để admin khóa lại.
 > **Thời gian:** ~40 phút (walkthrough 20 phút ở cuối bài).
 
+## Mục tiêu bài học
+
+- Phân biệt được extension, MCP server, publisher trust, allow/ask/deny — và vì sao cả hai đều "chạy bằng quyền của bạn".
+- Chạy được 5 bước validate (publisher → permissions → tools → sandbox → allowlist) trên 1 tool thật, ra bằng chứng.
+- Đọc được bảng permission matrix và nhớ ngay luật `deny > ask > allow`.
+- Làm được một injection test an toàn và đọc đúng kết quả pass/fail.
+- Viết được 1 dòng allowlist + vài dòng `managed-settings.json` để admin khóa lại cho cả team.
+
 ## Mục lục
 
 1. [Vì sao validate? (why)](#1-vì-sao-validate-why)
@@ -18,12 +26,15 @@
 9. [Pitfalls + fix](#9-pitfalls--fix)
 10. [Bài tập](#10-bài-tập)
 11. [Link chéo](#11-link-chéo)
+- [So sánh với Claude Code](#so-sánh-với-claude-code)
+- [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
+- [Reference](#reference)
 
 ---
 
 ## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
 
-*Section này trả lời: 9 thuật ngữ dưới đây (6 của 5 bước + 3 của phần admin) nghĩa là gì. Không biết chúng thì đọc tiếp sẽ mù. Tra cứu nhanh, không cần đọc từ đầu.*
+Trước khi vào 5 bước, bạn cần nắm 9 thuật ngữ dưới đây — 6 cái thuộc phần 5 bước, 3 cái thuộc phần admin. Không biết chúng thì đọc tiếp sẽ mù. Đây là bảng tra cứu nhanh, cứ quay lại đây khi gặp từ lạ, không cần đọc từ đầu.
 
 | Thuật ngữ | Hiểu nôm na (1 câu) | Analogie | Ví dụ kỹ thuật thật | Verify |
 |---|---|---|---|---|
@@ -41,7 +52,7 @@
 
 ## 1. Vì sao validate? (why)
 
-*Section này trả lời: vì sao "cài 5 phút cho nhanh" là deal tồi, và 5 bước dưới đây thay cho deal đó bằng cái gì.*
+Cài xong một extension mất 5 phút, nghe rất rẻ. Cái bạn trả không phải 5 phút — mà là quyền chạy code trên chính máy mình. Mục này giải thích vì sao cái giá đó đắt hơn bạn tưởng, và 5 bước dưới đây đổi "cài cho nhanh" thành "cài có kiểm chứng".
 
 **1 câu:** extension/MCP không validate trước khi cài = giao chìa khóa nhà cho người lạ, vì chúng chạy với quyền của bạn.
 **Nôm na:** như cho người thuê mới vào nhà mà không hỏi tên, không xem lịch sử — họ có chìa khóa mở mọi tủ.
@@ -62,11 +73,15 @@ Co validate:     publisher ok → permissions vua du → tools audit sach →
 > Quy tắc: **không extension/MCP nào vào máy team mà chưa qua 5 bước. Tiện 5 phút
 > cài bừa có thể trả giá bằng 1 incident.**
 
+**Vì sao quan trọng?** Một tool độc không cần bạn gõ prompt gì cả — chỉ cần nằm đó, chờ bạn mở chat là nó đã có mặt trong vòng lặp agent. Bạn là người duy nhất đứng giữa "cài cho nhanh" và "mất `.env`", nên 5 bước này không phải thủ tục giấy tờ mà là hàng rào thật.
+
+**Nếu làm sai thì sao?** Cài bừa → tool lạ có quyền đọc mọi file, chạy shell, gọi network; bạn chỉ phát hiện khi đã muộn (bill lạ, token bị dùng trộm, PR lén). Cách tránh: coi mọi thứ chưa qua 5 bước là "chưa được cài", kể cả khi đồng nghiệp bảo "ngon lắm".
+
 ---
 
 ## 2. Extension/MCP có thể làm gì xấu
 
-*Section này trả lời: đúng 5 kiểu hại một tool có thể gây ra, kèm tên extension/MCP cụ thể để tưởng tượng được. Đọc bảng là đủ hình dung.*
+Có đúng 5 kiểu hại một tool có thể gây ra. Đọc bảng này là đủ hình dung — mỗi dòng kèm ví dụ extension/MCP cụ thể để bạn thấy nó trông ra sao ngoài đời.
 
 | Khả năng | Hiểu nôm na | Ví dụ extension độc | Ví dụ MCP server độc |
 |---|---|---|---|
@@ -84,6 +99,10 @@ Co validate:     publisher ok → permissions vua du → tools audit sach →
 # Ho 3 cau truoc khi cai: AI VIEET? (publisher) — LAM GI? (permissions/tools) —
 # LO XAU THI SAO? (sandbox + go duoc khong?)
 ```
+
+**Vì sao quan trọng?** 5 kiểu hại này không loại trừ nhau — một tool "chỉ để format code" vẫn có thể vừa đọc files vừa gửi network ở update sau (supply chain). Biết bảng này giúp bạn đặt câu hỏi đúng thay vì tin vào mô tả trên marketplace.
+
+**Nếu làm sai thì sao?** Nếu bạn chỉ nhìn tính năng mà bỏ qua khả năng đọc file/network, bạn sẽ đánh giá thấp rủi ro và cài liều. Cách tránh: soi tool theo 5 khả năng này, không theo lời quảng cáo.
 
 ### 2.1. Sơ đồ validate 5 bước (mermaid)
 
@@ -115,7 +134,7 @@ Giải thích từng bước:
 
 ## 3. Bước 1 — Publisher trust (ai đứng sau)
 
-*Section này trả lời: check gì trong 5 phút trước khi bấm Install, và red flag nào bắt buộc dừng lại.*
+Đây là 5 phút rẻ nhất trong cả quy trình, nhưng lọc được phần lớn rác. Trọng tâm: check gì trước khi bấm Install, và red flag nào buộc bạn dừng ngay, không cần suy nghĩ thêm.
 
 ### 3.1. Checklist publisher (5 phút, làm mọi lần)
 
@@ -151,11 +170,15 @@ code --list-extensions --show-versions | sort
 # - Blog huong dan curl | bash de cai MCP (khong doc script thi khong chay)
 ```
 
+**Vì sao quan trọng?** Publisher trust là bộ lọc rẻ nhất: đa số đồ độc lộ mặt ngay ở bước này (publisher mới, xin quyền rộng, hướng dẫn `curl | bash`). Bỏ qua bước 1 rồi mới đi soi code là tự làm khó mình.
+
+**Nếu làm sai thì sao?** Check qua loa → bạn tải đúng con typo-squat (`copilott`) và giao chìa khóa cho nó. Cách tránh: coi mọi red flag là điểm dừng, không "ừ chắc cũng không sao".
+
 ---
 
 ## 4. Bước 2 — Permissions audit (nó xin quyền gì)
 
-*Section này trả lời: đọc quyền của extension ở đâu, và khi 3 nguồn cấu hình cùng nói thì cái nào thắng (permission matrix).*
+Quyền là thứ quyết định tool làm được gì trên máy bạn, nên phải đọc trước khi cài. Mục này chỉ bạn đọc quyền extension ở đâu, và khi 3 nguồn cấu hình (local / org / enterprise) cùng nói thì cái nào thắng.
 
 ### 4.1. Extension permissions: đọc ở đâu
 
@@ -201,9 +224,7 @@ code --list-extensions --show-versions | sort
 
 ### 4.3. Permission matrix — deny > ask > allow (managed settings)
 
-**Dành cho admin/org owner.** Section này trả lời: khi settings local, org policy và
-enterprise cùng khai một thao tác thì cái nào thắng. Câu trả lời là bảng dưới —
-thuộc lòng, không cần tra.
+**Dành cho admin/org owner.** Khi settings local, org policy và enterprise cùng khai một thao tác, bạn cần biết cái nào thắng — nếu không sẽ tưởng "đã tắt" mà thực ra chưa. Câu trả lời nằm ở bảng dưới; thuộc lòng, không cần tra.
 
 | Thao tác / đối tượng | Khai ở đâu (trong `managed-settings.json`) | Mức | Cái gì thắng |
 |---|---|---|---|
@@ -236,11 +257,15 @@ thuộc lòng, không cần tra.
 // Sua settings local de mo lai → van bi chan thi policy enforcement dang song.
 ```
 
+**Vì sao quan trọng?** Chỉ cần nhớ `deny > ask > allow` là bạn đoán được kết quả của mọi cấu hình chồng nhau. Không nắm luật này, admin sẽ tưởng đã mở khóa trong khi enterprise đang chặn (hoặc ngược lại), rồi đổ lỗi cho tool.
+
+**Nếu làm sai thì sao?** Nếu bạn tin rằng "settings local là cao nhất", bạn sẽ hứa với team một cấu hình mà policy công ty vẫn đè được. Cách tránh: mọi thay đổi quyền đều kiểm chứng bằng cách chạy thử một tool nằm ở ô deny để thấy `blocked by policy`.
+
 ---
 
 ## 5. Bước 3 — Tools audit (MCP tools nào nguy hiểm)
 
-*Section này trả lời: phân loại tool theo 3 màu, test prompt-injection, và validate cấu hình MCP xem nó có đúng format đúng chỗ không.*
+Extension/MCP chỉ nguy hiểm qua những tool nó phơi ra. Bước này phân loại tool theo 3 màu, test prompt-injection, và kiểm tra cấu hình MCP có đúng format đúng chỗ không — sai chỗ thì tool không chạy, hoặc chạy quá tay.
 
 ### 5.1. Phân loại tools (3 màu)
 
@@ -278,8 +303,7 @@ De xuat config allow/ask/deny tung tool + ly do 1 dong/tool."
 
 ### 5.3. MCP validation: cấu hình đúng + server sạch
 
-**Đọc để tra.** MCP validation = đối chiếu 4 điểm: file đúng key, server đúng nguồn,
-toolset đúng mức, policy đúng chỗ. Sai 1 điểm là tool không chạy hoặc chạy quá tay.
+Phần này để tra. MCP validation = đối chiếu 4 điểm: file đúng key, server đúng nguồn, toolset đúng mức, policy đúng chỗ. Sai 1 điểm là tool không chạy hoặc chạy quá tay.
 
 ```text
 # A. Noi dat cau hinh — moi client doc 1 cho, KEY KHAC NHAU:
@@ -323,11 +347,15 @@ Bảng tra nhanh nơi đặt cấu hình MCP (mục A):
 Verify sau khi cấu hình: mở Chat → MCP panel → đếm server và tool list. Server không
 có trong allowlist, hoặc tool 🔴 không nằm ở `deny` → config sai, quay lại mục 4.3.
 
+**Vì sao quan trọng?** Cùng một `github-readonly`, nếu tool 🔴 vẫn nằm ở `allow` thì nó thành tool nguy hiểm; đặt sai key `servers`/`mcpServers` thì Copilot không đọc được file và bạn tưởng server hỏng. Cả hai đều là lỗi cấu hình, không phải lỗi tool.
+
+**Nếu làm sai thì sao?** Mất công audit mà tool vẫn chạy quá tay (vì deny đặt sai file) hoặc "không chạy" (vì key sai) — hai cực nguy hiểm như nhau. Cách tránh: verify bằng MCP panel sau mỗi lần sửa config.
+
 ---
 
 ## 6. Bước 4 — Sandbox thử lửa (chạy cách ly)
 
-*Section này trả lời: cách ly tool mới trong 1 tuần bằng gì — profile/worktree cá nhân cho dev, sandbox policy cho admin.*
+Đến đây bạn đã tin tool "có vẻ ổn" — nhưng chưa nên thả vào repo chính. Cách ly nó 1 tuần bằng profile/worktree cho dev, bằng sandbox policy cho admin. Mục này chỉ dùng công cụ gì để làm việc đó.
 
 ### 6.1. Sandbox extension mới (1 tuần)
 
@@ -363,8 +391,7 @@ git branch -D sandbox/mcp-test
 
 ### 6.3. Sandbox enforced — admin siết bằng policy (không dev tự mở được)
 
-**Dành cho admin.** Sandbox cá nhân ai cũng tắt được. Muốn cả team chạy trong cũi
-thì phải khóa bằng `managed-settings.json` — luật này đè lên settings local.
+**Dành cho admin.** Sandbox cá nhân ai cũng tắt được. Muốn cả team chạy trong cũi thì phải khóa bằng `managed-settings.json` — luật này đè lên settings local.
 
 ```text
 # 1. VS Code (v1.141, Windows/macOS/Linux): bat sandbox cho agent:
@@ -377,11 +404,15 @@ thì phải khóa bằng `managed-settings.json` — luật này đè lên setti
 # Verify: dev sua settings local de ha sandbox → van bi giu muc admin dat.
 ```
 
+**Vì sao quan trọng?** Thử trên repo chính là cách biến "một tool lạ" thành "một incident thật". Worktree + token rẻ chỉ tốn vài phút, nhưng giới hạn thiệt hại xuống gần bằng không nếu tool có ý đồ xấu.
+
+**Nếu làm sai thì sao?** Nếu bạn test trên repo chính và tool có tool 🔴, code thật có thể bị đọc/gửi/xóa trước khi bạn kịp gỡ. Cách tránh: luôn dựng worktree dùng 1 lần + token read-only trước khi bật tool mới.
+
 ---
 
 ## 7. Bước 5 — Allowlist checklist cho team
 
-*Section này trả lời: ghi nhận tool đã duyệt ở đâu, và khóa lại bằng policy nào để ai cũng phải đi qua 5 bước trên.*
+Qua được 4 bước không có nghĩa là xong — cần ghi nhận và khóa lại, nếu không người tiếp theo sẽ cài lại từ đầu và bỏ qua hết. Mục này chỉ ghi ở đâu và khóa bằng policy nào để ai cũng phải đi qua 5 bước.
 
 ### 7.1. Template allowlist (dán team wiki, admin sở hữu)
 
@@ -418,8 +449,7 @@ code --list-extensions --show-versions | sort > /tmp/ext-$(date +%F).txt
 
 ### 7.3. Policy enforcement — allowedMcpServers / deniedMcpServers (deny wins)
 
-**Dành cho admin/org owner.** Section này trả lời: sau khi allowlist viết trên wiki,
-bằng cách nào nó thành luật. Câu trả lời: enterprise policy + `managed-settings.json`.
+**Dành cho admin/org owner.** Allowlist viết trên wiki vẫn chỉ là "mong muốn" cho tới khi nó thành luật. Cách biến nó thành luật: enterprise policy + `managed-settings.json`.
 
 ```jsonc
 // managed-settings.json — chot allowlist MCP + plugin cho ca enterprise:
@@ -450,11 +480,15 @@ Quy tắc enforcement cần nhớ:
   chứa prompt**) ở bài 15 mục 7.2; muốn log chi tiết hơn thì cấu hình `telemetry`
   (OTEL) xuất về endpoint của công ty.
 
+**Vì sao quan trọng?** Một dòng allowlist trên wiki không chặn được ai; chỉ policy ở tầng org/enterprise mới khiến dev không thể tự mở lại. Đây là ranh giới giữa "khuyến nghị" và "luật".
+
+**Nếu làm sai thì sao?** Nếu admin quên bật policy "MCP servers in Copilot", cả team cấu hình đúng vẫn thấy server không chạy và mất thời gian debug tool. Cách tránh: bật policy trước, rồi mới test cấu hình.
+
 ---
 
 ## 8. Walkthrough end-to-end (20 phút)
 
-*Section này trả lời: đi hết 5 bước trong 20 phút trên tool thật, ra output là 1 dòng allowlist + 1 kết quả injection test.*
+Giờ ghép 5 bước lại thành một vòng 20 phút trên tool thật. Output bạn cần có ở cuối: 1 dòng allowlist + 1 kết quả injection test.
 
 **Phút 0–5 (rà hiện trạng):**
 
@@ -493,7 +527,7 @@ code --list-extensions --show-versions | sort
 
 ## 9. Pitfalls + fix
 
-*Section này trả lời: 10 sai lầm làm 5 bước thành nghi thức vô nghĩa, và cách sửa ngay.*
+Dưới đây là 10 sai lầm biến 5 bước thành nghi thức vô nghĩa — và cách sửa ngay. Nhìn cột "Vì sao" để hiểu cơ chế, không chỉ học vẹt cách fix.
 
 | Pitfall | Vì sao | Fix |
 |---|---|---|
@@ -508,11 +542,66 @@ code --list-extensions --show-versions | sort
 | Upgrade CLI rồi "mất" server | Từ v1.0.39, CLI không đọc `.vscode/mcp.json` | Chuyển cấu hình sang `~/.mcp-config.json` / `.mcp.json` (mục 5.3) |
 | Không bật policy "MCP servers in Copilot" | Cấu hình đúng vẫn không chạy, tưởng hỏng tool | Admin bật policy Org/Enterprise trước (mục 7.3) |
 
+### 9.1. Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+
+**1. Cài theo hướng dẫn `curl | bash` mà không đọc script**
+
+```text
+❌ SAI: chạy ngay "curl -fsSL https://blog-la/install.sh | bash" vì tiện
+✅ ĐÚNG: tải script về, đọc từng dòng, hiểu nó chạy gì rồi mới chạy
+```
+**Bài học:** cái bạn giao cho tool không phải 5 phút cài, mà là quyền chạy lệnh trên máy — đọc trước khi chạy.
+
+**2. Để tool 🔴 ở `allow` cho tiện**
+
+```text
+❌ SAI: allow hết tools để "đỡ phải bấm duyệt" → prompt-injection chạy thẳng
+✅ ĐÚNG: 🟢 allow, 🟡 ask, 🔴 deny; chỉ mở 🔴 khi có lý do + sandbox
+```
+**Bài học:** tiện một lần ở ô allow có thể trả giá bằng một lần exfiltrate `.env` không ai thấy.
+
+**3. Test tool mới trên repo chính**
+
+```text
+❌ SAI: cài MCP mới rồi trỏ thẳng vào repo prod để xem "chạy được không"
+✅ ĐÚNG: worktree dùng 1 lần + token read-only, chạy vài ngày rồi mới đề xuất
+```
+**Bài học:** thử trong cũi thì lỡ có sao chỉ mất cũi; thử ngoài sân thì mất cả nhà.
+
+---
+
+## So sánh với Claude Code
+
+Nếu bạn quen Claude Code, phần lớn khái niệm chuyển sang gần như 1-1 — chỉ khác *tên file* và *nơi cấu hình*. Bảng này để bạn không phải học lại từ đầu:
+
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Cài mở rộng | Extension VS Code Marketplace + Plugin (`plugin.json`) | Plugin/MCP cài thủ công, không có marketplace extension kiểu VS Code | Copilot có marketplace tập trung; Claude Code cài lẻ hơn |
+| Kết nối tool ngoài | MCP (`.vscode/mcp.json`, `.mcp.json`, `~/.copilot/mcp-config.json`) | MCP (`.mcp.json`, `.claude/`) | Cùng chuẩn MCP — điều cốt lõi là allowlist + version pin như nhau |
+| Phân quyền tool | `permissions` allow/ask/deny + `managed-settings.json` | `allow`/`ask`/`deny` trong `.claude/settings.json` | Cùng tư tưởng deny-first, cùng tên khái niệm |
+| Cách ly khi thử | VS Code profile `sandbox` + worktree + token rẻ | Worktree + container/VM tùy cách dựng | Claude Code không có "profile" tương đương trực tiếp — dùng worktree/container |
+| Policy doanh nghiệp | `managed-settings.json` đè settings local | Managed policy đè settings local | Cùng mục tiêu: dev không tự mở lại được |
+| Kiểm chứng | Bạn tự chạy injection test + MCP panel | Bạn tự chạy test + kiểm tra tool | **Không agent nào tự chịu trách nhiệm đúng/sai** |
+
+> **Đọc bảng này thế nào:** nếu bạn đã quen `permissions` allow/ask/deny và MCP của Claude Code thì sang Copilot bạn chỉ cần nhớ thêm vài *đường dẫn file* (`managed-settings.json`, `~/.copilot/mcp-config.json`). Phần Copilot hơn là có marketplace extension tập trung; phần Claude Code không có tương đương trực tiếp là profile `sandbox` của VS Code.
+
+---
+
+## Best practices (kèm "vì sao")
+
+- **Mọi tool phải qua đủ 5 bước, không nhảy bước.** *Vì sao?* Bước 1 lọc rẻ nhất, bước 4 giới hạn thiệt hại — bỏ bước nào cũng để lại một lỗ hổng đúng ở tầng đó.
+- **Pin version exact cho MCP (`@1.2.3`), đừng dùng `latest`.** *Vì sao?* Remote có thể đổi tools âm thầm; không pin thì audit hôm qua vô nghĩa cho bản hôm nay.
+- **Deny-first: 🟢 allow, 🟡 ask, 🔴 deny.** *Vì sao?* Mặc định mở là mặc định sai; chỉ mở khi có lý do cụ thể thì mới kiểm soát được.
+- **Token riêng, read-only, rotation 90 ngày.** *Vì sao?* MCP lộ token là mất cả repo/org — tách token và xoay vòng giới hạn thiệt hại.
+- **Coi mọi dữ liệu ngoài là untrusted.** *Vì sao?* Issue/web/DB có thể chứa prompt-injection; chỉ lệnh từ user chat trực tiếp mới là lệnh.
+- **Đặt calendar review quý ngay khi thêm tool.** *Vì sao?* Tool leo quyền và CVE chỉ lộ theo thời gian — không lên lịch thì không ai soi lại.
+- **Kiểm chứng bằng hành vi thật, không bằng niềm tin.** *Vì sao?* Chỉ khi tool ở ô deny báo `blocked by policy` và injection test bị từ chối, bạn mới biết policy đang sống.
+
 ---
 
 ## 10. Bài tập
 
-*Section này trả lời: 3 bài dưới đây biến 5 bước thành thói quen — làm 1 lần là có template cho cả team.*
+3 bài dưới đây biến 5 bước thành thói quen — làm 1 lần là bạn có template dùng cho cả team.
 
 **Bài 1 (20 phút — rà + audit 1 tool):**
 
@@ -541,8 +630,6 @@ code --list-extensions --show-versions | sort
 
 ## 11. Link chéo
 
-*Section này trả lời: bài nào trong series đi sâu vào từng bước của bài này.*
-
 - **Bài 03 — Instructions/Memory/Rules**: dặn agent "data ngoài là untrusted" viết
   vào instructions team.
 - **Bài 07 — Policies/guardrails**: automation rules + approval ask/deny cho tools 🟡🔴;
@@ -556,3 +643,12 @@ code --list-extensions --show-versions | sort
 - **Bài 14 — Models**: model policy + tools policy là 2 mặt 1 đồng xu governance.
 - **Bài 15 — Security 5 tầng**: bài này là "tầng 0" — tool độc thì 5 tầng cũng mệt;
   audit log + managed settings của tầng 5.
+
+## Reference
+
+- VS Code Copilot docs: https://code.visualstudio.com/docs/copilot
+- GitHub Copilot docs (MCP, policies): https://docs.github.com/copilot
+- GitHub MCP Registry (tìm server đã curated): https://github.com/mcp
+- Billing / AI Credits: https://github.com/settings/copilot
+
+> Chốt bài 16: cài nhanh 5 phút có thể trả giá bằng một incident — đi đủ 5 bước, và để allowlist + policy thay bạn nói "tool này được vào nhà".

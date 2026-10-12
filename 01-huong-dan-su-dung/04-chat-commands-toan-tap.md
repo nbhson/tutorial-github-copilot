@@ -7,6 +7,13 @@
 > Mỗi lệnh có 1 folder riêng trong `commands/` (vd `commands/chat-session/new-chat/`), chứa README chi tiết: cú pháp,
 > ví dụ, pitfalls, plan/model gating. **Thời gian:** ~30 phút đọc + tra cứu dần.
 
+## Mục tiêu bài học
+
+- Tra đúng nhóm ký hiệu khi cần: `/` (chạy workflow), `@` (chọn nguồn tri thức), `#` (gắn file/vùng chọn).
+- Chạy được **công thức 5 lệnh session đầu** trên 1 repo thật, mỗi lệnh kiểm 1 điểm.
+- Tự debug khi một lệnh "biến mất" — phân biệt plan/model gating với extension cũ.
+- Biết lệnh nào hợp việc nào, để không đốt AI Credits bằng Agent cho việc một dòng.
+
 ## Mục lục
 
 1. [Cách đọc index này + why phải học commands](#1-cách-đọc-index-này--why-phải-học-commands)
@@ -15,10 +22,14 @@
 4. [Nhóm 3 — Code actions (10)](#nhóm-3--code-actions-10)
 5. [Nhóm 4 — System & Knowledge (15)](#nhóm-4--system--knowledge-15)
 6. [Công thức 5 lệnh session đầu (giữ nguyên, làm 1 lần/repo)](#6-công-thức-5-lệnh-session-đầu-giữ-nguyên-làm-1-lầnrepo)
-7. [Lưu ý plan/model gating (AI Credits, BYOK)](#7-lưu-ý-planmodel-gating-premium-requests-byok)
+7. [Lưu ý plan/model gating (AI Credits, BYOK)](#7-lưu-ý-planmodel-gating-ai-credits-byok)
 8. [Walkthrough + ví dụ copy-paste](#8-walkthrough--ví-dụ-copy-paste)
 9. [Hiểu nhầm thường gặp + Pitfalls + bài tập](#9-hiểu-nhầm-thường-gặp--pitfalls--bài-tập)
-10. [Link chéo](#10-link-chéo)
+10. [So sánh với Claude Code](#so-sánh-với-claude-code)
+11. [Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)](#lỗi-thường-gặp--sai--đúng)
+12. [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
+13. [Bài tập nhỏ](#bài-tập-nhỏ)
+14. [Link chéo](#10-link-chéo)
 
 ---
 
@@ -64,6 +75,10 @@ Vì sao học commands thay vì gõ tự nhiên mãi? Câu trả lời ngắn:
 - Prompt tự nhiên linh hoạt nhưng tốn tokens + thiếu determinism.
 - Commands (`/`, `@`, `#`) là "đường tắt có kiểm chứng": gắn đúng scope, đúng model, đúng tools ngay từ turn 1.
 - Kết quả: rẻ hơn 3–5 turns làm rõ.
+
+**Vì sao quan trọng?** Commands là thứ biến một prompt "hy vọng agent hiểu đúng" thành một prompt "agent buộc phải đúng scope". Không nắm `/`, `@`, `#` thì bạn gõ càng dài càng tốn turns làm rõ, và dễ kết luận sai là "Copilot dở" trong khi thật ra chỉ thiếu scope.
+
+**Nếu làm sai thì sao?** Gõ tự nhiên dài mà không có `#file`/`@workspace` → agent tự đoán file, sửa lan sang chỗ không hỏng (diff phình), hoặc hỏi lại "file nào?" vài turns. Cách tránh: mọi prompt code phải có `#file`/`#selection` hoặc `@workspace` ngay turn 1.
 
 ---
 
@@ -355,23 +370,70 @@ gh copilot suggest "viet commit message conventional commits cho diff hien tai"
 | Lệnh vắng mặt mà kết luận "bug" | Plan/model gating | Check `/status` + plan + gõ `/` xem list thực tế trước |
 | Quên `/policy`/`/exclusion` ở corp | Không biết org cấm gì | Session đầu luôn chạy `/policy` → `/exclusion` |
 
-### Bài tập thực hành
+---
 
-**Bài 1 (15 phút) — Scope drill:**
-Cùng 1 task, chạy 2 lần: lần 1 không `@`/`#`, lần 2 có `@workspace` + `#file`.
-So sánh số turns + độ đúng. Ghi lại chênh lệch vào team wiki.
+## So sánh với Claude Code
 
-**Bài 2 (15 phút) — Commands tour:**
-Chạy tuần tự `/status → /instructions → /mcp → /agents → /policy → /usage`
-trên repo thật. Chụp (che secrets) + giải thích mỗi output 1 câu.
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Gọi lệnh có sẵn | Slash command built-in (`/fix`, `/tests`, `/explain`...) — bảng tra 47 lệnh | Slash command built-in (`/help`, `/clear`, `/compact`, `/model`...) + tự tạo trong `.claude/commands/` | Cùng ý tưởng `/`; tên và số lệnh khác nhau |
+| Chọn nguồn tri thức | Participant `@workspace`, `@terminal`, `@github` | Không có `@participant` tương đương trực tiếp; agent tự quét repo | Copilot có kênh `@` tường minh; Claude Code để agent tự tìm |
+| Gắn file/vùng chọn | Variable `#file`, `#selection`, `#editor` | `@file` mention; không có tương đương `#selection` (terminal-first) | Copilot gắn được vùng đang bôi đen |
+| Quản lý phiên | `/new`, `/clear`, `/history`, `/export`, `/resume` | `/clear` + `--resume`/`--continue`; không có `/export` tương đương rõ ràng | Cả hai đều có mở/xóa/resume phiên |
+| Đổi model giữa phiên | `/model` (GPT/Claude/Gemini) | `/model` (gói model Anthropic) | Cùng tên lệnh, khác tập model |
+| Kiểm tra hệ thống | `/status`, `/mcp`, `/instructions` | `/status`, `/mcp`, `/doctor` | Cùng mục đích debug |
+| Hệ biến `#` | Nhiều biến (`#file`, `#selection`, `#fetch`...) | Không có hệ biến `#` tương đương trực tiếp | Claude Code dùng mention/đường dẫn thay thế |
 
-**Bài 3 (20 phút) — Git flow:**
-Trên branch test, chạy `/diff → /review → /commit → /pr`. Liệt kê: lệnh nào
-đúng ngay, lệnh nào bạn phải sửa tay, sửa gì.
+## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
-**Bài 4 (15 phút) — Gating check:**
-Mở `/model` liệt kê models khả dụng ở plan bạn. So với đồng nghiệp plan khác
-(nếu có). Ghi bảng: model nào tốn AI Credits cao nhất (ước lượng từ dashboard).
+**1. Gõ tự nhiên dài mà không gắn scope**
+
+```text
+❌ SAI: "sua loi login dum tao" → agent tự đoán file, tốn 3–5 turns hỏi lại.
+✅ ĐÚNG: #file:src/routes/login.ts #selection Them null check cho customerId, giu nguyen API shape.
+```
+**Bài học:** mọi prompt code phải gắn `#file`/`#selection` hoặc `@workspace` ngay turn 1 — scope càng khóa, càng ít turns làm rõ.
+
+**2. Dùng Ask rồi trách "không sửa file"**
+
+```text
+❌ SAI: (Ask mode) "Sửa bug login giúp" → chỉ trả lời chữ, không đụng file.
+✅ ĐÚNG: chuyển /edit (hoặc /agent) rồi mới giao việc sửa.
+```
+**Bài học:** Ask read-only là cố ý, không phải bug. Muốn sửa file thì phải đổi mode/lệnh trước.
+
+**3. Lệnh vắng mặt là kết luận "Copilot hỏng"**
+
+```text
+❌ SAI: gõ /skills không thấy → kết luận lỗi công cụ.
+✅ ĐÚNG: /status → check plan ở github.com/settings/copilot → gõ / xem list thực tế.
+        Vẫn không có → plan gating hoặc extension cũ (/update).
+```
+**Bài học:** lệnh vắng mặt thường do plan/model gating hoặc extension cũ — debug theo thứ tự trước khi đổ lỗi.
+
+**4. Tin `/commit`/`/pr` 100% mà không đọc**
+
+```text
+❌ SAI: chạy /commit rồi commit luôn message nó gợi ý.
+✅ ĐÚNG: đọc + sửa message trước khi commit/push.
+```
+**Bài học:** `/commit`/`/pr` chỉ sinh nháp — commit/push là hành động thật, bạn vẫn là người duyệt cuối.
+
+## Best practices (kèm "vì sao")
+
+- **Gắn scope ngay turn 1 (`#file`/`#selection`/`@workspace`).** *Vì sao?* Prompt không scope tốn 3–5 turns làm rõ, vừa tốn tokens vừa dễ sửa sai.
+- **Chọn lệnh theo cỡ việc: 1 dòng dùng `/fix`/`/explain`, việc mở dùng `/agent`.** *Vì sao?* Agent cho việc nhỏ sẽ đi đọc cả chục file — đốt AI Credits vô ích.
+- **`/new` mỗi task, để instructions giữ context chung.** *Vì sao?* Chat dài làm rule loãng và agent quên đầu bài, còn instructions vẫn tự nạp.
+- **Đổi model theo việc: model rẻ cho `/explain`/`/review`, model mạnh cho `/agent` khó.** *Vì sao?* Giá chênh 5–10 lần; việc dễ không cần model flagship.
+- **Luôn đọc lại `/commit`/`/pr` trước khi commit/push.** *Vì sao?* Nó chỉ sinh nháp, còn commit/push là hành động không undo được.
+- **Session đầu chạy `/status → /instructions → /mcp` (corp thêm `/policy` → `/exclusion`).** *Vì sao?* Phát hiện sai account/plan/quota hoặc file bị exclusion trước khi tốn cả buổi.
+
+## Bài tập nhỏ
+
+1. **(15 phút) — Scope drill:** Cùng 1 task, chạy 2 lần: lần 1 không `@`/`#`, lần 2 có `@workspace` + `#file`. So sánh số turns + độ đúng. Ghi lại chênh lệch vào team wiki.
+2. **(15 phút) — Commands tour:** Chạy tuần tự `/status → /instructions → /mcp → /agents → /policy → /usage` trên repo thật. Chụp (che secrets) + giải thích mỗi output 1 câu.
+3. **(20 phút) — Git flow:** Trên branch test, chạy `/diff → /review → /commit → /pr`. Liệt kê: lệnh nào đúng ngay, lệnh nào bạn phải sửa tay, sửa gì.
+4. **(15 phút) — Gating check:** Mở `/model` liệt kê models khả dụng ở plan bạn. So với đồng nghiệp plan khác (nếu có). Ghi bảng: model nào tốn AI Credits cao nhất (ước lượng từ dashboard).
 
 ---
 
@@ -384,3 +446,11 @@ Mở `/model` liệt kê models khả dụng ở plan bạn. So với đồng ng
 - **Bài 05 — Agent Skills & Custom Instructions**: `SKILL.md` (chuẩn 2026) + port prompt files legacy — commands gọi workflow tái dùng.
 - **Bài 10 — Modes & Permissions**: `policy-approval`, `content-exclusion`, model gating chi tiết.
 - **Bài 11 — Worktrees & Checkpoints**: coding agent assign/PR trong flow issue → PR.
+
+## Reference
+
+- GitHub Copilot docs: https://docs.github.com/copilot
+- VS Code Copilot docs: https://code.visualstudio.com/docs/copilot
+- Billing / AI Credits: https://github.com/settings/copilot
+
+> **Chốt bài 04:** ba ký hiệu `/`, `@`, `#` là ngữ pháp của Copilot Chat — nắm ngữ pháp này thì prompt đầu tiên đã đúng scope, và bạn thôi trả tiền cho những turn "file nào nhỉ?".

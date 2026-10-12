@@ -1,8 +1,14 @@
 # Nhóm System & Knowledge (15 lệnh)
 
-> **Dành cho:** người cấu hình/troubleshoot hệ thống và tri thức của Copilot · **Vấn đề:** 15 lệnh (instructions, prompt files, skills, MCP, extensions, exclusion, telemetry, auth, feedback, knowledge base, CLI) nằm rải rác, không biết lệnh nào dùng lúc nào · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi click sang README chi tiết (~2 phút)
+> **Dành cho:** người cấu hình và xử lý sự cố cho hệ thống, tri thức của Copilot · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi bấm sang README chi tiết (~2 phút).
 
-Mỗi README chi tiết trả lời 5 câu: **dùng khi nào · cho ai · kết quả ra gì · ví dụ copy-paste · liên quan.**
+Nhóm này là "phòng máy" của Copilot: rules mà nó nạp (`/instructions`), cách mở rộng năng lực (prompt files, skills, MCP, extensions), thứ nó *không được* đọc (content exclusion), dữ liệu nó gửi đi (telemetry), tài khoản và trạng thái (`/status`, `/login`, `/logout`), cùng các công cụ ngoài Chat (knowledge base, `gh copilot`). Đây là nhóm bạn chỉ mở khi cần thiết lập hoặc khi có gì đó không chạy như mong đợi.
+
+**Tra thế nào?** Phân theo mục đích: *"làm cho Copilot hiểu repo/team tôi"* → `/instructions`, tri thức nhóm; *"cắm thêm công cụ/skill"* → `/skills`, MCP, extensions; *"kiểm soát quyền riêng tư"* → content exclusion, telemetry; *"đăng nhập / kiểm tra sống chết"* → `/status`, `/login`, `/logout`; *"báo lỗi cho GitHub"* → `/feedback + /bug`; *"dùng Copilot ngoài Chat"* → `gh copilot`.
+
+**Vì sao quan trọng?** Nhóm này quyết định Copilot trả lời dựa trên *luật nào*. Nạp sai instructions thì mọi câu trả lời trong repo đều lệch; thêm MCP/skill ẩu thì model gọi công cụ ngoài ý muốn. Cấu hình đúng một lần dùng được cho cả team.
+
+**Nếu làm sai?** Hai cái bẫy: (1) tưởng `/prompts` vẫn là chuẩn chính — nó đã legacy, việc mới nên dùng `/skills`; (2) chỉnh telemetry/exclusion rồi quên rằng nó áp ở cấp tổ chức, có thể ảnh hưởng người khác chứ không riêng bạn.
 
 | Lệnh | Mô tả 1 dòng | Chi tiết |
 |---|---|---|
@@ -22,4 +28,22 @@ Mỗi README chi tiết trả lời 5 câu: **dùng khi nào · cho ai · kết 
 | `gh copilot suggest` | Gợi ý lệnh CLI trong terminal (gh copilot) | [./cli-suggest/README.md](./cli-suggest/README.md) |
 | `gh copilot explain` | Giải thích lệnh CLI vừa chạy/gặp | [./cli-explain/README.md](./cli-explain/README.md) |
 
+## So sánh với Claude Code
+
+| Việc | Copilot | Claude Code |
+|---|---|---|
+| Rules/memory nạp vào phiên | `/instructions` (`.github/copilot-instructions.md`, `AGENTS.md`) | `/memory` + `CLAUDE.md` |
+| Lệnh tái sử dụng theo tên | Prompt files (`.github/prompts/`, **legacy**) → chuyển sang Skills | Custom slash commands trong `.claude/commands/` |
+| Năng lực tự gọi khi task khớp | Agent Skills (`.github/skills/`, `/skills`) | Skills (`SKILL.md` trong `.claude/skills/`) |
+| Kết nối công cụ ngoài | `/mcp`, `MCP add` | `claude mcp add`, `/mcp` |
+| Chợ extension | Copilot Extensions (`/extensions`) | Không có tương đương trực tiếp — dùng MCP/plugins |
+| Chặn đọc file | Content exclusion (cấp tổ chức) | Không có tương đương trực tiếp ở cấp org — dựa vào permission settings và `.gitignore` |
+| Đồng ý telemetry | `Telemetry` (code-telemetry consent) | Cấu hình qua settings/env — không có lệnh riêng |
+| Trạng thái & đăng nhập | `/status`, `/login`, `/logout` | `/status`; xác thực qua `claude` login/setup |
+| Báo lỗi cho nhà cung cấp | `/feedback + /bug` | `/bug` |
+| Hỏi tri thức nội bộ team | Knowledge base (docs/wiki/RAG) | Không có tương đương trực tiếp — thường cắm qua MCP |
+| Gợi ý/giải thích lệnh shell | `gh copilot suggest`, `gh copilot explain` | Không có tương đương trực tiếp — Claude Code là một agent CLI |
+
 Quay về: [../README.md](../README.md) · Bài tổng: [../../04-chat-commands-toan-tap.md](../../04-chat-commands-toan-tap.md)
+
+> Đây là nhóm ít mở nhất nhưng đáng đầu tư nhất: cấu hình instructions, skills và MCP cho đúng một lần, cả team hưởng lợi ở mọi câu trả lời về sau.

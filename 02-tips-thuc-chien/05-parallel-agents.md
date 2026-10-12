@@ -1,6 +1,17 @@
 # Tips 05 — Parallel Agents: Chạy Song Song Multi-Chat, Coding Agent, Worktrees
 
-> Copilot mạnh nhất khi bạn fan-out: multi-chat song song, multi Coding Agent sessions, worktrees cô lập, custom agents chia vai. Bài này dạy bạn khi nào song song, khi nào không, và 4 recipes copy-paste.
+> **Dành cho:** dev đã quen 1 chat 1 việc và đang chờ Copilot tuần tự từng module.
+> **Vấn đề:** research 3 modules tuần tự mất 60 phút trong khi làm song song chỉ tốn 30 — và cùng lúc đó bạn vẫn đang trả AI Credits.
+> **Đọc xong:** chọn đúng 1 trong 4 kiểu song song, biết khi nào không nên song song, có 4 recipes copy-paste.
+> **Thời gian:** ~25 phút đọc + ~65 phút làm bài tập.
+
+## Mục tiêu bài học
+
+- Phân biệt **4 kiểu song song** Copilot và biết kiểu nào hợp tình huống nào.
+- Trả lời được "song song theo *cái gì*?" — theo module/files, **không** theo cùng 1 file.
+- Chạy được **fan-out research** (3 chats → 1 chat gộp) và **worktrees** cô lập.
+- Giao **2–3 Coding Agent sessions** không conflict bằng scope tách rời.
+- Nhận diện **các pitfall song song** và cách chặn (merge tuần tự, output contract).
 
 ## Mục lục
 
@@ -12,7 +23,9 @@
 - [6. Kiểu 4: custom agents fan-out](#6-kiểu-4-custom-agents-fan-out)
 - [7. Walkthrough theo phút: research 3 modules 30 phút](#7-walkthrough-theo-phút-research-3-modules-30-phút)
 - [8. Bảng tra nhanh: chọn kiểu nào?](#8-bảng-tra-nhanh-chọn-kiểu-nào)
+- [So sánh với Claude Code](#so-sánh-với-claude-code)
 - [9. Pitfalls + cách fix](#9-pitfalls--cách-fix)
+- [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
 - [10. Bài tập cuối bài](#10-bài-tập-cuối-bài)
 - [11. Tham khảo chéo](#11-tham-khảo-chéo)
 
@@ -51,6 +64,8 @@ Giải thích: 1) Chỉ fan-out việc độc lập + khác files. 2) Mỗi nhá
 
 ## 1. Vì sao phải song song?
 
+**Vì sao quan trọng?** Copilot chạy song song miễn phí về *thời gian của bạn* — bạn mở 3 chat, cả 3 cùng chạy, bạn chỉ việc gộp. Nhưng nó **không** miễn phí về AI Credits: nhiều session = nhiều lượt gọi model cùng lúc. Song song đúng cách rút ngắn wall-clock; song song sai cách vừa conflict vừa đốt credits.
+
 Làm tuần tự với Copilot rất phí:
 
 - Bạn research auth 20 phút, xong mới research payments 20 phút, xong mới research cart 20 phút → 60 phút.
@@ -67,6 +82,8 @@ Việc cùng files -> không song song (sẽ conflict).
 
 > Rule: **song song theo module/files, không song song trên cùng 1 file.**
 > Lưu ý 2026: song song nhiều session = nhiều AI Credits cùng lúc chạy — kiểm tra dashboard trước khi fan-out (xem [Tips 08](./08-tiet-kiem-premium-requests.md)).
+
+**Nếu làm sai thì sao?** Song song 2 việc *cùng một file* → hai bản sửa đụng nhau, `git merge` báo conflict hàng chục chỗ, và bạn mất nhiều thời gian gỡ hơn cả lúc làm tuần tự. Song song 5 chat mà không có chat gộp → bạn có 5 mảnh kết quả rời rạc, chẳng ai ghép lại thành plan.
 
 ---
 
@@ -89,6 +106,10 @@ Sơ đồ fan-out chuẩn:
 Chat chính giữ gọn, chỉ nhận summary từ các nhánh (xem [Tips 01](./01-context-hygiene.md)).
 
 > Lưu ý 2026: ngoài 4 kiểu trên, Copilot SDK (public preview 01/10/2026) cho phép dàn dựng dynamic workflows đa-agent bằng code — chạy qua Copilot CLI (experimental) hoặc App. Xem [bài 12 mục 2](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md).
+
+**Vì sao quan trọng?** Mỗi kiểu "cô lập" một thứ khác nhau: multi-chat cô lập *context*, Coding Agent cô lập *branch + CI*, worktree cô lập *thư mục*, custom agent cô lập *vai*. Chọn đúng kiểu cô lập = hết conflict mà không cần dọn dẹp.
+
+**Nếu làm sai thì sao?** Dùng multi-chat cho việc sửa code local nặng (không cô lập thư mục) → 2 chat cùng ghi vào 1 working tree, file đè nhau. Dùng worktree chỉ để research → setup nặng mà chẳng được gì (multi-chat là đủ).
 
 ---
 
@@ -335,6 +356,22 @@ Chat chính: "Đọc 2 files research-*.md, gộp table Module/Flow/Risks + plan
 
 ---
 
+## So sánh với Claude Code
+
+Copilot và Claude Code đều có công cụ để chạy nhiều việc cùng lúc, nhưng cách "cô lập" và mức độ tiện khác nhau:
+
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Nhiều phiên làm việc song song | Mở nhiều chat VS Code / github.com | Mở nhiều terminal/phiên Claude Code | Cùng tư tưởng: mỗi phiên 1 việc độc lập |
+| Cô lập theo nhánh code local | **Worktrees** — Copilot có bài hướng dẫn riêng | Dùng `git worktree` tương tự (thao tác git, không phải tính năng riêng của agent) | Đều là thủ thuật git, không phải nút bấm của công cụ |
+| Giao việc async trên cloud | **Coding Agent** assign issue → PR draft (2–3 session song song) | Chạy async qua **GitHub Actions**; không có mô hình "assign issue cho bot" y hệt | Mô hình async khác nhau |
+| Chia vai Planner/Tester/Reviewer | **Custom agents** (`.github/agents/*.md`) | Sub-agents / custom agents qua cấu hình repo | Cùng ý tưởng chia vai, khác cấu hình |
+| Dàn dựng workflow đa-agent bằng code | **Copilot SDK** (public preview 01/10/2026) | Agent SDK / orchestration ngoài | Cả hai cho phép lập trình hoá fan-out |
+
+> **Đọc bảng này thế nào:** nếu quen Claude Code, phần lớn khái niệm chuyển gần 1-1: nhiều phiên song song, worktree để cô lập nhánh, sub-agent để chia vai. Khác biệt nằm ở chỗ Copilot có **Coding Agent gắn với GitHub issue** và **SDK** riêng — mạnh khi bạn làm việc trên GitHub.
+
+---
+
 ## 9. Pitfalls + cách fix
 
 | Pitfall | Triệu chứng | Fix |
@@ -348,6 +385,45 @@ Chat chính: "Đọc 2 files research-*.md, gộp table Module/Flow/Risks + plan
 | Song song task phụ thuộc | B làm sai vì A chưa xong | Vẽ dependency trước: B cần A → tuần tự |
 | Quá nhiều sessions | Tốn AI Credits/minutes, review không xuể | Tối đa 2–3 song song, review xong mới fan-out tiếp |
 | Không save findings ra file | Chat gộp quên hết | Mỗi nhánh ghi ra docs/research-*.md |
+
+### Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+
+**1. Song song 2 việc trên cùng một file**
+
+```text
+❌ SAI: Chat A "Fix login" + Chat B "Thêm tính năng login"  -> cùng login.ts, merge conflict 20 chỗ
+✅ ĐÚNG: Chat A sửa src/auth/**, Chat B sửa src/payments/**  -> scope giao nhau = 0
+```
+**Bài học:** kiểm tra files *trước* khi fan-out. Cùng file thì tuần tự, đừng cố song song.
+
+**2. Fan-out mà không có chat gộp**
+
+```text
+❌ SAI: mở 5 chats research, mỗi chat xong để đó  -> 5 mảnh rời, không ai ghép
+✅ ĐÚNG: 3 chats nhánh + 1 chat chính đọc research-*.md gộp thành plan
+```
+**Bài học:** fan-out luôn phải có fan-in — không có chat gộp thì công song song đổ sông.
+
+**3. Nhánh dump log dài vào chat chính**
+
+```text
+❌ SAI: mỗi nhánh paste 200 dòng log vào chat chính  -> chat chính phình, gộp tốn kém
+✅ ĐÚNG: output contract "3 bullet + evidence (file:line + log xanh) + blocker 1 dòng"
+```
+**Bài học:** quy định nhánh trả gì *trước* khi chạy — chat chính chỉ nhận summary gọn.
+
+---
+
+## Best practices (kèm "vì sao")
+
+- **Chỉ song song việc độc lập + khác files.** *Vì sao?* Cùng file là conflict chắc chắn; phụ thuộc nhau là làm sai thứ tự.
+- **Mỗi nhánh ghi kết quả ra file riêng (`docs/research-*.md`).** *Vì sao?* Chat chính gộp từ file gọn, không phải gộp từ history dài.
+- **Luôn có chat chính (fan-in) gộp + duyệt plan.** *Vì sao?* Không có nó, fan-out chỉ tạo ra các mảnh rời.
+- **Đặt output contract trước khi fan-out.** *Vì sao?* "3 bullet + evidence" giữ chat chính không phình, gộp rẻ.
+- **Giao Coding Agents với scope không giao nhau.** *Vì sao?* Hai PR cùng đụng 1 file chỉ tạo conflict cho bạn dọn.
+- **Merge tuần tự + full test sau mỗi merge.** *Vì sao?* Merge cùng lúc làm main đỏ mà không biết nhánh nào gây ra.
+- **Giới hạn 2–3 session song song.** *Vì sao?* Nhiều hơn thì bạn không review xuể và AI Credits tăng nhanh (xem [Tips 08](./08-tiet-kiem-premium-requests.md)).
+- **Cleanup worktree + branch sau merge.** *Vì sao?* Không dọn thì disk đầy và branch rác tích tụ.
 
 ---
 
@@ -384,4 +460,4 @@ Chat chính: "Đọc 2 files research-*.md, gộp table Module/Flow/Risks + plan
   - [Tips 08](./08-tiet-kiem-premium-requests.md) — fan-out tốn AI Credits, khi nào đáng?
   - [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — Coding Agent sessions + 2 CLI (gh copilot, copilot)
 
-> Mẹo 1 dòng: _việc độc lập + khác files thì song song, cùng file hoặc phụ thuộc thì tuần tự — luôn có chat chính gộp._
+> **Chốt Tips 05:** _fan-out chỉ đáng khi có fan-in — chia việc theo files tách rời, rồi luôn có một chat chính gộp lại._

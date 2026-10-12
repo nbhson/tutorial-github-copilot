@@ -5,24 +5,33 @@
 > **Đọc xong:** viết được 4 custom agents hoàn chỉnh, chọn đúng `@workspace` vs custom agent trong 30 giây, và chạy song song 3 sessions mà không giẫm chân nhau.
 > **Thời gian:** ~45 phút (bản mở rộng).
 
+## Mục tiêu bài học
+
+- Viết được **4 custom agents** hoàn chỉnh (explorer, planner, security-reviewer, tester) và biết mỗi field trong `.agent.md` để làm gì.
+- Chọn đúng công cụ trong 30 giây: `@workspace` / custom agent / skill / coding agent — không spawn thừa.
+- Chạy song song **3 sessions** mà không giẫm chân nhau (mỗi session 1 branch/worktree).
+- Ước lượng **AI Credits** trước khi fan-out và biết vì sao trần thực tế là 3 concurrent.
+
 ## Mục lục
 
-1. [Vì sao cần custom agent? (why)](#1-vì-sao-cần-custom-agent-why)
-2. [`@workspace` vs custom agent — chọn 30 giây](#2-workspace-vs-custom-agent--chọn-30-giây)
-3. [Sơ đồ: generalist vs custom agents vs song song](#3-sơ-đồ-generalist-vs-custom-agents-vs-song-song)
-4. [Anatomy file `.agent.md`](#4-anatomy-file-agentmd-frontmatter--body)
-5. [4 agents mẫu hoàn chỉnh (copy-paste)](#5-4-agents-mẫu-hoàn-chỉnh-copy-paste)
-6. [Chạy song song: 3 cách](#6-chạy-song-song-3-cách-copy-paste)
-7. [Orchestration patterns + cost math](#7-orchestration-patterns--cost-math-ai-credits)
-8. [Hiểu nhầm thường gặp](#8-hiểu-nhầm-thường-gặp)
-9. [Walkthrough + pitfalls + bài tập](#9-walkthrough-step-by-step)
-10. [Link chéo](#10-link-chéo)
+- [1. Vì sao cần custom agent? (why)](#1-vì-sao-cần-custom-agent-why)
+- [2. `@workspace` vs custom agent — chọn 30 giây](#2-workspace-vs-custom-agent--chọn-30-giây)
+- [3. Sơ đồ: generalist vs custom agents vs song song](#3-sơ-đồ-generalist-vs-custom-agents-vs-song-song)
+- [4. Anatomy file `.agent.md`](#4-anatomy-file-agentmd-frontmatter--body)
+- [5. 4 agents mẫu hoàn chỉnh (copy-paste)](#5-4-agents-mẫu-hoàn-chỉnh-copy-paste)
+- [6. Chạy song song: 3 cách](#6-chạy-song-song-3-cách-copy-paste)
+- [7. Orchestration patterns + cost math](#7-orchestration-patterns--cost-math-ai-credits)
+- [8. Hiểu nhầm thường gặp](#8-hiểu-nhầm-thường-gặp)
+- [So sánh với Claude Code](#so-sánh-với-claude-code)
+- [9. Walkthrough + pitfalls + bài tập](#9-walkthrough-step-by-step)
+- [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
+- [10. Link chéo](#10-link-chéo)
 
 ---
 
 ## 1. Vì sao cần custom agent? (why)
 
-*Section này trả lời: khi nào nên tách một việc ra cho agent riêng, và bạn được gì so với để chat chính làm tất.*
+Khi nào nên tách một việc ra cho agent riêng, và bạn được gì so với để chat chính tự làm tất?
 
 **3 lớp khái niệm:**
 
@@ -61,11 +70,15 @@
  # Verify: đếm files task bạn sắp làm (search trước). <5 → hỏi trực tiếp.
 ```
 
+**Vì sao quan trọng?** Không hiểu chỗ này thì bạn hoặc để chat chính ôm hết (context đầy, càng về sau càng nát), hoặc spawn agent cho từng việc nhỏ (overhead ăn hết phần lời). Ranh giới rất rõ: **việc ồn thì tách ra, việc 1 bước thì làm luôn**.
+
+**Nếu làm sai thì sao?** Spawn agent cho task 1 file → mỗi lần tốn thêm một vòng nạp instructions + tool definitions mà chẳng được gì. Ngược lại, cho agent read-only full tools để "cho mạnh" → nó sửa lung tung ngoài scope. Xem cách khóa bằng `tools` ở mục 4 và mục 9.3.
+
 ---
 
 ## 2. `@workspace` vs custom agent — chọn 30 giây
 
-*Section này trả lời: khi nào gõ `@workspace`, khi nào spawn agent, khi nào chỉ cần prompt file. Chọn đúng trong 30 giây.*
+Khi nào gõ `@workspace`, khi nào spawn agent, khi nào chỉ cần prompt file? Mục này để bạn chọn đúng trong 30 giây.
 
 **3 lớp khái niệm:**
 
@@ -81,7 +94,7 @@
  dùng agent explorer map auth flow, trả summary 15 dòng theo format của nó
 ```
 
-**Ai dùng lúc nào:**
+**Chọn cách nào — nhìn bảng là ra:**
 
 | Cách | Nôm na là gì | Khi nào | Ví dụ copy-paste | Ai dùng lúc nào |
 |---|---|---|---|---|
@@ -102,11 +115,15 @@
 
 **Điểm khác biệt quyết định (load-bearing):** `@workspace` dùng tools mặc định của bạn. Custom agent **khóa tools** trong frontmatter — dù bạn dụ "sửa luôn giúp anh" thì agent read-only vẫn không sửa được. Đây là guard, không phải bug.
 
+**Vì sao quan trọng?** Chọn nhầm công cụ là lý do phổ biến nhất khiến bạn thấy "sao chậm / sao tốn credit / sao nó không chịu sửa". Cùng một việc, gọi đúng loại sẽ nhanh và rẻ hơn hẳn.
+
+**Nếu làm sai thì sao?** Dùng agent cho việc 1 file → phí overhead. Dùng `@workspace` cho việc lặp 20 lần theo chuẩn → mỗi lần bạn phải gõ lại quy trình, dễ quên bước.
+
 ---
 
 ## 3. Sơ đồ: generalist vs custom agents vs song song
 
-*Section này cho bạn nhìn một lần cấu trúc: chat chính (generalist) nhận việc, bắn ra các agent chuyên biệt, rồi nhận về từng đoạn summary. Đọc hai sơ đồ dưới là đủ hiểu dòng chảy.*
+Nhìn một lần là thấy cấu trúc: chat chính (generalist) nhận việc, bắn ra các agent chuyên biệt, rồi nhận về từng đoạn summary. Hai sơ đồ dưới là đủ.
 
 **Space view — ai gọi ai:**
 
@@ -150,7 +167,7 @@ sequenceDiagram
 
 ## 4. Anatomy file `.agent.md` (frontmatter + body)
 
-*Section này trả lời: 1 file `.agent.md` gồm những phần nào, đặt ở đâu, và viết thế nào để agent chạy đúng ý bạn.*
+Một file `.agent.md` gồm những phần nào, đặt ở đâu, và viết thế nào để agent chạy đúng ý bạn.
 
 **3 lớp khái niệm:**
 
@@ -227,11 +244,15 @@ target: vscode                    # vscode | github-coding-agent | cli
  # Kỳ vọng: agent chỉ dùng tools cho phép, output đúng format, không sửa ngoài scope.
 ```
 
+**Vì sao quan trọng?** Frontmatter là nơi bạn **khóa quyền** (tools) và **chọn giá** (model). Bỏ qua nó thì agent nào cũng giống agent nào — persona chỉ còn là lời dặn suông, model nào cũng mặc định.
+
+**Nếu làm sai thì sao?** Quên khóa `tools` → agent read-only vẫn sửa được code. Description viết chung chung → agent không bao giờ tự được gọi, bạn phải gọi tay mỗi lần.
+
 ---
 
 ## 5. 4 agents mẫu hoàn chỉnh (copy-paste)
 
-*Section này là kho copy-paste. 4 agent dưới đây dùng được ngay cho mọi repo, mỗi agent kèm nôm na và cách verify.*
+Đây là kho copy-paste. 4 agent dưới đây dùng được ngay cho mọi repo, mỗi agent kèm nôm na và cách verify.
 
 > Đặt vào `.github/agents/`. Commit. Mở Chat view mới để load.
 
@@ -383,7 +404,7 @@ git add .github/agents && git commit -m "chore: add 4 copilot custom agents" && 
 
 ## 6. Chạy song song: 3 cách (copy-paste)
 
-*Section này trả lời: mở bao nhiêu session, mở ở đâu, và làm sao để chúng không giẫm chân nhau. Đọc xong chọn 1 trong 3 cách hợp với việc của bạn.*
+Mở bao nhiêu session, mở ở đâu, và làm sao để chúng không giẫm chân nhau. Đọc xong chọn 1 trong 3 cách hợp với việc của bạn.
 
 **Nôm na:** Như mở 3 bếp cùng nấu. Bếp 1 hầm xương (explorer), bếp 2 xào rau (planner), bạn đứng nêm món chính (code tay). Xong thì gom lại thành 1 mâm.
 
@@ -459,7 +480,7 @@ git worktree list  # xác nhận mỗi session 1 checkout riêng
 
 ## 7. Orchestration patterns + cost math (AI Credits)
 
-*Section này trả lời: ghép các agent theo pattern nào cho từng loại task, và ước lượng chi phí AI Credits trước khi fan-out.*
+Ghép các agent theo pattern nào cho từng loại task, và ước lượng chi phí AI Credits trước khi fan-out.
 
 ### 7.1. 4 patterns thực chiến (nôm na + ai dùng lúc nào)
 
@@ -535,11 +556,15 @@ git worktree list  # xác nhận mỗi session 1 checkout riêng
 # Kỳ vọng: tester/explorer chạy model rẻ; model mạnh chỉ cho implement/reviewer.
 ```
 
+**Vì sao quan trọng?** Fan-out là con dao hai lưỡi: research 50 files thì multi-session rẻ và sạch hơn làm trực tiếp, nhưng task 1 bước mà spawn thì overhead ăn hết. Nhẩm trước bằng công thức để biết mình đang lời hay lỗ.
+
+**Nếu làm sai thì sao?** Spawn 5 session cho 5 việc vặt → bill nổ, sáng dậy có 5 PR phải review mà chẳng cái nào đáng. Mở dashboard mỗi tuần để tự bắt lỗi này.
+
 ---
 
 ## 8. Hiểu nhầm thường gặp
 
-*Bảng tra cứu nhanh, không cần đọc từ đầu. Gặp câu nào quen thì dừng lại đọc cột "Sự thật".*
+Gặp câu nào quen thì dừng lại đọc cột "Sự thật".
 
 | Hiểu nhầm | Sự thật |
 |---|---|
@@ -552,9 +577,26 @@ git worktree list  # xác nhận mỗi session 1 checkout riêng
 
 ---
 
+## So sánh với Claude Code
+
+Cả hai đều cho bạn tách việc ra cho "agent con" rồi chạy song song. Khác nhau ở tên file và nơi chạy:
+
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| File định nghĩa agent | `.github/agents/<ten>.agent.md` (repo) + `~/.copilot/agents/` (personal) | `.claude/agents/<ten>.md` | Cùng tư tưởng: file trong repo/`~` khai báo persona + tools |
+| Khóa tools | `tools:` allowlist trong frontmatter | `tools:` trong frontmatter subagent | Cả hai đều cắt được quyền của agent |
+| Model riêng cho agent | `model:` trong frontmatter (GPT/Claude/Gemini) | `model:` hoặc kế thừa từ session | Copilot đổi model ngay trong 1 tài khoản |
+| Chạy song song | Multi-chat VS Code, multi coding-agent cloud, Agent Tasks nền | Nhiều session/terminal + subagent | Cả hai đều cần tách branch/worktree để khỏi giẫm |
+| Trả kết quả gọn cho chat chính | `handoff: summary-only/full/plan-file` | Subagent trả báo cáo cuối cho agent chính | Cùng mục tiêu: giữ context chính sạch |
+| Cloud agent (không cần máy bạn) | Coding agent trên github.com (assign issue) | Chạy terminal-first, không có tương đương assign-issue cloud | Copilot có bề mặt cloud riêng |
+
+> **Đọc bảng này thế nào:** nếu bạn quen Claude Code, khái niệm custom agent chuyển sang Copilot gần như 1-1 — chỉ khác *tên file* và *bề mặt chạy*. Phần Copilot hơn hẳn là **coding agent trên cloud** (giao issue, sáng có PR); phần Claude Code mạnh là **chạy terminal-first, agentic mặc định**.
+
+---
+
 ## 9. Walkthrough step-by-step
 
-*Section này đưa bạn từ 0 tới parallel trong 30 phút. Làm theo 9.1, rồi tra 9.2–9.3 khi vướng, làm 9.4 để nhớ.*
+Từ 0 tới parallel trong 30 phút. Làm 9.1, tra 9.2–9.3 khi vướng, làm 9.4 để nhớ.
 
 ### 9.1. Walkthrough: agent đầu tiên tới parallel (30 phút)
 
@@ -578,7 +620,7 @@ git worktree list  # xác nhận mỗi session 1 checkout riêng
 
 ### 9.2. Khi nào KHÔNG dùng custom agent
 
-*Bảng này trả lời nhanh: việc đó thì dùng công cụ gì thay thế. Không cần custom agent cho mọi thứ.*
+Không cần custom agent cho mọi thứ — bảng này nói việc đó thì dùng công cụ gì thay thế.
 
 | Tình huống | Chọn | Vì sao | Ai dùng lúc nào |
 |---|---|---|---|
@@ -591,7 +633,7 @@ git worktree list  # xác nhận mỗi session 1 checkout riêng
 
 ### 9.3. Pitfalls + fix
 
-*Bảng bẫy thường gặp: gặp symptom nào thì tra đúng dòng đó, làm ngay cột "Fix".*
+Gặp symptom nào thì tra đúng dòng đó, làm ngay cột "Fix".
 
 | Pitfall | Vì sao | Fix |
 |---|---|---|
@@ -602,9 +644,25 @@ git worktree list  # xác nhận mỗi session 1 checkout riêng
 | 2 sessions cùng branch → conflict | Không quy ước branch | Mỗi session 1 branch `feat/*` + worktree riêng (bài 11) |
 | Tester chạy full suite 20 phút | Không dặn focused | Body tester: focused trước, full chỉ khi yêu cầu rõ |
 
+Nhìn 2 ca điển hình để nhớ lâu:
+
+```text
+ ❌ SAI: "Cho explorer full tools cho nó mạnh" → nó tự sửa code, sai scope
+ ✅ ĐÚNG: explorer chỉ có [search, read, grep] → dù dụ "sửa luôn" vẫn không sửa được
+```
+
+**Bài học:** `tools` của agent là **guard**, không phải gợi ý. Muốn agent không đụng vào code thì đừng đưa `edit` vào allowlist — đừng trông vào lời dặn trong body.
+
+```text
+ ❌ SAI: task "đọc file config.ts xem có gì" → spawn explorer, chờ 1 session
+ ✅ ĐÚNG: task 1 file → hỏi @workspace luôn, 1 turn, đáp ngay
+```
+
+**Bài học:** overhead spawn là cố định. Việc càng nhỏ thì overhead càng chiếm phần lớn — dưới 5 files thì hỏi trực tiếp.
+
 ### 9.4. Bài tập thực hành
 
-*Làm 4 bài dưới đây theo thứ tự. Mỗi bài có mức thời gian gợi ý.*
+Làm 4 bài theo thứ tự. Mỗi bài có mức thời gian gợi ý.
 
 **Bài 1 (20 phút):** Cài 4 agents mục 5. Test explorer + tester lên repo thật.
 So sánh số turns vs hỏi trực tiếp — khi nào spawn lời?
@@ -620,9 +678,19 @@ Tính theo công thức mục 7.2: có đáng không? Thử lại với 1 sessio
 
 ---
 
-## 10. Link chéo
+## Best practices (kèm "vì sao")
 
-*Mỗi dòng là một bài nên mở khi cần. Tra cứu nhanh, không cần đọc từ đầu.*
+- **Dưới 5 files → hỏi trực tiếp, đừng spawn.** *Vì sao?* Mỗi lần spawn tốn overhead nạp instructions + tool definitions, việc nhỏ thì overhead chiếm phần lớn.
+- **Khóa `tools` cho agent read-only (explorer/reviewer/tester).** *Vì sao?* Đây là guard cứng — model không sửa được code nếu `edit` không nằm trong allowlist.
+- **`description` 1–2 câu, nhiều từ khóa task.** *Vì sao?* Agent auto-trigger dựa vào description; câu quá dài (>500 ký tự) làm từ khóa chìm, agent không bao giờ tự được gọi.
+- **Route việc dễ (tester/explorer) sang model rẻ trong frontmatter.** *Vì sao?* Giá chênh 5–10 lần giữa model rẻ và model mạnh; việc chạy test không cần flagship.
+- **Trần 3 session song song.** *Vì sao?* Đây là trần review của con người — quá 3 là bill nổ mà bạn không kiểm nổi diff.
+- **Mỗi session 1 branch `feat/*` + worktree riêng.** *Vì sao?* Hai session cùng branch thì conflict là chắc chắn, không phải "có thể".
+- **PR quan trọng: dùng reviewer fresh-chat (pattern C).** *Vì sao?* Reviewer không mang định kiến của người viết nên bắt được lỗi mà implementer tự mù.
+
+---
+
+## 10. Link chéo
 
 - **Bài 03 — Instructions, Memory, Rules:** `copilot-instructions.md` vs agent body — cái nào cho facts, cái nào cho persona.
 - **Bài 04 — Chat commands:** `@workspace`, `/`, `#file`, model picker dùng kèm agents.
@@ -635,3 +703,5 @@ Tính theo công thức mục 7.2: có đáng không? Thử lại với 1 sessio
 
 ---
 *(Hết bài 06 — bản mở rộng. Tiếp theo: Bài 07 — Policies & guardrails tự động hóa.)*
+
+> **Chốt bài 06:** Chat chính đừng ôm hết — việc ồn giao cho một agent hẹp đã khóa tools, gom về vài dòng summary. Và nhớ trần: thứ bạn không review nổi thì không tính là đã xong, nên đừng chạy quá 3 session cùng lúc.

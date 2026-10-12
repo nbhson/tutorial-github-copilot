@@ -2,9 +2,15 @@
 
 > Nhóm Tùy biến tri thức · 10 câu hỏi deep-dive · Đọc xong fix mọi ca "không load, applyTo sai, frontmatter lỗi"
 
-File này trả lời mọi câu hỏi "prompt files/agents/skills/instructions không load, applyTo sai, frontmatter lỗi". Mỗi câu có giải thích + lệnh copy-paste + ví dụ + khi nào áp dụng.
+Prompt file không hiện trong picker, `applyTo` không ăn, frontmatter hỏng... gần hết các ca "đã tạo file mà Copilot không biết" nằm trong 10 câu dưới đây. Mỗi câu giữ đúng 5 nhịp: **hỏi ngắn** → **trả lời 1 câu** → **giải thích + ví dụ** → **làm thế nào** → **nếu vẫn lỗi thì làm gì**, kèm một dòng **khi nào áp dụng**. Dán nguyên khối code vào terminal/IDE là chạy.
 
----
+## Mục tiêu bài học
+
+- Phân biệt **ai kích hoạt cái gì**: file tự load, file gọi tay, và file model tự gọi.
+- Viết **`applyTo`** đúng root repo (đối chiếu `ls`/`find` thật, không đoán).
+- Né **4 bẫy frontmatter** khiến prompt/agent "không hiện trong picker".
+- Biết ngưỡng **`<200 dòng`** cho `copilot-instructions.md` và cách tách phần dài.
+- **Test** instructions mới bằng 3 phép thử: load, hành vi, nhiễu.
 
 ## Sơ đồ tư duy nhanh (đọc 30 giây)
 
@@ -42,9 +48,9 @@ flowchart TD
 - **Gọi tay:** `*.prompt.md` (slash command trong chat — **legacy, deprecated cho Agent Host**), custom agent (chọn trong picker rồi chat).
 - **Model tự quyết:** Skills (`SKILL.md` có `description`) — model đọc mô tả skill rồi tự gọi khi task khớp, bạn không cần nhớ tên. **Chuẩn khuyến nghị 2026 (chạy mọi harness).**
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Cây thư mục chuẩn (đứng ở root repo):
 
 ```bash
 # Cây thư mục chuẩn (đứng ở root repo)
@@ -61,7 +67,8 @@ find .github -type f | sort
 
 > **Khi nào áp dụng:** khi "đã tạo file mà Copilot không biết" — check đường dẫn + tên file trước tiên.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** kiểm tra lại đúng đuôi file (`.instructions.md` chứ không phải `.md` trơn), mở chat mới, rồi gửi kèm output `find .github -type f` cho admin nếu org có thể đã tắt custom instructions.
+
 ---
 
 ## 2. `applyTo` viết sao cho đúng (glob hay sai nhất)?
@@ -76,9 +83,9 @@ find .github -type f | sort
 - `applyTo: **/*.ts` muốn chỉ frontend nhưng ăn cả backend.
 - Quên `**/` đầu → chỉ khớp root, không khớp sâu.
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Đối chiếu glob với cây file thật trước khi commit:
 
 ```yaml
 # Đúng cho repo apps/api + apps/web:
@@ -97,7 +104,8 @@ ls apps/api/**/*.ts 2>/dev/null | head -5   # nếu rỗng -> glob sai
 
 > **Khi nào áp dụng:** mỗi khi tạo/sửa `*.instructions.md` — đối chiếu glob với `ls`/`find` thật.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** so `applyTo` với `ls`/`find` thật thêm một lần; nhớ quote glob có `*`; nếu repo là monorepo đặt trong subfolder, thử thêm `**/` ở đầu.
+
 ---
 
 ## 3. Frontmatter lỗi — các bẫy phổ biến?
@@ -113,9 +121,9 @@ ls apps/api/**/*.ts 2>/dev/null | head -5   # nếu rỗng -> glob sai
 3. Quên quote glob có `*` → YAML parse sai (`applyTo: **/*` phải quote).
 4. `tools:` liệt kê tool không tồn tại → agent lỗi lúc chạy.
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Kiểm tra frontmatter bằng mắt rồi bằng script:
 
 ```bash
 # Check frontmatter 1 file: 5 dòng đầu phải là --- ... ---
@@ -134,8 +142,6 @@ PY
 **Ví dụ mẫu đúng:**
 
 ```markdown
-
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 mode: agent
 description: Review PR theo checklist correctness/security/tests
@@ -144,6 +150,8 @@ tools: [github-mcp, search, edit]
 ```
 
 > **Khi nào áp dụng:** khi prompt/agent "không hiện trong picker" — 70% là frontmatter hỏng.
+
+> **Nếu vẫn lỗi thì...** chạy lại script validate và đảm bảo `---` là dòng đầu tiên (không có dòng trống hay ký tự BOM trước nó); soát kỹ chính tả key `applyTo`/`description` và tên tool trong `tools`.
 
 ---
 
@@ -159,9 +167,9 @@ tools: [github-mcp, search, edit]
 - Chi tiết theo path → `instructions/*.instructions.md`.
 - Procedure dài (deploy, add-table) → **`.github/skills/<ten>/SKILL.md`** (chuẩn 2026, khuyến nghị). `*.prompt.md` (legacy) vẫn chạy Local.
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Đo độ dài trước khi tách:
 
 ```bash
 # Đo độ dài + tìm chỗ cắt
@@ -173,7 +181,8 @@ wc -l .github/copilot-instructions.md .github/instructions/*.md
 
 > **Khi nào áp dụng:** mỗi quý review 1 lần, hoặc khi thêm stack mới vào repo.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** nếu đã tách mà vẫn nặng, kiểm tra file chính và instructions con có lặp nội dung không; đo lại `wc -l` rồi cắt phần "nice-to-have" xuống skill.
+
 ---
 
 ## 5. Instructions không load — checklist 6 bước?
@@ -191,9 +200,9 @@ wc -l .github/copilot-instructions.md .github/instructions/*.md
 5. Chat mới hay chat cũ? (chat cũ giữ context cũ → mở chat mới)
 6. Org policy có tắt custom instructions không? (hỏi admin)
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Chạy 1 lèo 4 check đầu rồi reload:
 
 ```bash
 # Chạy 1 lèo 4 check đầu
@@ -207,7 +216,8 @@ ls apps/api/controller.ts 2>/dev/null || find . -name "*.ts" -path "*api*" | hea
 
 > **Khi nào áp dụng:** mọi ca instructions "không ăn" — 90% rơi vào 6 bước này.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** nếu hết 6 bước vẫn không load, ghi lại chính xác bạn hỏi gì và Copilot trả gì, rồi mở issue kèm log + ảnh chụp để admin kiểm tra org policy.
+
 ---
 
 ## 6. Prompt files (`*.prompt.md`) gọi thế nào, khác gì chat thường? (**legacy**)
@@ -231,13 +241,11 @@ Khác chat thường: prompt ép **mode + tools + steps cố định** → kết
 | Chia sẻ team | Có (commit vào repo) | Không (chỉ trong chat) |
 | Khi nào dùng | Việc lặp >3 lần/tuần (review, deploy, tạo table) | Hỏi ad-hoc, task 1 lần |
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Đây là mẫu một prompt file hoàn chỉnh:
 
 ```markdown
-
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 mode: agent
 description: Review PR theo checklist
@@ -257,6 +265,8 @@ tools: [search, edit]
 
 > **Khi nào áp dụng:** việc lặp lại >3 lần/tuần (review, deploy, tạo table) → đóng gói thành prompt.
 
+> **Nếu vẫn lỗi thì...** kiểm tra frontmatter và tên gọi đúng `/tên-file` (không đuôi); nhớ prompt file chỉ chạy Local — muốn chạy Cloud/CLI thì port sang Agent Skill.
+
 ---
 
 ## 7. Custom agent (`*.agent.md`) viết sao, khi nào cần?
@@ -269,13 +279,11 @@ tools: [search, edit]
 
 Không cần khi: task đơn giản 1-2 file — chat thường + instructions đủ.
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Viết tối thiểu `description` + `tools` + ranh giới:
 
 ```markdown
-
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 description: Trinh sát chỉ-đọc, trả về list files sẽ sửa/đọc
 tools: [search]
@@ -292,6 +300,8 @@ ls .github/agents/  # explorer.agent.md tester.agent.md security-reviewer.agent.
 **Ví dụ cụ thể:** task refactor lớn → gọi explorer trước (lấy bản đồ file) → rồi mới agent sửa → ít lạc, ít tốn quota.
 
 > **Khi nào áp dụng:** task multi-file hoặc cần kỷ luật đọc-trước-sửa-sau. Mẫu sẵn trong `templates/.github/agents/`.
+
+> **Nếu vẫn lỗi thì...** kiểm tra `tools` có tên hợp lệ không (tool sai làm agent lỗi lúc chạy) — thử bỏ hẳn `tools` để test, rồi thêm lại từng cái một.
 
 ---
 
@@ -313,13 +323,11 @@ Cấu trúc: `.github/skills/<ten>/SKILL.md` với frontmatter `name` + `descrip
 | Trạng thái 2026 | Deprecated cho Agent Host | Chính thức | Khuyến nghị |
 | Khi nào dùng | Việc lặp đã có sẵn, chỉ chạy Local | Tách việc / ép kỷ luật theo vai | Procedure tự áp, không cần nhớ tên lệnh |
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Một skill tối thiểu trông như sau:
 
 ```markdown
-
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
 ---
 name: review-pr
 description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trước merge. Không dùng cho việc viết feature mới.
@@ -331,6 +339,8 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 **Ví dụ cụ thể:** user gõ "review giúp PR này" → model đọc descriptions các skills → tự nạp `review-pr` → chạy checklist chuẩn team mà user không cần gõ `/review-pr`.
 
 > **Khi nào áp dụng:** procedure team muốn "tự động áp" mà không cần training member nhớ tên lệnh. Mẫu: `templates/.github/skills/review-pr/SKILL.md`.
+
+> **Nếu vẫn lỗi thì...** `description` quá mơ hồ là lý do phổ biến nhất khiến model không gọi — viết lại theo cặp "dùng khi..." và "không dùng cho...".
 
 ---
 
@@ -349,9 +359,9 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 
 Mâu thuẫn thì cái cụ thể + gần hơn thắng. Vì vậy đừng viết 2 instructions mâu thuẫn nhau cho cùng path.
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Grep hết mọi `applyTo` để thấy file nào có thể đánh nhau:
 
 ```bash
 # Tìm mọi instructions có thể ăn vào 1 file
@@ -364,7 +374,8 @@ grep -h "applyTo" .github/instructions/*.md
 
 > **Khi nào áp dụng:** khi 2 instructions "đánh nhau" — thu hẹp glob để mỗi file chỉ bị 1 instructions chi phối mạnh.
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** grep lại toàn bộ `applyTo` và thu hẹp glob để mỗi file chỉ một instructions chi phối; xóa hẳn cặp instructions mâu thuẫn thay vì cố đoán cái nào thắng.
+
 ---
 
 ## 10. Test instructions mới thêm có hiệu quả không?
@@ -379,9 +390,9 @@ grep -h "applyTo" .github/instructions/*.md
 2. **Test hành vi:** giao task nhỏ vi phạm quy tắc → xem nó có tuân thủ (VD bảo sửa migration bị cấm → phải từ chối).
 3. **Test nhiễu:** hỏi task ngoài scope → đảm bảo instructions hẹp không làm hỏng task khác.
 
-### Làm thế nào (steps copy-paste)
+### Làm thế nào
 
-Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
+Gộp test 1 + 3 vào một chat mới:
 
 ```bash
 # Test 1+3 trong 1 chat mới:
@@ -394,7 +405,23 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 
 > **Khi nào áp dụng:** sau mọi lần sửa instructions — 2 phút test đỡ 2 tuần "sao nó không nghe".
 
-> **Nếu vẫn lỗi thì...** thử theo thứ tự: (1) làm lại bước copy-paste với scope gọn hơn (1 file/selection), (2) đổi model (`/model`) rồi chạy lại, (3) tra “Vẫn lỗi thì sao?” cuối file này, (4) hỏi admin (policy/seat) hoặc mở issue với log + ảnh chụp lỗi.
+> **Nếu vẫn lỗi thì...** chạy lại 3 test trong chat mới; nếu test hành vi fail, soát lại câu chữ quy tắc (ALWAYS/NEVER) và vị trí file xem đã đúng chỗ chưa.
+
+---
+
+## So sánh với Claude Code
+
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| File luật trong repo | `.github/copilot-instructions.md` + `.github/instructions/*.instructions.md` | `CLAUDE.md` (kể cả `CLAUDE.md` lồng theo thư mục) + `.claude/` | Cùng tư tưởng "file trong repo là luật"; khác tên file và thư mục |
+| Kích hoạt theo path | `applyTo` glob trong frontmatter | `CLAUDE.md` đặt theo thư mục con | Copilot khớp bằng glob; Claude Code dựa vào vị trí thư mục — không có `applyTo` tương đương |
+| Slash command tự tạo | `*.prompt.md` (legacy) / Skill | `.claude/commands/` | Cùng ý tưởng: đóng gói quy trình gọi tay |
+| Persona / tách việc | Custom agent `*.agent.md` (chọn trong picker) | Subagent (`.claude/agents/`) | Cả hai tách vai + giới hạn tools |
+| Procedure tự áp | Agent Skill `.github/skills/<ten>/SKILL.md` | Claude Code cũng hỗ trợ Agent Skills (`SKILL.md`) | Cùng chuẩn Agent Skills; khác thư mục đặt file |
+| Tool ngoài repo | MCP (`.vscode/mcp.json`) | MCP | Cùng chuẩn giao thức |
+
+> **Không đưa vào bảng vì chưa đủ chắc chắn:** thứ tự ưu tiên khi nhiều instructions cùng khớp một file, và chi tiết hành vi auto-load của từng harness — chưa đối chiếu nguồn chính thức nên không dám khẳng định, tránh bịa.
+
 ---
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)
@@ -409,6 +436,19 @@ Copy từng bước theo thứ tự (dán vào terminal/IDE là chạy):
 find .github -type f | sort && head -6 .github/instructions/*.md .github/prompts/*.md 2>/dev/null
 ```
 
+> Nếu đi hết 5 bước vẫn không được: (1) làm lại với scope gọn hơn (1 file/selection), (2) đổi model bằng `/model` rồi chạy lại, (3) kiểm tra lại chính mục này, (4) hỏi admin (policy/seat) hoặc mở issue kèm log + ảnh chụp lỗi.
+
+---
+
+## Best practices (kèm "vì sao")
+
+- **Đặt file đúng chỗ, đúng đuôi.** *Vì sao?* Copilot auto-load theo đường dẫn/tên — sai chỗ (hoặc thiếu `.instructions.md`) thì file không bao giờ "ăn".
+- **Mọi `applyTo` phải đối chiếu `ls`/`find` thật.** *Vì sao?* Glob sai root là lý do số 1 khiến instructions "không load".
+- **Giữ `copilot-instructions.md` <200 dòng.** *Vì sao?* File này nạp lại mỗi turn — càng dài càng tốn credits và loãng trọng tâm.
+- **Procedure dài thì đóng thành Skill, không nhồi vào instructions.** *Vì sao?* Skill chỉ nạp khi đúng context, lại chạy được cả Local + Cloud + CLI (chuẩn 2026).
+- **Đừng viết 2 instructions mâu thuẫn cùng path.** *Vì sao?* Cái cụ thể hơn thắng, nên hành vi trở nên khó đoán và khó debug.
+- **Luôn test bằng chat mới (load/hành vi/nhiễu).** *Vì sao?* Chat cũ giữ context cũ, dễ khiến bạn tưởng instructions sai trong khi thật ra chỉ là chat bẩn.
+
 ---
 
 ## Tham khảo chéo
@@ -416,4 +456,4 @@ find .github -type f | sort && head -6 .github/instructions/*.md .github/prompts
 - Viết quy tắc ALWAYS/NEVER: [bài 05](05-policies-guardrails-faq.md). Context + nhiễu: [bài 02](02-model-context-premium.md).
 - Custom agent workflows: [bài 07](07-custom-agents-coding-agent-workflows.md). Mẫu copy ngay: [../templates/README.md](../templates/README.md).
 
-> Mẹo 1 dòng: _đúng chỗ, đúng tên, applyTo đối chiếu bằng ls thật, và luôn test bằng chat mới._
+> **Chốt bài 06:** đúng chỗ, đúng tên, `applyTo` phải đối chiếu bằng `ls` thật, và luôn test bằng chat mới — làm đủ 4 điều đó là hết 90% ca "không load".

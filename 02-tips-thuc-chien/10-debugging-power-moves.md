@@ -1,6 +1,16 @@
 # Tips 10 — Debugging Power Moves: /fix, Test Loop, Bisect, Log→Prompt
 
+> **Dành cho:** dev đang kẹt với test đỏ / bug prod và muốn debug có hệ thống · **Vấn đề:** paste đống log vào chat rồi cầu nguyện, sửa 5 file càng sửa càng đỏ · **Đọc xong:** dùng thành thạo /fix có scope, loop test tới xanh, bisect thu hẹp, log→prompt và @terminal · **Thời gian:** ~20 phút đọc + ~55 phút làm bài tập.
+>
 > Debug với Copilot không phải paste đống log rồi cầu nguyện. Bài này dạy bạn /fix + debug session, test failure loop, bisect thu hẹp, log→prompt gọn, và @terminal để Copilot đọc lỗi trực tiếp.
+
+## Mục tiêu bài học
+
+- Biết **debug là thu hẹp search space**: phân loại bug rồi chọn đúng move (biết chỗ → /fix, biết vùng → bisect, mù tịt → log→prompt).
+- Chạy được **/fix có scope + ràng buộc NEVER** để diff không lan sang logic khác.
+- Chạy được **test failure loop trong 1 message**, dừng đúng lúc sau 3 lần đỏ và restore checkpoint khi cãi nhau.
+- Biết dùng **bisect** và **log→prompt** để không paste 1000 dòng log vào chat chính.
+- Luôn kết thúc bằng **1 regression test** chứa issue id + chạy mở rộng lint/build.
 
 ## Mục lục
 
@@ -44,6 +54,8 @@ flowchart TD
 
 Giải thích: chưa tái hiện thì chưa debug (mới đoán). Rõ file:line thì `/fix` ngay; mờ thì bisect/log trước; cãi 2 lần thì restore. Mọi bug có 1 regression test chứa issue id.
 
+**Vì sao quan trọng?** Hầu hết thời gian debug bị mất vào việc *đoán* chứ không phải *sửa* — biết mình đang ở loại bug nào thì chọn đúng move ngay. **Nếu làm sai?** Bạn nhảy thẳng vào sửa khi chưa tái hiện được lỗi, thế là sửa mù và tạo thêm bug mới.
+
 > ✅ **Kỳ vọng thấy gì:** sau `/fix`, focused test xanh trong ≤4 turns + 1 regression test mới + `diff --stat` 2 files.
 
 ---
@@ -65,6 +77,8 @@ Khong tai hien duoc thi chua debug, moi dang doan.
 ```
 
 > Rule: **correct 2 lần vẫn sai → dừng cãi, thu hẹp scope hoặc restore checkpoint.**
+
+**Nếu làm sai thì sao?** Càng cãi càng nhiều rác trong context, agent càng quên đầu bài — đến lúc bạn phải revert cả loạt thay đổi và bắt đầu lại từ đầu, tốn gấp đôi.
 
 ---
 
@@ -93,6 +107,8 @@ Luôn đòi root cause trước fix:
 Khong doan, thieu evidence thi hoi them thay vi fix bira.
 # Ky vong: co du 3 bullet truoc khi bat tay sua, tranh sua man.
 ```
+
+**Vì sao quan trọng?** Phân loại bug là bước rẻ nhất mà tiết kiệm nhiều nhất — chọn sai loại thì mọi bước sau đi sai hướng. **Nếu làm sai?** Bạn dùng bisect cho một bug đã có stack trace chỉ rõ file:line (thừa), hoặc `/fix` cho bug flaky không tái hiện được (sửa mù).
 
 ---
 
@@ -133,6 +149,8 @@ Khi du evidence moi de xuat fix.
 # Ky vong: 3 cau hoi du, co evidence, moi sua, khong sua man.
 ```
 
+**Nếu làm sai thì sao?** `/fix` không kèm scope và câu "không refactor" thì model tiện tay dọn dẹp chỗ không hỏng — diff phình ra, review khó, dễ mang bug mới vào.
+
 ---
 
 ## 4. Move 2: test failure loop tới xanh
@@ -171,6 +189,8 @@ Them 1 regression test cover dung case vua fix:
 ```
 
 Vì sao loop trong 1 message? Vì mỗi message mới là 1 request mới + context mới. Loop trong 1 message để Copilot tự retry rẻ hơn bạn nhắc tay.
+
+**Vì sao quan trọng?** Loop biến "sửa và hy vọng" thành "sửa và chứng minh" — mỗi lần đỏ là dữ liệu mới để thu hẹp. **Nếu làm sai?** Không giới hạn số lần đỏ, agent cày 10 vòng vẫn đỏ mà context đã đầy rác — đến lúc đó nó chỉ còn đoán.
 
 ---
 
@@ -230,6 +250,8 @@ Khong fix, chi tom tat."
 
 Lợi ích: chat chính chỉ nhận 10 dòng summary, không gánh 1000 dòng rác (xem [Tips 01](./01-context-hygiene.md)).
 
+**Nếu làm sai thì sao?** Bisect mà không tái hiện được lỗi một cách ổn định thì kết quả good/bad vô nghĩa — bạn khoanh sai commit và đi sửa nhầm chỗ.
+
 ---
 
 ## 6. Move 4: @terminal + explain lỗi
@@ -266,6 +288,8 @@ Bug flaky: 10 lan chay do 3 lan.
 Khong fix ngay, thu thap evidence truoc.
 # Ky vong: co 3 nguyen nhan + 2 noi them log, lan sau co so lieu.
 ```
+
+**Vì sao quan trọng?** `@terminal` cho model thấy đúng output thật thay vì bản bạn gõ lại (dễ sai/sót) — giảm hẳn một nguồn lỗi khi debug. **Nếu làm sai?** Copy tay thiếu dòng stack quan trọng, model chẩn đoán lệch, bạn lại mất thêm vòng.
 
 ---
 
@@ -328,6 +352,21 @@ Chat chinh: "/fix #testFailure, root cause 3 bullet, fix toi thieu, chay npm tes
 
 ---
 
+## So sánh với Claude Code
+
+| Việc | Copilot (nhóm này) | Claude Code | Ghi chú |
+|---|---|---|---|
+| Sửa nhanh trên selection | `/fix` dựng sẵn (bôi đen + gọi) | Không có `/fix` dựng sẵn — bôi đen rồi gõ prompt, hoặc tự tạo slash command | Copilot bấm-là-chạy; Claude Code phải tự dựng |
+| Đọc lỗi terminal | `@terminal` / `@terminalLastCommand` | Đọc output lệnh trong phiên trực tiếp, không cần cú pháp `@terminal` | Cùng mục tiêu: cho model thấy output thật |
+| Loop tới xanh | Agent tự chạy test → đỏ → sửa trong cùng phiên | Agent tự chạy test → đỏ → sửa trong cùng phiên | Cùng tư tưởng agentic loop; đều phải giới hạn số vòng |
+| Bisect | Dùng `git bisect` + script | Cùng `git bisect` + script | Không khác biệt — đây là kỹ năng git chung |
+| Thu hẹp context | `#file` / `#selection` | `@file` / chọn file | Cùng nguyên tắc: đưa đúng chỗ đau |
+| Checkpoint/undo | Checkpoints trong phiên | Có checkpoint/rewind | Cả hai đều cho phép quay lại trước khi re-prompt |
+
+> **Đọc bảng này thế nào:** kỹ thuật cốt lõi (tái hiện → thu hẹp → loop → regression) giống hệt nhau; khác biệt duy nhất đáng kể là `/fix` và cú pháp `@terminal` — Claude Code không có hai thứ đó dựng sẵn.
+
+---
+
 ## 9. Pitfalls + cách fix
 
 | Pitfall | Triệu chứng | Fix |
@@ -342,6 +381,41 @@ Chat chinh: "/fix #testFailure, root cause 3 bullet, fix toi thieu, chay npm tes
 | Quên regression test | Bug quay lại tháng sau | Mọi bug đều 1 test mới chứa issue id |
 | Chỉ chạy 1 file | Sửa A hỏng B | Focused xanh → full scope + build |
 | Debug 1 chat 100 turns | Context bẩn, quên đầu | Tóm tắt → new chat, findings ra file |
+
+### Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+
+**1. Sửa khi chưa tái hiện được lỗi**
+
+```text
+❌ SAI: "nghe nói prod 500, fix giúp" → agent sửa mù, không biết đúng không.
+✅ ĐÚNG: tái hiện bằng 1 lệnh (`curl ...`) → có log → mới khoanh scope → /fix.
+```
+**Bài học:** chưa tái hiện được thì chưa phải debug — mọi thứ trước đó chỉ là đoán.
+
+**2. Cãi nhau với agent thay vì thu hẹp**
+
+```text
+❌ SAI: "sai rồi, sửa lại" ×5 → mỗi turn gánh thêm rác, càng sửa càng đỏ.
+✅ ĐÚNG: 2 lần sai → restore checkpoint, re-prompt hẹp hơn (1 file, có root cause + NEVER).
+```
+**Bài học:** 2 lần sai là tín hiệu prompt/scope có vấn đề, không phải "cố thêm chút nữa".
+
+**3. Xóa test để "xanh cho đẹp"**
+
+```text
+❌ SAI: comment/delete test đỏ → CI xanh nhưng bug vẫn còn.
+✅ ĐÚNG: cấm xóa/sửa test trong prompt; sửa source, thêm regression test cho đúng case.
+```
+**Bài học:** test đỏ là tín hiệu, không phải chướng ngại — xanh giả chỉ giấu bug đi chỗ khác.
+
+## Best practices (kèm "vì sao")
+
+- **Tái hiện bằng 1 lệnh trước khi sửa.** *Vì sao?* Không có lệnh tái hiện thì không có cách nào chứng minh đã fix xong.
+- **Rõ file:line thì `/fix` ngay, mờ thì bisect/log trước.** *Vì sao?* Chọn đúng move theo loại bug rẻ hơn nhiều so với thử-sai.
+- **Loop test trong cùng 1 message, tối đa 3 lần đỏ.** *Vì sao?* Mỗi message mới là 1 request + context mới; loop tại chỗ rẻ hơn và ít nhiễu hơn.
+- **Log dài thì tóm tắt ở chat phụ rồi mang summary sang chat chính.** *Vì sao?* Chat chính chỉ nên nhận ~10 dòng thay vì 1000 dòng rác.
+- **Cấm xóa/sửa test trong prompt.** *Vì sao?* Không có ràng buộc này, agent dễ "cho xanh" bằng cách bỏ test — bug vẫn còn.
+- **Mỗi bug phải có 1 regression test chứa issue id.** *Vì sao?* Đây là thứ duy nhất ngăn bug cũ quay lại tháng sau.
 
 ---
 
@@ -378,4 +452,4 @@ Chat chinh: "/fix #testFailure, root cause 3 bullet, fix toi thieu, chay npm tes
   - [Tips 03](./03-plan-first-workflow.md) — debug xong thì plan fix lớn
   - [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — debug trên CLI/web khi xa máy
 
-> Mẹo 1 dòng: _debug là thu hẹp — tái hiện 1 lệnh, khoanh 1 file, /fix có scope, loop tới xanh._
+> **Chốt Tips 10:** debug giỏi không phải sửa nhanh mà là *thu hẹp giỏi* — tái hiện 1 lệnh, khoanh 1 file, `/fix` có scope, loop tới xanh, và khóa lại bằng 1 regression test. Cãi 2 lần thì dừng, restore, làm lại hẹp hơn.

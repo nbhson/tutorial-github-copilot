@@ -1,19 +1,18 @@
 # Ask mode — Chế độ chỉ hỏi, không sửa
 
-> **Dành cho:** người nghiên cứu code/kiến trúc trước khi sửa · **Vấn đề:** chỉ muốn hỏi mà sợ agent sửa lung tung · **Đọc xong:** hỏi thoải mái, git status vẫn sạch (~2 phút)
+> **Dành cho:** người muốn hiểu code/kiến trúc trước khi đụng vào · **Đọc xong:** hỏi thoải mái mà `git status` vẫn sạch (~2 phút)
 
-## Lệnh làm gì (1 câu nôm na)
+## 1 câu nôm na
 
-Nôm na: chế độ “chỉ nhìn không chạm” — hỏi thoải mái, code không mất cọng nào. Chat → dropdown mode → Ask; vẫn phải gắn `#file`/`@workspace` nếu muốn trả lời đúng file.
+Chế độ "chỉ nhìn, không chạm": hỏi gì cũng được, code không mất một cọng. Vào Chat → dropdown mode → **Ask**, rồi hỏi như bình thường.
 
-## Khi nào dùng
+Nhưng đừng tưởng Ask tự biết file bạn đang nói tới — nó vẫn chỉ trả lời tốt khi bạn gắn `#file`/`@workspace`. Không gắn scope thì câu trả lời sẽ chung chung, dù đúng là nó chưa sửa gì.
 
-Section này trả lời: khi nào dừng ở Ask, và khi nào nên leo thang sang Edit/Agent.
+## Vì sao dùng Ask mode?
 
-- **Cho ai:** người mới (hỏi cho an toàn), reviewer, người so sánh phương án chưa muốn sửa.
-- Tìm hiểu code/kiến trúc trước khi đụng.
-- So sánh phương án, chưa muốn sửa.
-- Review: hỏi “đoạn này làm gì, rủi ro gì?”.
+Có những việc bạn muốn *hiểu* trước khi *sửa*: đọc một module lạ, so sánh hai phương án, review xem đoạn code này có rủi ro gì. Ở Ask, bạn hỏi thoải mái mà không sợ agent tiện tay sửa lung tung.
+
+Ba chế độ của Chat khác nhau ở mức quyền, đây là bảng để bạn chọn nhanh:
 
 | Mode | Đặc điểm | Khi nào dùng |
 |---|---|---|
@@ -21,49 +20,90 @@ Section này trả lời: khi nào dừng ở Ask, và khi nào nên leo thang s
 | Edit | Sửa đúng files bạn tick, có kiểm soát | Đã biết sửa 1–5 file, muốn review từng hunk |
 | Agent | Tự tìm file, sửa, chạy terminal | Task mở nhiều bước, chưa biết chạm file nào |
 
-## Cách gọi (copy-paste)
+**Nếu làm sai thì sao?** Hai sai lầm hay gặp: (1) nhầm đang ở Edit/Agent mà tưởng Ask → code bị đổi; (2) ở mãi Ask dù đã hiểu rồi → bạn ngồi tự sửa tay trong khi Edit/Agent làm nhanh hơn. Ask là chế độ rẻ nhất để khảo sát, không phải "chế độ an toàn để không bao giờ phải sửa".
 
-Cách gọi `Ask mode` — làm đúng theo khối dưới đây, kèm câu kiểm tra lệnh có ở máy bạn hay không:
+## Khi nào dùng / khi nào đừng
+
+- **Dùng khi:** tìm hiểu code/kiến trúc trước khi đụng; so sánh phương án chưa muốn sửa; review kiểu "đoạn này làm gì, rủi ro gì?".
+- **ĐỪNG dùng khi:** bạn đã biết cần sửa file nào → chuyển **Edit mode**; hoặc task mở, chưa biết chạm file nào → chuyển **Agent mode**.
+- **Cho ai:** người mới (hỏi cho an toàn), reviewer, người đang cân nhắc phương án.
+
+## Cách gọi (copy-paste)
 
 ```bash
 Chat → dropdown mode → Ask
-“so sánh 2 cách cache, chưa cần sửa code”
+"#file:src/cache.ts — so sánh 2 cách cache, chưa cần sửa code"
 # Kỳ vọng: trả lời phân tích, không file nào bị đổi
 # Verify: git status sạch sau khi hỏi
 ```
 
-> Kiểm tra lệnh có khả dụng ở máy bạn không: gõ `/` trong Chat input, tìm `Ask mode`. Không thấy → đọc `/status` + plan trước khi kết luận bug.
+> Không thấy **Ask** trong dropdown? Xem `/status` và plan trước khi kết luận lỗi — trên IDE của bạn menu có thể gộp nhóm như Ask / Plan / Agent.
 
-## Ví dụ prompt thật + kết quả mong đợi
+## Ví dụ thật
 
-Prompt mẫu cho `Ask mode` — đổi phần tên file/task cho đúng việc của bạn:
-
-**Prompt thật (copy-paste, nhớ gắn scope trước):**
+Nghiệp vụ: bạn được giao sửa module auth của một repo lạ, muốn hiểu luồng login trước khi động vào.
 
 ```bash
-(Ask mode) “đọc module auth, vẽ flow login bằng chữ + chỉ 3 rủi ro lớn nhất”
+# Ở Ask mode, gắn scope để nó đọc đúng chỗ
+(Ask) "@workspace đọc module auth trong src/auth/ và vẽ lại flow login bằng chữ,
+chỉ ra 3 rủi ro bảo mật lớn nhất. Không sửa file nào."
+# Verify: git status -> không có file nào thay đổi
 ```
 
-**Kết quả mong đợi:** Câu trả lời phân tích, không file nào bị sửa; hiểu đủ để quyết bước tiếp.
+**Kết quả mong đợi:** Một bản mô tả luồng login + danh sách rủi ro, đủ để bạn quyết bước tiếp theo; không file nào bị sửa.
 
-**Cách verify:** git status sạch sau khi hỏi là đạt.
+**✅ Verify:** Chạy `git status` sau khi hỏi — cây làm việc sạch là đạt.
+
+## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)
+
+**❌ SAI — hỏi trong Ask mà không gắn scope, rồi tưởng Ask "dở":**
+
+```bash
+(Ask) "module auth hoạt động thế nào?"   # không đọc file -> trả lời generic
+```
+
+**✅ ĐÚNG — gắn scope ngay cả khi chỉ hỏi:**
+
+```bash
+(Ask) "@workspace src/auth/ hoạt động thế nào? Chỉ đọc, không sửa."
+```
+
+**Bài học:** Ask không sửa file, nhưng vẫn cần bạn chỉ cho nó đọc ở đâu. Scope là thứ quyết định chất lượng câu trả lời ở mọi mode.
 
 ## Lỗi thường gặp
-
-Ba triệu chứng hay gặp nhất với lệnh này — kèm nhanh cách xử lý:
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Hỏi trong Ask mà code vẫn đổi | Nhầm mode (đang Edit/Agent) | Nhìn lại dropdown mode trước khi Enter |
-| Ask trả lời thiếu vì không đọc file | Quên gắn scope | Gắn #file/@workspace ngay cả trong Ask |
+| Ask trả lời thiếu vì không đọc file | Quên gắn scope | Gắn `#file`/`@workspace` ngay cả trong Ask |
 | Ở mãi Ask khi cần sửa | Sợ agent | Hiểu rồi → leo thang Edit/Agent |
+
+## So sánh với Claude Code
+
+| Việc | Copilot (Ask mode) | Claude Code | Ghi chú |
+|---|---|---|---|
+| Chế độ chỉ đọc | Có mode Ask riêng, chọn bằng dropdown | Không tách mode riêng — mặc định agentic, nhưng có plan mode để chỉ lập kế hoạch | Copilot tách "hỏi" thành mode; Claude Code coi "chỉ đọc" là một cách dùng |
+| Không sửa file | Ask cam kết không đụng file | Cần nói rõ "đừng sửa" hoặc dùng plan mode | Cùng mục đích: khảo sát trước khi thay đổi |
+| Lấy ngữ cảnh | Vẫn cần `#file`/`@workspace` | `@file` hoặc để agent tự đọc | Cả hai đều cần scope thì trả lời mới đúng |
+
+## Best practices (kèm "vì sao")
+
+- **Ask là bước đầu của task lớn.** *Vì sao?* Hiểu luồng trước khi sửa giúp bạn viết prompt cho Edit/Agent trúng hơn nhiều.
+- **Luôn gắn scope khi hỏi.** *Vì sao?* Ask không tự biết "module auth" của bạn ở đâu — không scope thì câu trả lời chung chung.
+- **Xác nhận đang ở đúng mode trước khi Enter.** *Vì sao?* Câu hỏi "chỉ để hiểu" mà chạy ở Agent có thể kéo theo thay đổi bạn không ngờ.
+- **Hiểu rồi thì leo thang, đừng nấn ná.** *Vì sao?* Ở Ask quá lâu với việc cần sửa = bạn tự làm chậm mình.
+
+## Bài tập nhỏ
+
+1. **(3 phút)** Ở Ask, hỏi một module bạn chưa từng đọc (có `#file`), sau đó chạy `git status` để tự thấy nó sạch.
+2. **(5 phút)** Hỏi cùng một câu hai lần: một lần không gắn scope, một lần có `@workspace`. So sánh độ cụ thể của hai câu trả lời.
+3. **(7 phút)** Dùng Ask để so sánh hai phương án (ví dụ: cache in-memory vs Redis), chọn ra phương án rồi mới sang Edit để sửa đúng phần bạn đã chốt.
 
 ## Tham khảo
 
-Liên quan — index nhóm, cheatsheet 1 trang và FAQ phòng khi kẹt:
-
-- Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh.
+- Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh Model & Agent.
 - Cheatsheet 1 trang: [../../../../CHEATSHEET.md](../../../../CHEATSHEET.md).
 - Kẹt thì tra [FAQ troubleshooting](../../../../03-cau-hoi-thuong-gap/08-loi-thuong-gap-troubleshooting.md).
+- Đã biết sửa file nào: [../edit-mode/README.md](../edit-mode/README.md). Task mở, nhiều bước: [../agent-mode/README.md](../agent-mode/README.md).
 
-> Mẹo 1 dòng: _gắn scope trước (`#file`/`@workspace`), review diff sau, đừng bao giờ Accept mù._
+> Ask không phải bước "tốn thời gian" — đây là bước rẻ nhất để bạn khỏi phải sửa nhầm một thứ mình chưa hiểu.

@@ -1,6 +1,17 @@
 # Tips 03 — Plan-First Workflow: Ask → Edit → Agent Leo Thang
 
-> Task càng lớn càng phải plan trước. Bài này dạy bạn leo thang Ask → Plan → Edit → Agent → Coding Agent, duyệt plan trước khi cho code, save plan.md để chat nào cũng tiếp tục được.
+> **Dành cho:** dev đã quen gõ prompt nhưng hay giao task lớn cho Copilot mà chưa có plan.
+> **Vấn đề:** task >2 steps mà nhảy thẳng vào Agent → code sai spec, test đỏ, mất cả buổi revert.
+> **Đọc xong:** leo thang đúng 5 nấc Ask → Plan → Edit → Agent → Coding Agent, có `plan.md` để chat nào cũng tiếp tục được.
+> **Thời gian:** ~25 phút đọc + ~65 phút làm bài tập.
+
+## Mục tiêu bài học
+
+- Kể được **5 nấc thang** Copilot 2026 và chọn đúng nấc cho từng cỡ task.
+- Giải thích được vì sao **1 turn plan rẻ hơn 10 turn sửa sai** (đo bằng AI Credits).
+- Tự viết **`plan.md` 7 mục** + prompt duyệt kiểu reviewer khó tính.
+- Chạy trọn **walkthrough 60 phút** cho 1 feature thật mà không phải revert lớn.
+- Nhận diện **các pitfall plan-first** và biết cách chặn trước.
 
 ## Mục lục
 
@@ -12,7 +23,9 @@
 - [6. Mẫu plan.md chuẩn + prompt duyệt](#6-mẫu-planmd-chuẩn--prompt-duyệt)
 - [7. Walkthrough theo phút: feature payments 60 phút](#7-walkthrough-theo-phút-feature-payments-60-phút)
 - [8. Bảng tra nhanh: chọn nấc nào?](#8-bảng-tra-nhanh-chọn-nấc-nào)
+- [So sánh với Claude Code](#so-sánh-với-claude-code)
 - [9. Pitfalls + cách fix](#9-pitfalls--cách-fix)
+- [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
 - [10. Bài tập cuối bài](#10-bài-tập-cuối-bài)
 - [11. Tham khảo chéo](#11-tham-khảo-chéo)
 
@@ -54,6 +67,8 @@ Giải thích: 1) Luôn bắt đầu Ask (rẻ). 2) Plan phải có verify từn
 
 ## 1. Vì sao phải plan-first với Copilot?
 
+**Vì sao quan trọng?** Copilot code rất nhanh — nhanh tới mức nếu bạn đưa sai hướng, nó cũng "hoàn thành" sai hướng trong vài phút. Plan-first là cách duy nhất để bạn chặn sai hướng *trước khi* nó sinh ra 200 dòng code phải revert.
+
 Ba nỗi đau kinh điển khi cho Copilot code ngay:
 
 - Bạn gõ `làm feature payments giúp tôi` → Copilot code 200 dòng, sai spec, test đỏ, bạn mất 1 giờ revert.
@@ -74,6 +89,8 @@ Lợi ích đo được:
 - Bạn vẫn là người quyết định kiến trúc, Copilot chỉ implement.
 
 > Rule: **task >2 steps hoặc >1 file → bắt buộc plan trước.**
+
+**Nếu làm sai thì sao?** Bỏ qua plan, bạn trả giá bằng chính thứ đắt nhất: thời gian review và revert. Một prompt thiếu scope khiến diff chạm 10 file, mỗi file bạn phải tự đọc xem có đúng không — trong khi lẽ ra 1 turn plan (vài credits) đã khoanh được đúng 2 file cần sửa. Tệ hơn, chat càng dài thì Copilot càng quên đầu bài, càng sửa càng nát.
 
 ---
 
@@ -104,6 +121,10 @@ Minh họa leo thang:
 - Plan duyệt rồi, việc độc lập 2 giờ → assign Coding Agent trên issue.
 
 > Lưu ý 2026: ngoài 5 nấc trên, VS Code/CLI còn có persona **Plan** và **Autopilot** (chọn bằng `Shift+Tab` trong CLI, dropdown trong Chat) — Autopilot tự chạy tới xong, vẫn tính AI Credits. Xem [bài 10 mục 3](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
+
+**Vì sao quan trọng?** Bạn chỉ được nâng quyền cho Copilot khi đã có plan duyệt. Nếu cho nó quyền Agent (tự sửa nhiều file) cho một task chưa rõ, bạn vừa tốn credits vừa mất kiểm soát. "Nấc" chính là "mức độ tin tưởng" bạn cấp.
+
+**Nếu làm sai thì sao?** Nhảy thẳng lên nấc cao (Agent/Coding Agent) cho task mơ hồ → nó tạo nhánh, sửa lan, mở PR sai hướng; bạn mất thời gian dọn thay vì được giúp. Ngược lại, mãi kẹt ở Ask cho việc đáng ra nên giao Agent → bạn tự làm chậm mình.
 
 ---
 
@@ -366,6 +387,22 @@ Trước khi code: 1) Đọc #file:docs/payment-spec.md + #file:src/payments/ref
 
 ---
 
+## So sánh với Claude Code
+
+Cả hai đều có tư tưởng "vẽ bản đồ trước khi code", nhưng cách thể hiện khác nhau. Bảng này để bạn chuyển thói quen qua lại mà không bỡ ngỡ:
+
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Duyệt plan trước khi code | Có **nấc Plan** (Ask + plan file) và persona **Plan/Autopilot** | Có **plan mode** (bật/tắt trong phiên) và mặc định agentic | Cùng ý tưởng; Copilot leo nấc từng bước, Claude Code agentic sẵn |
+| Nơi lưu plan để chat sau đọc lại | `plan.md` commit trong repo | Không có định dạng plan riêng — bạn tự lưu file tương tự | Cả hai đều dựa vào file trong repo, không có "bộ nhớ plan" tự động |
+| Leo thang theo quyền | Ask → Edit → Agent → Coding Agent, chọn bằng dropdown/persona | Bắt đầu ở mức agentic; giới hạn bằng permission prompt & allowed tools | Copilot "tăng dần", Claude Code "khoanh vùng cho phép" |
+| Giao việc bất đồng bộ | **Coding Agent** trên github.com: assign issue → PR draft | Chạy async qua **GitHub Actions**/môi trường cloud, không phải mô hình "assign issue cho bot" y hệt | Mô hình async khác nhau — chi tiết xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md) |
+| Cấu hình "luật" repo | `.github/copilot-instructions.md` | `CLAUDE.md` | Cùng tư tưởng: file trong repo là luật |
+
+> **Đọc bảng này thế nào:** nếu quen Claude Code, bạn đã có sẵn phản xạ "plan trước, code sau". Sang Copilot chỉ cần nhớ thêm: nó có *nấc thang* thay vì agentic liền, và plan nên nằm ở `plan.md` commit được.
+
+---
+
 ## 9. Pitfalls + cách fix
 
 | Pitfall | Triệu chứng | Fix |
@@ -379,6 +416,44 @@ Trước khi code: 1) Đọc #file:docs/payment-spec.md + #file:src/payments/ref
 | Không save plan.md | Chat mới quên hết | Save + commit plan.md ngay sau duyệt |
 | Edit cho task multi-files | Sửa chỗ này quên chỗ kia | Edit chỉ cho 1 vùng, multi-files dùng Agent |
 | Quên dặn dừng khi đỏ | Agent vá 10 lần càng hỏng | Luôn dặn đỏ sau 3 lần → dừng + báo blocker |
+
+### Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+
+**1. Nhảy thẳng Agent cho task lớn**
+
+```text
+❌ SAI: "làm feature payments giúp tôi"  -> code 200 dòng sai spec, test đỏ
+✅ ĐÚNG: "Trình plan files sửa/steps/risks/KHÔNG đụng/verify. Chờ tôi duyệt mới code."
+```
+**Bài học:** task >2 steps thì duyệt plan trước — 1 turn plan rẻ hơn 10 turn sửa sai.
+
+**2. Plan có steps nhưng không có verify**
+
+```text
+❌ SAI: "Plan: thêm API refund"  -> implement xong vẫn không biết đúng hay sai
+✅ ĐÚNG: "Phase 2 verify: npm test -- payments + npm run build"  -> mỗi phase 1 lệnh cụ thể
+```
+**Bài học:** plan không có verify thì chữ "xong" vô nghĩa — bạn không có gì để tin.
+
+**3. Plan chỉ sống trong 1 chat**
+
+```text
+❌ SAI: plan nằm trong history chat cũ, mở chat mới là quên sạch
+✅ ĐÚNG: save plan.md + commit `docs: approve refund plan`, mọi chat đọc #file:plan.md
+```
+**Bài học:** plan phải sống ngoài chat — để chat nào, Coding Agent nào cũng đọc được cùng một bản.
+
+---
+
+## Best practices (kèm "vì sao")
+
+- **Task >2 steps hoặc >1 file → ép Plan trước khi cho code.** *Vì sao?* Đây là ngưỡng mà đoán sai hướng sẽ tốn hơn nhiều so với 1 turn plan.
+- **Luôn có câu `Chờ tôi duyệt mới code` trong prompt plan.** *Vì sao?* Không có nó, Copilot tiện tay code luôn — bạn mất luôn cơ hội duyệt.
+- **Mỗi phase phải có 1 lệnh verify cụ thể.** *Vì sao?* "Xong" không đo được; `npm test -- payments` thì đo được.
+- **1 phase = 1 chat fresh.** *Vì sao?* Chat dài làm loãng luật và agent quên đầu bài (xem [Tips 01](./01-context-hygiene.md)).
+- **Duyệt plan bằng reviewer khó tính, đừng tự khen.** *Vì sao?* Người viết plan khó thấy lỗ hổng của chính mình; prompt adversarial mục 6 ép lộ 3 gaps.
+- **Save + commit `plan.md` ngay sau khi duyệt.** *Vì sao?* Plan là hợp đồng giữa các chat; không lưu thì chat sau tự sáng tạo lại từ đầu.
+- **Luôn dặn "đỏ sau 3 lần thì dừng".** *Vì sao?* Không có giới hạn, agent vá mù tới lúc hỏng nặng hơn cả bug gốc.
 
 ---
 
@@ -415,4 +490,4 @@ Trước khi code: 1) Đọc #file:docs/payment-spec.md + #file:src/payments/ref
   - [Tips 05](./05-parallel-agents.md) — song song hóa sau khi có plan
   - [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — Coding Agent + 2 CLI + web
 
-> Mẹo 1 dòng: _chưa có plan duyệt thì chưa cho code — 1 turn plan rẻ hơn 10 turns sửa sai._
+> **Chốt Tips 03:** _vẽ bản đồ trước khi đổ bê tông — chưa có plan duyệt thì chưa cho Copilot viết dòng code nào._

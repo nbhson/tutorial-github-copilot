@@ -5,15 +5,9 @@
 > **Đọc xong:** biết thứ tự đọc 00 → 17, biết ghép bài đọc với lệnh trong `commands/`, và chọn được bài đúng nhu cầu ngay lúc này.
 > **Thời gian:** ~5 phút.
 
-Đọc theo thứ tự **00 → 17**: từ tổng quan, cài đặt, bề mặt sử dụng, cấu hình nền tảng
-(`copilot-instructions.md`, chat commands, Agent Skills (chuẩn 2026, thay prompt files),
-custom agents, instructions, rules, MCP, Agent Plugins, policies), tới agent mode,
-code review, testing, models, security, best practices team và Agent Customizations hub.
+Đây là nhóm "học nghề": 18 bài xếp liền mạch từ **tổng quan → cài đặt → bề mặt sử dụng → cấu hình nền tảng → vận hành nâng cao**. Cấu hình nền tảng gồm `copilot-instructions.md`, chat commands, Agent Skills (chuẩn 2026, thay prompt files), custom agents, instructions, rules, MCP, Agent Plugins và policies. Vận hành nâng cao gồm agent mode, code review, testing, models, security, best practices team và Agent Customizations hub. Đọc tuần tự thì mạch kiến thức liền; đọc nhảy cóc thì tra bảng dưới rồi mở đúng bài.
 
-Cách học nhanh: đọc bài tổng quan trước (00–04), vừa đọc vừa mở `commands/` tra lệnh tương ứng
-(ví dụ đọc bài 04 thì mở `commands/code-actions/fix/` xem ví dụ prompt thật). Mỗi folder lệnh trong
-`commands/` đều theo format cố định: **lệnh làm gì → khi nào dùng → cách gọi → ví dụ prompt thật +
-kết quả mong đợi → lỗi thường gặp**.
+Cách học nhanh, đỡ khô: đọc trước 4 bài tổng quan (**00–04**), rồi vừa đọc vừa mở `commands/` tra lệnh tương ứng — ví dụ đọc bài 04 thì mở [`commands/code-actions/fix/`](./commands/code-actions/fix/README.md) xem ví dụ prompt thật. Mỗi folder lệnh trong `commands/` đi theo cùng một khuôn: **lệnh làm gì (1 câu nôm na) → khi nào dùng/khi nào đừng → cách gọi → ví dụ thật + kết quả mong đợi → lỗi thường gặp → so sánh Claude Code → best practices (kèm "vì sao") → bài tập nhỏ**.
 
 Muốn nhảy cóc? Bảng dưới đây mô tả đúng 1 dòng mỗi bài — đọc cột "Mô tả 1 dòng" là đủ để quyết định có cần mở bài đó không.
 
@@ -48,3 +42,22 @@ Phần này dùng để tra nhanh khi đang làm việc — không cần đọc 
 - Index đầy đủ theo 4 nhóm: [commands/README.md](./commands/README.md)
 - Ví dụ tra cứu nhanh: [commands/chat-session/new-chat/README.md](./commands/chat-session/new-chat/README.md)
   (thay `new-chat` bằng slug bất kỳ, vd `./commands/model-agent/agent-mode/README.md`, `./commands/system-knowledge/instructions/README.md`).
+
+## So sánh với Claude Code
+
+Nếu bạn đã quen Claude Code, phần lớn khái niệm trong nhóm này chuyển sang gần như 1-1 — chỉ khác *tên file* và *nơi chạy*. Bảng này là bản đồ nhanh để biết đọc bài nào:
+
+| Việc | Copilot (nhóm này) | Claude Code | Ghi chú |
+|---|---|---|---|
+| Cấu hình trong repo | `.github/copilot-instructions.md` + `AGENTS.md` | `CLAUDE.md` + `.claude/` | Cùng tư tưởng "file trong repo là luật" — [bài 03](./03-instructions-memory-rules.md) |
+| Slash command tự tạo | Agent Skills / prompt files | `.claude/commands/` | Tương đương về ý tưởng — [bài 05](./05-prompt-files-custom-instructions.md) |
+| Nối hệ thống ngoài | MCP (`.vscode/mcp.json`, `.mcp.json`) | MCP (`.mcp.json`) | Cùng chuẩn giao thức — [bài 08](./08-mcp-ket-noi-cong-cu-ngoai.md) |
+| Agent mode | Ask/Edit/Agent + Session Target (Local/Copilot/Cloud) | Mặc định agentic, terminal-first | Copilot leo thang từng bước — [bài 00](./00-tong-quan-copilot.md), [bài 10](./10-modes-permissions-availability.md) |
+| Custom agents | `.github/agents/<ten>.agent.md` | Subagents trong `.claude/agents/` | Cùng ý tưởng persona + tool giới hạn — [bài 06](./06-custom-agents-parallel.md) |
+| Hub quản trị tuỳ biến | Agent Customizations Hub (`Chat: Open Customizations`) | Không có màn hình hub tương đương | Copilot gom vào 1 chỗ, có profile `sandbox` — [bài 17](./17-agent-customizations-hub.md) |
+
+> **Đọc bảng này thế nào:** quen Claude Code thì bạn đã có nền cho gần hết nhóm này; cái cần học thêm là *tên file* của Copilot và khái niệm **Session Target** (Local/Copilot/Cloud) — thứ Claude Code không có tương đương trực tiếp.
+
+Quay về: [../README.md](../README.md) · Bài tổng: [00 — Tổng quan Copilot](./00-tong-quan-copilot.md)
+
+> Chốt nhóm 01: đừng đọc 18 bài như 18 thứ rời — chúng là một đường leo thang từ autocomplete tới agent. Đọc 00–04 lấy nền, rồi mỗi khi làm việc thật thì mở `commands/` tra đúng lệnh cho việc đó.

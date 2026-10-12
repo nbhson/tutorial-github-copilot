@@ -1,9 +1,23 @@
 # Tips 02 — Prompt Engineering Cho Copilot: Viết Sao, Ra Vậy
 
-> Copilot không đọc được ý nghĩ. Prompt tốt = mục tiêu 1 câu + scope files + cách verify + dòng đừng-đụng-X. Bài này mổ xẻ anatomy, 6 mẫu theo task, few-shot bằng prompt files, bảng sai→sửa và guide non-coder.
+> **Dành cho:** dev (và cả non-coder) đã biết gõ prompt cho Copilot nhưng kết quả hay lệch, phải sửa lại nhiều lượt.
+> **Vấn đề:** prompt ẩu khiến Copilot đọc lan, sửa thừa, "xong rồi chắc vậy" — tốn turns và tốn AI Credits.
+> **Đọc xong:** viết được prompt đủ 4 thành phần + verify + ràng buộc NEVER, dùng 6 mẫu theo task, đóng gói prompt tái dùng, và tự chấm prompt bằng checklist trước khi Enter.
+> **Thời gian:** ~15 phút đọc + ~45 phút làm bài tập cuối bài.
+
+Copilot không đọc được ý nghĩ. Prompt tốt = mục tiêu 1 câu + scope files + cách verify + dòng đừng-đụng-X. Bài này mổ xẻ anatomy, 6 mẫu theo task, few-shot bằng prompt files, bảng sai→sửa và guide non-coder.
+
+## Mục tiêu bài học
+
+- Giải thích được **vì sao model giỏi + prompt ẩu vẫn ra output lan man** (prompt = hợp đồng thu hẹp search space).
+- Viết được prompt **đủ 4 thành phần**: scope files, end-state, độ phân giải, format output.
+- Thêm được **3 gia vị** nâng chất lượng: success criteria, cách verify, ràng buộc phủ định (NEVER).
+- Dùng được **6 mẫu prompt theo task** (bug, feature, refactor, research, review, data/docs) và biết khi nào dùng cái nào.
+- Biết **đóng gói prompt tái dùng** qua `.prompt.md` (Local) hoặc Agent Skills, và tự chấm prompt bằng checklist 10 ô.
 
 ## Mục lục
 
+- [0. Giải ngố thuật ngữ](#0-giải-ngố-thuật-ngữ-1-câu--so-sánh--ví-dụ--verify)
 - [1. Vì sao prompt quyết định output?](#1-vì-sao-prompt-quyết-định-output)
 - [2. Giải phẫu prompt tốt: 4 thành phần](#2-giải-phẫu-prompt-tốt-4-thành-phần)
 - [3. Ba gia vị nâng chất lượng 10x](#3-ba-gia-vị-nâng-chất-lượng-10x)
@@ -13,7 +27,9 @@
 - [7. Bảng sai→ sửa](#7-bảng-saisửa)
 - [8. Non-coder guide](#8-non-coder-guide)
 - [9. Checklist trước khi Enter](#9-checklist-trước-khi-enter)
+- [So sánh với Claude Code](#so-sánh-với-claude-code)
 - [10. Pitfalls + fix](#10-pitfalls--fix)
+- [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
 - [11. Bài tập](#11-bài-tập)
 - [12. Tham khảo chéo](#12-tham-khảo-chéo)
 
@@ -55,6 +71,10 @@ Nguyên nhân số 1 của "Copilot sửa lan man, đọc 100 files, đổi API 
 - Không phải model lười, mà là bạn cho nó **quyền tự do quá rộng**.
 - Prompt `"fix login"` không scope = model tự đoán scope, tự đoán done, tự đoán verify.
 - Prompt `"@workspace investigate auth"` với repo 500 files = mời model đi lạc.
+
+**Vì sao quan trọng?** Vì prompt không chỉ là "câu hỏi" — nó là bản hợp đồng quy định model được phép lang thang tới đâu. Hiểu điều này thì bạn thôi đổ lỗi cho model và bắt đầu sửa từ chính câu bạn gõ.
+
+**Nếu làm sai thì sao?** Bạn sẽ lặp vòng "prompt ẩu → output loạn → thử model mạnh hơn → vẫn loạn". Gốc rễ vẫn là quyền tự do quá rộng; đổi model không thay được điều đó. Cách tránh: luôn khoanh scope + định nghĩa done trước khi gõ.
 
 ### 1.2. Cơ chế: prompt là hợp đồng giới hạn search space
 
@@ -141,6 +161,10 @@ Phân tích:
 - Chi tiết: quote + count + segment + đối chiếu totals (3).
 - Format: markdown table, chỉ chat (4).
 
+**Vì sao quan trọng?** Bốn thành phần này là bộ khung để bạn không quên mảnh nào. Thiếu scope thì output lan; thiếu end-state thì chung chung; thiếu độ phân giải thì hời hợt; thiếu format thì phải tự reformat. Mỗi mảnh vá một kiểu lệch khác nhau.
+
+**Nếu làm sai thì sao?** Thiếu 1 trong 4 mảnh là output lệch đúng 1 hướng, và bạn thường phát hiện muộn — sau khi đã tốn vài turns sửa. Cách tránh: coi 4 mảnh như checklist, đọc lại prompt một lần trước khi Enter (xem mục 9).
+
 ---
 
 ## 3. Ba gia vị nâng chất lượng 10x
@@ -175,6 +199,10 @@ Model cần biết **cấm địa**. Không dặn là nó sẽ đụng.
 ```
 
 Mẹo: gom ràng buộc chung vào `.github/copilot-instructions.md` (chuẩn 2026, <200 dòng), chỉ để ràng buộc riêng task trong prompt.
+
+**Vì sao quan trọng?** Ba gia vị này biến prompt từ "hy vọng" thành "kiểm soát được": success criteria để biết đích, verify để bắt tự sửa, NEVER để chặn đụng cấm địa. Thiếu chúng, bạn phải ngồi canh từng turn.
+
+**Nếu làm sai thì sao?** Không có success criteria → model tự định nghĩa "xong" theo cảm giác; không có verify → model tự khen "should work"; không có NEVER → nó tiện tay sửa lan. Cả ba đều dẫn tới việc bạn phát hiện lỗi muộn, khi diff đã phình.
 
 ---
 
@@ -398,6 +426,31 @@ Trước khi code, trình outline 5 bullet files/hàm sẽ di chuyển và chờ
 > Kết quả tốt: 1 turn plan + 3 turns implement sạch, test xanh, diff gọn 3 files. Tổng 15 phút. Verify: `npm test -- auth` xanh + `git diff --stat` chỉ 3 files.
 > ✅ **Kỳ vọng thấy gì:** After cho outline 5 bullet trước, rồi từng bước 1 log xanh; Before cho code 200 dòng ngay + 5 chỗ đỏ.
 
+### Pitfall nhìn là nhớ (❌ SAI / ✅ ĐÚNG)
+
+**1. Prompt một dòng cho task năm bước**
+
+```text
+❌ SAI: "Refactor auth cho sạch"
+        → đọc 40 files, đổi API, thêm dep, test đỏ 5 chỗ.
+✅ ĐÚNG: "Refactor #file:src/auth.ts (~800 dòng) thành login.ts, session.ts, types.ts.
+        Giữ nguyên public API. Sau mỗi bước chạy npm test -- auth và dán log.
+        Đỏ thì dừng và báo. Đừng đụng src/generated/, đừng thêm dep, đừng commit.
+        Trước khi code, trình outline 5 bullet và chờ duyệt."
+```
+**Bài học:** task càng lớn càng phải mô tả kỹ — prompt 1 dòng cho task 5 bước thì model tự bịa 4 bước còn lại theo cách của nó.
+
+**2. Mô tả solution thay vì problem**
+
+```text
+❌ SAI: "Thêm if ở dòng 42" (trong khi root cause nằm ở dòng 80)
+        → model vá đúng chỗ bạn chỉ, bug vẫn còn.
+✅ ĐÚNG: "Login email có dấu bị 500, log chỉ normalizeEmail ở login.ts:42.
+        Tìm root cause, giải thích 3 bullet trước khi sửa, fix tối thiểu."
+        → model tìm ra gốc thật rồi mới sửa.
+```
+**Bài học:** bạn là người mô tả *vấn đề*, model mạnh hơn ở việc tìm *giải pháp* — đừng tự khóa nó vào hướng sửa của bạn.
+
 ---
 
 ## 8. Non-coder guide
@@ -448,6 +501,23 @@ Mỗi lý do kèm 2 quotes + số lượng. Output table.
 
 ---
 
+## So sánh với Claude Code
+
+Cấu trúc prompt (4 thành phần + verify + NEVER) là tư duy chung, không phụ thuộc công cụ. Khác nhau nằm ở *chỗ lưu* và *cách gọi lại*:
+
+| Việc | GitHub Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Lưu prompt tái dùng | `.github/prompts/*.prompt.md` (Local) hoặc Agent Skills `SKILL.md` | `.claude/commands/` (custom slash command) | Cùng tư tưởng "đóng gói 1 lần, gọi nhiều lần"; khác tên file |
+| Biến truyền vào prompt | `${input:tên}` trong `.prompt.md` | Tham số trong slash command / prompt | Cả hai đều cho phép điền tham số khi gọi |
+| Luật chung của repo | `.github/copilot-instructions.md` + `AGENTS.md` | `CLAUDE.md` + `.claude/` | Cùng tư tưởng: file trong repo là "luật" |
+| Chọn model | Đổi ngay trong Chat (GPT / Claude / Gemini) | Gắn với model Anthropic | Copilot cho chọn "bộ não" theo task |
+| Gắn file vào prompt | `#file`, `#selection`, `@workspace` | Dùng `@` trỏ file, agent tự đọc thêm | Cùng tinh thần: chỉ đúng chỗ, đừng đưa cả repo |
+| Kiểm chứng output | Bạn tự chạy test/lint | Bạn tự chạy test/lint | Không agent nào tự chịu trách nhiệm đúng/sai — verify vẫn là việc của bạn |
+
+> Đọc bảng này thế nào: nếu bạn quen Claude Code, phần lớn kỹ thuật prompt chuyển sang Copilot gần như 1-1 (scope, end-state, verify, NEVER, đóng gói prompt). Khác biệt thực tế: **Copilot cho đổi model ngay trong chat**, còn **Claude Code prompt file sống trong `.claude/commands/`**.
+
+---
+
 ## 10. Pitfalls + fix
 
 | Pitfall | Triệu chứng | Fix |
@@ -462,6 +532,18 @@ Mỗi lý do kèm 2 quotes + số lượng. Output table.
 | File khổng lồ ném nguyên | Quên rule, lan man | Tóm tắt, chat chính chỉ nhận outline |
 | Hỏi lại cùng câu 3 lần | Model không hiểu ý | Viết lại bằng end-state + ví dụ input/output mẫu |
 | Prompt files thiếu variables | Mỗi lần vẫn phải sửa tay | Dùng `${input:...}` + description rõ |
+
+---
+
+## Best practices (kèm "vì sao")
+
+- **Mở đầu bằng scope, không mở đầu bằng động từ chung chung.** *Vì sao?* Scope thu hẹp search space ngay từ turn 1; bỏ qua nó thì model tự đoán và đi lạc.
+- **Mô tả end-state, không mô tả activity.** *Vì sao?* "Cho sạch" là cảm giác; "test xanh + 3 modules" là đích kiểm chứng được — model bám đích chính xác hơn.
+- **Mọi prompt code đều có 1 dòng verify + 1 dòng NEVER.** *Vì sao?* Verify bắt model tự chạy và tự sửa; NEVER chặn nó tiện tay đụng cấm địa.
+- **Ép format output ngay trong prompt.** *Vì sao?* Không chỉ định = nhận format ngẫu nhiên; table/checklist/file:line giúp bạn review nhanh và diff dễ.
+- **Task >1 file hoặc >2 bước thì bắt plan trước, chờ duyệt.** *Vì sao?* Trả 1 turn plan rẻ hơn nhiều so với 10 turns code sai rồi phải restore.
+- **Đóng gói prompt dùng lại thành `.prompt.md` hoặc Agent Skill.** *Vì sao?* Viết 1 lần, cả team gọi cùng một chuẩn — hết cảnh 5 người 5 kiểu prompt.
+- **Mỗi prompt 1 việc.** *Vì sao?* Gộp bug + feature + refactor vào 1 prompt là cách nhanh nhất để "sửa A hỏng B".
 
 ---
 
@@ -499,4 +581,4 @@ Mỗi lý do kèm 2 quotes + số lượng. Output table.
   - [Tips 07](./07-thiet-ke-prompts-skills.md) — thiết kế prompt files tái dùng + Agent Skills chuẩn 2026
   - [Tips 10](./10-debugging-power-moves.md) — log → prompt khi debug
 
-> Mẹo 1 dòng: _mỗi prompt đều trả lời 4 câu: files nào, ra cái gì, chi tiết nào, format nào — thiếu 1 là lệch 1 hướng._
+> **Chốt Tips 02:** Prompt tốt không phải câu thần chú dài dòng, mà là bản mô tả công việc đủ 4 mảnh cộng một lệnh verify và một dòng NEVER — cho đủ ba thứ đó, model mới có cơ hội làm đúng ngay từ lần gõ đầu thay vì để bạn sửa lại năm lượt.

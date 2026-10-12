@@ -5,6 +5,14 @@
 > **Đọc xong:** chạy được worktree cho parallel agents, undo đúng lúc bằng timeline/fork/git restore, và theo đúng branch strategy `copilot/*`.
 > **Thời gian:** ~30 phút.
 
+## Mục tiêu bài học
+
+- Tạo được **worktree** để 2 agent chạy song song trên 2 branch riêng, không conflict file.
+- Phân biệt **3 cơ chế undo** của VS Code (Timeline / Fork chat / `git restore` + new chat) và biết chọn cái nào theo mức hỏng.
+- Theo đúng **branch strategy** `copilot/*` (của agent) vs `feat/*` (của bạn) khi review PR coding agent cloud.
+- Có phản xạ **rewind sớm**: sai 2 lần thì restore + chat mới, thay vì argue 10 turns đốt AI Credits.
+- Nhận ra worktree **không thay thế** checkpoint — một cái cách ly chỗ làm việc, một cái cứu kết quả sai.
+
 ## Mục lục
 
 1. [Giới ngố 5 thuật ngữ (2 phút)](#0-giới-ngố-5-thuật-ngữ-2-phút)
@@ -28,7 +36,7 @@ Mỗi khái niệm đủ 3 lớp: **1 câu định nghĩa**, **so sánh đời t
 | **Git worktree** | 1 repo mở được nhiều thư mục làm việc song song, mỗi thư mục gắn 1 branch. | 1 căn nhà (repo) nhiều phòng (worktree) — mỗi người 1 phòng, không giẫm chân. | `git worktree add ../myrepo-worktrees/feat-login -b feat/login` | `git worktree list` → 2+ dòng (main + worktree mới). |
 | **Checkpoint (Timeline)** | Nút undo của VS Code: quay 1 file về trước khi agent sửa, không tạo commit. | Ctrl+Z nhưng nhớ được nhiều giờ trước, kể cả đã tắt máy. | Explorer → chuột phải file → Timeline → Restore bản 9h sáng. | `git diff HEAD -- <file>` → trống sau restore. |
 | **Chat session fork** | Rẽ nhánh chat cũ để thử hướng khác, giữ mạch chính. | Save game ở ngã ba: thử đường A, chết thì load lại đi đường B. | Chat view → History (đồng hồ) → Restore/Fork session. | Session cũ hiện lại, chat hiện tại vẫn nguyên. |
-| **Branch `copilot/*`** | Branch do coding agent cloud tự tạo; bạn chỉ review qua PR. | Robot thuê ngoài có phòng riêng — bạn kiểm hàng ở cửa, không vào phòng nó. | `git branch -r | grep "copilot/"` thấy `origin/copilot/issue-123-x`. | `gh pr list --author "app/copilot"` → thấy PR draft. |
+| **Branch `copilot/*`** | Branch do coding agent cloud tự tạo; bạn chỉ review qua PR. | Robot thuê ngoài có phòng riêng — bạn kiểm hàng ở cửa, không vào phòng nó. | `git branch -r \| grep "copilot/"` thấy `origin/copilot/issue-123-x`. | `gh pr list --author "app/copilot"` → thấy PR draft. |
 | **Git restore (rewind thật)** | Xóa hết sửa đổi sai, về bản sạch, chat mới từ đầu. | Lật bàn cờ khi đánh sai 10 nước — đánh ván mới nhanh hơn cố gỡ. | `git restore src/auth/login.ts` + mở chat mới. | `git diff --stat` → gọn lại (hết 10 files lan man). |
 
 > **Nhớ ngay:** worktree cách ly **nơi làm việc**. Checkpoint/quay lại cứu **kết quả sai**. Hai thứ không thay thế nhau.
@@ -46,6 +54,10 @@ Vấn đề 1 — Giẫm chân: 2 sessions cùng sửa 1 working dir → conflic
 Vấn đề 2 — Đi sai đường: agent sửa 15 turns vẫn sai, càng sửa càng nát.
   → Vá bằng checkpoints: undo code + conversation về điểm trước khi nát.
 ```
+
+**Vì sao quan trọng?** Vì hai vấn đề này ăn tiền trực tiếp. Giẫm chân làm bạn mất cả buổi merge conflict; đi sai đường làm bạn đốt AI Credits cho những turn cãi nhau không tới đâu. Hiểu cơ chế vá thì bạn xử lý trước khi cơn đau tới, chứ không phải dọn hậu quả sau.
+
+**Nếu làm sai thì sao?** Không tách worktree khi chạy 2 task song song → 2 agent cùng ghi vào một file, diff trộn lẫn, bạn không biết cái nào của ai. Không có checkpoint khi giao task mạo hiểm → agent phá 10 file mà bạn không có đường lùi.
 
 3 lớp công cụ phối hợp, không thay thế nhau:
 
@@ -104,6 +116,10 @@ flowchart TD
 | **Timeline** (file history) | Undo từng file — quay 1 file về bản trước. | Agent phá `login.ts` → Timeline → Restore bản 9h sáng. | Sai 1–2 files, còn lại đúng |
 | **Chat session fork** | Rẽ nhánh hội thoại — thử đường mới, giữ đường cũ. | Fork chat ở turn 5 để thử JWT thay vì session. | Muốn thử hướng khác, giữ mạch chính |
 | **Git restore + new chat** | Lật bàn cờ — xóa hết, đánh ván mới. | `git restore src/auth/` + chat mới với prompt đủ ý. | Agent nát 10+ turns (rewind thật) |
+
+**Vì sao quan trọng?** Vì Copilot không có một nút "quay lại tất cả" như Claude Code — bạn phải tự chọn đúng cơ chế theo *mức hỏng*. Chọn sai (dùng `git restore` cho lỗi một dòng) là phí luôn 9 bước đúng; chọn sai ngược lại (dùng Timeline cho một mớ hỗn độn) là quay lui không tới đáy.
+
+**Nếu làm sai thì sao?** Dùng `git restore` khi chỉ sai tên một cột → bạn xóa cả những phần agent đã làm đúng và phải chạy lại từ đầu, tốn thêm AI Credits.
 
 ```bash
 # 3 cách xem "đã hỏng gì" trước khi quyết định undo (copy-paste):
@@ -263,6 +279,10 @@ git branch -m spike/option-2 feat/sessions
 > **Câu hỏi:** rewind khi nào, bằng cái gì? Đọc 4 scenario, rồi tra bảng cuối.
 > **Quy tắc ngắn:** sửa 2 lần vẫn sai → đừng argue, restore + chat mới.
 
+**Vì sao quan trọng?** Vì "rewind đúng lúc" là kỹ năng phân biệt người dùng Copilot giỏi và người đốt tiền. Phần lớn người mới cố "sửa dần" từ một hướng sai, mà hướng sai thì càng sửa càng xa.
+
+**Nếu làm sai thì sao?** Không chịu rewind → bạn dính vào 10–20 turns cãi nhau với agent, tốn AI Credits và kết thúc bằng một đống code nửa vời không hướng nào đúng.
+
 **Scenario 1 — Agent sửa 3 turns vẫn fail cùng 1 test**
 
 ```text
@@ -391,7 +411,33 @@ Mỗi worktree 1 window riêng. Đặt settings:
 | Xóa worktree đang có window mở | Window mất folder | Đóng window trước, hoặc `cd` ra rồi `remove` |
 | Agent lan scope mà vẫn argue 10 turns | Tiếc turns đã tốn (AI Credits) | Sai 2 lần → restore + new chat, rẻ hơn argue |
 
-### 7.4. Bài tập (có thời gian)
+### 7.3.1. Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+
+**1. Chạy 2 task song song trong cùng một working dir**
+
+```text
+❌ SAI: mở 2 cửa sổ cùng trỏ vào 1 folder, 2 agent cùng ghi → diff trộn, conflict
+✅ ĐÚNG: mỗi task 1 worktree + 1 branch riêng (mục 3), 1 window = 1 branch
+```
+**Bài học:** task song song thì phải tách không gian làm việc trước, không có ngoại lệ "làm nhanh".
+
+**2. Cố "sửa dần" từ code đã sai hướng**
+
+```text
+❌ SAI: agent sai hướng, bạn argue tiếp 10 turns mong nó tự sửa cho đúng
+✅ ĐÚNG: restore + chat mới với prompt đủ (mục tiêu + scope + verify + non-goals)
+```
+**Bài học:** sai 2 lần → rewind; hướng sai thì càng sửa càng xa, và mỗi turn cãi là một lượt trừ AI Credits.
+
+**3. Restore mù sau khi đã push**
+
+```text
+❌ SAI: PR đã push 2 review, bạn git restore local để "quay lại" → rối cả local lẫn remote
+✅ ĐÚNG: đã push thì dùng `git revert` / PR mới — checkpoints là local only
+```
+**Bài học:** checkpoint cứu được việc chưa commit; đã lên remote thì luật chơi là revert, không phải restore.
+
+### 7.4. Bài tập nhỏ (có thời gian)
 
 **Bài 1 (15 phút):** Tạo 2 worktrees (pattern A). Mở 2 windows, mỗi bên 1 task nhỏ. Merge + dọn. Ghi thời gian so với làm tuần tự.
 
@@ -400,6 +446,32 @@ Mỗi worktree 1 window riêng. Đặt settings:
 **Bài 3 (10 phút):** Thử Timeline restore 1 file + fork chat history. Khi nào Timeline đủ, khi nào cần `git restore` + new chat?
 
 **Bài 4 (15 phút):** Giao 1 issue test cho coding agent. Review branch `copilot/*` + PR draft: checkout local, comment 1 request changes, merge, verify auto-delete.
+
+---
+
+## So sánh với Claude Code
+
+Nếu bạn quen Claude Code, phần "quay lại khi agent đi sai" là chỗ khác biệt rõ nhất — Copilot không có một lệnh rewind hợp nhất, phải ghép từ công cụ của VS Code và Git.
+
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Undo cả phiên | Không có `/rewind` — ghép Timeline + fork chat + `git restore` | Có `/rewind` sẵn | Copilot phải tự chọn cơ chế theo *mức hỏng* (mục 2) |
+| Undo 1 file | Timeline (file history) của VS Code | Có checkpoint / rewind | Copilot dùng tính năng của editor, không phải của agent |
+| Rẽ nhánh hội thoại | Fork chat session (History) | `/branch` | Cùng ý tưởng "thử hướng khác mà giữ mạch chính" |
+| Cách ly nơi làm việc | Git worktree + mở folder riêng trong VS Code | Cũng chạy trên git, terminal-first | Cùng nền Git: worktree là công cụ của Git, không của riêng agent nào |
+| Bền hoá kết quả | `git commit` / PR (checkpoint chỉ ở máy) | `git commit` / PR | Checkpoint ở cả hai đều **không** phải commit — muốn bền phải commit |
+
+> **Đọc bảng này thế nào:** nền tảng Git là chung — worktree, branch, revert, commit giống nhau. Khác biệt nằm ở *cách agent phơi thao tác quay lui*: Claude Code gói thành `/rewind`, Copilot để bạn ghép công cụ editor + Git. Nhớ kỹ: cả hai đều coi **`git commit`/PR là nguồn sự thật**, còn checkpoint chỉ là tiện ích cục bộ.
+
+## Best practices (kèm "vì sao")
+
+- **Task song song = worktree riêng, không ngoại lệ.** *Vì sao?* Hai agent ghi cùng một working dir sẽ conflict file và trộn diff, khiến bạn không tách được phần của ai.
+- **Sai 2 lần vẫn sai → rewind ngay, đừng argue turn 3.** *Vì sao?* Mỗi turn cãi là một lượt trừ AI Credits, mà hướng sai thì càng sửa càng xa.
+- **Đặt worktree ngoài repo, theo quy ước `../<repo>-worktrees/<ten>`.** *Vì sao?* Giữ `git status` repo chính sạch, khỏi phải thêm vào `.gitignore`.
+- **Mỗi worktree 1 window, nhìn title biết đang ở branch nào.** *Vì sao?* Tránh commit nhầm branch khi mở nhiều nơi song song.
+- **Merge xong xóa worktree + branch ngay.** *Vì sao?* Worktree tồn sau merge là nợ — cuối tuần bạn phải ngồi dọn một đống không còn dùng.
+- **Đã push thì revert, không restore.** *Vì sao?* Checkpoint là local-only; restore sau khi push chỉ làm rối cả local lẫn remote.
+- **`copilot/*` là của agent — review qua PR, đừng push tay.** *Vì sao?* Đụng vào branch của agent làm hỏng luồng iterate của nó và khó biết ai đổi gì.
 
 ---
 
@@ -414,4 +486,7 @@ Mỗi worktree 1 window riêng. Đặt settings:
 | Chat history + model picker khi mở chat mới sau rewind | [04 — Chat commands](./04-chat-commands-toan-tap.md) |
 
 ---
+
+> **Chốt bài 11:** Worktree và checkpoint là hai tay của cùng một phản xạ — *cách ly trước khi chạy, quay lui ngay khi sai*. Tạo worktree mất 30 giây, rewind sớm mất vài giây; còn argue với agent thì tính bằng AI Credits và bằng buổi làm việc của bạn.
+
 *(Hết bài 11. Tiếp theo: [bài 12 — Copilot SDK & CI/CD automation](./12-copilot-sdk-ci-cd-automation.md).)*
