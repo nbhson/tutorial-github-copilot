@@ -327,7 +327,9 @@ Giới hạn: PowerShell suggestion kém hơn bash/zsh (test kỹ trước khi E
 
 ## 6. Copilot CLI deep-dive
 
-### 6.1. Hai lệnh gốc (dùng hàng ngày)
+> **Update 10/2026:** có **2 CLI khác nhau** — `gh copilot` (gh extension: `suggest`/`explain` lệnh shell) vs `copilot` (Copilot CLI binary: agent trong terminal, Interactive/Plan/Autopilot, `/permissions`, `/sandbox`, `--max-ai-credits`). Đừng nhầm. CLI hiện còn: `/model` thấy local models từ Ollama đang chạy (07/10, offline mode vẫn là switch riêng `COPILOT_OFFLINE`, telemetry vẫn chạy), local sandboxing GA (07/10), computer use preview `/computer on|show|off` (01/10, macOS/Windows).
+
+### 6.1. Hai lệnh gốc (dùng hàng ngày) — `gh copilot`
 
 ```bash
 # suggest: sinh lệnh shell từ mô tả tiếng Việt/Anh:
@@ -359,6 +361,23 @@ gh copilot suggest "chay migration prisma tren staging (dry-run truoc)"
 # Copy lệnh được gợi ý -> đưa cho agent mode VS Code:
 # "Chạy lệnh này ở terminal, đọc output, nếu lỗi thì fix config thiếu."
 ```
+
+### 6.4. Copilot CLI agent (`copilot` binary) + computer use — mới 10/2026
+
+```bash
+# 3 persona: Shift+Tab xoay standard → plan → autopilot;
+# copilot --mode=interactive|plan|autopilot, --plan, --max-ai-credits N
+# /permissions [default|assisted|allow-all|show] · /sandbox on|off · /model (kèm local Ollama)
+/computer on    # bật computer use (preview 01/10, macOS/Windows)
+/computer show  # xem trạng thái
+/computer off   # tắt
+# Computer use: click/gõ/scroll/drag xuyên desktop apps (legacy/GUI-only không API/MCP).
+# Luôn xin approval trước khi điều khiển app; macOS cấp Accessibility + Screen Recording;
+# org có thể disable. Mô tả outcome + apps + constraints thì chạy ổn nhất.
+# Verify: /computer show → on? Thử task nhỏ ("tóm tắt notifications trong browser") trước.
+```
+
+> VS Code 1.141 (10/2026): Agents window xem sessions side-by-side · "Open worktree cleanup" dọn worktree inactive. App 10/2026: dùng 2 account tách biệt (license Copilot riêng + repos riêng). JetBrains 10/10 có controls + chat improvements riêng — đừng assume parity với VS Code.
 
 ---
 

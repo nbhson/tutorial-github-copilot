@@ -123,11 +123,11 @@ Tháng 10/2026 Copilot có nhiều model trải theo vai trò: flagship để ng
 
 | Nhóm | Hiểu nôm na | Ví dụ trên picker | Ví dụ task nên dùng | Vai trò |
 |---|---|---|---|---|
-| **GPT-5.x (flagship)** | Giáo sư toàn diện — khó gì cũng nghĩ được. | GPT-5.5, GPT-6.1 Sol, GPT-6 Astra | Plan migrate auth 5 files; debug stuck 1h. | Suy luận sâu, agent multi-step, refactor lớn |
-| **o-series (reasoning)** | Nhà toán học trầm ngâm — chậm mà sâu. | Lớp reasoning (tên picker 10/2026 cần verify — xem mục 2.6) | Tối ưu query N+1, race condition retry. | Toán/logic khó, debug stuck, cần chain-of-thought dài |
-| **Claude trên Copilot** | Nhà văn tinh tế — viết hay, review khéo. | Claude Sonnet 5.5, Claude Opus 5.5 | Viết docs, PR description, review wording giữ style. | Viết + giải thích code dài, docs, review tinh tế |
-| **Gemini trên Copilot** | Thủ thư nhớ cả thư viện — context khổng lồ. | Gemini 3.1 Pro, Gemini 3.8 Flash | Tóm tắt cả `apps/api`, hỏi xuyên monorepo. | Context rất dài, retrieve monorepo, task đa ngữ |
-| **Mini/Flash-tier (rẻ)** | Xe ôm nhanh rẻ — việc nhỏ gọi ngay. | GPT-5.4 mini, Claude Haiku 4.5, Gemini 3.8 Flash | Autocomplete, rename, CRUD, 5 chats explore song song. | Việc hàng ngày: complete, test, CRUD, explore |
+| **GPT-5.x (flagship)** | Giáo sư toàn diện — khó gì cũng nghĩ được. | GPT-6.1 Sol, GPT-6 Astra, Gemini 4 Argon (mới 13/10) | Plan migrate auth 5 files; debug stuck 1h. | Suy luận sâu, agent multi-step, refactor lớn |
+| **o-series (reasoning)** | Nhà toán học trầm ngâm — chậm mà sâu. | Lớp reasoning (model mạnh nhất hiện tại: GPT-6.x / Opus 5.x) | Tối ưu query N+1, race condition retry. | Toán/logic khó, debug stuck, cần chain-of-thought dài |
+| **Claude trên Copilot** | Nhà văn tinh tế — viết hay, review khéo. | Claude Sonnet 5.5, Claude Opus 5.5, Haiku 5.5 (mới, việc nhỏ) | Viết docs, PR description, review wording giữ style. | Viết + giải thích code dài, docs, review tinh tế |
+| **Gemini trên Copilot** | Thủ thư nhớ cả thư viện — context khổng lồ. | Gemini 4 Argon, Gemini 3.8 Flash | Tóm tắt cả `apps/api`, hỏi xuyên monorepo. | Context rất dài, retrieve monorepo, task đa ngữ |
+| **Mini/Flash-tier (rẻ)** | Xe ôm nhanh rẻ — việc nhỏ gọi ngay. | GPT-5.6 Luna, Claude Haiku 5.5, Gemini 3.8 Flash, MAI-Code-1.1-Flash | Autocomplete, rename, CRUD, 5 chats explore song song. | Việc hàng ngày: complete, test, CRUD, explore |
 
 ### 2.2. GPT-5.x — flagship mặc định khi cần depth
 
@@ -181,33 +181,51 @@ tóm tắt, classify) + fan-out: 5 prompt explore song song rẻ hơn 1 flagship
 cover rộng hơn. Lưu ý: context + reasoning yếu hơn — đừng giao kiến trúc.
 ```
 
-### 2.6. Danh sách model 10/2026 + model ngừng hỗ trợ (02/10/2026)
+### 2.6. Danh sách model 10/2026 + model ngừng hỗ trợ (02/10 đã gỡ · 19/10 + 16/11 sắp gỡ)
 
-Đây là tên model chính xác đang có trên picker tháng 10/2026, kèm 4 model vừa bị gỡ để bạn đừng gọi tên cũ nữa.
+Đây là tên model chính xác đang có trên picker tháng 10/2026 (verify 16/10/2026 với `docs.github.com/copilot/reference/ai-models/supported-models` + changelog 01–15/10), kèm các mốc gỡ để bạn đừng gọi tên cũ nữa.
 
 ```text
-# Danh sach model tren Copilot — thang 10/2026 (tra picker thuc te, doi theo quy)
-# OpenAI: GPT-5 mini, GPT-5.3-Codex, GPT-5.4, GPT-5.4 mini, GPT-5.4 nano
-#   (Codex chi co tren VS Code ext, Pro+ only), GPT-5.5, GPT-5.6 Luna / Sol / Terra,
+# Danh sach model tren Copilot — 16/10/2026 (tra picker thuc te, doi theo quy)
+# OpenAI: GPT-5.3-Codex (Codex chi co tren VS Code ext, Pro+ only),
+#   GPT-5.6 Luna / Sol / Terra (*Terra deprecated 16/11 → GPT-6.1 Sol / GPT-6 Luna),
 #   GPT-6 Astra, GPT-6 Luna, GPT-6 Sol, GPT-6.1 Sol.
-# Anthropic: Claude Fable 5, Claude Fable 5.1, Claude Haiku 4.5,
-#   Claude Opus 4.5 / 4.6 / 4.7 / 4.8 (+ fast mode preview) / 5 / 5.5,
+#   HydraFusion + HydraFusion Max (mới 14/10, research preview, VS Code/app/CLI):
+#   orchestrate đa model (pool Opus 5.5 + GPT-6 Astra/6.1 Sol/6 Luna),
+#   draft medium → review high; HydraFusion = balanced, Max = frontier capability.
+# Anthropic: Claude Haiku 4.5, Claude Haiku 5.5 (MỚI GA 07/10 — subagent/quick-edit,
+#   matched Sonnet 5 nhiều task với ít token+steps; Pro/Pro+/Max/Biz/Ent),
+#   Claude Fable 5 / 5.1, Claude Opus 4.5 / 4.6 / 4.8 (+ fast mode preview) / 5 / 5.5,
 #   Claude Sonnet 4.5 / 4.6 / 5 / 5.5.
-# Google: Gemini 3.1 Pro (public preview), Gemini 3.5 / 3.6 / 3.7 / 3.8 Flash.
+#   (*Opus 4.8 + Opus 5 deprecated 16/11 → Opus 5.5; Opus 4.8 giữ cho individual annual.
+#    Opus 4.7 đã gỡ 02/10.)
+# Google: Gemini 3.1 Pro (public preview), Gemini 3.8 Flash,
+#   Gemini 4 Argon (MỚI GA 13/10 — frontier coding/agentic/reasoning, mạnh nhất ở CLI;
+#   Pro+/Max/Biz/Ent, provider list pricing, rollout dần).
 # Microsoft: MAI-Code-1-Flash, MAI-Code-1.1-Flash, Raptor mini (fine-tuned GPT-5 mini).
-# Other: Kimi K2.7 Code, Kimi K3, Grok 4.5, Grok 4.6 (Grok 4.7 thay trong bang gia — can verify).
+# Other: Kimi K3 (K2.7 đã gỡ 02/10), Grok 4.6 (Grok 4.5 deprecated 19/10 → 4.6).
 # Luu y: roster 10/2026 khong co dong "o-series" rieng — lop reasoning trong bai
-#   am chi nhom model manh nhat (GPT-5.5 / GPT-6.x / Claude Opus 5.x). (can verify)
+#   am chi nhom model manh nhat (GPT-6.x / Claude Opus 5.x / Gemini 4 Argon).
 ```
 
-4 model bị deprecated ngày **02/10/2026** — áp mọi trải nghiệm Copilot:
+Đã gỡ 02/10/2026 + sắp gỡ 19/10 và 16/11 — áp mọi trải nghiệm Copilot
+(Chat, inline edits, Ask/Edit/Agent, completions):
 
 | Model | Deprecated | Thay bằng |
 |---|---|---|
-| Gemini 3.5 Flash | 2026-10-02 | Gemini 3.8 Flash |
-| Gemini 3.6 Flash | 2026-10-02 | Gemini 3.8 Flash |
-| Kimi K2.7 Code | 2026-10-02 | Kimi K3 |
-| Claude Opus 4.7 | 2026-10-02 | Claude Opus 5.5 |
+| Gemini 3.5 Flash | 2026-10-02 (xong) | Gemini 3.8 Flash |
+| Gemini 3.6 Flash | 2026-10-02 (xong) | Gemini 3.8 Flash |
+| Kimi K2.7 Code | 2026-10-02 (xong) | Kimi K3 |
+| Claude Opus 4.7 | 2026-10-02 (xong) | Claude Opus 5.5 |
+| Gemini 3.7 Flash | 2026-10-19 (sắp) | Gemini 3.8 Flash |
+| GPT-5.5 | 2026-10-19 (sắp) | GPT-5.6 Sol |
+| GPT-5.4 | 2026-10-19 (sắp) | GPT-5.6 Sol |
+| GPT-5.4 mini | 2026-10-19 (sắp) | GPT-5.6 Luna |
+| GPT-5 mini | 2026-10-19 (sắp) | GPT-5.6 Luna |
+| Grok 4.5 | 2026-10-19 (sắp) | Grok 4.6 |
+| Claude Opus 4.8* | 2026-11-16 (sắp) | Claude Opus 5.5 (*giữ cho individual annual) |
+| Claude Opus 5 | 2026-11-16 (sắp) | Claude Opus 5.5 |
+| GPT-5.6 Terra | 2026-11-16 (sắp) | GPT-6.1 Sol hoặc GPT-6 Luna |
 
 Sự thật model đáng nhớ (dùng khi review bill + chọn model):
 

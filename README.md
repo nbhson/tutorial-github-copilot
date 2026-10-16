@@ -93,7 +93,13 @@ Repo này viết cho Copilot, nhưng nếu bạn đã quen Claude Code thì chuy
 
 - GitHub Copilot **(2026)**. Kiểm tra version bằng `gh copilot --version` / `gh extension list`.
 - Docs gốc: https://docs.github.com/copilot — VS Code Copilot: https://code.visualstudio.com/docs/copilot
-- **Cập nhật sự kiện 2026-10-09** (verify docs + changelog):
+- **Cập nhật sự kiện 2026-10-16** (verify `github.blog/changelog` + docs):
+  - Model mới: `Gemini 4 Argon` GA 13/10 (Pro+/Max/Business/Enterprise, mạnh nhất ở CLI) · `Claude Haiku 5.5` GA 07/10 (Pro→Enterprise, subagent/quick-edit rẻ-nhanh) · `HydraFusion Max` mới 14/10 (research preview, pool Opus 5.5 + GPT-6 Astra/6.1 Sol/6 Luna).
+  - Sắp gỡ **19/10/2026**: Gemini 3.7 Flash, GPT-5.5, GPT-5.4 (+mini), GPT-5 mini, Grok 4.5 → thay bằng 3.8 Flash / GPT-5.6 Sol/Luna / Grok 4.6.
+  - Sắp gỡ **16/11/2026**: Claude Opus 4.8*, Opus 5, GPT-5.6 Terra → Opus 5.5 / GPT-6.1 Sol / GPT-6 Luna (*Opus 4.8 giữ cho individual annual).
+  - Local sandboxing **GA 07/10** (CLI + app + VS Code Agent Host, MXC, miễn phí, enterprise enforce được) · Computer use **preview 01/10** (CLI `/computer on`, app Settings → Computer Use, macOS cần Accessibility + Screen Recording).
+  - App dùng 2 account tách biệt · CLI `/model` thấy local Ollama · VS Code 1.141 Agents side-by-side + worktree cleanup · Code review effort mặc định Balanced (từ 28/09) · Governance: telemetry attribution + managed-settings fail-closed.
+- **Cập nhật sự kiện 2026-10-09** (giữ để tra lịch sử):
   - `.github/copilot-instructions.md` (không còn `muse-instructions.md`).
   - Copilot **có** hooks in-process (`.github/hooks/*.json`, events `PreToolUse`/`PostToolUse`, preview Local — bài 17).
   - Prompt files (`.prompt.md`) **deprecated cho Agent Host** → ưu tiên **Agent Skills** (`SKILL.md`).

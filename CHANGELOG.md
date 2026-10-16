@@ -1,5 +1,30 @@
 # Changelog — Khóa Học GitHub Copilot (tiếng Việt)
 
+## [Unreleased] — CẬP NHẬT SỰ KIỆN 2026-10-16 (verify github.blog/changelog + docs.github.com/copilot)
+
+## [Unreleased] — CẬP NHẬT SỰ KIỆN 2026-10-16 (verify github.blog/changelog + docs.github.com/copilot)
+
+- **Model mới:**
+  - `Gemini 4 Argon` GA 13/10/2026 — frontier cho coding/agentic/reasoning phức tạp, mạnh nhất ở Copilot CLI (tự check edge cases). Plan: Pro+/Max/Business/Enterprise (không có Pro thường/Free). Bật qua model policy (default auto-enable). Tính tiền provider list pricing.
+  - `Claude Haiku 5.5` GA 07/10/2026 — lightweight cho subagent/quick edit/terminal task, matched Sonnet 5 nhiều task coding với ít token+steps hơn. Plan: Pro/Pro+/Max/Business/Enterprise.
+  - `HydraFusion` update 14/10/2026 + thêm option **`HydraFusion Max`** (research preview, VS Code/app/CLI, cần bật experimental/preview features + tuân model policy org). Pool mới: Opus 5.5, GPT-6 Astra, GPT-6.1 Sol, GPT-6 Luna. Tailor reasoning effort theo stage (draft medium → review high). Cascade thêm judging step (repair khi cần); Critique dùng tools inspect workspace trực tiếp + parallel critics. HydraFusion = balanced (speed/cost/perf); Max = frontier capability cho task đòi reasoning sâu nhất.
+- **Deprecations (đã xảy ra + sắp tới):**
+  - ĐÃ gỡ 02/10/2026 (giữ nguyên trong repo): Gemini 3.5/3.6 Flash → 3.8 Flash; Kimi K2.7 Code → K3; Opus 4.7 → 5.5.
+  - SẮP gỡ 19/10/2026 (còn 3 ngày từ 16/10): Gemini 3.7 Flash → 3.8 Flash; GPT-5.5 → GPT-5.6 Sol; GPT-5.4 → GPT-5.6 Sol; GPT-5.4 mini → GPT-5.6 Luna; GPT-5 mini → GPT-5.6 Luna; Grok 4.5 → Grok 4.6. Phạm vi: mọi surface (Chat, inline edits, Ask/Edit/Agent, completions).
+  - SẮP gỡ 16/11/2026: Claude Opus 4.8* → Opus 5.5; Claude Opus 5 → Opus 5.5; GPT-5.6 Terra → GPT-6.1 Sol hoặc GPT-6 Luna. (*Opus 4.8 giữ lại cho individual annual plan để còn 1 Opus.) Alternatives auto-enable cho Business/Enterprise nếu admin không tắt global default.
+- **Sandbox + Computer use + HydraFusion:**
+  - Local sandboxing GA 07/10/2026 (CLI + Copilot app + VS Code Agent Host sessions). Chạy bằng Microsoft eXecution Container (MXC) dịch 1 policy chung ra OS controls (Windows/macOS/Linux). Giới hạn files/dirs, internet+local network, Git/GitHub CLI credentials; áp được cho local MCP/language servers (where supported). Bao gồm miễn phí. Enterprise enforce qua managed settings (dev không nới được).
+  - Computer use public preview 01/10/2026 (CLI + app, macOS/Windows): đọc accessible content + visual context, click, gõ/sửa text, phím, scroll, drag, đi xuyên apps (hữu ích cho legacy/GUI-only không API/CLI/MCP). Bật: CLI `/computer on` (`/computer show|off`); app Settings → Computer Use. Luôn xin approval trước khi điều khiển app (Allow / Always allow / decline); macOS cần Accessibility + Screen Recording; org có thể disable.
+- **App / IDE / CLI / Governance:**
+  - Weekly 05/10 (post 09/10): app dùng 2 account tách biệt (license Copilot riêng + repos riêng); CLI `/model` phát hiện local models từ Ollama đang chạy (offline mode vẫn là switch riêng, telemetry vẫn chạy); VS Code 1.141 Agents window xem sessions side-by-side + "Open worktree cleanup" dọn worktree inactive.
+  - Code review: API support + effort mặc định chuyển Lite → Balanced từ 28/09/2026; 08/10 thêm org billing options/controls.
+  - JetBrains 10/10: controls + chat improvements mới (đọc changelog trước khi assume parity với VS Code).
+  - Governance 12–13/10: client telemetry có user attribution + configurable capture (OTLP endpoint/protocol/captureContent...); enterprise managed settings có enforcement mạnh hơn (fail-closed `forceRemoteSettingsRefresh`, minimum client versions bắt đầu từ sandbox key).
+  - Khác 14–15/10: agentic autofix cho code scanning alerts GA; Slack/Teams multi-repo; dynamic workflows trong CLI + app; async merge API GA.
+- **Files chạm:** `README.md`, `CHEATSHEET.md`, `01-huong-dan-su-dung/14-models-chon-model-dung.md` (mục 2.6),
+  `01-huong-dan-su-dung/10-modes-permissions-availability.md` (mục 4.3 + 5.4),
+  `01-huong-dan-su-dung/02-cac-be-mat-vscode-ide-web-cli.md` (mục 6).
+
 ## [Unreleased] — Viết lại toàn bộ tài liệu "hết robot" theo STYLE.md (2026-10-12)
 
 - **Chuẩn mới:** thêm [`STYLE.md`](./STYLE.md) — khuôn viết "dễ hiểu" (3 lớp: định nghĩa → nôm na → ví dụ; "Vì sao quan trọng?"; "Nếu làm sai thì sao?"; pitfall ❌ SAI/✅ ĐÚNG + "Bài học:"; best practices kèm "vì sao"; bảng so sánh Claude Code; bài tập nhỏ; câu chốt riêng từng file) + **danh sách câu cấm** (mùi văn template/robot). `CONTRIBUTING.md` trỏ về STYLE.md và mô tả format lệnh mới.

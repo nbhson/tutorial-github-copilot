@@ -316,11 +316,16 @@ Chọn model nào cho task nào, tiền tính ra sao (AI Credits), và Auto mode
 
 ```text
 Chat view → model picker (góc dưới): chọn model mỗi chat.
-- Model rẻ: GPT-5.4 mini, GPT-5 mini, MAI-Code-1.1-Flash — nhanh, tốn ít credits.
-  Task thường ngày.
-- Model mạnh: Claude Opus 5, Claude Sonnet 5.5, GPT-5.5, GPT-6.1 Sol — tốn credits
+- Model rẻ (16/10/2026): GPT-5.6 Luna, MAI-Code-1.1-Flash, Gemini 3.8 Flash,
+  Claude Haiku 5.5 (mới 07/10, subagent/quick-edit rẻ-nhanh) — nhanh, tốn ít credits.
+  Task thường ngày. (GPT-5 mini / 5.4 mini gỡ 19/10 — đừng pin nữa.)
+- Model mạnh: Claude Opus 5.5, Claude Sonnet 5.5, GPT-6.1 Sol, GPT-6 Astra,
+  Gemini 4 Argon (mới 13/10, Pro+/Max/Biz/Ent) — tốn credits
   nhiều hơn. Task khó (refactor lớn, debug sâu, review bảo mật).
+  (GPT-5.5 gỡ 19/10; Opus 4.8/Opus 5 + GPT-5.6 Terra gỡ 16/11 — xem mục 2.6.)
 - Auto: Copilot tự chọn model hợp task (tiện, plan trả phí còn được giảm 10%).
+- Orchestrate đa model (preview): HydraFusion (balanced) / HydraFusion Max
+  (frontier, 14/10, cần bật experimental/preview features).
 
 Quy tắc team (ai giữ: tech lead):
 - Mặc định: model rẻ. Khó mới đổi mạnh (ghi lý do trong PR/chat).
@@ -372,20 +377,26 @@ Free/Student: chỉ dùng Auto (không có model picker tay).
 ### 4.3. Model list 2026 (roster 10/2026)
 
 ```text
-OpenAI:    GPT-5 mini, GPT-5.3-Codex, GPT-5.4, GPT-5.4 mini,
-           GPT-5.4 nano (chỉ Codex VS Code ext, chỉ Pro+), GPT-5.5,
-           GPT-5.6 Luna / Sol / Terra, GPT-6 Astra, GPT-6 Luna,
-           GPT-6 Sol, GPT-6.1 Sol.
-Anthropic: Claude Fable 5, Claude Fable 5.1, Claude Haiku 4.5,
-           Claude Opus 4.5 / 4.6 / 4.7 / 4.8 (+ fast mode preview) / 5 / 5.5,
+OpenAI:    GPT-5.3-Codex (Codex chỉ VS Code ext, chỉ Pro+),
+           GPT-5.6 Luna / Sol / Terra (*Terra gỡ 16/11 → GPT-6.1 Sol / GPT-6 Luna),
+           GPT-6 Astra, GPT-6 Luna, GPT-6 Sol, GPT-6.1 Sol
+           (+ HydraFusion / HydraFusion Max orchestrate đa model, preview 14/10).
+Anthropic: Claude Fable 5 / 5.1, Claude Haiku 4.5, Claude Haiku 5.5 (MỚI 07/10),
+           Claude Opus 4.5 / 4.6 / 4.8 (+ fast mode preview) / 5 / 5.5,
            Claude Sonnet 4.5 / 4.6 / 5 / 5.5.
-Google:    Gemini 3.1 Pro (public preview), Gemini 3.5 / 3.6 / 3.7 / 3.8 Flash.
+           (Opus 4.7 đã gỡ 02/10; Opus 4.8 + Opus 5 gỡ 16/11 → Opus 5.5.)
+Google:    Gemini 3.1 Pro (public preview), Gemini 3.8 Flash,
+           Gemini 4 Argon (MỚI GA 13/10, Pro+/Max/Biz/Ent, mạnh nhất ở CLI).
+           (3.5/3.6 đã gỡ 02/10; 3.7 gỡ 19/10 → 3.8 Flash.)
 Microsoft: MAI-Code-1-Flash, MAI-Code-1.1-Flash, Raptor mini (GPT-5 mini fine-tune).
-Khác:      Kimi K2.7 Code, Kimi K3, Grok 4.5, Grok 4.6
-           (Grok 4.7 chỉ thấy trong bảng giá — cần verify).
+Khác:      Kimi K3 (K2.7 đã gỡ 02/10), Grok 4.6 (Grok 4.5 gỡ 19/10 → 4.6).
 
-Ngừng hỗ trợ 02/10/2026 (đổi trước khi dùng): Gemini 3.5 Flash → 3.8 Flash;
+Ngừng hỗ trợ 02/10/2026 (đã gỡ): Gemini 3.5 Flash → 3.8 Flash;
 Gemini 3.6 Flash → 3.8 Flash; Kimi K2.7 Code → Kimi K3; Claude Opus 4.7 → 5.5.
+Sắp gỡ 19/10/2026: Gemini 3.7 Flash → 3.8 Flash; GPT-5.5/5.4 → GPT-5.6 Sol;
+GPT-5.4 mini / GPT-5 mini → GPT-5.6 Luna; Grok 4.5 → Grok 4.6.
+Sắp gỡ 16/11/2026: Opus 4.8* → 5.5; Opus 5 → 5.5; GPT-5.6 Terra → GPT-6.1 Sol / GPT-6 Luna
+(*Opus 4.8 giữ cho individual annual).
 Model nổi bật: GPT-6 Astra GA 04/09/2026 (autonomous coding, tự validate);
 GPT-6.1 Sol GA 29/09/2026 (agentic/terminal, ít token + ít bước hơn).
 # Verify: mở model picker → đối chiếu tên với roster. Khác → bản bạn đang chạy
@@ -536,6 +547,8 @@ CLI parity (Copilot CLI):
 **Vì sao quan trọng?** Vì đây là lớp bảo vệ mạnh hơn auto-approve rules: thay vì tin rằng agent sẽ không làm bậy, bạn giới hạn hẳn cái nó *có thể* làm.
 
 **Nếu làm sai thì sao?** Tưởng sandbox là máy ảo rồi yên tâm bật Autopilot → nó không phải VM, không thay thế bảo mật hệ thống, và `allowNetwork`/`allowUnsandboxedCommands` có thể làm yếu lớp cách ly bạn đang trông cậy.
+
+> **Update 07/10/2026 — Local sandboxing GA:** có mặt ở Copilot CLI + Copilot app + VS Code sessions dùng Agent Host (miễn phí). Chạy bằng Microsoft eXecution Container (MXC) dịch 1 policy chung ra OS controls Windows/macOS/Linux. Giới hạn files/dirs, internet + local network, Git/GitHub CLI credentials; áp được cho local MCP/language servers (where supported). Enterprise enforce qua managed settings (dev không nới được). Model execution và tool isolation là 2 việc riêng — sandbox áp cho tool execution bất kể model nào.
 
 | Sandbox | Nghĩa là gì | Hệ quả |
 |---|---|---|

@@ -108,12 +108,14 @@
 
 | Nhóm | Model |
 |---|---|
-| OpenAI | GPT-5 mini, GPT-5.3-Codex, GPT-5.4 (+mini/nano), GPT-5.5, GPT-5.6 Luna/Sol/Terra, GPT-6 Astra, GPT-6 Luna, GPT-6 Sol, GPT-6.1 Sol |
-| Anthropic | Claude Fable 5/5.1, Haiku 4.5, Opus 4.5–4.8 (fast preview)/5/5.5, Sonnet 4.5/4.6/5/5.5 |
-| Google | Gemini 3.1 Pro (preview), 3.5–3.8 Flash |
+| OpenAI | GPT-5.3-Codex, GPT-5.6 Luna/Sol, GPT-6 Astra, GPT-6 Luna, GPT-6 Sol, GPT-6.1 Sol (+ HydraFusion/HydraFusion Max orchestrate đa model, preview) |
+| Anthropic | Claude Haiku 4.5, **Haiku 5.5 (mới 07/10, subagent rẻ-nhanh)**, Sonnet 4.5/4.6/5/5.5, Opus 4.5/4.6/4.8/5/5.5 (+ fast preview) |
+| Google | Gemini 3.1 Pro (preview), 3.8 Flash, **Gemini 4 Argon (mới 13/10, Pro+/Max/Biz/Ent, mạnh nhất ở CLI)** |
 | Microsoft | MAI-Code-1-Flash, MAI-Code-1.1-Flash, Raptor mini |
-| Khác | Kimi K2.7 Code, Kimi K3, Grok 4.5, Grok 4.6 (4.7 — verify) |
-| Deprecated 02/10/2026 | Gemini 3.5/3.6 Flash → 3.8 Flash; Kimi K2.7 Code → K3; Claude Opus 4.7 → 5.5 |
+| Khác | Kimi K3, Grok 4.6 |
+| Gỡ 02/10/2026 (xong) | Gemini 3.5/3.6 Flash → 3.8 Flash; Kimi K2.7 Code → K3; Claude Opus 4.7 → 5.5 |
+| Gỡ 19/10/2026 (sắp) | Gemini 3.7 Flash → 3.8 Flash; GPT-5.5/5.4 → GPT-5.6 Sol; GPT-5.4 mini/5 mini → GPT-5.6 Luna; Grok 4.5 → 4.6 |
+| Gỡ 16/11/2026 (sắp) | Opus 4.8* → 5.5; Opus 5 → 5.5; GPT-5.6 Terra → GPT-6.1 Sol / GPT-6 Luna (*4.8 giữ cho individual annual) |
 
 ## Hooks in-process (preview, Local)
 
@@ -126,6 +128,8 @@
 | `.github/hooks/*.json` | `PreToolUse` chặn lệnh nguy hiểm, `PostToolUse` chạy formatter sau khi agent sửa file (bài 07/17) |
 | `/create-hook` | `"/create-hook chạy prettier sau mỗi lần agent sửa file" → sinh hook vào .github/hooks/` |
 | `/hooks` | `mở card Hooks trong Customizations hub — xem hook đang bật` |
+| Local sandboxing (GA 07/10) | `CLI/app/VS Code Agent Host, MXC, giới hạn files+network+credentials, miễn phí; enterprise enforce được (bài 10)` |
+| Computer use (preview 01/10) | `CLI: /computer on|show|off · app: Settings → Computer Use · macOS cần Accessibility + Screen Recording` |
 
 ## 3 cạm bẫy hay gặp khi tra nhanh
 
