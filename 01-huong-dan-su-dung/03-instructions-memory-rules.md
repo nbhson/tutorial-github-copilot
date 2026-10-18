@@ -93,7 +93,8 @@ flowchart TD
     A --> C[.github/copilot-instructions.md\nRiêng Copilot, thắng khi xung đột]
     A --> D[.github/instructions/api.instructions.md\napplyTo: apps/api/**]
     A --> E[.github/instructions/web.instructions.md\napplyTo: apps/web/**]
-    A --> F[.vscode/settings.json\nTầng cá nhân, không commit]
+    A --> F[.vscode/settings.json\nTầng repo: quy tắc kỹ thuật chung]
+    A --> G[~/.config/Code/User/settings.json\nTầng personal: preferences cá nhân, không commit]
     G[Task sửa apps/api/orders.ts] --> D
     G --> C
     G --> B
@@ -117,7 +118,8 @@ ls -la .github/copilot-instructions.md .github/instructions/ AGENTS.md 2>&1
 .github/copilot-instructions.md      repo-wide, commit git cho team (QUAN TRONG NHAT)
 .github/instructions/*.instructions.md   path-scoped, co applyTo globs
 AGENTS.md                          chuan mo 2026, Copilot + nhieu agent khac doc duoc
-.vscode/settings.json              custom instructions dang settings (may ca nhan)
+.vscode/settings.json              repo-level: quy tắc kỹ thuật team (commit được)
+~/.config/Code/User/settings.json  personal: preferences cá nhân (không commit)
 ```
 
 ```bash
@@ -128,9 +130,16 @@ wc -l .github/copilot-instructions.md .github/instructions/*.instructions.md 2>/
 ```
 
 ```json
-// .vscode/settings.json — bat buoc de instructions duoc load:
+// .vscode/settings.json — repo-level (commit cho team) để bật instructions:
 {
   "github.copilot.chat.codeGeneration.useInstructionFiles": true
+}
+
+// ~/.config/Code/User/settings.json — personal (KHÔNG commit), đặt instructions riêng:
+{
+  "github.copilot.chat.codeGeneration.instructions": [
+    { "text": "Trả lời bằng tiếng Việt, ngắn gọn. Code comments không dấu." }
+  ]
 }
 ```
 
@@ -392,10 +401,11 @@ Ngoài repo files, VS Code cho phép instructions ở tầng settings (máy cá 
 
 | Tầng | File | Commit? | Khi dùng |
 |---|---|---|---|
-| Personal | User `settings.json` + `instructions[].text` | Không | Ngôn ngữ trả lời, style cá nhân |
+| Personal | `~/.config/Code/User/settings.json` + `instructions[].text` | Không | Ngôn ngữ trả lời, style cá nhân |
 | Repo | `.github/copilot-instructions.md` | Có | Team dùng chung (quan trọng nhất) |
 | Path | `.github/instructions/*.instructions.md` | Có | Rules subtree |
 | Org | Org policy/instructions (Business+) | Admin giữ | Quy ước nhiều repo |
+| Repo settings | `.vscode/settings.json` | Có | Quy tắc kỹ thuật team (tool approval, exclude...) |
 
 > Quy tắc team: personal chỉ để preferences cá nhân. Mọi thứ team cần giống nhau
 > phải vào repo files + commit — đừng để trong settings máy riêng rồi trách

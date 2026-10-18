@@ -1,10 +1,54 @@
 {
-  // Copilot instruction files: tu dong nap .github/copilot-instructions.md (hoac AGENTS.md) + instructions con.
-  // File goc: .github/copilot-instructions.md (<200 dong). Chi tiet theo path: .github/instructions/*.instructions.md
+  // ============================================================
+  // GitHub Copilot — Settings (REPO-LEVEL, commit cho team)
+  // ============================================================
+  //
+  // PHÂN TẦNG CẤU HÌNH — đọc kỹ trước khi sửa:
+  //
+  //   Personal (user settings)
+  //     Vị trí: ~/.config/Code/User/settings.json  (TRÊN MÁY CÁ NHÂN)
+  //     Commit?: ❌ KHÔNG
+  //     Dùng cho: ngôn ngữ trả lời, style riêng, instructions[].text
+  //     Ví dụ:
+  //       {
+  //         "github.copilot.chat.codeGeneration.instructions": [
+  //           { "text": "Trả lời bằng tiếng Việt, ngắn gọn." }
+  //         ]
+  //       }
+  //
+  //   Repo (file này — .vscode/settings.json trong repo)
+  //     Vị trí: .vscode/settings.json  (TRONG REPO)
+  //     Commit?: ✅ CÓ — toàn team dùng chung
+  //     Dùng cho: quy tắc kỹ thuật, tool approval, exclude paths...
+  //
+  //   Org policy (Business/Enterprise)
+  //     Vị trí: github.com → Org Settings → Copilot → Policies
+  //     Commit?: N/A — admin quản lý
+  //
+  // THỨ TỰ THẮNG KHI XUNG ĐỘT (priority):
+  //   user settings < org policy < repo copilot-instructions.md < *.instructions.md (applyTo)
+  //
+  // QUY TẮC VÀNG:
+  //   - Personal preferences → user settings máy bạn (KHÔNG commit)
+  //   - Quy tắc team → file trong repo + commit
+  //   - Đừng trộn lẫn: nếu để personal trong repo, đồng nghiệp sẽ bị áp kiểu của bạn
+  //
+  // ============================================================
+
+  // ---------- 1. INSTRUCTIONS ----------
+  // BẮT BUỘC: tự động nạp .github/copilot-instructions.md + AGENTS.md + *.instructions.md
+  // Vị trí settings này: .vscode/settings.json (repo-level, commit cho team)
+  // Nếu muốn personal instructions → đặt trong ~/.config/Code/User/settings.json
   "github.copilot.chat.codeGeneration.useInstructionFiles": true,
 
-  // Content exclusion: Copilot KHONG doc cac path nay (them path nhay cam cua repo vao).
-  // Org policy (Business/Enterprise) de len setting nay — day la lop repo-level.
+  // Custom instructions dạng text (personal — KHÔNG commit, chỉ để user settings máy riêng)
+  // "github.copilot.chat.codeGeneration.instructions": [
+  //   { "text": "Trả lời bằng tiếng Việt, ngắn gọn. Code comments không dấu." }
+  // ],
+
+  // ---------- 2. CONTENT EXCLUSION ----------
+  // Danh sách path bị loại khỏi context (Copilot KHÔNG đọc).
+  // Ưu tiên cao nhất: chặn file nhạy cảm trước khi lọt vào model.
   "github.copilot.chat.exclude": [
     "**/*.pem",
     "**/*.key",
@@ -13,12 +57,76 @@
     "**/credentials*.json"
   ],
 
-  // Go y: mo Copilot Completions cho moi file tru khi bi exclusion o tren.
+  // ---------- 3. ENABLE / DISABLE theo file type ----------
+  // Bật/tắt Copilot Completions cho từng loại file.
+  // plaintext/env=false → tắt gợi ý cho file text nhạy cảm và .env
   "github.copilot.enable": {
-    "*": true
+    "*": true,
+    "plaintext": false,
+    "env": false
   },
 
-  // MCP: doc servers tu .vscode/mcp.json (cung thu muc .vscode).
-  // Secrets MCP chi qua ${input:...}/${env:...} trong mcp.json — KHONG hardcode token o day.
+  // ---------- 4. LANGUAGE GATING ----------
+  // Chỉ bật gợi ý cho các ngôn ngữ team dùng → gợi ý chuẩn hơn, ít nhiễu.
+  // Repo-level — đặt trong .vscode/settings.json (commit cho team).
+  // Cá nhân muốn khác → thêm vào ~/.config/Code/User/settings.json
+  "github.copilot.chat.language": {
+    "enabled": ["typescript", "python", "go"],
+    "disabled": []
+  },
+
+  // ---------- 5. TOOL APPROVAL ----------
+  // Auto-run policies: "ask" (hỏi) | "allow" (cho qua) | "deny" (cấm)
+  // Priority: deny > ask > allow
+  // Repo-level — đặt trong .vscode/settings.json (commit cho team).
+  // Cá nhân muốn override → thêm vào ~/.config/Code/User/settings.json
+  "github.copilot.chat.toolAutoRun": "ask",
+
+  // Chi tiết approval cho từng tool. Commit cho team.
+  "github.copilot.chat.tools": {
+    "terminal": "ask",        // chạy shell → hỏi trước (an toàn)
+    "github-mcp": "allow",    // GitHub MCP (read-only PRs, issues) → cho qua
+    "postgres-prod": "deny"   // DB prod → cấm hẳn
+  },
+
+  // ---------- 6. MODEL SELECTION ----------
+  // Model mặc định cho chat (tên exact từ picker — roster đổi theo quý).
+  // Repo-level: "github.copilot.chat.model" + "completions.model"
+  // Personal override: thêm vào ~/.config/Code/User/settings.json
+  // Khuyến nghị: model rẻ cho default, task khó mới đổi tay sang model mạnh.
+  // "github.copilot.chat.model": "gpt-mini-tier",
+
+  // Model riêng cho inline completions (tiết kiệm credits — dùng model rẻ hơn).
+  // "github.copilot.completions.model": "gpt-mini-tier",
+
+  // Default model gợi ý cho team (commented — uncomment + đổi tên exact khi cần).
+  // "github.copilot.chat.defaultModel": "<model rẻ trong roster 2026>"
+
+  // ---------- 7. SANDBOX (Agent mode) ----------
+  // Nhốt terminal agent vào giới hạn file + mạng, lệnh trong đó auto-approve.
+  // Repo-level — đặt trong .vscode/settings.json (commit cho team).
+  // Cá nhân muốn override → ~/.config/Code/User/settings.json
+  // Hỗ trợ: macOS, Linux, WSL2.
+  "chat.agent.sandbox.enabled": "off",                  // off | on
+  "chat.agent.sandbox.network.allowNetwork": false,     // chặn mạng khi sandbox bật
+  "chat.agent.sandbox.allowUnsandboxedCommands": false, // không cho chạy lệnh ngoài chuồng
+
+  // ---------- 8. ASSISTED PERMISSIONS + AUTO-ACCEPT ----------
+  // Hiện Assisted mode trong permission picker.
+  "chat.assistedPermissions.enabled": true,
+
+  // Giây chờ auto-accept edit (0 = tắt — khuyến nghị 0 khi review kỹ).
+  "chat.editing.autoAcceptDelay": 0,
+
+  // ---------- 9. TELEMETRY ----------
+  // Mức thu thập telemetry client-side: "off" | "error" | "crash" | "all"
+  // Personal override: thêm vào ~/.config/Code/User/settings.json
+  // Lưu ý: tắt local KHÔNG nghĩa là hết log — org audit log (Business+) ghi server-side.
+  // "telemetry.telemetryLevel": "all",
+  // "github.copilot.telemetry": true
+
+  // ---------- 10. MCP (Model Context Protocol) ----------
+  // Đọc servers từ .vscode/mcp.json (cùng thư mục .vscode).
+  // Secrets MCP chỉ qua ${input:...}/${env:...} trong mcp.json — KHÔNG hardcode token.
   "mcp.enabled": true
 }
