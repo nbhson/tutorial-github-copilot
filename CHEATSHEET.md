@@ -112,9 +112,9 @@
 | Anthropic | Claude Haiku 4.5, **Haiku 5.5 (mới 07/10, subagent rẻ-nhanh)**, Sonnet 4.5/4.6/5/5.5, Opus 4.5/4.6/4.8/5/5.5 (+ fast preview) |
 | Google | Gemini 3.1 Pro (preview), 3.8 Flash, **Gemini 4 Argon (mới 13/10, Pro+/Max/Biz/Ent, mạnh nhất ở CLI)** |
 | Microsoft | MAI-Code-1-Flash, MAI-Code-1.1-Flash, Raptor mini |
-| Khác | Kimi K3, Grok 4.6 |
+| Khác | Kimi K3, Grok 4.7 |
 | Gỡ 02/10/2026 (xong) | Gemini 3.5/3.6 Flash → 3.8 Flash; Kimi K2.7 Code → K3; Claude Opus 4.7 → 5.5 |
-| Gỡ 19/10/2026 (sắp) | Gemini 3.7 Flash → 3.8 Flash; GPT-5.5/5.4 → GPT-5.6 Sol; GPT-5.4 mini/5 mini → GPT-5.6 Luna; Grok 4.5 → 4.6 |
+| Gỡ 19/10/2026 (sắp) | Gemini 3.7 Flash → 3.8 Flash; GPT-5.5/5.4 → GPT-5.6 Sol; GPT-5.4 mini/5 mini → GPT-5.6 Luna; Grok 4.5 → 4.7 |
 | Gỡ 16/11/2026 (sắp) | Opus 4.8* → 5.5; Opus 5 → 5.5; GPT-5.6 Terra → GPT-6.1 Sol / GPT-6 Luna (*4.8 giữ cho individual annual) |
 
 ## Hooks in-process (preview, Local)

@@ -1,6 +1,9 @@
 # Changelog — Khóa Học GitHub Copilot (tiếng Việt)
 
-## [Unreleased] — CẬP NHẬT SỰ KIỆN 2026-10-16 (verify github.blog/changelog + docs.github.com/copilot)
+## [Unreleased] — CẬP NHẬT SỰ KIỆN 2026-10-28 (verify github.blog/changelog + docs.github.com/copilot)
+
+- **Sửa bug version Grok (verify changelog 2026-10-28):** mọi chỗ ghi "Grok 4.5 → Grok **4.6**" đã đổi thành "Grok 4.5 → Grok **4.7**" — khớp changelog chính thức: Grok 4.7 GA trong Copilot **21/09/2026** (github.blog/changelog/2026-09-21) và bảng deprecation **19/10/2026** (github.blog/changelog/2026-10-19) chỉ định alternative của Grok 4.5 là **Grok 4.7**. Files chạm: `README.md`, `CHEATSHEET.md`, `CHANGELOG.md`, `01-huong-dan-su-dung/10-modes-permissions-availability.md`, `01-huong-dan-su-dung/14-models-chon-model-dung.md`. Ghi chú "(4.7 — verify)" cũ đã gỡ (đã verify).
+- **FAQ mới — bài 11:** `03-cau-hoi-thuong-gap/11-spaces-spark-workspace.md` — Copilot Spaces (GA 24/09/2025), Copilot Spark (deprecated 08–31/08/2026), Copilot Workspace (sunset 2025, hấp thụ vào coding agent); trạng thái 10/2026, cách truy cập, bảng so sánh. `03-cau-hoi-thuong-gap/README.md` cập nhật index 10 → 11 bài.
 
 ## [Unreleased] — CẬP NHẬT SỰ KIỆN 2026-10-16 (verify github.blog/changelog + docs.github.com/copilot)
 
@@ -10,7 +13,7 @@
   - `HydraFusion` update 14/10/2026 + thêm option **`HydraFusion Max`** (research preview, VS Code/app/CLI, cần bật experimental/preview features + tuân model policy org). Pool mới: Opus 5.5, GPT-6 Astra, GPT-6.1 Sol, GPT-6 Luna. Tailor reasoning effort theo stage (draft medium → review high). Cascade thêm judging step (repair khi cần); Critique dùng tools inspect workspace trực tiếp + parallel critics. HydraFusion = balanced (speed/cost/perf); Max = frontier capability cho task đòi reasoning sâu nhất.
 - **Deprecations (đã xảy ra + sắp tới):**
   - ĐÃ gỡ 02/10/2026 (giữ nguyên trong repo): Gemini 3.5/3.6 Flash → 3.8 Flash; Kimi K2.7 Code → K3; Opus 4.7 → 5.5.
-  - SẮP gỡ 19/10/2026 (còn 3 ngày từ 16/10): Gemini 3.7 Flash → 3.8 Flash; GPT-5.5 → GPT-5.6 Sol; GPT-5.4 → GPT-5.6 Sol; GPT-5.4 mini → GPT-5.6 Luna; GPT-5 mini → GPT-5.6 Luna; Grok 4.5 → Grok 4.6. Phạm vi: mọi surface (Chat, inline edits, Ask/Edit/Agent, completions).
+  - SẮP gỡ 19/10/2026 (còn 3 ngày từ 16/10): Gemini 3.7 Flash → 3.8 Flash; GPT-5.5 → GPT-5.6 Sol; GPT-5.4 → GPT-5.6 Sol; GPT-5.4 mini → GPT-5.6 Luna; GPT-5 mini → GPT-5.6 Luna; Grok 4.5 → Grok 4.7. Phạm vi: mọi surface (Chat, inline edits, Ask/Edit/Agent, completions).
   - SẮP gỡ 16/11/2026: Claude Opus 4.8* → Opus 5.5; Claude Opus 5 → Opus 5.5; GPT-5.6 Terra → GPT-6.1 Sol hoặc GPT-6 Luna. (*Opus 4.8 giữ lại cho individual annual plan để còn 1 Opus.) Alternatives auto-enable cho Business/Enterprise nếu admin không tắt global default.
 - **Sandbox + Computer use + HydraFusion:**
   - Local sandboxing GA 07/10/2026 (CLI + Copilot app + VS Code Agent Host sessions). Chạy bằng Microsoft eXecution Container (MXC) dịch 1 policy chung ra OS controls (Windows/macOS/Linux). Giới hạn files/dirs, internet+local network, Git/GitHub CLI credentials; áp được cho local MCP/language servers (where supported). Bao gồm miễn phí. Enterprise enforce qua managed settings (dev không nới được).
@@ -80,7 +83,7 @@
   - Anthropic: Claude Fable 5/5.1, Haiku 4.5, Opus 4.5/4.6/4.7/4.8 (fast mode preview)/5/5.5, Sonnet 4.5/4.6/5/5.5.
   - Google: Gemini 3.1 Pro (preview), 3.5/3.6/3.7/3.8 Flash.
   - Microsoft: MAI-Code-1-Flash, MAI-Code-1.1-Flash, Raptor mini.
-  - Khác: Kimi K2.7 Code, Kimi K3, Grok 4.5, Grok 4.6 (4.7 — verify).
+  - Khác: Kimi K3, Grok 4.6, Grok 4.7 (GA trong Copilot 21/09/2026; Grok 4.5 gỡ 19/10/2026 → 4.7). Verify xong 2026-10-28 với github.blog changelog.
   - Deprecated **02/10/2026**: Gemini 3.5/3.6 Flash → 3.8 Flash; Kimi K2.7 Code → K3; Claude Opus 4.7 → 5.5.
 - **Copilot CLI (2 CLI khác nhau — phân biệt rõ):**
   - `gh copilot` (gh extension): `suggest`/`explain` lệnh shell (bài 01, tips 11).

@@ -203,7 +203,7 @@ cover rộng hơn. Lưu ý: context + reasoning yếu hơn — đừng giao ki�
 #   Gemini 4 Argon (MỚI GA 13/10 — frontier coding/agentic/reasoning, mạnh nhất ở CLI;
 #   Pro+/Max/Biz/Ent, provider list pricing, rollout dần).
 # Microsoft: MAI-Code-1-Flash, MAI-Code-1.1-Flash, Raptor mini (fine-tuned GPT-5 mini).
-# Other: Kimi K3 (K2.7 đã gỡ 02/10), Grok 4.6 (Grok 4.5 deprecated 19/10 → 4.6).
+# Other: Kimi K3 (K2.7 đã gỡ 02/10), Grok 4.7 (GA trong Copilot 21/09/2026; Grok 4.5 deprecated 19/10 → 4.7).
 # Luu y: roster 10/2026 khong co dong "o-series" rieng — lop reasoning trong bai
 #   am chi nhom model manh nhat (GPT-6.x / Claude Opus 5.x / Gemini 4 Argon).
 ```
@@ -222,7 +222,7 @@ cover rộng hơn. Lưu ý: context + reasoning yếu hơn — đừng giao ki�
 | GPT-5.4 | 2026-10-19 (sắp) | GPT-5.6 Sol |
 | GPT-5.4 mini | 2026-10-19 (sắp) | GPT-5.6 Luna |
 | GPT-5 mini | 2026-10-19 (sắp) | GPT-5.6 Luna |
-| Grok 4.5 | 2026-10-19 (sắp) | Grok 4.6 |
+| Grok 4.5 | 2026-10-19 (sắp) | Grok 4.7 |
 | Claude Opus 4.8* | 2026-11-16 (sắp) | Claude Opus 5.5 (*giữ cho individual annual) |
 | Claude Opus 5 | 2026-11-16 (sắp) | Claude Opus 5.5 |
 | GPT-5.6 Terra | 2026-11-16 (sắp) | GPT-6.1 Sol hoặc GPT-6 Luna |

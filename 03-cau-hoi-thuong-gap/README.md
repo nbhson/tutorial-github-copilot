@@ -1,7 +1,7 @@
-# 03 — Câu hỏi thường gặp (10 bài, tra cứu khi kẹt)
+# 03 — Câu hỏi thường gặp (11 bài, tra cứu khi kẹt)
 
 > **Dành cho:** ai đang kẹt với GitHub Copilot — từ người mới tới dev đã dùng, cần tra cứu nhanh.
-> **Vấn đề:** 10 nhóm câu hỏi lặp đi lặp lại (tài khoản, model, MCP, policy, lỗi...) khiến bạn phải tìm documentation khắp nơi.
+> **Vấn đề:** 11 nhóm câu hỏi lặp đi lặp lại (tài khoản, model, MCP, policy, lỗi...) khiến bạn phải tìm documentation khắp nơi.
 > **Đọc xong:** mở đúng file trong 30 giây, trả lời được ngay nhờ mục "Trả lời 1 câu". **Thời gian:** ~5 phút đọc mục lục.
 
 Coi nhóm này như một tủ thuốc, không phải cuốn sách để đọc từ đầu tới cuối: bạn tra triệu chứng, tìm đúng "ngăn", lấy đúng bài. Mỗi bài gồm ~10 câu hỏi, mỗi câu theo cấu trúc cố định: **Hỏi ngắn gọn → Trả lời 1 câu → Giải thích chi tiết + ví dụ → Làm thế nào → Nếu vẫn lỗi thì...**. Bận thì chỉ đọc "Trả lời 1 câu" + sơ đồ mermaid đầu file; rảnh thì làm theo steps.
@@ -18,6 +18,7 @@ Coi nhóm này như một tủ thuốc, không phải cuốn sách để đọc 
 | 08 | Lỗi thường gặp & troubleshooting | [08-loi-thuong-gap-troubleshooting.md](./08-loi-thuong-gap-troubleshooting.md) |
 | 09 | Bảo mật, quyền, riêng tư | [09-bao-mat-quyen-rieng-tu.md](./09-bao-mat-quyen-rieng-tu.md) |
 | 10 | CI, SDK, review, Web | [10-ci-sdk-review-web.md](./10-ci-sdk-review-web.md) |
+| 11 | Copilot Spaces, Spark, Workspace | [11-spaces-spark-workspace.md](./11-spaces-spark-workspace.md) |
 
 ## Gặp lỗi X → đọc bài nào?
 
@@ -33,6 +34,7 @@ Không cần đọc từ đầu: bắt đúng triệu chứng bạn đang gặp,
 - Copilot offline, mất gợi ý, chat error, CLI fail → **bài 08** trước
 - Sợ lộ code, training, secret scanning, audit logs, ZDR → **bài 09**
 - Actions + coding agent, SDK, auto review, bản Web/Mobile → **bài 10**
+- Spaces / Spark / Workspace là gì, còn sống không, truy cập ở đâu → **bài 11**
 
 ## So sánh với Claude Code
 
@@ -49,4 +51,4 @@ Không cần đọc từ đầu: bắt đúng triệu chứng bạn đang gặp,
 
 Quay về: [../README.md](../README.md) · Bài tổng: [../01-huong-dan-su-dung/00-tong-quan-copilot.md](../01-huong-dan-su-dung/00-tong-quan-copilot.md).
 
-> **Chốt nhóm FAQ:** tra đúng triệu chứng, đọc "Trả lời 1 câu" trước, rồi mới làm theo steps — 10 bài này để bạn tự gỡ phần lớn ca kẹt mà không phải chờ ai.
+> **Chốt nhóm FAQ:** tra đúng triệu chứng, đọc "Trả lời 1 câu" trước, rồi mới làm theo steps — 11 bài này để bạn tự gỡ phần lớn ca kẹt mà không phải chờ ai.

@@ -145,6 +145,13 @@ Cần gọi SaaS từ Chat thì cài chợ nào. Cần tooling editor thì cài 
 
 ## 4. Copilot Extensions: GitHub Apps expose skills cho @-mention
 
+> **GA date: February 19, 2025** — Copilot Extensions are now generally available (github.blog
+> changelog). Auth uses native third-party tokens (no more `X-GitHub-Token`). Available in VS Code,
+> github.com, Visual Studio, JetBrains, **and GitHub Mobile**. For the full 2025/2026 picture — GA
+> timeline, third-party agents, Copilot CLI, Enterprise features, and Mobile — see
+> [`../copilot-extensions-ai-powered/README.md`](../../copilot-extensions-ai-powered/README.md)
+> (EN).
+
 Cài Copilot Extension theo flow nào, chọn extension nào cho team, và khi nào phải tự viết extension riêng.
 
 **Nôm na 1 câu:** Copilot Extension là **GitHub App đăng ký quầy riêng** trong Chat. Gõ `@tên-quầy` là gọi đúng nhân viên quầy đó (Sentry tra lỗi, Linear tạo task).
@@ -517,6 +524,7 @@ Tra cứu nhanh: nối bài này với các bài còn lại trong series.
 - **Bài 08 — MCP:** extension bundle MCP — cài 1 được 2, review URL/secrets.
 - **Bài 10 — Modes & permissions:** tool approval cho extension tools + plan differences.
 - **Bài 12 — SDK & CI:** extensions trong Actions runners (cài CLI extensions cho CI).
+- **[copilot-extensions-ai-powered](../../copilot-extensions-ai-powered/README.md)** (EN): Copilot Extensions GA 2025, custom agents, Copilot in GitHub Actions, Copilot Enterprise, Copilot CLI GA 02/2026, Copilot in GitHub Mobile.
 
 ## Reference
 

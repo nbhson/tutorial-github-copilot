@@ -389,12 +389,12 @@ Google:    Gemini 3.1 Pro (public preview), Gemini 3.8 Flash,
            Gemini 4 Argon (MỚI GA 13/10, Pro+/Max/Biz/Ent, mạnh nhất ở CLI).
            (3.5/3.6 đã gỡ 02/10; 3.7 gỡ 19/10 → 3.8 Flash.)
 Microsoft: MAI-Code-1-Flash, MAI-Code-1.1-Flash, Raptor mini (GPT-5 mini fine-tune).
-Khác:      Kimi K3 (K2.7 đã gỡ 02/10), Grok 4.6 (Grok 4.5 gỡ 19/10 → 4.6).
+Khác:      Kimi K3 (K2.7 đã gỡ 02/10), Grok 4.7 (GA 21/09/2026; Grok 4.5 gỡ 19/10 → 4.7).
 
 Ngừng hỗ trợ 02/10/2026 (đã gỡ): Gemini 3.5 Flash → 3.8 Flash;
 Gemini 3.6 Flash → 3.8 Flash; Kimi K2.7 Code → Kimi K3; Claude Opus 4.7 → 5.5.
 Sắp gỡ 19/10/2026: Gemini 3.7 Flash → 3.8 Flash; GPT-5.5/5.4 → GPT-5.6 Sol;
-GPT-5.4 mini / GPT-5 mini → GPT-5.6 Luna; Grok 4.5 → Grok 4.6.
+GPT-5.4 mini / GPT-5 mini → GPT-5.6 Luna; Grok 4.5 → Grok 4.7.
 Sắp gỡ 16/11/2026: Opus 4.8* → 5.5; Opus 5 → 5.5; GPT-5.6 Terra → GPT-6.1 Sol / GPT-6 Luna
 (*Opus 4.8 giữ cho individual annual).
 Model nổi bật: GPT-6 Astra GA 04/09/2026 (autonomous coding, tự validate);
