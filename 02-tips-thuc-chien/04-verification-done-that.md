@@ -3,82 +3,13 @@
 > **Dành cho:** dev đã cho Copilot code nhưng từng bị "xong rồi" mà không có bằng chứng.
 > **Vấn đề:** Copilot rất giỏi nói "đã xong"; nếu bạn tin lời, code đỏ lọt vào main.
 > **Đọc xong:** có thang V1→V4, 4 checklist copy-paste, cách bắt iterate tới xanh và review gate adversarial.
-> **Thời gian:** ~25 phút đọc + ~45 phút làm bài tập.
-
-## Mục tiêu bài học
-
-- Phân biệt **V1 → V4** và biết task nào cần mức nào trước khi được tính là "done".
-- Viết được **mục `## Evidence`** (test/lint/build log + diff) vào mọi prompt code.
-- Dùng 4 **checklist A–D** để chốt done cho bug / feature / refactor / docs.
-- Bắt Copilot **iterate tới xanh** mà không cho nó xóa test để lách.
-- Dựng **review gate** bằng Reviewer fresh + Copilot code review.
-
-## Mục lục
-
-- [1. Vì sao phải định nghĩa done?](#1-vì-sao-phải-định-nghĩa-done)
-- [2. Thang verification 4 mức](#2-thang-verification-4-mức)
-- [3. Checklist done cho 4 loại task](#3-checklist-done-cho-4-loại-task)
-- [4. Bắt Copilot iterate tới xanh](#4-bắt-copilot-iterate-tới-xanh)
-- [5. Copilot review gate: reviewer khó tính](#5-copilot-review-gate-reviewer-khó-tính)
-- [6. Walkthrough theo phút: fix bug tới xanh](#6-walkthrough-theo-phút-fix-bug-tới-xanh)
-- [7. Bảng tra nhanh: evidence nào cho task nào?](#7-bảng-tra-nhanh-evidence-nào-cho-task-nào)
-- [So sánh với Claude Code](#so-sánh-với-claude-code)
-- [8. Pitfalls + cách fix](#8-pitfalls--cách-fix)
-- [Best practices (kèm "vì sao")](#best-practices-kèm-vì-sao)
-- [9. Bài tập cuối bài](#9-bài-tập-cuối-bài)
-- [10. Tham khảo chéo](#10-tham-khảo-chéo)
-
----
-
-## 0. Giải ngố thuật ngữ (1 câu + so sánh + ví dụ + verify)
-
-Mỗi thuật ngữ đủ 3 lớp: **1 câu định nghĩa**, **so sánh đời thường**, **ví dụ copy-paste** — kèm 1 dòng `Verify`.
-
-| Thuật ngữ | Hiểu nôm na (1 câu) | So sánh đời thường | Ví dụ copy-paste | Verify |
-|---|---|---|---|---|
-| **Done / Evidence** | Xong là phải có hóa đơn (log), không nói miệng. | Giao hàng: phải có ảnh + chữ ký, không "em gửi rồi (chắc vậy)". | `## Evidence: test log + lint log + git diff --stat` paste trong PR. | Không log = chưa done, dù code nhìn đúng. |
-| **V1→V4** | 4 nấc chắc: nhìn đúng → chạy đúng chỗ → không gãy chỗ khác → người khác tin. | Nấu ăn: ngửi thơm (V1) → nếm 1 miếng (V2) → cả mâm ok (V3) → khách khen (V4). | Fix 1 hàm cần V2; merge main cần V4. | Merge mà chỉ V2 là thiếu (phải V4). |
-| **Regression test** | Test gác cửa: bug cũ không được quay lại. | Ổ khóa mới sau khi mất trộm: trộm cũ không vào được nữa. | Test `refund >30 ngày #101` chạy xanh + full scope xanh. | Xóa test để xanh là gian lận (cấm trong prompt). |
-| **Reviewer fresh** | Nhờ người chưa thấy bài làm chấm lại. | Thi: thí sinh không được tự chấm bài mình. | Chat mới `/team-review` verdict PASS/NEEDS-FIX + `[SEVERITY] file:line`. | Tự review bài mình → LGTM mù. |
-
-```mermaid
-flowchart TD
-    A[Code xong] --> B{Task gì?}
-    B -->|Hỏi/research| V1[V1 Nhìn đúng]
-    B -->|Fix 1 hàm| V2[V2 Focused test xanh + log]
-    B -->|Feature/refactor| V3[V3 Full test + lint + build]
-    V2 --> C{Regression?}
-    V3 --> D[Reviewer fresh]
-    C --> D
-    D --> E{PASS?}
-    E -->|Có| F[V4 Merge được]
-    E -->|Không| G[Fix tiếp trong message, max 3 lần]
-    G --> D
-```
-
-Giải thích: 1) Càng gần main càng cần V nặng. 2) Mọi bug phải có regression test chứa issue id. 3) Cấm xóa test để xanh. 4) Evidence dán cuối message + mô tả PR.
-
-> ✅ **Kỳ vọng thấy gì:** mỗi prompt code trả `## Evidence` với 10 dòng cuối log xanh + `diff --stat` gọn đúng scope.
-
----
+> **Thời gian:** ~20 phút đọc + ~45 phút làm bài tập.
 
 ## 1. Vì sao phải định nghĩa done?
 
-**Vì sao quan trọng?** Agent không biết đúng/sai — nó chỉ *đọc* kết quả tool. Nếu bạn không tự định nghĩa "done" bằng một lệnh chạy thật, thì "done" chỉ là một câu nói, và câu nói thì không chặn được bug vào production.
+Agent không biết đúng/sai — nó chỉ *đọc* kết quả tool. Ba câu nói dối kinh điển: "Xong rồi (chắc vậy)", "Should work", "Tôi đã test kỹ rồi" (không log). Nếu bạn không tự định nghĩa "done" bằng một lệnh chạy thật, thì "done" chỉ là một câu nói — và câu nói không chặn được bug vào production.
 
-Ba câu nói dối kinh điển của AI (và của cả con người):
-
-- "Xong rồi (chắc vậy)."
-- "Should work."
-- "Tôi đã test kỹ rồi" (nhưng không có log).
-
-Không có định nghĩa done:
-
-- Bạn merge code đỏ, production gãy.
-- Bạn mất 30 phút tự chạy lại những gì Copilot lẽ ra phải chạy.
-- Team không ai dám tin PR từ Copilot.
-
-Có định nghĩa done:
+Không có định nghĩa done: bạn merge code đỏ, mất 30 phút tự chạy lại, team không ai dám tin PR từ Copilot.
 
 ```text
 Mọi prompt code đều kèm: lệnh chạy + log dán + diff kiểm tra.
@@ -87,42 +18,26 @@ Không log = chưa xong.
 
 > Rule: **không evidence thì chưa done, dù code nhìn đúng.**
 
-**Nếu làm sai thì sao?** Bạn sẽ trả giá ở đúng chỗ đắt nhất: production. Một chữ "should work" không log có thể là test đỏ ở 1 case biên mà không ai thấy, hoặc diff lén chạm 5 file ngoài scope. Cái giá không nằm ở 30 phút bạn tự chạy lại — nó nằm ở sự cố production và niềm tin của team vào mọi PR do Copilot tạo.
-
----
-
 ## 2. Thang verification 4 mức
 
 | Mức | Tên | Evidence | Khi nào đủ |
 |---|---|---|---|
-| V1 | Nhìn đúng | Copilot giải thích + snippet | Chỉ cho hỏi, research, docs nháp |
+| V1 | Nhìn đúng | Copilot giải thích + snippet | Hỏi, research, docs nháp |
 | V2 | Chạy đúng chỗ | Focused test 1 file xanh + log | Bug nhỏ, edit 1 hàm |
 | V3 | Không gãy chỗ khác | Full scope test + lint + build xanh | Feature, refactor multi-files |
 | V4 | Người khác tin được | V3 + review PASS + diff gọn | Merge main, giao team, release |
 
-Leo thang:
-
-- Fix 1 hàm → ít nhất V2.
-- Thêm API, refactor → ít nhất V3.
-- Merge, release, giao khách → V4.
-
-**Ví dụ phân biệt (copy-paste để dặn Copilot):**
-
 ```text
 V2 (bug nhỏ): "Chạy `npm test -- auth` focused, dán log pass/fail. Đủ."
 V3 (feature): "Chạy `npm test -- payments` + `npm run lint` + `npm run build`, dán cả 3 logs."
-V4 (merge): "V3 + review [SEVERITY] + git diff --stat chỉ chạm scope cho phép."
+V4 (merge):   "V3 + review [SEVERITY] + git diff --stat chỉ chạm scope cho phép."
 ```
 
-**Vì sao quan trọng?** Mức V tỉ lệ thuận với "độ gần main". Càng gần production, một lỗi lọt lưới càng đắt — nên bằng chứng phải nặng hơn. Nắm thang này giúp bạn không bắt Copilot over-verify một việc nhỏ, cũng không under-verify một bản merge.
+Mức V tỉ lệ thuận với độ gần main: merge mà chỉ có V2 là tuyên bố "không gãy chỗ khác" khi chưa chạy full scope; ngược lại bắt full CI cho câu hỏi "hàm này nghĩa gì" là đốt AI Credits vô ích.
 
-**Nếu làm sai thì sao?** Merge mà chỉ có V2 (test 1 file) → bạn tuyên bố "không gãy chỗ khác" trong khi chưa hề chạy full scope. Ngược lại, bắt chạy full CI cho một câu hỏi "hàm này nghĩa gì" → đốt AI Credits vô ích.
+## 3. Checklist done cho 4 loại task (copy-paste)
 
----
-
-## 3. Checklist done cho 4 loại task
-
-### Checklist A — BUG (copy-paste vào prompt)
+**A — BUG:**
 
 ```text
 Done khi:
@@ -133,19 +48,17 @@ Done khi:
 - [ ] `git diff --stat` chỉ chạm scope cho phép
 ```
 
-### Checklist B — FEATURE (copy-paste)
+**B — FEATURE:**
 
 ```text
 Done khi:
 - [ ] Đúng plan.md đã duyệt (không thêm scope lén)
-- [ ] `npm test -- <scope>` xanh (dán log)
-- [ ] `npm run lint` 0 error (dán log)
-- [ ] `npm run build` pass (dán log)
+- [ ] `npm test -- <scope>` xanh + `npm run lint` 0 error + `npm run build` pass (dán logs)
 - [ ] API mới có test + docs cập nhật
 - [ ] Ràng buộc NEVER giữ nguyên (generated/, schema, main)
 ```
 
-### Checklist C — REFACTOR (copy-paste)
+**C — REFACTOR:**
 
 ```text
 Done khi:
@@ -156,7 +69,7 @@ Done khi:
 - [ ] Reviewer fresh verdict PASS
 ```
 
-### Checklist D — DOCS / DATA (copy-paste)
+**D — DOCS / DATA:**
 
 ```text
 Done khi:
@@ -167,34 +80,18 @@ Done khi:
 - [ ] Không sửa/xóa file gốc
 ```
 
-Mẹo team: lưu 4 checklist này vào `.github/prompts/verify-*.prompt.md` để gọi `/verify-bug`, `/verify-feature` (xem [Tips 07](./07-thiet-ke-prompts-skills.md)). Lưu ý 2026: nếu chạy trên Agent Host/Cloud, nên gói 4 checklist này thành 4 Agent Skills (`SKILL.md`) thay vì prompt files legacy.
-
----
+Mẹo team: lưu 4 checklist vào `.github/prompts/verify-*.prompt.md` để gọi `/verify-bug`, `/verify-feature`; nếu chạy Agent Host thì gói thành Agent Skills (`SKILL.md`) — xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 
 ## 4. Bắt Copilot iterate tới xanh
 
-### Công thức 1 câu quyền lực
-
-Thêm câu này vào mọi prompt code, Copilot tự chạy → đọc lỗi → sửa → chạy lại.
-
-**Ví dụ 1 — Loop tới xanh (copy-paste):**
+**Loop tới xanh (thêm vào mọi prompt code):**
 
 ```text
 Sau khi sửa, chạy `npm test -- payments` và dán log pass/fail.
 Nếu đỏ, fix tiếp trong message này tới khi xanh hoặc dừng sau 3 lần và báo blocker + file:line.
 ```
 
-**Ví dụ 2 — Loop 3 lệnh (copy-paste):**
-
-```text
-Verify 3 bước, dán cả 3 logs ở cuối:
-1. `npm test -- payments`
-2. `npm run lint`
-3. `npm run build`
-Bước nào đỏ thì fix ngay trong message này (tối đa 3 lần), rồi chạy lại từ bước 1.
-```
-
-**Ví dụ 3 — Cấm xóa test để xanh (copy-paste):**
+**Cấm xóa test để xanh (bắt buộc):**
 
 ```text
 Tuyệt đối không xóa/sửa test cũ để cho xanh, không skip test,
@@ -202,9 +99,9 @@ không dùng --passWithNoTests để lách.
 Nếu test cũ sai thật, báo lý do + file:line và chờ tôi quyết.
 ```
 
-Vì sao cần câu 3? Vì Copilot (và cả dev vội) rất hay lách bằng cách xóa test khó. Bạn phải cấm trước.
+Vì sao cần câu này? Vì Copilot (và cả dev vội) rất hay lách bằng cách xóa test khó — bạn tưởng đã sửa xong, thực ra vừa giấu bug đi.
 
-### Dặn dán evidence đúng chỗ
+**Dặn dán evidence đúng chỗ:**
 
 ```text
 Cuối message luôn có mục:
@@ -215,38 +112,18 @@ Cuối message luôn có mục:
 Không có mục này = chưa xong, đừng nói done.
 ```
 
-### Checklist nhanh trước khi commit (copy-paste)
-
-```text
-- [ ] Lệnh test đúng scope? Log xanh thật?
-- [ ] Lint + build đã chạy (nếu feature/refactor)?
-- [ ] Diff --stat chỉ chạm scope cho phép?
-- [ ] Regression test cho bug? API mới có test?
-- [ ] Reviewer fresh PASS (nếu merge)?
-- [ ] Evidence đã paste vào PR mô tả?
-```
-
-**Vì sao quan trọng?** Một prompt có "loop tới xanh + cấm xóa test + mục Evidence" biến Copilot từ "máy khen" thành "máy chứng minh". Bạn không cần tin nó — bạn chỉ cần đọc log.
-
-**Nếu làm sai thì sao?** Bỏ câu "cấm xóa test", Copilot có thể làm test xanh bằng cách xóa đúng cái test đang bắt bug — bạn tưởng đã sửa xong, thực ra vừa giấu bug đi.
-
----
-
 ## 5. Copilot review gate: reviewer khó tính
 
-Đừng để người viết tự review. Mở chat mới (agent Reviewer hoặc github.com review) với prompt adversarial.
-
-**Ví dụ 1 — Reviewer fresh (copy-paste):**
+Đừng để người viết tự review. Mở chat mới (chưa thấy reasoning cũ) với prompt adversarial:
 
 ```text
-# Mở chat mới, chưa thấy reasoning cũ
 Review diff hiện tại với plan trong #file:plan.md.
 - Finding = bug/correctness/security/test-gap thực sự. Bỏ qua style.
 - Trả về: [SEVERITY: HIGH/MED/LOW] file:line — mô tả 1 dòng — gợi ý fix 1 dòng.
 - Cuối cùng: verdict PASS / NEEDS-FIX + 3 gaps ưu tiên cao nhất.
 ```
 
-**Ví dụ 2 — Calibration: reviewer không dễ dãi (copy-paste):**
+**Calibration — reviewer không dễ dãi:**
 
 ```text
 Bạn là reviewer khó tính. Không được nói LGTM nếu còn 1 trong:
@@ -257,7 +134,7 @@ Bạn là reviewer khó tính. Không được nói LGTM nếu còn 1 trong:
 Tìm ít nhất 1 HIGH hoặc giải thích vì sao chắc chắn không có HIGH.
 ```
 
-**Ví dụ 3 — Dùng GitHub Copilot code review (copy-paste setup):**
+**Bật Copilot code review (setup):**
 
 ```text
 Repo -> Settings -> Code review -> Copilot review: bật cho mọi PR.
@@ -265,175 +142,75 @@ Rule: PR từ Copilot Coding Agent bắt buộc có 1 review người + Copilot 
 Branch protection: require status checks (test/lint/build) + require review.
 ```
 
-Kết hợp:
+Kết hợp 3 nguồn: Copilot code review quét mỗi PR (rẻ, nhanh) → chat Reviewer fresh soi sâu trước merge → người review cuối chốt và chịu trách nhiệm.
 
-- Copilot review tự động quét mỗi PR (rẻ, nhanh).
-- Chat Reviewer fresh soi sâu trước merge (kỹ).
-- Người review cuối chốt (chịu trách nhiệm).
+> Lưu ý 2026: review Balanced (mặc định từ 28/09/2026) tốn AI Credits + GitHub Actions minutes.
 
-| Nguồn review | So sánh nôm na | Ví dụ | Khi nào dùng |
-|---|---|---|---|
-| Copilot code review | Máy quét cổng tự động. | Bật cho mọi PR mới. | Mọi PR, chạy tự động trước khi người xem |
-| Chat Reviewer fresh | Nhờ người mới soi kỹ bài làm. | Feature/refactor cần verdict PASS/NEEDS-FIX. | Diff rủi ro, soi sâu trước merge |
-| Người review cuối | Thủ trưởng ký duyệt. | Merge main, release. | Luôn là người chốt chịu trách nhiệm |
+## 6. Walkthrough: fix bug tới xanh trong 30 phút
 
-> Lưu ý 2026: review Balanced (mặc định từ 28/09/2026) tốn AI Credits + GitHub Actions minutes. Xem [bài 12 mục 5](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md).
+Bối cảnh: login email có dấu bị 500, file `src/auth/login.ts:42`.
 
-**Nếu làm sai thì sao?** Tự review bài mình (hoặc để đúng chat đang implement tự chấm) → bạn nhận về "LGTM" mù. Reviewer phải là một phiên *chưa thấy reasoning cũ*; nếu không, nó sẽ bênh code của chính nó.
-
----
-
-## 6. Walkthrough theo phút: fix bug tới xanh
-
-**Bối cảnh:** login email có dấu bị 500, file `src/auth/login.ts:42`.
-
-| Phút | Việc | Prompt / lệnh (copy-paste) |
+| Phút | Việc | Prompt / lệnh |
 |---|---|---|
-| 0–2 | Mở chat Edit, gắn hẹp | Bôi đen hàm → `"#selection Root cause 3 bullet trước khi sửa. Fix tối thiểu, giữ export."` |
+| 0–2 | Chat Edit, gắn hẹp | Bôi đen hàm → `"#selection Root cause 3 bullet trước khi sửa. Fix tối thiểu, giữ export."` |
 | 2–10 | Fix + regression test | `"Thêm 1 regression test email có dấu. Chạy npm test -- auth, dán log."` |
 | 10–15 | Loop tới xanh | Nếu đỏ → `"Fix tiếp trong message này, tối đa 3 lần, dán log mỗi lần."` |
-| 15–20 | Mở rộng V3 | `"Chạy thêm npm run lint + npm run build, dán 2 logs. Diff --stat chỉ chạm src/auth/**?"` |
-| 20–28 | Review gate | Mở chat Reviewer fresh → prompt mục 5 → verdict PASS/NEEDS-FIX |
+| 15–20 | Mở rộng V3 | `"Chạy thêm npm run lint + npm run build. Diff --stat chỉ chạm src/auth/**?"` |
+| 20–28 | Review gate | Chat Reviewer fresh → prompt mục 5 → PASS/NEEDS-FIX |
 | 28–30 | Chốt done | Checklist BUG mục 3 tick đủ → commit `fix: normalizeEmail dau + regression test` |
-
-Tổng 30 phút, có log xanh + review PASS. Không còn should work.
-
----
 
 ## 7. Bảng tra nhanh: evidence nào cho task nào?
 
-| Task | So sánh nôm na | Ví dụ | Test | Lint/Build | Diff | Review | Dòng dặn 1 câu |
-|---|---|---|---|---|---|---|---|
-| Hỏi / research | Chỉ nghe, không làm. | Giải thích `retryWithBackoff`. | Không | Không | Không | Không | `Chỉ trả lời, không sửa` |
-| Fix 1 hàm | Vá 1 lỗ nhỏ. | Fix `validate()` email dấu. | Focused 1 file | Không bắt buộc | --stat | Không bắt buộc | `Chạy focused test + dán log` |
-| Bug + regression | Vá + gắn khóa chống trộm lại. | Bug refund #101 + test mới. | Focused + case mới | Lint file | --stat scope | Nên có | `Thêm regression + test xanh` |
-| Feature multi-files | Xây cả phòng + nghiệm thu. | Thêm `POST /refund` 3 files. | Full scope | Lint + build | --stat scope | Bắt buộc fresh | `3 logs + review PASS` |
-| Refactor | Dọn nhà không mất đồ. | Tách `auth.ts` 900 dòng. | Full scope từng bước | Lint + build | --stat gọn | Bắt buộc fresh | `Mỗi bước 1 log xanh` |
-| Merge main | Bàn giao nhà cho khách. | Merge vào `main` release. | Full CI xanh | Full CI | PR diff | Người + Copilot | `CI xanh + 2 reviews` |
+| Task | Test | Lint/Build | Diff | Review | Dòng dặn 1 câu |
+|---|---|---|---|---|---|
+| Hỏi / research | Không | Không | Không | Không | `Chỉ trả lời, không sửa` |
+| Fix 1 hàm | Focused 1 file | Không bắt buộc | --stat | Không bắt buộc | `Chạy focused test + dán log` |
+| Bug + regression | Focused + case mới | Lint file | --stat scope | Nên có | `Thêm regression + test xanh` |
+| Feature multi-files | Full scope | Lint + build | --stat scope | Bắt buộc fresh | `3 logs + review PASS` |
+| Refactor | Full scope từng bước | Lint + build | --stat gọn | Bắt buộc fresh | `Mỗi bước 1 log xanh` |
+| Merge main | Full CI xanh | Full CI | PR diff | Người + Copilot | `CI xanh + 2 reviews` |
 
 > Quy tắc ngón tay: **càng gần main càng cần evidence nặng. Hỏi thì V1 đủ, merge thì phải V4.**
 
-### Before / After — prompt dở vs tốt
-
-**Before (tin miệng):**
-```text
-Fix login giúp tôi, xong báo nhé
-```
-> Kết quả: Copilot trả "Xong rồi!" không log. Bạn merge → prod gãy vì test đỏ 1 chỗ. Không regression, không diff-stat.
-
-**After (bắt evidence):**
-```text
-BUG: Login email có dấu bị 500 (#file:src/auth/login.ts:42).
-Root cause 3 bullet trước khi sửa. Fix tối thiểu + 1 regression test.
-Chạy `npm test -- auth` dán log. Tuyệt đối không xóa test để xanh.
-Cuối message có ## Evidence: log + diff --stat.
-```
-> Kết quả: log xanh + regression + diff gọn 2 files + Reviewer PASS. Merge tự tin. Verify: mở CI run thấy xanh thật.
-> ✅ **Kỳ vọng thấy gì:** After luôn có `## Evidence` 3 dòng logs; Before chỉ có chữ "done".
-
----
-
-## So sánh với Claude Code
-
-Nguyên tắc "không log thì chưa done" không riêng Copilot — nhưng cách *dựng* review gate thì mỗi bên một kiểu. Bảng này để bạn mang thói quen qua lại:
+## 8. So sánh với Claude Code
 
 | Việc | Copilot | Claude Code | Ghi chú |
 |---|---|---|---|
-| Ai chạy lệnh verify | Bạn dặn Copilot chạy test/lint/build trong prompt | Bạn dặn Claude Code chạy lệnh trong prompt | **Không agent nào tự chịu trách nhiệm đúng/sai** |
-| Dán bằng chứng vào PR | `## Evidence` (test/lint/build log + `diff --stat`) | Cùng cách — log dán vào mô tả PR, bạn đọc | Đây là thói quen của *bạn*, không phải tính năng công cụ |
-| Review tự động trên PR | **Copilot code review** bật sẵn cho repo | Dùng **GitHub Actions**/CI + review của người, không có bot review "cây nhà lá vườn" tương đương | Copilot có bot review tích hợp; Claude Code dựa vào CI + người |
-| Reviewer "fresh" | Chat mới (agent Reviewer) chưa thấy reasoning cũ | Cùng ý tưởng: mở phiên mới để review, tránh tự khen | Cả hai đều cần phiên sạch |
-| Chống xóa test để lách | Cấm trong prompt (`không xóa/sửa test`) | Cấm trong prompt tương tự | Vấn đề nằm ở dev/agent, không ở nhà cung cấp |
+| Ai chạy lệnh verify | Bạn dặn Copilot chạy test/lint/build | Bạn dặn Claude Code chạy lệnh | Không agent nào tự chịu trách nhiệm đúng/sai |
+| Dán bằng chứng vào PR | `## Evidence` (logs + `diff --stat`) | Cùng cách — log vào mô tả PR | Thói quen của *bạn*, không phải tính năng |
+| Review tự động trên PR | **Copilot code review** bật sẵn cho repo | CI + review người, không có bot review tương đương | Copilot có bot review tích hợp |
+| Reviewer "fresh" | Chat mới (agent Reviewer) | Mở phiên mới để review | Cả hai đều cần phiên sạch |
+| Chống xóa test để lách | Cấm trong prompt | Cấm trong prompt | Vấn đề nằm ở agent, không ở nhà cung cấp |
 
-> **Đọc bảng này thế nào:** nếu quen Claude Code, bạn đã quen "bắt dán log". Sang Copilot chỉ thêm một thứ tiện: **Copilot code review** quét mỗi PR tự động — nhưng nó vẫn không thay được người review cuối.
-
----
-
-## 8. Pitfalls + cách fix
+## 9. Pitfalls + cách fix
 
 | Pitfall | Triệu chứng | Fix |
 |---|---|---|
 | Tin should work | Production gãy sau merge | Không log = chưa done, bắt dán log |
 | Chỉ chạy 1 file rồi claim xong | Sửa A hỏng B | Feature/refactor phải full scope + build |
-| Xóa test để xanh | Test xanh giả | Cấm xóa/sửa test trong prompt (ví dụ 3 mục 4) |
+| Xóa test để xanh | Test xanh giả | Cấm xóa/sửa test trong prompt (mục 4) |
 | Reviewer tự review | LGTM mù | Luôn chat Reviewer fresh + Copilot PR review |
 | Diff lẫn 5 việc | Review không nổi | 1 task 1 branch/PR, diff --stat kiểm tra scope |
 | Quên lint/build | CI đỏ sau push | Mọi prompt feature đều có 3 logs |
 | Dán log cắt đầu cắt đuôi | Giấu lỗi | Dặn paste 10 dòng cuối + exit code |
-| Không lưu evidence vào PR | Người sau không tin | Paste logs vào mô tả PR, link CI run |
-| Verify bằng mắt | Quên edge case | Checklist A–D mục 3 tick đủ mới commit |
+| Verify bằng mắt | Quên edge case | Checklist A–D tick đủ mới commit |
 
-### Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+## 10. Bài tập cuối bài
 
-**1. Tin lời "xong rồi"**
+**Bài 1 (10 phút):** Lấy 1 prompt code gần nhất, thêm 1 lệnh verify + dặn dán log + 1 dòng NEVER + mục Evidence. Chạy lại, so số turns trước/sau.
 
-```text
-❌ SAI: "Fix login giúp tôi, xong báo nhé"  -> Copilot trả "Xong rồi!" không log
-✅ ĐÚNG: "Chạy `npm test -- auth`, dán 10 dòng cuối log + ## Evidence."  -> bạn đọc log mới tin
-```
-**Bài học:** agent chỉ *đọc* kết quả tool — tính đúng do lệnh verify quyết định, không do lời nói.
+**Bài 2 (20 phút):** Lấy 1 PR/diff gần nhất, mở chat Reviewer fresh với prompt mục 5. Ghi lại mấy HIGH/MED/LOW, có gap nào bạn bỏ sót không? Bật Copilot code review cho repo, so findings 2 nguồn.
 
-**2. Chỉ chạy 1 file rồi claim "không gãy chỗ khác"**
-
-```text
-❌ SAI: "npm test -- auth xanh"  -> tuyên bố cả repo ổn
-✅ ĐÚNG: "npm test -- payments + npm run lint + npm run build, dán cả 3 logs"
-```
-**Bài học:** feature/refactor phải full scope + build; 1 file xanh không chứng minh được gì ngoài 1 file.
-
-**3. Để test xanh bằng cách xóa test**
-
-```text
-❌ SAI: test đỏ -> xóa test cho xanh -> "đã fix xong"
-✅ ĐÚNG: "Tuyệt đối không xóa/sửa test cũ để cho xanh... nếu test cũ sai thật thì báo lý do + chờ tôi quyết."
-```
-**Bài học:** test xanh giả nguy hiểm hơn test đỏ thật — bug bị giấu đi chứ không biến mất.
-
----
-
-## Best practices (kèm "vì sao")
-
-- **Mọi prompt code phải có lệnh verify chạy thật.** *Vì sao?* Đây là thứ duy nhất phân biệt "sửa đúng" với "agent tự khen".
-- **Chốt done bằng mục `## Evidence` cố định.** *Vì sao?* Có khe cố định để dán log thì bạn không phải nhớ hỏi lại từng lần.
-- **Dặn paste 10 dòng cuối log + exit code.** *Vì sao?* Log cắt đầu cắt đuôi là chỗ dễ giấu lỗi nhất.
-- **Cấm xóa/sửa test để xanh ngay trong prompt.** *Vì sao?* Agent (và dev vội) có xu hướng lách bằng test dễ xóa — cấm trước thì không phải hối.
-- **Review bằng phiên fresh, không tự chấm.** *Vì sao?* Người viết khó thấy lỗi của mình; phiên sạch không bênh code cũ.
-- **Càng gần main, evidence càng nặng (V3 → V4).** *Vì sao?* Giá của một lỗi lọt lưới tăng theo mức gần production.
-- **Lưu logs vào mô tả PR + link CI run.** *Vì sao?* Người sau (và chính bạn 3 tháng nữa) cần biết tại sao tin được bản merge này.
-
----
-
-## 9. Bài tập cuối bài
-
-**Bài 1 (10 phút — gắn done vào prompt cũ):**
-
-1. Lấy 1 prompt code gần nhất của bạn.
-2. Thêm: 1 lệnh verify + dặn dán log + 1 dòng NEVER + mục Evidence.
-3. Chạy lại, so số turns trước/sau.
-
-**Bài 2 (20 phút — review gate thật):**
-
-1. Lấy 1 PR/diff gần nhất, mở chat Reviewer fresh với prompt mục 5.
-2. Ghi lại: mấy HIGH/MED/LOW? Có gap nào bạn bỏ sót không?
-3. Bật Copilot code review cho repo, so findings 2 nguồn.
-
-**Bài 3 (15 phút — chuẩn hóa team):**
-
-1. Lưu 4 checklist mục 3 thành `.github/prompts/verify-*.prompt.md` (hoặc 4 Agent Skills nếu dùng Agent Host).
-2. Thêm vào CONTRIBUTING: mọi PR phải có Evidence (test/lint/build logs).
-3. Bật branch protection: require checks + review (xem Tips 06).
+**Bài 3 (15 phút):** Lưu 4 checklist mục 3 thành `.github/prompts/verify-*.prompt.md` (hoặc Agent Skills). Thêm vào CONTRIBUTING: mọi PR phải có Evidence. Bật branch protection require checks + review (xem Tips 06).
 
 > Đạt: sau 2 tuần, 100% PR từ Copilot của bạn có log xanh dán kèm, 0 PR should work.
 
----
+## Tham khảo chéo
 
-## 10. Tham khảo chéo
+- [Tips 02](./02-prompt-engineering.md) — viết verify + NEVER ngay trong prompt
+- [Tips 03](./03-plan-first-workflow.md) — plan có verify từng phase
+- [Tips 06](./06-policies-guardrails-recipes.md) — branch protection + pre-commit recipes
+- [Tips 09](./09-teamwork-chuan-hoa.md) — chuẩn hóa review workflow cho team
+- [Tips 10](./10-debugging-power-moves.md) — test failure loop khi đỏ
 
-- Bài tips liên quan:
-  - [Tips 02](./02-prompt-engineering.md) — viết verify + NEVER ngay trong prompt
-  - [Tips 03](./03-plan-first-workflow.md) — plan có verify từng phase
-  - [Tips 06](./06-policies-guardrails-recipes.md) — branch protection + pre-commit recipes
-  - [Tips 09](./09-teamwork-chuan-hoa.md) — chuẩn hóa review workflow cho team
-  - [Tips 10](./10-debugging-power-moves.md) — test failure loop khi đỏ
-
-> **Chốt Tips 04:** _một dòng log xanh đáng giá hơn mười câu "should work" — bắt Copilot chứng minh, đừng tin lời hứa._
+> **Chốt Tips 04:** một dòng log xanh đáng giá hơn mười câu "should work" — bắt Copilot chứng minh, đừng tin lời hứa.

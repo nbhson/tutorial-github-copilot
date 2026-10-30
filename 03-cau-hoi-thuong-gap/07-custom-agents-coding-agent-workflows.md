@@ -1,28 +1,6 @@
 # FAQ 07 — Custom Agents & Coding Agent Workflows
 
-> Nhóm Agent nâng cao · 10 câu hỏi deep-dive · Đọc xong hết agent loạn, coding agent PR sạch, không conflict
-
-Custom agent sửa lố scope, coding agent mở PR xong để lại conflict, CI đỏ mà không biết bắt đầu từ đâu... 10 câu dưới đây giữ đúng 5 nhịp: **hỏi ngắn** → **trả lời 1 câu** → **giải thích + ví dụ** → **làm thế nào** → **nếu vẫn lỗi thì làm gì**, kèm một dòng **khi nào áp dụng**. Dán nguyên khối code vào terminal là chạy.
-
-## Mục tiêu bài học
-
-- Trị custom agent "chạy loạn" bằng **`tools` + ranh giới**, không phải bằng niềm tin.
-- Chạy đúng **workflow 3 pha** explorer → làm → tester cho task lớn.
-- Giao việc cho coding agent bằng **issue đủ 5 phần** để PR xanh lần đầu.
-- Xử lý 3 ca PR agent hay gặp: **conflict, CI đỏ, sai scope**.
-- Biết **khi nào tin agent, khi nào review từng dòng**.
-
-## Sơ đồ tư duy nhanh (đọc 30 giây)
-
-```mermaid
-flowchart LR
-    A[Issue ro] --> B[explorer: ve ban do]
-    B --> C[lam chinh: sua + test]
-    C --> D[tester: chay focused]
-    D --> E{Cham auth/payment?}
-    E -->|Yes| F[security-reviewer]
-    E -->|No| G[Mo PR + review]
-```
+> **Vấn đề:** custom agent sửa lố scope, coding agent mở PR xong để lại conflict, CI đỏ không biết bắt đầu từ đâu — 10 câu dưới đây trị bằng `tools` + ranh giới + issue đủ spec, không phải bằng niềm tin.
 
 ## Bảng tổng hợp: agent nào việc nào
 
@@ -37,21 +15,7 @@ flowchart LR
 
 ## 1. Custom agent "chạy loạn" — nguyên nhân và cách trị?
 
-> **Hỏi ngắn gọn:** _Custom agent "chạy loạn" — nguyên nhân và cách trị?_
-
-**Trả lời 1 câu:** Agent chạy loạn vì thiếu `tools` khóa quyền, thiếu ranh giới trong body, hoặc task quá to — trị bằng cách khóa tools + 3 dòng ranh giới + chia nhỏ task.
-
-**Giải thích chi tiết + ví dụ:** Nôm na: agent không có ranh giới giống như thợ điện được giao "sửa cái này" mà chìa khóa toàn nhà trong túi — nó sửa luôn cái không được nhờ. "Loạn" = sửa file ngoài scope, chạy lệnh cấm, lặp vòng không xong. 3 nguyên nhân:
-
-1. **Thiếu `tools` giới hạn** trong frontmatter → agent có full quyền.
-2. **Thiếu ranh giới trong body:** không ghi "CHỈ đọc / KHÔNG sửa".
-3. **Task quá to** → agent tự mở rộng scope để "cho xong".
-
-2026: có thể ép thêm Agent Skills (chuẩn `SKILL.md`, thay prompt files legacy) để nạp đúng kiến thức cần, và hooks (preview, chỉ Local) để chặn lệnh ghi — nhưng hooks chưa phải security boundary, gate thật vẫn là `tools` + ranh giới trong issue.
-
-### Làm thế nào
-
-Khóa quyền ngay trong file agent, ranh giới viết trước procedure:
+**Trả lời 1 câu:** 3 nguyên nhân: thiếu `tools` khóa quyền (agent có full quyền), thiếu ranh giới trong body, task quá to — trị bằng khóa tools + 3 dòng ranh giới + chia nhỏ task.
 
 ```markdown
 <!-- .github/agents/explorer.agent.md — trinh sat chi doc -->
@@ -64,93 +28,39 @@ tools: [search]
 - Quá 10 file liên quan -> dừng, hỏi user chọn tiếp.
 ```
 
-```bash
-# Verify: agent chi doc, khong sua gi
-gh pr list --author "app/copilot" --state open   # check PR moi (neu dung coding agent)
-```
+> `tools` + ranh giới là gate thật; hooks (preview, chỉ Local) chưa phải security boundary. **Vẫn loạn:** rút `tools` còn 1 tool, thêm "quá 10 file thì dừng", chia task nhỏ hơn.
 
-**Ví dụ cụ thể:** explorer không giới hạn tự sửa luôn code → thêm block `tools: [search]` + 3 dòng ranh giới trên → từ đó chỉ trả bản đồ file.
+## 2. Workflow 3 pha explorer → làm → tester?
 
-> **Khi nào áp dụng:** ngay khi tạo/sửa mọi `*.agent.md` — ranh giới viết trước procedure.
-
-> **Nếu vẫn lỗi thì...** rút `tools` xuống còn 1 tool rồi chạy lại; thêm câu "quá 10 file thì dừng, hỏi user"; và chia task nhỏ hơn thay vì thêm lời nhắc.
-
----
-
-## 2. Bộ 3 explorer → làm → tester: workflow chuẩn?
-
-> **Hỏi ngắn gọn:** _Bộ 3 explorer → làm → tester: workflow chuẩn?_
-
-**Trả lời 1 câu:** Workflow chuẩn cho task lớn là 3 pha mỗi pha một chat: explorer vẽ bản đồ, pha làm sửa đúng list file, tester chạy test và báo PASS/FAIL.
-
-**Giải thích chi tiết + ví dụ:** Nôm na: khảo sát → thi công → nghiệm thu, ba đoàn khác nhau, không gộp chung. Workflow 3 pha cho task >30 phút:
-
-1. **Explorer:** "vẽ bản đồ" — file nào liên quan, thứ tự đọc, rủi ro.
-2. **Làm (Edit/Agent):** sửa theo bản đồ, scope khóa theo list explorer.
-3. **Tester:** chạy test focused + lint, báo PASS/FAIL + guess 1 dòng nếu đỏ.
-
-Mỗi pha 1 chat (hoặc 1 agent call) để context gọn — tránh trường hợp agent tự lan sang "tránh chạy loạn" ở câu 1.
-
-### Làm thế nào
-
-Ba pha là ba chat, mỗi chat một việc:
+**Trả lời 1 câu:** Workflow chuẩn cho task >30 phút: mỗi pha một chat — explorer vẽ bản đồ, pha làm sửa đúng list file đó, tester chạy test và báo PASS/FAIL (khảo sát → thi công → nghiệm thu).
 
 ```bash
 # Pha 1 (chat 1, agent explorer): "Ve ban do refactor login trong src/auth/, chua sua."
 # Pha 2 (chat 2, edit/agent): "Sua theo list: <paste list explorer>. Chi cac file nay."
-# Pha 3 (chat 3 hoac tester): "Chay npm test -- auth + npm run lint, bao PASS/FAIL."
-# Verify: sau pha 3, test xanh thi moi commit
+# Pha 3 (chat 3, tester): "Chay npm test -- auth + npm run lint, bao PASS/FAIL."
 ```
 
-**Ví dụ cụ thể:** refactor auth 8 file → explorer trả list 8 file + thứ tự → pha 2 sửa đúng 8 file → tester chạy test xanh → commit.
-
-> **Khi nào áp dụng:** mọi task multi-file. Task 1-2 file thì gộp pha 1+2.
-
-> **Nếu vẫn lỗi thì...** kiểm tra mỗi pha có phải một chat riêng không, và pha 2 đã paste đúng list file của explorer chưa — dán sai list là scope trôi ngay.
-
----
+> Task 1-2 file thì gộp pha 1+2. Dán sai list của explorer là scope trôi ngay.
 
 ## 3. Security-reviewer gọi khi nào, check gì?
 
-> **Hỏi ngắn gọn:** _Security-reviewer gọi khi nào, check gì?_
+**Trả lời 1 câu:** Gọi khi diff chạm auth/session, input validation, crypto, thanh toán, secrets, permissions hoặc SQL — reviewer chỉ đọc + comment, không sửa.
 
-**Trả lời 1 câu:** Gọi security-reviewer khi diff chạm auth/session, input validation, crypto, thanh toán, secrets, permissions hoặc SQL — nó chỉ đọc và comment, không sửa code.
-
-**Giải thích chi tiết + ví dụ:** Nôm na: trước khi đóng cổng chính, cho lính gác soi lại 1 vòng. Checklist: injection (SQL/command), XSS, auth bypass, IDOR, secret lộ, crypto yếu, rate-limit.
-
-Gọi sau pha làm, trước khi mở PR — reviewer này chỉ đọc + comment, không sửa. 2026: có thể đóng gói checklist này thành 1 Agent Skill (chuẩn `SKILL.md`) để agent nào cũng đọc được khi chạm auth/payment, thay prompt file legacy.
-
-### Làm thế nào
-
-Đưa diff cho reviewer, rồi yêu cầu chỉ báo lỗi:
+Checklist: injection (SQL/command), XSS, auth bypass, IDOR, secret lộ, crypto yếu, rate-limit.
 
 ```bash
-# Lay diff cho reviewer (trong chat attach hoac paste stat)
 git diff main...HEAD --stat
 git diff main...HEAD -- src/auth/ | head -100
-# Verify: diff chua sua gi ngoai src/auth/
 # Prompt: "Review security diff tren. Chi bao Critical/Major + dong cu the + cach fix."
 ```
 
-**Ví dụ cụ thể:** PR thêm endpoint `/admin/export` → security-reviewer phát hiện thiếu check role → thêm middleware trước khi merge.
-
-> **Khi nào áp dụng:** auto-trigger (quy ước team): diff chạm `auth|payment|crypto|admin` → bắt buộc qua security-reviewer. Mẫu agent trong `templates/.github/agents/security-reviewer.agent.md`.
-
-> **Nếu vẫn lỗi thì...** đảm bảo diff đã attach/paste đúng; nếu reviewer "tiện tay" sửa code thì thêm dòng "CHỈ đọc + comment" vào agent; nếu lọt lỗi, bổ sung mục còn thiếu vào checklist.
-
----
+> Quy ước team: diff chạm `auth|payment|crypto|admin` → bắt buộc qua security-reviewer. Mẫu: `templates/.github/agents/security-reviewer.agent.md`.
 
 ## 4. Coding agent trên GitHub là gì, giao việc thế nào?
 
-> **Hỏi ngắn gọn:** _Coding agent trên GitHub là gì, giao việc thế nào?_
+**Trả lời 1 câu:** Coding agent là bot chạy trên cloud GitHub nhận việc từ issue (assign cho `copilot`), tự code + chạy test + mở PR, bạn review như review người thật — khởi động nhanh hơn 50% từ changelog 03/2026.
 
-**Trả lời 1 câu:** Coding agent là bot chạy trên cloud GitHub nhận việc từ issue (assign cho `copilot`), tự code + chạy test + mở PR trong ~10 phút, bạn review như review người thật.
-
-**Giải thích chi tiết + ví dụ:** Nôm na: thuê đội thi công qua đêm — sáng dậy chỉ cần xem PR. Bạn giao việc qua 2 CLI: `gh copilot assign` (CLI chuẩn coding agent) hoặc web "Assign to Copilot". Giao việc chuẩn: issue mô tả **mục tiêu + phạm vi file + tiêu chí xong (acceptance criteria) + lệnh test**. 2026: AI Credits được trừ theo token model — task to tốn nhiều hơn, luôn ghi lệnh verify trong issue để agent tự check.
-
-### Làm thế nào
-
-Một issue mẫu đủ để agent làm đúng, và lệnh theo dõi PR:
+Giao việc chuẩn: issue mô tả **mục tiêu + phạm vi file + acceptance criteria + lệnh test**. Task to tốn nhiều AI Credits hơn → luôn ghi lệnh verify trong issue.
 
 ```markdown
 <!-- Mau issue giao cho coding agent -->
@@ -168,191 +78,73 @@ Thêm rate-limit 100 req/phút cho /api/login.
 ```
 
 ```bash
-# Verify: giao viec va theo doi PR
 gh copilot assign 123 --repo acme/api
 gh pr list --author "app/copilot" --state open
 ```
 
-**Ví dụ cụ thể:** tạo issue trên → assign `copilot` → 10-20 phút sau có PR → bạn review diff + CI (xem [bài 10](10-ci-sdk-review-web.md)).
-
-> **Khi nào áp dụng:** task rõ ràng, có test, scope hẹp — agent làm tốt. Task mơ hồ thì làm rõ issue trước.
-
-> **Nếu vẫn lỗi thì...** kiểm tra đã assign đúng `copilot` và repo đã bật coding agent chưa; nếu task mơ hồ thì dừng lại làm rõ issue thay vì assign đi assign lại.
-
----
+> Task rõ ràng, có test, scope hẹp → agent làm tốt. Task mơ hồ thì làm rõ issue trước, đừng assign đi assign lại.
 
 ## 5. Coding agent conflict / PR fail — xử lý sao?
 
-> **Hỏi ngắn gọn:** _Coding agent conflict / PR fail — xử lý sao?_
-
-**Trả lời 1 câu:** 3 ca phổ biến — conflict: rebase lên base mới; CI đỏ: đọc log job đầu tiên rồi comment `@copilot` bảo fix; PR sai scope: request changes hoặc checkout về sửa tay.
-
-**Giải thích chi tiết + ví dụ:** Nôm na: PR của agent cũng "sập" như PR người thật — 3 kiểu hỏng:
-
-1. **Conflict với main:** base branch trôi trong lúc agent làm → `gh` update branch hoặc bảo agent rebase.
-2. **CI đỏ:** đọc log check đầu tiên đỏ → comment vào PR bảo agent fix ("fix `lint` job: ...").
-3. **PR sai scope:** agent sửa lố → request changes liệt kê file cần revert, hoặc checkout PR về sửa tay.
+**Trả lời 1 câu:** 3 ca: conflict → rebase lên base mới; CI đỏ → đọc log job đỏ đầu tiên rồi comment `@copilot` bảo fix; PR sai scope → request changes hoặc checkout về sửa tay.
 
 | Ca | Triệu chứng | Cách xử |
 |---|---|---|
-| Conflict với main | Base branch trôi trong lúc agent làm | `gh pr checkout` → rebase lên `origin/main` → `git push --force-with-lease` (hoặc bảo agent rebase) |
-| CI đỏ | Check/job đỏ trên PR | Đọc log job đỏ đầu tiên rồi comment `@copilot` bảo fix cụ thể |
-| PR sai scope | Agent sửa file ngoài issue | Request changes liệt kê file cần revert, hoặc checkout về sửa tay |
-| Khi nào dùng | — | Mọi PR agent trước khi merge: check scope + CI + test |
-
-### Làm thế nào
-
-Xem trạng thái PR rồi update branch khi cần:
+| Conflict với main | Base branch trôi trong lúc agent làm | Rebase lên `origin/main` → `git push --force-with-lease` |
+| CI đỏ | Check/job đỏ trên PR | Đọc log job đỏ đầu tiên, comment `@copilot` fix cụ thể |
+| PR sai scope | Agent sửa file ngoài issue | Request changes liệt kê file cần revert, hoặc checkout sửa tay |
 
 ```bash
-# Xem PR cua agent + trang thai checks
-gh pr view <NUM> --json title,state,mergeable,statusCheckRollup
-gh pr checks <NUM>
+gh pr view <NUM> --json title,state,mergeable,statusCheckRollup && gh pr checks <NUM>
 
-# Verify: chi co job xanh thi moi merge
-
-# Update branch cho PR (giai conflict don gian)
-gh pr checkout <NUM>
-git fetch origin && git rebase origin/main
-git push --force-with-lease
+# Giai conflict don gian
+gh pr checkout <NUM> && git fetch origin && git rebase origin/main && git push --force-with-lease
 ```
 
-**Ví dụ cụ thể:** PR agent CI đỏ job `test` → đọc log thấy thiếu import → comment trong PR: "@copilot thiếu import X ở file Y" → agent push fix.
+**Ví dụ:** CI đỏ job `test` thiếu import → comment trong PR: "@copilot thiếu import X ở file Y" → agent push fix.
 
-> **Khi nào áp dụng:** mọi PR agent — review như review junior: check scope + CI + test trước khi merge.
+## 6. Viết issue thế nào để agent làm đúng ngay lần 1?
 
-> **Nếu vẫn lỗi thì...** đọc log job đỏ đầu tiên (thường là nguyên nhân gốc), rebase lại nếu conflict; còn sai scope thì request changes liệt kê rõ file cần revert thay vì tự sửa lén.
-
----
-
-## 6. Viết issue thế nào để coding agent làm đúng ngay lần 1?
-
-> **Hỏi ngắn gọn:** _Viết issue thế nào để coding agent làm đúng ngay lần 1?_
-
-**Trả lời 1 câu:** Viết issue đủ 5 phần — bối cảnh, mục tiêu, phạm vi file, acceptance criteria, lệnh verify — thì tỉ lệ PR xanh lần đầu cao gấp 3 lần issue 1 dòng.
-
-**Giải thích chi tiết + ví dụ:** Nôm na: thiếu phần nào trong spec, agent tự đoán phần đó — và đoán sai. Công thức issue 5 phần: **Bối cảnh (1-2 câu) + Mục tiêu + Phạm vi file + Acceptance criteria + Lệnh verify.**
+**Trả lời 1 câu:** Issue đủ 5 phần — **bối cảnh, mục tiêu, phạm vi file, acceptance criteria, lệnh verify** — thiếu phần nào agent tự đoán phần đó (và đoán sai).
 
 - Tốt: "Thêm 429 khi vượt 100 req/phút, chỉ src/auth/**, test expect 429, verify `npm test -- auth`."
-- Dở: "Làm rate limit đi." (agent tự chọn lib, scope, không test)
-
-2026: lệnh verify nên là lệnh đã ghi trong `.github/copilot-instructions.md` (khóa commands team) để agent dùng đúng test runner.
-
-### Làm thế nào
-
-Bổ sung bối cảnh + lệnh verify, rồi chạy thử lệnh đó trước khi giao:
-
-```markdown
-## Bối cảnh
-Login đang bị brute-force, cần rate-limit.
-
-## Mục tiêu
-... (như câu 4)
-
-## Lệnh verify
-npm test -- auth && npm run lint
-```
+- Dở: "Làm rate limit đi."
 
 ```bash
-# Verify: chay duoc lenh verify tren machine truoc khi giao issue
+# Chay thu lenh verify tren may truoc khi giao issue
 npm test -- auth
 ```
 
-**Ví dụ cụ thể:** issue viết đủ 5 phần → agent ra PR xanh lần 1 (tỉ lệ cao gấp 3 lần issue 1 dòng, theo kinh nghiệm team).
+> 5 phút viết issue kỹ đỡ 30 phút sửa PR; lệnh verify nên trùng lệnh đã ghi trong `copilot-instructions.md`.
 
-> **Khi nào áp dụng:** trước khi assign — 5 phút viết issue kỹ đỡ 30 phút sửa PR.
+## 7. Nhiều agents cùng làm 1 repo — tránh giẫm chân?
 
-> **Nếu vẫn lỗi thì...** soát lại đủ 5 phần chưa, và chạy thử lệnh verify trên máy trước khi giao — lệnh test sai thì agent xanh ảo hoặc đỏ oan.
-
----
-
-## 7. Nhiều agents cùng làm 1 repo — tránh giẫm chân sao?
-
-> **Hỏi ngắn gọn:** _Nhiều agents cùng làm 1 repo — tránh giẫm chân sao?_
-
-**Trả lời 1 câu:** Áp dụng quy tắc 1 agent = 1 branch + 1 scope file không giao nhau; giao 2 agents cùng file thì conflict chắc chắn, phải chia theo module hoặc tầng.
-
-**Giải thích chi tiết + ví dụ:** Nôm na: 2 đội thợ cùng 1 căn phòng thì đấm nhau vào đầu — mỗi đội nhận 1 phòng riêng. Quy tắc: **1 agent = 1 branch + 1 scope file không giao nhau.** Chia theo module (auth/payments) hoặc tầng (API/tests).
-
-Theo dõi bằng PR list + branch prefix (`copilot/issue-<N>`). 2026: coding agent cloud và Copilot CLI chạy song song được trên các module khác nhau — chỉ cần scope rời.
-
-### Làm thế nào
-
-Chia scope rời trong issue rồi assign song song:
+**Trả lời 1 câu:** Quy tắc: **1 agent = 1 branch + 1 scope file không giao nhau** — chia theo module (auth/payments) hoặc tầng (API/tests); giao 2 agents cùng file là conflict chắc chắn.
 
 ```bash
-# Xem agents dang lam gi (PR mo cua bot)
 gh pr list --author "app/copilot" --state open
-
-# Verify: 2 PR khong dong file chi nao
-# Chia scope trong 2 issues:
+# Verify: 2 PR không động file nào chung
 # Issue A: "Chi src/auth/**"  |  Issue B: "Chi src/payments/**"
-gh copilot assign 123 --repo acme/api
-gh copilot assign 124 --repo acme/api
 ```
-
-**Ví dụ cụ thể:** 2 features song song → 2 issues scope rời nhau → 2 PR riêng → merge từng cái, không conflict.
-
-> **Khi nào áp dụng:** khi team chạy >1 coding agent cùng lúc — chia scope trong issue là bắt buộc.
-
-> **Nếu vẫn lỗi thì...** soát 2 PR có đụng chung file không; nếu có, chia lại scope theo module hoặc tầng rồi assign lại, đừng để hai agent cùng ghi một chỗ.
-
----
 
 ## 8. Handoff người ↔ agent: tiếp tục dở dang thế nào?
 
-> **Hỏi ngắn gọn:** _Handoff người ↔ agent: tiếp tục dở dang thế nào?_
-
-**Trả lời 1 câu:** Hai chiều: người tiếp quản bằng `gh pr checkout` + sửa + push; agent tiếp quản bằng comment `@copilot` với yêu cầu cụ thể — luôn đọc PR timeline trước khi tiếp quản.
-
-**Giải thích chi tiết + ví dụ:** Nôm na: bàn giao chìa khóa — người biết agent đã làm tới đâu, agent biết người đã sửa gì. 2 chiều:
-
-- **Người tiếp quản agent:** `gh pr checkout <NUM>` → sửa tiếp → push (giữ branch agent).
-- **Agent tiếp quản người:** comment `@copilot` trong PR/issue với yêu cầu cụ thể ("fix lint ở file X") → agent push thêm commit.
-
-Luôn đọc PR timeline trước khi tiếp quản để biết agent đã làm tới đâu. 2026: cả 2 chiều đều chạy trên cùng 1 branch `copilot/issue-<N>`, không cần đổi tool.
-
-| Tiêu chí | Người tiếp quản agent | Agent tiếp quản người |
-|---|---|---|
-| Ai làm tiếp | Bạn (dev) | Coding agent (`@copilot`) |
-| Cách làm | `gh pr checkout <NUM>` → sửa → `git push` | Comment `@copilot` + yêu cầu cụ thể trong PR/issue |
-| Branch | Giữ branch `copilot/issue-<N>` | Cùng branch, agent push thêm commit |
-| Khi nào dùng | Agent lặp lần 3 không xong | Cần fix nhỏ mà agent tự làm được |
-
-### Làm thế nào
-
-Đọc timeline rồi tiếp quản theo chiều bạn cần:
+**Trả lời 1 câu:** 2 chiều: người tiếp quản bằng `gh pr checkout` + sửa + push; agent tiếp quản bằng comment `@copilot` với yêu cầu cụ thể — luôn đọc PR timeline trước khi tiếp quản.
 
 ```bash
 # Nguoi tiep quan PR agent
-gh pr checkout <NUM>
-git log --oneline -5   # xem agent da lam gi
-# ... sua tiep ...
-git push
+gh pr checkout <NUM> && git log --oneline -5
+# ... sua tiep ... git push
 
-# Verify: da duoc push, agent bi dong
-
-# Giao lai cho agent: comment trong PR (web hoac CLI)
+# Giao lai cho agent
 gh pr comment <NUM> --body "@copilot fix loi lint o src/auth/login.ts dong 42"
 ```
 
-**Ví dụ cụ thể:** agent làm 80% nhưng kẹt test khó → bạn checkout, fix 20% còn lại, merge — nhanh hơn chờ agent lặp.
-
-> **Khi nào áp dụng:** khi agent lặp lần 3 không xong — người vào là hiệu quả nhất.
-
-> **Nếu vẫn lỗi thì...** luôn đọc PR timeline trước khi tiếp quản; nếu agent không phản hồi comment, kiểm tra coding agent còn bật không rồi reassign hoặc tự checkout sửa tiếp.
-
----
+> Agent lặp lần 3 không xong → người vào là hiệu quả nhất: làm 80% của nó + fix 20% còn lại, nhanh hơn chờ vòng lặp thứ 4 đốt Credits.
 
 ## 9. Đo chất lượng agent: khi nào tin, khi nào không?
 
-> **Hỏi ngắn gọn:** _Đo chất lượng agent: khi nào tin, khi nào không?_
-
-**Trả lời 1 câu:** Tin khi scope hẹp + test xanh + diff <300 dòng + không chạm auth/infra; không tin (review từng dòng) khi diff to, chạm migration/infra, không test, hoặc agent "sáng tạo" thêm scope.
-
-**Giải thích chi tiết + ví dụ:** Nôm na: PR nhỏ + test xanh = tin được như đồng nghiệp đáng tin; PR to + không test = xem như junior mới vào. Tin khi: scope hẹp + có test xanh + diff nhỏ (<300 dòng) + không chạm auth/infra. Không tin (review kỹ từng dòng) khi: diff to, chạm migration/infra, không có test, agent tự "sáng tạo" thêm scope.
-
-Thước đo team: tỉ lệ PR agent merge không sửa (target >60% sau 1 tháng fine-tune issue template). 2026: track bằng dashboard AI Credits ở `github.com/settings/copilot` — PR nào tốn nhiều credits nhất thì review kỹ trước.
+**Trả lời 1 câu:** Tin (review nhanh) khi scope hẹp + test xanh + diff <300 dòng + không chạm auth/infra; review từng dòng khi diff to, chạm migration/infra, không test, hoặc agent tự "sáng tạo" thêm scope.
 
 | Tiêu chí | Tin (review nhanh) | Không tin (review từng dòng) |
 |---|---|---|
@@ -360,70 +152,23 @@ Thước đo team: tỉ lệ PR agent merge không sửa (target >60% sau 1 thá
 | Test | Có test xanh | Không có test |
 | Diff | Nhỏ (<300 dòng) | To (>500 dòng / >10 file) |
 | Vùng chạm | Không chạm auth/infra | Chạm migration/infra/auth |
-| Khi nào dùng | Review 5 phút rồi merge | Checkout review từng hunk |
-
-### Làm thế nào
-
-Xem stat trước, đọc diff sau:
 
 ```bash
-# Danh gia nhanh PR agent truoc khi review sau
 gh pr view <NUM> --json additions,deletions,files
 git diff main...copilot/issue-N --stat
 # Verify: additions >500 hoac files >10 -> review ky tung file
 ```
 
-**Ví dụ cụ thể:** PR agent 40 dòng + test xanh → review 5 phút merge. PR 800 dòng chạm migrations → checkout review từng hunk.
+> Thước đo team: tỉ lệ PR agent merge không sửa (target >60% sau 1 tháng fine-tune issue template); track chi phí bằng dashboard AI Credits ở `github.com/settings/copilot`.
 
-> **Khi nào áp dụng:** mỗi PR agent — 30 giây xem stat trước khi đọc diff.
+## 10. Dọn dẹp sau agent?
 
-> **Nếu vẫn lỗi thì...** nếu PR to, chạm auth/infra hoặc thiếu test thì mặc định xếp vào nhóm "không tin": checkout và review từng hunk thay vì dựa vào CI xanh.
-
----
-
-## 10. Dọn dẹp sau agent: branch, comment, log?
-
-> **Hỏi ngắn gọn:** _Dọn dẹp sau agent: branch, comment, log?_
-
-**Trả lời 1 câu:** Sau merge: xóa branch agent bằng `--delete-branch`, resolve comments, giữ issue + PR timeline làm tài liệu — không xóa issue vì đó là spec gốc.
-
-**Giải thích chi tiết + ví dụ:** Nôm na: công trình xong — dỡ công trường, nhưng giữ hồ sơ thiết kế. Sau merge: xóa branch agent (`gh pr merge --delete-branch`), resolve comments, giữ lại issue + PR timeline làm tài liệu. Đừng xóa issue — đó là spec gốc.
-
-2026: AI Credits đã trả cho agent nên log PR là bằng chứng việc làm — giữ làm audit khi cần justify chi phí.
-
-### Làm thế nào
-
-Merge, xóa branch và kiểm tra còn sót không:
+**Trả lời 1 câu:** Sau merge: xóa branch agent (`--delete-branch`), resolve comments, **giữ nguyên issue + PR timeline** làm tài liệu và bằng chứng chi phí AI Credits đã trả — đừng xóa issue vì đó là spec gốc.
 
 ```bash
-# Merge + xoa branch 1 lenh
 gh pr merge <NUM> --squash --delete-branch
-
-# Verify: branch da thanh ly
-git branch -r | grep "copilot/issue-"
-gh pr list --author "app/copilot" --state closed --limit 20
+git branch -r | grep "copilot/issue-"   # Verify: branch da thanh ly
 ```
-
-**Ví dụ cụ thể:** cuối tuần dọn: merge 3 PR agent xanh → `--delete-branch` → repo còn mỗi `main/develop` sạch.
-
-> **Khi nào áp dụng:** sau mỗi PR agent merge, và dọn định kỳ hàng tuần.
-
-> **Nếu vẫn lỗi thì...** nếu không xóa được branch, kiểm tra branch protection chặn xóa; dù vậy vẫn giữ nguyên issue + PR timeline làm spec, chỉ dọn branch.
-
----
-
-## So sánh với Claude Code
-
-| Việc | Copilot | Claude Code | Ghi chú |
-|---|---|---|---|
-| Persona / tách vai | Custom agent `*.agent.md` (chọn trong picker) | Subagent (`.claude/agents/`) | Cả hai tách vai + giới hạn `tools` |
-| Workflow đa pha | explorer → làm → tester | Tương tự: tách phiên/subagent theo pha | Cùng ý tưởng "mỗi pha một context gọn" |
-| Giao việc qua issue | Assign issue cho `copilot` → PR trên cloud | Không có tương đương trực tiếp — agent chạy local/terminal | Đây là điểm khác rõ nhất |
-| Agent chạy cloud | Coding agent (GitHub) | Không có (agent chạy trên máy bạn) | Copilot có "thuê đội qua đêm", Claude Code không |
-| Review PR | `gh pr checks` / `gh pr checkout` như bình thường | Dùng git/`gh` như bình thường | Cách verify giống nhau |
-| Handoff người ↔ agent | Comment `@copilot` trong PR | Trao đổi trong phiên CLI | Cơ chế khác nhau, cùng mục tiêu bàn giao |
-
-> **Không có tương đương trực tiếp:** "assign issue cho bot → PR trên cloud" là nét riêng của GitHub Copilot coding agent; Claude Code không có cơ chế này nên không đưa vào để so cho đủ.
 
 ---
 
@@ -433,32 +178,6 @@ gh pr list --author "app/copilot" --state closed --limit 20
 2. Scope lố → thu hẹp issue/prompt, chia task nhỏ.
 3. PR fail → `gh pr checks` đọc log job đỏ đầu tiên.
 4. Conflict → rebase lên base mới nhất.
-5. Lặp 3 lần không xong → người checkout làm tiếp, đừng đốt quota.
+5. Lặp 3 lần không xong → người checkout làm tiếp, đừng đốt AI Credits.
 
-```bash
-# Verify: dua lenh chuan
-gh pr checks <NUM> && git diff main...HEAD --stat
-```
-
-> Nếu đi hết 5 bước vẫn không được: (1) làm lại với scope gọn hơn (1 file/selection), (2) đổi model bằng `/model` rồi chạy lại, (3) kiểm tra lại chính mục này, (4) hỏi admin (policy/seat) hoặc mở issue kèm log + ảnh chụp lỗi.
-
----
-
-## Best practices (kèm "vì sao")
-
-- **Viết ranh giới trước procedure trong mọi `*.agent.md`.** *Vì sao?* `tools` + ranh giới mới là gate thật; hooks mới ở mức preview và chưa phải security boundary.
-- **1 agent = 1 branch + 1 scope không giao nhau.** *Vì sao?* Giao chung file thì conflict chắc chắn, và merge phải giải quyết bằng tay.
-- **Issue đủ 5 phần trước khi assign.** *Vì sao?* Thiếu phần nào agent tự đoán phần đó; issue 1 dòng làm tỉ lệ PR xanh lần đầu tụt mạnh.
-- **Mỗi pha một chat (explorer → làm → tester).** *Vì sao?* Context gọn giúp agent không tự lan scope và không quên đầu bài.
-- **Xem stat 30 giây trước khi đọc diff.** *Vì sao?* Diff to hoặc chạm auth/infra thì 30 giây đó quyết định bạn review nhanh hay từng hunk.
-- **Người vào ngay khi agent lặp lần 3.** *Vì sao?* Vòng lặp thứ 4+ thường đốt AI Credits mà không tiến triển.
-- **Giữ issue + PR timeline sau merge.** *Vì sao?* Đó là spec gốc và là bằng chứng cho chi phí AI Credits đã trả.
-
----
-
-## Tham khảo chéo
-
-- Viết agent đúng: [bài 06](06-prompts-agents-instructions.md). CI + review PR agent: [bài 10](10-ci-sdk-review-web.md).
-- Permissions + approval: [bài 03](03-modes-permissions.md). Guardrails repo: [bài 05](05-policies-guardrails-faq.md).
-
-> **Chốt bài 07:** 1 agent 1 branch 1 scope, issue đủ 5 phần, và người vào ngay khi agent lặp lần 3 — ba thói quen đó giữ cho cả đàn agent không giẫm chân nhau.
+Tham khảo chéo: [bài 06](06-prompts-agents-instructions.md) (viết agent đúng) · [bài 10](10-ci-sdk-review-web.md) (CI + review PR agent) · [bài 03](03-modes-permissions.md) (permissions) · [bài 05](05-policies-guardrails-faq.md) (guardrails repo).

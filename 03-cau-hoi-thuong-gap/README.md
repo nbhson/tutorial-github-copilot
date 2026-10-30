@@ -4,12 +4,12 @@
 > **Vấn đề:** 11 nhóm câu hỏi lặp đi lặp lại (tài khoản, model, MCP, policy, lỗi...) khiến bạn phải tìm documentation khắp nơi.
 > **Đọc xong:** mở đúng file trong 30 giây, trả lời được ngay nhờ mục "Trả lời 1 câu". **Thời gian:** ~5 phút đọc mục lục.
 
-Coi nhóm này như một tủ thuốc, không phải cuốn sách để đọc từ đầu tới cuối: bạn tra triệu chứng, tìm đúng "ngăn", lấy đúng bài. Mỗi bài gồm ~10 câu hỏi, mỗi câu theo cấu trúc cố định: **Hỏi ngắn gọn → Trả lời 1 câu → Giải thích chi tiết + ví dụ → Làm thế nào → Nếu vẫn lỗi thì...**. Bận thì chỉ đọc "Trả lời 1 câu" + sơ đồ mermaid đầu file; rảnh thì làm theo steps.
+Coi nhóm này như một tủ thuốc, không phải cuốn sách để đọc từ đầu tới cuối: bạn tra triệu chứng, tìm đúng "ngăn", lấy đúng bài. Mỗi bài gồm ~10 câu hỏi theo cấu trúc gọn: **Trả lời 1 câu → giải thích + lệnh copy-paste → "Vẫn lỗi thì sao?" cuối file**. Bận thì chỉ đọc "Trả lời 1 câu"; rảnh thì làm theo lệnh.
 
 | # | Chủ đề | Link |
 |---|--------|------|
 | 01 | Tài khoản, pricing, cài đặt | [01-tai-khoan-pricing-cai-dat.md](./01-tai-khoan-pricing-cai-dat.md) |
-| 02 | Model, context, premium | [02-model-context-premium.md](./02-model-context-premium.md) |
+| 02 | Model, context & AI Credits | [02-model-context-premium.md](./02-model-context-premium.md) |
 | 03 | Modes & permissions | [03-modes-permissions.md](./03-modes-permissions.md) |
 | 04 | MCP FAQ | [04-mcp-faq.md](./04-mcp-faq.md) |
 | 05 | Policies & guardrails FAQ | [05-policies-guardrails-faq.md](./05-policies-guardrails-faq.md) |
@@ -40,7 +40,7 @@ Không cần đọc từ đầu: bắt đúng triệu chứng bạn đang gặp,
 
 | Việc | GitHub Copilot | Claude Code | Ghi chú |
 |---|---|---|---|
-| Tra cứu theo triệu chứng | 10 bài FAQ + bảng "lỗi nào đọc câu nào" | Docs Anthropic theo chủ đề + `/help` trong phiên | Cùng cách tra: tìm đúng chỗ, đừng đọc tuần tự |
+| Tra cứu theo triệu chứng | 11 bài FAQ + bảng "lỗi nào đọc câu nào" | Docs Anthropic theo chủ đề + `/help` trong phiên | Cùng cách tra: tìm đúng chỗ, đừng đọc tuần tự |
 | Hỏi ngay trong công cụ | Copilot Chat, `/help`, `/status` | `/help`, hỏi trực tiếp trong phiên terminal | Cả hai đều có trợ giúp tại chỗ |
 | Luật repo | `.github/copilot-instructions.md` + `AGENTS.md` | `CLAUDE.md` | Cùng tư tưởng: file trong repo là "luật" |
 | Cấu hình MCP | `.vscode/mcp.json` (CLI 2026: `~/.mcp-config.json` + `.mcp.json`) | `.mcp.json` + cấu hình user | Cùng chuẩn giao thức, khác đường dẫn |

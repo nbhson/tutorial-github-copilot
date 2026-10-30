@@ -1,65 +1,30 @@
-# Tips 08 — Tiết Kiệm Premium Requests: Dùng Copilot Rẻ Mà Vẫn Mạnh
+# Tips 08 — Tiết Kiệm AI Credits: Dùng Copilot Rẻ Mà Vẫn Mạnh
 
-> **Dành cho:** người thấy credits tụt nhanh mà không rõ tiền đi đâu · **Vấn đề:** việc gì cũng dùng Agent mode + model mạnh nhất, hết quota giữa tháng · **Đọc xong:** route đúng việc sang đúng chế độ/model, prune MCP, đóng gói knowledge base — giảm 30–50% credits mà chất lượng không tụt · **Thời gian:** ~20 phút đọc + ~50 phút làm bài tập.
->
-> Copilot 2026 tính theo **AI Credits** (không phải premium requests cũ). Bài này dạy bạn model routing, phân biệt completions vs chat vs agent, prune MCP/extensions, dùng knowledge base để trả ít mà được nhiều.
+> **Dành cho:** người thấy credits tụt nhanh mà không rõ tiền đi đâu.
+> **Vấn đề:** việc gì cũng dùng Agent mode + model mạnh nhất, hết credits giữa tháng.
+> **Đọc xong:** route đúng việc sang đúng chế độ/model, prune MCP, đóng gói knowledge base — giảm 30–50% credits mà chất lượng không tụt.
+> **Thời gian:** ~20 phút đọc + ~50 phút làm bài tập.
 
-## Mục tiêu bài học
+> **Lưu ý billing 2026:** từ **01/06/2026** Copilot chuyển từ "premium requests" (legacy) sang **usage-based billing theo AI Credits**. 1 AI credit = **$0.01**. Tên gọi "premium requests" không còn được dùng.
 
-- Phân biệt **thang tốn** completions → Ask → Edit → Agent → Coding Agent, và biết khi nào mới leo thang.
-- Có **bảng routing** để gán đúng model/chế độ cho từng cỡ việc, thay vì việc gì cũng Agent mạnh.
-- Ước lượng được **cái gì tốn credits** (`turns × tokens × hệ số model`) và cách cắt từng thành phần.
-- Biết **prune MCP/extensions**, giữ chat gọn, và đóng gói knowledge base/prompt files để "trả 1 lần, dùng mãi".
-- Làm xong **audit 50 phút**: có bảng routing dán lên wiki + dashboard credits tuần sau thấp hơn.
+## 1. Cách tính: AI Credits là gì?
 
-## Mục lục
+**Bảng gói hiện tại (từ 01/06/2026):**
 
-- [1. Vì sao tốn credits?](#1-vì-sao-tốn-credits)
-- [2. Cơ chế: cái gì tốn credits?](#2-cơ-chế-cái-gì-tốn-credits)
-- [3. Model routing: việc nào model nào?](#3-model-routing-việc-nào-model-nào)
-- [4. Completions vs Chat vs Agent](#4-completions-vs-chat-vs-agent)
-- [5. Prune MCP/extensions + chat gọn](#5-prune-mcpextensions--chat-gọn)
-- [6. Knowledge base: trả 1 lần, dùng mãi](#6-knowledge-base-trả-1-lần-dùng-mãi)
-- [7. Walkthrough theo phút: audit 1 tuần](#7-walkthrough-theo-phút-audit-1-tuần)
-- [8. Bảng tra nhanh: tốn bao nhiêu?](#8-bảng-tra-nhanh-tốn-bao-nhiêu)
-- [9. Pitfalls + cách fix](#9-pitfalls--cách-fix)
-- [10. Bài tập cuối bài](#10-bài-tập-cuối-bài)
-- [11. Tham khảo chéo](#11-tham-khảo-chéo)
+| Gói | Giá/tháng | Credits gồm sẵn |
+|---|---|---|
+| Copilot Free | $0 | Giới hạn thấp (credits nhỏ) |
+| Copilot Pro | $10 | 1.500 AI credits (base 1.000 + flex 500) |
+| Copilot Pro+ | $39 | 7.000 AI credits (base 3.900 + flex 3.100) |
+| Copilot Max | $100 | 20.000 AI credits (base 10.000 + flex 10.000) |
+| Copilot Business | $19/user | 1.900 AI credits/seat |
+| Copilot Enterprise | $39/user | 3.900 AI credits/seat (pooled) |
 
----
+Credits dùng hết có thể mua thêm; mỗi lượt gọi model trừ theo **số tokens × hệ số của model** (model nhẹ rẻ hơn flagship nhiều). Xem usage: GitHub → Settings → Copilot → Usage; trong Copilot CLI dùng `/limits` để xem/đổi giới hạn credits của phiên.
 
-## 0. Giải ngố thuật ngữ (1 câu + analogie + verify)
+> Bài cũ nào còn dạy "tiết kiệm premium requests" là legacy — nguyên tắc tiết kiệm giữ nguyên, chỉ đổi đơn vị đo sang AI Credits.
 
-| Thuật ngữ | Hiểu nôm na | Analogie | Ví dụ kỹ thuật thật | Verify |
-|---|---|---|---|---|
-| **AI Credit** | Tiền lẻ trả theo lượt hỏi AI; 1 credit = 0,01 USD. | Như xu arcade: game xịn (model flagship) nuốt 5 xu, game thường (model nhẹ) 1 xu. | Agent 50 steps × flagship ×3 = 150 credits bốc hơi. | `# Verify:` Settings → Billing → Copilot usage xem % đã dùng. |
-| **Model routing** | Việc nào xe đó: việc nhỏ xe đạp, việc lớn xe tải. | Như gọi Grab: đi chợ gọi xe máy, chuyển nhà gọi xe tải. | Hỏi vặt → model nhẹ; plan/refactor khó → flagship. | `# Verify:` cuối tuần flagship <30% tổng credits là đạt. |
-| **Completions vs Chat vs Agent** | Gợi ý Tab (rẻ ~0) → hỏi (vừa) → tự làm nhiều bước (đắt). | Như gõ tắt (Tab) vs hỏi bạn (chat) vs thuê thợ (agent). | `function sum(` + Tab thay vì chat "viết hàm cộng". | `# Verify:` boilerplate Tab nhanh hơn chat 10x, tốn ~0 credit. |
-| **Prune MCP** | Nhổ cây thừa cho vườn thoáng. | Như xóa app không dùng cho điện thoại nhẹ. | Giữ ≤6 MCP servers, tắt cái 2 tuần không dùng. | `# Verify:` mỗi turn nhẹ hơn, ít tool defs rác. |
-
-```mermaid
-flowchart TD
-    A[Việc mới] --> B{Nhỏ + rõ?}
-    B -->|Có| C[Completions Tab / Ask nhẹ]
-    B -->|Không| D{Multi-files?}
-    D -->|Không, 1 chỗ| E[Edit mid-tier]
-    D -->|Có| F[Agent + plan duyệt]
-    F --> G{Stuck?}
-    G -->|Không| H[Done]
-    G -->|Có, >30p| I[Leo flagship/reasoning]
-    C --> H
-    E --> H
-```
-
-Giải thích: Tab trước, Ask/Edit sau, Agent khi đáng, Coding Agent khi rảnh tay. 1 turn plan mạnh tránh 10 turns sửa sai (đáng tiền); hỏi vặt bằng Agent mạnh là đốt credits.
-
-**Vì sao quan trọng?** Không nắm thang tốn thì bạn mặc định việc gì cũng Agent + model mạnh — đó chính là cách đốt credits nhanh nhất. **Nếu làm sai?** Bạn trả tiền cho reasoning nặng ở những việc gõ vài ký tự + Tab là xong, rồi hết quota đúng lúc cần model mạnh cho việc khó thật.
-
-> ✅ **Kỳ vọng thấy gì:** sau routing 1 tuần, credits/tuần giảm 30–50% mà test xanh + review PASS giữ nguyên.
-
----
-
-## 1. Vì sao tốn credits?
+## 2. Vì sao tốn credits?
 
 Ba cách đốt credits nhanh nhất:
 
@@ -67,105 +32,44 @@ Ba cách đốt credits nhanh nhất:
 - 1 chat nuôi 100 turns, mỗi turn gánh rác cũ → mỗi request đắt dần.
 - Bật 12 MCP servers/extensions, mỗi request gánh tool defs không dùng.
 
-Thực tế team:
-
-```text
-Truoc: 500 requests/tuan/nguoi, nua la hoi vat + retry code sai.
-Sau routing + prune: 200 requests/tuan, chat luong tuong duong.
-# Ky vong: co so 2 con so tren dashboard usage, xac nhan giam 60%.
-```
-
-> Rule: **việc rẻ thì dùng cách rẻ. Credits model mạnh để dành cho plan + implement khó.**
-
-**Nếu làm sai thì sao?** Đốt hết quota giữa tháng, đến đoạn cần model mạnh để plan/refactor thì lại phải dùng model base "hẻo" — chất lượng tụt đúng lúc quan trọng nhất.
-
----
-
-## 2. Cơ chế: cái gì tốn credits?
-
-### Thang tốn (rẻ → đắt)
+Thang tốn (rẻ → đắt):
 
 ```text
 [Rẻ] completions (gợi ý inline, Tab) → chat Ask → chat Edit → Agent → Coding Agent (cloud + CI)
-# Ky vong: luon bat dau tu cot re, chi leo len khi cot truoc that luc.
 ```
 
-- **Completions:** rẻ nhất, tính ít hoặc miễn phí theo gói. Gõ → gợi ý 3–5 dòng.
-- **Chat Ask:** 1 request/chat turn, không sửa code.
-- **Chat Edit/Agent:** 1 request + thêm tool calls (mỗi tool có thể tính thêm).
-- **Coding Agent:** đắt nhất (requests + minutes + CI), nhưng làm bất đồng bộ.
-
-### Công thức tốn
+Công thức tốn:
 
 ```text
 Tổng = số turns × (prompt tokens + tools × overhead) × hệ số model
-# Ky vong: giam duoc 1 trong 3 vi tri nen ton giam thuan tuyen.
 ```
 
-Giảm 1 trong 3 là rẻ:
+Giảm 1 trong 3 là rẻ: **giảm turns** (prompt tốt + plan-first, ít retry); **giảm tokens/turn** (chat gọn + ít attachments + ít MCP); **giảm hệ số model** (việc dễ dùng model nhẹ). Chat gọn xem [Tips 01](./01-context-hygiene.md), prompt tốt xem [Tips 02](./02-prompt-engineering.md).
 
-- Giảm turns: prompt tốt + plan-first (ít retry).
-- Giảm tokens/turn: chat gọn + ít attachments + ít MCP.
-- Giảm hệ số model: việc dễ dùng model nhẹ.
-
-Xem chat gọn ở [Tips 01](./01-context-hygiene.md), prompt tốt ở [Tips 02](./02-prompt-engineering.md).
-
-**Vì sao quan trọng?** Công thức này cho bạn 3 "núm vặn" cụ thể thay vì cảm giác mơ hồ "sao tháng này tốn thế". **Nếu làm sai?** Bạn chỉ chỉnh 1 núm (ví dụ đổi model) mà quên 2 núm còn lại (turns và tokens) — vẫn tốn như cũ mà không hiểu vì sao.
-
----
+> Rule: **việc rẻ thì dùng cách rẻ. Credits model mạnh để dành cho plan + implement khó.**
 
 ## 3. Model routing: việc nào model nào?
 
-### Bảng routing gợi ý (điều chỉnh theo gói của bạn)
+| Việc | Ví dụ | Model | Mode | Vì sao |
+|---|---|---|---|---|
+| Gợi ý inline, boilerplate | Gõ `function sum(` + Tab | Nhẹ / auto | Completions | Rẻ, nhanh, đủ đúng |
+| Giải thích hàm, hỏi docs | `retryWithBackoff` làm gì? | Nhẹ | Ask | Không cần reasoning nặng |
+| Fix 1 hàm rõ ràng | Fix `normalizeEmail` crash dấu | Trung bình | Edit | Đủ sức, ít tốn |
+| Feature multi-files, refactor | Refactor auth 800 dòng 5 files | Mạnh | Agent + plan | Đáng tiền, tránh retry |
+| Review khó, kiến trúc | Review PR payments | Mạnh | Ask/Reviewer fresh | Cần reasoning tốt nhất |
+| Việc nền độc lập 2 giờ | Issue rate-limit | — | Coding Agent | Đắt nhưng bạn làm việc khác |
 
-| Việc | Hiểu nôm na | Ví dụ cụ thể | Model | Mode | Vì sao |
-|---|---|---|---|---|---|
-| Gợi ý inline, boilerplate | Đánh vần hộ 3 chữ. | Gõ `function sum(` + Tab. | Nhẹ / auto | Completions | Rẻ, nhanh, đủ đúng |
-| Giải thích hàm, hỏi docs | Hỏi đường đi chợ. | `retryWithBackoff` làm gì? 3 bullet. | Nhẹ | Ask | Không cần reasoning nặng |
-| Fix 1 hàm rõ ràng | Vá 1 lỗ thủng. | Fix `normalizeEmail` crash dấu. | Trung bình | Edit | Đủ sức, ít tốn |
-| Feature multi-files, refactor | Xây cả nhà. | Refactor auth 800 dòng 5 files. | Mạnh | Agent + plan | Đáng tiền, tránh retry |
-| Review khó, kiến trúc | Thuê giám định. | Review PR payments HIGH bug. | Mạnh | Ask/Reviewer fresh | Cần reasoning tốt nhất |
-| Việc nền độc lập 2 giờ | Giao khoán đi vắng. | Issue rate-limit 2h. | Coding Agent | Cloud | Đắt nhưng bạn làm việc khác |
-
-### Before / After — đốt quota vs tiết kiệm
-
-**Before (mọi việc Agent mạnh):**
-```text
-(Agent + flagship cho cả hỏi vặt) "@workspace thêm null-check giúp tôi" → quét cả repo
-+ Mọi câu hỏi đều model mạnh nhất + 1 chat 100 turns + 12 MCP servers
-```
-> Kết quả: 500 requests/tuần, hết quota giữa tháng, 3 tuần cuối dùng model base hẻo. Mỗi request gánh 80K rác.
-
-**After (routing rẻ mà mạnh):**
-```text
-Boi den 5 dong → Ctrl+I (Edit, model trung bình): "thêm null-check, giữ signature."
-Hỏi vặt → chat Ask model nhẹ. Chỉ plan/refactor khó mới Agent mạnh + plan duyệt.
-Completions Tab cho boilerplate. Prune MCP ≤6. 1 task 1 chat.
-# Ky vong: dashboard usage tuan sau thap hon, chat luong (test/review) giu nguyen.
-```
-> Kết quả: 200 requests/tuần (−60%), chất lượng tương đương (test xanh + PASS giữ). Verify: Billing usage tuần sau giảm mà V3/V4 vẫn đạt.
-> ✅ **Kỳ vọng thấy gì:** bảng routing dán wiki + default model nhẹ; completions Tab dùng trước khi chat.
-
-### Ví dụ 1 — Đặt default nhẹ (copy-paste setup)
+**Ví dụ 1 — Đặt default nhẹ (copy-paste setup):**
 
 ```text
 VS Code → Settings → Copilot:
 - Default chat model: nhẹ/auto (dùng hằng ngày).
 - Chỉ chuyển sang mạnh khi: plan feature, refactor, review khó.
 - Completions: luôn bật, Tab để nhận, Esc để bỏ.
-# Ky vong: 80% chat hang ngay chay model nhe, chi thay khi that.
+# Kỳ vọng: 80% chat hằng ngày chạy model nhẹ, chỉ thay khi thật sự cần.
 ```
 
-### Ví dụ 2 — Prompt tự chọn model (copy-paste)
-
-```text
-# Dau chat kho, ghi ro:
-"Dùng model mạnh nhất của tôi cho task này (refactor auth 800 dòng).
-Các câu hỏi phụ sau tôi sẽ mở chat khác model nhẹ."
-# Ky vong: chi 1 lan xai model manh vao moi viec kho, ko lan ra hoi vat.
-```
-
-### Ví dụ 3 — Khi nào KHÔNG tiếc credits
+**Ví dụ 2 — Khi nào KHÔNG tiếc credits:**
 
 ```text
 ĐÁNG tiền:
@@ -177,298 +81,140 @@ KHÔNG đáng:
 - Hỏi vặt "hàm này là gì" bằng Agent mạnh.
 - Retry lần 5 cho prompt ẩu (sửa prompt thay vì đốt tiếp).
 - @workspace cả repo cho câu hỏi 1 file.
-# Ky vong: 1 credit cho viec manh phai co 10 lan gia tri, nguoc lai la dot.
 ```
 
-**Vì sao quan trọng?** Routing biến "chọn model" từ cảm tính thành quy tắc: cỡ việc quyết định model, không phải thói quen. **Nếu làm sai?** Bạn vừa đắt vừa chậm — việc nhỏ chạy flagship lâu hơn, việc lớn chạy model nhẹ thì phải retry nhiều lần.
-
----
-
 ## 4. Completions vs Chat vs Agent
-
-> **Nôm na:** Tab (completions) là gõ tắt rẻ nhất, Chat là hỏi/sửa có kiểm soát, Agent là thuê thợ làm nhiều bước. Chọn theo bảng:
 
 | Tiêu chí | Completions (Tab) | Chat (Ask/Edit) | Agent |
 |---|---|---|---|
 | Tốn credits | ~0 (rẻ nhất) | Thấp (1 turn) | Cao (turn + tool calls + retry) |
-| Sửa code | Không — chỉ chèn gợi ý | Có — Edit 1 chỗ | Có — đa file + chạy lệnh |
+| Sửa code | Không — chỉ chèn gợi ý | Edit 1 chỗ | Đa file + chạy lệnh |
 | Phạm vi | 1 dòng đang gõ | 1 file/đoạn bôi đen | Nhiều file + terminal |
 | Khi nào dùng | Boilerplate, import, test lặp | Hỏi/lý giải, fix 1 chỗ | Task >2 steps, multi-files, cần test |
 | Tránh khi | Cần reasoning/đa file | Multi-files phức tạp | Hỏi vặt, task <15 phút Edit xong |
 
-### Completions: Tab là vua
-
-- Gõ tên hàm → Tab nhận gợi ý, không tốn chat turn.
-- Viết test boilerplate, import, types → completions nhanh hơn chat 10×.
-
-**Ví dụ 1 — Dùng completions thay chat (copy-paste thói quen):**
+**Completions — Tab là vua:**
 
 ```text
 Thay vì chat: "viết hàm cộng 2 số" (1 request)
-Hãy gõ: `function sum(` → Tab → xong (rẻ).
+Hãy gõ: `function sum(` → Tab → xong (gần như 0 credits).
 
 Thay vì chat: "viết 10 test cases CRUD" (đắt)
-Hãy gõ 1 case mẫu → Tab Tab Tab → sửa số liệu (rẻ).
-# Ky vong: boi qua boi, khoi mo chat, credits gan bang 0.
+Hãy gõ 1 case mẫu → Tab Tab Tab → sửa số liệu.
 ```
 
-### Chat: hỏi + sửa có kiểm soát
-
-- Ask cho hỏi, Edit cho sửa 1 chỗ.
-- Đừng dùng Agent cho việc Edit làm được.
-
-**Ví dụ 2 — Chọn Chat thay vì Agent (copy-paste):**
-
-```text
-TỐT (Edit, rẻ): bôi đen 5 dòng → Ctrl+I → "thêm null-check, giữ signature."
-TỆ (Agent, đắt): "@workspace thêm null-check giúp tôi" → quét cả repo.
-
-TỐT (Ask, rẻ): "Giải thích #selection 3 bullet, không sửa."
-TỆ (Agent, đắt): Agent đọc 20 files để giải thích 1 hàm.
-# Ky vong: co chuon (nhe) thi dung chuon, co con dao (manh) thi dung con dao.
-```
-
-### Agent: chỉ khi đáng
-
-- Multi-files, cần chạy test/lệnh, task >2 steps.
-- Luôn kèm plan duyệt + scope hẹp để không đốt retry.
-
-**Ví dụ 3 — Gate trước khi bật Agent (checklist):**
+**Agent — gate trước khi bật (checklist):**
 
 ```text
 - [ ] Có plan.md duyệt chưa? Chưa → Ask plan trước (rẻ hơn).
 - [ ] Scope ≤5 files? Chưa → thu hẹp.
 - [ ] Có verify + NEVER? Chưa → thêm vào prompt.
 - [ ] Task <15 phút Edit xong? → đừng bật Agent.
-# Ky vong: di qua het 4 o moi lan bat agent, tranh do credits vo von.
 ```
 
-**Vì sao quan trọng?** Ba chế độ này chênh nhau cả chục lần về chi phí; chọn đúng chế độ tiết kiệm nhiều hơn mọi mẹo tối ưu prompt. **Nếu làm sai?** Bạn viết prompt hoàn hảo nhưng giao cho Agent một việc Edit 5 giây là xong — prompt hay mấy cũng vô ích.
-
----
+Ba chế độ chênh nhau cả chục lần về chi phí — chọn đúng chế độ tiết kiệm nhiều hơn mọi mẹo tối ưu prompt.
 
 ## 5. Prune MCP/extensions + chat gọn
 
-### Audit extensions
-
-**Ví dụ 1 — Prune checklist (copy-paste):**
+**Prune checklist (mỗi tháng 1 lần):**
 
 ```text
-Mỗi tháng 1 lần:
 1. Extensions → Copilot/MCP related: tắt cái 2 tuần không dùng.
 2. MCP servers: giữ ≤6, tắt server không nhớ tác dụng.
-3. Hỏi: thiếu thì bật lại, đừng bật sẵn "cho chắc".
-# Ky vong: danhsach MCP co chi 6 ten, moi turn nhe hon that su.
+3. Thiếu thì bật lại, đừng bật sẵn "cho chắc".
 ```
 
-### Chat gọn = rẻ
-
-**Ví dụ 2 — 3 thói quen rẻ (copy-paste):**
+**3 thói quen rẻ:**
 
 ```text
 1. 1 task 1 chat, xong → New Chat (đừng nuôi 100 turns).
 2. Ưu tiên #file/#selection, hạn chế @workspace cả repo.
 3. Log dài → paste vào file, chat chính chỉ nhận summary 5 bullet.
-# Ky vong: moi chat duoi 20 turns, co 1 lan new chat 1 lan task.
 ```
 
-Chi tiết xem [Tips 01](./01-context-hygiene.md).
+**Đo và so:** ghi số chats, turns/chat, số @workspace, số retries vì prompt ẩu tuần này; áp routing + prune tuần sau; so 2 cột trước/sau.
 
-**Ví dụ 3 — Đo và so (copy-paste):**
+## 6. Đóng gói tri thức: trả 1 lần, dùng mãi
 
-```text
-Tuần này ghi lại:
-- Số chats, số turns/chat trung bình, số lần @workspace.
-- Số retries vì prompt ẩu.
-Tuần sau áp routing + prune, so 2 tuần: requests giảm? chất lượng giữ?
-# Ky vong: 1 bang 3 cot (sotruoc/sau/truong), xem xuong la duoc.
-```
+Paste spec 200 dòng vào 20 chats = trả 20 lần. Đưa vào file dùng chung = trả 1 lần:
 
----
+- **Knowledge base** (Repo → Settings → Copilot → Knowledge bases; nguồn docs/, wiki, ADRs). Hỏi: `@payments-docs Chính sách refund 30 ngày? Kèm link nguồn, 3 bullet.` → không paste spec, không quét repo.
+- **Instructions** thay paste NEVER mỗi chat — mọi chat tự áp luật từ `.github/copilot-instructions.md`.
+- **Skills** thay gõ lại prompt (chuẩn 2026): `.github/skills/team-bug/SKILL.md` — nói "fix bug" là tự load; prompt files `.prompt.md` legacy chỉ chạy Local. Xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 
-## 6. Knowledge base: trả 1 lần, dùng mãi
+Cẩn thận: đóng gói sai chỗ (nhét cả checklist dài vào instructions) thì nạp lại mỗi turn — càng tốn hơn.
 
-> **Nôm na:** Knowledge base là tủ hồ sơ chung của team — Copilot tự mở đọc khi cần, khỏi paste spec lại mỗi chat.
+## 7. Walkthrough: audit usage trong 50 phút
 
-Paste spec 200 dòng vào 20 chats = trả 20 lần.
-
-Đưa vào knowledge base / instructions = trả 1 lần viết, dùng mãi.
-
-**Ví dụ 1 — Knowledge base docs (copy-paste):**
-
-```text
-Repo → Settings → Copilot → Knowledge bases → New (docs/, wiki, ADRs).
-Hỏi: `@payments-docs Chính sách refund 30 ngày? Kèm link nguồn, 3 bullet.`
-→ Không cần paste spec, không cần @workspace quét code.
-# Ky vong: tra 1 lan, dung mai, chi phi gan bang 0.
-```
-
-**Ví dụ 2 — Instructions thay paste (copy-paste):**
-
-```markdown
-# Thay vi paste 10 dong NEVER moi chat:
-# Viet 1 lan vao .github/copilot-instructions.md:
-- Không sửa src/generated/, không commit main, test xanh mới done.
-# Moi chat tu ap, khoi go lai, khoi ton tokens nhac.
-# Ky vong: ko co cai "nhac lai", moi chat tu dong biap luat.
-```
-
-**Ví dụ 3 — Prompt files thay gõ lại (copy-paste):**
-
-```text
-Thay vi go 15 dong prompt bug moi lan:
-Luu `.github/skills/team-bug/SKILL.md` (chuan 2026, chay Local + Cloud) — hoac `.github/prompts/team-bug.prompt.md` (legacy, chi Local). Goi bang cach noi "fix bug" (skill tu load) hoac `/team-bug scope=... bug=...` (prompt legacy).
-→ Prompt ngắn, output chuẩn, ít retry (retry cũng tốn credits).
-# Ky vong: 1 ten lieu lai, output dong deu, retry giam, credits giam.
-```
-
-> Ghi chú (skill 2026 / prompt legacy): `.github/skills/<ten>/SKILL.md` là chuẩn 2026 (Agent Skills, chạy được cả local lẫn cloud coding agent); `.github/prompts/*.prompt.md` là format cũ (legacy), hiện chỉ chạy local — nên ưu tiên viết skill mới, giữ prompt cũ làm fallback.
-
-Chi tiết xem [Tips 07](./07-thiet-ke-prompts-skills.md).
-
-**Nếu làm sai thì sao?** Không đóng gói thì mỗi lần dùng lại paste lại — vừa tốn tokens vừa dễ lệch nhau (mỗi chat một phiên bản spec). Đóng gói sai chỗ (nhét cả checklist dài vào instructions) thì lại nạp lại mỗi turn, càng tốn hơn.
-
----
-
-## 7. Walkthrough theo phút: audit 1 tuần
-
-**Bối cảnh:** bạn thấy credits tăng vọt, không biết do đâu.
-
-| Phút | Việc | Làm gì (copy-paste) |
+| Phút | Việc | Làm gì |
 |---|---|---|
-| 0–5 | Xem usage | GitHub → Settings → Copilot → Usage: top ngày nào tốn? Model nào? Agent vs chat? |
+| 0–5 | Xem usage | Settings → Copilot → Usage: ngày nào tốn nhất? Model nào? Agent vs chat? |
 | 5–15 | Phân loại | Ghi 10 turns gần nhất: mấy hỏi vặt bằng Agent? mấy retry vì prompt ẩu? mấy @workspace rộng? |
-| 15–25 | Routing | Đặt default model nhẹ, completions ON, chỉ dùng mạnh cho plan/review/refactor. Viết bảng routing dán lên wiki |
+| 15–25 | Routing | Đặt default model nhẹ, completions ON, mạnh chỉ cho plan/review/refactor. Bảng routing dán wiki |
 | 25–35 | Prune | Tắt extensions/MCP thừa, bật tool approval, thu gọn instructions <200 dòng |
-| 35–45 | Đóng gói | Lưu 2 prompt files/skills dùng nhiều nhất, tạo knowledge base cho docs hay paste |
+| 35–45 | Đóng gói | Lưu 2 skills/prompts dùng nhiều nhất, tạo knowledge base cho docs hay paste |
 | 45–50 | Đo lại | Tuần sau so credits/tuần + số retry + chất lượng (test xanh? review PASS?) |
-
-> ✅ **Kỳ vọng thấy gì:** sau 50 phút audit, có bảng routing trên wiki + dashboard credits tuần sau thấp hơn 30–50% mà quality không tụt.
-
-Mục tiêu: giảm 30–50% requests mà V3/V4 verify vẫn giữ (xem [Tips 04](./04-verification-done-that.md)).
-
----
 
 ## 8. Bảng tra nhanh: tốn bao nhiêu?
 
-| Cách làm | Tốn tương đối | Khi dùng | Cách rẻ hơn |
-|---|---|---|---|
-| Completions Tab | ★☆☆☆☆ | Boilerplate, gợi ý dòng | Luôn ưu tiên trước |
-| Chat Ask nhẹ | ★★☆☆☆ | Hỏi, giải thích | Dùng #selection, không @workspace |
-| Chat Edit | ★★☆☆☆ | Fix 1 chỗ | Bôi đen hẹp, không Agent |
-| Chat Agent | ★★★★☆ | Multi-files + test | Plan duyệt + scope hẹp + giới hạn 3 lần đỏ |
-| Coding Agent cloud | ★★★★★ | Việc độc lập 1–2h | Chỉ khi spec rõ + done checklist |
-| @workspace cả repo | +★★ | Explore | 1 lần rồi ghi file, sau đó đọc file |
-| MCP 12 servers | +★★ | Mọi turn | Prune ≤6, tắt auto-approve write |
-| Retry prompt ẩu ×5 | ×5 | — | Sửa prompt (scope+verify+NEVER) rồi mới retry |
+| Cách làm | Tốn tương đối | Cách rẻ hơn |
+|---|---|---|
+| Completions Tab | ★☆☆☆☆ | Luôn ưu tiên trước |
+| Chat Ask nhẹ | ★★☆☆☆ | Dùng #selection, không @workspace |
+| Chat Edit | ★★☆☆☆ | Bôi đen hẹp, không Agent |
+| Chat Agent | ★★★★☆ | Plan duyệt + scope hẹp + giới hạn 3 lần đỏ |
+| Coding Agent cloud | ★★★★★ | Chỉ khi spec rõ + done checklist |
+| @workspace cả repo | +★★ | 1 lần rồi ghi file, sau đó đọc file |
+| MCP 12 servers | +★★ | Prune ≤6, tắt auto-approve write |
+| Retry prompt ẩu ×5 | ×5 | Sửa prompt (scope+verify+NEVER) rồi mới retry |
 
 > Quy tắc ngón tay: **Tab trước, Ask/Edit sau, Agent khi đáng, Coding Agent khi rảnh tay làm việc khác.**
-
----
-
-## So sánh với Claude Code
-
-| Việc | Copilot (nhóm này) | Claude Code | Ghi chú |
-|---|---|---|---|
-| Cơ chế tính tiền | AI Credits (1 credit = 0,01 USD), trừ theo model × token | Gói subscription (Pro/Max) với hạn mức theo cửa sổ usage | Khác bản chất: Copilot trả theo mức dùng, Claude theo quota gói |
-| Completions (Tab) | Có, gần như miễn phí credits | Không phải trọng tâm | Copilot có "vua" gõ code từng dòng |
-| Chọn model | Đổi ngay trong Chat: GPT / Claude / Gemini | `/model` chọn trong nhóm model Anthropic | Copilot cho chọn nhiều nhà cung cấp hơn |
-| Giữ context gọn | New Chat + `#file`/`#selection` | `/clear` + `/compact` | Cùng mục tiêu: đừng nuôi một phiên quá dài |
-| Đóng gói tri thức | Knowledge base + `.github/copilot-instructions.md` | `CLAUDE.md` + file trong `.claude/` | Cùng tư tưởng: viết 1 lần, tái dùng nhiều lần |
-| Prune công cụ ngoài | MCP servers (giữ ≤6) | MCP servers trong `.mcp.json` | Cả hai đều cần prune để giảm overhead mỗi lượt |
-
-> **Đọc bảng này thế nào:** nguyên tắc tối ưu (việc dễ dùng cách rẻ, giữ context gọn, đóng gói cái lặp lại) giống hệt nhau — chỉ khác *đơn vị đo tiền*. Copilot đo bằng AI Credits theo từng lượt; Claude Code đo bằng hạn mức gói, nên bạn không "thấy" từng request tốn bao nhiêu — càng phải đo bằng thói quen.
-
----
 
 ## 9. Pitfalls + cách fix
 
 | Pitfall | Triệu chứng | Fix |
 |---|---|---|
-| Mọi việc đều Agent mạnh | Hết quota giữa tháng | Routing mục 3, default nhẹ |
+| Mọi việc đều Agent mạnh | Hết credits giữa tháng | Routing mục 3, default nhẹ |
 | Nuôi chat 100 turns | Mỗi request đắt dần | New chat mỗi task (Tips 01) |
 | @workspace mọi câu | Tốn + chậm + lạc | #file/#selection, @workspace chỉ explore |
 | Prompt ẩu → retry 5 lần | Đốt 5× cho 1 việc | Sửa prompt rồi retry, max 3 lần đỏ thì dừng |
 | 12 MCP/extensions | Overhead mọi turn | Prune ≤6, audit monthly |
 | Paste spec 20 lần | Trả 20 lần cho 1 nội dung | Knowledge base + instructions |
-| Gõ lại prompt dài | Tốn + output khác nhau | Prompt files + /tên-file |
 | Giao Coding Agent việc 15 phút | Đắt + chờ lâu | Edit local nhanh hơn |
 | Tắt completions | Mọi việc đều thành chat | Bật completions, Tab trước khi chat |
 | Không đo usage | Không biết tốn đâu | Xem usage weekly, audit 50 phút mục 7 |
 
-### Ba pitfall ❌ SAI / ✅ ĐÚNG (nhìn là nhớ)
+## 10. So sánh với Claude Code
 
-**1. Hỏi vặt bằng Agent mạnh**
+| Việc | Copilot | Claude Code | Ghi chú |
+|---|---|---|---|
+| Cơ chế tính tiền | AI Credits (1 credit = 0,01 USD), trừ theo model × token | Gói subscription (Pro/Max) theo cửa sổ usage | Copilot trả theo mức dùng, Claude theo hạn mức gói |
+| Completions (Tab) | Có, gần như miễn phí credits | Không phải trọng tâm | Copilot có "vua" gõ code từng dòng |
+| Chọn model | Đổi ngay trong Chat: GPT / Claude / Gemini | `/model` trong nhóm model Anthropic | Copilot cho chọn nhiều nhà cung cấp hơn |
+| Giữ context gọn | New Chat + `#file`/`#selection` | `/clear` + `/compact` | Cùng mục tiêu: đừng nuôi phiên quá dài |
+| Đóng gói tri thức | Knowledge base + copilot-instructions.md | `CLAUDE.md` + file trong `.claude/` | Viết 1 lần, tái dùng nhiều lần |
+| Prune công cụ ngoài | MCP servers (giữ ≤6) | MCP servers trong `.mcp.json` | Cả hai cần prune để giảm overhead |
 
-```text
-❌ SAI: (Agent + model mạnh) "@workspace hàm này làm gì?" → quét cả repo, đọc 20 file.
-✅ ĐÚNG: (Ask + model nhẹ) "Giải thích #selection 3 bullet, không sửa." → 1 turn rẻ.
-```
-**Bài học:** câu hỏi càng nhỏ thì chế độ càng nhẹ — dùng Ask/`#selection` cho việc hiểu code, để Agent mạnh cho việc khó thật.
+> Nguyên tắc tối ưu giống hệt nhau — chỉ khác đơn vị đo tiền. Copilot đo bằng AI Credits từng lượt nên "thấy" được tiền đi đâu; Claude Code đo bằng hạn mức gói nên càng phải kiểm soát bằng thói quen.
 
-**2. Nuôi 1 chat qua nhiều task**
+## 11. Bài tập cuối bài
 
-```text
-❌ SAI: giữ nguyên 1 chat từ task A sang task B, mỗi turn gánh rác của task trước.
-✅ ĐÚNG: xong 1 task → New Chat; task mới mở chat mới, chỉ mang context cần thiết.
-```
-**Bài học:** mỗi turn gửi lại toàn bộ history — chat càng dài thì mỗi request càng đắt và càng dễ lạc.
+**Bài 1 (10 phút):** Liệt kê 10 lần dùng Copilot gần nhất, gắn mỗi lần 1 ô (completions/Ask/Edit/Agent/Coding Agent), đánh dấu mấy lần dùng đắt hơn cần → viết lại cách rẻ hơn.
 
-**3. Paste spec dài vào từng chat**
+**Bài 2 (20 phút):** Liệt kê MCP + extensions đang bật, tắt cái 2 tuần không dùng. Rút gọn instructions <200 dòng, đặt default model nhẹ.
 
-```text
-❌ SAI: mỗi chat dán lại spec 200 dòng → trả 20 lần cho cùng một nội dung.
-✅ ĐÚNG: đưa spec vào knowledge base / instructions → viết 1 lần, mọi chat tự đọc.
-```
-**Bài học:** nội dung lặp lại nhiều lần thì đóng gói (knowledge base/instructions/prompt file), đừng paste tay.
+**Bài 3 (15 phút):** Lấy prompt dài bạn gõ >2 lần/tuần, lưu thành skill/prompt file. Tạo 1 knowledge base cho docs hay paste nhất. Tuần sau so credits: giảm? retry giảm? chất lượng giữ?
 
-## Best practices (kèm "vì sao")
+> Đạt: giảm 30–50% credits/tuần mà test xanh + review PASS không giảm.
 
-- **Tab trước, chat sau.** *Vì sao?* Completions gần như miễn phí credits — gõ `function sum(` + Tab rẻ hơn hẳn việc mở chat "viết hàm cộng".
-- **Việc dễ dùng model nhẹ, việc khó mới leo model mạnh.** *Vì sao?* Giá chênh 5–10 lần; giải thích code không cần flagship.
-- **Một task = một chat sạch.** *Vì sao?* History cũ được gửi lại mỗi turn, làm request sau đắt dần và dễ lạc trọng tâm.
-- **Giữ MCP ≤ 6 servers, audit mỗi tháng.** *Vì sao?* Mỗi server cõng thêm tool defs vào *mọi* request, kể cả khi bạn không dùng.
-- **Cái gì lặp lại thì đóng gói (knowledge base / instructions / prompt file).** *Vì sao?* Viết 1 lần rồi tái dùng rẻ hơn paste lại N lần.
-- **Đo usage hằng tuần.** *Vì sao?* Không đo thì không biết tiền đi đâu, cũng không biết routing có thực sự hiệu quả.
+## Tham khảo chéo
 
----
+- [Tips 01](./01-context-hygiene.md) — chat gọn rẻ hơn nhiều lần
+- [Tips 02](./02-prompt-engineering.md) — prompt tốt ít retry
+- [Tips 03](./03-plan-first-workflow.md) — 1 turn plan tránh 10 turns sai
+- [Tips 06](./06-policies-guardrails-recipes.md) — prune MCP + approval
+- [Tips 07](./07-thiet-ke-prompts-skills.md) — knowledge base + prompt files
+- [00 — Tổng quan: AI Credits](../01-huong-dan-su-dung/00-tong-quan-copilot.md) — bảng giá + cách tính
+- [08 — MCP](../01-huong-dan-su-dung/08-mcp-ket-noi-cong-cu-ngoai.md) — prune ở đâu, giữ mấy servers
 
-## 10. Bài tập cuối bài
-
-**Bài 1 (10 phút — phân loại việc):**
-
-1. Liệt kê 10 lần dùng Copilot gần nhất.
-2. Gắn mỗi lần 1 ô: completions / Ask / Edit / Agent / Coding Agent.
-3. Đánh dấu: mấy lần dùng đắt hơn cần? Viết lại cách rẻ hơn.
-
-**Bài 2 (20 phút — prune):**
-
-1. Liệt kê MCP + extensions đang bật, tắt cái 2 tuần không dùng.
-2. Rút gọn instructions <200 dòng, chuyển chi tiết sang applyTo files.
-3. Đặt default model nhẹ, chỉ dùng mạnh cho plan/review.
-
-**Bài 3 (15 phút — đóng gói 1 prompt):**
-
-1. Lấy prompt dài bạn gõ >2 lần/tuần, lưu thành `.prompt.md`.
-2. Tạo/đăng ký 1 knowledge base cho docs hay paste nhất.
-3. Tuần sau so credits: giảm? retry giảm? chất lượng giữ?
-
-> ✅ **Kỳ vọng đạt:** giảm 30–50% credits/tuần mà test xanh + review PASS không giảm.
-
----
-
-## 11. Tham khảo chéo
-
-- Bài tips liên quan:
-  - [Tips 01](./01-context-hygiene.md) — chat gọn rẻ hơn 90%
-  - [Tips 02](./02-prompt-engineering.md) — prompt tốt ít retry
-  - [Tips 03](./03-plan-first-workflow.md) — 1 turn plan tránh 10 turns sai
-  - [Tips 06](./06-policies-guardrails-recipes.md) — prune MCP + approval
-  - [Tips 07](./07-thiet-ke-prompts-skills.md) — knowledge base + prompt files
-
-- Bài hướng dẫn liên quan:
-  - [00 — Tổng quan: AI Credits](../01-huong-dan-su-dung/00-tong-quan-copilot.md) — bảng giá + cách tính
-  - [08 — MCP](../01-huong-dan-su-dung/08-mcp-ket-noi-cong-cu-ngoai.md) — prune ở đâu, giữ mấy servers
-  - [17 — Agent Customizations Hub](../01-huong-dan-su-dung/17-agent-customizations-hub.md) — skill/agent M
-
-> **Chốt Tips 08:** credits không mất vì bạn dùng Copilot nhiều, mà vì bạn dùng *sai cỡ việc*. Giữ đúng thứ tự Tab → Ask/Edit → Agent → Coding Agent, và đóng gói những gì lặp lại — bạn sẽ tiết kiệm gần một nửa mà chất lượng đầu ra không đổi.
+> **Chốt Tips 08:** credits không mất vì bạn dùng Copilot nhiều, mà vì bạn dùng *sai cỡ việc*. Giữ đúng thứ tự Tab → Ask/Edit → Agent → Coding Agent, và đóng gói những gì lặp lại — tiết kiệm gần một nửa mà chất lượng đầu ra không đổi.

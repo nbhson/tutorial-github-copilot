@@ -22,7 +22,7 @@ Nguồn tổng hợp: GitHub Docs, VS Code Copilot docs, best-practices, guide v
 |---|---|---|
 | [`01-huong-dan-su-dung/`](./01-huong-dan-su-dung/) | **Hướng dẫn sử dụng**: inline completions, Chat, Ask/Edit/Agent mode, Session Target (Local/Copilot/Cloud), custom agent, instructions/prompts/skills, MCP, Copilot CLI, SDK, coding agent, code review, Agent Customizations hub | 18 bài + commands/ (47 lệnh) |
 | [`02-tips-thuc-chien/`](./02-tips-thuc-chien/) | **Tips thực chiến**: context hygiene, prompt engineering, plan-first, verification, parallel tasks, instructions design, tiết kiệm AI Credits, teamwork | 11 bài deep-dive |
-| [`03-cau-hoi-thuong-gap/`](./03-cau-hoi-thuong-gap/) | **Q&A thường gặp**: tài khoản & pricing, model & context, permissions, MCP, instructions, custom agent, lỗi & troubleshooting, bảo mật | 10 bài deep-dive |
+| [`03-cau-hoi-thuong-gap/`](./03-cau-hoi-thuong-gap/) | **Q&A thường gặp**: tài khoản & pricing, model & AI Credits, permissions, MCP, instructions, custom agent, lỗi & troubleshooting, bảo mật, Spaces/Spark/Workspace | 11 bài deep-dive |
 | [`templates/`](./templates/) | Template copy-paste: `.github/copilot-instructions.md`, `instructions/`, `prompts/`, `agents/`, `skills/`, `.vscode/mcp.json`, workflows | templates copy-paste: instructions, prompts, agents, skills, mcp.json, copilot-review + ci-triage |
 | [`CHEATSHEET.md`](./CHEATSHEET.md) | Bảng tra nhanh lệnh, phím tắt, Chat participants/slashes, modes, MCP | 1 trang |
 
@@ -49,10 +49,10 @@ Quy tắc vàng (nhớ 4 câu này là đủ 80% sức mạnh):
 
 ## Cách dùng repo này (đọc 3 phút rồi hãy học)
 
-- Đọc theo thứ tự file `00-*` → `NN-*` trong mỗi folder (đã đánh số). Mỗi bài FAQ trong `03-*` đều theo cấu trúc cố định: **Hỏi ngắn gọn → Trả lời 1 câu → Giải thích chi tiết + ví dụ → Làm thế nào (steps copy-paste) → Nếu vẫn lỗi thì...** — bận thì chỉ đọc "Trả lời 1 câu", rảnh thì làm theo steps.
+- Đọc theo thứ tự file `00-*` → `NN-*` trong mỗi folder (đã đánh số). Mỗi bài FAQ trong `03-*` theo cấu trúc gọn: **Trả lời 1 câu → giải thích + lệnh copy-paste → "Vẫn lỗi thì sao?" cuối file** — bận thì chỉ đọc "Trả lời 1 câu", rảnh thì làm theo lệnh.
 - Mọi code block đều copy-paste được. Template trong `templates/` dùng được ngay (copy `.github/` + `.vscode/` sang repo thật, sửa stack/lệnh/glob cho khớp).
 - Gõ `/` trong Copilot Chat để xem slash commands khả dụng, `@` để xem participants ở môi trường của bạn.
-- Kẹt ở đâu tra đó: `CHEATSHEET.md` (1 trang, lệnh nào cũng có ví dụ mini) → `01-huong-dan-su-dung/commands/` (47 lệnh, mỗi lệnh 1 folder chi tiết) → `03-cau-hoi-thuong-gap/` (10 bài FAQ, mỗi bài có mermaid + mục "Vẫn lỗi thì sao?").
+- Kẹt ở đâu tra đó: `CHEATSHEET.md` (1 trang, lệnh nào cũng có ví dụ mini) → `01-huong-dan-su-dung/commands/` (47 lệnh, mỗi lệnh 1 folder chi tiết) → `03-cau-hoi-thuong-gap/` (11 bài FAQ, mỗi bài có mục "Vẫn lỗi thì sao?").
 
 ## So sánh với Claude Code
 
