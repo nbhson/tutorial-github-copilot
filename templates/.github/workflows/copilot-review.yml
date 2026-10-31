@@ -1,0 +1,62 @@
+# Copilot Review — review PR tu dong (guardrailed)
+#
+# Chay khi PR mo/update: lint + test focused, roi goi Copilot CLI tom tat/review
+# thanh comment. Secrets qua env. KHONG co flag bypass/skip nao.
+# Copy file nay vao .github/workflows/copilot-review.yml cua repo that.
+
+name: copilot-review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+# Quyen toi thieu: doc code + comment PR. KHONG contents:write.
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    environment: review # doi thanh environment co approval neu repo dung prod
+    steps:
+      - name: Checkout PR
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install (ci sach, khong update lockfile)
+        run: npm ci
+
+      - name: Lint (gate 1)
+        run: npm run lint --if-present
+
+      - name: Test focused (gate 2)
+        run: npm test -- --passWithNoTests
+        env:
+          CI: "true"
+
+      - name: Copilot review comment
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          STAT="$(git diff --stat "origin/${{ github.base_ref }}"...HEAD | head -30)"
+          gh pr comment "$PR_NUMBER" --body "## Copilot review (auto)
+          Lint + test da chay (xem Checks tab).
+          <details><summary>Diff stat</summary>
+
+          \`\`\`
+          $STAT
+          \`\`\`
+          </details>
+
+          Checklist nguoi review: correctness / security (input, auth, secret) / tests.
+          Bot la reviewer dau tien — quyet dinh merge do nguoi."

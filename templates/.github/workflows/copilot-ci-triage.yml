@@ -1,0 +1,52 @@
+# Copilot CI Triage — phan loai issue tu dong (chi doc + label)
+#
+# Chay khi issue moi: doc tieu de/body, gan label, comment hoi them thong tin
+# neu thieu. KHONG sua code, KHONG co flag bypass/skip nao.
+# Copy file nay vao .github/workflows/copilot-ci-triage.yml cua repo that.
+
+name: copilot-ci-triage
+
+on:
+  issues:
+    types: [opened]
+
+# Quyen toi thieu: label + comment issue, doc code de lay context.
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Triage issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          set -euo pipefail
+          TITLE="${ISSUE_TITLE:-}"
+          BODY="${ISSUE_BODY:-}"
+
+          LABEL="question"
+          case "$TITLE $BODY" in
+            *[Bb]ug*|*lỗi*|*loi*|*500*|*crash*|*fail*) LABEL="bug" ;;
+            *[Ff]eat*|*tính năng*|*them*|*thêm*) LABEL="enhancement" ;;
+            *[Dd]ocs*|*tài liệu*|README*) LABEL="documentation" ;;
+          esac
+          gh issue edit "$ISSUE_NUMBER" --add-label "$LABEL" || true
+
+          # Neu thieu thong tin (body qua ngan), hoi them thay vi doan
+          if [ "${#BODY}" -lt 50 ]; then
+            gh issue comment "$ISSUE_NUMBER" --body "Cam on ban da mo issue! De triage nhanh, vui long bo sung:
+          - Mo ta / steps tai hien (bug) hoac acceptance criteria (feature)
+          - Version / moi truong
+          - Log lien quan (da xoa secret truoc khi paste)
+
+          Bot tu dong gan label \`$LABEL\`. Maintainer se confirm." || true
+            gh issue edit "$ISSUE_NUMBER" --add-label "needs-info" || true
+          else
+            gh issue comment "$ISSUE_NUMBER" --body "Da triage tu dong: label \`$LABEL\`. Maintainer se xem tiep." || true
+          fi
