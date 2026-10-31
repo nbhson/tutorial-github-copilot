@@ -26,20 +26,9 @@
 
 ## Cách gọi (copy-paste)
 
-```jsonc
-// .vscode/mcp.json — thêm một khối dưới key "servers"
-{
-  "servers": {
-    "github": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-github"] }
-  }
-}
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.jsonc`](examples/01-cach-goi-copy-paste.jsonc)
 
-```bash
-# Hoặc qua UI: Command Palette (Ctrl+Shift+P) → "MCP: Add Server"
-# Kỳ vọng: server mới connect, secret đi qua env, KHÔNG hardcode trong file
-# Verify: grep token thật trong mcp.json → trống, mà tool vẫn chạy được
-```
+> 📄 **Code ví dụ:** [`examples/02-cach-goi-copy-paste.sh`](examples/02-cach-goi-copy-paste.sh)
 
 > Không thấy `MCP: Add Server` trong Command Palette? Kiểm `/status` + plan trước khi kết luận lỗi công cụ.
 
@@ -47,26 +36,9 @@
 
 Nghiệp vụ: bạn muốn agent đọc dữ liệu DB an toàn để viết query, nhưng tuyệt đối không cho nó ghi lên dữ liệu thật.
 
-```jsonc
-// .vscode/mcp.json — thêm postgres-dev, trỏ read-replica, user chỉ có quyền đọc
-{
-  "servers": {
-    "postgres-dev": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres"],
-      // KHÔNG dán connection string thật ở đây:
-      "env": { "DATABASE_URL": "${input:pg_readonly_url}" }
-    }
-  }
-}
-```
+> 📄 **Code ví dụ:** [`examples/03-vi-du-that.jsonc`](examples/03-vi-du-that.jsonc)
 
-```bash
-# Sau khi lưu → reload window → kiểm kết nối bằng lệnh của /mcp:
-/mcp              # thấy postgres-dev: connected?
-# rồi test 1 tool chỉ-đọc:
-"liệt kê 5 bảng trong postgres-dev"
-```
+> 📄 **Code ví dụ:** [`examples/04-vi-du-that.sh`](examples/04-vi-du-that.sh)
 
 **Kết quả mong đợi:** server mới connected; test một tool chỉ-đọc chạy thành công; secret đi qua env, không nằm trong file.
 
@@ -76,16 +48,11 @@ Nghiệp vụ: bạn muốn agent đọc dữ liệu DB an toàn để viết qu
 
 **❌ SAI — dán token thẳng vào file rồi commit:**
 
-```jsonc
-"env": { "DATABASE_URL": "postgres://readonly:S3cret@prod-db:5432/app" }
-// lỡ push lên repo → token lộ vĩnh viễn trong git history.
-```
+> 📄 **Code ví dụ:** [`examples/05-neu-lam-sai-thi-sao-sai-ung.jsonc`](examples/05-neu-lam-sai-thi-sao-sai-ung.jsonc)
 
 **✅ ĐÚNG — dùng `${input}`/env, giữ bí mật ngoài repo:**
 
-```jsonc
-"env": { "DATABASE_URL": "${input:pg_readonly_url}" }   // nhập lúc chạy, không nằm trong file
-```
+> 📄 **Code ví dụ:** [`examples/06-neu-lam-sai-thi-sao-sai-ung.jsonc`](examples/06-neu-lam-sai-thi-sao-sai-ung.jsonc)
 
 **Bài học:** `mcp.json` là file trong repo — coi như mọi thứ bạn dán vào đó đã công khai. Secret phải đi qua `${input}`/env; lỡ lộ thì **xoay key ngay**, xóa commit là không đủ.
 

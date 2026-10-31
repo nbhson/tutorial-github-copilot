@@ -32,12 +32,7 @@ Ba chế độ của Chat để bạn chọn đúng cỡ việc:
 
 ## Cách gọi (copy-paste)
 
-```bash
-Chat → mode Agent
-"thêm rate-limit cho /api/login + test; duyệt plan trước khi code"
-# Kỳ vọng: agent liệt kê file + plan trước, chờ duyệt, không code tự ý
-# Verify: git log mới nhất là commit của bạn (checkpoint), diff agent gọn trong scope
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy **Agent** trong dropdown? Xem `/status` + plan trước khi kết luận lỗi; trên UI mới persona có thể mang tên Interactive / Plan / Autopilot.
 
@@ -45,14 +40,7 @@ Chat → mode Agent
 
 Nghiệp vụ: `/api/login` đang không có giới hạn số lần thử, bạn muốn thêm rate-limit nhưng chưa biết middleware nằm ở đâu.
 
-```bash
-# 1. Commit git tay để có checkpoint
-git add -A && git commit -m "checkpoint truoc khi giao agent"
-# 2. Giao task có plan gate
-(Agent) "thêm rate-limit cho /api/login: tìm code route + middleware hiện tại,
-đề xuất plan (đổi file nào, dùng lib nào), chờ tôi duyệt rồi mới code + viết test"
-# 3. Duyệt plan -> để agent code -> review diff cuối
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Agent liệt kê file đã đọc + plan để bạn duyệt; code + test theo từng phase; bạn review diff cuối trước khi nhận.
 
@@ -62,18 +50,11 @@ git add -A && git commit -m "checkpoint truoc khi giao agent"
 
 **❌ SAI — thả một task mơ hồ, không plan, không checkpoint:**
 
-```bash
-(Agent) "làm login cho ngon hơn"
-# -> sửa lung tung, không có commit để lùi
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — khóa scope + plan gate + checkpoint trước:**
 
-```bash
-git commit -m "checkpoint"
-(Agent) "trong apps/api: thêm rate-limit cho POST /api/login (5 lần/phút theo IP).
-Đề xuất plan chờ duyệt. Duyệt rồi mới code + test. Đừng đụng web/."
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Agent mạnh vì tự đi tìm việc, và đó cũng là lý do bạn phải vạch phạm vi + bắt duyệt plan trước. Không có "hàng rào" thì "tự làm" thành "tự tung".
 

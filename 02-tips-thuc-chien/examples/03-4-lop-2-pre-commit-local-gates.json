@@ -1,0 +1,6 @@
+{
+  "lint-staged": {
+    "src/**/*.ts": ["eslint --fix", "prettier --write"],
+    "src/payments/**": ["npm test -- payments"]
+  }
+}

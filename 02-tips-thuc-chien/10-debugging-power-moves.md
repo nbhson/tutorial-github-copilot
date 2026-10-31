@@ -103,14 +103,7 @@ Vì sao loop trong 1 message? Mỗi message mới là 1 request + context mới 
 
 **Bisect bằng git (khi chưa biết file nào gây lỗi):**
 
-```bash
-git bisect start
-git bisect bad HEAD
-git bisect good v1.2.0
-# Mỗi bước chạy: npm test -- <scope> → good/bad
-git bisect reset
-# Kỳ vọng: ~log2(số commit) lần chạy, khoanh được 1 commit gây lỗi.
-```
+> 📄 **Code ví dụ:** [`examples/01-5-move-3-bisect-log-prompt.sh`](examples/01-5-move-3-bisect-log-prompt.sh)
 
 Nhờ Copilot viết script bisect: `"Viết script bash: mỗi commit chạy npm test -- payments, in PASS/FAIL + 5 dòng cuối log. Tôi sẽ dùng với git bisect."` Bisect bằng comment code cũng được: `"Bug chỉ xảy ra khi bật voucher + refund cùng lúc. Đề xuất 3 điểm bisect (tắt từng cái) — mỗi điểm kèm file:line + lệnh verify."`
 
@@ -118,10 +111,7 @@ Lưu ý: bisect mà không tái hiện được lỗi một cách ổn định t
 
 **Log→prompt — đừng paste log thô:**
 
-```bash
-# Bước 1: lưu log ra file
-npm test -- payments > /tmp/test.log 2>&1
-```
+> 📄 **Code ví dụ:** [`examples/02-5-move-3-bisect-log-prompt.sh`](examples/02-5-move-3-bisect-log-prompt.sh)
 
 ```text
 # Bước 2: mở chat phụ, gắn file log:

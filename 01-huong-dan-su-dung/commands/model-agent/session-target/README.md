@@ -29,13 +29,7 @@ Chọn đúng nơi chạy theo việc:
 
 ## Cách gọi (copy-paste)
 
-```bash
-# VS Code: đáy khung Chat → Session Target → chọn target
-# Local / Copilot / Cloud / Claude / Codex... + "Learn about harnesses..."
-# Copilot session → /delegate  (đẩy task sang Cloud, mở PR)
-# Kỳ vọng: session hiện đúng ở Agent Sessions sidebar; Cloud trả về 1 PR
-# Verify: Local sửa ngay trong editor; Cloud xong thì có PR mới trên GitHub
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy `Copilot`/`Cloud` trong list? Thường do chưa đăng nhập GitHub, thiếu extension, hoặc org policy chặn (`ChatEditorPreferCopilotHarness`) — kiểm tra `/status` trước khi kết luận lỗi. Chi tiết: [bài 10 mục 3.3](../../../10-modes-permissions-availability.md).
 
@@ -43,16 +37,7 @@ Chọn đúng nơi chạy theo việc:
 
 Nghiệp vụ: bạn có ba việc khác tính chất và muốn xếp đúng "nhà xưởng" cho từng việc.
 
-```bash
-# Local: sửa nhanh, cần test ngay trong editor
-"sửa src/auth/login.ts, chạy npm test ngay trong editor"
-
-# Copilot: refactor dài, muốn chạy nền và mở lại ở cửa sổ khác
-"refactor module payments + chạy test"   (target: Copilot)
-
-# Cloud: task gọn, giao hẳn để nhận PR cho team review
-"thêm endpoint /healthz + test"          → chọn Cloud → agent mở PR
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Local sửa ngay trong workspace; Copilot chạy nền + xuất hiện ở Agent Sessions sidebar; Cloud trả về 1 PR trên GitHub.
 
@@ -62,17 +47,11 @@ Nghiệp vụ: bạn có ba việc khác tính chất và muốn xếp đúng "n
 
 **❌ SAI — đổi target xong tưởng là "chat mới", mất hết ngữ cảnh:**
 
-```bash
-# Đang làm ở Local, đổi sang Cloud rồi hỏi lại từ đầu
-# -> mất history + context của phiên cũ
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — dùng Handoff để mang context sang target mới:**
 
-```bash
-# Từ session Local: Handoff sang target khác -> mang theo history + context
-# Hoặc trong session Copilot: /delegate để tiếp tục trên Cloud
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Đổi target là đổi nơi chạy, không phải nút "chat mới". Cần giữ ngữ cảnh thì dùng Handoff (chỉ khởi tạo được từ session Local).
 

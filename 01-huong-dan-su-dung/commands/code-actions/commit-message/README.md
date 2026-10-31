@@ -20,13 +20,7 @@ Message tốt là message nói được cả **đổi gì** lẫn **vì sao** �
 
 ## Cách gọi (copy-paste)
 
-```bash
-# Stage changes, rồi:
-/commit
-
-/commit theo conventional, tiếng Anh, <72 chars
-# Kỳ vọng: message feat/fix(scope): ... + body ngắn
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > `/commit` không xuất hiện khi gõ `/` trong Chat? Chạy `/status` + xem plan trước khi kết luận lệnh hỏng.
 
@@ -34,12 +28,7 @@ Message tốt là message nói được cả **đổi gì** lẫn **vì sao** �
 
 Nghiệp vụ: vừa thêm null check cho email có dấu trong luồng login (fix bug 500), đã `git add` đúng 2 file.
 
-```bash
-# 1. git add src/auth/login.ts src/auth/login.test.ts
-# 2. Gọi:
-/commit "viết message conventional từ staged diff, tiếng Anh, dòng đầu <72 chars"
-# Verify: đọc message 5 giây là hiểu đổi gì + vì sao
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** `fix(auth): handle accented email in login` kèm body ngắn nêu nguyên nhân — log sạch, CI parse được.
 
@@ -49,18 +38,11 @@ Nghiệp vụ: vừa thêm null check cho email có dấu trong luồng login (f
 
 **❌ SAI — stage một cục lộn xộn rồi commit luôn message gợi ý:**
 
-```bash
-git add .            # gộp cả refactor + fix + format
-/commit              # -> "chore: update files", chẳng nói được gì
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — stage gọn theo mục đích, đọc lại message:**
 
-```bash
-git add src/auth/login.ts src/auth/login.test.ts
-/commit "conventional, tiếng Anh, <72 chars, body nêu vì sao fix"
-# đọc lại, sửa nếu cần, rồi mới commit
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** message tốt bắt đầu từ **diff gọn**; và `/commit` chỉ sinh nháp — commit là hành động thật, bạn duyệt cuối.
 

@@ -1,0 +1,6 @@
+on:
+  issues:
+    types: [opened]
+permissions:
+  issues: write  # chi label + comment
+  contents: read

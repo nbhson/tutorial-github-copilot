@@ -23,12 +23,7 @@
 - **Business/Enterprise:** snippets KHÔNG dùng để train (cam kết trong điều khoản thương mại).
 - Dữ liệu truyền qua TLS, giữ tạm phục vụ request rồi xóa theo retention policy.
 
-```bash
-# Khong co CLI; check + tat tren web:
-# https://github.com/settings/copilot
-# -> Bo tick "Allow GitHub to use my code snippets..."
-# -> Bat "Duplication detection filter" (cau 2)
-```
+> 📄 **Code ví dụ:** [`examples/01-1-code-cua-toi-co-bi-dung-e.sh`](examples/01-1-code-cua-toi-co-bi-dung-e.sh)
 
 > Setup máy mới check 1 lần; code NDA/compliance thì tắt training ngay trước khi mở file.
 
@@ -48,18 +43,7 @@
 
 **Trả lời 1 câu:** Thứ tự BẮT BUỘC: **xoay/revoke key TRƯỚC, dọn history SAU** — secret đã push lên GitHub coi như đã lộ; xóa commit mà không xoay key thì key vẫn sống trong tay kẻ đã clone.
 
-```bash
-# 1. Revoke/rotate TREN DASHBOARD provider (Stripe/GitHub/AWS...) - lam ngay
-
-# 2. Xoa file khoi tracking + commit moi
-git rm --cached secrets/leaked.key
-echo "secrets/" >> .gitignore
-git commit -m "chore(security): remove leaked secret, rotated key"
-
-# 3. Quet ca history xem con sot khong
-gitleaks detect --verbose
-gh api repos/<OWNER>/<REPO>/secret-scanning/alerts --jq '.[] | {secret_type, state}'
-```
+> 📄 **Code ví dụ:** [`examples/02-3-lo-commit-secret-thi-xu-ly-sao.sh`](examples/02-3-lo-commit-secret-thi-xu-ly-sao.sh)
 
 **Ví dụ:** push nhầm `sk-live_...` → Stripe dashboard roll key (2 phút) → rồi mới `git rm + commit` → key cũ vô hiệu dù ai đã thấy.
 
@@ -67,14 +51,7 @@ gh api repos/<OWNER>/<REPO>/secret-scanning/alerts --jq '.[] | {secret_type, sta
 
 **Trả lời 1 câu:** Push protection chặn secret lúc push (bypass có lý do, lưu audit log); xử lý alert `validity: active` trước, còn lại dọn sau.
 
-```bash
-# Uu tien alert con 'active'
-gh api repos/<OWNER>/<REPO>/secret-scanning/alerts \
-  --jq '.[] | select(.state=="open") | {number, secret_type, validity}'
-
-# Dong alert sau khi da xoay key
-gh api repos/<OWNER>/<REPO>/secret-scanning/alerts/<N> -X PATCH -f state='resolved'
-```
+> 📄 **Code ví dụ:** [`examples/03-4-secret-scanning-push-protection-goc-bao-mat.sh`](examples/03-4-secret-scanning-push-protection-goc-bao-mat.sh)
 
 > Review Security tab hàng tuần; alert `active` = xử lý trong ngày. Cấu hình chi tiết: [bài 05](05-policies-guardrails-faq.md) câu 5.
 
@@ -82,11 +59,7 @@ gh api repos/<OWNER>/<REPO>/secret-scanning/alerts/<N> -X PATCH -f state='resolv
 
 **Trả lời 1 câu:** 3 tầng log: org audit log (ai đổi policy, assign seat, bypass — giữ 180 ngày đến 7 năm tùy plan), repo events (merge/dismiss), git history (author từng commit, kể cả bot).
 
-```bash
-gh api orgs/<ORG>/audit-log --jq '.[] | {action, actor, created_at}' | head -20
-gh api "orgs/<ORG>/audit-log?phrase=action:copilot" --jq '.[] | {action, actor, created_at}'
-gh api repos/<OWNER>/<REPO>/events --jq '.[] | {type, actor: .actor.login, created_at}' | head -20
-```
+> 📄 **Code ví dụ:** [`examples/04-5-audit-logs-xem-o-au.sh`](examples/04-5-audit-logs-xem-o-au.sh)
 
 **Ví dụ:** có người bypass push protection → audit log hiện `push_protection_bypass by @userX` → hỏi lý do + verify key đó đã xoay.
 
@@ -102,13 +75,7 @@ Hỏi admin 3 câu rồi ghi vào hồ sơ compliance, không hứa miệng vớ
 
 Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.gitignore` → exclusion → scanning. Cấu hình 2 mức: xem [bài 03](03-modes-permissions.md) câu 3.
 
-```bash
-# Audit: file nhay cam nao dang bi git track?
-git ls-files | grep -Ei "pem$|key$|\.env$|credentials|secrets" || echo "OK: khong co"
-
-# Co -> go ngay (roi xoay key theo cau 3)
-git rm --cached <file> && echo "<file>" >> .gitignore && git commit -m "chore(security): untrack sensitive file"
-```
+> 📄 **Code ví dụ:** [`examples/05-7-content-exclusion-cho-file-nhay-cam.sh`](examples/05-7-content-exclusion-cho-file-nhay-cam.sh)
 
 ## 8. Token/PAT quản lý sao cho an toàn?
 
@@ -120,10 +87,7 @@ git rm --cached <file> && echo "<file>" >> .gitignore && git commit -m "chore(se
 | Quyền | Tối thiểu, chỉ repo cần | Cấp tự động theo job |
 | Hạn | 30-90 ngày, tự xoay | Hết khi job xong |
 
-```bash
-# Quét repo có ai hardcode token không
-grep -rEn "ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk-live-[A-Za-z0-9]{10,}" --exclude-dir=node_modules --exclude-dir=.git . || echo "Sach"
-```
+> 📄 **Code ví dụ:** [`examples/06-8-token-pat-quan-ly-sao-cho-an.sh`](examples/06-8-token-pat-quan-ly-sao-cho-an.sh)
 
 > Đặt lịch 90 ngày rotate PAT MCP; offboard = revoke. Đặt tên token ghi rõ mục đích: `mcp-github-laptop-2026-10`.
 
@@ -131,11 +95,7 @@ grep -rEn "ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk-live-[A-Za-z0-9]
 
 **Trả lời 1 câu:** PR agent qua cùng gate bảo mật như PR người — secret scan, required review, security-reviewer khi chạm auth/payment — cộng 2 check riêng: **scope lố không** (file ngoài issue?) và **dependency lạ không** (`package.json` thêm lib không rõ nguồn?).
 
-```bash
-gh pr diff <NUM> --name-only | head -30
-git diff main...copilot/issue-N -- package.json pnpm-lock.yaml
-# Thay lib moi -> check: npm view <lib> + doc diff code dung lib do
-```
+> 📄 **Code ví dụ:** [`examples/07-9-review-pr-cua-coding-agent-ve-mat.sh`](examples/07-9-review-pr-cua-coding-agent-ve-mat.sh)
 
 **Ví dụ:** PR agent thêm `super-helper-utils` 50 downloads/tuần → yêu cầu thay bằng lib chuẩn team.
 
@@ -143,12 +103,7 @@ git diff main...copilot/issue-N -- package.json pnpm-lock.yaml
 
 **Trả lời 1 câu:** 5 item: gitleaks sạch, không file nhạy cảm bị track, exclusion + ruleset + required checks bật, token đã xoay nếu từng lộ, LICENSE + duplication filter phù hợp.
 
-```bash
-gitleaks detect --verbose
-git ls-files | grep -Ei "pem$|key$|\.env$|credentials|secrets" || echo "OK: khong track file nhay cam"
-gh api repos/<OWNER>/<REPO>/secret-scanning/alerts --jq '[.[] | select(.state=="open")] | length'
-# Verify: 0 alert open + "OK" mới public
-```
+> 📄 **Code ví dụ:** [`examples/08-10-checklist-bao-mat-truoc-khi-public-mo.sh`](examples/08-10-checklist-bao-mat-truoc-khi-public-mo.sh)
 
 > Thêm item (tùy repo): Agent Skills + hooks preview (nếu có) phải được review trước khi public — chúng là code chạy trên máy dev.
 

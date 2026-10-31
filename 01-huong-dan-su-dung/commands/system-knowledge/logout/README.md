@@ -20,12 +20,7 @@ Vì credentials đăng nhập của bạn là thứ phải dọn sạch khi bạ
 
 ## Cách gọi (copy-paste)
 
-```bash
-/logout
-# xong /login lại nếu cần
-# Kỳ vọng: credentials local sạch, máy không còn vào được account bạn
-# Verify: /status báo signed-out
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Gõ `/` trong Chat để kiểm tra `/logout` có trong list không. Không thấy thì xem plan/model trước khi kết luận là bug.
 
@@ -33,11 +28,7 @@ Vì credentials đăng nhập của bạn là thứ phải dọn sạch khi bạ
 
 Nghiệp vụ: bạn mượn laptop của đồng nghiệp để demo, xong việc phải trả lại sạch sẽ.
 
-```bash
-# 1. /logout trên máy mượn
-# 2. /status → xác nhận máy báo chưa login
-# 3. Xóa thêm token trong biến môi trường nếu có, rồi trả máy
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Credentials local sạch; máy không còn vào được account của bạn.
 

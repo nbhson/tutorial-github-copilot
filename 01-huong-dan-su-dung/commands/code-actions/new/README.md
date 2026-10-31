@@ -20,12 +20,7 @@ Phần tốn thời gian khi viết code mới không phải logic mà là khung
 
 ## Cách gọi (copy-paste)
 
-```bash
-/new
-
-/new viết hàm retry fetch 3 lần, backoff 1s
-# Kỳ vọng: code nháp đúng style repo, review rồi mới giữ
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy `/new (code)` khi gõ `/` trong Chat? Xem `/status` + plan trước khi kết luận lệnh hỏng. Lưu ý có `/new` để mở chat mới và `/new (code)` để sinh code — chọn đúng cái bạn cần.
 
@@ -33,10 +28,7 @@ Phần tốn thời gian khi viết code mới không phải logic mà là khung
 
 Nghiệp vụ: cần một helper gọi API có retry cho tầng network.
 
-```bash
-/new "viết hàm fetchWithRetry(url): retry 3 lần, backoff 1s, throw lỗi cuối — theo style repo"
-# Verify: chạy thử + viết 1 test nhanh cho hàm mới
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** code mới đúng style repo + có xử lý lỗi cơ bản (timeout/lỗi mạng); bạn review diff rồi mới giữ.
 
@@ -46,17 +38,11 @@ Nghiệp vụ: cần một helper gọi API có retry cho tầng network.
 
 **❌ SAI — tả cả module một lần, không có mẫu:**
 
-```bash
-/new "viết module xử lý payment đầy đủ: retry, webhook, refund, log, config"
-# -> ra khối code to, lệch style, khó review
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — chia bước + đính file mẫu:**
 
-```bash
-/new "viết hàm fetchWithRetry(url): retry 3 lần, backoff 1s — theo đúng style file src/net/http.ts"
-# bước tiếp: viết test, rồi mới ghép vào module
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** code nháp đúng style + tả từng phần nhỏ thì review nhanh và ít bug hơn nhiều so với ôm cả module.
 

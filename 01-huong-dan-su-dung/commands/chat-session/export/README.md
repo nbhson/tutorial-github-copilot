@@ -26,11 +26,7 @@ Giá trị thật của một phiên chat thường nằm ở **đoạn giữa**
 
 ## Cách gọi (copy-paste)
 
-```bash
-/export
-/export lưu chat này ra docs/chat-refactor-login.md
-# Kỳ vọng: file markdown sạch, không lọt secrets
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Kiểm tra lệnh có ở máy bạn không: gõ `/` trong ô Chat, tìm `/export`. Không thấy → đọc `/status` + plan trước khi kết luận lỗi công cụ.
 
@@ -38,12 +34,7 @@ Giá trị thật của một phiên chat thường nằm ở **đoạn giữa**
 
 Nghiệp vụ: bạn vừa cùng Copilot chốt xong cách xử lý retry cho `apiClient`, muốn lưu vào wiki team để người sau khỏi mò lại.
 
-```bash
-# 1. Truoc khi export: soat xem chat co dinh token/key nao khong
-# 2. Export ra file
-/export lưu chat này ra docs/chats/retry-api-client.md
-# Verify: mo file, doc lai 1 luot, da soat secrets
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** File markdown chứa đủ turns + code blocks; share được, secrets đã soát.
 
@@ -53,19 +44,11 @@ Nghiệp vụ: bạn vừa cùng Copilot chốt xong cách xử lý retry cho `a
 
 **❌ SAI — export nguyên xi một chat từng attach file có token, rồi đẩy lên wiki:**
 
-```bash
-/export lưu chat này ra docs/chats/retry-api-client.md
-# File mang theo token da tung attach -> lo secret
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — soát secrets trước, xử lý phần dài, rồi mới export:**
 
-```bash
-# Chat dai 50+ turns -> nen /summarize truoc
-/summarize nén chat này thành bản gọn để lưu
-# Soat secrets: khong con token/key trong chat
-/export lưu chat này ra docs/chats/retry-api-client.md
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Export là hành động *công khai hoá* — thứ gì trong chat cũng đi ra file. Soát secrets là bước không được bỏ.
 

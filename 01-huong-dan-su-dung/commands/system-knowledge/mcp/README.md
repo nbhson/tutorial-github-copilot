@@ -26,12 +26,7 @@ MCP server chạy **ngoài** VS Code: nó có thể rớt mạng, hết hạn to
 
 ## Cách gọi (copy-paste)
 
-```bash
-/mcp
-# liệt kê servers/tools đang bật
-# Kỳ vọng: thấy list servers connected + tools khả dụng
-# Verify: test 1 tool thật (list PRs / query / test browser) chạy được
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy `/mcp` trong list khi gõ `/`? Kiểm `/status` + plan trước khi kết luận lỗi công cụ.
 
@@ -39,15 +34,7 @@ MCP server chạy **ngoài** VS Code: nó có thể rớt mạng, hết hạn to
 
 Nghiệp vụ: bạn cần Copilot đọc PR trên GitHub, nhưng vừa nâng cấp gì đó nên không rõ server còn sống không.
 
-```bash
-/mcp
-# Đọc kết quả: server "github" có connected? tool list_prs/create_prs có trong list?
-
-# Rồi test bằng 1 câu NHỎ (đừng test bằng việc lớn):
-"dùng github tool liệt kê 5 PRs mới nhất"
-# → trả về đúng 5 PR = server sống, tool chạy thật.
-# → báo "tool không khả dụng" = quay lại xem /mcp, server đang rớt.
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** thấy list servers connected + tools khả dụng; test một tool nhỏ chạy thành công.
 

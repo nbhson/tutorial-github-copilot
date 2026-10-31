@@ -36,12 +36,7 @@ Quy tắc tính tiền cần nhớ:
 
 Mấu chốt: **Free/Pro/Pro+/Max = tự trả, tự quản; Business/Enterprise = admin quản, policy đè lên setting cá nhân.**
 
-```bash
-# Xem plan hiện tại (cần gh CLI đã login)
-gh api user --jq '{login, plan: .plan.name}'
-gh api /user/copilot_seat_details --jq . 2>/dev/null || echo "Chua co seat"
-# Verify: ra login + tên plan, không phải 404
-```
+> 📄 **Code ví dụ:** [`examples/01-1-cac-plan-khac-nhau-gi.sh`](examples/01-1-cac-plan-khac-nhau-gi.sh)
 
 > **Nếu vẫn lỗi:** chạy `gh auth status` xem đúng account chưa; mở `github.com/settings/copilot` đối chiếu plan thật; org thì hỏi admin seat đã gán chưa.
 
@@ -59,13 +54,7 @@ Hết trial: Free → suggestions dừng, chat báo hạn mức; Business trial 
 
 Hai chế độ: allow all members (tốn seat theo headcount) hoặc selected teams/users (tiết kiệm). Credits org **pooled ở mức billing entity** — seat nào xài nhiều vẫn lấy chung hạn mức tổ chức.
 
-```bash
-# Admin: xem ai đang giữ seat
-gh api orgs/<ORG>/copilot/billing/seats --jq '.seats[] | {login: .assignee.login, plan}'
-# Assign seat cho 1 team
-gh api -X POST orgs/<ORG>/copilot/billing/selected_teams -f selected_teams='["team-slug"]'
-# Verify: list ra login + plan; dev trong team thấy Copilot chạy
-```
+> 📄 **Code ví dụ:** [`examples/02-3-seat-la-gi-admin-assign-thu-hoi.sh`](examples/02-3-seat-la-gi-admin-assign-thu-hoi.sh)
 
 > **Khi nào áp dụng:** khi dev báo "Copilot đòi mua dù đã join org" — 90% là chưa được assign seat.
 
@@ -80,14 +69,7 @@ gh api -X POST orgs/<ORG>/copilot/billing/selected_teams -f selected_teams='["te
 | Neovim | `github/copilot.vim` hoặc `zbirenbaum/copilot.lua` | `:Copilot auth` |
 | CLI | `gh extension install github/gh-copilot` hoặc binary `copilot` | `gh auth login` / `copilot init` |
 
-```bash
-code --install-extension GitHub.copilot
-code --install-extension GitHub.copilot-chat
-# Verify: code --list-extensions | grep -i copilot ra đúng 2 dòng
-
-gh extension install github/gh-copilot && gh copilot --help
-# Verify: ra help, không phải "command not found"
-```
+> 📄 **Code ví dụ:** [`examples/03-4-cai-at-the-nao-cho-sach-vs.sh`](examples/03-4-cai-at-the-nao-cho-sach-vs.sh)
 
 Bản CLI độc lập 2026 là binary `copilot` (có `copilot init`, slash command `/mcp`, `/usage`) — xem [bài 10](10-ci-sdk-review-web.md).
 
@@ -109,14 +91,7 @@ Triệu chứng: setting tự revert sau restart, model picker thiếu model, ch
 
 **Trả lời 1 câu:** 3 lỗi top là 2 plugin Copilot đè nhau, IDE quá cũ, và máy thiếu `gh` — gỡ bản lạ, update IDE, cài `gh` là chạy lại.
 
-```bash
-code --list-extensions | grep -i copilot
-# Verify: ra đúng 2 dòng (GitHub.copilot + GitHub.copilot-chat), thêm = conflict
-code --uninstall-extension <ten-la>   # gỡ bản lạ
-
-gh --version && gh extension list | grep copilot
-# Verify: gh ra số version, extension list có "github/gh-copilot"
-```
+> 📄 **Code ví dụ:** [`examples/04-7-loi-cai-at-kinh-ien.sh`](examples/04-7-loi-cai-at-kinh-ien.sh)
 
 > **Khi nào áp dụng:** khi suggestions/chat đột nhiên chết sau update IDE hoặc sau khi vọc extension.
 
@@ -124,14 +99,7 @@ gh --version && gh extension list | grep copilot
 
 **Trả lời 1 câu:** Verify suggestions chạy → copy `templates/` (copilot-instructions + mcp.json + settings) → thêm instructions theo stack → thêm MCP nếu cần data ngoài repo → thêm content exclusion cho path nhạy cảm.
 
-```bash
-cd ~/code/my-repo && code .
-# Trong IDE: gõ thử 1 hàm để verify suggestions (gợi ý xám → Tab)
-
-cp -r /path/to/tutorial-copilot/templates/.github ./
-cp -r /path/to/tutorial-copilot/templates/.vscode ./
-# Verify: ls .github/ .vscode/ thấy đủ file
-```
+> 📄 **Code ví dụ:** [`examples/05-8-bat-au-repo-moi-5-viec-setup.sh`](examples/05-8-bat-au-repo-moi-5-viec-setup.sh)
 
 Copilot đọc instructions tĩnh — repo trống vẫn setup được full khung, chỉ cần sửa ~20% cho khớp stack thật (template ghi `npm test` mà bạn dùng `pnpm` thì sửa ngay, không Copilot gợi ý sai lệnh cả tháng). Team thì commit `.github/` + `.vscode/` để người sau khỏi setup lại.
 
@@ -139,10 +107,7 @@ Copilot đọc instructions tĩnh — repo trống vẫn setup được full khu
 
 **Trả lời 1 câu:** Báo qua GitHub Discussions (`github.com/community`) hoặc Support ticket (Business/Enterprise), kèm đủ 3 thứ: plan + IDE version + log thì mới xử lý nhanh.
 
-```bash
-gh --version && code --version && code --list-extensions | grep -i copilot
-# VS Code: Output panel -> "GitHub Copilot" -> copy đoạn lỗi
-```
+> 📄 **Code ví dụ:** [`examples/06-9-bao-loi-nho-ho-tro-github-the.sh`](examples/06-9-bao-loi-nho-ho-tro-github-the.sh)
 
 ---
 

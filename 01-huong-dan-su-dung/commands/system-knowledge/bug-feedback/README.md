@@ -27,12 +27,7 @@ Vì GitHub chỉ sửa được cái nó tái hiện được. Một câu "Copil
 
 ## Cách gọi (copy-paste)
 
-```bash
-/feedback tốt/xấu + lý do
-/bug “mô tả + bước lặp + version”
-# Kỳ vọng: GitHub nhận đủ context để tái hiện bug
-# Verify: nhận được confirm/tham chiếu issue
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Gõ `/` trong Chat để kiểm tra `/feedback` và `/bug` có trong list không. Không thấy thì xem plan/model trước khi kết luận là bug.
 
@@ -40,11 +35,7 @@ Vì GitHub chỉ sửa được cái nó tái hiện được. Một câu "Copil
 
 Nghiệp vụ: `/tests` sinh ra import sai mỗi lần bạn bôi đen hàm X, và bạn lặp lại được đều đặn.
 
-```bash
-/bug “/tests sinh sai import. Bước lặp: bôi đen hàm X → gọi /tests.
-Kỳ vọng: import đúng theo mẫu repo. Thực tế: import sai path.
-Version: ext 1.2.3, VS Code 1.8x”
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Bug có đủ context (prompt + version + bước lặp) để GitHub tái hiện; bạn nhận được xác nhận/issue tham chiếu.
 

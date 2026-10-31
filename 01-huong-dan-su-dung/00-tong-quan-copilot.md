@@ -104,14 +104,7 @@ Mẹo tiết kiệm: luôn `search` trước, `read` sau. File >300 dòng → b�
 
 **Nhóm 4 — MCP (công cụ ngoài, động):** MCP server là chương trình ngoài repo, phơi ra các "tools" để agent gọi khi cần dữ liệu ngoài. Nôm na: VS Code có sẵn quầy read/edit/terminal, ki-ốt MCP cho thêm GitHub, Postgres, Slack. Ví dụ: server `github` có tool `create_pr` → PR được tạo thật trên GitHub.
 
-```json
-// .vscode/mcp.json — mẫu tối thiểu (copy-paste, sửa path)
-{
-  "servers": {
-    "github": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-github"] }
-  }
-}
-```
+> 📄 **Code ví dụ:** [`examples/01-3-4-ho-tool-copilot.json`](examples/01-3-4-ho-tool-copilot.json)
 
 > Quy tắc: giữ **3–6 servers**. Càng nhiều tool → model càng dễ chọn nhầm. Chi tiết: [bài 08](./08-mcp-ket-noi-cong-cu-ngoai.md).
 
@@ -197,10 +190,7 @@ Kiểm chứng: dashboard github.com/settings/copilot
 
 **Bước 1 — Mở Chat trong repo thật (2 phút)**
 
-```bash
-code /path/to/repo-cua-ban
-# Ctrl+Shift+P → "Chat: New Chat" (hoặc Ctrl+Alt+I) → chọn Agent mode
-```
+> 📄 **Code ví dụ:** [`examples/02-6-walkthrough-5-buoc-cho-nguoi-moi.sh`](examples/02-6-walkthrough-5-buoc-cho-nguoi-moi.sh)
 
 **Bước 2 — Kiểm tra Copilot đọc đúng repo (5 phút)**
 
@@ -239,10 +229,7 @@ Quan sát: nó đọc file → sửa → chạy lệnh → đọc output → s�
 
 **Bước 5 — Đóng session sạch (3 phút)**
 
-```bash
-# Xem usage: github.com/settings/copilot (số AI credits đã dùng)
-# Mở chat mới cho task kế tiếp — không nối task mới vào history cũ (tốn + nhiễu)
-```
+> 📄 **Code ví dụ:** [`examples/03-6-walkthrough-5-buoc-cho-nguoi-moi.sh`](examples/03-6-walkthrough-5-buoc-cho-nguoi-moi.sh)
 
 ---
 

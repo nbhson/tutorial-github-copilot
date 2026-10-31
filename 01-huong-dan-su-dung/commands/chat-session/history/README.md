@@ -26,11 +26,7 @@ Trí nhớ của bạn không phải nơi lưu tốt nhất cho hàng chục phi
 
 ## Cách gọi (copy-paste)
 
-```bash
-/history
-# hoặc Ctrl+Shift+P → "Chat: Show History"
-# Kỳ vọng: danh sách chat cũ theo thời gian hiện ra
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Kiểm tra lệnh có ở máy bạn không: gõ `/` trong ô Chat, tìm `/history`. Không thấy → đọc `/status` + plan trước khi kết luận lỗi công cụ.
 
@@ -38,11 +34,7 @@ Trí nhớ của bạn không phải nơi lưu tốt nhất cho hàng chục phi
 
 Nghiệp vụ: tuần trước bạn thử hai hướng fix bug timezone — một ở chat "tz-utc-offset", một ở chat "tz-library". Giờ cần mở lại chat dùng thư viện để so với hướng còn lại.
 
-```bash
-/history
-# Tim chat "tz-library" (thu huong dung thu vien) -> mo lai
-# Verify: nhan 1 cau follow-up -> model nho context cu cua phien do
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Thấy list chats cũ theo thời gian; mở lại đúng phiên, tiếp tục không cần giải thích lại.
 
@@ -52,18 +44,11 @@ Nghiệp vụ: tuần trước bạn thử hai hướng fix bug timezone — m�
 
 **❌ SAI — mở lại chat cũ rồi giao việc mới y như cũ, không tóm tắt:**
 
-```bash
-# Mo chat "tz-library" roi hoi tiep nhu the tool state con nguyen
-# -> model quen file nao da doc, phai doan mo
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — mở lại rồi tóm tắt 3 dòng bối cảnh trước khi hỏi tiếp:**
 
-```bash
-# Sau khi mo lai chat cu:
-"Tóm tắt lại giúp: hướng đang làm là dùng thư viện timezone Z,
- đã sửa file src/time.ts, còn dở phần test. Rồi ta làm tiếp."
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** history giữ text, không giữ tool state. Mở lại thì nhắc lại bối cảnh bằng lời.
 

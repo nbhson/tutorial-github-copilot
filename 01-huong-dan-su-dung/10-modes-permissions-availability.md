@@ -110,27 +110,7 @@ Model = "não"; **harness** = "tay chân + nhà xưởng" (ai thực thi tool, c
 
 ### 4.1. Settings mẫu team (commit)
 
-```jsonc
-// .vscode/settings.json — team-ready (commit):
-{
-  "github.copilot.chat.toolAutoRun": "ask",   // mặc định hỏi
-  "github.copilot.chat.tools": {
-    "search": "allow",          // tìm files/symbols → an toàn
-    "read": "allow",            // đọc file → cho qua
-    "fetch": "allow",           // fetch web docs → cho qua
-    "github-mcp-read": "allow", // GitHub read (PR/issues)
-    "terminal": "ask",          // chạy shell → hỏi mỗi lần (side effects)
-    "playwright": "ask",        // browser automation → hỏi
-    "postgres-write": "deny",   // DB write → cấm hẳn
-    "deploy": "deny"            // deploy → cấm (chỉ CI/human làm)
-  }
-}
-// Personal user settings (KHÔNG commit) — chỉ NỚI cái team chưa cover, cùng key
-// "github.copilot.chat.tools": { "terminal-pnpm-test": "allow", "gh-pr-view": "allow" }
-// (lệnh test lặp lại → đỡ bấm Allow 20 lần). Đừng deny trong personal để lách team allow.
-// Verify (2 phút): "@workspace git diff --stat là gì" → chạy luôn (allow);
-// Agent "chạy pnpm test" → popup Ask; bấm Deny 1 lần → Copilot dừng, không lách.
-```
+> 📄 **Code ví dụ:** [`examples/01-4-1-settings-mau-team-commit.jsonc`](examples/01-4-1-settings-mau-team-commit.jsonc)
 
 ### 4.2. Patterns + thứ tự thắng
 
@@ -172,17 +152,7 @@ Assisted + Allow all + Autopilot), ChatToolsEligibleForAutoApproval + TerminalEn
 | **Tắt** (mặc định) | Quy tắc permission/approval khác vẫn áp dụng; lệnh cần duyệt vẫn hỏi |
 | **Bật** | Giới hạn file + mạng; lệnh TRONG sandbox auto-approve (đã bị giới hạn) |
 
-```jsonc
-// .vscode/settings.json (một số setting có thể bị org quản lý):
-{
-  "chat.agent.sandbox.enabled": "on",                    // off | on
-  "chat.agent.sandbox.network.allowNetwork": false,      // chặn mạng khi bật
-  "chat.agent.sandbox.allowUnsandboxedCommands": false,  // không cho chạy ngoài chuồng
-  "chat.assistedPermissions.enabled": true,
-  "chat.editing.autoAcceptDelay": 0                      // 0 = tắt auto-accept edit
-}
-// Verify sâu (Agent Host): /sandbox policy → xem file system + network policy hiệu lực.
-```
+> 📄 **Code ví dụ:** [`examples/02-4-4-sandboxing-for-terminal.jsonc`](examples/02-4-4-sandboxing-for-terminal.jsonc)
 
 ```text
 3 điều đừng quên: (1) Sandbox KHÔNG phải máy ảo, không thay thế bảo mật hệ thống;

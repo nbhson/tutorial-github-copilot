@@ -53,12 +53,7 @@ App **đã deploy** vẫn tiếp tục chạy — chỉ việc chỉnh sửa tro
 | Issue → spec → plan → PR trong một UI | Assign issue → chạy trên GitHub Actions → draft PR |
 | Chỉnh tay trong workbench | Sửa tiếp bằng comment trên PR, duyệt từ GitHub Mobile |
 
-```bash
-# Workflow "issue -> PR" hôm nay:
-# 1. Mở issue -> gán assignee Copilot (nút Assign)
-# 2. Agent tạo branch + draft PR + log tiến trình trong tab Sessions
-# CLI thay thế: copilot (Copilot CLI) chạy agent trực tiếp trong terminal
-```
+> 📄 **Code ví dụ:** [`examples/01-3-copilot-workspace-au-roi.sh`](examples/01-3-copilot-workspace-au-roi.sh)
 
 > **Không thấy nút assign Copilot:** repo private của org Free plan (coding agent cần plan trả phí); hoặc org policy tắt coding agent — hỏi admin bật.
 
@@ -68,11 +63,7 @@ App **đã deploy** vẫn tiếp tục chạy — chỉ việc chỉnh sửa tro
 
 Phân quyền: Space cá nhân = private / share user / public link (view-only); Space org = member thấy theo vai trò admin/editor/viewer hoặc "No access" ẩn hẳn.
 
-```bash
-# Verify qua API (token cần quyền Copilot thích hợp):
-curl -s -H "Authorization: Bearer <TOKEN>" https://api.github.com/copilot/spaces | head -20
-# 401/403 -> token sai scope / không có license / org chặn
-```
+> 📄 **Code ví dụ:** [`examples/02-4-truy-cap-spaces-o-au-ai-dung.sh`](examples/02-4-truy-cap-spaces-o-au-ai-dung.sh)
 
 ## 5. Muốn "vibe coding" tạo app như Spark, giờ dùng gì?
 
@@ -85,12 +76,7 @@ curl -s -H "Authorization: Bearer <TOKEN>" https://api.github.com/copilot/spaces
 | Học/AI trong app | Tự nối provider AI trực tiếp (`llm()` của Spark đã chết cùng GitHub Models) |
 | Không muốn rời terminal | Copilot CLI: `copilot` rồi mô tả việc, duyệt từng bước |
 
-```bash
-gh repo create my-prototype --public --clone && cd my-prototype
-gh issue create --title "Xay dung app dem calo" --body "Stack: ..., tinh nang: ..."
-gh issue edit 1 --add-assignee "@copilot"
-# Verify: PR draft xuat hien, comment de yeu cau sua tiep
-```
+> 📄 **Code ví dụ:** [`examples/03-5-muon-vibe-coding-tao-app-nhu-spark.sh`](examples/03-5-muon-vibe-coding-tao-app-nhu-spark.sh)
 
 > Agent làm sai ý: issue viết spec cụ thể hơn (stack, cấu trúc thư mục, tiêu chí xong); chia nhỏ thành nhiều issue thay vì 1 issue khổng lồ.
 
@@ -109,14 +95,7 @@ gh issue edit 1 --add-assignee "@copilot"
 
 **Trả lời 1 câu:** **Spaces API GA 18/05/2026** — CRUD đầy đủ Space + quản lý collaborators/nguồn qua REST, dành cho org cần quản lý hàng loạt: sinh 1 Space cho mỗi repo mới khi onboarding, dọn Space không ai dùng, đồng bộ collaborators theo bảng nhân sự.
 
-```bash
-curl -s -X POST -H "Authorization: Bearer <TOKEN>" \
-  -H "Accept: application/vnd.github+json" \
-  https://api.github.com/copilot/spaces \
-  -d '{"title":"Dự án billing","description":"Context cho team billing"}'
-
-# Chi tiết đầy đủ: docs.github.com -> REST API -> Copilot -> Spaces
-```
+> 📄 **Code ví dụ:** [`examples/04-7-quan-ly-spaces-bang-code-spaces-api.sh`](examples/04-7-quan-ly-spaces-bang-code-spaces-api.sh)
 
 > 404 + config trông đúng → bản preview cũ có schema khác, API đã GA 18/05/2026.
 
@@ -131,12 +110,7 @@ curl -s -X POST -H "Authorization: Bearer <TOKEN>" \
 | Không edit được app Spark | Spark đóng 31/08/2026 | Dựng lại từ repo (nếu đã export) bằng coding agent |
 | Không tìm thấy Copilot Workspace | Sunset 2025 → coding agent | Assign issue cho Copilot / dùng Copilot CLI |
 
-```bash
-# Thu tu kiem tra:
-# 1. License: github.com/settings/copilot -> thấy plan đang dùng
-# 2. Org policy: hỏi admin (Copilot -> Policies)
-# 3. Đồng bộ Space: mở Space -> check danh sách sources còn nguyên
-```
+> 📄 **Code ví dụ:** [`examples/05-8-troubleshooting-ca-3-ma-tran-trieu-chung.sh`](examples/05-8-troubleshooting-ca-3-ma-tran-trieu-chung.sh)
 
 ---
 

@@ -22,15 +22,7 @@ Vì cú pháp git/docker/gh/kubectl rất dễ nhớ nhầm flag — mà sai fla
 
 ## Cách gọi (copy-paste)
 
-```bash
-# Cài nếu chưa có:
-gh extension install github/gh-copilot
-
-gh copilot suggest "tìm file >100MB trong git history"
-# Kỳ vọng: 1–2 lệnh cụ thể + giải thích flag
-# Verify: chạy lệnh được gợi ý ở chế độ an toàn (--dry-run) thành công
-# Lưu ý: gh copilot ≠ copilot (gh copilot là extension CLI, không phải lệnh copilot riêng)
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy `gh copilot` thì kiểm tra bằng `gh extension list` trước khi kết luận là bug.
 
@@ -38,11 +30,7 @@ gh copilot suggest "tìm file >100MB trong git history"
 
 Nghiệp vụ: dọn dẹp máy — xóa các branch local đã merge vào main nhưng quên đúng cú pháp.
 
-```bash
-gh copilot suggest “xóa branch đã merge trừ main/develop”
-# Đọc lệnh + giải thích flag → chạy thử bản an toàn trước:
-#   git branch --merged | grep -v ... | xargs git branch -d   # -d (không -D) để không xóa branch chưa merge
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Được 1–2 lệnh cụ thể kèm giải thích flag; bạn chạy thử bản an toàn (ví dụ `-d` thay `-D`, hoặc `--dry-run`) trước.
 

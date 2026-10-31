@@ -1,0 +1,9 @@
+// .vscode/settings.json — giới hạn tools Copilot được auto-run (commit cho team)
+{
+  "github.copilot.chat.toolAutoRun": "ask",      // ask | allow | deny
+  "github.copilot.chat.tools": {
+    "terminal": "ask",                           // chạy shell → hỏi trước
+    "github-mcp": "allow",                       // GitHub MCP → cho qua (read-only)
+    "postgres-prod": "deny"                      // DB prod → cấm hẳn
+  }
+}

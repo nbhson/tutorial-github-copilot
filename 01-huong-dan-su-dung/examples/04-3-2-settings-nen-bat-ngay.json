@@ -1,0 +1,6 @@
+// .vscode/settings.json — mẫu team (copy-paste, sửa lại)
+{
+  "github.copilot.enable": { "*": true },
+  "github.copilot.chat.localeOverride": "en",
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true
+}

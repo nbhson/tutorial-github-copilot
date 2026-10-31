@@ -18,15 +18,7 @@
 
 **Trả lời 1 câu:** Tự load `copilot-instructions.md` (mọi lúc) + `*.instructions.md` khớp `applyTo`; gọi tay `*.prompt.md` (slash, legacy) + custom agent (chọn trong picker); còn Skill thì model tự gọi theo `description` — chuẩn khuyến nghị 2026.
 
-```bash
-find .github -type f | sort
-# Kỳ vọng:
-# .github/copilot-instructions.md
-# .github/instructions/backend-api.instructions.md
-# .github/prompts/review-pr.prompt.md
-# .github/agents/tester.agent.md
-# .github/skills/review-pr/SKILL.md
-```
+> 📄 **Code ví dụ:** [`examples/01-1-file-nao-copilot-tu-load-file-nao.sh`](examples/01-1-file-nao-copilot-tu-load-file-nao.sh)
 
 > "Đã tạo file mà Copilot không biết" — check đường dẫn + tên file trước tiên (đuôi phải là `.instructions.md` chứ không phải `.md` trơn).
 
@@ -34,16 +26,9 @@ find .github -type f | sort
 
 **Trả lời 1 câu:** `applyTo` là glob phải khớp đúng root thật của repo (thường cần `**/` đầu và quote khi có `*`) — viết theo `ls`/`find` thật, đừng đoán.
 
-```yaml
-# Đúng cho repo apps/api + apps/web:
-applyTo: "apps/api/**/*"           # backend-api.instructions.md
-applyTo: "apps/web/**/*.{ts,tsx}"  # frontend-react.instructions.md
-```
+> 📄 **Code ví dụ:** [`examples/02-2-applyto-viet-sao-cho-ung.yaml`](examples/02-2-applyto-viet-sao-cho-ung.yaml)
 
-```bash
-# Test glob khớp file nào: rỗng = glob sai
-ls apps/api/**/*.ts 2>/dev/null | head -5
-```
+> 📄 **Code ví dụ:** [`examples/03-2-applyto-viet-sao-cho-ung.sh`](examples/03-2-applyto-viet-sao-cho-ung.sh)
 
 > Glob sai root là lý do số 1 khiến instructions "không load".
 
@@ -51,9 +36,7 @@ ls apps/api/**/*.ts 2>/dev/null | head -5
 
 **Trả lời 1 câu:** 4 bẫy: thiếu cặp `---` mở/đóng, sai key (`applyTo` phải camelCase), quên quote glob có `*`, liệt kê `tools` không tồn tại.
 
-```bash
-head -8 .github/prompts/review-pr.prompt.md   # 2 dòng đầu + cuối phải là ---
-```
+> 📄 **Code ví dụ:** [`examples/04-3-frontmatter-loi-cac-bay-pho-bien.sh`](examples/04-3-frontmatter-loi-cac-bay-pho-bien.sh)
 
 ```markdown
 ---
@@ -69,10 +52,7 @@ tools: [github-mcp, search, edit]
 
 **Trả lời 1 câu:** Giữ **<200 dòng** — dài quá context phình, phần cuối bị cắt, rule quan trọng chìm. Phần dài tách sang `*.instructions.md` theo path, procedure dài tách thành `SKILL.md`.
 
-```bash
-wc -l .github/copilot-instructions.md .github/instructions/*.md
-# >200 dòng ở file chính -> tách bớt
-```
+> 📄 **Code ví dụ:** [`examples/05-4-copilot-instructions-md-bao-nhieu-dong-la.sh`](examples/05-4-copilot-instructions-md-bao-nhieu-dong-la.sh)
 
 **Ví dụ:** file chính 350 dòng (React + API + deploy) → tách React sang `frontend-react.instructions.md`, deploy sang skill → còn 120 dòng.
 
@@ -80,11 +60,7 @@ wc -l .github/copilot-instructions.md .github/instructions/*.md
 
 **Trả lời 1 câu:** Đi đúng thứ tự: tên file/đường dẫn → `applyTo` đúng glob → file có khớp glob → reload IDE → mở chat mới → hỏi admin (org policy có thể tắt custom instructions).
 
-```bash
-ls .github/instructions/*.instructions.md
-head -6 .github/instructions/backend-api.instructions.md
-# Rồi: reload IDE + mở chat mới + hỏi "liệt kê quy tắc backend đang áp dụng"
-```
+> 📄 **Code ví dụ:** [`examples/06-5-instructions-khong-load-checklist-6-buoc.sh`](examples/06-5-instructions-khong-load-checklist-6-buoc.sh)
 
 > **Chat cũ giữ context cũ** — mở chat mới trước khi kết luận instructions sai.
 
@@ -104,9 +80,7 @@ tools: [search, edit]
 3. Trả về: Critical / Major / Minor + gợi ý sửa cụ thể
 ```
 
-```bash
-# Trong chat gọi: /review-pr  (không gõ đuôi .prompt.md)
-```
+> 📄 **Code ví dụ:** [`examples/07-6-prompt-files-prompt-md-legacy.sh`](examples/07-6-prompt-files-prompt-md-legacy.sh)
 
 > Repo chỉ chạy Local và đã có prompt file ổn → giữ tạm, port dần sang Skill.
 
@@ -153,11 +127,7 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 
 **Trả lời 1 câu:** Mạnh → yếu: prompt hiện tại > `*.instructions.md` khớp path cụ thể > `copilot-instructions.md` > org policy (trần cứng) — cái cụ thể/gần hơn luôn thắng.
 
-```bash
-# Tìm mọi instructions có thể "đánh nhau"
-grep -h "applyTo" .github/instructions/*.md
-# 2 file cùng khớp 1 path -> gộp hoặc thu hẹp glob
-```
+> 📄 **Code ví dụ:** [`examples/08-9-thu-tu-uu-tien-khi-nhieu-instructions.sh`](examples/08-9-thu-tu-uu-tien-khi-nhieu-instructions.sh)
 
 > Đừng viết 2 instructions mâu thuẫn cho cùng path — hành vi sẽ khó đoán.
 
@@ -165,12 +135,7 @@ grep -h "applyTo" .github/instructions/*.md
 
 **Trả lời 1 câu:** 3 phép thử trong chat mới: **test load** (hỏi quy tắc, phải kể đúng), **test hành vi** (task vi phạm phải bị từ chối), **test nhiễu** (task ngoài scope không bị ảnh hưởng).
 
-```bash
-# Test 1+3 trong 1 chat mới:
-# "Liệt kê quy tắc áp dụng cho apps/api/auth.ts.
-#  Sau đó giải thích hàm map trong JS (không liên quan backend)."
-# Đạt: kể đúng rules backend + trả lời JS bình thường
-```
+> 📄 **Code ví dụ:** [`examples/09-10-test-instructions-moi-co-hieu-qua-khong.sh`](examples/09-10-test-instructions-moi-co-hieu-qua-khong.sh)
 
 **Ví dụ:** thêm "NEVER sửa migrations" → test "sửa giúp migration 003" → Copilot phải từ chối + đề xuất tạo migration mới. 2 phút test đỡ 2 tuần "sao nó không nghe".
 

@@ -26,10 +26,7 @@ Có những câu hỏi không xứng đáng để mở cả một Chat view: "h�
 
 ## Cách gọi (copy-paste)
 
-```bash
-Shift+Alt+I → nhập câu hỏi → Enter → Esc đóng
-# Kỳ vọng: popup trả lời ngắn ngay trên editor
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Phím không ăn? Vào Keyboard Shortcuts search "quick chat" để kiểm tra/gán lại — đôi khi layout hoặc extension khác chiếm phím.
 
@@ -37,12 +34,7 @@ Shift+Alt+I → nhập câu hỏi → Enter → Esc đóng
 
 Nghiệp vụ: bạn đang viết một component React và không chắc nên debounce ô search bao nhiêu ms để vừa mượt vừa đỡ gọi API.
 
-```bash
-# Dang o trong file SearchBox.tsx
-Shift+Alt+I → "debounce o tim kiem goi API nen dat bao nhieu ms la hop ly?"
-# Doc popup -> chon 300ms -> Esc -> tiep tuc code
-# Verify: ap dung duoc cau tra loi trong 1 phut
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Popup trả lời ngắn gọn ngay trên editor; đóng là về code tiếp.
 
@@ -52,19 +44,11 @@ Shift+Alt+I → "debounce o tim kiem goi API nen dat bao nhieu ms la hop ly?"
 
 **❌ SAI — dùng quick chat cho việc cần context nhiều file, rồi than nó trả lời cộc:**
 
-```bash
-Shift+Alt+I → "sua bug login xuyen 3 file nay giup toi"
-# -> popup tra loi coc, khong du context
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — quick chat cho câu hỏi vặt; việc lớn chuyển Chat view:**
 
-```bash
-# Cau hoi vat:
-Shift+Alt+I → "cach destructure nested object trong TS?"
-# Viec lon:
-# -> mo Chat view / Agent mode, gan scope #file
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Quick chat là kênh hỏi nhanh, không phải kênh giao việc. Chọn đúng kênh cho đúng cỡ câu hỏi.
 

@@ -1,0 +1,8 @@
+// package.json — chỉ lint files staged (nhanh, không lint cả repo):
+{
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": ["prettier --write", "eslint --max-warnings 0"],
+    "*.{py}": ["ruff check --fix", "ruff format"],
+    "*.{go}": ["gofmt -w", "go vet ./..."]
+  }
+}

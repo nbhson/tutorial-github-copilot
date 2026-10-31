@@ -20,14 +20,7 @@ Docs viết tay hay bị bỏ qua, mà khi có thì thường thiếu đúng ph�
 
 ## Cách gọi (copy-paste)
 
-```bash
-# Bôi đen hàm, rồi:
-/doc
-
-# Hoặc nói rõ cần gì:
-/doc viết JSDoc gồm params + example
-# Kỳ vọng: docstring đủ @param/@returns + example chạy được
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > `/doc` không xuất hiện khi gõ `/` trong Chat? Kiểm tra `/status` + xem plan trước khi kết luận lệnh lỗi.
 
@@ -35,12 +28,7 @@ Docs viết tay hay bị bỏ qua, mà khi có thì thường thiếu đúng ph�
 
 Nghiệp vụ: `parseInvoiceNumber()` trong `src/billing/` vừa được refactor, người khác muốn dùng lại nhưng docs cũ đã lệch.
 
-```bash
-# 1. Bôi đen hàm parseInvoiceNumber()
-# 2. Gọi:
-/doc "viết JSDoc: mô tả, @param, @returns, @throws + 1 example chạy được"
-# Verify: copy example trong docs chạy thử — chạy được là đạt
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** docstring đúng chuẩn repo (params/returns/example), và example trong docs copy ra chạy được.
 
@@ -50,16 +38,11 @@ Nghiệp vụ: `parseInvoiceNumber()` trong `src/billing/` vừa được refact
 
 **❌ SAI — sinh docs một lần rồi quên; đổi signature mà không regen:**
 
-```bash
-/doc "viết mô tả cho hàm"
-# -> @param invoiceNumber {string}  trong khi code đã nhận {number}; không có example
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — nêu chuẩn rõ + regen sau mỗi lần đổi signature:**
 
-```bash
-/doc "viết JSDoc: mô tả + @param + @returns + @throws + 1 example chạy được, theo style module billing"
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** docs sai params nguy hiểm hơn không có docs — regen `/doc` ngay sau khi hàm thay đổi.
 

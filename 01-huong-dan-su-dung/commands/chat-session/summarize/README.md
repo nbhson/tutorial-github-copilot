@@ -26,11 +26,7 @@ Khi phiên chat dài, hai việc cùng lúc trở nên khó: model quên đầu 
 
 ## Cách gọi (copy-paste)
 
-```bash
-/summarize
-/summarize nén chat này thành 5 gạch + việc còn dở
-# Kỳ vọng: bản tóm tắt gọn: đã làm / đã chốt / còn dở
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Kiểm tra lệnh có ở máy bạn không: gõ `/` trong ô Chat, tìm `/summarize`. Không thấy → đọc `/status` + plan trước khi kết luận lỗi công cụ.
 
@@ -38,12 +34,7 @@ Khi phiên chat dài, hai việc cùng lúc trở nên khó: model quên đầu 
 
 Nghiệp vụ: bạn đã debug một bug websocket suốt 35 turns, đã chốt dùng thư viện `ws` và sửa 2 file, còn dở phần reconnection. Bạn muốn nén lại để chuyển sang chat mới làm tiếp.
 
-```bash
-/summarize "nén chat nay: da lam gi, quyet dinh nao da chot, con do gi, va liet ke file lien quan"
-# Doc lai ban tom tat -> sua tay neu sot
-# Mo /new, paste tom tat, hoi tiep
-# Verify: chat moi theo duoc mach cu
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Bản tóm tắt gọn: đã làm / đã chốt / còn dở + file liên quan; paste sang chat mới là tiếp tục được.
 
@@ -53,16 +44,11 @@ Nghiệp vụ: bạn đã debug một bug websocket suốt 35 turns, đã chốt
 
 **❌ SAI — tin 100% bản tóm tắt rồi share luôn, không đọc lại:**
 
-```bash
-/summarize "tom tat giup"   # model nen au, hoac bao sai file -> share luon -> nguoi sau lam sai
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — nói rõ phải giữ gì, rồi tự đọc lại trước khi dùng:**
 
-```bash
-/summarize "nen lai: Giu file + quyet dinh + so lieu quan trong. Liet ke file da sua."
-# Doc lai ban tom tat, sua tay -> roi moi sang chat moi
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Tóm tắt là bản *do model viết*, không phải chân lý. Đọc lại và sửa tay là bước bắt buộc.
 

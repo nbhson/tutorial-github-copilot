@@ -1,0 +1,7 @@
+# .github/workflows/copilot-triage.yml (skeleton)
+- name: Copilot CI triage
+  env:
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  run: |
+    npm i -g @github/copilot
+    copilot -p "Analyze the failing CI run $RUN_URL, open an issue with root cause + fix suggestion"

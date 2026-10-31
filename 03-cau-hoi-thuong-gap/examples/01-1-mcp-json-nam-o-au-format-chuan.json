@@ -1,0 +1,13 @@
+// .vscode/mcp.json — khung chuẩn (copy từ templates/.vscode/mcp.json)
+{
+  "servers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github_token}" }
+    }
+  },
+  "inputs": [
+    { "type": "promptString", "id": "github_token", "description": "GitHub PAT (repo scope)", "password": true }
+  ]
+}

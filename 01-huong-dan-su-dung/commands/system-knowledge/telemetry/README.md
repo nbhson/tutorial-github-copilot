@@ -30,12 +30,7 @@ Vì đây là thứ đầu tiên bị hỏi khi onboarding máy công ty hoặc 
 
 Telemetry không phải slash command trong Chat — nó là mục trong Settings. Đường đi:
 
-```bash
-Settings → search “telemetry” / “copilot data”
-# xem trạng thái + bật/tắt theo policy team
-# Kỳ vọng: biết trạng thái on/off + ai quản (cá nhân/org)
-# Verify: đối chiếu settings với policy team — khớp
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Đây là mục Settings chứ không nằm trong list `/` của Chat. Nếu bạn gõ `/` mà tìm "Telemetry" thì đừng kết luận là thiếu tính năng — nó ở đúng chỗ khác.
 
@@ -43,11 +38,7 @@ Settings → search “telemetry” / “copilot data”
 
 Nghiệp vụ: onboard một máy dev mới cho nhân viên, cần lưu bằng chứng trạng thái consent để nộp audit.
 
-```bash
-# 1. Mở Settings, search “copilot data”
-# 2. Chụp màn hình trạng thái telemetry hiện tại
-# 3. Lưu ảnh vào docs onboard của team, ghi rõ ngày chụp
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Bạn biết máy đang on hay off, và ai quản (tài khoản cá nhân hay policy org).
 

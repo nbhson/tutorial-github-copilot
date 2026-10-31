@@ -66,17 +66,7 @@ Cú pháp đầy đủ đã ở bài 03; ở đây chỉ nhớ công thức: **c
 
 Allowlist = **danh sách được phép**; ngoài list → hỏi (ask) hoặc cấm (deny). Nôm na: Copilot cầm chìa phòng đọc (allow), chìa phòng máy phải hỏi (ask), chìa két sắt không đưa (deny).
 
-```jsonc
-// .vscode/settings.json — giới hạn tools Copilot được auto-run (commit cho team)
-{
-  "github.copilot.chat.toolAutoRun": "ask",      // ask | allow | deny
-  "github.copilot.chat.tools": {
-    "terminal": "ask",                           // chạy shell → hỏi trước
-    "github-mcp": "allow",                       // GitHub MCP → cho qua (read-only)
-    "postgres-prod": "deny"                      // DB prod → cấm hẳn
-  }
-}
-```
+> 📄 **Code ví dụ:** [`examples/01-3-2-lop-2-mcp-allowlist-tool-approval.jsonc`](examples/01-3-2-lop-2-mcp-allowlist-tool-approval.jsonc)
 
 ```text
  Org-level (admin — Org Settings → Copilot → Policies): MCP allowlist chỉ github/fetch/linear,
@@ -155,76 +145,19 @@ Pre-commit là git hook local chạy **ngoài model** — Copilot gợi ý sai t
 
 ### 6.1. Recipe A — husky + lint-staged (Node, phổ biến nhất)
 
-```bash
-# Cài (1 lần):
-pnpm add -D husky lint-staged prettier eslint
-pnpm exec husky init   # → tạo .husky/pre-commit
+> 📄 **Code ví dụ:** [`examples/02-6-1-recipe-a-husky-lint-staged-node.sh`](examples/02-6-1-recipe-a-husky-lint-staged-node.sh)
 
-# .husky/pre-commit (chmod +x, commit cho team):
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-pnpm exec lint-staged
-
-# Test: commit file "const x=1" → phải auto-format hoặc fail nếu lint lỗi.
-```
-
-```json
-// package.json — chỉ lint files staged (nhanh, không lint cả repo):
-{
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": ["prettier --write", "eslint --max-warnings 0"],
-    "*.{py}": ["ruff check --fix", "ruff format"],
-    "*.{go}": ["gofmt -w", "go vet ./..."]
-  }
-}
-```
+> 📄 **Code ví dụ:** [`examples/03-6-1-recipe-a-husky-lint-staged-node.json`](examples/03-6-1-recipe-a-husky-lint-staged-node.json)
 
 ### 6.2. Recipe B — pre-commit framework + secret scan (đa ngôn ngữ)
 
-```yaml
-# .pre-commit-config.yaml (commit cho team):
-repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-merge-conflict
-      - id: check-added-large-files
-        args: ["--maxkb=500"]
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.24.0
-    hooks:
-      - id: gitleaks          # block secrets (API keys, tokens) trước commit
-  - repo: local
-    hooks:
-      - id: no-migration-edit
-        name: Block editing merged migrations
-        entry: bash -c 'git diff --cached --name-only | grep -E "db/migrations/|prisma/migrations/" && echo "BLOCKED: viết migration MỚI" && exit 1 || exit 0'
-        language: system
-        always_run: true
-```
+> 📄 **Code ví dụ:** [`examples/04-6-2-recipe-b-pre-commit-framework-secret.yaml`](examples/04-6-2-recipe-b-pre-commit-framework-secret.yaml)
 
-```bash
-# Cài + test:
-pip install pre-commit && pre-commit install
-echo 'OPENAI_API_KEY="sk-fake123456789"' > fake-secret.txt
-git add fake-secret.txt && git commit -m "test"  # phải FAIL ở gitleaks
-git reset HEAD fake-secret.txt && rm fake-secret.txt
-```
+> 📄 **Code ví dụ:** [`examples/05-6-2-recipe-b-pre-commit-framework-secret.sh`](examples/05-6-2-recipe-b-pre-commit-framework-secret.sh)
 
 ### 6.3. Recipe C — git hook thuần (block push main, không dependency)
 
-```bash
-# .husky/pre-push:
-#!/bin/sh
-BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
-  echo "BLOCKED: không push trực tiếp main/master. Mở PR từ branch feat/*."; exit 1
-fi
-exit 0
-# An toàn tuyệt đối vẫn là lớp 5 (server) — hook local có thể bị --no-verify bỏ qua.
-```
+> 📄 **Code ví dụ:** [`examples/06-6-3-recipe-c-git-hook-thuan-block.sh`](examples/06-6-3-recipe-c-git-hook-thuan-block.sh)
 
 ---
 
@@ -234,24 +167,7 @@ exit 0
 
 Muốn merge vào `main` phải có PR + CI xanh + 1 người duyệt — **kể cả admin**. Nôm na: khóa cổng làng + giấy thông hành, admin cũng không leo rào được.
 
-```bash
-# Setup bằng gh CLI (chạy 1 lần/repo — cần admin):
-gh api repos/{owner}/{repo}/branches/main/protection -X PUT \
-  -H "Accept: application/vnd.github+json" \
-  -f required_status_checks[strict]=true \
-  -f required_status_checks[contexts][]="lint" \
-  -f required_status_checks[contexts][]="test" \
-  -f enforce_admins=true \
-  -f required_pull_request_reviews[required_approving_review_count]=1 \
-  -f required_pull_request_reviews[dismiss_stale_reviews]=true \
-  -f restrictions=null \
-  -f allow_force_pushes=false \
-  -f allow_deletions=false
-
-# Verify:
-gh api repos/{owner}/{repo}/branches/main/protection --jq '{enforce_admins, allow_force_pushes}'
-# Kỳ vọng: enforce_admins.enabled=true, allow_force_pushes.enabled=false
-```
+> 📄 **Code ví dụ:** [`examples/07-7-1-lop-5-branch-protection-required-checks.sh`](examples/07-7-1-lop-5-branch-protection-required-checks.sh)
 
 **Rulesets** (khuyên dùng 2026 — github.com → Settings → Rules → Rulesets, dễ review/dễ đổi hơn CLI 1 lần): target branch `main` (+ `release/*`); rules: Restrict deletions ✓, Block force pushes ✓, Require PR (1 approval + dismiss stale) ✓, Require status checks ✓, Require Copilot code review (mục 7.3) ✓.
 
@@ -261,12 +177,7 @@ gh api repos/{owner}/{repo}/branches/main/protection --jq '{enforce_admins, allo
 - **Push protection: ON** — block push chứa secret **ngay lúc push**, kể cả Copilot là người tạo commit.
 - **Validity checks: ON** — check secret còn sống không.
 
-```bash
-# Test push protection (secret giả, trên branch feat/*):
-echo 'GITHUB_TOKEN="ghp_fake1234567890123456789012345678901234"' > leak-test.txt
-git add leak-test.txt && git commit -m "test" && git push origin feat/test
-# Kỳ vọng: push bị BLOCK với message "Push protection". Dọn: git reset HEAD~1 && rm leak-test.txt
-```
+> 📄 **Code ví dụ:** [`examples/08-7-2-lop-6a-secret-scanning-push-protection.sh`](examples/08-7-2-lop-6a-secret-scanning-push-protection.sh)
 
 ### 7.3. Lớp 6b — Copilot code review as gate
 

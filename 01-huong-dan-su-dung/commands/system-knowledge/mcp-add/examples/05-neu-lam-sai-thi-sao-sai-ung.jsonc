@@ -1,0 +1,2 @@
+"env": { "DATABASE_URL": "postgres://readonly:S3cret@prod-db:5432/app" }
+// lỡ push lên repo → token lộ vĩnh viễn trong git history.

@@ -20,14 +20,7 @@ Viết test là việc nhàm chán nhưng bắt buộc, và tốn thời gian nh
 
 ## Cách gọi (copy-paste)
 
-```bash
-# Bôi đen hàm, rồi:
-/tests
-
-# Nói rõ framework + mẫu + mock:
-/tests sinh test theo mẫu repo, mock DB
-# Kỳ vọng: file test chạy xanh, cover đúng nhánh vừa sửa
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Gõ `/` trong Chat mà không thấy `/tests`? Chạy `/status` + xem plan trước khi cho rằng lệnh hỏng.
 
@@ -35,12 +28,7 @@ Viết test là việc nhàm chán nhưng bắt buộc, và tốn thời gian nh
 
 Nghiệp vụ: `src/pricing/applyDiscount.ts` vừa thêm nhánh giảm giá theo hạng khách (VIP), chưa có test.
 
-```bash
-# 1. Bôi đen hàm applyDiscount()
-# 2. Gọi:
-/tests "sinh 3 cases: hạng thường, hạng VIP, và order rỗng (null) — mock DB theo mẫu repo"
-# Verify: chạy test mới — xanh, và cover đúng nhánh VIP + order rỗng vừa thêm
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** file test theo đúng framework/mẫu repo, chạy xanh ngay hoặc chỉ cần sửa nhỏ.
 
@@ -50,16 +38,11 @@ Nghiệp vụ: `src/pricing/applyDiscount.ts` vừa thêm nhánh giảm giá the
 
 **❌ SAI — mô tả quá chung, ra test ảo:**
 
-```bash
-/tests "viết test cho hàm này"
-# -> sinh test chỉ gọi hàm rồi assert truthy; logic sai vẫn xanh
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — nêu framework + mẫu + bắt test fail được:**
 
-```bash
-/tests "sinh 3 cases (thường, biên, null) theo mẫu order.test.ts, mock DB; mỗi test phải fail nếu logic sai"
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** một test không thể đỏ khi logic sai thì vô giá trị — hãy yêu cầu rõ điều đó và review tay.
 

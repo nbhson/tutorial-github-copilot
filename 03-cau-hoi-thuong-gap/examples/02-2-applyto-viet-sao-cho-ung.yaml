@@ -1,0 +1,3 @@
+# Đúng cho repo apps/api + apps/web:
+applyTo: "apps/api/**/*"           # backend-api.instructions.md
+applyTo: "apps/web/**/*.{ts,tsx}"  # frontend-react.instructions.md

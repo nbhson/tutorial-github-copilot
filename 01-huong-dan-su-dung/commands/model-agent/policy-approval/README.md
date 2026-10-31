@@ -30,12 +30,7 @@ Ba mức cần nắm:
 
 ## Cách gọi (copy-paste)
 
-```bash
-Popup Allow/Deny khi agent xin
-Team: settings → policies → allow/ask/deny theo tool
-# Kỳ vọng: lệnh nguy hiểm bị hỏi/chặn, lệnh lành chạy trơn
-# Verify: thử 1 lệnh nhạy cảm — bị hỏi/chặn đúng baseline
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy tab Policies? Có thể bạn đang ở plan Individual (thiếu org policy) hoặc org chưa cấu hình — hỏi admin trước khi kết luận lỗi.
 
@@ -43,12 +38,7 @@ Team: settings → policies → allow/ask/deny theo tool
 
 Nghiệp vụ: agent đang làm task migration và xin chạy lệnh migration lên database.
 
-```bash
-# Agent xin: "chạy npm run migrate --up"
-→ Chọn Deny
-→ Trả lời: "chỉ chạy trên DB dev, đưa lệnh ra cho tôi xem trước đã"
-# Verify: agent dừng lệnh đó, đưa lệnh để bạn tự quyết
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Lệnh nguy hiểm bị chặn và hiện ra để bạn xem trước; các lệnh lành (đọc file, chạy test đọc) vẫn chạy trơn.
 
@@ -58,17 +48,11 @@ Nghiệp vụ: agent đang làm task migration và xin chạy lệnh migration l
 
 **❌ SAI — bấm Allow mù cho một lệnh chưa đọc:**
 
-```bash
-# Popup: "chạy rm -rf node_modules && npm i" -> bấm Allow ngay
-# Bạn không để ý lệnh còn gì phía sau
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — đọc lệnh, Deny mặc định cho thao tác ghi/xóa:**
 
-```bash
-# Popup hiện lệnh -> đọc hết -> nếu là ghi/xóa: Deny
-# "Đưa lệnh ra trước, tôi tự chạy" hoặc đổi sang lệnh an toàn
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Deny là mặc định an toàn cho lệnh ghi/xóa. Chỉ Allow cho những tool đọc mà bạn thật sự tin.
 

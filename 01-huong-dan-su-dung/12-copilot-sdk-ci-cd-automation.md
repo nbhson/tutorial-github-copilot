@@ -42,37 +42,9 @@ SDK bọc vòng lặp Copilot (tools + permissions + orchestration) để build 
 | Task độc lập → branch + PR, không cần trông | Coding agent (assign issue) |
 | Việc định kỳ (nightly triage, weekly audit) | Actions `schedule` + CLI/SDK |
 
-```typescript
-// examples/copilot-review.ts — chạy: npx tsx examples/copilot-review.ts
-import { CopilotClient } from "@github/copilot-sdk";
+> 📄 **Code ví dụ:** [`examples/01-2-copilot-sdk-build-agent-rieng.ts`](examples/01-2-copilot-sdk-build-agent-rieng.ts)
 
-// Auth qua env: GITHUB_TOKEN (KHÔNG hardcode — mục 2.2).
-const client = new CopilotClient({
-  token: process.env.GITHUB_TOKEN!,
-  model: "auto",  // hoặc model hiện hành trong picker — đừng pin tên cũ
-  allowedTools: ["read", "grep", "github-read"],  // allowlist hẹp: không terminal/deploy
-});
-
-const session = await client.createSession({
-  instructions: [
-    "Review git diff, trả tối đa 10 findings dạng checklist.",
-    "Chỉ flag lỗi thực sự (bug, security). Đừng over-engineer.",
-    "KHÔNG sửa files, KHÔNG chạy shell, chỉ đọc + báo cáo.",
-  ].join("\n"),
-});
-
-for await (const msg of session.ask("Review diff main...HEAD của repo ./")) {
-  if (msg.type === "text") process.stdout.write(msg.text);
-}
-await session.close();
-```
-
-```bash
-export GITHUB_TOKEN="$(gh auth token)"   # Verify: gh auth token trả về token
-npx tsx examples/copilot-review.ts
-# Kỳ vọng: terminal in 5–10 dòng findings checklist.
-# Thử prompt "xóa hết files" → SDK trả từ chối (allowlist hẹp), KHÔNG chạy shell.
-```
+> 📄 **Code ví dụ:** [`examples/02-2-copilot-sdk-build-agent-rieng.sh`](examples/02-2-copilot-sdk-build-agent-rieng.sh)
 
 ### 2.1. SDK 2026: runtimes, harness & AHP
 
@@ -94,14 +66,7 @@ Audit: grep -rniE "ghp_|gho_|sk-|xox_" examples/ .github/workflows/ → phải T
 
 > **Copilot CLI đã GA từ 03/2026 cho mọi subscriber trả phí** — agentic workflows trong terminal, nhiều model, tích hợp GitHub (repo/issue/PR). Phân phối như binary `copilot` độc lập (`copilot init`, `/usage`, `/mcp`, `/skills`, `/experimental`, `/fork`).
 
-```bash
-# Copilot CLI độc lập (agent trong terminal):
-copilot --plan "chia nhỏ issue X"        # chỉ lập kế hoạch
-copilot --mode autopilot "implement + test"  # tự chạy — bọc sandbox + --max-ai-credits
-copilot --plan --mode autopilot "..."    # plan xong tự chuyển autopilot
-# gh extension (gợi ý/giải thích lệnh — vẫn dùng được trong script):
-gh copilot suggest "ffmpeg nén 4K→1080p"   # in lệnh copy-paste được
-```
+> 📄 **Code ví dụ:** [`examples/03-3-copilot-cli-ga-03-2026-automation.sh`](examples/03-3-copilot-cli-ga-03-2026-automation.sh)
 
 ```text
 3 chế độ agent của Copilot CLI (Shift+Tab hoặc copilot --mode):
@@ -117,93 +82,11 @@ gh copilot suggest "ffmpeg nén 4K→1080p"   # in lệnh copy-paste được
 
 ### 4.1. Workflow 1 — Auto-review PR mới
 
-```yaml
-name: copilot-review
-on: { pull_request: { types: [opened, synchronize, reopened] } }
-permissions:
-  contents: read
-  pull-requests: write   # để post comment findings
-jobs:
-  review:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
-      - name: Collect diff (guardrailed, read-only)   # cần GH_TOKEN để gh install
-        run: |
-          gh extension install github/gh-copilot || true
-          git diff "origin/${{ github.base_ref }}...HEAD" --stat > diffstat.txt
-          git diff "origin/${{ github.base_ref }}...HEAD" > diff.txt
-          # Diff >60KB → cắt (tránh prompt khổng lồ):
-          head -c 60000 diff.txt > diff-truncated.txt
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Request Copilot code review
-        uses: actions/github-script@v7
-        with:
-          script: |
-            // Cần repo bật Copilot review (mục 6):
-            await github.rest.pulls.requestReviewers({
-              ...context.repo,
-              pull_number: context.issue.number,
-              reviewers: ['github-copilot[bot]'],
-            }).catch(e => console.log('auto-review skip:', e.message));
-      - name: Post diff-summary comment
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const stat = require('fs').readFileSync('diffstat.txt', 'utf8');
-            const body = `## Auto diff-stat\n\`\`\`\n${stat.slice(0, 3000)}\n\`\`\`\n` +
-              `Copilot review đã được request. Human reviewer check CI + findings trước khi merge.`;
-            github.rest.issues.createComment({ ...context.repo, issue_number: context.issue.number, body });
-```
+> 📄 **Code ví dụ:** [`examples/04-4-1-workflow-1-auto-review-pr-moi.yaml`](examples/04-4-1-workflow-1-auto-review-pr-moi.yaml)
 
 ### 4.2. Workflow 2 — Overnight CI failure triage
 
-```yaml
-name: copilot-ci-triage
-on:
-  schedule: [{ cron: "0 22 * * *" }]   # nightly 22:00 UTC
-  workflow_dispatch: {}    # + nút chạy tay
-permissions:
-  contents: read
-  actions: read
-  issues: write            # mở issue khi CI fail
-jobs:
-  triage:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-      - name: Collect latest failures (read-only, secrets qua env)
-        run: |
-          gh run list --branch main --limit 5 --json conclusion,name,headSha,url > runs.json
-          FAILED_ID="$(jq -r '[.[] | select(.conclusion=="failure")][0].databaseId // empty' runs.json || true)"
-          if [ -n "$FAILED_ID" ]; then
-            gh run view "$FAILED_ID" --log-failed > failed-log.txt 2>&1 || true
-            head -c 40000 failed-log.txt > failed-truncated.txt
-          else
-            echo "All green." > failed-truncated.txt
-          fi
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Open issue if failures found
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-            const log = fs.readFileSync('failed-truncated.txt', 'utf8');
-            if (/all green/i.test(log)) { console.log('All green.'); return; }
-            const runs = JSON.parse(fs.readFileSync('runs.json', 'utf8'));
-            const body = `## CI triage ${new Date().toISOString().slice(0,10)}\n\n` +
-              `Runs:\n${runs.map(r => `- ${r.name}: ${r.conclusion} (${r.url})`).join('\n')}\n\n` +
-              `Failed log (truncated):\n\`\`\`\n${log.slice(0, 8000)}\n\`\`\`\n\n` +
-              `Giao cho coding agent hoặc on-call: xác nhận root cause + mở PR fix.`;
-            await github.rest.issues.create({ ...context.repo,
-              title: `CI triage ${new Date().toISOString().slice(0,10)}`,
-              body, labels: ['ci'] });
-```
+> 📄 **Code ví dụ:** [`examples/05-4-2-workflow-2-overnight-ci-failure-triage.yaml`](examples/05-4-2-workflow-2-overnight-ci-failure-triage.yaml)
 
 > GitLab CI tương đương: job image `node:22`, script chạy `gh extension install github/gh-copilot` + `git diff --stat`, rule `merge_request_event`; secrets qua GitLab CI/CD variables (masked).
 
@@ -213,22 +96,7 @@ jobs:
 
 ### 5.1. Assign issue (chất lượng PR = chất lượng issue)
 
-```bash
-# Chuẩn bị issue NGON (agent chỉ giỏi bằng issue bạn viết):
-gh issue create --repo acme/api --title "feat: thêm rate-limit POST /login" --body "
-## Mục tiêu + Acceptance criteria
-Thêm rate-limit 5 req/phút/IP cho POST /login.
-- [ ] Quá 5 req/phút → 429 + header Retry-After.
-- [ ] Focused test pass: pnpm --filter @acme/api test rate-limit.
-
-## Non-goals
-- Không đổi cơ chế auth, không refactor module khác.
-" --label "ready"
-
-# Giao cho agent (CLI hoặc web "Assign to Copilot"):
-gh copilot assign 123 --repo acme/api
-# Theo dõi: gh pr list --repo acme/api --author "app/copilot" --state open (PR draft copilot/issue-123-*)
-```
+> 📄 **Code ví dụ:** [`examples/06-5-1-assign-issue-chat-luong-pr-chat.sh`](examples/06-5-1-assign-issue-chat-luong-pr-chat.sh)
 
 **Quy tắc assign (dán vào CONTRIBUTING):** 1 issue = 1 task độc lập, acceptance criteria đo được, non-goals rõ; chỉ assign khi có label "ready"; agent iterate tối đa 3 rounds (quá → close + chia nhỏ); PR agent review như PR người (diff + CI + Copilot review + human approve).
 

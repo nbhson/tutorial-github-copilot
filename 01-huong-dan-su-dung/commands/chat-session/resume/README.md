@@ -26,11 +26,7 @@ Không phải việc nào cũng xong trong một buổi. `/resume` giữ lại m
 
 ## Cách gọi (copy-paste)
 
-```bash
-/resume
-# hoặc /history → chọn phiên → tiếp tục
-# Kỳ vọng: phiên cũ mở lại đúng chỗ dừng
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Kiểm tra lệnh có ở máy bạn không: gõ `/` trong ô Chat, tìm `/resume`. Không thấy → đọc `/status` + plan trước khi kết luận lỗi công cụ.
 
@@ -38,11 +34,7 @@ Không phải việc nào cũng xong trong một buổi. `/resume` giữ lại m
 
 Nghiệp vụ: hôm qua bạn dừng giữa task thêm rate-limit cho `/api/login`, mới xong bước 2 (viết middleware), bước 3 (gắn vào route) còn dở.
 
-```bash
-/resume
-# Chon phien "them rate-limit cho /api/login" hom qua
-# Verify: nhan "tiep tuc buoc 3" -> model lam dung buoc 3
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Phiên cũ mở lại đúng chỗ dừng; hỏi tiếp không cần giải thích lại từ đầu.
 
@@ -52,18 +44,11 @@ Nghiệp vụ: hôm qua bạn dừng giữa task thêm rate-limit cho `/api/logi
 
 **❌ SAI — resume xong hỏi tiếp luôn, giả định model còn nguyên trạng thái tool:**
 
-```bash
-# Mo lai phien roi: "tiep tuc di"
-# -> model khong con nho da doc file nao, de doan mo
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — resume rồi nhắc lại bối cảnh + file liên quan, và kiểm tra code đĩa:**
 
-```bash
-# Sau khi resume:
-"Nhắc lại: đang thêm rate-limit cho POST /login, đã viết middleware
- ở src/middleware/rateLimit.ts, còn gắn vào route. Code trên đĩa có thể đã đổi — check git diff trước."
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Resume khôi phục *cuộc trò chuyện*, không khôi phục *trạng thái hệ thống*. Bạn là người đồng bộ lại hai thứ đó.
 

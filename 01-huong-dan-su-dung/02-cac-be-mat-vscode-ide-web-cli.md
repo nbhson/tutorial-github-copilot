@@ -132,12 +132,7 @@ Up/Down trong input   lịch sử prompt
 
 **Neovim:**
 
-```bash
-# Mạnh: gõ nhanh, nhẹ, ghost text ngay trong buffer. Yếu: không agent mode full.
-:Copilot status    # kiểm tra
-:Copilot enable    # bật lại
-# Khi chuyển: task cần đọc nhiều file + chạy test -> sang VS Code.
-```
+> 📄 **Code ví dụ:** [`examples/01-4-cac-ide-khac-visual-studio-jetbrains-neovim.sh`](examples/01-4-cac-ide-khac-visual-studio-jetbrains-neovim.sh)
 
 > Cố ép agent mode ở IDE thiếu terminal tool rồi kết luận "Copilot dở" là hiểu nhầm tốn thời gian — chuyển bề mặt rẻ hơn cãi với tool.
 
@@ -215,37 +210,15 @@ Fix crash POST /orders khi payload thiếu customerId (trả 422 + { code, messa
 
 ### 7.1. `gh copilot` — 2 lệnh gốc dùng hàng ngày
 
-```bash
-# suggest: sinh lệnh shell từ mô tả:
-gh copilot suggest "xoa cac git branch local da merge vao main"
-gh copilot suggest "tim 10 file lon nhat trong thu muc hien tai"
-
-# explain: giải thích lệnh khó hiểu trước khi chạy:
-gh copilot explain "find . -type f -name '*.log' -mtime +7 -delete"
-gh copilot explain "git rebase --onto main feature-old feature-new"
-```
+> 📄 **Code ví dụ:** [`examples/02-7-1-gh-copilot-2-lenh-goc-dung.sh`](examples/02-7-1-gh-copilot-2-lenh-goc-dung.sh)
 
 ### 7.2. Flow an toàn với lệnh nguy hiểm
 
-```bash
-# NGUYÊN TẮC: explain trước, chạy sau. Đặc biệt với rm/find/docker prune.
-gh copilot explain "find . -type f -name '*.log' -mtime +7 -delete"
-# Đọc kỹ: đúng folder không? có -delete nhầm không?
-find . -type f -name '*.log' -mtime +7 | head   # chạy khô trước
-# Đúng mới chạy thật (bỏ | head, thêm -delete).
-```
+> 📄 **Code ví dụ:** [`examples/03-7-2-flow-an-toan-voi-lenh-nguy.sh`](examples/03-7-2-flow-an-toan-voi-lenh-nguy.sh)
 
 ### 7.3. Copilot CLI agent (`copilot` binary)
 
-```bash
-copilot --mode=plan            # bắt đầu ở persona plan
-# /permissions [default|assisted|allow-all|show] · /sandbox on|off · /model
-# /model còn thấy local models từ Ollama đang chạy (offline mode là switch riêng COPILOT_OFFLINE)
-# Local sandboxing đã GA (07/10/2026); computer use preview (01/10/2026, macOS/Windows):
-/computer on    # bật computer use (preview — click/gõ/scroll xuyên desktop apps, luon xin approval)
-/computer show  # xem trạng thái
-/computer off   # tắt
-```
+> 📄 **Code ví dụ:** [`examples/04-7-3-copilot-cli-agent-copilot-binary.sh`](examples/04-7-3-copilot-cli-agent-copilot-binary.sh)
 
 > Tin mới 10/2026: VS Code 1.141 có Agents window xem sessions side-by-side + "Open worktree cleanup"; Copilot app hỗ trợ 2 account tách biệt; JetBrains có controls riêng — đừng assume parity với VS Code.
 

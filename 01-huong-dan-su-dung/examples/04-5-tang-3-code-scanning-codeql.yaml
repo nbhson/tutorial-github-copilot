@@ -1,0 +1,4 @@
+# Nâng cao — variant custom khi default chưa đủ (khung):
+# .github/workflows/codeql.yml — codeql-action init + analyze
+#   languages: ['javascript-typescript', 'python']
+#   on: [pull_request, push (main), schedule: weekly]

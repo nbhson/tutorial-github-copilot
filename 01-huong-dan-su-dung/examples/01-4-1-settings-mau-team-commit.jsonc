@@ -1,0 +1,19 @@
+// .vscode/settings.json — team-ready (commit):
+{
+  "github.copilot.chat.toolAutoRun": "ask",   // mặc định hỏi
+  "github.copilot.chat.tools": {
+    "search": "allow",          // tìm files/symbols → an toàn
+    "read": "allow",            // đọc file → cho qua
+    "fetch": "allow",           // fetch web docs → cho qua
+    "github-mcp-read": "allow", // GitHub read (PR/issues)
+    "terminal": "ask",          // chạy shell → hỏi mỗi lần (side effects)
+    "playwright": "ask",        // browser automation → hỏi
+    "postgres-write": "deny",   // DB write → cấm hẳn
+    "deploy": "deny"            // deploy → cấm (chỉ CI/human làm)
+  }
+}
+// Personal user settings (KHÔNG commit) — chỉ NỚI cái team chưa cover, cùng key
+// "github.copilot.chat.tools": { "terminal-pnpm-test": "allow", "gh-pr-view": "allow" }
+// (lệnh test lặp lại → đỡ bấm Allow 20 lần). Đừng deny trong personal để lách team allow.
+// Verify (2 phút): "@workspace git diff --stat là gì" → chạy luôn (allow);
+// Agent "chạy pnpm test" → popup Ask; bấm Deny 1 lần → Copilot dừng, không lách.

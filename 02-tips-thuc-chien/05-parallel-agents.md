@@ -105,29 +105,13 @@ Mở PR draft, dán log test xanh vào mô tả.
 
 Khi muốn chạy 2 Agents local cùng lúc mà không conflict files:
 
-```bash
-# Tạo 2 worktrees từ main
-git worktree add ../proj-auth feature/auth-fix
-git worktree add ../proj-cart feature/cart-fix
-
-# Mở mỗi worktree 1 cửa sổ VS Code riêng
-code ../proj-auth
-code ../proj-cart
-```
+> 📄 **Code ví dụ:** [`examples/01-5-kieu-3-worktrees-co-lap.sh`](examples/01-5-kieu-3-worktrees-co-lap.sh)
 
 Chạy song song: mỗi VS Code gắn prompt riêng — `"Đọc plan.md Phase auth. Chỉ làm trong worktree này. Chạy npm test -- auth, dán log."`
 
 **Gộp sau khi cả 2 xanh (copy-paste lệnh):**
 
-```bash
-git checkout main
-git merge feature/auth-fix --no-ff -m "merge: auth fix (verified)"
-npm test -- auth
-git merge feature/cart-fix --no-ff -m "merge: cart fix (verified)"
-npm test
-git worktree remove ../proj-auth
-git worktree remove ../proj-cart
-```
+> 📄 **Code ví dụ:** [`examples/02-5-kieu-3-worktrees-co-lap.sh`](examples/02-5-kieu-3-worktrees-co-lap.sh)
 
 **Khi nào KHÔNG cần worktrees:** chỉ research/hỏi (multi-chat là đủ); task <30 phút (1 Agent nhanh hơn setup); máy yếu (dùng Coding Agent cloud thay).
 

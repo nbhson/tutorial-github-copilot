@@ -74,39 +74,7 @@
 
 **Khung đầy đủ (copy-paste — chỉ thay env):**
 
-```json
-{
-  "servers": {
-    "github": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}" }
-    },
-    "playwright": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
-    },
-    "postgres-dev": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres", "${DATABASE_URL}"],
-      "env": {}
-    },
-    "fetch": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"]
-    },
-    "linear": {
-      "type": "http",
-      "url": "${LINEAR_MCP_URL}",
-      "headers": { "Authorization": "Bearer ${LINEAR_API_KEY}" }
-    }
-  }
-}
-```
+> 📄 **Code ví dụ:** [`examples/01-3-file-vscode-mcp-json-3-transports.json`](examples/01-3-file-vscode-mcp-json-3-transports.json)
 
 | Transport | Nôm na | Khi nào dùng | Lưu ý |
 |---|---|---|---|
@@ -114,13 +82,7 @@
 | `http` | Gọi quán qua app (remote streamable HTTP) | Server remote mới (linear, internal API) | URL + headers auth qua env. **Khuyên dùng cho remote mới** |
 | `sse` | Điện thoại bàn cũ (remote streaming cũ) | Server remote cũ (notion, vài SaaS) | Dần thay bằng `http` — giữ nếu docs yêu cầu |
 
-```bash
-# Verify sau khi sửa mcp.json:
-# 1. Ctrl+Shift+P → "MCP: List Servers" → servers phải Connected.
-# 2. Chat: "@workspace liệt kê MCP tools mày đang thấy" → đọc được list.
-# 3. Audit secrets (phải TRỐNG):
-grep -rniE "ghp_|gho_|sk-|xox-|password\s*[:=]" .vscode/mcp.json; echo "exit=$? (1 = sạch, 0 = CÓ LỘ!)"
-```
+> 📄 **Code ví dụ:** [`examples/02-3-file-vscode-mcp-json-3-transports.sh`](examples/02-3-file-vscode-mcp-json-3-transports.sh)
 
 ---
 
@@ -151,19 +113,7 @@ Nhớ công thức: **Tools = tay (làm), Resources = mắt (đọc), Prompts = 
 
 Approval là **gác cổng**: mỗi lần Copilot muốn bấm nút (Tool), gác cổng tra sổ → cho qua (allow) / hỏi bạn (ask) / cấm (deny). Nôm na: "xem TV (read) cứ xem, ra đường (browser/terminal) phải hỏi, sờ ổ điện (prod DB) thì cấm".
 
-```jsonc
-// .vscode/settings.json — approval theo server (commit cho team)
-{
-  "github.copilot.chat.toolAutoRun": "ask",
-  "github.copilot.chat.mcp.tools": {
-    "github": "allow",            // đọc PR/issues — read-only, an toàn
-    "fetch": "allow",             // đọc docs web — an toàn
-    "playwright": "ask",          // browser click có side effects
-    "postgres-dev": "ask",        // query sai tốn thời gian, write nguy hiểm
-    "postgres-prod": "deny"       // DB prod: cấm hẳn (đừng tạo server prod nếu không cần)
-  }
-}
-```
+> 📄 **Code ví dụ:** [`examples/03-5-tools-approval-allow-ask-deny.jsonc`](examples/03-5-tools-approval-allow-ask-deny.jsonc)
 
 **Thứ tự ưu tiên — thuộc lòng: `deny > ask > allow`** (luật của enterprise `managed-settings.json`, chi tiết bài 07):
 
@@ -183,32 +133,15 @@ Approval là **gác cổng**: mỗi lần Copilot muốn bấm nút (Tool), gác
 
 **GitHub — impact cao nhất, cài đầu tiên:**
 
-```bash
-# 1. Tạo token (fine-grained, chỉ repo cần) → env, KHÔNG paste vào file:
-export GITHUB_TOKEN="$(gh auth token)"   # lấy từ gh CLI, không lưu plaintext
-# 2. Đã có trong .vscode/mcp.json (mục 3, dùng ${GITHUB_TOKEN}).
-# 3. Verify: "liệt kê 5 PRs mở gần nhất của repo này + tóm tắt mỗi PR 1 dòng"
-# → Copilot tự gọi github MCP, trả 5 dòng. Không được → "MCP: List Servers" check status.
-```
+> 📄 **Code ví dụ:** [`examples/04-6-5-server-day-one-copy-paste.sh`](examples/04-6-5-server-day-one-copy-paste.sh)
 
 **Playwright — Copilot NHÌN UI qua browser thật:**
 
-```bash
-npx playwright install chromium   # cài browsers 1 lần
-pnpm dev &   # boot app local
-# Chat (playwright = ask → bấm Allow khi hỏi):
-# "mở http://localhost:3000/login bằng browser, chụp màn hình, nhận xét UI"
-# Kỳ vọng: browser thật + screenshot + 3-5 nhận xét UI.
-# Lưu ý: playwright stdio KHÔNG theo lên coding agent cloud (bài 12).
-```
+> 📄 **Code ví dụ:** [`examples/05-6-5-server-day-one-copy-paste.sh`](examples/05-6-5-server-day-one-copy-paste.sh)
 
 **Postgres — đọc schema + query dev (KHÔNG commit password):**
 
-```bash
-export DATABASE_URL="postgresql://dev@localhost:5432/acme_dev"  # dev only!
-# Verify: "liệt kê tables + đếm rows mỗi table, chỉ đọc" → list tables.
-# Quy tắc: prod KHÔNG tạo server trong mcp.json team. Cần → personal + read-only + deny write.
-```
+> 📄 **Code ví dụ:** [`examples/06-6-5-server-day-one-copy-paste.sh`](examples/06-6-5-server-day-one-copy-paste.sh)
 
 ```markdown
 <!-- .github/instructions/db.instructions.md — kèm postgres MCP -->
@@ -223,20 +156,11 @@ applyTo: "**/*.sql"
 
 **Fetch/Brave — web grounding live:**
 
-```bash
-# Server "fetch" đã có trong mcp.json (stdio, không auth). Test:
-# "fetch docs https://docs.github.com/en/copilot tóm tắt 10 dòng về custom agents"
-# Kỳ vọng: tóm tắt từ trang thật, không bịa. Brave Search: cần BRAVE_API_KEY qua env.
-```
+> 📄 **Code ví dụ:** [`examples/07-6-5-server-day-one-copy-paste.sh`](examples/07-6-5-server-day-one-copy-paste.sh)
 
 **Linear/Notion — tickets, docs (remote, token cá nhân):**
 
-```bash
-export LINEAR_API_KEY="..."    # Linear → Settings → API
-export NOTION_API_KEY="..."    # Notion → Integrations
-# Token cá nhân → để servers này ở ~/.vscode/mcp.json, KHÔNG commit.
-# Verify: "@workspace liệt kê tasks Linear của tao" → tasks thật.
-```
+> 📄 **Code ví dụ:** [`examples/08-6-5-server-day-one-copy-paste.sh`](examples/08-6-5-server-day-one-copy-paste.sh)
 
 ---
 

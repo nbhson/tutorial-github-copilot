@@ -30,12 +30,7 @@ Ba lựa chọn trong danh sách, chọn theo độ khó task:
 
 ## Cách gọi (copy-paste)
 
-```bash
-/model
-# chọn trong list: rẻ cho việc nhẹ, mạnh cho việc khó
-# Kỳ vọng: câu trả lời khớp độ khó của task, quota không phí
-# Verify: so 2 câu trả lời rẻ vs mạnh cho cùng prompt
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy `/model` trong danh sách khi gõ `/`? Xem `/status` và plan trước khi kết luận lỗi công cụ — Free/Student chỉ có Auto, không hiện picker tay.
 
@@ -43,14 +38,7 @@ Ba lựa chọn trong danh sách, chọn theo độ khó task:
 
 Nghiệp vụ: bạn hỏi model rẻ cách tách module thanh toán thành event-driven, nhận câu trả lời chung chung, không đụng tới codebase thật.
 
-```bash
-# 1. Hỏi model rẻ -> câu trả lời generic
-# 2. Đổi sang model mạnh cho đúng câu kiến trúc vừa fail
-/model → chọn model mạnh
-"#file:src/payments/router.ts + #file:src/events/bus.ts — đề xuất cách tách thanh toán
-sang event-driven, giữ API hiện tại, chỉ ra 3 rủi ro migration"
-# 3. Sau khi xong, đổi lại model rẻ cho các câu hỏi vụn tiếp theo
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Câu trả lời cấp kiến trúc có bám file thật, nêu rủi ro; các câu hỏi vặt sau đó vẫn đi model rẻ nên quota không bị đốt vô ích.
 
@@ -60,17 +48,11 @@ sang event-driven, giữ API hiện tại, chỉ ra 3 rủi ro migration"
 
 **❌ SAI — đổi model mạnh để "chữa" một prompt thiếu scope:**
 
-```bash
-# câu hỏi: "sửa bug login giúp tôi"
-/model → model mạnh   # vẫn dở vì model không biết login nằm ở đâu
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — khóa scope trước, đổi model sau:**
 
-```bash
-"#file:src/auth/login.ts — login email có dấu bị trả 500, tìm nguyên nhân, giữ API shape"
-/model → model mạnh   # model mạnh giờ có ngữ cảnh để làm việc
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Model là bộ não, scope là đề bài. Bộ não xịn mà đề bài trống thì vẫn ra đáp án trống.
 

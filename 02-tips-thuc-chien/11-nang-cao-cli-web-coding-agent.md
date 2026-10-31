@@ -38,40 +38,21 @@ Cố code nặng (refactor, debug sâu) trên điện thoại là vừa chậm v
 
 ### 3.1. `gh copilot` — hỏi lệnh, giải thích lỗi
 
-```bash
-gh extension install github/gh-copilot
-gh copilot --help
-```
+> 📄 **Code ví dụ:** [`examples/01-3-1-gh-copilot-hoi-lenh-giai-thich.sh`](examples/01-3-1-gh-copilot-hoi-lenh-giai-thich.sh)
 
 **Gợi ý lệnh:**
 
-```bash
-gh copilot suggest "tìm 5 files TS lớn nhất trong src, sắp xếp giảm dần"
-# → gợi ý: find src -name "*.ts" -exec wc -l {} + | sort -rn | head -5
-# Chọn: Run / Revise / Cancel
-```
+> 📄 **Code ví dụ:** [`examples/02-3-1-gh-copilot-hoi-lenh-giai-thich.sh`](examples/02-3-1-gh-copilot-hoi-lenh-giai-thich.sh)
 
 **Giải thích lỗi:**
 
-```bash
-npm test -- payments 2>&1 | tail -30
-gh copilot explain "TypeError normalizeEmail ở src/auth/login.ts:42"
-# → 3 bullet nguyên nhân + gợi ý fix 1 file
-```
+> 📄 **Code ví dụ:** [`examples/03-3-1-gh-copilot-hoi-lenh-giai-thich.sh`](examples/03-3-1-gh-copilot-hoi-lenh-giai-thich.sh)
 
 Mẹo CLI: mọi gợi ý nguy hiểm (`rm`, `reset --hard`, `push --force`) → Revise/Cancel, không Run mù. Alias hay dùng: `alias gcs='gh copilot suggest'` + `alias gce='gh copilot explain'`.
 
 ### 3.2. `copilot` — CLI agent đầy đủ
 
-```bash
-# Cài: npm install -g @github/copilot (yêu cầu Node 22+)
-# Đăng nhập lần đầu: /login
-
-copilot                        # Interactive: hỏi từng tool (Shift+Tab xoay chế độ)
-copilot --plan "refactor auth" # Plan trước, duyệt rồi mới code
-copilot -p "fix test đỏ ở packages/api, chỉ 2 files"   # Non-interactive, xong là exit
-copilot --plan --mode autopilot "task có plan rõ"      # Plan-then-autopilot
-```
+> 📄 **Code ví dụ:** [`examples/04-3-2-copilot-cli-agent-ay-u.sh`](examples/04-3-2-copilot-cli-agent-ay-u.sh)
 
 Trong phiên: `Shift+Tab` xoay standard → plan → autopilot; `/permissions` cấu hình quyền; `/limits` xem/đổi giới hạn AI credits; `@file` gắn file vào prompt. Autopilot tự chạy tới xong — vẫn tốn AI Credits.
 
@@ -162,12 +143,7 @@ Hai bẫy khi rời máy chính: voice nghe nhầm tên file → sửa nhầm ch
 
 **C — Terminal-first cho devops:**
 
-```bash
-# Trên server/ssh, không có VS Code:
-gh copilot suggest "backup DB trước migrate, ghi log ra /tmp/backup.log"
-gh copilot explain "lỗi migrate ở step 3 trong /tmp/migrate.log"
-# Migrate xong: gh pr create --draft, về VS Code review kỹ.
-```
+> 📄 **Code ví dụ:** [`examples/05-6-recipes-leo-thang-a-mat-tran.sh`](examples/05-6-recipes-leo-thang-a-mat-tran.sh)
 
 ## 7. Walkthrough: từ issue tới PR khi đang đi đường
 

@@ -31,12 +31,7 @@ Lệnh verify: pnpm --filter api test
 
 ## Cách gọi (copy-paste)
 
-```bash
-GitHub issue → Assign → Copilot
-Kèm: mục tiêu / phạm vi / lệnh verify
-# Kỳ vọng: sáng ra có PR chờ review, diff đúng phạm vi, test xanh
-# Verify: PR mở từ branch agent, CI xanh, không đụng file ngoài phạm vi
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Muốn giới hạn agent chạy vào vùng nào? Ghi thẳng trong issue (mục "Phạm vi"); không ghi thì nó tự đoán.
 
@@ -44,16 +39,7 @@ Kèm: mục tiêu / phạm vi / lệnh verify
 
 Nghiệp vụ: bạn có issue #142 cần thêm rate-limit cho endpoint login, muốn giao qua đêm.
 
-```bash
-# Nội dung issue #142 rồi assign cho Copilot:
-Issue #142: "thêm rate-limit cho POST /api/login.
-  Mục tiêu: 5 lần/phút theo IP.
-  Phạm vi: apps/api/** (không đụng web/).
-  Xong khi: có test cho nhánh vượt ngưỡng.
-  Lệnh verify: pnpm --filter api test."
-→ Assign → Copilot
-# Sáng hôm sau: mở PR, đọc tóm tắt + CI
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Agent tự tạo branch + PR kèm log và test; bạn chỉ còn việc review và merge.
 
@@ -63,18 +49,11 @@ Issue #142: "thêm rate-limit cho POST /api/login.
 
 **❌ SAI — issue một dòng, không scope, không lệnh verify:**
 
-```bash
-Issue: "làm login ngon hơn" → Assign Copilot
-# -> agent đoán sai hướng, PR lệch hẳn
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — issue có mục tiêu, phạm vi, tiêu chí xong, lệnh verify:**
 
-```bash
-Issue: "thêm rate-limit cho POST /api/login.
-  Phạm vi: apps/api/**. Xong khi: có test nhánh vượt ngưỡng.
-  Lệnh verify: pnpm --filter api test." → Assign Copilot
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Với coding agent, issue chính là bản đặc tả. Viết càng rõ thì PR sáng mai càng dễ merge.
 

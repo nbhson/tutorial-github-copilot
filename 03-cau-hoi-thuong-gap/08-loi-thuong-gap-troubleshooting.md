@@ -23,13 +23,7 @@
 
 **Trả lời 1 câu:** "Offline" = extension không nối được server GitHub — 4 nguyên nhân: mất mạng, proxy/firewall chặn, token hết hạn, GitHub incident.
 
-```bash
-curl -s -m 10 -o /dev/null -w "%{http_code}\n" https://api.github.com
-# Verify: 200/401 = mạng OK
-
-env | grep -i proxy    # máy công ty hay dính
-curl -s https://www.githubstatus.com/api/v2/status.json | head -c 300; echo
-```
+> 📄 **Code ví dụ:** [`examples/01-1-copilot-bao-offline-vi-sao-fix-sao.sh`](examples/01-1-copilot-bao-offline-vi-sao-fix-sao.sh)
 
 **Ví dụ:** máy công ty qua proxy → `api.github.com` timeout dù web vẫn mở → xin IT whitelist `*.github.com` + `*.githubcopilot.com`. Khi status bar Offline, cả 2 CLI + coding agent cloud vẫn hoạt động nếu có mạng — chỉ IDE bị ảnh hưởng.
 
@@ -37,11 +31,7 @@ curl -s https://www.githubstatus.com/api/v2/status.json | head -c 300; echo
 
 **Trả lời 1 câu:** Checklist 6 bước: file type không hỗ trợ → nằm trong exclusion (repo + org) → completions bị tắt → token hết hạn → extension xung đột → code "quá lạ".
 
-```bash
-# Ctrl+Shift+P -> "Copilot: Check Status" / "Enable Completions"
-printf 'def add(a, b):\n' > /tmp/copilot-test.py && code /tmp/copilot-test.py
-# Verify: file test có gợi ý mà file dự án không -> do exclusion
-```
+> 📄 **Code ví dụ:** [`examples/02-2-no-suggestions-go-khong-ra-goi-y.sh`](examples/02-2-no-suggestions-go-khong-ra-goi-y.sh)
 
 > "Chỗ có chỗ không" → so file lỗi vs file test để khoanh vùng. Chỉ file `secrets/` không gợi ý → đúng ý exclusion, không phải lỗi.
 
@@ -67,10 +57,7 @@ printf 'def add(a, b):\n' > /tmp/copilot-test.py && code /tmp/copilot-test.py
 | `auth failed` | `gh` chưa login / token hết | `gh auth login --web` |
 | `No seat` | Account không có seat | Xin admin assign (bài 01) |
 
-```bash
-gh --version && gh extension list | grep -i copilot || gh extension install github/gh-copilot
-gh auth status && gh copilot suggest "list files by size" --no-interactive
-```
+> 📄 **Code ví dụ:** [`examples/03-4-gh-copilot-cli-fail-command-not-found.sh`](examples/03-4-gh-copilot-cli-fail-command-not-found.sh)
 
 > CLI chết mà IDE sống (hoặc ngược lại) là 2 "thằng" có auth riêng — fix auth từng thằng. Ngoài `gh copilot` còn có binary `copilot` độc lập (3 chế độ interactive/plan/autopilot) — xem [bài 12](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md).
 
@@ -78,11 +65,7 @@ gh auth status && gh copilot suggest "list files by size" --no-interactive
 
 **Trả lời 1 câu:** Đừng sửa config vội — validate JSON → test transport (token/env) → reload IDE → đọc Output log. Chi tiết [bài 04](04-mcp-faq.md).
 
-```bash
-python3 -c "import json; json.load(open('.vscode/mcp.json')); print('JSON OK')"
-echo ${GITHUB_MCP_TOKEN:+TOKEN_OK}
-# Rồi: reload IDE -> View -> Output -> chon MCP server -> doc loi
-```
+> 📄 **Code ví dụ:** [`examples/04-5-mcp-tools-ot-nhien-mat-thu-tu.sh`](examples/04-5-mcp-tools-ot-nhien-mat-thu-tu.sh)
 
 **Ví dụ:** sau restart máy tools mất → `echo $TOKEN` rỗng (env mất cùng session) → export lại + mở IDE từ terminal.
 
@@ -110,20 +93,13 @@ return res.status(400).json({ code: "BAD_INPUT", message, requestId });
 
 **Trả lời 1 câu:** Dấu hiệu cần can thiệp: lặp cùng lỗi 3 lần, task nhỏ chạy >20 phút, tool calls toàn retry — xử lý: **Cancel → đọc log vòng cuối → chia task nhỏ → chạy lại từng phần**, đừng để chạy tiếp "biết đâu được" (chỉ đốt AI Credits).
 
-```bash
-git status --short && git diff --stat   # xem no da sua gi truoc khi lap
-# Giu phan dung (git stash phan do), roi chat moi voi task da chia nho
-```
+> 📄 **Code ví dụ:** [`examples/05-7-agent-lap-vong-o-chay-mai-khong.sh`](examples/05-7-agent-lap-vong-o-chay-mai-khong.sh)
 
 ## 8. Sau update IDE/extension thì hỏng?
 
 **Trả lời 1 câu:** Lệch version IDE mới + extension cũ (hoặc ngược lại) → API không khớp → fix bằng update CẢ IDE + extension lên mới nhất, reload, sign-in lại.
 
-```bash
-code --version && code --list-extensions --show-versions | grep -i copilot
-# Update: VS Code (Help -> Check for Updates) + Extensions view -> Update All
-# Rồi: Ctrl+Shift+P -> "Reload Window", sign-in lại nếu cần
-```
+> 📄 **Code ví dụ:** [`examples/06-8-sau-update-ide-extension-thi-hong.sh`](examples/06-8-sau-update-ide-extension-thi-hong.sh)
 
 > Copilot chết ngay sau auto-update thì 99% do lệch version.
 
@@ -145,11 +121,7 @@ code --version && code --list-extensions --show-versions | grep -i copilot
 6. Tắt instructions/MCP/Agent Skills custom tạm (loại trừ config).
 7. Hỏi admin (policy/seat) → báo GitHub Support kèm log.
 
-```bash
-gh auth status
-curl -s -m 10 -o /dev/null -w "api:%{http_code}\n" https://api.github.com
-gh --version; code --version && code --list-extensions --show-versions | grep -i copilot
-```
+> 📄 **Code ví dụ:** [`examples/07-10-thu-tu-debug-tong-khong-ro-nguyen.sh`](examples/07-10-thu-tu-debug-tong-khong-ro-nguyen.sh)
 
 **Ví dụ:** chạy 1 lèo → thấy `api:000` (mất mạng) → khỏi cần check 6 bước còn lại.
 

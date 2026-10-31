@@ -63,10 +63,7 @@ flowchart TD
     README hụễn xin quyền rộng; MCP remote xin API key qua chat (phishing); curl | bash.
 ```
 
-```bash
-code --list-extensions --show-versions | sort
-# → publisher nào không nhận ra → tra marketplace ngay (tick xanh? installs?)
-```
+> 📄 **Code ví dụ:** [`examples/01-2-buoc-1-publisher-trust-5-phut-loc.sh`](examples/01-2-buoc-1-publisher-trust-5-phut-loc.sh)
 
 ---
 
@@ -83,20 +80,7 @@ code --list-extensions --show-versions | sort
 # không (thử tắt 1 tuần — chạy được thì tắt luôn)?
 ```
 
-```jsonc
-// mcp.json — mẫu least privilege (copy khung, sửa cho server bạn):
-{
-  "servers": {
-    "github-readonly": {
-      "type": "local",
-      "command": "npx",
-      "args": ["-y", "@vendor/github-mcp@1.2.3"],     // PIN version, không latest
-      "env": { "GITHUB_TOKEN": "${GH_READ_TOKEN}" },  // token READ-ONLY riêng
-      "tools": ["search_issues", "get_pr"]            // CHỈ tools cần, cấm exec/write
-    }
-  }
-}
-```
+> 📄 **Code ví dụ:** [`examples/02-3-buoc-2-permissions-audit.jsonc`](examples/02-3-buoc-2-permissions-audit.jsonc)
 
 ### 3.1. Permission matrix — deny > ask > allow (managed settings)
 
@@ -109,21 +93,7 @@ code --list-extensions --show-versions | sort
 | MCP server lạ | `deniedMcpServers` | 🔴 Cấm | **Deny thắng allow** |
 | MCP server đã duyệt | `allowedMcpServers` | 🟢 Cho | Giao (intersection) mọi nguồn cấu hình |
 
-```jsonc
-// managed-settings.json — khung (áp cho mọi client Copilot):
-{
-  "permissions": {
-    "deny": ["shell_exec"],
-    "ask": ["mcp_tool_call"],
-    "allow": ["file_read"],
-    "disableBypassPermissionsMode": true   // chặn bypass/YOLO mode
-  },
-  "allowedMcpServers": ["github", "playwright"],
-  "deniedMcpServers": ["random-blog-mcp"]  // deny THẮNG allow; [] = lockdown
-}
-// Verify: chạy 1 tool thuộc deny → nhận "blocked by policy"; sửa local mở lại mà
-// vẫn bị chặn → policy enforcement đang sống.
-```
+> 📄 **Code ví dụ:** [`examples/03-3-1-permission-matrix-deny-ask-allow-managed.jsonc`](examples/03-3-1-permission-matrix-deny-ask-allow-managed.jsonc)
 
 ---
 
@@ -221,18 +191,7 @@ git worktree add ../sandbox-mcp -b sandbox/mcp-test   # MCP chỉ thấy worktre
 #   → diff với quý trước: extension mới không trong allowlist? (hỏi owner ngay)
 ```
 
-```jsonc
-// managed-settings.json — chốt allowlist MCP + plugin cho cả enterprise:
-{
-  "allowedMcpServers": ["github", "playwright"],
-  "deniedMcpServers": ["random-blog-mcp"],   // deny THẮNG allow
-  "enabledPlugins": [],
-  "extraKnownMarketplaces": ["<url marketplace của công ty>"],
-  "strictKnownMarketplaces": true            // marketplace lạ không cài được
-}
-// Hai danh sách tính theo GIAO (intersection) qua mọi nguồn; cả hai [] = LOCKDOWN
-// MCP. Policy áp cho: Copilot CLI, VS Code, Copilot app, cloud agent, JetBrains.
-```
+> 📄 **Code ví dụ:** [`examples/04-6-2-org-policy-khoa-lai-admin.jsonc`](examples/04-6-2-org-policy-khoa-lai-admin.jsonc)
 
 ```text
 Quy tắc enforcement cần nhớ:

@@ -19,12 +19,7 @@ Vì Copilot im lặng khi token hết hạn hoặc khi bạn login sai account �
 
 ## Cách gọi (copy-paste)
 
-```bash
-/login
-# làm theo popup GitHub → verify bằng /status
-# Kỳ vọng: /status hiện đúng login + plan, gợi ý chạy lại
-# Verify: gõ thử 1 hàm thấy gợi ý
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Gõ `/` trong Chat để kiểm tra `/login` có trong list không. Không thấy thì xem plan/model trước.
 
@@ -32,12 +27,7 @@ Vì Copilot im lặng khi token hết hạn hoặc khi bạn login sai account �
 
 Nghiệp vụ: sáng nay Copilot không gợi ý gì sau khi bạn đổi sang laptop công ty.
 
-```bash
-# 1. /login
-# 2. Làm theo popup → sign in đúng account công ty
-# 3. /status  → xác nhận login + plan
-# 4. Mở 1 file TypeScript, gõ nửa hàm xem ghost text có hiện lại không
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Đăng nhập đúng account; `/status` hiện đúng login + plan; gợi ý ghost text chạy lại.
 

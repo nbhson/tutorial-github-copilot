@@ -20,12 +20,7 @@ Body PR là nơi reviewer đọc **đầu tiên** — viết tốt thì được
 
 ## Cách gọi (copy-paste)
 
-```bash
-/pr
-
-/pr tóm tắt diff thành title + body + checklist test
-# Kỳ vọng: title conventional + body Đổi gì / Vì sao / Test
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > `/pr` không xuất hiện khi gõ `/` trong Chat? Xem `/status` + plan trước khi kết luận lệnh lỗi.
 
@@ -33,12 +28,7 @@ Body PR là nơi reviewer đọc **đầu tiên** — viết tốt thì được
 
 Nghiệp vụ: nhánh `feat/login-rate-limit` vừa thêm giới hạn số lần đăng nhập + test, sắp mở PR.
 
-```bash
-# 1. Push branch lên remote
-# 2. Gọi:
-/pr "tóm tắt diff này: title conventional, body có Đổi gì / Vì sao / Test, checklist đã chạy"
-# Verify: teammate đọc body 1 phút không cần hỏi thêm
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** title conventional + body rõ (đổi gì, vì sao, test, rủi ro); reviewer đọc 1 phút là hiểu và biết chỗ nào cần soi.
 
@@ -48,16 +38,11 @@ Nghiệp vụ: nhánh `feat/login-rate-limit` vừa thêm giới hạn số lầ
 
 **❌ SAI — nhánh gộp nhiều việc, body chung chung:**
 
-```bash
-# nhánh gồm cả rate-limit + rename folder + upgrade dep
-/pr   # -> "feat: improve login", reviewer không biết bắt đầu từ đâu
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — PR một mục đích, body có Test + Rủi ro:**
 
-```bash
-/pr "title conventional; body: Đổi gì / Vì sao / Test đã chạy / Rủi ro còn lại"
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** PR nhỏ, một mục đích thì body mới rõ; mục **Test** và **Rủi ro** là bắt buộc, không phải tùy chọn.
 

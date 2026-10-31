@@ -19,12 +19,7 @@ Extension là thứ dễ “mọc thêm” mà không ai nhớ: cài theo docs t
 
 ## Cách gọi (copy-paste)
 
-```bash
-/extensions
-# hoặc: Ctrl+Shift+X → search "Copilot"
-# Kỳ vọng: list đã cài/active rõ ràng, không còn extension thừa
-# Verify: chat/inline chạy ổn sau khi dọn
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy `/extensions` trong list khi gõ `/`? Kiểm `/status` + plan trước khi kết luận lỗi công cụ.
 
@@ -32,12 +27,7 @@ Extension là thứ dễ “mọc thêm” mà không ai nhớ: cài theo docs t
 
 Nghiệp vụ: sau khi update IDE, chat Copilot bỗng hành xử lạ. Bạn nghi có hai extension cùng chức năng đang tranh nhau.
 
-```bash
-/extensions "liệt kê extensions Copilot đã cài + cái nào đang active"
-
-# Đọc kết quả: thấy 2 mục Copilot Chat (một cái là tàn dư của bản cũ).
-# → Giữ 1, disable cái còn lại → reload window → thử lại chat.
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** biết list đã cài/active; gỡ hoặc bật đúng cái cần; hết xung đột.
 

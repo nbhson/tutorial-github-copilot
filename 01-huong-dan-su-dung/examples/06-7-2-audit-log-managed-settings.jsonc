@@ -1,0 +1,16 @@
+// managed-settings.json — chốt quyền (áp cho CLI, VS Code, Copilot app, cloud agent, JetBrains).
+// Chi tiết bảng key: bài 07 mục 4.3.
+{
+  "permissions": {
+    "deny": ["shell_exec", "git_push_force"],
+    "ask": ["mcp_tool_call"],
+    "allow": ["file_read"],
+    "disableBypassPermissionsMode": true   // chặn bypass/YOLO mode
+  },
+  "allowedMcpServers": ["github", "playwright"],
+  "deniedMcpServers": ["random-blog-mcp"]  // deny THẮNG allow; [] rỗng = lockdown
+}
+// - Thứ tự thắng: deny > ask > allow. Ask không thỏa bằng bypass/YOLO hay approval đã lưu.
+// - Lệnh chưa khớp rule nào → mặc định HỎI LẠI.
+// - Allowlist hiệu lực = GIAO (intersection) của mọi nguồn cấu hình.
+// Verify: gọi 1 tool thuộc deny → phải báo "blocked by policy".

@@ -20,14 +20,7 @@ Tự đọc thì bạn phải nhảy qua lại giữa hàm, caller, type... 15 p
 
 ## Cách gọi (copy-paste)
 
-```bash
-# Bôi đen 10-40 dòng trọng tâm, rồi:
-/explain
-
-# Hoặc nói rõ bạn muốn nghe kiểu gì:
-/explain giải thích như cho intern mới
-# Kỳ vọng: từng bước + input/output + edge case
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Gõ `/` trong Chat mà không thấy `/explain`? Chạy `/status` + xem plan của bạn trước khi kết luận lệnh bị lỗi.
 
@@ -35,12 +28,7 @@ Tự đọc thì bạn phải nhảy qua lại giữa hàm, caller, type... 15 p
 
 Nghiệp vụ: một đồng nghiệp đã nghỉ để lại `src/middleware/verifySignedRequest.ts` — bạn không rõ nó chặn request theo tiêu chí nào.
 
-```bash
-# 1. Bôi đen đúng 20 dòng thân middleware (đừng bôi cả file)
-# 2. Gọi:
-/explain "giải thích từng bước + vẽ flow bằng chữ, nêu edge case"
-# Verify: tự kể lại bằng lời mình + chỉ ra 1 edge case mà code chưa xử lý
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** từng bước đúng logic, chỉ rõ input/output, và liệt kê edge case (ví dụ header thiếu thì nhánh nào chạy).
 
@@ -50,16 +38,11 @@ Nghiệp vụ: một đồng nghiệp đã nghỉ để lại `src/middleware/ve
 
 **❌ SAI — bôi cả file rồi hỏi chung chung:**
 
-```bash
-# (bôi cả 300 dòng) /explain "file này làm gì?"
-# -> trả lời ở mức "file này xử lý request", không dùng được
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — khoanh 10–40 dòng trọng tâm + nêu tên file:**
 
-```bash
-# (bôi 20 dòng verifySignature()) /explain "verifySignedRequest.ts: giải thích từng bước + edge case khi header thiếu"
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** `/explain` càng khoanh gọn thì trả lời càng sâu; bôi cả file chỉ nhận lại mô tả bề mặt.
 

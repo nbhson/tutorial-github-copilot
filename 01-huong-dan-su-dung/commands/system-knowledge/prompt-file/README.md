@@ -28,12 +28,7 @@ Một việc lặp lại gõ tay 5 lần thì 3 lần bạn sẽ quên một bư
 
 ## Cách gọi (copy-paste)
 
-```bash
-/prompts
-# liệt kê prompt files có trong .github/prompts/ rồi gọi theo tên, vd /review-pr
-# Kỳ vọng: prompt chạy đúng form team, không phải gõ lại cả đoạn
-# Verify: chạy 2 lần cho 2 diff khác nhau — ra cùng form output
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy `/prompts` trong list khi gõ `/`? Kiểm `/status` + plan trước khi kết luận lỗi công cụ.
 
@@ -41,15 +36,7 @@ Một việc lặp lại gõ tay 5 lần thì 3 lần bạn sẽ quên một bư
 
 Nghiệp vụ: bạn có PR đang mở và muốn review theo đúng tiêu chí team (bug + test thiếu + migration an toàn), thay vì mỗi lần tự nhớ một kiểu.
 
-```bash
-# Team đã commit .github/prompts/review-pr.prompt.md với checklist cố định.
-/review-pr "review diff hiện tại: nêu 3 lỗi lớn nhất + gợi ý test còn thiếu"
-
-# So sánh 2 lần chạy:
-#  - Lần 1: PR feat/refund
-#  - Lần 2: PR fix/login-email
-# → cả 2 phải ra CÙNG khung output (3 lỗi + phần test thiếu), chỉ khác nội dung.
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** prompt chạy đúng form team đã đóng gói; bạn không phải gõ lại cả đoạn tiêu chí.
 

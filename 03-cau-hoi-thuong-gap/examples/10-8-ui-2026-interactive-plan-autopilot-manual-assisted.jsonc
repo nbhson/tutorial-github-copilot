@@ -1,0 +1,5 @@
+// Bọc an toàn trước khi dùng Autopilot / Allow all:
+{
+  "chat.agent.sandbox.enabled": "on",   // nhốt terminal + lệnh trong sandbox
+  "chat.editing.autoAcceptDelay": 0     // tắt auto-accept khi review kỹ
+}

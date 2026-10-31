@@ -18,11 +18,7 @@
 - **Edit:** sửa trực tiếp file trong working set (file bạn mở/attach). Thường không chạy lệnh build/test trừ khi bạn bảo.
 - **Agent:** tự tìm file, sửa nhiều file, chạy terminal (lint/test/build), tạo file mới. Mỗi hành động nhạy cảm hiện **approval prompt**.
 
-```bash
-# Đổi mode trong VS Code: dropdown cạnh nút Send trong Chat view
-# Ask -> Edit -> Agent (chọn trước khi gõ prompt)
-# Verify: chat hiện đúng label mode mới
-```
+> 📄 **Code ví dụ:** [`examples/01-1-ask-edit-agent-khac-nhau-gi.sh`](examples/01-1-ask-edit-agent-khac-nhau-gi.sh)
 
 **Ví dụ:** hỏi "hàm này làm gì" → Ask. Sửa 1 hàm → Edit + attach file. Refactor auth 5 file + chạy test → Agent.
 
@@ -36,10 +32,7 @@
 | Allow for session/workspace | Nhớ cho phiên/workspace | Có | Lệnh an toàn lặp lại (`npm test`, `git diff`) |
 | Deny | Cấm chạy | Có | Lệnh nguy hiểm (`rm -rf`, `git push --force`) |
 
-```bash
-# Allow for workspace cho lệnh an toàn: npm test, npm run lint, git status, git diff
-# KHÔNG bao giờ "allow always" cho: rm -rf, git push, kubectl delete, drop table
-```
+> 📄 **Code ví dụ:** [`examples/02-2-tool-approval-la-gi-sao-cu-hoi.sh`](examples/02-2-tool-approval-la-gi-sao-cu-hoi.sh)
 
 > **Hỏi hoài:** thường do task agent rộng (nhiều tool calls) hoặc chưa allow-for-workspace lệnh an toàn. Workspace mới → bộ nhớ approval reset.
 
@@ -47,17 +40,9 @@
 
 **Trả lời 1 câu:** Content exclusion = danh sách path Copilot **không được đọc/không gợi ý** (VD `*.pem`, `secrets/`), có 2 mức: cá nhân (`.vscode/settings.json`) và org (admin) — mức org thắng.
 
-```json
-// .vscode/settings.json (mẫu repo, xem templates/)
-{
-  "github.copilot.chat.exclude": ["**/*.pem", "**/secrets/**", "**/.env*"]
-}
-```
+> 📄 **Code ví dụ:** [`examples/03-3-content-exclusion-la-gi-cau-hinh-o.json`](examples/03-3-content-exclusion-la-gi-cau-hinh-o.json)
 
-```bash
-# Admin org (web UI): Org Settings -> Copilot -> Content exclusion -> Add path
-# Verify: chat hỏi "#file secrets/stripe.key" -> Copilot không trả được nội dung
-```
+> 📄 **Code ví dụ:** [`examples/04-3-content-exclusion-la-gi-cau-hinh-o.sh`](examples/04-3-content-exclusion-la-gi-cau-hinh-o.sh)
 
 > **Khi nào áp dụng:** ngay khi repo có secret/key/hợp đồng — exclusion trước, code sau. Chi tiết [bài 09](09-bao-mat-quyen-rieng-tu.md). Lưu ý: file đã vào git thì exclusion không cứu được — phải xử lý ở tầng secret.
 
@@ -65,15 +50,7 @@
 
 **Trả lời 1 câu:** 3 lớp cứu hộ: undo trong chat → git checkout/stash → checkpoint session; cứ 1 file sai thì chưa cần đến lớp cuối.
 
-```bash
-# Xem agent đã sửa gì
-git status --short && git diff --stat
-# Verify: chỉ ra file bạn muốn, file khác = agent sửa lan
-
-# Hoàn tác 1 file / tất cả (cẩn thận: stash mất cả change đúng)
-git checkout -- src/wrong-file.ts
-git stash -u
-```
+> 📄 **Code ví dụ:** [`examples/05-4-agent-sua-nham-file-thi-xu-ly.sh`](examples/05-4-agent-sua-nham-file-thi-xu-ly.sh)
 
 > **Thói quen bắt buộc:** `git diff --stat` trước khi commit sau mỗi task agent. Agent mode còn có timeline checkpoint — quay về checkpoint trước khi nó sửa sai.
 
@@ -85,21 +62,13 @@ git stash -u
 - Cân nhắc từng lần: `npm install`, `git commit`, `docker build`.
 - Không bao giờ auto-allow: `rm -rf`, `git push --force`, `kubectl delete`, `drop table`, `chmod 777`.
 
-```bash
-# Prompt đầu task: "Chỉ được chạy: npm test, npm run lint, git status, git diff.
-#  Không chạy git push, rm, hay lệnh mạng khi chưa hỏi tôi."
-```
+> 📄 **Code ví dụ:** [`examples/06-5-cho-agent-chay-lenh-terminal-an-toan.sh`](examples/06-5-cho-agent-chay-lenh-terminal-an-toan.sh)
 
 ## 6. Edit mode sửa lan sang file khác — chặn thế nào?
 
 **Trả lời 1 câu:** Edit mode chỉ sửa working set (file mở + file attach) — lan ra ngoài là do bạn attach folder hoặc prompt chung chung; fix bằng ghi rõ file được/không được đụng.
 
-```bash
-# Prompt Edit chuẩn:
-# "Chỉ sửa src/auth/login.ts (hàm login): chuyển sang async/await.
-#  KHÔNG đụng session.ts, types.ts, tests"
-# Verify: git diff --stat chỉ ra 1 file
-```
+> 📄 **Code ví dụ:** [`examples/07-6-edit-mode-sua-lan-sang-file-khac.sh`](examples/07-6-edit-mode-sua-lan-sang-file-khac.sh)
 
 > **Đã ghi rõ mà vẫn lan:** đóng tab file không liên quan, Undo rồi thử lại với `#selection` đúng đoạn.
 
@@ -107,10 +76,7 @@ git stash -u
 
 **Trả lời 1 câu:** Ask chỉ đọc file bạn attach + instructions, không tự quét repo — nhưng `#file` secret vào chat là nội dung đó lên server model.
 
-```bash
-# Check 3 giây trước khi attach:
-git check-ignore secrets/stripe.key && echo "IGNORED" || echo "COI CHUNG: file nay dang track!"
-```
+> 📄 **Code ví dụ:** [`examples/08-7-ask-mode-co-so-lo-file-nhay.sh`](examples/08-7-ask-mode-co-so-lo-file-nhay.sh)
 
 **Ví dụ:** debug lỗi Stripe → paste **đoạn code gọi API** (đã xóa key) thay vì `#file:secrets/stripe.ts` nguyên file. **Lỡ attach secret rồi:** coi như đã lộ, **xoay key ngay**, thêm path vào content exclusion.
 
@@ -127,18 +93,9 @@ git check-ignore secrets/stripe.key && echo "IGNORED" || echo "COI CHUNG: file n
 | Permission | Assisted (Experimental) | — | LLM judge chấm rủi ro từng tool call | Muốn tự duyệt nhưng chấm rủi ro |
 | Permission | Allow all | — | Tự duyệt hết | Sandbox bật + git sạch |
 
-```bash
-# VS Code: dropdown agent + picker Permissions ở khung Chat
-# CLI: Shift+Tab xoay standard -> plan -> autopilot; /permissions show để xem hiện tại
-```
+> 📄 **Code ví dụ:** [`examples/09-8-ui-2026-interactive-plan-autopilot-manual-assisted.sh`](examples/09-8-ui-2026-interactive-plan-autopilot-manual-assisted.sh)
 
-```jsonc
-// Bọc an toàn trước khi dùng Autopilot / Allow all:
-{
-  "chat.agent.sandbox.enabled": "on",   // nhốt terminal + lệnh trong sandbox
-  "chat.editing.autoAcceptDelay": 0     // tắt auto-accept khi review kỹ
-}
-```
+> 📄 **Code ví dụ:** [`examples/10-8-ui-2026-interactive-plan-autopilot-manual-assisted.jsonc`](examples/10-8-ui-2026-interactive-plan-autopilot-manual-assisted.jsonc)
 
 **Ví dụ:** task refactor 8 file → **Plan** duyệt kế hoạch → **Interactive** code có kiểm soát. **Autopilot** chỉ trong worktree riêng + sandbox bật. Chi tiết [bài 10 mục 3.2, 5.3, 5.4](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
 
@@ -158,13 +115,7 @@ git check-ignore secrets/stripe.key && echo "IGNORED" || echo "COI CHUNG: file n
 
 **Trả lời 1 câu:** 5 lúc: hotfix prod gấp, migration DB/infra, code legal/compliance, repo chưa có test, quota đỏ cuối tháng — dùng Ask/Edit hoặc làm tay.
 
-```bash
-# Checklist trước khi bật Agent:
-# [ ] Có test chạy được? (npm test xanh)
-# [ ] Git sạch? (git status --short trống)
-# [ ] Scope <10 file?
-# Thiếu 1 trong 3 -> dùng Edit hoặc làm tay
-```
+> 📄 **Code ví dụ:** [`examples/11-10-khi-nao-khong-nen-dung-agent-mode.sh`](examples/11-10-khi-nao-khong-nen-dung-agent-mode.sh)
 
 **Ví dụ:** hotfix thanh toán lỗi giữa đêm → Edit 1 file + chạy test tay, đừng bật agent quét cả repo. **Đã bật rồi mới nhận ra không nên:** Cancel ngay → `git diff --stat` → checkout hoàn tác file ngoài ý muốn.
 
@@ -179,11 +130,7 @@ git check-ignore secrets/stripe.key && echo "IGNORED" || echo "COI CHUNG: file n
 | Cloud | Hạ tầng remote → mở PR | Không | — | Giao hẳn task để nhận PR |
 | Claude / Codex | Harness của provider (nếu cài) | Tùy harness | Tùy | Khi cài harness provider |
 
-```bash
-# VS Code: đáy khung Chat -> Session Target -> chọn target
-# Copilot session: /delegate để đẩy task sang Cloud (mở PR)
-# Handoff chỉ khởi tạo được từ session Local
-```
+> 📄 **Code ví dụ:** [`examples/12-11-session-target-copilot-local-cloud-la-gi.sh`](examples/12-11-session-target-copilot-local-cloud-la-gi.sh)
 
 > **Lỗi hay gặp:** Cloud không thấy tool/context local — đừng giao việc cần file local cho Cloud. Chi tiết [bài 10 mục 3.3](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
 

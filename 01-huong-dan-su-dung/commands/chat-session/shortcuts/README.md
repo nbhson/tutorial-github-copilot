@@ -34,11 +34,7 @@ Chuyển tay từ bàn phím sang chuột rồi về bàn phím tốn thời gia
 
 ## Cách gọi (copy-paste)
 
-```bash
-VS Code → Ctrl+K Ctrl+S → search "copilot chat"
-Ctrl+I inline · Ctrl+Shift+I quick · Ctrl+Alt+I chat view · Tab nhận · Esc từ chối
-# Kỳ vọng: đủ danh sách phím, chỉ gán lại cái xung đột
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Phím không ăn? Trong Keyboard Shortcuts, gõ tên lệnh (ví dụ "inline chat") để xem tổ hợp hiện tại và gán lại phím trống.
 
@@ -46,11 +42,7 @@ Ctrl+I inline · Ctrl+Shift+I quick · Ctrl+Alt+I chat view · Tab nhận · Esc
 
 Nghiệp vụ: máy bạn dùng layout có sẵn phím tắt của extension khác chiếm `Ctrl+Shift+I`, nên quick chat không mở. Bạn cần gỡ xung đột và in ra 5 phím core.
 
-```bash
-# Ctrl+K Ctrl+S -> search "quick chat"
-# Thay Ctrl+Shift+I bang to hop khac (vd Ctrl+Shift+Q)
-# Verify: lam 1 task chi dung phim, khong cham chuot
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Thuộc 5 phím core; thao tác chat/inline/receive/dismiss không cần chuột.
 
@@ -60,19 +52,11 @@ Nghiệp vụ: máy bạn dùng layout có sẵn phím tắt của extension kh�
 
 **❌ SAI — nhớ nhầm `Ctrl+I` và `Ctrl+Shift+I`, hoặc thấy xung đột là bỏ cuộc:**
 
-```bash
-Ctrl+I   # dinh mo quick chat nhung lai ra inline -> sai che do
-# hoac: thay phim khong an roi ket luan "extension loi"
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — phân biệt rõ ba phím, và xử lý xung đột ngay trong Keyboard Shortcuts:**
 
-```bash
-# Inline = sua tai cho (Ctrl+I)
-# Quick  = hoi nhanh popup (Ctrl+Shift+I)
-# View   = chat day du (Ctrl+Alt+I)
-# Xung dot -> Ctrl+K Ctrl+S -> gan lai phim trong
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Ba phím na ná nhau nhưng ba chế độ khác hẳn. Gán rõ ràng và dán lên bàn để không nhầm.
 

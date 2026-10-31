@@ -217,14 +217,7 @@ Output:
 - Root-cause guess 1 dòng (ghi rõ là guess) + lệnh đã chạy để chat chính reproduce
 ```
 
-```bash
-# Cài 4 agents (copy-paste):
-mkdir -p .github/agents
-# Tạo 4 file .agent.md với nội dung trên. Commit + push:
-git add .github/agents && git commit -m "chore: add 4 copilot custom agents" && git push
-# Verify: mở VS Code Chat → gõ "/" hoặc "@" → phải thấy 4 agents mới.
-# Không thấy → mở Chat view mới (nội dung load khi mở).
-```
+> 📄 **Code ví dụ:** [`examples/01-4-4-agent-4-tester-chay-test-bao.sh`](examples/01-4-4-agent-4-tester-chay-test-bao.sh)
 
 > **Mẹo:** `description` quá dài (>500 ký tự) → auto-trigger kém. Giữ 1–2 câu, chi tiết dồn vào body.
 
@@ -247,19 +240,9 @@ git add .github/agents && git commit -m "chore: add 4 copilot custom agents" && 
    + tóm tắt 10 dòng" → chạy nền, ping khi xong; chat không thấy 2000 dòng gốc.
 ```
 
-```bash
-# Cách 2 — giao 2 issues độc lập cho coding agent (chạy trên github.com):
-# Từ web: mở issue → Assign (hoặc Assignees) → chọn Copilot. Mỗi issue 1 session.
-# Theo dõi: Agent HQ (github.com/copilot/agents) hoặc gh pr list --state open
-# — mỗi session ra 1 branch copilot/* + 1 PR draft riêng (bài 11).
-```
+> 📄 **Code ví dụ:** [`examples/02-5-chay-song-song-3-cach.sh`](examples/02-5-chay-song-song-3-cach.sh)
 
-```bash
-# Quy ước branch cho parallel (tránh giẫm — chi tiết bài 11):
-git worktree add ../api-wt/feat-billing -b feat/billing origin/main  # session 2
-git worktree list   # xác nhận mỗi session 1 checkout riêng
-# Chung branch → conflict chắc chắn, không phải "có thể".
-```
+> 📄 **Code ví dụ:** [`examples/03-5-chay-song-song-3-cach.sh`](examples/03-5-chay-song-song-3-cach.sh)
 
 > Trần thực tế: **N ≤ 3 concurrent**. Quá con số đó bạn không review nổi + bill AI Credits nổ.
 

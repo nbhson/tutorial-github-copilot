@@ -1,0 +1,4 @@
+// .vscode/settings.json (mẫu repo, xem templates/)
+{
+  "github.copilot.chat.exclude": ["**/*.pem", "**/secrets/**", "**/.env*"]
+}

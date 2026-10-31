@@ -74,50 +74,15 @@ Nguyên tắc: **gate nhanh để ở local, gate nặng để cho CI** — bắ
 
 **Recipe 4 — pre-commit chặn rác (copy-paste):**
 
-```yaml
-# .pre-commit-config.yaml
-repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-added-large-files
-        args: ['--maxkb=500']
-      - id: check-merge-conflict
-  - repo: local
-    hooks:
-      - id: no-generated
-        name: Chặn sửa generated/
-        entry: bash -c 'git diff --cached --name-only | grep -q "src/generated/" && echo "BLOCKED: đừng sửa generated/" && exit 1 || exit 0'
-        language: system
-        always_run: true
-      - id: no-main-commit
-        name: Chặn commit thẳng main
-        entry: bash -c 'git rev-parse --abbrev-ref HEAD | grep -q "^main$" && echo "BLOCKED: không commit thẳng main" && exit 1 || exit 0'
-        language: system
-        always_run: true
-```
+> 📄 **Code ví dụ:** [`examples/01-4-lop-2-pre-commit-local-gates.yaml`](examples/01-4-lop-2-pre-commit-local-gates.yaml)
 
-```bash
-pip install pre-commit && pre-commit install && pre-commit run --all-files
-```
+> 📄 **Code ví dụ:** [`examples/02-4-lop-2-pre-commit-local-gates.sh`](examples/02-4-lop-2-pre-commit-local-gates.sh)
 
 **Recipe 5 — lint-staged + test nhanh:**
 
-```json
-{
-  "lint-staged": {
-    "src/**/*.ts": ["eslint --fix", "prettier --write"],
-    "src/payments/**": ["npm test -- payments"]
-  }
-}
-```
+> 📄 **Code ví dụ:** [`examples/03-4-lop-2-pre-commit-local-gates.json`](examples/03-4-lop-2-pre-commit-local-gates.json)
 
-```bash
-npm i -D lint-staged husky && npx husky init
-echo "npx lint-staged" > .husky/pre-commit
-```
+> 📄 **Code ví dụ:** [`examples/04-4-lop-2-pre-commit-local-gates.sh`](examples/04-4-lop-2-pre-commit-local-gates.sh)
 
 **Recipe 6 — Tool approval trong VS Code:**
 
@@ -144,23 +109,7 @@ Repo → Settings → Branches → Add rule (main):
 
 **Recipe 8 — CI workflow gate (copy-paste):**
 
-```yaml
-# .github/workflows/verify.yml
-name: verify
-on: [pull_request]
-jobs:
-  verify:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20 }
-      - run: npm ci
-      - run: npm test
-      - run: npm run lint
-      - run: npm run build
-      - run: git diff --stat origin/main | grep -q "src/generated/" && echo "BLOCKED" && exit 1 || echo "diff OK"
-```
+> 📄 **Code ví dụ:** [`examples/05-5-lop-3-branch-protection-ci-gates.yaml`](examples/05-5-lop-3-branch-protection-ci-gates.yaml)
 
 **Recipe 9 — CODEOWNERS + org policy:**
 

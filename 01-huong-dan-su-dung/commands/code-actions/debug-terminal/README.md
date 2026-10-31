@@ -20,12 +20,7 @@ Log lỗi thường dài và nhiễu — dòng quan trọng nằm lẫn giữa h
 
 ## Cách gọi (copy-paste)
 
-```bash
-@terminal
-
-@terminal giải thích lỗi vừa rồi + gợi ý 2 cách fix
-# Kỳ vọng: nguyên nhân top-1 + fix xếp theo rủi ro
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Gõ `@` trong Chat mà không thấy `@terminal`? Xem `/status` + plan trước khi kết luận nó không khả dụng.
 
@@ -33,10 +28,7 @@ Log lỗi thường dài và nhiễu — dòng quan trọng nằm lẫn giữa h
 
 Nghiệp vụ: `npm test` vừa fail với stack trace dài, bạn không biết lỗi thật nằm ở đâu.
 
-```bash
-@terminal "đọc 30 dòng log cuối, nói nguyên nhân top-1 + gợi ý fix ít rủi ro nhất"
-# Verify: áp fix, chạy lại lệnh — hết đỏ là đạt
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** nguyên nhân top-1 đúng + 1–2 cách fix xếp theo rủi ro; bạn chọn 1 cách rồi làm tiếp.
 
@@ -46,16 +38,11 @@ Nghiệp vụ: `npm test` vừa fail với stack trace dài, bạn không biết
 
 **❌ SAI — paste cả log rồi chạy theo fix mạo hiểm:**
 
-```bash
-# (paste 500 dòng) @terminal "sửa lỗi này"
-# -> gợi ý mơ hồ, có thể kèm "git reset --hard" — mất code
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — đưa log gọn + ngữ cảnh, cấm lệnh phá hủy:**
 
-```bash
-@terminal "đây là 30 dòng cuối của `npm test` (đã chạy trên branch feat/x, macOS): nói nguyên nhân top-1 + fix ít rủi ro nhất, đừng đề xuất lệnh xóa/force"
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** log gọn + ngữ cảnh = chẩn đoán đúng; và luôn từ chối fix mang tính phá hủy để bảo vệ code của bạn.
 

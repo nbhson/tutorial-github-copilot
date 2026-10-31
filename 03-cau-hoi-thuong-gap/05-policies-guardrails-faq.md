@@ -24,12 +24,7 @@
 4. User bảo "sửa luôn migration" → model nghe prompt gần hơn instruction.
 5. Context tràn → instructions bị cắt khỏi window (xem [bài 02](02-model-context-premium.md)).
 
-```bash
-ls .github/copilot-instructions.md .github/instructions/
-wc -l .github/copilot-instructions.md   # nên <200 dòng, dài quá bị cắt
-# Test: "Liệt kê 3 quy tắc quan trọng nhất trong copilot-instructions.md"
-# Verify: trả đúng 3 quy tắc, không bịa
-```
+> 📄 **Code ví dụ:** [`examples/01-1-instruction-khong-an-vi-sao-copilot-van.sh`](examples/01-1-instruction-khong-an-vi-sao-copilot-van.sh)
 
 > Đi tăng cường độ câu chữ ("KHÔNG, TUYỆT ĐỐI KHÔNG...") trong khi file nằm sai thư mục thì câu cấm có mạnh đến mấy cũng không được nạp.
 
@@ -63,36 +58,13 @@ wc -l .github/copilot-instructions.md   # nên <200 dòng, dài quá bị cắt
 | Secret scan | gitleaks/trufflehog | Secret trong staged files | Local (git hook) |
 | Push protection | GitHub secret scanning | Secret đã biết lúc push | GitHub server |
 
-```bash
-pip install pre-commit gitleaks || brew install pre-commit gitleaks
-
-cat > .pre-commit-config.yaml <<'YAML'
-repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-added-large-files
-YAML
-pre-commit install
-# Verify: git commit thử -> hook chạy + chặn lỗi
-
-gitleaks protect --staged --verbose
-# Verify: "No leaks found" hoặc list đúng dòng dính secret
-```
+> 📄 **Code ví dụ:** [`examples/02-3-pre-commit-tuong-uong-chan-commit-xau.sh`](examples/02-3-pre-commit-tuong-uong-chan-commit-xau.sh)
 
 ## 4. Branch protection: chặn push main + ép review thế nào?
 
 **Trả lời 1 câu:** Tạo ruleset `protect-main` ở `Repo → Settings → Rules → Rulesets`: require PR + status checks + block force push — lớp "law" thật sự: dù agent hay người, vào `main` đều phải qua PR + CI xanh.
 
-```bash
-gh api repos/<OWNER>/<REPO>/rulesets -X POST -f name='protect-main' \
-  -f enforcement='active' -f target='branch' \
-  --raw-field 'conditions={ "ref_name": { "include": ["refs/heads/main"], "exclude": [] } }' \
-  --raw-field 'rules=[{"type":"deletion"},{"type":"non_fast_forward"},{"type":"pull_request","parameters":{"required_approving_review_count":1,"dismiss_stale_reviews_on_push":true}}]'
-# Verify: gh api repos/<OWNER>/<REPO>/rulesets ra list có protect-main
-```
+> 📄 **Code ví dụ:** [`examples/03-4-branch-protection-chan-push-main-ep-review.sh`](examples/03-4-branch-protection-chan-push-main-ep-review.sh)
 
 > Dựng **trước** khi onboarding Copilot coding agent — nó cũng phải tuân ruleset.
 
@@ -103,29 +75,13 @@ gh api repos/<OWNER>/<REPO>/rulesets -X POST -f name='protect-main' \
 - **Secret scanning:** quét repo tìm secret đã lộ → alert trong `Security → Secret scanning`.
 - **Push protection:** chặn ngay lúc `git push`, bypass có lý do (lưu audit log).
 
-```bash
-gh api repos/<OWNER>/<REPO>/secret-scanning/alerts --jq '.[] | {number, secret_type, state}'
-# Verify: state "open" = còn secret lộ
-
-# Lỡ commit secret: 1. Revoke/rotate trên dashboard provider (trước!)  2. Xóa file
-git rm --cached secrets/leaked.key && git commit -m "chore: remove leaked secret"
-```
+> 📄 **Code ví dụ:** [`examples/04-5-secret-scanning-push-protection-bat-the-nao.sh`](examples/04-5-secret-scanning-push-protection-bat-the-nao.sh)
 
 ## 6. Ép conventional commits / lint trước khi agent commit?
 
 **Trả lời 1 câu:** commitlint hook local (chặn ngay khi commit) + status check CI (PR không merge được nếu đỏ) — agent và người cùng bị ép một chuẩn.
 
-```yaml
-# .github/workflows/lint.yml (status check bắt buộc)
-name: lint
-on: [pull_request]
-jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: npm ci && npm run lint
-```
+> 📄 **Code ví dụ:** [`examples/05-6-ep-conventional-commits-lint-truoc-khi-agent.yaml`](examples/05-6-ep-conventional-commits-lint-truoc-khi-agent.yaml)
 
 **Ví dụ:** agent commit `fix stuff` → commitlint chặn → agent tự sửa thành `fix(auth): handle expired session`.
 
@@ -133,48 +89,25 @@ jobs:
 
 **Trả lời 1 câu:** Admin (Enterprise) cấu hình ở org policy (coding agent bật cho repo nào); dev ghi rõ repo + branch + phạm vi file trong issue để agent không lan ra ngoài.
 
-```bash
-# Trong issue giao việc: "Repo: acme/api. Branch base: develop (KHÔNG main).
-#  Chỉ sửa src/payments/**. Không đụng infra/."
-# Verify: PR đúng repo + đúng branch, không lan ra ngoài
-```
+> 📄 **Code ví dụ:** [`examples/06-7-gioi-han-coding-agent-chi-cho-no.sh`](examples/06-7-gioi-han-coding-agent-chi-cho-no.sh)
 
 ## 8. Audit: biết ai/agent đã làm gì?
 
 **Trả lời 1 câu:** 3 nguồn log: git history (commit agent có `Co-authored-by: Copilot`), org audit log (ai đổi policy/assign seat), PR timeline (agent ghi comment từng bước).
 
-```bash
-git log --format='%h %an %s' -20 | grep -i "bot\|copilot"
-gh api orgs/<ORG>/audit-log --jq '.[] | {action, actor, created_at}' | head -20
-# Verify: list commit + hành động, actor = ai
-```
+> 📄 **Code ví dụ:** [`examples/07-8-audit-biet-ai-agent-a-lam-gi.sh`](examples/07-8-audit-biet-ai-agent-a-lam-gi.sh)
 
 ## 9. Guardrail cho lệnh nguy hiểm trong CI?
 
 **Trả lời 1 câu:** Secrets qua `${{ secrets.* }}` → `env`, KHÔNG `echo` secret, KHÔNG flag skip-verification/bypass; job đụng prod dùng `environment:` + required reviewers.
 
-```yaml
-jobs:
-  review:
-    runs-on: ubuntu-latest
-    environment: review  # ép approval nếu đụng prod
-    steps:
-      - uses: actions/checkout@v4
-      - env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh copilot suggest "summarize changes" --no-interactive || true
-```
+> 📄 **Code ví dụ:** [`examples/08-9-guardrail-cho-lenh-nguy-hiem-trong-ci.yaml`](examples/08-9-guardrail-cho-lenh-nguy-hiem-trong-ci.yaml)
 
 ## 10. Checklist guardrails cho repo mới (5 phút)?
 
 **Trả lời 1 câu:** 6 tick: exclusion paths, block Rules ALWAYS/NEVER, ruleset bảo vệ `main`, secret scanning + push protection, CI lint/test, `mcp.json` không hardcode.
 
-```bash
-ls .github/copilot-instructions.md .vscode/settings.json .vscode/mcp.json
-grep -rn "ghp_\|sk-live\|xoxb-" .vscode/ .github/ 2>/dev/null && echo "CO SECRET HARDCODE!" || echo "secrets OK"
-gh api repos/<OWNER>/<REPO>/rulesets --jq '.[].name'
-# Verify: đủ 3 file + "secrets OK" + ruleset protect-main
-```
+> 📄 **Code ví dụ:** [`examples/09-10-checklist-guardrails-cho-repo-moi-5-phut.sh`](examples/09-10-checklist-guardrails-cho-repo-moi-5-phut.sh)
 
 > Đây là definition-of-done trước khi bật coding agent — thiếu 1 tick là mở một đường lách qua guardrail.
 

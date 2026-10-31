@@ -64,13 +64,7 @@ flowchart TD
 [ ] vendor/, dist/, *.min.js (nhiễu, loại cho sạch index)
 ```
 
-```bash
-# Verify exclusion sống (dev làm 1 lần, 2 phút):
-# Chat: "@workspace tìm chuỗi STRIPE_KEY trong repo?" → phải "không thấy / excluded".
-git check-ignore -v .env .env.prod secrets/ 2>/dev/null
-# → phải ignored (exclusion + gitignore song kiêm, thiếu 1 là hở 1 đường).
-git status --porcelain | grep -E "env|pem|key|secrets" || echo "sạch: không file nhạy cảm staged"
-```
+> 📄 **Code ví dụ:** [`examples/01-3-tang-1-exclusion-duplication-detection.sh`](examples/01-3-tang-1-exclusion-duplication-detection.sh)
 
 ```text
 # Duplication detection (Org Settings → Copilot → Policies → Suggestions matching public code):
@@ -91,23 +85,9 @@ git status --porcelain | grep -E "env|pem|key|secrets" || echo "sạch: không f
 [ ] Push protection: chặn NGAY lúc push phát hiện secret (đỡ hơn fix sau)
 ```
 
-```bash
-# Ca A — push bị chặn: KHÔNG bypass, fix đúng:
-git diff --cached -- <file-bị-chặn>          # 1. đọc: loại secret, file, dòng
-# 2. xóa secret khỏi code → chuyển sang env/secrets manager (process.env.STRIPE_KEY)
-# 3. commit lại + push lại (protection pass là xong)
+> 📄 **Code ví dụ:** [`examples/02-4-tang-2-secret-scanning-push-protection.sh`](examples/02-4-tang-2-secret-scanning-push-protection.sh)
 
-# Ca B — secret đã lọt (alert trong Security tab):
-# 1. REVOKE key NGAY (Stripe/GitHub/AWS dashboard) — trước khi xóa code
-# 2. xóa khỏi history nếu cần (BFG/filter-repo — admin), rồi push fix
-# 3. đánh dấu alert resolved + ghi lý do (audit cần, mục 7)
-```
-
-```bash
-# Phòng bệnh local: pre-commit hook khung (.git/hooks/pre-commit, chmod +x):
-git diff --cached --name-only | xargs grep -n -i -E "sk-live|ghp_|AKIA|xoxb-|-----BEGIN .*PRIVATE KEY" && {
-  echo "BLOCKED: nghi secret staged — doi sang env truoc khi commit"; exit 1; }
-```
+> 📄 **Code ví dụ:** [`examples/03-4-tang-2-secret-scanning-push-protection.sh`](examples/03-4-tang-2-secret-scanning-push-protection.sh)
 
 ---
 
@@ -120,12 +100,7 @@ git diff --cached --name-only | xargs grep -n -i -E "sk-live|ghp_|AKIA|xoxb-|---
 # PR sau tự có check "CodeQL". Verify: mở 1 PR → check CodeQL hiện và chạy.
 ```
 
-```yaml
-# Nâng cao — variant custom khi default chưa đủ (khung):
-# .github/workflows/codeql.yml — codeql-action init + analyze
-#   languages: ['javascript-typescript', 'python']
-#   on: [pull_request, push (main), schedule: weekly]
-```
+> 📄 **Code ví dụ:** [`examples/04-5-tang-3-code-scanning-codeql.yaml`](examples/04-5-tang-3-code-scanning-codeql.yaml)
 
 ```text
 # Fix alert đúng cách (paste alert message vào chat):
@@ -190,36 +165,9 @@ git diff --cached --name-only | xargs grep -n -i -E "sk-live|ghp_|AKIA|xoxb-|---
 
 ### 7.2. Audit log + managed settings
 
-```bash
-# Audit log (giữ 180 ngày, KHÔNG chứa prompt/session data của client):
-# action:copilot         → umbrella: plan/settings/policy/license + agent activity
-# action:copilot_policy  → ai đổi exclusion/model policy
-# action:secret_scanning → ai dismiss alert (dismiss bừa = red flag)
-# action:code_scanning   → ai dismiss CodeQL
-gh api /orgs/<ORG>/audit-log --paginate -f per_page=100 \
-  -f phrase="action:copilot_policy OR action:secret_scanning" \
-  --jq '.[] | [.actor, .action, .created_at] | @tsv' > /tmp/sec-audit.tsv
-# → pivot: ai dismiss nhiều nhất? policy đổi lúc nửa đêm? (hỏi 1 câu là ra chuyện)
-```
+> 📄 **Code ví dụ:** [`examples/05-7-2-audit-log-managed-settings.sh`](examples/05-7-2-audit-log-managed-settings.sh)
 
-```jsonc
-// managed-settings.json — chốt quyền (áp cho CLI, VS Code, Copilot app, cloud agent, JetBrains).
-// Chi tiết bảng key: bài 07 mục 4.3.
-{
-  "permissions": {
-    "deny": ["shell_exec", "git_push_force"],
-    "ask": ["mcp_tool_call"],
-    "allow": ["file_read"],
-    "disableBypassPermissionsMode": true   // chặn bypass/YOLO mode
-  },
-  "allowedMcpServers": ["github", "playwright"],
-  "deniedMcpServers": ["random-blog-mcp"]  // deny THẮNG allow; [] rỗng = lockdown
-}
-// - Thứ tự thắng: deny > ask > allow. Ask không thỏa bằng bypass/YOLO hay approval đã lưu.
-// - Lệnh chưa khớp rule nào → mặc định HỎI LẠI.
-// - Allowlist hiệu lực = GIAO (intersection) của mọi nguồn cấu hình.
-// Verify: gọi 1 tool thuộc deny → phải báo "blocked by policy".
-```
+> 📄 **Code ví dụ:** [`examples/06-7-2-audit-log-managed-settings.jsonc`](examples/06-7-2-audit-log-managed-settings.jsonc)
 
 ```text
 # Network allowlist (thiếu domain là Copilot kẹt giữa chừng):
@@ -244,18 +192,7 @@ gh api /orgs/<ORG>/audit-log --paginate -f per_page=100 \
 
 ## 8. Walkthrough verify 20 phút + pitfalls
 
-```bash
-# Phút 0–5 (T1): git status --porcelain | grep -E "env|pem|key|secrets" || echo "sạch"
-#   Chat: "@workspace tìm STRIPE_KEY?" → phải không thấy.
-# Phút 5–10 (T2 — thử lửa an toàn):
-echo 'STRIPE_KEY=sk-live-FAKEKEY123' > fake-test.env
-git add fake-test.env && git commit -m "test push protection" || echo "chặn là ĐÚNG"
-git reset HEAD fake-test.env; rm fake-test.env
-#   → bị chặn = tầng 2 sống. Không chặn → báo admin kiểm tra config.
-# Phút 10–15 (T3+T4): mở 1 PR nhỏ → CodeQL check chạy? Copilot review comment?
-# Phút 15–20 (T5): audit log filter action:copilot_policy → ai đổi lần cuối, khi nào?
-# Ghi team log 1 dòng: "5 tầng: T1 ok / T2 ok / T3 _ / T4 _ / T5 _".
-```
+> 📄 **Code ví dụ:** [`examples/07-8-walkthrough-verify-20-phut-pitfalls.sh`](examples/07-8-walkthrough-verify-20-phut-pitfalls.sh)
 
 | Pitfall | Fix |
 |---|---|

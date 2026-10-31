@@ -20,13 +20,7 @@ Refactor là việc đúng nhưng dễ phá thứ đang chạy: đổi cấu tr�
 
 ## Cách gọi (copy-paste)
 
-```bash
-# Bôi đen, rồi:
-/refactor
-
-/refactor tách hàm này thành 3 hàm nhỏ, giữ nguyên behavior
-# Kỳ vọng: code gọn hơn, tên rõ hơn, test cũ vẫn xanh
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy `/refactor` khi gõ `/` trong Chat? Kiểm tra `/status` + xem plan trước khi kết luận lệnh lỗi.
 
@@ -34,12 +28,7 @@ Refactor là việc đúng nhưng dễ phá thứ đang chạy: đổi cấu tr�
 
 Nghiệp vụ: `processCheckout()` đã phình lên 100 dòng, khó đọc, nhưng đang chạy tốt.
 
-```bash
-# 1. Bôi đen hàm processCheckout()
-# 2. Gọi:
-/refactor "tách thành validate/process/save, giữ nguyên behavior + có test bao"
-# Verify: chạy full test liên quan — xanh hết là đạt
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** code gọn hơn, tên hàm rõ hơn; toàn bộ test cũ vẫn xanh (behavior giữ nguyên).
 
@@ -49,18 +38,11 @@ Nghiệp vụ: `processCheckout()` đã phình lên 100 dòng, khó đọc, như
 
 **❌ SAI — refactor không test + gộp thêm tính năng:**
 
-```bash
-/refactor "dọn lại processCheckout cho gọn, tiện thêm voucher giảm giá luôn"
-# -> vừa đổi cấu trúc vừa đổi hành vi, không biết bug đến từ đâu
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — có test bao + chỉ refactor:**
 
-```bash
-# (đã chạy test xanh trước) rồi:
-/refactor "tách thành validate/process/save, giữ nguyên behavior, không thêm tính năng"
-# chạy lại full test sau khi refactor
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** refactor và thêm tính năng là 2 commit khác nhau; và test phải xanh **trước** lẫn **sau**.
 

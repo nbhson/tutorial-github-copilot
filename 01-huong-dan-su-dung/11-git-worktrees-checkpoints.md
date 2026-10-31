@@ -57,12 +57,7 @@ flowchart TD
 | **Chat session fork** | Rẽ nhánh hội thoại, giữ mạch chính | Fork chat ở turn 5 để thử JWT thay vì session | Muốn thử hướng khác |
 | **Git restore + new chat** | Lật bàn cờ, đánh ván mới | `git restore src/auth/` + chat mới với prompt đủ ý | Agent nát 10+ turns (rewind thật) |
 
-```bash
-# 3 cách xem "đã hỏng gì" trước khi quyết undo:
-git diff HEAD -- src/auth/login.ts   # file này agent sửa gì chưa commit?
-git diff --stat                      # scope phình chưa? (>5 files khi chỉ cần 2 = lan)
-git log --oneline -5 -- src/auth/login.ts  # điểm restore nào an toàn?
-```
+> 📄 **Code ví dụ:** [`examples/01-2-checkpoints-3-co-che-undo.sh`](examples/01-2-checkpoints-3-co-che-undo.sh)
 
 > **Nguyên tắc 30 giây:** sửa 2 lần vẫn sai → đừng argue, `git restore` + chat mới. Rẻ hơn 10 turns cãi nhau, và prompt mới có context sạch.
 
@@ -70,25 +65,7 @@ git log --oneline -5 -- src/auth/login.ts  # điểm restore nào an toàn?
 
 ## 3. Worktrees deep-dive (lệnh thuộc lòng)
 
-```bash
-# Tạo (branch mới từ HEAD):
-git worktree add ../myrepo-worktrees/feat-login -b feat/login
-# Verify: git worktree list → thêm 1 dòng "feat-login [feat/login]"
-
-# Tạo từ main mới nhất:
-git fetch origin
-git worktree add ../myrepo-worktrees/feat-pay -b feat/pay origin/main
-
-# Mở session trong worktree (1 window = 1 branch):
-code ../myrepo-worktrees/feat-login
-# Verify: title window hiện "feat-login".
-
-# Dọn sau merge:
-git worktree remove ../myrepo-worktrees/feat-login          # worktree sạch
-git worktree remove --force ../myrepo-worktrees/feat-login  # có changes chưa commit (cẩn thận!)
-git worktree prune                                           # dọn metadata xóa tay
-# Verify: git worktree list → mất dòng feat-login.
-```
+> 📄 **Code ví dụ:** [`examples/02-3-worktrees-deep-dive-lenh-thuoc-long.sh`](examples/02-3-worktrees-deep-dive-lenh-thuoc-long.sh)
 
 ```text
 Quy ước tên:
@@ -119,22 +96,7 @@ Luồng coding agent chuẩn:
 - `feat/*` → của bạn local (worktrees). Không đặt `feat/copilot-*` gây nhầm.
 - `main` → protected: không ai push trực tiếp, kể cả agent (bài 07).
 
-```bash
-# Theo dõi + review coding agent:
-git fetch origin
-git branch -r | grep "copilot/"                     # agent đang làm branches nào?
-gh pr list --repo acme/api --author "app/copilot" --state open
-gh pr view 45 --json title,headRefName,reviews,state --jq .
-
-# Checkout PR về local để test (KHÔNG sửa trên branch của nó):
-gh pr checkout 45 --branch review-45
-pnpm install --frozen-lockfile && pnpm test
-
-# Dọn sau merge:
-git branch -d feat/my-done-task
-git worktree remove ../api-worktrees/feat-my-done-task
-git worktree prune && git worktree list             # Verify: sạch
-```
+> 📄 **Code ví dụ:** [`examples/03-4-branch-strategy-cua-coding-agent-copilot.sh`](examples/03-4-branch-strategy-cua-coding-agent-copilot.sh)
 
 > **Tin tốt 2026:** coding agent khởi động nhanh hơn 50% (changelog 19/03/2026) — tạo PR từ đầu và feedback loop nhanh hơn hẳn, nên luồng assign → review → iterate bớt chờ đợi.
 
@@ -148,23 +110,7 @@ git worktree prune && git worktree list             # Verify: sạch
 | **B — Thử 2 phương án (spike)** | Cắm 2 mầm, giữ cây khỏe hơn | Chưa biết hướng nào đúng |
 | **C — Bạn local + agent cloud fan-out** | Bạn giữ việc chính, thuê robot làm phụ | Vừa code tay vừa giao issue cho coding agent |
 
-```bash
-# Pattern A — 2 features song song:
-git fetch origin
-git worktree add ../myrepo-worktrees/feat-a -b feat/a origin/main
-git worktree add ../myrepo-worktrees/feat-b -b feat/b origin/main
-# Window 1 (feat-a) Agent mode: "implement login rate-limit theo plan, chạy focused test"
-# Window 2 (feat-b) Agent mode: "migrate users table thêm last_login_at, test local"
-# Xong: review diff → commit → push → gh pr create → merge → dọn:
-git worktree remove ../myrepo-worktrees/feat-a && git branch -d feat/a
-
-# Pattern B — spike 2 phương án:
-git worktree add ../myrepo-worktrees/spike-1 -b spike/option-1 origin/main
-git worktree add ../myrepo-worktrees/spike-2 -b spike/option-2 origin/main
-# Mỗi bên: implement + test + đo → giữ spike-2, bỏ spike-1:
-git worktree remove --force ../myrepo-worktrees/spike-1
-git branch -D spike/option-1 && git branch -m spike/option-2 feat/sessions
-```
+> 📄 **Code ví dụ:** [`examples/04-5-3-worktree-workflows-copy-paste.sh`](examples/04-5-3-worktree-workflows-copy-paste.sh)
 
 ```text
 Pattern C — Bạn KHÔNG tạo worktree cho agent cloud (nó chạy trên hạ tầng GitHub,
@@ -203,21 +149,7 @@ branch copilot/*):
 
 **4 gotchas ai cũng vấp 1 lần:**
 
-```bash
-# 1. Untracked files không theo worktree — WIP chưa commit ở main KHÔNG sang:
-git stash push -m "wip-main" && git worktree add ../myrepo-worktrees/feat-x -b feat/x
-
-# 2. Dependencies phải cài lại mỗi worktree:
-cd ../myrepo-worktrees/feat-x && pnpm install --frozen-lockfile
-# (python: python -m venv .venv && pip install -r requirements.txt)
-
-# 3. Env files + ports đụng nhau (.env thường untracked — copy tay, KHÔNG commit):
-cp /path/to/main/.env ../myrepo-worktrees/feat-x/.env
-PORT=3001 pnpm dev   # worktree A :3000, worktree B :3001
-
-# 4. Đừng mở 2 worktrees trong 1 window — mỗi worktree 1 window riêng:
-#    "window.title": "${rootName} — ${activeEditorShort}"
-```
+> 📄 **Code ví dụ:** [`examples/05-7-gotchas-pitfalls.sh`](examples/05-7-gotchas-pitfalls.sh)
 
 | Pitfall | Fix |
 |---|---|

@@ -22,15 +22,7 @@ Vì lệnh copy từ mạng về rất hay giấu hành vi phá hủy trong mộ
 
 ## Cách gọi (copy-paste)
 
-```bash
-# Cài nếu chưa có:
-gh extension install github/gh-copilot
-
-gh copilot explain "docker run -p 5432:5432 postgres"
-# Kỳ vọng: giải thích từng flag + rủi ro trước khi Enter
-# Verify: nói lại được "lệnh này làm gì + rủi ro gì"
-# Lưu ý: gh copilot ≠ copilot (gh copilot là extension CLI, không phải lệnh copilot riêng)
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy `gh copilot` thì kiểm tra bằng `gh extension list` trước khi kết luận là bug.
 
@@ -38,11 +30,7 @@ gh copilot explain "docker run -p 5432:5432 postgres"
 
 Nghiệp vụ: bạn copy một lệnh dọn log từ một script trên mạng, muốn biết nó thực sự làm gì trước khi chạy.
 
-```bash
-gh copilot explain "find . -type f -name '*.log' -mtime +7 -delete"
-# Giải thích: tìm file .log cũ hơn 7 ngày rồi XÓA (-delete) — đây là lệnh phá hủy!
-# → thử trên thư mục copy/test trước khi chạy nơi thật.
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Hiểu từng flag + rủi ro (lệnh này **xóa file**); bạn quyết định chạy hay không *có cơ sở*.
 

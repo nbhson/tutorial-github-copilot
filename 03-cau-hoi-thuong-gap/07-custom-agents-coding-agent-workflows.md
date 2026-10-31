@@ -34,11 +34,7 @@ tools: [search]
 
 **Trả lời 1 câu:** Workflow chuẩn cho task >30 phút: mỗi pha một chat — explorer vẽ bản đồ, pha làm sửa đúng list file đó, tester chạy test và báo PASS/FAIL (khảo sát → thi công → nghiệm thu).
 
-```bash
-# Pha 1 (chat 1, agent explorer): "Ve ban do refactor login trong src/auth/, chua sua."
-# Pha 2 (chat 2, edit/agent): "Sua theo list: <paste list explorer>. Chi cac file nay."
-# Pha 3 (chat 3, tester): "Chay npm test -- auth + npm run lint, bao PASS/FAIL."
-```
+> 📄 **Code ví dụ:** [`examples/01-2-workflow-3-pha-explorer-lam-tester.sh`](examples/01-2-workflow-3-pha-explorer-lam-tester.sh)
 
 > Task 1-2 file thì gộp pha 1+2. Dán sai list của explorer là scope trôi ngay.
 
@@ -48,11 +44,7 @@ tools: [search]
 
 Checklist: injection (SQL/command), XSS, auth bypass, IDOR, secret lộ, crypto yếu, rate-limit.
 
-```bash
-git diff main...HEAD --stat
-git diff main...HEAD -- src/auth/ | head -100
-# Prompt: "Review security diff tren. Chi bao Critical/Major + dong cu the + cach fix."
-```
+> 📄 **Code ví dụ:** [`examples/02-3-security-reviewer-goi-khi-nao-check-gi.sh`](examples/02-3-security-reviewer-goi-khi-nao-check-gi.sh)
 
 > Quy ước team: diff chạm `auth|payment|crypto|admin` → bắt buộc qua security-reviewer. Mẫu: `templates/.github/agents/security-reviewer.agent.md`.
 
@@ -77,10 +69,7 @@ Thêm rate-limit 100 req/phút cho /api/login.
 - [ ] Mở PR về develop
 ```
 
-```bash
-gh copilot assign 123 --repo acme/api
-gh pr list --author "app/copilot" --state open
-```
+> 📄 **Code ví dụ:** [`examples/03-4-coding-agent-tren-github-la-gi-giao.sh`](examples/03-4-coding-agent-tren-github-la-gi-giao.sh)
 
 > Task rõ ràng, có test, scope hẹp → agent làm tốt. Task mơ hồ thì làm rõ issue trước, đừng assign đi assign lại.
 
@@ -94,12 +83,7 @@ gh pr list --author "app/copilot" --state open
 | CI đỏ | Check/job đỏ trên PR | Đọc log job đỏ đầu tiên, comment `@copilot` fix cụ thể |
 | PR sai scope | Agent sửa file ngoài issue | Request changes liệt kê file cần revert, hoặc checkout sửa tay |
 
-```bash
-gh pr view <NUM> --json title,state,mergeable,statusCheckRollup && gh pr checks <NUM>
-
-# Giai conflict don gian
-gh pr checkout <NUM> && git fetch origin && git rebase origin/main && git push --force-with-lease
-```
+> 📄 **Code ví dụ:** [`examples/04-5-coding-agent-conflict-pr-fail-xu-ly.sh`](examples/04-5-coding-agent-conflict-pr-fail-xu-ly.sh)
 
 **Ví dụ:** CI đỏ job `test` thiếu import → comment trong PR: "@copilot thiếu import X ở file Y" → agent push fix.
 
@@ -110,10 +94,7 @@ gh pr checkout <NUM> && git fetch origin && git rebase origin/main && git push -
 - Tốt: "Thêm 429 khi vượt 100 req/phút, chỉ src/auth/**, test expect 429, verify `npm test -- auth`."
 - Dở: "Làm rate limit đi."
 
-```bash
-# Chay thu lenh verify tren may truoc khi giao issue
-npm test -- auth
-```
+> 📄 **Code ví dụ:** [`examples/05-6-viet-issue-the-nao-e-agent-lam.sh`](examples/05-6-viet-issue-the-nao-e-agent-lam.sh)
 
 > 5 phút viết issue kỹ đỡ 30 phút sửa PR; lệnh verify nên trùng lệnh đã ghi trong `copilot-instructions.md`.
 
@@ -121,24 +102,13 @@ npm test -- auth
 
 **Trả lời 1 câu:** Quy tắc: **1 agent = 1 branch + 1 scope file không giao nhau** — chia theo module (auth/payments) hoặc tầng (API/tests); giao 2 agents cùng file là conflict chắc chắn.
 
-```bash
-gh pr list --author "app/copilot" --state open
-# Verify: 2 PR không động file nào chung
-# Issue A: "Chi src/auth/**"  |  Issue B: "Chi src/payments/**"
-```
+> 📄 **Code ví dụ:** [`examples/06-7-nhieu-agents-cung-lam-1-repo-tranh.sh`](examples/06-7-nhieu-agents-cung-lam-1-repo-tranh.sh)
 
 ## 8. Handoff người ↔ agent: tiếp tục dở dang thế nào?
 
 **Trả lời 1 câu:** 2 chiều: người tiếp quản bằng `gh pr checkout` + sửa + push; agent tiếp quản bằng comment `@copilot` với yêu cầu cụ thể — luôn đọc PR timeline trước khi tiếp quản.
 
-```bash
-# Nguoi tiep quan PR agent
-gh pr checkout <NUM> && git log --oneline -5
-# ... sua tiep ... git push
-
-# Giao lai cho agent
-gh pr comment <NUM> --body "@copilot fix loi lint o src/auth/login.ts dong 42"
-```
+> 📄 **Code ví dụ:** [`examples/07-8-handoff-nguoi-agent-tiep-tuc-do-dang.sh`](examples/07-8-handoff-nguoi-agent-tiep-tuc-do-dang.sh)
 
 > Agent lặp lần 3 không xong → người vào là hiệu quả nhất: làm 80% của nó + fix 20% còn lại, nhanh hơn chờ vòng lặp thứ 4 đốt Credits.
 
@@ -153,11 +123,7 @@ gh pr comment <NUM> --body "@copilot fix loi lint o src/auth/login.ts dong 42"
 | Diff | Nhỏ (<300 dòng) | To (>500 dòng / >10 file) |
 | Vùng chạm | Không chạm auth/infra | Chạm migration/infra/auth |
 
-```bash
-gh pr view <NUM> --json additions,deletions,files
-git diff main...copilot/issue-N --stat
-# Verify: additions >500 hoac files >10 -> review ky tung file
-```
+> 📄 **Code ví dụ:** [`examples/08-9-o-chat-luong-agent-khi-nao-tin.sh`](examples/08-9-o-chat-luong-agent-khi-nao-tin.sh)
 
 > Thước đo team: tỉ lệ PR agent merge không sửa (target >60% sau 1 tháng fine-tune issue template); track chi phí bằng dashboard AI Credits ở `github.com/settings/copilot`.
 
@@ -165,10 +131,7 @@ git diff main...copilot/issue-N --stat
 
 **Trả lời 1 câu:** Sau merge: xóa branch agent (`--delete-branch`), resolve comments, **giữ nguyên issue + PR timeline** làm tài liệu và bằng chứng chi phí AI Credits đã trả — đừng xóa issue vì đó là spec gốc.
 
-```bash
-gh pr merge <NUM> --squash --delete-branch
-git branch -r | grep "copilot/issue-"   # Verify: branch da thanh ly
-```
+> 📄 **Code ví dụ:** [`examples/09-10-don-dep-sau-agent.sh`](examples/09-10-don-dep-sau-agent.sh)
 
 ---
 

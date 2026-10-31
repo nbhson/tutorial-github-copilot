@@ -1,0 +1,6 @@
+// stdio: chạy local
+{ "command": "npx", "args": ["-y", "@modelcontextprotocol/server-playwright"] }
+
+// SSE/HTTP: nối server xa
+{ "type": "sse", "url": "https://mcp.internal.company.com/sse",
+  "headers": { "Authorization": "Bearer ${input:mcp_token}" } }

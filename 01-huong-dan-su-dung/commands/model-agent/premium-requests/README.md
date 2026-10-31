@@ -24,12 +24,7 @@ Nó cũng giúp bạn phân biệt hai chuyện rất khác nhau: **hết quota*
 
 ## Cách gọi (copy-paste)
 
-```bash
-/usage
-# hoặc github.com/settings/copilot → quota
-# Kỳ vọng: biết con số đã dùng/còn lại + ngày reset
-# Verify: nói được "còn X, đủ/không đủ tới reset"
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy số liệu? Đăng nhập đúng account GitHub đang dùng Copilot, rồi mở `github.com/settings/copilot` → Usage làm chuẩn.
 
@@ -37,13 +32,7 @@ Nó cũng giúp bạn phân biệt hai chuyện rất khác nhau: **hết quota*
 
 Nghiệp vụ: bạn đang giữa sprint, tự trả tiền theo usage, và sắp giao một loạt task agent. Trước khi fan-out nhiều session, kiểm tra công-tơ.
 
-```bash
-/usage "cho biết đã dùng bao nhiêu, còn lại bao nhiêu, reset ngày nào"
-# Hoặc mở dashboard để chắc chắn:
-# github.com/settings/copilot → Usage (theo ngày/user)
-# Quyết định: còn dư nhiều -> chạy agent song song thoải mái;
-#            còn ít -> chuyển sang model rẻ cho các việc explain/doc
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Biết con số đã dùng/còn lại + ngày reset, từ đó quyết được "tiết kiệm hay xả" cho phần còn lại của tháng.
 
@@ -53,18 +42,11 @@ Nghiệp vụ: bạn đang giữa sprint, tự trả tiền theo usage, và sắ
 
 **❌ SAI — thấy error là mở issue, không đọc message:**
 
-```bash
-# "Copilot báo lỗi, chắc hỏng rồi" -> mở issue
-# Thực ra message ghi rõ: quota exhausted
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — đọc kỹ message rồi tra công-tơ trước:**
 
-```bash
-/usage   # xác nhận quota
-# Nếu quota exhausted: giảm model / chờ reset
-# Nếu là model unavailable: đổi model khác -> báo admin nếu vẫn lỗi
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** "Hết quota" và "model lỗi" là hai ca khác nhau. Tra công-tơ trước khi kết luận, khỏi mở ticket sai.
 

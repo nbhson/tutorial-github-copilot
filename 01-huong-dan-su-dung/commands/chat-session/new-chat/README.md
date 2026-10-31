@@ -28,11 +28,7 @@ Chat càng dài thì hai thứ xấu đi cùng lúc: model bị **loãng trọng
 
 ## Cách gọi (copy-paste)
 
-```bash
-/new
-/new bắt đầu task refactor login, cho checklist 5 bước
-# Kỳ vọng: chat trắng sạch, history cũ không lẫn
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Kiểm tra lệnh có ở máy bạn không: gõ `/` trong ô Chat, tìm `/new`. Không thấy → đọc `/status` + plan trước khi kết luận lỗi công cụ.
 
@@ -40,14 +36,7 @@ Chat càng dài thì hai thứ xấu đi cùng lúc: model bị **loãng trọng
 
 Nghiệp vụ: bạn vừa debug xong bug login trong chat cũ, giờ sang task mới là thêm rate-limit. Trước khi đổi task, lưu lại phần debug.
 
-```bash
-# 1. Luu lai viec dang do truoc khi cat context
-/export lưu chat debug login này ra docs/chats/debug-login.md
-
-# 2. Mo chat moi + chot scope ngay turn 1
-/new bắt đầu task thêm rate-limit cho POST /login: cho tôi checklist 5 bước và danh sách file cần đọc
-# Verify: hoi tiep 1 cau, model khong nhac chuyen debug login cu
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Chat trắng + checklist 5 bước đúng scope; history cũ (phần debug login) không lẫn vào.
 
@@ -57,16 +46,11 @@ Nghiệp vụ: bạn vừa debug xong bug login trong chat cũ, giờ sang task 
 
 **❌ SAI — `/new` ngay giữa việc dở, chưa lưu gì:**
 
-```bash
-/new   # context debug login chua export -> mat mach, phai ke lai tu dau
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — export trước, rồi mới mở chat trắng kèm scope:**
 
-```bash
-/export lưu chat này ra docs/chats/debug-login.md
-/new bắt đầu task thêm rate-limit cho POST /login, cho checklist 5 bước
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** `/new` là cắt cầu, không phải dọn nhà. Muốn giữ cái gì thì `/export` trước.
 

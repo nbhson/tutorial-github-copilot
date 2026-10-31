@@ -160,33 +160,11 @@ description: 'Them table/column moi (forward-only migration + model + test).
 - NEVER viet down migration pha du lieu.
 ```
 
-```bash
-# .github/skills/add-table/scripts/migrate.sh (chmod +x)
-#!/bin/sh
-case "$1" in
-  dev)  pnpm migrate:dev ;;     # chay local
-  dry)  pnpm migrate:dry ;;     # dry-run truoc khi chay that
-  *)    echo "Dung: $0 dev|dry" ; exit 1 ;;
-esac
-```
+> 📄 **Code ví dụ:** [`examples/01-4-2-mau-b-skill-add-table-script.sh`](examples/01-4-2-mau-b-skill-add-table-script.sh)
 
 ### 4.3. Port prompt file cũ sang skill (migration 5 phút)
 
-```bash
-# Bước 1: tạo folder skill mới:
-mkdir -p .github/skills/deploy-checklist/{scripts,references,examples}
-touch .github/skills/deploy-checklist/SKILL.md
-
-# Bước 2: copy body .github/prompts/deploy.prompt.md vào SKILL.md,
-# giữ `description` (đây là trigger). Đổi name theo tên folder.
-
-# Bước 3: tách steps dài >50 dòng vào references/ (nếu có).
-
-# Bước 4: xóa prompt file cũ sau khi skill pass test:
-rm .github/prompts/deploy.prompt.md
-
-# Verify: chat "deploy staging" (KHÔNG gõ /) → skill tự load.
-```
+> 📄 **Code ví dụ:** [`examples/02-4-3-port-prompt-file-cu-sang-skill.sh`](examples/02-4-3-port-prompt-file-cu-sang-skill.sh)
 
 ---
 
@@ -232,16 +210,7 @@ Skill là 1 folder trong repo. **Agent Plugin** (bài 09 chi tiết) là **hộp
 
 ## 7. Walkthrough 5 phút — skill đầu tiên của bạn
 
-```bash
-# 1. Tạo folder + file (repo root):
-mkdir -p .github/skills/gen-test && echo "" > .github/skills/gen-test/SKILL.md
-# 2. Paste nội dung bên dưới vào SKILL.md (sửa theo repo của bạn)
-# 3. Commit + push (skill dùng chung cho cả team):
-git add .github/skills/gen-test && git commit -m "add gen-test skill" && git push
-# 4. Verify: chat "viet test cho src/utils/date.ts" (KHÔNG gõ /)
-#    → agent phải tự load skill, viết test, chạy test.
-#    Không tự load? Sửa câu ĐẦU của description — thêm đúng từ bạn hay gõ.
-```
+> 📄 **Code ví dụ:** [`examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh`](examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh)
 
 ```markdown
 # .github/skills/gen-test/SKILL.md

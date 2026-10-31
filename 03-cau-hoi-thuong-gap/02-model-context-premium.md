@@ -20,11 +20,7 @@
 - **Completions:** setting `github.copilot.completions.model` — thường không cần đổi.
 - **Chat sidebar / Agent mode:** dropdown trên khung chat, chọn theo conversation.
 
-```bash
-# VS Code settings.json: ghim model completions (nếu muốn)
-# { "github.copilot.completions.model": "<model-id>" }
-# Chat model: đổi bằng dropdown trong Chat view (không có lệnh CLI)
-```
+> 📄 **Code ví dụ:** [`examples/01-1-model-picker-o-au-oi-model-the.sh`](examples/01-1-model-picker-o-au-oi-model-the.sh)
 
 > **Nếu picker thiếu model:** check org policy allowlist (admin ẩn), reload IDE, hỏi admin mở thêm.
 
@@ -47,11 +43,7 @@
 
 Thứ tự tốn Credits tăng dần → **gõ tay được thì đừng chat; chat được thì đừng agent.**
 
-```bash
-# Theo dõi usage trên web (không có CLI):
-# https://github.com/settings/copilot -> "AI Credits usage"
-# Kinh nghiệm: đầu tháng check 1 lần, giữa tháng check 1 lần
-```
+> 📄 **Code ví dụ:** [`examples/02-2-ai-credits-tinh-tien-the-nao.sh`](examples/02-2-ai-credits-tinh-tien-the-nao.sh)
 
 **Ví dụ cụ thể:** Pro 1.500 credits/tháng (1.000 base + 500 flex). Dùng model đắt cho mọi chat linh tinh → cạn nhanh; model rẻ cho việc dễ + model mạnh cho việc khó → đủ cả tháng.
 
@@ -63,12 +55,7 @@ Thứ tự tốn Credits tăng dần → **gõ tay được thì đừng chat; c
 
 Gồm: file đang mở (vùng quanh con trỏ), file liên quan (imports, file mở gần đây), `#file` / `#selection` bạn attach, `copilot-instructions.md` + instructions khớp `applyTo`, và (Agent mode) kết quả tool calls.
 
-```bash
-# Trong Chat: gắn file cụ thể thay vì để Copilot tự đoán
-# #file:src/auth/login.ts giải thích hàm này làm gì
-# #selection refactor đoạn này sang async/await
-# Kiểm tra instructions nào đang ăn: Chat -> "..." -> referenced files
-```
+> 📄 **Code ví dụ:** [`examples/03-3-context-window-la-gi-copilot-nhet-gi.sh`](examples/03-3-context-window-la-gi-copilot-nhet-gi.sh)
 
 > **Trả lời lạc đề:** 80% là context nhiễu, không phải model dốt.
 
@@ -98,11 +85,7 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 - Refactor multi-file, debug race condition, thiết kế: model mạnh nhất.
 - Agent tự chạy lâu: model mạnh + instructions chặt (không thì nó chạy loạn bằng model đắt).
 
-```bash
-# Mẫu chat mở đầu để ép scope trước khi nâng model:
-# "Đọc #file:src/auth/login.ts và #file:src/auth/session.ts,
-#  liệt kê 3 chỗ có thể gây race condition. Chưa cần sửa."
-```
+> 📄 **Code ví dụ:** [`examples/04-6-nen-dung-model-nao-cho-viec-nao.sh`](examples/04-6-nen-dung-model-nao-cho-viec-nao.sh)
 
 ## 7. Sao cùng 1 prompt mà hôm nay dở hơn hôm qua?
 
@@ -137,10 +120,7 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 
 **Trả lời 1 câu:** Thứ tự: chuyển về model rẻ + tắt Agent → dùng completions và IDE refactor (0 Credits) → xin admin thêm budget / chuyển plan → chờ chu kỳ mới.
 
-```bash
-# Check ngày reset: https://github.com/settings/copilot -> Billing cycle ends
-# Credits còn lại / số ngày còn lại = ngân sách/ngày
-```
+> 📄 **Code ví dụ:** [`examples/05-9-het-ai-credits-giua-thang-thi-chua.sh`](examples/05-9-het-ai-credits-giua-thang-thi-chua.sh)
 
 **Ví dụ:** còn 100 Credits mà 10 ngày nữa mới reset → 10/ngày: chỉ bật model mạnh cho task blocker, còn lại model nhẹ. Đừng đợi cạn mới tiết kiệm — nhận cảnh báo 80% là bắt đầu.
 

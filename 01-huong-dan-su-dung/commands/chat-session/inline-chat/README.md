@@ -26,11 +26,7 @@ Phần lớn thao tác sửa code hằng ngày rất nhỏ: thêm một null che
 
 ## Cách gọi (copy-paste)
 
-```bash
-Bôi đen code → Ctrl+I (Win/Linux) / Cmd+I (Mac)
-Nhập: thêm null check, giữ nguyên API
-# Kỳ vọng: diff hiện ngay tại chỗ để Accept/Discard
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Muốn chắc `Ctrl+I` hoạt động: mở chat inline từ dòng đang bôi đen, xem Copilot có phản hồi không. Không thấy gì → bôi đen lại, check status bar Copilot.
 
@@ -38,12 +34,7 @@ Nhập: thêm null check, giữ nguyên API
 
 Nghiệp vụ: trong `src/utils/parse.ts`, hàm `parseConfig()` đọc `process.env.CONFIG` có thể `undefined` và ném lỗi khó hiểu. Bạn muốn chặn sớm ngay tại chỗ.
 
-```bash
-# Boi den than ham parseConfig()
-# Ctrl+I -> nhap:
-"thêm guard cho process.env.CONFIG: nếu undefined thì trả {} thay vì crash, giữ nguyên chữ ký hàm"
-# Verify: chay test focused cho parseConfig -> xanh
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Diff hiện ngay tại chỗ; Accept từng hunk hoặc Discard; code chạy tiếp không gián đoạn.
 
@@ -53,16 +44,11 @@ Nghiệp vụ: trong `src/utils/parse.ts`, hàm `parseConfig()` đọc `process.
 
 **❌ SAI — bấm Ctrl+I khi chưa bôi đen, hoặc gom quá nhiều việc vào một lần:**
 
-```bash
-# (khong boi den) Ctrl+I -> "refactor ca file nay, doi ten het, them test" -> khong hien gi / diff roi loan
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — bôi hẹp đúng đoạn, nói rõ "chỉ sửa đoạn đã chọn":**
 
-```bash
-# Boi den dung than ham parseConfig()
-# Ctrl+I -> "chi sua doan da chon: them guard cho process.env.CONFIG, giu nguyen chu ky"
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Mỗi lần `Ctrl+I` một việc, bôi hẹp. Diff nhỏ thì review dễ và chính xác.
 

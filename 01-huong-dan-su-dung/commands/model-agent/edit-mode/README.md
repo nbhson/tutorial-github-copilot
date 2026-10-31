@@ -30,12 +30,7 @@ Ba chế độ của Chat khác nhau ở mức quyền:
 
 ## Cách gọi (copy-paste)
 
-```bash
-Chat → mode Edit → tick files
-"đổi message lỗi sang tiếng Việt, chỉ 2 file đã tick"
-# Kỳ vọng: diff chỉ nằm trong 2 file đã tick, không lan thêm
-# Verify: git diff --stat chỉ hiện files đã tick
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy mode **Edit** trong dropdown? Xem `/status` + plan trước khi kết luận lỗi — có IDE gộp nhóm mode khác, cứ chọn theo menu thực tế của bạn.
 
@@ -43,13 +38,7 @@ Chat → mode Edit → tick files
 
 Nghiệp vụ: form đăng ký nhận email sai định dạng. Bạn đã biết cần sửa đúng 2 file: `src/validators/email.ts` và test của nó.
 
-```bash
-# 1. Tick đúng 2 file trong khung Edit
-# 2. Ra lệnh có khóa phạm vi
-(Edit, tick src/validators/email.ts + src/validators/email.test.ts)
-"thêm validation email dùng regex chuẩn + test cho trường hợp thiếu @, chỉ đụng 2 file này"
-# Verify: git diff --stat -> chỉ 2 file trên
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Diff chỉ nằm trong 2 file đã tick; bạn review từng hunk, chạy test liên quan xanh rồi mới Accept.
 
@@ -59,17 +48,11 @@ Nghiệp vụ: form đăng ký nhận email sai định dạng. Bạn đã biế
 
 **❌ SAI — tick nhiều file rồi ra lệnh mơ hồ:**
 
-```bash
-# tick 10 file, rồi: "sửa validation giúp tôi"
-# -> diff lan khắp nơi, review không xuể
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — tick ít, khóa phạm vi rõ:**
 
-```bash
-(Edit, tick 2 file)
-"thêm validation email + test, chỉ đụng 2 file này, không refactor chỗ khác"
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Ở Edit, danh sách tick chính là hàng rào. Càng ít file và càng nói rõ ranh giới, diff càng dễ review.
 

@@ -34,11 +34,7 @@ Giao cho agent sửa nhiều file là con dao hai lưỡi: nhanh, nhưng một t
 
 ## Cách gọi (copy-paste)
 
-```bash
-Chat view → timeline/checkpoints → Restore
-# hoặc Undo từng edit (Ctrl+Z) nếu mới sửa ít
-# Verify: git diff sạch trở lại sau restore
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy mục checkpoint? Kiểm tra phiên có đủ dài / tính năng có bật không; nếu không, chuyển sang commit git thủ công.
 
@@ -46,14 +42,7 @@ Chat view → timeline/checkpoints → Restore
 
 Nghiệp vụ: bạn giao agent "đổi toàn bộ API layer sang fetch có retry". Agent chạy xong nhưng sửa lan 5 file, có file không liên quan, và làm hỏng một import. Bạn muốn về lại đúng lúc trước khi bắt đầu.
 
-```bash
-# Truoc khi giao task (chuan bi):
-git commit -am "checkpoint: truoc khi cho agent doi API layer"
-
-# Agent sua lan -> quay lui:
-# Chat view -> chon moc "truoc khi chay agent sang nay" -> Restore
-# Verify: git status + git diff -> sach, test nhanh xanh
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Code về đúng trạng thái checkpoint; `git diff` sạch lại; thử hướng mới từ điểm an toàn.
 
@@ -63,17 +52,11 @@ git commit -am "checkpoint: truoc khi cho agent doi API layer"
 
 **❌ SAI — để agent chạy mạo hiểm mà không có mốc nào để về:**
 
-```bash
-# Cho agent sua 8 file, khong commit, khong checkpoint
-# -> roi loan, muon quay lui thi khong con moc nao sach
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — commit thủ công làm checkpoint trước task lớn, rồi mới giao agent:**
 
-```bash
-git commit -am "checkpoint: truoc khi cho agent refactor auth"
-# Giao task -> neu sai thi restore / git reset ve commit nay
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Không phải lúc nào checkpoint tự động cũng có. Trước việc mạo hiểm, tự tạo mốc bằng git.
 

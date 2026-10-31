@@ -1,0 +1,11 @@
+// .vscode/settings.json — approval theo server (commit cho team)
+{
+  "github.copilot.chat.toolAutoRun": "ask",
+  "github.copilot.chat.mcp.tools": {
+    "github": "allow",            // đọc PR/issues — read-only, an toàn
+    "fetch": "allow",             // đọc docs web — an toàn
+    "playwright": "ask",          // browser click có side effects
+    "postgres-dev": "ask",        // query sai tốn thời gian, write nguy hiểm
+    "postgres-prod": "deny"       // DB prod: cấm hẳn (đừng tạo server prod nếu không cần)
+  }
+}

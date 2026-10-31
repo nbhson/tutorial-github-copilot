@@ -19,12 +19,7 @@ Gõ prompt tay, bạn không kiểm chứng được điều quan trọng nhất
 
 ## Cách gọi (copy-paste)
 
-```bash
-/instructions
-# liệt kê rules đang áp cho repo/file hiện tại
-# Kỳ vọng: thấy đúng rules (repo-wide + applyTo khớp file đang mở)
-# Verify: sửa 1 rule → mở chat mới → hỏi lại → model làm theo rule mới
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy `/instructions` trong list khi gõ `/`? Kiểm tra `/status` và plan trước khi kết luận đây là lỗi công cụ — không phải plan nào cũng bật lệnh này.
 
@@ -32,16 +27,7 @@ Gõ prompt tay, bạn không kiểm chứng được điều quan trọng nhất
 
 Nghiệp vụ: team quy định “route không được query DB trực tiếp”, nhưng một bạn vừa thêm `db.query()` thẳng trong route. Bạn muốn xem luật này có đang được nạp cho file đó không.
 
-```bash
-# Trong apps/api/src/routes/login.ts, gọi:
-/instructions "liệt kê quy tắc đang áp cho file apps/api/login.ts"
-
-# Đọc kết quả:
-#  - Thấy rule "route không query DB trực tiếp"
-#    (từ .github/instructions/api.instructions.md, applyTo: apps/api/**)
-#    → rule CÓ được nạp.
-#  - Không thấy → glob applyTo sai, hoặc rule nằm nhầm file.
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** danh sách rule đang áp, có cả repo-wide lẫn `*.instructions.md` khớp file đang mở; chỗ sai thì sửa được ngay.
 

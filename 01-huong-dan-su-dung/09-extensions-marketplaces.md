@@ -69,12 +69,7 @@ Có 2 chợ khác nhau: **chợ GitHub** bán "người phục vụ biết gọi
  # Verify: bước 3 phải thấy @-mention mới. Không thấy → reload window + check repo được phép.
 ```
 
-```bash
-# Kiểm tra extensions đã cài cho org (cần admin):
-gh api orgs/{org}/installations --jq '.installations[] | {app: .app.slug, repo_selection}'
-gh api orgs/{org}/installations/{id}/repositories --jq '.repositories[] | .full_name'
-# Verify: app.slug có tên extension? repo_selection gồm repo bạn? Không → admin chưa cấp.
-```
+> 📄 **Code ví dụ:** [`examples/01-3-copilot-extensions-cai-dung.sh`](examples/01-3-copilot-extensions-cai-dung.sh)
 
 **5 extensions team hay dùng (2026):**
 
@@ -99,44 +94,11 @@ gh api orgs/{org}/installations/{id}/repositories --jq '.repositories[] | .full_
 
 ## 4. VS Code extensions: pack chuẩn team
 
-```json
-// .vscode/extensions.json — VS Code tự gợi ý cài khi mở repo (commit cho team):
-{
-  "recommendations": [
-    "github.copilot",
-    "github.copilot-chat",
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "eamodio.gitlens",
-    "ms-playwright.playwright-vscode",
-    "github.vscode-github-actions"
-  ],
-  "unwantedRecommendations": [
-    "some.noisy-theme",
-    "some.conflicting-formatter"
-  ]
-}
-```
+> 📄 **Code ví dụ:** [`examples/02-4-vs-code-extensions-pack-chuan-team.json`](examples/02-4-vs-code-extensions-pack-chuan-team.json)
 
-```jsonc
-// .vscode/settings.json — settings đi kèm pack (format/lint on save):
-{
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": { "source.fixAll.eslint": "explicit" },
-  "github.copilot.enable": { "*": true },
-  "github.copilot.chat.toolAutoRun": "ask"
-}
-```
+> 📄 **Code ví dụ:** [`examples/03-4-vs-code-extensions-pack-chuan-team.jsonc`](examples/03-4-vs-code-extensions-pack-chuan-team.jsonc)
 
-```bash
-# Cài pack từ CLI (onboarding máy mới):
-cat .vscode/extensions.json | jq -r '.recommendations[]' | while read -r ext; do
-  code --install-extension "$ext"
-done
-code --list-extensions | grep -i "copilot\|eslint\|prettier"  # verify
-# Kỳ vọng: list hiện đủ copilot + eslint + prettier. Thiếu → cài tay ID đó.
-```
+> 📄 **Code ví dụ:** [`examples/04-4-vs-code-extensions-pack-chuan-team.sh`](examples/04-4-vs-code-extensions-pack-chuan-team.sh)
 
 **Khi nào extension vs dotfiles:** 1–2 prompt files, 1 repo → commit `.github/` thẳng. Tooling editor (lint/format/git) → VS Code pack. Gọi SaaS từ Chat → `@-mention`. Chuẩn cross-repo → org template repo + pack (mục 5.2). Preferences cá nhân (theme, keymap) → không commit.
 
@@ -146,18 +108,7 @@ code --list-extensions | grep -i "copilot\|eslint\|prettier"  # verify
 
 ### 5.1. Pin version (tránh breaking giữa sprint)
 
-```bash
-# Cài version cụ thể (không lấy latest mù):
-code --install-extension github.copilot-chat@0.26.0
-code --install-extension dbaeumer.vscode-eslint@3.0.0
-
-# Xem versions đã cài:
-code --list-extensions --show-versions | grep -i "copilot\|eslint"
-
-# Update có kiểm soát (cuối sprint, không giữa sprint):
-code --list-extensions | xargs -I{} code --install-extension {} --force
-# → test 1 ngày trên repo thử trước khi announce team.
-```
+> 📄 **Code ví dụ:** [`examples/05-5-1-pin-version-tranh-breaking-giua-sprint.sh`](examples/05-5-1-pin-version-tranh-breaking-giua-sprint.sh)
 
 ```text
  Quy ước team (wiki — ai giữ: tech lead):
@@ -183,11 +134,7 @@ code --list-extensions | xargs -I{} code --install-extension {} --force
  Update chuẩn: PR vào template → announce → các repos cherry-pick (hoặc script sync).
 ```
 
-```bash
-gh repo create acme/new-service --template acme/acme-copilot-template --private --clone
-cd new-service && cat .vscode/extensions.json  # verify pack đi kèm
-# Kỳ vọng: repo mới có đủ .github/ + .vscode/ + .husky/.
-```
+> 📄 **Code ví dụ:** [`examples/06-5-2-repo-template-thuc-te-hon-viet.sh`](examples/06-5-2-repo-template-thuc-te-hon-viet.sh)
 
 ---
 
@@ -206,11 +153,7 @@ Dành cho admin/org owner (Business/Enterprise); dev thường chỉ xem + reque
  - Block categories: themes lạ không sao; block extensions chạy shell/network chưa vet.
 ```
 
-```bash
-# Audit extensions team đang dùng (mỗi tháng):
-code --list-extensions --show-versions > /tmp/exts.txt
-# So với allowlist wiki: ngoài list + không ai nhận → code --uninstall-extension <id>
-```
+> 📄 **Code ví dụ:** [`examples/07-6-org-policy-allow-block-checklist-review.sh`](examples/07-6-org-policy-allow-block-checklist-review.sh)
 
 **Checklist review extension lạ (trước khi cho vào org):**
 

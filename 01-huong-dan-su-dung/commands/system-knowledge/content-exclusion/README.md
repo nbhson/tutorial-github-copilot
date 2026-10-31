@@ -26,12 +26,7 @@ Nó là danh sách path mà Copilot bị cấm đọc/index — thường là `.
 
 ## Cách gọi (copy-paste)
 
-```jsonc
-// settings.json — mức local
-{
-  "github.copilot.chat.exclusion": ["**/.env*", "**/*.pem", "secrets/**"]
-}
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.jsonc`](examples/01-cach-goi-copy-paste.jsonc)
 
 ```text
 # Hoặc (admin): github.com → Org/Repo Settings → Copilot → Content exclusion → Add
@@ -45,20 +40,7 @@ Nó là danh sách path mà Copilot bị cấm đọc/index — thường là `.
 
 Nghiệp vụ: `secrets/prod.json` chứa key thật, và bạn để ý Copilot không gợi ý gì khi mở file đó — cần xác nhận đó là chủ ý chứ không phải lỗi.
 
-```bash
-# 1. Kiểm exclusion:
-#    settings.json → github.copilot.chat.exclusion
-#    (hoặc Org Settings nếu đây là policy)
-#    → thấy "secrets/**" nằm trong danh sách.
-
-# 2. Đối chứng 2 file:
-#    - mở src/utils/format.ts  → Copilot CÓ gợi ý  (bình thường)
-#    - mở secrets/prod.json    → Copilot KHÔNG gợi ý (đúng ý đồ)
-
-# 3. Xác nhận thêm bằng một câu hỏi có scope:
-"@workspace có thấy file secrets/prod.json không?"
-# → trả "không thấy / excluded" nghĩa là exclusion đang sống.
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** file nhạy cảm bị loại khỏi context; chỗ khác vẫn gợi ý bình thường.
 
@@ -68,15 +50,11 @@ Nghiệp vụ: `secrets/prod.json` chứa key thật, và bạn để ý Copilot
 
 **❌ SAI — glob quá rộng, chặn nhầm cả code:**
 
-```jsonc
-"secrets": ["**/*"]   // chặn hết → Copilot gần như không hoạt động, tưởng hỏng.
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.jsonc`](examples/03-neu-lam-sai-thi-sao-sai-ung.jsonc)
 
 **✅ ĐÚNG — glob hẹp, đúng thứ cần chặn:**
 
-```jsonc
-["**/.env*", "**/*.pem", "secrets/**"]   // chỉ chặn file nhạy cảm
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.jsonc`](examples/04-neu-lam-sai-thi-sao-sai-ung.jsonc)
 
 **Bài học:** exclusion chặn **nhầm chỗ** cũng tệ như bỏ sót — glob phải hẹp và được test bằng cả file có lẫn không nhạy cảm.
 

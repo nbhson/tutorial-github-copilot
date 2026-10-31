@@ -20,12 +20,7 @@ Vì tri thức team nằm rải rác trong wiki, docs, runbook — hỏi đồng
 
 ## Cách gọi (copy-paste)
 
-```bash
-Hỏi qua Chat/MCP docs nội bộ
-“theo wiki team, deploy staging gồm mấy bước?”
-# Kỳ vọng: câu trả lời kèm nguồn (file/wiki/section), không bịa
-# Verify: mở nguồn được trích — khớp là đạt
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Đây là cách hỏi qua Chat/MCP chứ không phải một slash command riêng. Nếu bạn gõ `/` mà tìm "Knowledge base" thì nó không nằm ở đó — bạn gọi nó bằng câu hỏi trỏ tới nguồn docs.
 
@@ -33,10 +28,7 @@ Hỏi qua Chat/MCP docs nội bộ
 
 Nghiệp vụ: bạn mới vào team, cần biết quy trình xin review PR mà không muốn hỏi Slack lần thứ ba.
 
-```bash
-“Theo docs nội bộ, quy trình xin review PR gồm mấy bước?
-Trích rõ nguồn (file/section). Nếu docs không có thì nói là không có.”
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Câu trả lời kèm nguồn (file/wiki/section); nếu docs không có thì nó nói thẳng không có thay vì bịa.
 

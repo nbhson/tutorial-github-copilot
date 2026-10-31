@@ -1,0 +1,9 @@
+# .github/workflows/lint.yml (status check bắt buộc)
+name: lint
+on: [pull_request]
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci && npm run lint

@@ -18,21 +18,7 @@ Mỗi MCP server expose 3 loại thành phần (không phải 3 loại server): 
 
 **Trả lời 1 câu:** VS Code đọc ở repo-level `.vscode/mcp.json` (commit share cả team) và user-level User Settings (đè lên repo); key chuẩn là `servers` — nhầm `mcpServers` (của tool khác) thì im lặng không chạy.
 
-```json
-// .vscode/mcp.json — khung chuẩn (copy từ templates/.vscode/mcp.json)
-{
-  "servers": {
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github_token}" }
-    }
-  },
-  "inputs": [
-    { "type": "promptString", "id": "github_token", "description": "GitHub PAT (repo scope)", "password": true }
-  ]
-}
-```
+> 📄 **Code ví dụ:** [`examples/01-1-mcp-json-nam-o-au-format-chuan.json`](examples/01-1-mcp-json-nam-o-au-format-chuan.json)
 
 > **Sai chỗ/sai key = lỗi âm thầm:** sửa đúng nội dung mà IDE đọc file khác hoặc bỏ qua key lạ — "chẳng có gì xảy ra" dù config trông đúng.
 
@@ -40,20 +26,9 @@ Mỗi MCP server expose 3 loại thành phần (không phải 3 loại server): 
 
 **Trả lời 1 câu:** stdio = IDE tự spawn process trên máy bạn (nhẹ, cần `npx`, tốn RAM, chết theo IDE); SSE/HTTP = nối tới URL server đang chạy (share team, cần mạng + auth).
 
-```json
-// stdio: chạy local
-{ "command": "npx", "args": ["-y", "@modelcontextprotocol/server-playwright"] }
+> 📄 **Code ví dụ:** [`examples/02-2-stdio-vs-sse-http-khac-nhau-gi.json`](examples/02-2-stdio-vs-sse-http-khac-nhau-gi.json)
 
-// SSE/HTTP: nối server xa
-{ "type": "sse", "url": "https://mcp.internal.company.com/sse",
-  "headers": { "Authorization": "Bearer ${input:mcp_token}" } }
-```
-
-```bash
-# Test server xa còn sống trước khi đổ lỗi cho Copilot
-curl -s -o /dev/null -w "%{http_code}\n" https://mcp.internal.company.com/health
-# Verify: 200 = sống; 000/timeout = server chết hoặc URL sai
-```
+> 📄 **Code ví dụ:** [`examples/03-2-stdio-vs-sse-http-khac-nhau-gi.sh`](examples/03-2-stdio-vs-sse-http-khac-nhau-gi.sh)
 
 > **Chọn sai transport là lỗi âm thầm:** MCP panel báo `disconnected` mà chẳng rõ lý do. 1 mình vọc → stdio; team dùng chung / server nặng → SSE.
 
@@ -67,30 +42,13 @@ curl -s -o /dev/null -w "%{http_code}\n" https://mcp.internal.company.com/health
 | `${env:...}` | Trung bình–cao | Token riêng mỗi dev |
 | Hardcode trong `mcp.json` | CẤM | Không bao giờ |
 
-```bash
-# Cách đúng: token trong env, mcp.json chỉ tham chiếu
-export GITHUB_MCP_TOKEN="ghp_xxxx"   # ~/.zshrc, mở IDE từ terminal để hứng env
-# mcp.json: "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${env:GITHUB_MCP_TOKEN}" }
-
-# Quét repo xem có ai hardcode:
-grep -rn "ghp_\|sk-\|xoxb-" .vscode/mcp.json .github/ 2>/dev/null
-# Verify: rỗng = sạch; ra dòng thì sửa + rotate token
-```
+> 📄 **Code ví dụ:** [`examples/04-3-auth-cho-mcp-server-the-nao.sh`](examples/04-3-auth-cho-mcp-server-the-nao.sh)
 
 ## 4. Tools không hiện trong Copilot — debug theo thứ tự nào?
 
 **Trả lời 1 câu:** 5 bước đừng nhảy cóc: validate JSON → check key `servers` → test process → reload IDE → đọc log MCP panel.
 
-```bash
-# 1. Validate JSON (lỗi dấu phẩy = nguyên nhân #1)
-python3 -c "import json; json.load(open('.vscode/mcp.json')); print('JSON OK')"
-
-# 2. Test stdio server chạy tay được không
-npx -y @modelcontextprotocol/server-github --help 2>&1 | head -5
-
-# 3. Test SSE server
-curl -s -m 10 -o /dev/null -w "%{http_code}\n" https://mcp.internal.company.com/health
-```
+> 📄 **Code ví dụ:** [`examples/05-4-tools-khong-hien-trong-copilot-debug-theo.sh`](examples/05-4-tools-khong-hien-trong-copilot-debug-theo.sh)
 
 Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS Code → View → Output → chọn MCP server đó.
 
@@ -98,15 +56,9 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 
 **Trả lời 1 câu:** Quy tắc vàng: **`mcp.json` commit được = không chứa secret thật** — mọi secret đi qua `${input:...}` (IDE hỏi lúc start) hoặc `${env:...}` (shell profile).
 
-```json
-{ "env": { "POSTGRES_URL": "${env:PG_REPLICA_URL}" } }
-```
+> 📄 **Code ví dụ:** [`examples/06-5-secrets-trong-mcp-placeholders-viet-sao.json`](examples/06-5-secrets-trong-mcp-placeholders-viet-sao.json)
 
-```bash
-# .envrc hoặc shell profile (KHÔNG commit):
-export PG_REPLICA_URL="postgres://readonly:xxxx@replica.internal:5432/app"
-code .   # mở IDE từ terminal để hứng env
-```
+> 📄 **Code ví dụ:** [`examples/07-5-secrets-trong-mcp-placeholders-viet-sao.sh`](examples/07-5-secrets-trong-mcp-placeholders-viet-sao.sh)
 
 > Không có ngoại lệ "tạm paste rồi xóa sau": git history giữ mãi, bot quét GitHub tìm thấy trong vài phút. Đã lỡ commit → `git rm` + **xoay token ngay**.
 
@@ -114,17 +66,9 @@ code .   # mở IDE từ terminal để hứng env
 
 **Trả lời 1 câu:** 3 lớp bảo vệ, bật cả 3: trỏ **read-replica** (hoặc user DB chỉ `GRANT SELECT`), server chỉ expose query tools (tắt `exec/migrate`), tool `exec` luôn Deny/allow-once.
 
-```sql
--- Tạo user readonly cho MCP (chạy 1 lần trên DB)
-CREATE USER mcp_reader WITH PASSWORD '${MCP_READER_PW}';
-GRANT SELECT ON ALL TABLES IN SCHEMA public TO mcp_reader;
--- Verify: SELECT được, INSERT/DELETE bị từ chối
-```
+> 📄 **Code ví dụ:** [`examples/08-6-mcp-postgres-tro-prod-lam-sao-khong.sql`](examples/08-6-mcp-postgres-tro-prod-lam-sao-khong.sql)
 
-```bash
-export PG_REPLICA_URL="postgres://mcp_reader:${MCP_READER_PW}@replica.internal:5432/app"
-# Verify: echo $PG_REPLICA_URL ra host replica, không phải prod
-```
+> 📄 **Code ví dụ:** [`examples/09-6-mcp-postgres-tro-prod-lam-sao-khong.sh`](examples/09-6-mcp-postgres-tro-prod-lam-sao-khong.sh)
 
 > Cần migrate → làm tay bằng migration tool, không qua MCP.
 
@@ -132,26 +76,15 @@ export PG_REPLICA_URL="postgres://mcp_reader:${MCP_READER_PW}@replica.internal:5
 
 **Trả lời 1 câu:** Token tối thiểu làm được việc — fine-grained PAT chỉ repo cần (read-only nếu chỉ đọc), tạo PAT riêng cho MCP, đừng reuse PAT deploy.
 
-```bash
-# github.com/settings/tokens -> Fine-grained -> chọn repo ->
-# Contents: Read, Issues: Read, PRs: Read/Write
-export GITHUB_MCP_TOKEN="github_pat_xxxx"
-gh api --header "Authorization: token $GITHUB_MCP_TOKEN" user
-# Verify: ra đúng account
-```
+> 📄 **Code ví dụ:** [`examples/10-7-mcp-github-server-can-scope-token-nao.sh`](examples/10-7-mcp-github-server-can-scope-token-nao.sh)
 
 ## 8. MCP Playwright (browser) dùng khi nào?
 
 **Trả lời 1 câu:** Cho agent mở trang, click, chụp screenshot, đọc console errors — nặng (Chromium ~300-500MB RAM) nhưng cần khi verify UI/E2E thật; chỉ check API thì dùng `curl` nhanh hơn.
 
-```json
-{ "command": "npx", "args": ["-y", "@modelcontextprotocol/server-playwright"] }
-```
+> 📄 **Code ví dụ:** [`examples/11-8-mcp-playwright-browser-dung-khi-nao.json`](examples/11-8-mcp-playwright-browser-dung-khi-nao.json)
 
-```bash
-# Prompt hiệu quả: "Mở http://localhost:3000/login, login test@example.com,
-#  chụp màn hình + đọc console errors. Không click nút thanh toán."
-```
+> 📄 **Code ví dụ:** [`examples/12-8-mcp-playwright-browser-dung-khi-nao.sh`](examples/12-8-mcp-playwright-browser-dung-khi-nao.sh)
 
 > Thiếu browser → `npx playwright install chromium`; boot app local trước; làm backend thuần thì tắt server cho nhẹ máy.
 
@@ -159,12 +92,7 @@ gh api --header "Authorization: token $GITHUB_MCP_TOKEN" user
 
 **Trả lời 1 câu:** Mỗi server stdio = 1 process + RAM, và menu tools dài làm model chọn sai/bỏ sót — chỉ bật server task đang cần, server nặng để SSE chung team.
 
-```bash
-ps aux | grep -i "mcp\|modelcontextprotocol" | grep -v grep
-# Verify: server nào >500MB thì cân nhắc chuyển SSE
-
-# Tắt tạm: thêm "_" prefix vào key ("_playwright-disabled") -> bật lại thì xóa
-```
+> 📄 **Code ví dụ:** [`examples/13-9-nhieu-mcp-servers-cung-luc-quan-ly.sh`](examples/13-9-nhieu-mcp-servers-cung-luc-quan-ly.sh)
 
 > Ngày làm backend → `github + postgres`; ngày làm UI → thêm `playwright`. Không bật cả 3 trừ khi cần.
 
@@ -179,12 +107,7 @@ ps aux | grep -i "mcp\|modelcontextprotocol" | grep -v grep
 | `ECONNREFUSED` | SSE server chưa chạy | Start server / check URL |
 | `JSON parse error` | `mcp.json` sai cú pháp | Validate JSON (câu 4) |
 
-```bash
-# Kiểm nhanh 3 thứ trước khi đọc log sâu
-node --version; npx --version
-echo ${GITHUB_MCP_TOKEN:+TOKEN_OK}
-python3 -c "import json; json.load(open('.vscode/mcp.json')); print('JSON OK')"
-```
+> 📄 **Code ví dụ:** [`examples/14-10-mcp-log-oc-o-au-loi-nao.sh`](examples/14-10-mcp-log-oc-o-au-loi-nao.sh)
 
 ---
 

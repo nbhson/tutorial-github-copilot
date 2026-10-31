@@ -1,0 +1,5 @@
+// .vscode/settings.json — default cho team (commit; tên exact lấy từ picker hiện tại):
+{
+  "github.copilot.chat.model": "gpt-mini-tier",         // đặt đúng tên picker thực tế
+  "github.copilot.completions.model": "gpt-mini-tier"
+}

@@ -20,13 +20,7 @@ Hai việc `/optimize` làm mà gõ tay khó bằng: nó nêu **trước/sau** (
 
 ## Cách gọi (copy-paste)
 
-```bash
-# Bôi đen đoạn chậm (đã profile), rồi:
-/optimize
-
-/optimize giảm N+1 query, giữ nguyên output
-# Kỳ vọng: đề xuất trước/sau + code mới, benchmark chứng minh
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Gõ `/` trong Chat mà không thấy `/optimize`? Chạy `/status` + xem plan trước khi kết luận lệnh lỗi.
 
@@ -34,12 +28,7 @@ Hai việc `/optimize` làm mà gõ tay khó bằng: nó nêu **trước/sau** (
 
 Nghiệp vụ: `loadOrdersWithItems()` gọi DB trong vòng lặp — trang order list chậm hẳn khi có nhiều đơn.
 
-```bash
-# 1. Bôi đen hàm loadOrdersWithItems()
-# 2. Gọi:
-/optimize "giảm N+1 bằng batch, giữ nguyên output — nêu trước/sau complexity"
-# Verify: benchmark trước/sau + test vẫn xanh
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** đề xuất cụ thể (trước/sau) + code mới; benchmark cải thiện và test vẫn xanh.
 
@@ -49,17 +38,11 @@ Nghiệp vụ: `loadOrdersWithItems()` gọi DB trong vòng lặp — trang orde
 
 **❌ SAI — optimize khi chưa đo, không ràng buộc output:**
 
-```bash
-/optimize "làm hàm này nhanh hơn"
-# -> đổi cấu trúc theo cảm tính, có thể sai edge case, chưa chắc nhanh hơn
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — profile trước, ràng buộc output:**
 
-```bash
-# (đã chạy EXPLAIN thấy N+1) rồi:
-/optimize "giảm N+1 bằng batch, giữ nguyên output mọi input — nêu trước/sau complexity"
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** không có số đo thì "tối ưu" chỉ là sở thích cá nhân; và luôn khóa "giữ nguyên output" để không đánh đổi tính đúng lấy tốc độ.
 

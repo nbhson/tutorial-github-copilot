@@ -59,16 +59,7 @@ Từ 2025–2026: multi-model picker (đổi GPT/Claude/Gemini ngay trong Chat),
 
 ### 2.2. Đăng ký trial + verify (copy-paste)
 
-```bash
-# 1. Vào https://github.com/copilot -> chọn plan (Pro để bắt đầu) + payment method.
-# 2. Verify tại https://github.com/settings/copilot — phải thấy plan + ngày hết hạn trial.
-#    Không thấy = chưa active, đừng cài tiếp.
-
-# Kiểm tra bằng CLI (sau khi cài gh + extension, mục 4):
-gh auth login
-gh copilot --help
-# Kỳ vọng: hiện help, không báo "no Copilot subscription".
-```
+> 📄 **Code ví dụ:** [`examples/01-2-2-ang-ky-trial-verify-copy-paste.sh`](examples/01-2-2-ang-ky-trial-verify-copy-paste.sh)
 
 ### 2.3. Hoạt động nào tốn AI Credits?
 
@@ -90,25 +81,11 @@ VS Code là bề mặt mạnh nhất 2026: agent mode full tools + MCP + custom 
 
 > **OAuth login là gì?** Cách VS Code nhờ GitHub xác nhận "đúng là bạn" mà không gõ mật khẩu vào VS Code — click "Sign in" → browser mở `github.com/login/oauth` → Allow → VS Code nhận token lưu local. Token hết hạn thì sign out + sign in lại, không phải cài lại extension.
 
-```bash
-# 1. Cài VS Code Stable mới nhất (>= 1.90 để có agent mode ổn định):
-#    https://code.visualstudio.com/
-code --version
-# Kỳ vọng / Verify: hiện 3 dòng, version >= 1.90. Cũ hơn → tải bản mới.
-
-# 2. Ctrl+Shift+X (Extensions) → tìm "GitHub Copilot" → Install
-#    (kèm "GitHub Copilot Chat" nếu bản của bạn tách 2 extensions — cài cả 2).
-# 3. Reload VS Code khi được yêu cầu.
-# 4. Status bar góc dưới-phải: icon Copilot → "Sign in to GitHub" → OAuth → Allow.
-```
+> 📄 **Code ví dụ:** [`examples/02-3-vs-code-setup-manh-nhat.sh`](examples/02-3-vs-code-setup-manh-nhat.sh)
 
 ### 3.1. Verify VS Code
 
-```bash
-# Ctrl+Shift+P, chạy lần lượt:
-# > "Copilot: Check Status"       -> kỳ vọng: Active, đúng account
-# > "Chat: New Chat"              -> kỳ vọng: mở Chat panel bên phải
-```
+> 📄 **Code ví dụ:** [`examples/03-3-1-verify-vs-code.sh`](examples/03-3-1-verify-vs-code.sh)
 
 ```text
 Verify bằng mắt (3 giây):
@@ -120,14 +97,7 @@ Verify bằng mắt (3 giây):
 
 ### 3.2. Settings nên bật ngay
 
-```json
-// .vscode/settings.json — mẫu team (copy-paste, sửa lại)
-{
-  "github.copilot.enable": { "*": true },
-  "github.copilot.chat.localeOverride": "en",
-  "github.copilot.chat.codeGeneration.useInstructionFiles": true
-}
-```
+> 📄 **Code ví dụ:** [`examples/04-3-2-settings-nen-bat-ngay.json`](examples/04-3-2-settings-nen-bat-ngay.json)
 
 > `useInstructionFiles: true` là quan trọng nhất — bật thì `.github/copilot-instructions.md` mới được load (chi tiết bài 03).
 
@@ -151,13 +121,7 @@ Quy tắc: **Neovim/VS/JetBrains để gõ + hỏi nhanh. VS Code để agent.**
 #   → Restart → Help → "Sign in to GitHub".
 ```
 
-```bash
-# Neovim — cài plugin copilot.vim:
-git clone https://github.com/github/copilot.vim.git ~/.config/nvim/pack/github/start/copilot.vim
-# Mở nvim, login: :Copilot setup  (OAuth, paste code về nvim)
-# Verify:  :Copilot status   -> "Copilot: Enabled" ("Not authenticated" -> chạy lại :Copilot setup)
-# Phím tắt: Tab nhận gợi ý · :Copilot enable/disable bật/tắt tạm
-```
+> 📄 **Code ví dụ:** [`examples/05-4-jetbrains-visual-studio-neovim.sh`](examples/05-4-jetbrains-visual-studio-neovim.sh)
 
 ---
 
@@ -169,35 +133,11 @@ git clone https://github.com/github/copilot.vim.git ~/.config/nvim/pack/github/s
 >
 > Riêng `gh copilot` là gh extension **cũ hơn**, chỉ có 2 lệnh `suggest`/`explain` cho lệnh shell — vẫn tiện khi quên flag docker/git.
 
-```bash
-# Cài Copilot CLI (agent GA 03/2026):
-npm install -g @github/copilot
-copilot --version
-# Login đúng GitHub account có subscription Copilot trả phí.
-
-# Cài gh + gh-copilot (extension suggest/explain):
-brew install gh          # hoặc: sudo apt install -y gh; Windows: https://cli.github.com/
-gh auth login            # chọn đúng account trước khi cài extension
-gh extension install github/gh-copilot
-gh extension upgrade github/gh-copilot   # update khi có bản mới
-gh copilot --help        # kỳ vọng: hiện suggest/explain
-```
+> 📄 **Code ví dụ:** [`examples/06-5-1-hai-cli-ung-nham.sh`](examples/06-5-1-hai-cli-ung-nham.sh)
 
 ### 5.2. Hai lệnh dùng 90% thời gian (`gh copilot`)
 
-```bash
-# suggest: gợi ý lệnh shell:
-gh copilot suggest "xoa cac git branch local da merge vao main"
-gh copilot suggest "tim file >100MB trong repo hien tai"
-
-# explain: giải thích lệnh khó trước khi chạy:
-gh copilot explain "docker run -p 5432:5432 -e POSTGRES_PASSWORD=secret postgres:16"
-gh copilot explain "git rebase -i HEAD~3"
-
-# Alias cho gọn (thêm vào ~/.zshrc hoặc ~/.bashrc):
-alias cps='gh copilot suggest'
-alias cpe='gh copilot explain'
-```
+> 📄 **Code ví dụ:** [`examples/07-5-2-hai-lenh-dung-90-thoi-gian.sh`](examples/07-5-2-hai-lenh-dung-90-thoi-gian.sh)
 
 > **Nguyên tắc an toàn:** với lệnh nguy hiểm (`rm`, `find -delete`, `docker prune`) — explain trước, chạy khô (`| head`) sau, rồi mới chạy thật.
 
@@ -218,11 +158,7 @@ Fix: click icon → Sign out → sign in lại đúng account.
 
 ### 6.2. Verify tổng + bảng lỗi hay gặp
 
-```bash
-gh auth status          # kỳ vọng: Logged in to github.com as <bạn>
-gh copilot --help       # kỳ vọng: hiện suggest/explain
-code --version          # kỳ vọng: VS Code >= 1.90
-```
+> 📄 **Code ví dụ:** [`examples/08-6-2-verify-tong-bang-loi-hay-gap.sh`](examples/08-6-2-verify-tong-bang-loi-hay-gap.sh)
 
 | Triệu chứng | Nguyên nhân likely | Fix (copy-paste) |
 |---|---|---|

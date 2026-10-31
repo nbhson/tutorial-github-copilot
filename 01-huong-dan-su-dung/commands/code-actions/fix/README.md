@@ -24,14 +24,7 @@ Khi gõ prompt tay, bạn tốn 1–2 câu chỉ để nói *sửa file nào, đ
 
 ## Cách gọi (copy-paste)
 
-```bash
-# Bôi đen đoạn lỗi trong editor, rồi:
-/fix
-
-# Hoặc gọi kèm chỉ dẫn cụ thể cho chỗ đau:
-/fix thêm null check cho params, giữ nguyên API shape
-# Kỳ vọng: diff nhỏ đúng chỗ đau, không lan logic khác
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Kiểm tra `/fix` có ở máy bạn không: gõ `/` trong ô Chat, tìm `/fix`. Không thấy → chạy `/status` + xem plan trước khi kết luận là lỗi công cụ.
 
@@ -39,12 +32,7 @@ Khi gõ prompt tay, bạn tốn 1–2 câu chỉ để nói *sửa file nào, đ
 
 Nghiệp vụ: `login()` nhận email có dấu bị trả 500 vì `params` có thể là `undefined`.
 
-```bash
-# 1. Bôi đen đúng hàm validate() đang lỗi trong src/auth/login.ts
-# 2. Gọi:
-/fix "thêm null check cho params, giữ nguyên API shape"
-# Verify: chạy test/build/lint cho file vừa sửa — xanh là đạt
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** diff nhỏ đúng chỗ đau (vài dòng), không đụng export/kiểu trả về; test liên quan xanh.
 
@@ -54,16 +42,11 @@ Nghiệp vụ: `login()` nhận email có dấu bị trả 500 vì `params` có 
 
 **❌ SAI — mô tả quá cụt, không khóa scope:**
 
-```bash
-/fix sửa giúp tôi   # model tự đoán, có thể sửa lan sang hàm khác
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — gắn scope + câu "giữ nguyên":**
 
-```bash
-# (bôi đen hàm validate) rồi:
-/fix "thêm null check cho params, giữ nguyên API shape, không refactor chỗ khác"
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** luôn nói rõ *sửa gì* và *giữ nguyên gì*. Scope càng khóa, diff càng gọn.
 

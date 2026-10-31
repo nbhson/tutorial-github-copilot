@@ -27,12 +27,7 @@ Skill nằm trong `.github/skills/<ten>/SKILL.md`, có `description` liệt kê 
 
 ## Cách gọi (copy-paste)
 
-```bash
-/skills
-# xem skills đang có, rồi nhờ 1 việc quen: "review PR giúp tôi"
-# Kỳ vọng: model tự kích hoạt đúng skill, output đúng form
-# Verify: model báo đã dùng skill X — không cần gõ /review-pr
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy `/skills` trong list khi gõ `/`? Kiểm `/status` + plan trước khi kết luận lỗi công cụ.
 
@@ -40,16 +35,7 @@ Skill nằm trong `.github/skills/<ten>/SKILL.md`, có `description` liệt kê 
 
 Nghiệp vụ: team đã có skill `review-pr` (chỉ đọc diff, nêu bug + test thiếu, không sửa code). Bạn muốn nó tự chạy khi bạn chỉ nói như người thường.
 
-```bash
-# KHÔNG gõ /review-pr. Chỉ nói tự nhiên:
-"review PR 123 giúp tôi"
-
-# Kỳ vọng trên màn hình:
-#  - Model báo đang dùng skill review-pr (description khớp từ "review")
-#  - Trả về: danh sách lỗi theo file:line + test còn thiếu
-#  - KHÔNG sửa code (đúng như skill đã quy định)
-# Nếu model sửa code lung tung → SKILL.md thiếu dòng "chỉ đọc", sửa lại.
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** model tự kích hoạt đúng skill, output đúng form; bạn không cần nhớ tên.
 

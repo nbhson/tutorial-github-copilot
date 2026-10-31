@@ -26,10 +26,7 @@ Khi một phiên chat phình to, model bắt đầu quên đầu bài — nhưng
 
 ## Cách gọi (copy-paste)
 
-```bash
-/clear
-# Kỳ vọng: turns cũ biến mất, instructions + MCP vẫn còn
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Kiểm tra lệnh có ở máy bạn không: gõ `/` trong ô Chat, tìm `/clear`. Không thấy → đọc `/status` + plan trước khi kết luận lỗi công cụ.
 
@@ -37,14 +34,7 @@ Khi một phiên chat phình to, model bắt đầu quên đầu bài — nhưng
 
 Nghiệp vụ: bạn đang giữa phiên sửa `payment.ts` với MCP `github` đang kết nối, nhưng đã 30 turns và model bắt đầu nhắc lại chuyện cũ. Bạn muốn reset context nhưng **giữ** MCP và instructions.
 
-```bash
-# 1. Con dang do -> luu truoc
-/export lưu chat đang sửa payment ra docs/chats/payment-wip.md
-
-# 2. Lau bang, giu nguyen cau hinh
-/clear
-# Verify: hoi "liet ke quy tac dang ap dung" -> van tra loi duoc
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Turns cũ biến mất, instructions + MCP servers vẫn còn; chat nhẹ lại.
 
@@ -54,17 +44,11 @@ Nghiệp vụ: bạn đang giữa phiên sửa `payment.ts` với MCP `github` �
 
 **❌ SAI — `/clear` xong tưởng mất hết cấu hình, hoảng rồi setup lại từ đầu:**
 
-```bash
-/clear   # roi di cau hinh lai MCP / viet lai instructions -> mat thoi gian vo ich
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — biết `/clear` chỉ xóa turns, và luôn export trước khi clear việc dở:**
 
-```bash
-/export lưu chat này ra docs/chats/payment-wip.md
-/clear
-# Hoi lai 1 cau -> van thay instructions + MCP con nguyen
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** `/clear` là lau bảng, không phải đổi lớp. Cái mất chỉ là mạch hội thoại — cấu hình nằm ở file, không nằm trong turns.
 

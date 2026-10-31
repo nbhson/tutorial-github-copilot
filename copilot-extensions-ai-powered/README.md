@@ -64,15 +64,7 @@ Two distinct things people mean by "Copilot in Actions":
 
 The **Copilot CLI** and the Copilot SDK can be invoked inside Actions runners (ephemeral, sandboxed, non-interactive):
 
-```yaml
-# .github/workflows/copilot-triage.yml (skeleton)
-- name: Copilot CI triage
-  env:
-    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  run: |
-    npm i -g @github/copilot
-    copilot -p "Analyze the failing CI run $RUN_URL, open an issue with root cause + fix suggestion"
-```
+> 📄 **Code ví dụ:** [`examples/01-3-1-running-agents-from-ci-workflows.yaml`](examples/01-3-1-running-agents-from-ci-workflows.yaml)
 
 Rules: pin the CLI version in CI, run with the narrowest token scopes, and treat output as untrusted input (review before auto-merge).
 
@@ -109,11 +101,7 @@ The Copilot CLI is a **terminal-native coding agent** — separate from the olde
 - `/model` can detect local Ollama models; auto model selection (efficiency / balance / intelligence tiers) is available.
 - Install: `npm install -g @github/copilot` (or `gh extension install github/gh-copilot` for the legacy suggest/explain tool).
 
-```bash
-copilot                     # interactive agent session in terminal
-copilot -p "fix the failing test in src/auth.spec.ts"
-copilot --version
-```
+> 📄 **Code ví dụ:** [`examples/02-5-copilot-cli.sh`](examples/02-5-copilot-cli.sh)
 
 ---
 

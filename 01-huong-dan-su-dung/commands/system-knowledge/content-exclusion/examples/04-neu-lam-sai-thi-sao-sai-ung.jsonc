@@ -1,0 +1,1 @@
+["**/.env*", "**/*.pem", "secrets/**"]   // chỉ chặn file nhạy cảm

@@ -28,12 +28,7 @@ Ba việc điển hình nên giao cho chuyên gia:
 
 ## Cách gọi (copy-paste)
 
-```bash
-Gọi agent trong .github/agents/
-"nhờ explorer vẽ bản đồ file chạm tới auth"
-# Kỳ vọng: sub-agent trả kết quả gọn, chat chính không bị ồn
-# Verify: kết quả paste được vào PR/wiki
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy agent trong danh sách? Kiểm tra `.github/agents/` có file `.agent.md` tương ứng chưa — danh bạ trống thì không có gì để gọi.
 
@@ -41,12 +36,7 @@ Gọi agent trong .github/agents/
 
 Nghiệp vụ: bạn sắp refactor module auth, cần biết có những file nào dính tới nó trước khi sửa.
 
-```bash
-# Gọi explorer (chỉ-đọc) để trinh sát, không đụng code
-"nhờ explorer (chỉ-đọc): vẽ bản đồ 5 file chạm tới auth + ai gọi ai,
-kèm file nào có test và file nào không"
-# Verify: sub-agent chỉ đọc; kết quả dán được vào mô tả PR hoặc wiki team
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Một bản đồ gọn (danh sách file + quan hệ gọi nhau + test có/không); chat chính chỉ giữ lại quyết định refactor.
 
@@ -56,16 +46,11 @@ kèm file nào có test và file nào không"
 
 **❌ SAI — gọi explorer mà không nói nó chỉ-đọc:**
 
-```bash
-"nhờ explorer dọn lại code auth"
-# -> bạn giao việc sửa cho một agent vốn sinh ra để trinh sát
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — nêu rõ vai + phạm vi ngay trong lời gọi:**
 
-```bash
-"nhờ explorer (chỉ-đọc): liệt kê file chạm tới auth và quan hệ gọi nhau, không sửa gì"
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Custom agent mạnh vì quyền hẹp. Nêu rõ phạm vi trong lời gọi để nó làm đúng vai — sai vai thì chuyên gia thành rủi ro.
 

@@ -34,12 +34,7 @@ Khác với gõ tên file bằng chữ ("hàm trong login.ts"): attach đưa **n
 
 ## Cách gọi (copy-paste)
 
-```bash
-#file → chọn file
-@workspace → hỏi cross-file
-Kéo-thả file/ảnh vào Chat input
-# Verify: model nhắc được tên file đã đọc trong câu trả lời
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Kiểm tra: gõ `#` trong ô Chat xem có gợi ý file không; gõ `@` xem có `@workspace` không. Thiếu → kiểm tra extension Copilot Chat đã bật.
 
@@ -47,10 +42,7 @@ Kéo-thả file/ảnh vào Chat input
 
 Nghiệp vụ: bạn cần biết field `customerId` được đọc/ghi ở đâu trong repo trước khi đổi kiểu dữ liệu của nó, và muốn model xác nhận đã đọc đúng file trung tâm.
 
-```bash
-@workspace "customerId duoc doc/ghi o nhung file nao? ham nao tao ra no?" + attach #file src/models/customer.ts
-# Verify: bat model "liet ke file may da doc" -> khop file ban gan
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Model liệt kê đúng file đã đọc + trả lời trúng scope; không sửa sai file.
 
@@ -60,16 +52,11 @@ Nghiệp vụ: bạn cần biết field `customerId` được đọc/ghi ở đ�
 
 **❌ SAI — quên attach, hoặc attach cả repo cho một câu hỏi nhỏ:**
 
-```bash
-# (khong attach) "sua loi o ham login giup toi"        -> model doan mo
-# @workspace ca repo cho cau hoi 1 file              -> cham + ton token
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — gắn đúng 1–3 file liên quan nhất, chỉ rõ muốn model đọc gì:**
 
-```bash
-#file src/auth/login.ts "giai thich nhanh if trong ham nay, chi doc file nay"
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Scope vừa đủ là 1–3 file liên quan nhất. Rộng quá tốn token, hẹp quá thì model thiếu dữ liệu — cân theo câu hỏi.
 

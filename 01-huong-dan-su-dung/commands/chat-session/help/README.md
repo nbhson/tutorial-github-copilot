@@ -26,10 +26,7 @@ Rất nhiều thắc mắc "sao lệnh này không chạy" thực ra là câu h�
 
 ## Cách gọi (copy-paste)
 
-```bash
-/help
-# Kỳ vọng: list slash/participant/mode đúng plan + version máy bạn
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Kiểm tra lệnh có ở máy bạn không: gõ `/` trong ô Chat, tìm `/help`. Không thấy → đọc `/status` + plan trước khi kết luận lỗi công cụ.
 
@@ -37,12 +34,7 @@ Rất nhiều thắc mắc "sao lệnh này không chạy" thực ra là câu h�
 
 Nghiệp vụ: bạn đọc tài liệu thấy có `/tests` để sinh test, nhưng gõ vào máy mình thì không thấy. Thay vì loay hoay, mở `/help` để xem thực tế máy mình có gì.
 
-```bash
-/help
-# Doi chieu list voi tai lieu: may ban thieu /tests do plan
-# -> mo /status xem plan + version, khong phai loi extension
-# Verify: go / so list thuc te -> khop voi /help
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** List slash/participant/mode khả dụng đúng plan + version máy bạn.
 
@@ -52,16 +44,11 @@ Nghiệp vụ: bạn đọc tài liệu thấy có `/tests` để sinh test, nh�
 
 **❌ SAI — thấy thiếu lệnh rồi kết luận ngay là extension hỏng:**
 
-```bash
-/help   # thay thieu /tests -> "extension loi roi" -> cai lai vo ich
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — đối chiếu `/help` với `/status` để tìm đúng nguyên nhân plan/version:**
 
-```bash
-/help
-/status   # xem plan + version -> thieu lenh la do plan, khong phai loi
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** "Không có lệnh" thường là chuyện plan/version, không phải lỗi cài đặt. `/help` + `/status` là cặp chẩn đoán.
 

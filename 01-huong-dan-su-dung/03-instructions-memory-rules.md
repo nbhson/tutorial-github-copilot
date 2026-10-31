@@ -45,17 +45,7 @@ Bảng này là xương sống của cả bài:
 | **2. `*.instructions.md`** | `.github/instructions/` (mỗi file có `applyTo`) | Nội quy từng phòng, chỉ đọc khi vào phòng đó | `applyTo: "apps/api/**"` → "Route không query DB trực tiếp" | Quy tắc chỉ đúng 1 subtree (mỗi file <50 dòng, tối đa ~8 files) |
 | **3. `AGENTS.md`** | Repo root (chuẩn mở) | Nội quy khu phố, đội thợ nào cũng hiểu | "Dev: `npm run dev`. Test: `npm test`." | Viết 1 lần để Copilot + Claude Code + Codex đều dùng được |
 
-```bash
-# Copy-paste: tạo đủ 3 loại file trong 1 phút
-mkdir -p .github/instructions
-touch .github/copilot-instructions.md AGENTS.md .github/instructions/api.instructions.md
-ls -la .github/copilot-instructions.md .github/instructions/ AGENTS.md 2>&1
-# Kỳ vọng: ls hiện đủ 3 paths. Sau đó paste mẫu mục 3 + 4.
-
-# Kiểm tra độ phình:
-wc -l .github/copilot-instructions.md .github/instructions/*.instructions.md 2>/dev/null
-# Mục tiêu: repo-wide file <200 dòng.
-```
+> 📄 **Code ví dụ:** [`examples/01-2-3-loai-file-phan-biet-va-at.sh`](examples/01-2-3-loai-file-phan-biet-va-at.sh)
 
 ### 2.1. Instruction hierarchy (thứ tự thắng khi xung đột)
 
@@ -67,19 +57,7 @@ user settings < org policy < repo copilot-instructions.md < *.instructions.md (a
 - **Org policy (Business/Enterprise) thắng mọi thứ** — admin cấm thì repo không mở được.
 - Quy tắc team: personal preferences (ngôn ngữ trả lời) để ở user settings; mọi thứ team dùng chung phải vào repo files + commit.
 
-```json
-// .vscode/settings.json — repo-level (commit cho team) để bật instructions:
-{
-  "github.copilot.chat.codeGeneration.useInstructionFiles": true
-}
-
-// ~/.config/Code/User/settings.json — personal (KHÔNG commit), instructions riêng:
-{
-  "github.copilot.chat.codeGeneration.instructions": [
-    { "text": "Trả lời bằng tiếng Việt, ngắn gọn. Code comments không dấu." }
-  ]
-}
-```
+> 📄 **Code ví dụ:** [`examples/02-2-1-instruction-hierarchy-thu-tu-thang-khi.json`](examples/02-2-1-instruction-hierarchy-thu-tu-thang-khi.json)
 
 ---
 
@@ -196,11 +174,7 @@ Thứ tự load khi có cả 2: AGENTS.md (chung) -> .github/copilot-instruction
 - NEVER commit truc tiep main.
 ```
 
-```bash
-# Kiem tra trung lap (chay moi thang):
-diff <(sort AGENTS.md) <(sort .github/copilot-instructions.md) | head -30
-# Trung >50% -> gop bot: chung o AGENTS, rieng o instructions.
-```
+> 📄 **Code ví dụ:** [`examples/03-5-agents-md-portability-viet-1-lan-chay.sh`](examples/03-5-agents-md-portability-viet-1-lan-chay.sh)
 
 ---
 

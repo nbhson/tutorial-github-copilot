@@ -18,12 +18,7 @@
 
 **Trả lời 1 câu:** Luồng chuẩn: **Issue (mô tả + acceptance criteria) → assign `copilot` → agent code + mở PR → Actions CI (lint/test) gate → review → merge** — workflow không gọi agent trực tiếp; agent tự lắng nghe assignment, workflow chỉ cần đảm bảo CI xanh/đỏ đúng.
 
-```bash
-gh issue create --title "feat(auth): them rate-limit login" \
-  --body "Phạm vi: src/auth/**. Xong khi: npm test -- auth xanh + test 429." \
-  -l "copilot"
-gh pr list --author "app/copilot" --state open
-```
+> 📄 **Code ví dụ:** [`examples/01-1-actions-coding-agent-noi-voi-nhau-the.sh`](examples/01-1-actions-coding-agent-noi-voi-nhau-the.sh)
 
 > Batch 2-3 issues/lần, đừng giao 10 cùng lúc — review không kịp, PR tồn đọng, CI nghẽn.
 
@@ -31,19 +26,9 @@ gh pr list --author "app/copilot" --state open
 
 **Trả lời 1 câu:** Chạy khi PR mở/update: checkout → lint/test → gọi Copilot CLI tóm tắt/review → post comment vào PR — secrets qua env, quyền tối thiểu, không flag bypass.
 
-```yaml
-on:
-  pull_request:
-    types: [opened, synchronize]
-permissions:
-  contents: read
-  pull-requests: write  # chi de comment review
-```
+> 📄 **Code ví dụ:** [`examples/02-2-workflow-copilot-review-yml-mau-lam-gi.yaml`](examples/02-2-workflow-copilot-review-yml-mau-lam-gi.yaml)
 
-```bash
-cp /path/to/tutorial-copilot/templates/.github/workflows/copilot-review.yml ./.github/workflows/
-# Verify: mo PR thu -> comment review tu dong xuat hien
-```
+> 📄 **Code ví dụ:** [`examples/03-2-workflow-copilot-review-yml-mau-lam-gi.sh`](examples/03-2-workflow-copilot-review-yml-mau-lam-gi.sh)
 
 **Ví dụ:** PR agent mở → workflow lint đỏ → comment "lint fail ở file X" → agent đọc → push fix → xanh.
 
@@ -51,14 +36,7 @@ cp /path/to/tutorial-copilot/templates/.github/workflows/copilot-review.yml ./.g
 
 **Trả lời 1 câu:** Chạy khi issue mới: đọc tiêu đề + body → phân loại (bug/feature/question) → gắn label + comment gợi ý (thiếu log? thiếu acceptance criteria?) — chỉ đọc + label, không sửa code.
 
-```yaml
-on:
-  issues:
-    types: [opened]
-permissions:
-  issues: write  # chi label + comment
-  contents: read
-```
+> 📄 **Code ví dụ:** [`examples/04-3-workflow-copilot-ci-triage-yml-mau-lam.yaml`](examples/04-3-workflow-copilot-ci-triage-yml-mau-lam.yaml)
 
 **Ví dụ:** issue thiếu log → bot comment "vui lòng bổ sung: version, steps, log" + label `needs-info`. Đỡ ~50% việc phân loại tay cho repo đông issue.
 
@@ -66,20 +44,9 @@ permissions:
 
 **Trả lời 1 câu:** 3 quy tắc sắt: secrets chỉ qua `${{ secrets.TEN }}` → `env` (không in log), `permissions:` tối thiểu từng job, KHÔNG dùng flag skip-verification/bypass — fix root cause thay vì bỏ gate.
 
-```yaml
-jobs:
-  review:
-    permissions: { contents: read, pull-requests: write }
-    steps:
-      - env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr view "$PR" --json title   # khong in token
-```
+> 📄 **Code ví dụ:** [`examples/05-4-secrets-trong-workflow-truyen-sao-cho-ung.yaml`](examples/05-4-secrets-trong-workflow-truyen-sao-cho-ung.yaml)
 
-```bash
-# Quét workflow có lộ secret/skip nguy hiểm không
-grep -rn "dangerously-skip\|skip-verification\|echo.*secrets\.\|print.*secrets\." .github/workflows/ || echo "Workflows sach"
-```
+> 📄 **Code ví dụ:** [`examples/06-4-secrets-trong-workflow-truyen-sao-cho-ung.sh`](examples/06-4-secrets-trong-workflow-truyen-sao-cho-ung.sh)
 
 ## 5. Copilot SDK là gì, khi nào dùng thay vì chat?
 
@@ -87,11 +54,7 @@ grep -rn "dangerously-skip\|skip-verification\|echo.*secrets\.\|print.*secrets\.
 
 SDK bọc Copilot CLI + cung cấp sessions, permissions, custom tools, events. Token qua env, log request count để kiểm soát quota.
 
-```bash
-# Docs: https://docs.github.com/en/copilot/building-copilot-extensions
-export COPILOT_SDK_TOKEN="${COPILOT_SDK_TOKEN:?thieu token}"
-# Trong code: process.env.COPILOT_SDK_TOKEN, khong hardcode
-```
+> 📄 **Code ví dụ:** [`examples/07-5-copilot-sdk-la-gi-khi-nao-dung.sh`](examples/07-5-copilot-sdk-la-gi-khi-nao-dung.sh)
 
 > Tên/gói SDK đổi nhanh — đối chiếu docs mới nhất trước khi dùng.
 
@@ -106,10 +69,7 @@ export COPILOT_SDK_TOKEN="${COPILOT_SDK_TOKEN:?thieu token}"
 | Chi phí | Theo seat/plan | GitHub Actions minutes (ngoài AI Credits) |
 | Khi nào dùng | Bật mặc định mọi repo | Team có chuẩn review riêng |
 
-```bash
-# Web: Repo Settings -> Code security -> Copilot code review -> On
-gh pr view <NUM> --comments | head -40
-```
+> 📄 **Code ví dụ:** [`examples/08-6-code-review-tu-ong-bat-o-au.sh`](examples/08-6-code-review-tu-ong-bat-o-au.sh)
 
 **Ví dụ:** PR 200 dòng → bot comment 5 Minor → người chỉ soi 1 Major logic → review nhanh gấp đôi.
 
@@ -117,11 +77,7 @@ gh pr view <NUM> --comments | head -40
 
 **Trả lời 1 câu:** Khi máy khác không có IDE, review nhanh PR trên web, hỏi về repo public chưa clone — giới hạn: không sửa multi-file mượt như IDE, không có MCP local.
 
-```bash
-# Mo https://github.com/copilot -> chon repo context -> hoi:
-# "Tom tat PR #123 trong acme/api: doi gi, rui ro gi?"
-# Verify: được tóm tắt PR không cần clone
-```
+> 📄 **Code ví dụ:** [`examples/09-7-github-com-copilot-ban-web-dung-khi.sh`](examples/09-7-github-com-copilot-ban-web-dung-khi.sh)
 
 > Web còn assign coding agent + xem coding agent status (xem [bài 07](07-custom-agents-coding-agent-workflows.md)).
 
@@ -129,10 +85,7 @@ gh pr view <NUM> --comments | head -40
 
 **Trả lời 1 câu:** Dùng để **review + quyết định** (đọc issue/PR, hỏi về code, approve workflow runs) — không dùng để code; hợp on-call/di chuyển.
 
-```bash
-# GitHub Mobile -> Copilot tab -> chon repo -> hoi / review PR
-# Merge tu mobile khi: CI xanh + da doc diff summary cua bot
-```
+> 📄 **Code ví dụ:** [`examples/10-8-copilot-tren-mobile-dung-uoc-gi.sh`](examples/10-8-copilot-tren-mobile-dung-uoc-gi.sh)
 
 > Combo "giao việc khi làm việc (cloud agent), duyệt khi di chuyển (mobile)".
 
@@ -140,11 +93,7 @@ gh pr view <NUM> --comments | head -40
 
 **Trả lời 1 câu:** Chỉ auto-merge khi đủ 4 điều kiện: **scope trong issue + CI xanh hết + review bot không có Critical + không chạm migrations/infra** — cấu hình bằng branch protection (required checks) + `gh pr merge --auto`.
 
-```bash
-gh pr merge <NUM> --auto --squash --delete-branch
-gh pr checks <NUM>
-gh pr diff <NUM> --name-only | grep -Ei "migrations|infra|terraform" && echo "KHONG auto-merge" || echo "OK auto"
-```
+> 📄 **Code ví dụ:** [`examples/11-9-auto-merge-pr-agent-an-toan-the.sh`](examples/11-9-auto-merge-pr-agent-an-toan-the.sh)
 
 > Agent đã tốn AI Credits — auto-merge sai = trả tiền cho merge sai. Repo chưa có CI → không auto-merge bất kỳ PR nào.
 
@@ -152,9 +101,7 @@ gh pr diff <NUM> --name-only | grep -Ei "migrations|infra|terraform" && echo "KH
 
 **Trả lời 1 câu:** 4 metric/tháng: **tỉ lệ PR agent merge không sửa**, **thời gian issue→merge**, **số comment bot có ích vs nhiễu**, **AI Credits tiêu thụ** (dashboard `github.com/settings/copilot`) — metric đỏ thì tune issue template + checklist review.
 
-```bash
-gh pr list --author "app/copilot" --state merged --limit 50 --json number,title,mergedAt | wc -l
-```
+> 📄 **Code ví dụ:** [`examples/12-10-o-hieu-qua-automation-metric-nao-ang.sh`](examples/12-10-o-hieu-qua-automation-metric-nao-ang.sh)
 
 **Ví dụ:** tháng 1: 20 PR agent, merge 8 (40%) → tune issue template → tháng 2: merge 13 (65%) → automation đáng tiền.
 

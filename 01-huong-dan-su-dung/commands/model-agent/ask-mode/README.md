@@ -30,12 +30,7 @@ Ba chế độ của Chat khác nhau ở mức quyền, đây là bảng để b
 
 ## Cách gọi (copy-paste)
 
-```bash
-Chat → dropdown mode → Ask
-"#file:src/cache.ts — so sánh 2 cách cache, chưa cần sửa code"
-# Kỳ vọng: trả lời phân tích, không file nào bị đổi
-# Verify: git status sạch sau khi hỏi
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Không thấy **Ask** trong dropdown? Xem `/status` và plan trước khi kết luận lỗi — trên IDE của bạn menu có thể gộp nhóm như Ask / Plan / Agent.
 
@@ -43,12 +38,7 @@ Chat → dropdown mode → Ask
 
 Nghiệp vụ: bạn được giao sửa module auth của một repo lạ, muốn hiểu luồng login trước khi động vào.
 
-```bash
-# Ở Ask mode, gắn scope để nó đọc đúng chỗ
-(Ask) "@workspace đọc module auth trong src/auth/ và vẽ lại flow login bằng chữ,
-chỉ ra 3 rủi ro bảo mật lớn nhất. Không sửa file nào."
-# Verify: git status -> không có file nào thay đổi
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Một bản mô tả luồng login + danh sách rủi ro, đủ để bạn quyết bước tiếp theo; không file nào bị sửa.
 
@@ -58,15 +48,11 @@ chỉ ra 3 rủi ro bảo mật lớn nhất. Không sửa file nào."
 
 **❌ SAI — hỏi trong Ask mà không gắn scope, rồi tưởng Ask "dở":**
 
-```bash
-(Ask) "module auth hoạt động thế nào?"   # không đọc file -> trả lời generic
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — gắn scope ngay cả khi chỉ hỏi:**
 
-```bash
-(Ask) "@workspace src/auth/ hoạt động thế nào? Chỉ đọc, không sửa."
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Ask không sửa file, nhưng vẫn cần bạn chỉ cho nó đọc ở đâu. Scope là thứ quyết định chất lượng câu trả lời ở mọi mode.
 

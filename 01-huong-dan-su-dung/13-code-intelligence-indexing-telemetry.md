@@ -80,14 +80,7 @@ Có telemetry:    dashboard: agent mode × model mạnh = 70% AI Credits → bi�
 # → kỳ vọng: "không thấy / excluded". Đọc được key thật → exclusion hỏng, sửa paths.
 ```
 
-```bash
-# Repo settings tối ưu index (máy bạn):
-# 1. .vscode/settings.json — files.exclude + search.exclude cho node_modules, dist, .next, coverage.
-# 2. .gitignore sạch = index sạch (index theo git-tracked files):
-git check-ignore -v dist/bundle.js node_modules/.package-lock.json   # phải ra "ignored"
-# 3. Monorepo: chỉ mở package bạn làm (Add Folder to Workspace → apps/api) — index nhanh ~10x.
-# VS Code: Chat → @workspace hiện "indexing..." là đang build lần đầu (repo lớn: 10–30 phút).
-```
+> 📄 **Code ví dụ:** [`examples/01-3-bat-codebase-indexing-copy-paste.sh`](examples/01-3-bat-codebase-indexing-copy-paste.sh)
 
 ---
 
@@ -138,12 +131,7 @@ Knowledge base là tập docs ngoài code (markdown, wiki, ADRs, runbooks) đư�
 
 **Khi nào cần?** Team > 5 người, có ADRs/conventions, onboarding tốn 2 tuần vì "quy ước nằm trong đầu senior". Không có docs thì knowledge base rỗng — viết docs trước (ít nhất `copilot-instructions.md`, bài 03).
 
-```bash
-# Tạo (admin, github.com → Copilot → Knowledge bases):
-# 1. New knowledge base → chọn repos chứa docs (docs/, .github/, wiki)
-# 2. Đặt tên rõ: "backend-conventions", "payment-domain"
-# 3. Gán repos nào được dùng base này (đừng gán all — nhiễu chéo domain)
-```
+> 📄 **Code ví dụ:** [`examples/02-5-knowledge-bases-ky-uc-team-dung-chung.sh`](examples/02-5-knowledge-bases-ky-uc-team-dung-chung.sh)
 
 ```text
 # Dùng trong chat:
@@ -165,11 +153,7 @@ Copilot completions + chat đọc text; Language Server (LSP) hiểu types/symbo
 | Diagnostics sau sửa | Chờ chạy test | ✓ gạch đỏ live (Problems panel) |
 | Copilot hỏi "còn lỗi type?" | Không biết | ✓ đọc Problems panel |
 
-```bash
-# Bật LSP theo stack: TS (có sẵn) · Python (Pylance/Pyright) · Go (ext Go) ·
-# Rust (rust-analyzer) · Java (Extension Pack for Java):
-code --list-extensions | grep -i -E "pylance|go|rust-analyzer|redhat.java"
-```
+> 📄 **Code ví dụ:** [`examples/03-6-lsp-copilot-synergy.sh`](examples/03-6-lsp-copilot-synergy.sh)
 
 ```text
 # Workflow chuẩn task typed: @workspace định vị → F12 jump (def thật) →
@@ -219,22 +203,7 @@ Giới hạn phải thuộc lòng: **giữ 180 ngày** (cần lâu hơn → stre
 
 ### 7.4. OpenTelemetry export + budget controls (admin)
 
-```jsonc
-// managed-settings.json — Copilot bắn telemetry về endpoint OTLP của bạn:
-// {
-//   "telemetry": {
-//     "enabled": true,
-//     "endpoint": "https://otel.example.com/v1/traces",
-//     "protocol": "http/json",        // hoặc "http/protobuf"
-//     "captureContent": false,        // có gửi cả nội dung prompt?
-//     "lockCaptureContent": true,     // khóa để user không override
-//     "serviceName": "copilot-cli",
-//     "resourceAttributes": { "team": "payments" }
-//   }
-// }
-// Áp dụng cho: Copilot CLI, VS Code, Copilot app, cloud agent, JetBrains.
-// Verify: sau 1 phiên, log phải về đúng endpoint khai.
-```
+> 📄 **Code ví dụ:** [`examples/04-7-4-opentelemetry-export-budget-controls-admin.jsonc`](examples/04-7-4-opentelemetry-export-budget-controls-admin.jsonc)
 
 ```text
 Budget controls — chặn AI Credits chạy vượt (checklist admin):

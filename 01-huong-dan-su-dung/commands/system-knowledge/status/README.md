@@ -20,11 +20,7 @@ Vì phần lớn cảm giác "Copilot hỏng" thực ra là lỗi cấu hình: m
 
 ## Cách gọi (copy-paste)
 
-```bash
-/status
-# Kỳ vọng: thấy active/account/plan/model/MCP overview trong 30 giây
-# Verify: nói được "plan X, model Y, login Z"
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > Gõ `/` trong ô Chat để kiểm tra `/status` có trong list không. Không thấy thì xem plan/model trước khi kết luận là bug công cụ.
 
@@ -32,13 +28,7 @@ Vì phần lớn cảm giác "Copilot hỏng" thực ra là lỗi cấu hình: m
 
 Nghiệp vụ: bạn mới clone repo, gõ `/fix` mà không thấy lệnh đâu — cần biết máy mình đang ở đâu.
 
-```bash
-# 1. Chạy:
-/status
-# 2. Đọc kết quả, tự trả lời 3 câu:
-#    "plan gì? model nào? login account nào?"
-# 3. Nếu lệnh vắng mặt: đối chiếu plan + danh sách `/`
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** Thấy active/account/plan/model và MCP overview; bạn biết chính xác máy đang ở plan/model/account nào.
 

@@ -89,13 +89,7 @@ GPT-5.2-Codex GA 01/2026, GPT-5.3-Codex là bản Codex hiện hành trên VS Co
 
 ## 3. Model picker + auto tier
 
-```bash
-# Đổi model (3 chỗ):
-# 1. Chat view → model picker (dropdown góc dưới) → chọn mỗi chat mới.
-# 2. Inline completions: model riêng (settings: github.copilot.completions model).
-# 3. Coding agent (github.com assign issue): model chọn lúc tạo job.
-# Verify: chat mới header hiện đúng model đã chọn.
-```
+> 📄 **Code ví dụ:** [`examples/01-3-model-picker-auto-tier.sh`](examples/01-3-model-picker-auto-tier.sh)
 
 ```text
 Auto model selection — 2 hệ thống chạy song song:
@@ -120,13 +114,7 @@ Quy tắc đổi model tay (giữ 3 điều):
 3. Sau 1 tuần: dashboard model nào ngốn % (bài 13) → adjust default team.
 ```
 
-```jsonc
-// .vscode/settings.json — default cho team (commit; tên exact lấy từ picker hiện tại):
-{
-  "github.copilot.chat.model": "gpt-mini-tier",         // đặt đúng tên picker thực tế
-  "github.copilot.completions.model": "gpt-mini-tier"
-}
-```
+> 📄 **Code ví dụ:** [`examples/02-3-model-picker-auto-tier.jsonc`](examples/02-3-model-picker-auto-tier.jsonc)
 
 ---
 

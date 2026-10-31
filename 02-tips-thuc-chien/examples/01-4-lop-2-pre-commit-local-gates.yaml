@@ -1,0 +1,22 @@
+# .pre-commit-config.yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-added-large-files
+        args: ['--maxkb=500']
+      - id: check-merge-conflict
+  - repo: local
+    hooks:
+      - id: no-generated
+        name: Chặn sửa generated/
+        entry: bash -c 'git diff --cached --name-only | grep -q "src/generated/" && echo "BLOCKED: đừng sửa generated/" && exit 1 || exit 0'
+        language: system
+        always_run: true
+      - id: no-main-commit
+        name: Chặn commit thẳng main
+        entry: bash -c 'git rev-parse --abbrev-ref HEAD | grep -q "^main$" && echo "BLOCKED: không commit thẳng main" && exit 1 || exit 0'
+        language: system
+        always_run: true

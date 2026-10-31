@@ -29,11 +29,7 @@ Flow gọn gồm 4 chặng, mỗi chặng là một cơ hội bắt lỗi:
 
 ## Cách gọi (copy-paste)
 
-```bash
-Mở PR agent → đọc tóm tắt + CI → review diff → merge/revert
-# Kỳ vọng: merge xong staging chạy ổn, không nợ review
-# Verify: staging xanh sau merge; revert gọn nếu sai
-```
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
 > PR chưa có CI xanh? Đừng merge. Comment yêu cầu agent bổ sung/sửa rồi để CI chạy lại.
 
@@ -41,13 +37,7 @@ Mở PR agent → đọc tóm tắt + CI → review diff → merge/revert
 
 Nghiệp vụ: agent mở PR "rate-limit" từ issue #142. Bạn là người review nó.
 
-```bash
-# 1. Mở PR agent "rate-limit": kiểm branch + CI
-# 2. Đọc diff, thấy thiếu case biên
-Comment: "thiếu test cho nhánh IP vượt ngưỡng 5 lần/phút, bổ sung giúp"
-# 3. Agent bổ sung -> CI xanh lại
-# 4. Review lần cuối -> merge; theo dõi staging sau merge
-```
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
 
 **Kết quả mong đợi:** PR có tóm tắt rõ + CI xanh + một lượt review của người; merge sạch, hoặc revert gọn nếu có vấn đề.
 
@@ -57,17 +47,11 @@ Comment: "thiếu test cho nhánh IP vượt ngưỡng 5 lần/phút, bổ sung 
 
 **❌ SAI — tin tóm tắt rồi merge khi CI còn đỏ:**
 
-```bash
-# "Bot ghi đã thêm rate-limit, CI đỏ chắc do flaky" -> merge
-# -> bug lọt lên staging
-```
+> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **✅ ĐÚNG — CI xanh trước, đọc diff trước, rồi mới merge:**
 
-```bash
-# CI đỏ -> Comment yêu cầu agent sửa -> CI xanh lại
-# Đọc diff -> thấy ổn -> merge -> theo dõi staging
-```
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
 
 **Bài học:** Tóm tắt của agent giúp bạn đọc nhanh, không thay bạn đọc diff. CI đỏ là cửa chặn, không phải phiền toái.
 
