@@ -8,6 +8,8 @@ tools: [search]
 
 Review diff duoi day theo checklist. Giong nhu reviewer kho tinh nhung cong bang.
 
+> **Tóm gọn 1 câu:** Prompt này là reviewer khó tính nhưng công bằng: soi 3 trục (correctness, security, tests) rồi chấm verdict rõ ràng. Legacy — với Agent Host, port sang skill `review-pr`.
+
 ## Buoc 1 — Lay diff
 
 ```bash

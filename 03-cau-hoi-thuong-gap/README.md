@@ -20,7 +20,11 @@ Coi nhóm này như một tủ thuốc, không phải cuốn sách để đọc 
 | 10 | CI, SDK, review, Web | [10-ci-sdk-review-web.md](./10-ci-sdk-review-web.md) |
 | 11 | Copilot Spaces, Spark, Workspace | [11-spaces-spark-workspace.md](./11-spaces-spark-workspace.md) |
 
+> **Cách đọc bảng này:** dọc cột **#** là danh mục 11 "ngăn thuốc", cột **Chủ đề** cho biết mỗi ngăn chữa gì — tìm đúng chủ đề rồi mở link, không cần đọc lần lượt từ 01 tới 11.
+
 ## Gặp lỗi X → đọc bài nào?
+
+Mục này là bàn phân loại tiếp nhận: kể triệu chứng, được chỉ ngay ngăn thuốc cần mở — đừng tự chẩn đoán trước khi tra.
 
 Không cần đọc từ đầu: bắt đúng triệu chứng bạn đang gặp, rồi nhảy thẳng tới bài tương ứng.
 
@@ -46,6 +50,8 @@ Không cần đọc từ đầu: bắt đúng triệu chứng bạn đang gặp,
 | Cấu hình MCP | `.vscode/mcp.json` (CLI 2026: `~/.mcp-config.json` + `.mcp.json`) | `.mcp.json` + cấu hình user | Cùng chuẩn giao thức, khác đường dẫn |
 | Tài khoản & quota | Gói cá nhân/team + AI Credits (1 credit = $0.01) | Theo gói Claude/subscription hoặc API key | Đơn vị đo khác nhau — đọc bài 01/02 để tính |
 | Debug lỗi | Bảng lỗi + thứ tự debug 7 bước (bài 08) | Log phiên terminal + docs troubleshooting Anthropic | Thứ tự "auth → mạng → version → phiên mới" gần giống nhau |
+
+> **Tóm gọn 1 câu:** Nhóm FAQ là tủ thuốc gia đình: triệu chứng gì tra đúng ngăn đó, uống đúng liều ("Trả lời 1 câu" trước, steps sau) — tự khỏi thì khỏi mất công đi khám.
 
 > **Đọc bảng này thế nào:** phần lớn khái niệm chuyển gần 1-1 (luật trong repo, MCP, slash command), chỉ khác *tên file* và *bề mặt chạy*. Điểm khác đáng nhớ: Copilot có sẵn bảng lỗi + chỉ báo trực quan (status bar) trong khi Claude Code terminal-first — lỗi hiện ngay nơi bạn gõ lệnh.
 

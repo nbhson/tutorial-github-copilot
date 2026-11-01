@@ -8,6 +8,8 @@
 | Edit (chỉnh sửa) | Sửa file trong scope bạn chỉ định | Sửa 1 vài file cụ thể |
 | Agent (tự hành động) | Đọc + sửa nhiều file + chạy lệnh (có approval) | Task multi-file, refactor, feature |
 
+> **Cách đọc bảng này:** ba dòng xếp theo "quyền hành động" tăng dần — Ask là người chỉ nói, Edit là người sửa đúng chỗ được chỉ, Agent là người tự đi khắp nhà; chọn mode thấp nhất còn làm nổi việc là tiết kiệm nhất.
+
 ---
 
 ## 1. Ask / Edit / Agent khác nhau gì?
@@ -26,6 +28,8 @@
 
 **Trả lời 1 câu:** Approval = Copilot xin phép trước khi chạy tool nhạy cảm (terminal, mạng, MCP) — Allow once / Allow for workspace / Deny.
 
+Giống hệt bảo vệ tòa nhà xin giấy ra vào: "cho vào lần này" (Allow once), "cho vào cả năm ở tòa này" (Allow for workspace), hoặc "đừng bao giờ cho thằng này vào" (Deny) — chênh nhau ở phạm vi bạn tin.
+
 | Lựa chọn | Nghĩa | Nhớ cho lần sau? | Khi nào dùng |
 |---|---|---|---|
 | Allow once | Cho chạy 1 lần | Không | Lệnh hiếm gặp, chưa chắc an toàn |
@@ -39,6 +43,8 @@
 ## 3. Content exclusion là gì, cấu hình ở đâu?
 
 **Trả lời 1 câu:** Content exclusion = danh sách path Copilot **không được đọc/không gợi ý** (VD `*.pem`, `secrets/`), có 2 mức: cá nhân (`.vscode/settings.json`) và org (admin) — mức org thắng.
+
+Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến chân ranh giới là nó dừng, không nhìn thấy gì bên trong — nhưng nếu kho báu đã từng bị chụp hình đưa ra ngoài (đã commit vào git) thì rào này vô dụng.
 
 > 📄 **Code ví dụ:** [`examples/03-3-content-exclusion-la-gi-cau-hinh-o.json`](examples/03-3-content-exclusion-la-gi-cau-hinh-o.json)
 
@@ -138,6 +144,8 @@
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)
 
+Đi lần lượt 5 bước dưới đây như đi from ngoài vào trong: kiểm tra mình đang cho nó quyền gì trước, rồi mới kiểm tra thứ đã bị chặn.
+
 1. Check đang ở mode nào (Ask/Edit/Agent) — đúng mode chưa.
 2. Xem approval history: có Deny nhầm lệnh cần thiết không.
 3. Check org policy có đè setting không (hỏi admin).
@@ -145,3 +153,5 @@
 5. Vẫn kẹt → chat mới + prompt ghi rõ phạm vi file + lệnh được chạy.
 
 Tham khảo chéo: [bài 04](04-mcp-faq.md) (MCP approval) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 07](07-custom-agents-coding-agent-workflows.md) (agent workflows) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (exclusion).
+
+> **Tóm gọn 1 câu:** Mode là cấp bậc quyền hạn: Ask chỉ nói, Edit sửa đúng chỗ được giao, Agent tự do hành động — trao quyền càng nhiều, lưới an toàn (approval, exclusion) càng phải khít.

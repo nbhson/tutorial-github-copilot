@@ -18,6 +18,8 @@
 
 **1 câu:** 1 lớp bảo mật luôn có lỗ — defense-in-depth là xếp 5 lớp chồng nhau, lớp này trượt thì lớp sau đỡ. **Nôm na:** nhà 5 ổ khóa — trộm phá được cổng thì kẹt cửa, phá cửa thì kẹt két, phá két thì camera + bảo vệ vẫn thấy.
 
+> **Tóm gọn 1 câu:** Defense-in-depth là năm lớp cửa chồng nhau — không lớp nào tin được một mình, nhưng phá hết cả năm thì kẻ xấu cũng phải toát mồ hôi.
+
 ```text
 Không stack:  Copilot đọc .env → gợi ý key vào code → push lên GitHub → lộ 6 tháng mới biết
 Có stack:     T1 chặn .env khỏi index → trượt? T2 push protection chặn push →
@@ -28,6 +30,8 @@ Có stack:     T1 chặn .env khỏi index → trượt? T2 push protection ch�
 
 ## 2. Bản đồ 5 tầng
 
+Mục này nói về bản đồ tổng thể của cả stack — đọc một lượt để biết mỗi tầng chặn gì, đứng ở đâu và ai sở hữu trước khi đi vào chi tiết từng tầng.
+
 | Tầng | Chặn gì | Ở đâu | Ai sở hữu |
 |---|---|---|---|
 | **1. Exclusion + duplication** | Copilot đọc file nhạy cảm; gợi ý copy code có license | Copilot settings (org/repo — Business/Enterprise) | Admin + team lead |
@@ -35,6 +39,8 @@ Có stack:     T1 chặn .env khỏi index → trượt? T2 push protection ch�
 | **3. Code scanning (CodeQL)** | SQLi, XSS, path traversal... | PR checks + `github/codeql` | Team fix, CI chặn |
 | **4. Copilot code review gate** | Bug/logic mà máy + mắt người sót | PR review + required checks | Reviewer + maintainer |
 | **5. Policy + audit** | Ai đổi 4 tầng trên, ai dùng gì | Org/enterprise policy + audit log (180 ngày) | Admin |
+
+> **Cách đọc bảng này:** đọc cột "Tầng" từ 1 tới 5 như thứ tự nước đi — càng lên cao càng gần con người; cột "Ai sở hữu" cho biết khi tầng đó trượt thì phải gọi ai.
 
 ```mermaid
 flowchart TD
@@ -53,6 +59,8 @@ flowchart TD
 ---
 
 ## 3. Tầng 1 — Exclusion + duplication detection
+
+Mục này nói về tầng gần Copilot nhất: không cho nó *nhìn thấy* file nhạy cảm ngay từ khâu index — đọc để chốt checklist paths và chọn mode duplication đúng ý legal.
 
 ```text
 # Checklist admin (github.com → Org Settings → Copilot → Content exclusion).
@@ -75,9 +83,13 @@ flowchart TD
 # ghi "# adapted from <url> (MIT)" nếu giữ ý tưởng.
 ```
 
+> **Tóm gọn 1 câu:** Tầng 1 là "không cho Copilot nhìn thấy" — file nhạy cảm ra khỏi index thì gợi ý hỏng cũng không còn nguyên liệu để hỏng.
+
 ---
 
 ## 4. Tầng 2 — Secret scanning + push protection
+
+Mục này nói về chốt chặn lúc push — đọc để bật đủ 2 nút (scanning + push protection) và hiểu vì sao chặn sớm rẻ hơn truy vết sau.
 
 ```text
 # Bật (github.com → Org/Repo Settings → Code security — 5 phút):
@@ -89,9 +101,13 @@ flowchart TD
 
 > 📄 **Code ví dụ:** [`examples/03-4-tang-2-secret-scanning-push-protection.sh`](examples/03-4-tang-2-secret-scanning-push-protection.sh)
 
+> **Tóm gọn 1 câu:** Push protection là chốt cửa giữ key ngay trên thảm — chưa kịp rời máy đã bị chặn, đỡ hơn truy vết và xoá lịch sử git sau này gấp mười lần.
+
 ---
 
 ## 5. Tầng 3 — Code scanning + CodeQL
+
+Mục này nói về kiểm định tự động cho code — đọc để bật default setup trong 5 phút và fix alert đúng cách (fix gốc, không suppress cho qua).
 
 ```text
 # Bật default setup (5 phút, hiệu quả/giờ cao nhất):
@@ -112,7 +128,11 @@ flowchart TD
 # Severity high/critical: fix trước khi merge, không "để sprint sau".
 ```
 
+> **Tóm gọn 1 câu:** CodeQL là kiểm định viên độc lập đọc từng PR — lỗ hổng quen thuộc bị gắn cờ trước khi kịp merge, còn suppress là xé tem kiểm định.
+
 ## 6. Tầng 4 — Copilot code review gate
+
+Mục này nói về gate cuối cùng trước merge: máy review trước, người chốt sau — đọc để biết cách đọc review Copilot đúng mức tin cậy và chi phí AI Credits.
 
 ```text
 # LỚP MÁY — Copilot code review:
@@ -145,9 +165,13 @@ flowchart TD
 #    sai ghi lý do bác."
 ```
 
+> **Tóm gọn 1 câu:** Tầng 4 ghép máy với người — Copilot review như junior nhiệt tình (đúng ~70%), nên nó hỗ trợ còn quyết định approve vẫn là mắt người.
+
 ---
 
 ## 7. Tầng 5 — Policy + audit (khóa cửa)
+
+Mục này nói về tầng khoá cuối: policy chốt cấu hình và audit log ghi lại ai đã đụng gì — đọc để rà định kỳ thay vì dựng xong là quên.
 
 ### 7.1. Policy checklist (admin, rà hàng quý)
 
@@ -188,9 +212,13 @@ flowchart TD
 # 3. Vá 1 tầng yếu nhất (10 phút — ghi team log, cùng nhịp bài 13 mục 7.3)
 ```
 
+> **Tóm gọn 1 câu:** Tầng 5 là sổ kho và khóa chính — policy giữ cấu hình không bị trôi, audit log là camera quay lại ai đã đổi gì trong 180 ngày.
+
 ---
 
 ## 8. Walkthrough verify 20 phút + pitfalls
+
+Mục này nói về cách verify cả 5 tầng bằng tay thật và các pitfall từng team mắc — đọc để có một buổi checklist 20 phút cho stack của mình.
 
 > 📄 **Code ví dụ:** [`examples/07-8-walkthrough-verify-20-phut-pitfalls.sh`](examples/07-8-walkthrough-verify-20-phut-pitfalls.sh)
 
@@ -206,6 +234,8 @@ flowchart TD
 | Tưởng audit log chứa prompt | Prompt phải tự gắn hook log riêng; audit giữ 180 ngày |
 | Firewall chặn thiếu domain Copilot | Dùng network allowlist chuẩn, không mở wildcard |
 
+> **Cách đọc bảng này:** mỗi dòng là một cách stack tự bung nắp — cột "Pitfall" là chuyện xảy ra, cột "Fix" là thói quen cần có; chạy walkthrough trên repo thật rồi đối chiếu xem mình đang rơi vào dòng nào.
+
 **Bài tập nhỏ:** (1) Verify exclusion + pre-commit hook; thử lửa push protection bằng fake key; hỏi admin duplication mode team. (2) Mở Security tab liệt kê alerts theo severity; fix 1 alert bằng prompt mẫu; dùng mẫu 3 phân loại comment Copilot review. (3) Audit log 3 filters; viết new-repo checklist 5 tầng cho team; đặt calendar rà quý + owner từng tầng.
 
 ---
@@ -219,6 +249,8 @@ flowchart TD
 | Code scanning | CodeQL gắn sẵn PR checks | SAST riêng trong CI |
 | Review gate | Copilot review + required reviewers | Tự review hoặc dựng CI |
 | Policy as code | `managed-settings.json` + audit log | `.claude/settings.json` permissions |
+
+> **Cách đọc bảng này:** so từng "Việc" giữa hai cột — Copilot mạnh ở tầng hệ sinh thái GitHub có sẵn; Claude Code thì những tầng tương đương phải tự dựng bằng quyền, hook và CI.
 
 > Copilot mạnh ở hệ sinh thái GitHub (Advanced Security + CodeQL + audit log) nên 5 tầng gắn liền nhau; Claude Code phải tự dựng bằng quyền, hook và CI.
 

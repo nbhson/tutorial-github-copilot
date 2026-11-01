@@ -18,6 +18,8 @@ Khác với gõ tên file bằng chữ ("hàm trong login.ts"): attach đưa **n
 
 **Nếu làm sai thì sao?** Hai cực đều hại: (1) quên attach nên model đoán mò; (2) attach cả repo nên chậm và tốn token. Thêm rủi ro âm thầm: attach file chứa token mà không soát. Xem ❌/✅ và bảng chọn cách gắn scope.
 
+> **Tóm gọn 1 câu:** Attach/`#file` là đưa nguyên liệu thật vào tay model — kẹp đúng 1–3 file liên quan thì câu trả lời trúng mà không đốt token thừa.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** mọi prompt về code (bắt buộc gắn scope); muốn model đọc đúng file thay vì đoán; cần đính kèm ảnh lỗi UI hoặc log terminal.

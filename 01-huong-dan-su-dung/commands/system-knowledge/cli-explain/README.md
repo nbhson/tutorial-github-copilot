@@ -52,6 +52,8 @@ Nghiệp vụ: bạn copy một lệnh dọn log từ một script trên mạng,
 | Lệnh dài vẫn chạy mù | Lười đọc | Bắt giải thích từng flag + thử trên copy/thư mục test |
 | Copy lệnh mạng về chạy | Không verify | explain + tra docs chính thức trước |
 
+> **Cách đọc bảng này:** ba dòng là ba kiểu "chạy mù" quen thuộc; tìm đúng dòng giống hoàn cảnh của bạn, lấy Fix làm quy trình cho lần sau.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (`gh copilot explain`) | Claude Code | Ghi chú |
@@ -59,6 +61,10 @@ Nghiệp vụ: bạn copy một lệnh dọn log từ một script trên mạng,
 | Giải thích lệnh shell | gh extension, giải thích từng flag + rủi ro | Là agent đầy đủ trong terminal | Khác mục đích: một cái dịch lệnh, một cái làm việc |
 | Chạy lệnh | Bạn tự chạy sau khi hiểu | Agent chạy trong terminal | Copilot tách "hiểu" khỏi "chạy" → bạn kiểm soát hơn |
 | Kiểm chứng | Bạn thử trên copy/test rồi nói lại rủi ro | Bạn review lệnh agent đề xuất | Cả hai: bạn vẫn là người chịu trách nhiệm cuối |
+
+> **Cách đọc bảng này:** dòng nào cũng xoay quanh một ranh giới — "hiểu" tách khỏi "chạy"; đọc cột Ghi chú để thấy vì sao sự tách đó là lợi thế.
+
+> **Tóm gọn 1 câu:** Đây là "phiên dịch trước, ký giấy sau" — dịch hết từng flag, hiểu rõ rủi ro rồi mới dán chữ ký bằng phím Enter.
 
 ## Best practices (kèm "vì sao")
 

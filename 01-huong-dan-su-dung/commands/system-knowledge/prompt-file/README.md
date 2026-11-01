@@ -26,6 +26,8 @@ Một việc lặp lại gõ tay 5 lần thì 3 lần bạn sẽ quên một bư
 | `/prompts` (legacy) | `.github/prompts/*.prompt.md` | Repo cũ còn dùng, bạn chủ động gõ tên prompt |
 | `/skills` (ưu tiên) | `.github/skills/<ten>/SKILL.md` | Muốn model tự kích hoạt, chạy mọi harness |
 
+> **Cách đọc bảng này:** hai dòng là thế hệ cũ và mới của cùng một nhu cầu; cột "Khi nào dùng" nói rõ dòng nào chỉ giữ lại cho repo cũ — việc mới thì đọc dòng dưới trước.
+
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
@@ -68,6 +70,8 @@ Bạn lưu review-checklist.txt ở Desktop, đồng nghiệp lưu bản khác �
 | Prompt trả lời chung chung | Thiếu tiêu chí “thế nào là xong” | Thêm checklist xong-việc vào thân prompt |
 | Ai cũng tự chế prompt riêng | Chưa có chuẩn team | Gom prompt hay vào repo, xóa bản lẻ |
 
+> **Cách đọc bảng này:** ba dòng là ba bước xuống dốc của prompt rời rạc — không hiện, trả lời loè loẹt rồi mỗi người một kiểu; cột Fix đều đưa về một nơi duy nhất: trong repo.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (`/prompts`, legacy) | Claude Code | Ghi chú |
@@ -75,6 +79,8 @@ Bạn lưu review-checklist.txt ở Desktop, đồng nghiệp lưu bản khác �
 | Lệnh tái dùng gọi tay | Prompt file `.github/prompts/*.prompt.md`, gõ `/ten` | Slash command `.claude/commands/*.md`, gõ `/ten` | Cùng ý tưởng; khác thư mục và đuôi file |
 | Tự nạp khi khớp ngữ cảnh | Không (phải gõ tên) | Có — Agent Skills `SKILL.md` | Đây là lý do 2026 Copilot chuyển sang `/skills` |
 | Trạng thái 2026 | Legacy — deprecated cho Agent Host | `.claude/commands/` vẫn là cách chính | Việc mới nên port sang `SKILL.md` |
+
+> **Tóm gọn 1 câu:** Prompt file là "công thức in giấy" — bạn tự lật tự gọi; nó vẫn nấu được món cũ, nhưng món mới thì nên ghi vào sổ tay skill để model tự mở.
 
 ## Best practices (kèm "vì sao")
 

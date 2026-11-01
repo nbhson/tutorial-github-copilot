@@ -18,6 +18,8 @@ Giá trị thật của một phiên chat thường nằm ở **đoạn giữa**
 
 **Nếu làm sai thì sao?** Rủi ro lớn nhất là **lọt secrets**: nếu bạn từng attach file chứa token rồi export nguyên, file markdown sẽ mang theo token đó. Ngoài ra chat 50+ turns export thẳng sẽ thành file khó đọc. Xem ❌/✅ và bảng lỗi.
 
+> **Tóm gọn 1 câu:** `/export` biến cuộc trò chuyện thành file chia sẻ được — và vì thứ gì trong chat cũng đi ra file, hãy soát secrets trước khi bấm.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** chat ra kết quả hay muốn lưu cho team; cần gửi context cho người khác tiếp tục; sắp `/new` hoặc `/clear` mà còn việc dở.

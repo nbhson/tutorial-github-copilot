@@ -18,6 +18,8 @@ Giao cho agent sửa nhiều file là con dao hai lưỡi: nhanh, nhưng một t
 
 **Nếu làm sai thì sao?** Ngộ nhận nguy hiểm nhất là tưởng agent sửa gì cũng "không sao, undo được". Không phải: nếu không có checkpoint (phiên quá ngắn, tính năng tắt), hoặc checkpoint quá xa, restore có thể xóa luôn cả phần đúng. Xem ❌/✅ và bảng chọn cách quay lui.
 
+> **Tóm gọn 1 câu:** Checkpoint là nút Undo cho cả phiên agent — nhưng mốc chắc nhất vẫn là một commit git bạn tự giăng trước khi giao việc.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** agent sửa lan man và càng sửa càng rối; muốn thử hai hướng khác nhau từ cùng một điểm; chuẩn bị giao task mạo hiểm.

@@ -2,6 +2,10 @@
 
 Khuôn này thay cách viết template cũ. Mục tiêu: mỗi file đọc như **một người giải thích cho bạn**, không phải máy liệt kê. Lấy cảm hứng từ `tutorial-react/3_react-tutorial/0-react-explore/README.md` (khái niệm đi kèm "vì sao quan trọng" + "nếu làm sai thì sao").
 
+Nôm na: nếu nội dung là gạch và vữa, thì khuôn này là cách bưng bê — cùng một đống vật liệu, bày theo kiểu "người ngồi đối diện giải thích" thì người đọc mới thực sự thấm, còn xếp kiểu "máy liệt kê" thì đọc xong chẳng nhớ gì.
+
+> **Tóm gọn 1 câu:** Mọi file viết theo khuôn 3 lớp "nói nó là gì → so đời thường → cho ví dụ sờ được", kèm vì sao quan trọng và làm sai thì sao.
+
 ## 1. Nguyên tắc vàng (áp cho MỌI file)
 
 1. **Ba lớp cho mỗi khái niệm then chốt:**
@@ -151,3 +155,5 @@ Quay về: [README.md](README.md) · Bài tổng: [...]
 - [ ] Không còn câu template trong danh sách "từ cấm".
 - [ ] Câu chốt cuối file là câu riêng của file này.
 - [ ] Không mất thông tin so với bản cũ (đối chiếu nhanh).
+
+> **Tóm gọn 1 câu:** Checklist này là máy soi trước khi xuất xưởng — file nào qua được cả 7 ô là file đọc như người nói chuyện, không còn "mùi robot".

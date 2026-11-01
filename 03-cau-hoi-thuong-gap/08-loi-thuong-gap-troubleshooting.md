@@ -17,11 +17,15 @@
 | Nghi policy chặn | 9 | Hỏi admin Policies tab |
 | Không rõ nguyên nhân | 10 | Thứ tự debug tổng |
 
+> **Cách đọc bảng này:** đây là "quầy lễ tân" của bài — dọc cột **Triệu chứng** tìm đúng cái đang thấy trên máy, cột **Câu** chỉ bạn nhảy thẳng tới mục đó, cột **Fix 1 dòng** là cứu cánh nhanh khi đang gấp.
+
 ---
 
 ## 1. Copilot báo Offline — vì sao, fix sao?
 
 **Trả lời 1 câu:** "Offline" = extension không nối được server GitHub — 4 nguyên nhân: mất mạng, proxy/firewall chặn, token hết hạn, GitHub incident.
+
+Giống điện thoại mất sóng: có thể do bạn ở trong hầm (proxy/firewall), do sim hết hạn (token), hoặc do nhà mạng sập (incident) — lần lượt loại trừ, đừng đổ lỗi cho cái máy ngay.
 
 > 📄 **Code ví dụ:** [`examples/01-1-copilot-bao-offline-vi-sao-fix-sao.sh`](examples/01-1-copilot-bao-offline-vi-sao-fix-sao.sh)
 
@@ -44,6 +48,8 @@
 | `quota exhausted` | Hết AI Credits | Đổi model nhẹ, chờ reset (check `github.com/settings/copilot`) |
 | `model unavailable` | Model incident hoặc org tắt | Đổi model khác trong picker |
 | `something went wrong / 500` | Lỗi tạm phía server | Chat mới; còn lỗi thì chờ + xem githubstatus |
+
+> **Cách đọc bảng này:** dọc cột **Message** tìm đúng dòng chữ đỏ bạn vừa thấy trong chat, cột **Nghĩa** dịch error ra tiếng người, cột **Cách xử nhanh** là việc làm ngay.
 
 > Đổi model + chat mới loại trừ 80% ca — đừng kết luận "Copilot sập" trước khi thử.
 
@@ -113,6 +119,8 @@ return res.status(400).json({ code: "BAD_INPUT", message, requestId });
 
 **Trả lời 1 câu:** Chạy đúng 7 bước theo thứ tự, dừng khi khỏi, không nhảy cóc:
 
+Ví von: đây là quy trình kiểm tra xe không nổ máy — xăng (auth) → nguồn (mạng) → phụ tùng (version) → chìa khóa (sign-in); cứ đi theo thứ tự, hết bệnh ở bước nào thì dừng ở đó.
+
 1. `gh auth status` + status bar IDE (auth?).
 2. Mạng: `curl api.github.com` + githubstatus.
 3. Version: IDE + extension mới nhất.
@@ -135,3 +143,5 @@ return res.status(400).json({ code: "BAD_INPUT", message, requestId });
 4. Business/Enterprise → Support ticket kèm đủ 3 thứ ở bước 2.
 
 Tham khảo chéo: [bài 01](01-tai-khoan-pricing-cai-dat.md) (auth/seat) · [bài 02](02-model-context-premium.md) (quota/model) · [bài 04](04-mcp-faq.md) (MCP) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 05](05-policies-guardrails-faq.md) (policy).
+
+> **Tóm gọn 1 câu:** Troubleshooting Copilot là trò loại trừ có kỷ luật: auth → mạng → version → phiên sạch → config → policy — đi đúng trật tự thì ~90% ca tự gãy lộ ra nguyên nhân.

@@ -7,6 +7,8 @@ description: Dung khi user nho review PR, review diff, hoac kiem tra code truoc 
 
 Skill nay model TU goi khi user noi "review PR", "xem giup diff", "kiem tra truoc merge".
 
+> **Tóm gọn 1 câu:** Skill này như sổ tay để sẵn trên bàn: model tự giở đúng trang khi nghe từ "review PR", làm theo 3 bước, và trả kết quả theo khuôn 3 mức + verdict.
+
 ## Khi nao goi (model tu quyet dinh)
 
 - User nhac: review, PR, diff, "xem code giup", "on dinh chua de merge".

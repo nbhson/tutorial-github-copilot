@@ -20,13 +20,19 @@ Ba lựa chọn trong danh sách, chọn theo độ khó task:
 | Model mạnh | Chất lượng cao hơn, tốn nhiều AI Credits | Việc khó: agent, kiến trúc, debug lạ |
 | Auto | Copilot tự chọn model theo độ khó task | Khi chưa chắc — để Copilot cân, khỏi phải nghĩ |
 
+> **Cách đọc bảng này:** ba dòng xếp theo giá tăng dần; đọc theo cột "Khi nào dùng" để ghép với việc đang làm — nghi ngờ giữa hai mức thì chọn thấp hơn, chưa chắc hoàn toàn thì để Auto.
+
 **Nếu làm sai thì sao?** Đổi model không cứu được một prompt thiếu scope. Nếu câu trả lời dở vì bạn không nói rõ file/ngữ cảnh, thì model mạnh nhất cũng chỉ đoán mò — chỉ tốn thêm tiền.
+
+> **Tóm gọn 1 câu:** Đổi model là đổi bộ não, không phải chữa đề bài — đề thiếu scope thì bộ não xịn cỡ nào cũng chỉ đoán mò đắt tiền hơn.
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** việc nhẹ (explain/doc/ hỏi đáp) muốn dùng model rẻ cho đỡ tốn quota; việc khó (agent/kiến trúc/debug lạ) cần model mạnh; hoặc model đang chạy trả lời dở và bạn muốn thử "bộ não" khác.
 - **ĐỪNG đổi model khi:** bạn chưa gắn scope. Gọn ngữ cảnh trước (`#file`/`@workspace`), rồi mới tính đổi model.
 - **Cho ai:** mọi người dùng Chat — nhất là người tự trả tiền theo usage (AI Credits).
+
+> **Tóm gọn 1 câu:** Gọi bếp phụ cho món thường, gọi bếp trưởng cho món khách đặt — và nhớ nguyên tắc gốc: không model nào cứu được đề bài viết thiếu.
 
 ## Cách gọi (copy-paste)
 
@@ -58,13 +64,19 @@ Nghiệp vụ: bạn hỏi model rẻ cách tách module thanh toán thành even
 
 ## Lỗi thường gặp
 
+Câu trả lời vẫn dở dù đã đổi model? Ba ca dưới đây cho biết tại sao — tra theo Triệu chứng rồi áp Fix.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Đổi model mà vẫn dở | Vấn đề ở scope, không phải model | Gọn scope (`#file`) trước, đổi model sau |
 | Model cần không có trong list | Plan/BYOK gating | Hỏi admin plan + BYOK list |
 | Dùng model mạnh cho mọi việc | Tốn quota | Rẻ mặc định; mạnh chỉ khi khó |
 
+> **Cách đọc bảng này:** đọc theo hàng từ Triệu chứng → Fix; hàng đầu là cái bẫy phổ biến nhất — "đổi model" là phương thuốc hay bị kê sai khi bệnh nằm ở đề bài.
+
 ## So sánh với Claude Code
+
+Cũng dùng Claude Code? Bảng này đối chiếu triết lý chọn model của hai bên — một bên đa nhà, một bên một nhà, cùng nguyên tắc chi tiêu.
 
 | Việc | Copilot (`/model`) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -72,7 +84,11 @@ Nghiệp vụ: bạn hỏi model rẻ cách tách module thanh toán thành even
 | Tiêu chí chọn | Rẻ cho việc nhẹ, mạnh cho việc khó, hoặc Auto | Tùy model Anthropic bạn chọn | Cùng triết lý: đừng dùng model đắt cho việc rẻ |
 | Ghi nhớ lựa chọn | Đặt default model trong settings team | Cấu hình trong `settings.json` | Cả hai đều cho team chốt model mặc định |
 
+> **Cách đọc bảng này:** đọc theo hàng so khớp tư duy; cột Ghi chú nói khác biệt cốt lõi — số lựa chọn khác nhau nhưng nguyên tắc "việc rẻ dùng model rẻ" thì hai bên chung một đường.
+
 ## Best practices (kèm "vì sao")
+
+Bốn thói quen dưới đây giúp bill cuối tháng không gây sốc — mỗi thói quen kèm lý do.
 
 - **Rẻ làm mặc định, mạnh chỉ khi cần.** *Vì sao?* Giá chênh nhau nhiều lần; task giải thích code không cần model đắt nhất.
 - **Đổi model *sau* khi đã gắn scope.** *Vì sao?* Model mạnh vẫn đoán mò nếu thiếu ngữ cảnh — scope trước, model sau.

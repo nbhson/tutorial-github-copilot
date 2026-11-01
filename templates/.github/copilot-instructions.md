@@ -2,6 +2,8 @@
 
 > File này Copilot tự đọc mỗi lần gợi ý/chat. Giữ <200 dòng. Chi tiết theo path → `.github/instructions/`. Procedure dài → `.github/skills/` (prompt files deprecated — xem FAQ 06).
 
+> **Tóm gọn 1 câu:** Đây là "giấy dán đầu tủ lạnh" của repo: ngắn, đúng lệnh đã chạy thử tay, và rule hay bị quên thì đưa hẳn xuống NEVER/ALWAYS.
+
 ## Tech Stack
 - <Framework + version>, <Ngôn ngữ + version>, <DB>, <lib chính>
 - VD: NestJS 11, TypeScript 5.6 strict, Postgres 16, pnpm 9

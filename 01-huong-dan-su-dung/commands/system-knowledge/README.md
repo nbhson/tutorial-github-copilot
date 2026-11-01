@@ -28,6 +28,8 @@ Nhóm này là "phòng máy" của Copilot: rules mà nó nạp (`/instructions`
 | `gh copilot suggest` | Gợi ý lệnh CLI trong terminal (gh copilot) | [./cli-suggest/README.md](./cli-suggest/README.md) |
 | `gh copilot explain` | Giải thích lệnh CLI vừa chạy/gặp | [./cli-explain/README.md](./cli-explain/README.md) |
 
+> **Cách đọc bảng này:** bảng xếp lệnh theo nhóm mục đích (rules → mở rộng → riêng tư → tài khoản → báo lỗi → ngoài Chat); đọc cột "Mô tả 1 dòng" để định vị, thấy đúng lệnh thì bấm cột Chi tiết.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot | Claude Code |
@@ -43,6 +45,10 @@ Nhóm này là "phòng máy" của Copilot: rules mà nó nạp (`/instructions`
 | Báo lỗi cho nhà cung cấp | `/feedback + /bug` | `/bug` |
 | Hỏi tri thức nội bộ team | Knowledge base (docs/wiki/RAG) | Không có tương đương trực tiếp — thường cắm qua MCP |
 | Gợi ý/giải thích lệnh shell | `gh copilot suggest`, `gh copilot explain` | Không có tương đương trực tiếp — Claude Code là một agent CLI |
+
+> **Cách đọc bảng này:** mỗi dòng ghép một nhu cầu Copilot với đối thủ tương ứng; dòng ghi "không có tương đương trực tiếp" là chỗ hai công cụ khác tư duy thật sự — đó là phần đáng đọc kỹ nhất.
+
+> **Tóm gọn 1 câu:** Nhóm này là "phòng máy" của Copilot — cấu hình đúng một lần (rules, skills, MCP, quyền riêng tư), cả team hưởng ở mọi câu trả lời về sau.
 
 Quay về: [../README.md](../README.md) · Bài tổng: [../../04-chat-commands-toan-tap.md](../../04-chat-commands-toan-tap.md)
 

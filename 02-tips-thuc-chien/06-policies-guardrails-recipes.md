@@ -15,12 +15,16 @@ Không guardrails, Copilot sẽ: đụng `src/generated/`, đổi schema, commit
 
 ## 2. Cơ chế: 4 lớp phòng thủ sâu
 
+Mục này dựng thành phòng thủ nhiều tầng cho repo. Đọc bảng để hiểu mỗi lớp đứng ở đâu — ý tưởng giống cửa hàng có khóa tủ + camera + bảo vệ: lỡ một lớp vẫn còn lớp sau.
+
 | Lớp | Chặn ở đâu | Ví dụ | Ai giữ |
 |---|---|---|---|
 | 1 | Instructions (tự áp mọi turn) | copilot-instructions.md, *.instructions.md | Dev / team |
 | 2 | Local gates (máy bạn) | pre-commit, lint-staged, tool approval | Dev |
 | 3 | Remote gates (GitHub) | Branch protection, required checks, CODEOWNERS | Org / maintainer |
 | 4 | Tool/MCP approval | Hỏi trước khi chạy lệnh/MCP | Dev / org policy |
+
+> **Cách đọc bảng này:** đọc từ lớp 1 lên lớp 4 theo độ "cứng" tăng dần — càng xuống dưới càng chặn thật chứ không chỉ dặn miệng; cột **Ai giữ** cho biết ai phải có tay dựng lớp đó.
 
 ```text
 Instructions dặn đừng → local gate chặn nếu vẫn làm → CI gate chặn nếu lọt → review người chốt.
@@ -29,9 +33,11 @@ Lọt 1 lớp không sao, còn 3 lớp sau.
 
 Cảnh báo hay gặp nhất: viết "đừng chạy `rm -rf`" vào instructions rồi tin là chặn được — không, instructions chỉ *dặn miệng*, phải có **tool approval** mới chặn thật lúc lệnh sắp chạy.
 
+> **Tóm gọn 1 câu:** Guardrails là thành trì nhiều tầng: chữ viết là cổng ngoài, git hook là tường, CI là hào, approval là ô cửa sổ cuối cùng — lọt tầng này còn tầng kia.
+
 ## 3. Lớp 1: instruction enforcement
 
-Lớp rẻ nhất, mềm nhất — nó chỉ "dặn", model vẫn có thể quên, đừng giao việc sống còn cho mỗi lớp này.
+Lớp rẻ nhất, mềm nhất — ví von cho dễ hình dung: nó là tấm biển "xin đừng bấm chuông", người lịch sự sẽ tuân nhưng không ai bắt buộc được. Nó chỉ "dặn", model vẫn có thể quên, đừng giao việc sống còn cho mỗi lớp này.
 
 **Recipe 1 — copilot-instructions.md cấm địa (copy-paste):**
 
@@ -69,6 +75,8 @@ applyTo: "src/payments/**"
 **Recipe 3 — Prompt files có gate sẵn:** file `.prompt.md` (mode: agent) mở đầu bằng "Đọc plan.md, liệt kê files sẽ sửa — file ngoài plan → hỏi trước" và kết thúc bằng gate chạy test/lint/build + `git diff --stat` lệch scope thì dừng. Chi tiết xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 
 ## 4. Lớp 2: pre-commit + local gates
+
+Mục này dựng chốt chặn ngay trên máy bạn — nơi bắt lỗi sớm và rẻ nhất. Hãy hình dung như chỗ cân hành lý ở sân bay: soi ở quầy thì mở valy sửa 2 phút, để lên máy bay mới phát hiện thì khổ gấp mười.
 
 Nguyên tắc: **gate nhanh để ở local, gate nặng để cho CI** — bắt local chờ 10 phút mỗi commit là dev sẽ lách bằng `--no-verify`.
 
@@ -130,7 +138,9 @@ GitHub Org → Copilot → Policies:
 
 ## 6. Lớp 4: MCP / tool approval
 
-MCP mở đường ra thế giới ngoài (DB, deploy, web) — cũng là nơi dễ rò secret nhất. Nguyên tắc: **mặc định từ chối, chỉ mở đúng cái cần.**
+Mục này nói về cánh cửa cuối cùng trước thế giới ngoài: MCP và lệnh terminal. MCP mở đường ra DB, deploy, web — cũng là nơi dễ rò secret nhất. Nguyên tắc: **mặc định từ chối, chỉ mở đúng cái cần.**
+
+> **Tóm gọn 1 câu:** MCP là cửa sau của ngôi nhà: chốt cửa mặc định, chỉ mở đúng người quen cần vào — cả nhà không cần chìa khóa mọi cánh cửa.
 
 **Recipe 10 — Prune MCP + approval hỏi trước (mỗi tháng 1 lần):**
 
@@ -177,6 +187,8 @@ Instructions thêm:
 | MCP bật 12 servers | Chọn sai tool, tốn requests | ≤6 servers, tắt cái 2 tuần không dùng |
 | Guardrails chỉ trên máy bạn | Người khác vẫn đi lạc | Commit instructions/prompts/CI vào repo (xem Tips 09) |
 | Secret lọt vào chat | Rò rỉ token | Recipe 11 + gitignore + review PR |
+
+> **Cách đọc bảng này:** quét cột **Pitfall** xem bạn đang mắc ca nào, cột **Triệu chứng** giúp xác nhận đúng bệnh, cột **Fix** trỏ về recipe đúng để dựng lại chốt chặn.
 
 Bài học lớn nhất: **guardrail bị bypass còn tệ hơn không có** — siết quá chặt ngay từ đầu khiến team lách bằng `--no-verify`, chọn độ chặt sao cho team chịu đi qua nó.
 

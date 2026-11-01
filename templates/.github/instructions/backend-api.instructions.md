@@ -7,6 +7,8 @@ description: Chuan backend API (NestJS/Express + Postgres). Tu dong ap khi sua f
 
 Ap dung cho moi file khop `apps/api/**/*`.
 
+> **Tóm gọn 1 câu:** File này là nội quy bếp backend — tự động áp cho mọi file trong `apps/api/`, và 3 dòng NEVER ở cuối là luật sắt không ngoại lệ.
+
 ## Error shape (bat buoc — copy pattern nay)
 
 ```ts

@@ -12,11 +12,15 @@ Refactor là việc đúng nhưng dễ phá thứ đang chạy: đổi cấu tr�
 
 **Nếu làm sai thì sao?** Hai mặt trái. Một là **refactor kèm đổi hành vi**: test đỏ mà bạn tưởng chỉ là "dọn dẹp", thực ra đã phá logic. Hai là **tách quá vụn**: chuỗi hàm 1 dòng nối nhau, đọc còn mệt hơn bản gốc. Và đừng bao giờ vừa refactor vừa thêm tính năng — trộn 2 việc thì không review nổi cái nào (xem mục ❌/✅).
 
+> **Tóm gọn 1 câu:** `/refactor` là người sắp lại đồ trong nhà mà không vứt món nào — test xanh trước và sau chính là biên bản kiểm kê.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** hàm/file quá dài muốn tách nhỏ, code trùng ở 3 chỗ muốn gom 1, hoặc đổi tên/tách module nhưng giữ behavior.
 - **ĐỪNG dùng khi:** bạn muốn *thêm tính năng* (làm riêng 1 commit), hoặc đoạn code chưa có test bao — viết test trước (`/tests`) rồi hãy refactor.
 - **Cho ai:** dev dọn code định kỳ, người tách hàm/file quá dài.
+
+> **Tóm gọn 1 câu:** Có lưới an toàn (test) mới dọn nhà được — không test thì việc "dọn gọn" của bạn chỉ là đổi chỗ cho bug nấp.
 
 ## Cách gọi (copy-paste)
 
@@ -48,13 +52,19 @@ Nghiệp vụ: `processCheckout()` đã phình lên 100 dòng, khó đọc, như
 
 ## Lỗi thường gặp
 
+Kết quả refactor chưa đạt? Ba ca dưới đây là những vấp phổ biến nhất — tra theo Triệu chứng rồi áp Fix.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Refactor đổi luôn behavior | Thiếu test bao + prompt thiếu "giữ nguyên" | Chạy test trước/sau; prompt ghi "giữ nguyên behavior" |
 | Tách quá vụn khó đọc | Tham tách | Tách vừa đủ: mỗi hàm 1 việc, tên nói được việc |
 | Refactor + thêm tính năng 1 lúc | Ôm 2 việc | Refactor riêng 1 commit, tính năng riêng 1 commit |
 
+> **Cách đọc bảng này:** đọc theo hàng từ Triệu chứng → Fix; để ý cả ba Fix đều quy về một nguyên tắc — khóa phạm vi và tách việc, đừng ôm.
+
 ## So sánh với Claude Code
+
+Cũng dùng Claude Code? Bảng này cho biết `/refactor` ánh xạ sang bên kia ở đâu và khác thật sự ở khâu nào.
 
 | Việc | Copilot (`/refactor`) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -62,7 +72,11 @@ Nghiệp vụ: `processCheckout()` đã phình lên 100 dòng, khó đọc, như
 | Ràng buộc "không đổi behavior" | Bạn phải nói trong prompt | Bạn cũng phải nói rõ | Không agent nào tự hiểu đây là refactor thuần |
 | Kiểm chứng | Bạn chạy test trước/sau | Bạn vẫn là người chạy | Test xanh là lưới an toàn duy nhất |
 
+> **Cách đọc bảng này:** mỗi dòng một việc; cột Ghi chú là chỗ đáng nhớ — dù dùng công cụ nào, ràng buộc "giữ nguyên behavior" cũng phải do bạn nói ra.
+
 ## Best practices (kèm "vì sao")
+
+Bốn thói quen dưới đây giúp mỗi lần refactor là một lần "đổi mà không ai hay" theo nghĩa tốt — mỗi thói quen kèm lý do.
 
 - **Có test bao trước khi refactor.** *Vì sao?* Không có test thì bạn không có cách nào biết mình vừa phá gì.
 - **Ghi rõ "giữ nguyên behavior" trong prompt.** *Vì sao?* Nếu không, model dễ "tiện tay" cải thiện logic — thứ bạn không hề yêu cầu.

@@ -7,6 +7,8 @@ description: Chuan frontend React + TypeScript. Tu dong ap khi sua file trong ap
 
 Ap dung cho moi file khop `apps/web/**/*.{ts,tsx}`.
 
+> **Tóm gọn 1 câu:** File này là nội quy xưởng frontend — tự động áp cho mọi file trong `apps/web/`, với 3 dòng NEVER ở cuối là luật sắt.
+
 ## Stack & pattern
 
 - React 18 + TypeScript strict, data-fetching bang <thu-vien-team-dung: React Query/SWR>.

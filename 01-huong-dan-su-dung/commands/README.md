@@ -87,6 +87,8 @@ Chi tiết nhóm: [./system-knowledge/README.md](./system-knowledge/README.md)
 | `gh copilot suggest` | Gợi ý lệnh CLI trong terminal (gh copilot) | [./system-knowledge/cli-suggest/README.md](./system-knowledge/cli-suggest/README.md) |
 | `gh copilot explain` | Giải thích lệnh CLI vừa chạy/gặp | [./system-knowledge/cli-explain/README.md](./system-knowledge/cli-explain/README.md) |
 
+> **Cách đọc bảng này:** 4 bảng trên chia theo 4 kiểu việc; trong mỗi bảng, đọc cột "Mô tả 1 dòng" cho đủ để quyết định, thấy đúng lệnh thì bấm cột Chi tiết sang README của nó lấy cách gọi + ví dụ.
+
 ## Công thức session đầu (làm 1 lần mỗi repo mới)
 
 ```text
@@ -103,6 +105,10 @@ Chi tiết nhóm: [./system-knowledge/README.md](./system-knowledge/README.md)
 | Chia nhóm lệnh | 4 nhóm cố định theo chủ đề | Không chia nhóm cố định; tài liệu gom theo chức năng |
 | Mở rộng lệnh riêng | Prompt files (`.github/prompts/`, legacy) hoặc Agent Skills (`/skills`) | Custom slash commands trong `.claude/commands/` hoặc Skills |
 | Gợi ý/giải thích lệnh shell (`gh copilot suggest`/`explain`) | Có, qua GitHub CLI extension | Không có tương đương trực tiếp — Claude Code là một agent CLI, không phải công cụ gợi ý shell riêng |
+
+> **Cách đọc bảng này:** mỗi dòng là một việc bạn cần làm; cột giữa cho biết Copilot dùng gì, cột phải cho biết Claude Code có cái tương ứng không — dòng nào ghi "không tương đương" thì đừng đi tìm nữa.
+
+> **Tóm gọn 1 câu:** Index này là bản đồ, không phải giáo trình — dùng để định vị lệnh rồi sang README chi tiết, còn máy bạn có gì thì gõ `/` là biết.
 
 Quay về: [../README.md](../README.md) · Bài tổng: [../04-chat-commands-toan-tap.md](../04-chat-commands-toan-tap.md)
 

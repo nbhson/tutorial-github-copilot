@@ -20,11 +20,15 @@ Ba việc điển hình nên giao cho chuyên gia:
 
 **Nếu làm sai thì sao?** Hai lỗi hay gặp: (1) mô tả agent thiếu phạm vi → nó "chạy loạn" ngoài vùng được phép; (2) gọi sai chuyên gia cho việc, ví dụ nhờ tester đi trinh sát → kết quả không đúng thứ bạn cần.
 
+> **Tóm gọn 1 câu:** Custom agent là danh bạ thợ chuyên việc — gọi đúng nghề thì kết quả gọn và dán dùng được ngay, gọi sai nghề thì chuyên gia thành chi phí.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** việc ồn ào cần cô lập (trinh sát multi-file); muốn chạy test focused sau mỗi change; diff chạm auth/payment cần soi bảo mật.
 - **ĐỪNG dùng khi:** việc quá nhỏ hoặc bạn chưa cần tách vai — gọi agent tổng quát trong chat chính là đủ. Custom agent đáng dùng khi việc có "tính chuyên môn" rõ ràng.
 - **Cho ai:** người đã tạo custom agent cho team, người cần chạy trinh sát/test song song.
+
+> **Tóm gọn 1 câu:** Việc ồn ào (đọc 10+ file, chạy test, soi bảo mật) tách sang sub-agent; việc nhỏ quá không đáng "thuê thợ" thì cứ gọi trong chat chính.
 
 ## Cách gọi (copy-paste)
 
@@ -56,13 +60,19 @@ Nghiệp vụ: bạn sắp refactor module auth, cần biết có những file n
 
 ## Lỗi thường gặp
 
+Sub-agent trả kết quả không đúng ý? Ba ca dưới đây là nguyên nhân thường gặp — tra theo Triệu chứng rồi áp Fix, phần lớn sửa ngay trong `.agent.md`.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Agent "chạy loạn" ngoài phạm vi | Mô tả agent thiếu phạm vi | Ghi rõ chỉ-đọc + files được đụng trong `.agent.md` |
 | Gọi sai agent cho việc | Chưa thuộc danh bạ | Đọc `templates/.github/agents/` 1 lần, ghi nhớ 3 con core |
 | Chat chính vẫn ồn | Ôm việc trong chat chính | Đẩy việc ồn sang sub-agent ngay |
 
+> **Cách đọc bảng này:** đọc theo hàng từ Triệu chứng → Fix; cả ba Fix đều thuộc "phòng bệnh hơn chữa bệnh" — sửa định nghĩa và phân vai sớm thì khỏi phải dọn kết quả sai.
+
 ## So sánh với Claude Code
+
+Cũng dùng Claude Code? Bảng này đối chiếu khái niệm "agent riêng của repo" giữa hai công cụ — cùng tư tưởng persona hẹp, khác nhau ở nơi khai báo.
 
 | Việc | Copilot (Custom agent) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -70,7 +80,11 @@ Nghiệp vụ: bạn sắp refactor module auth, cần biết có những file n
 | Giới hạn công cụ/quyền | Khai trong frontmatter agent | Khai trong định nghĩa subagent | Cả hai đều cho phép thu hẹp quyền theo vai |
 | Đẩy việc ồn sang nhánh phụ | Gọi sub-agent theo tên | Gọi subagent | Cùng mục đích: giữ mạch chính sạch |
 
+> **Cách đọc bảng này:** đọc theo hàng so khớp tư duy; cột Ghi chú chỉ ra điểm gặp nhau — persona hẹp + quyền giới hạn là bản chất chung, tên thư mục chỉ là chi tiết cài đặt.
+
 ## Best practices (kèm "vì sao")
+
+Bốn quy tắc dưới đây giúp "danh bạ thợ" của bạn ít mà tinh — mỗi quy tắc kèm lý do.
 
 - **Ghi rõ phạm vi trong chính file `.agent.md`.** *Vì sao?* Phạm vi nằm ở định nghĩa thì mọi lời gọi đều được bảo vệ, không phụ thuộc bạn nhớ nhắc.
 - **Thuộc 3 agent core trước khi tạo thêm.** *Vì sao?* Danh bạ quá dài thì chính bạn cũng gọi sai — ít mà đúng vai hơn nhiều mà mơ hồ.

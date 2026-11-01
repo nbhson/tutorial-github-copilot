@@ -24,6 +24,8 @@
 | stdio (local) | `command` + `args` | Server chạy trên máy bạn (`npx`, binary nội bộ) |
 | http/sse (remote) | `url` + `headers` | Server dùng chung team, không muốn mỗi máy spawn riêng |
 
+> **Cách đọc bảng này:** hai dòng là hai kiểu "lắp ổ cắm" — thiết bị chạy trên máy bạn (stdio) hay ở xa dùng chung (remote); chọn dòng nào thì config phải có đúng các cột "Config cần", thiếu một key là server im lặng.
+
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.jsonc`](examples/01-cach-goi-copy-paste.jsonc)
@@ -64,6 +66,8 @@ Nghiệp vụ: bạn muốn agent đọc dữ liệu DB an toàn để viết qu
 | Hardcode secret vào file | Tiện tay paste token | Dùng `${input}`/`${env}`; lỡ lộ → xoay key ngay |
 | Trỏ nhầm prod writable | Copy URL prod | Postgres **luôn** trỏ read-replica + `GRANT SELECT` |
 
+> **Cách đọc bảng này:** cả ba dòng đều là hậu quả của một thao tác "tiện tay" — cột Fix không chỉ sửa mà còn đưa ra quy tắc mặc định để khỏi lặp lại.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (`MCP add`) | Claude Code | Ghi chú |
@@ -71,6 +75,8 @@ Nghiệp vụ: bạn muốn agent đọc dữ liệu DB an toàn để viết qu
 | Khai báo server | `.vscode/mcp.json` (key `servers`) | Cấu hình MCP riêng (vd `.mcp.json`/CLI) | Cùng chuẩn MCP; khác tên file |
 | Transport | `stdio` (`command`+`args`) hoặc `http`/`sse` (`url`+`headers`) | Cũng hỗ trợ stdio và remote | Cùng hai kiểu transport |
 | Bí mật | `${input}`/`${env}`, không hardcode | Env/secret để ngoài file | Nguyên tắc giống nhau: secret không vào file commit |
+
+> **Tóm gọn 1 câu:** Thêm MCP server là cấp thêm chìa khóa cho agent — giao chìa nào (transport), khoá chìa nào (secret qua env), và chỉ mở cửa đọc (read-replica) thì agent mới đáng tin.
 
 ## Best practices (kèm "vì sao")
 

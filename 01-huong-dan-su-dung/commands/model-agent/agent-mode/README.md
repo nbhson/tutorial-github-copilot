@@ -22,13 +22,19 @@ Ba chế độ của Chat để bạn chọn đúng cỡ việc:
 | Edit | Sửa đúng files bạn tick, có kiểm soát | Đã biết sửa 1–5 file, muốn review từng hunk |
 | Agent | Tự tìm file, sửa, chạy terminal | Task mở nhiều bước, chưa biết chạm file nào |
 
+> **Cách đọc bảng này:** ba dòng xếp theo độ tự chủ tăng dần — đọc từ trên xuống và dừng ở dòng đầu tiên còn đủ dùng cho việc của bạn; càng xuống dưới, càng cần hàng rào (plan, checkpoint).
+
 **Nếu làm sai thì sao?** Giao một task quá to mà không có plan thì agent dễ sửa loạn, lan ra file ngoài phạm vi. Cách giữ nó trong chuồng rất đơn giản: bắt nó đề xuất plan chờ duyệt, chia phase, và chỉ allow các tool đọc.
+
+> **Tóm gọn 1 câu:** Agent là đội thợ tự đi tìm việc — giao task càng mơ hồ thì thợ càng sửa lung tung, nên vạch phạm vi + bắt duyệt plan trước khi thả.
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** task mở nhiều bước ("thêm rate-limit cho /api/login + test"); chưa biết chạm file nào, cần agent tự tìm; việc multi-step: sửa + chạy lệnh + sửa tiếp.
 - **ĐỪNG dùng khi:** việc chỉ sửa một đoạn đang bôi đen → `/fix`; hoặc biết rõ 1–5 file cần sửa → **Edit mode** nhanh và gọn hơn.
 - **Cho ai:** người giao việc nhiều bước; chưa hợp người mới với task lớn — người mới nên bắt đầu ở Ask/Edit.
+
+> **Tóm gọn 1 câu:** Task mở, chưa biết chạm file nào → Agent; đã biết đúng chỗ → Edit hay `/fix` rẻ và an toàn hơn.
 
 ## Cách gọi (copy-paste)
 
@@ -60,13 +66,19 @@ Nghiệp vụ: `/api/login` đang không có giới hạn số lần thử, bạ
 
 ## Lỗi thường gặp
 
+Agent chạy "trôi" ngoài dự kiến? Ba ca dưới đây là những lần thả rông thường gặp — tra theo Triệu chứng rồi áp Fix.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Agent chạy loạn, sửa lung tung | Giao task quá to không plan | Bắt "đề xuất plan, chờ duyệt" + chia phase |
 | Approve tool mù | Mỏi tay bấm Allow | Để `ask` cho lệnh nguy hiểm; allow chỉ tools đọc |
 | Không checkpoint trước | Sửa sai khó về | Commit git tay trước khi giao agent |
 
+> **Cách đọc bảng này:** đọc theo hàng từ Triệu chứng → Fix; cả ba Fix đều là "hàng rào dựng trước khi giao việc" — sửa sau khi agent đã chạy thì đã muộn.
+
 ## So sánh với Claude Code
+
+Cũng dùng Claude Code? Bảng này đối chiếu cách hai công cụ chia mức tự chủ — chỗ khác bản chất nằm ở cột Ghi chú.
 
 | Việc | Copilot (/agent) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -74,7 +86,11 @@ Nghiệp vụ: `/api/login` đang không có giới hạn số lần thử, bạ
 | Duyệt trước khi làm | Plan gate / persona Interactive | Plan mode (duyệt kế hoạch trước) | Cùng tinh thần: xem plan rồi mới cho sửa |
 | Chạy tự động tới xong | Persona Autopilot (cần sandbox + worktree) | Auto-accept edits / chạy liên tục | Cả hai đều rủi ro nếu repo chưa sạch |
 
+> **Cách đọc bảng này:** đọc theo hàng so khớp tư duy; hàng cuối đáng nhớ nhất — chạy tự động tới xong nào cũng cần repo sạch + lối thoát, không phân biệt công cụ.
+
 ## Best practices (kèm "vì sao")
+
+Bốn thói quen dưới đây là dây cương cho agent — mỗi thói quen kèm lý do để bạn biết khi nào được nới.
 
 - **Bắt agent đề xuất plan và chờ duyệt.** *Vì sao?* Xem plan là lúc bạn phát hiện nó hiểu sai scope — rẻ hơn nhiều so với sửa lại cả đống diff.
 - **Commit git trước khi giao.** *Vì sao?* Agent sai thì bạn `git reset` về checkpoint, khỏi mò tay từng file.

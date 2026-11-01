@@ -26,6 +26,8 @@ Vì đây là thứ đầu tiên bị hỏi khi onboarding máy công ty hoặc 
 | Duplication | Kiểm tra trùng với code public | Lo license/copyright khi code trùng |
 | `/status` | Trạng thái account/plan/model (không phải consent) | Cần biết máy đang ở plan/model nào |
 
+> **Cách đọc bảng này:** bốn dòng là bốn công tắc khác nhau trong cùng một căn phòng; trước khi gạt bất kỳ cái nào, đọc cột "Là gì" để chắc bạn đang cắm đúng công tắc — nhầm dòng là trả lời sai audit.
+
 ## Cách gọi (copy-paste)
 
 Telemetry không phải slash command trong Chat — nó là mục trong Settings. Đường đi:
@@ -60,6 +62,8 @@ Nghiệp vụ: onboard một máy dev mới cho nhân viên, cần lưu bằng c
 | Đổi setting local không ăn | Org đè setting cá nhân | Hỏi admin org policy |
 | Audit hỏi không trả lời được | Không ghi lại trạng thái | Chụp settings lưu vào docs onboard |
 
+> **Cách đọc bảng này:** mỗi dòng là một khủng hoảng nhỏ xuất phát từ cùng một gốc — gọi nhầm tên khái niệm; cột Fix đều bắt đầu bằng "gọi đúng tên, ghi lại bằng chứng".
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (Telemetry) | Claude Code | Ghi chú |
@@ -69,6 +73,8 @@ Nghiệp vụ: onboard một máy dev mới cho nhân viên, cần lưu bằng c
 | Train trên code | Tùy plan: Individual mặc định có thể, Business/Enterprise không | Dữ liệu API/Claude Code mặc định không dùng train (*tự verify*) | Luôn đối chiếu data controls thay vì đoán |
 
 > Đọc bảng này thế nào: cả hai đều có lớp nhìn thấy số liệu, nhưng chỉ Copilot có công tắc consent do org đè. Đừng bê nguyên câu trả lời của công cụ này sang công cụ kia.
+
+> **Tóm gọn 1 câu:** Telemetry, train, duplication là ba công tắc khác nhau trên cùng một tủ điện — gạt nhầm cái này rồi tưởng đã tắt cái kia là lỗi audit đắt giá nhất.
 
 ## Best practices (kèm "vì sao")
 

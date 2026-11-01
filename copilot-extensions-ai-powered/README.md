@@ -18,6 +18,10 @@
 
 ## 1. Copilot Extensions — General Availability (2025)
 
+This section covers what a Copilot extension is and what its 2025 GA release changed. Read it to understand when to reach for a marketplace extension instead of a custom agent — and how to install and verify one.
+
+Think of an extension as a plug adapter: your Copilot Chat is the wall socket, and the adapter lets a third-party service (Sentry, Linear...) plug in and be summoned with an `@-mention`.
+
 **Copilot Extensions went GA on February 19, 2025** (github.blog changelog, 2025-02-19). An extension is a **GitHub App registered with Copilot** that surfaces as an `@-mention` in Copilot Chat — `@sentry`, `@linear`, `@stackspot` — callable with natural language.
 
 What GA changed:
@@ -36,9 +40,13 @@ Install flow (copy-paste):
 
 Copilot Extensions ≠ VS Code extensions. An extension bundles **tools + (optionally) MCP servers + chat participants**; a VS Code extension is editor tooling. See lesson [09 — Extensions & Marketplaces](../01-huong-dan-su-dung/09-extensions-marketplaces.md) for packaging and org policy.
 
+> **One-line summary:** An extension is a GitHub App that plugs a third-party service into Copilot Chat via `@-mention` — GA since Feb 2025, installable from the Marketplace, governed per org.
+
 ---
 
 ## 2. Custom Copilot agents
+
+This section covers the three levels for building your own agent, from a reusable prompt to a full server-side extension. Read it to pick the lightest level that fits the job.
 
 Beyond marketplace extensions, you can build your own agents on three levels:
 
@@ -53,6 +61,8 @@ Notes for 2025/2026:
 - **Agent Skills** (`SKILL.md`) are the preferred packaging over legacy `.prompt.md` files for agent-facing behavior (prompt files are deprecated for the Agent Host path).
 - **Third-party coding agents** — Claude Code and Codex — can run **alongside Copilot's cloud agent** on github.com, working asynchronously on issues/PRs ("Agent HQ" direction announced at GitHub Universe 2025).
 - **Copilot coding agent** (assign an issue to Copilot) is GA for paid subscribers and works from github.com, VS Code, and GitHub Mobile.
+
+> **One-line summary:** Start at the lightest level that works — prompt file for one repeatable task, custom agent for a persona with tools, extension only when you need your own server.
 
 ---
 
@@ -76,6 +86,8 @@ Copilot Chat in VS Code and on github.com can draft and explain Actions workflow
 
 ## 4. Copilot Enterprise advanced features
 
+This section covers what Business/Enterprise unlock on top of Pro — gating, data residency, exclusions, audit. Read it before promising a feature to your team: plan tiers decide what is even possible.
+
 What Enterprise (and partly Business) adds on top of Pro:
 
 | Capability | Plan | What it does |
@@ -88,13 +100,19 @@ What Enterprise (and partly Business) adds on top of Pro:
 | **Usage-based billing controls** | All paid (2026) | AI Credits (1 credit = $0.01), paid-usage policy on by default — cap it in settings |
 | **Copilot knowledge bases / code review policies** | Enterprise | Curated context + code review effort defaults |
 
+> **How to read this table:** each row is one capability, and the `Plan` column tells you the minimum tier that unlocks it. Scan left to right — capability first, plan second, effect last — and cross-check the live feature matrix (link below) before committing to a promise, since this moves fast.
+
 Check the current feature matrix before promising anything to a team: https://docs.github.com/en/copilot/reference/copilot-feature-matrix
+
+> **One-line summary:** Enterprise's value is control, not extra intelligence — who may use which model, what never leaves the org, and a paper trail for every tool call.
 
 ---
 
 ## 5. Copilot CLI
 
-The Copilot CLI is a **terminal-native coding agent** — separate from the older `gh copilot` (suggest/explain shell commands):
+This section covers the terminal-native agent and how it differs from the older `gh copilot` tool. Read it to know which binary to install — mixing them up is the most common CLI mistake.
+
+The Copilot CLI is a **terminal-native coding agent** — separate from the older `gh copilot` (suggest/explain shell commands). Picture `gh copilot` as a talking dictionary for shell commands, and the Copilot CLI as a full colleague sitting in your terminal:
 
 - **Public preview:** September 2025. **GA: February 25, 2026** (github.blog changelog) for paid Copilot subscribers.
 - Three modes: interactive agent, one-shot prompt, and command mode; supports MCP servers (repo `.mcp.json` + `~/.copilot/mcp-config.json`; since CLI v1.0.39 it no longer reads `.vscode/mcp.json`).
@@ -103,9 +121,13 @@ The Copilot CLI is a **terminal-native coding agent** — separate from the olde
 
 > 📄 **Code ví dụ:** [`examples/02-5-copilot-cli.sh`](examples/02-5-copilot-cli.sh)
 
+> **One-line summary:** Two CLIs share a name but not a job — `gh copilot` translates shell commands, while `copilot` is a full coding agent that got GA in February 2026.
+
 ---
 
 ## 6. Copilot in GitHub Mobile
+
+This section covers what Copilot can (and cannot) do from your phone. Read it to treat Mobile correctly: a review-and-decide screen, not a coding surface.
 
 Copilot Chat ships inside the GitHub Mobile app and mirrors the github.com chat surface:
 
@@ -113,6 +135,8 @@ Copilot Chat ships inside the GitHub Mobile app and mirrors the github.com chat 
 - **Copilot Extensions work on Mobile** (public preview since 2025): `@sentry`, `@linear` etc. are available from the chat input.
 - **Copilot coding agent + Mobile** = "delegate while working, approve while commuting": assign an issue from your IDE, review/merge from your phone when CI is green.
 - Limitations: it is a review/decision surface, not a coding surface — no IDE, no local files.
+
+> **One-line summary:** Mobile turns dead commute time into review time — approve, merge, and unblock agents from your pocket, but always write code where the code lives.
 
 ```text
 GitHub Mobile → open repo/PR/issue → Copilot icon → ask or review
@@ -123,6 +147,8 @@ Verify: mobile app → Copilot tab → pick repo → ask "summarize open PRs ass
 
 ## 7. Best practices
 
+Seven habits that keep the extension ecosystem useful instead of dangerous — each one states its own reason, so skim the bold parts first.
+
 1. **Pick the right surface:** autocomplete/Chat for inline work; extensions for SaaS reach; coding agent for async issue work; CLI for terminal-native flows.
 2. **Keep extensions allowlisted at org level.** Every extension runs with your permissions — vet before install, pin versions.
 3. **Prefer Agent Skills over deprecated prompt files** for new agent-facing automation.
@@ -130,6 +156,8 @@ Verify: mobile app → Copilot tab → pick repo → ask "summarize open PRs ass
 5. **Use Mobile for review, not for coding.** Approve PRs and workflow runs from the phone; write code where the context is.
 6. **In CI, pin versions and scopes.** Copilot CLI in Actions should run sandboxed with least-privilege tokens.
 7. **Extensions ≠ MCP servers.** An extension may bundle MCP servers + participants; review both when you install one.
+
+> **One-line summary:** Treat every extension like a new hire with your keys — vet it, scope it, pin it, and review what it carries before it walks into your repo.
 
 ---
 

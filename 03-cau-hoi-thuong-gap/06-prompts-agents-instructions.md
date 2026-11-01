@@ -12,11 +12,15 @@
 | Custom agent | `.github/agents/*.agent.md` | Chọn trong agent picker | Chính thức |
 | Prompt tái dùng (legacy) | `.github/prompts/*.prompt.md` | Gọi tay `/tên-prompt` | **Deprecated cho Agent Host** (Local vẫn chạy) |
 
+> **Cách đọc bảng này:** đây là "địa chỉ nhà" của từng loại file — cột **Đường dẫn chuẩn** phải khớp từng ký tự, cột **Kích hoạt** cho biết tự chạy hay phải gọi tay, cột **Trạng thái 2026** cảnh báo cái nào đang cũ.
+
 ---
 
 ## 1. File nào Copilot tự load, file nào phải gọi tay?
 
 **Trả lời 1 câu:** Tự load `copilot-instructions.md` (mọi lúc) + `*.instructions.md` khớp `applyTo`; gọi tay `*.prompt.md` (slash, legacy) + custom agent (chọn trong picker); còn Skill thì model tự gọi theo `description` — chuẩn khuyến nghị 2026.
+
+Ví von cho dễ phân: instructions là tạp dước đeo sẵn vào việc (tự áp mỗi lần vào bếp), prompt file là công thức phải mở ra đọc, còn Skill là đầu bếp biết tự nhìn thấy món order mà vào bếp.
 
 > 📄 **Code ví dụ:** [`examples/01-1-file-nao-copilot-tu-load-file-nao.sh`](examples/01-1-file-nao-copilot-tu-load-file-nao.sh)
 
@@ -121,6 +125,8 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 | Chạy ở đâu | Local/VS Code | Harness có picker | Mọi harness |
 | Khi nào dùng | Việc lặp đã có, chỉ Local | Tách việc / ép kỷ luật | Procedure tự áp |
 
+> **Cách đọc bảng này:** dọc cột **Tiêu chí** so ba cách đóng gói như so ba cách giao hàng: gọi tay (prompt), chọn thủ công (custom agent), hay tự nhận việc (Skill) — cột nào thắng ở hàng "Kích hoạt" và "Chạy ở đâu" là lời giải cho vì sao 2026 khuyến nghị Skill.
+
 > **Model không gọi skill:** `description` quá mơ hồ là lý do phổ biến nhất — viết theo cặp "dùng khi..." / "không dùng cho...".
 
 ## 9. Thứ tự ưu tiên khi nhiều instructions cùng khớp 1 file?
@@ -150,3 +156,5 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 5. Hỏi admin: org có tắt custom instructions không.
 
 Tham khảo chéo: [bài 05](05-policies-guardrails-faq.md) (quy tắc ALWAYS/NEVER) · [bài 02](02-model-context-premium.md) (context + nhiễu) · [bài 07](07-custom-agents-coding-agent-workflows.md) (custom agent workflows) · [../templates/README.md](../templates/README.md).
+
+> **Tóm gọn 1 câu:** File Copilot không load chỉ có 3 thủ phạm: sai địa chỉ, sai giấy khai sinh (frontmatter), sai vùng phủ (glob) — soi ba chỗ đó theo thứ tự là tìm ra 90% ca.

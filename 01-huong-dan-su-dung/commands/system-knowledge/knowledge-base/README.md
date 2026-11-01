@@ -50,6 +50,8 @@ Nghiệp vụ: bạn mới vào team, cần biết quy trình xin review PR mà 
 | Docs cũ | Index lỗi thời | Reindex + ghi ngày update vào docs |
 | Hỏi chung chung | Thiếu tên docs | Nêu rõ "theo wiki X, mục Y" |
 
+> **Cách đọc bảng này:** cột Triệu chứng là các dạng câu trả lời đáng ngờ; cột Fix đều xoay quanh một nguyên tắc — bó câu trả lời vào nguồn thật để model hết chỗ bịa.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (Knowledge base) | Claude Code | Ghi chú |
@@ -57,6 +59,8 @@ Nghiệp vụ: bạn mới vào team, cần biết quy trình xin review PR mà 
 | Hỏi tri thức nội bộ | Qua Chat/MCP trỏ tới docs, bắt trích nguồn | Qua đọc file trong repo / MCP server | Cùng tư tưởng: phải trỏ tới nguồn thật, không bịa |
 | Chống bịa | Yêu cầu nêu file/section + "không có thì nói không có" | Cùng yêu cầu khi hỏi | Không agent nào tự đảm bảo đúng/sai — bạn verify |
 | Nguồn dữ liệu | Docs/wiki/RAG đã index + MCP | File trong repo + MCP | Copilot mạnh phần docs cấp org; Claude mạnh dò file tại chỗ (*cần verify từng setup*) |
+
+> **Tóm gọn 1 câu:** Knowledge base chỉ đáng tin bằng chứng thư mà nó trích ra được — câu trả lời không mở được nguồn thì coi như chưa được trả lời.
 
 ## Best practices (kèm "vì sao")
 

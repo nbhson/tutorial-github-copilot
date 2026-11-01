@@ -24,6 +24,8 @@ Nó là danh sách path mà Copilot bị cấm đọc/index — thường là `.
 | Local (máy bạn) | `settings.json` → `github.copilot.chat.exclusion` | Chỉnh nhanh cho repo cá nhân, org chưa set policy |
 | Org policy (admin) | Org settings → Content exclusion | Chuẩn chung cả org; đè setting local |
 
+> **Cách đọc bảng này:** hai dòng là hai tầng cấu hình — máy bạn đặt một tầng, org đặt một tầng đè lên trên; muốn biết "ai quyết định thật" thì hỏi tầng cao nhất (org) trước.
+
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.jsonc`](examples/01-cach-goi-copy-paste.jsonc)
@@ -66,12 +68,16 @@ Nghiệp vụ: `secrets/prod.json` chứa key thật, và bạn để ý Copilot
 | Exclusion sai glob | Pattern quá rộng | Thu hẹp glob, test lại từng path |
 | Policy org đè local | Sửa local không ăn | Hỏi admin policy org |
 
+> **Cách đọc bảng này:** cả ba dòng đều bắt đầu từ một hiểu nhầm nhỏ ("tưởng bug", "tưởng chặn đúng", "tưởng sửa được"); cột Fix là cách xác nhận lại trước khi kết luận.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (Content exclusion) | Claude Code | Ghi chú |
 |---|---|---|---|
 | Chặn file nhạy cảm khỏi AI | Có — cấu hình server-side (org/repo, Business/Enterprise) + setting local | Không có tương đương cấp org; giới hạn qua quyền/ignore trong repo | Copilot chặn *trước khi index*; Claude Code chặn ở phía truy cập |
 | Cấu hình ở đâu | `settings.json` (local) hoặc Org Settings (admin) | Quyền/ignore trong repo | Khác mô hình quản trị |
+
+> **Tóm gọn 1 câu:** Exclusion là "danh sách cấm cửa" kiểm trước khi agent mở sách — khoá nhầm chương thì trống, khoá sót trang thì lộ.
 
 ## Best practices (kèm "vì sao")
 

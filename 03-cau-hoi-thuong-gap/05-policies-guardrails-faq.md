@@ -12,11 +12,15 @@
 | Agent làm việc cấm | Instructions "KHÔNG" + approval | Prompt + IDE |
 | PR chưa review đã merge | Required reviewers + status checks | GitHub server |
 
+> **Cách đọc bảng này:** dọc cột **Muốn chặn** tìm đúng điều bạn sợ xảy ra, cột **Công cụ** là thiết bị cần lắp, cột **Chặn ở tầng** cho biết nó nằm ở máy bạn hay trên server GitHub — càng về server càng không ai tắt được.
+
 ---
 
 ## 1. Instruction "không ăn" — vì sao Copilot vẫn làm điều cấm?
 
 **Trả lời 1 câu:** 5 nguyên nhân theo thứ tự kiểm tra: file đặt sai chỗ → `applyTo` sai glob → câu cấm mơ hồ → prompt task đè instruction → context tràn.
+
+Coi đây như checklist "vì sao thư không tới tay người nhận": sai địa chỉ, sai tem, viết chữ khó đọc, có người khác nói to hơn trong phòng, hoặc hộp thư đầy — đi từng nguyên nhân một, đừng ngồi viết lại lá thư to tiếng hơn.
 
 1. `copilot-instructions.md` phải ở `.github/`; instructions con phải `*.instructions.md` trong `.github/instructions/`.
 2. `applyTo` sai glob → file cần không khớp pattern (xem [bài 06](06-prompts-agents-instructions.md)).
@@ -50,6 +54,8 @@
 
 **Trả lời 1 câu:** Dựng 3 lớp deterministic chạy *ngoài* model — pre-commit framework (lint/test), gitleaks (secret scan), GitHub push protection — không model nào tắt được.
 
+Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thuộc lời hứa của người ở trong nhà.
+
 > Copilot có hooks in-process (`.github/hooks/*.json`, `PreToolUse`/`PostToolUse`) nhưng **preview, chỉ chạy Local**, chưa phải security boundary — muốn "không thể tắt được" thì phải dựa vào git hook + server.
 
 | Lớp | Công cụ | Chặn gì | Chặn ở đâu |
@@ -57,6 +63,8 @@
 | Pre-commit framework | `pre-commit` | Lint/format/test nhanh | Local (git hook) |
 | Secret scan | gitleaks/trufflehog | Secret trong staged files | Local (git hook) |
 | Push protection | GitHub secret scanning | Secret đã biết lúc push | GitHub server |
+
+> **Cách đọc bảng này:** ba dòng là ba lớp rào xếp từ trong nhà ra tới cổng — lint/test bắt lỗi tại chỗ, gitleaks bắt secret trước khi commit, push protection là cánh cổng cuối của GitHub.
 
 > 📄 **Code ví dụ:** [`examples/02-3-pre-commit-tuong-uong-chan-commit-xau.sh`](examples/02-3-pre-commit-tuong-uong-chan-commit-xau.sh)
 
@@ -122,3 +130,5 @@
 5. Vẫn lọt → nâng từ "khuyến nghị" lên "ép buộc server-side" (ruleset + required checks).
 
 Tham khảo chéo: [bài 03](03-modes-permissions.md) (content exclusion) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (secrets + audit sâu) · [bài 10](10-ci-sdk-review-web.md) (CI workflows) · [../templates/README.md](../templates/README.md).
+
+> **Tóm gọn 1 câu:** Quy tắc nhắc miệng là lời khuyên, quy tắc khóa ở server là luật — cái nào phạm vào là mất tài sản thì phải đưa từ "lời khuyên" lên thành "luật".

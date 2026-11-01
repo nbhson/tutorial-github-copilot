@@ -15,6 +15,8 @@
 
 ## 1. Vì sao CI chạy Copilot khác chat trên máy? (pattern ACI)
 
+Mục này nói về điểm khác căn bản giữa CI và chat có người ngồi — đọc để hiểu vì sao mọi pattern phía sau đều xoay quanh "không ai bấm Allow".
+
 Khác biệt cốt tử: chat/VS Code cần người ngồi bấm Allow. **CI runner không có người** — job hỏi giữa chừng nghĩa là treo tới timeout. Mọi thứ dưới đây bù lại chỗ "không có người" đó. Kịch bản hay giao cho automation: auto-review PR mới, auto-fix CI failure (mở PR fix, không push main), triage overnight failures, weekly dep audit, docs sync check.
 
 **Pattern ACI (thuộc lòng 5 dòng):**
@@ -29,9 +31,13 @@ Khác biệt cốt tử: chat/VS Code cần người ngồi bấm Allow. **CI ru
 
 > ✅ **Kỳ vọng:** mở PR test → tab Actions có run xanh trong 2–5 phút + 1 comment `Auto diff-stat` dưới PR.
 
+> **Tóm gọn 1 câu:** CI không có ai bấm Allow, nên pattern ACI thay con người bằng scope hẹp, timeout rõ và guardrails không nới — robot chạy vắng người vẫn phải ở trong hàng rào.
+
 ---
 
 ## 2. Copilot SDK — build agent riêng
+
+Mục này nói về lúc nào "dùng sẵn" không đủ và bạn phải tự dựng agent bằng SDK — đọc để không mang SDK đi giải quyết việc mà CLI đã làm tốt hơn.
 
 SDK bọc vòng lặp Copilot (tools + permissions + orchestration) để build workflow custom: quy trình team quá đặc thù, cần UI riêng, nhúng vào backend nội bộ (Slack bot, dashboard, triage service).
 
@@ -41,6 +47,8 @@ SDK bọc vòng lặp Copilot (tools + permissions + orchestration) để build 
 | Multi-step orchestration custom (tools riêng, UI riêng) hoặc nhúng vào backend nội bộ | Copilot SDK |
 | Task độc lập → branch + PR, không cần trông | Coding agent (assign issue) |
 | Việc định kỳ (nightly triage, weekly audit) | Actions `schedule` + CLI/SDK |
+
+> **Cách đọc bảng này:** tìm dòng đúng "nhu cầu" của bạn ở cột trái, cột phải là công cụ nên chọn — nguyên tắc chung là chọn thứ rẻ nhất giải quyết được việc, SDK là lựa chọn nặng cuối bảng.
 
 > 📄 **Code ví dụ:** [`examples/01-2-copilot-sdk-build-agent-rieng.ts`](examples/01-2-copilot-sdk-build-agent-rieng.ts)
 
@@ -62,7 +70,11 @@ Audit: grep -rniE "ghp_|gho_|sk-|xox_" examples/ .github/workflows/ → phải T
 # (ra kết quả → token lộ, xoá + rotate ngay). CI: ${{ secrets.GITHUB_TOKEN }}.
 ```
 
+> **Tóm gọn 1 câu:** SDK là bộ đồ nghề dựng agent riêng cho quy trình quá đặc thù — việc thường ngày thì CLI/coding agent rẻ và nhẹ hơn hẳn.
+
 ## 3. Copilot CLI (GA 03/2026) automation
+
+Mục này nói về công cụ chạy agentic ngay trong terminal — đọc để biết ba chế độ agent và vì sao CI phải cấm eval mù output.
 
 > **Copilot CLI đã GA từ 03/2026 cho mọi subscriber trả phí** — agentic workflows trong terminal, nhiều model, tích hợp GitHub (repo/issue/PR). Phân phối như binary `copilot` độc lập (`copilot init`, `/usage`, `/mcp`, `/skills`, `/experimental`, `/fork`).
 
@@ -76,9 +88,13 @@ Audit: grep -rniE "ghp_|gho_|sk-|xox_" examples/ .github/workflows/ → phải T
 # timeout mỗi step (timeout-minutes) để job treo tự chết.
 ```
 
+> **Tóm gọn 1 câu:** Copilot CLI đưa agent vào terminal — nhưng trong CI thì output chỉ là *gợi ý*: ghi file, có người duyệt, có timeout, không eval mù.
+
 ---
 
 ## 4. 2 GitHub Actions workflow hoàn chỉnh
+
+Mục này nói về hai workflow chạy được ngay — đọc để deploy thử lên repo test trước khi mang vào repo thật.
 
 ### 4.1. Workflow 1 — Auto-review PR mới
 
@@ -90,9 +106,13 @@ Audit: grep -rniE "ghp_|gho_|sk-|xox_" examples/ .github/workflows/ → phải T
 
 > GitLab CI tương đương: job image `node:22`, script chạy `gh extension install github/gh-copilot` + `git diff --stat`, rule `merge_request_event`; secrets qua GitLab CI/CD variables (masked).
 
+> **Tóm gọn 1 câu:** Hai workflow là hai ca trực tự động — sáng review PR mới, đêm gom lỗi CI — và cả hai chỉ *báo cáo*, không tự chốt.
+
 ---
 
 ## 5. Coding agent assign + scheduled routines
+
+Mục này nói về cách giao việc cho coding agent và việc định kỳ chạy vắng người — đọc để hiểu chất lượng PR là bóng của chất lượng issue.
 
 ### 5.1. Assign issue (chất lượng PR = chất lượng issue)
 
@@ -109,9 +129,13 @@ Morning digest • Nightly triage (workflow 2) • Weekly dep audit • Docs-syn
 Quy tắc: steps có lệnh cụ thể + "chỉ báo cáo/mở issue, KHÔNG tự merge/deploy" + secrets qua ${{ secrets.* }}.
 ```
 
+> **Tóm gọn 1 câu:** Issue "ready" đủ criteria thì agent chạy đúng ngay vòng đầu — đầu bài sơ sài là thuê robot rồi chỉ đường bằng tiếng nước ngoài.
+
 ---
 
 ## 6. Copilot code review workflow
+
+Mục này nói về review gate tự động của Copilot — đọc để setup Rulesets đúng và giữ precision vừa đủ để team không bỏ qua gate.
 
 > **Mặc định từ 28/09/2026:** effort review là **Balanced** (reasoning hơn Lite, tốn AI Credits hơn); chọn được Lite hoặc Balanced — mọi review tính **AI Credits + GitHub Actions minutes** (ước tính Lite $0.05–$1, Balanced $0.25–$5 credits/lần).
 
@@ -133,9 +157,13 @@ Tune precision (reviewer quá khắt → team bỏ qua → mất gate):
 - CRITICAL/HIGH bắt buộc fix; MED/LOW fix hoặc reply lý do (không im lặng).
 ```
 
+> **Tóm gọn 1 câu:** Review gate chỉ sống được khi precision vừa phải — reviewer quá khắt khe thì team lách luật, và dù thế nào con người vẫn giữ chốt merge.
+
 ---
 
 ## 7. Pitfalls + bài tập
+
+Mục này nói về các tai nạn automation hay gặp nhất — đọc để đối chiếu workflow của team bạn từng dòng.
 
 | Pitfall | Vì sao | Fix |
 |---|---|---|
@@ -145,6 +173,8 @@ Tune precision (reviewer quá khắt → team bỏ qua → mất gate):
 | Coding agent PR không review mà merge | Tin robot 100% | Review như PR người + required checks ON |
 | Issue sơ sài → agent đoán mò 3 rounds | Thiếu criteria | Template issue + label "ready" mới assign |
 | Routine tự merge khi vắng người | Ca đêm tự duyệt code 2h sáng | Routine chỉ báo cáo/mở issue |
+
+> **Cách đọc bảng này:** cột "Vì sao" giải thích cơ chế đằng sau từng tai nạn — hiểu cơ chế thì nhớ lâu hơn nhớ fix; kiểm tra xem workflow của bạn có rơi vào dòng nào không trước khi chạy thật.
 
 **❌ SAI / ✅ ĐÚNG đáng nhớ nhất:** ❌ CI chạy lệnh AI sinh ra không ai đọc; cron tự `gh pr merge` 2h sáng. ✅ Output Copilot = gợi ý (ghi file + người duyệt); routine chỉ báo cáo/mở PR; quyền merge là thứ cuối cùng bạn được giao cho robot.
 
@@ -162,6 +192,8 @@ Tune precision (reviewer quá khắt → team bỏ qua → mất gate):
 | Guardrails quyền | `allowedTools`, managed settings, branch protection | Permission mode + allowlist settings |
 
 > Phần "tự động hoá không người" Copilot có lợi thế vì gắn liền GitHub (Actions + coding agent); Claude Code bù lại bằng CLI linh hoạt trong mọi runner. Cả hai đều để **con người làm chốt merge**.
+
+> **Cách đọc bảng này:** so từng "Việc" giữa hai cột — điểm chung lớn nhất nằm ở dòng cuối: bên nào cũng coi merge là quyền của người, không của robot.
 
 **Link chéo:** Bài 03 (tune review precision) · Bài 05 (prompt review/triage cho CI) · Bài 07 (branch + push protection) · Bài 08 (MCP trong Actions — remote only) · Bài 10 (approval + 3 chế độ agent) · Bài 11 (`copilot/*` branch strategy).
 

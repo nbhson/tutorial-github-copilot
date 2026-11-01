@@ -32,6 +32,8 @@ Chuyển tay từ bàn phím sang chuột rồi về bàn phím tốn thời gia
 | `Ctrl+Shift+I` | Quick chat (popup) | Hỏi nhanh 30 giây, không cần lưu lịch sử |
 | `Ctrl+Alt+I` | Chat view đầy đủ | Việc dài, cần context + tool ngoài |
 
+> **Tóm gọn 1 câu:** Thuộc 5 phím cốt lõi là trả góp vài giây mỗi lần thao tác — đầu tư nhỏ, lãi dài suốt cả ngày làm việc.
+
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)

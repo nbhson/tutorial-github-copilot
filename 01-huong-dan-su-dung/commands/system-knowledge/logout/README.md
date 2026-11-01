@@ -50,6 +50,8 @@ Nghiệp vụ: bạn mượn laptop của đồng nghiệp để demo, xong vi�
 | Logout rồi login vẫn lỗi | Cache token kẹt | Xóa credentials trong OS keychain + login lại |
 | Nhầm logout với tắt extension | Tắt extension ≠ logout | Muốn sạch hẳn thì `/logout` |
 
+> **Cách đọc bảng này:** mỗi dòng là một cách "tưởng đã sạch mà chưa"; cột Fix đưa về một chuẩn duy nhất — `/status` báo signed-out mới tính.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (`/logout`) | Claude Code | Ghi chú |
@@ -57,6 +59,8 @@ Nghiệp vụ: bạn mượn laptop của đồng nghiệp để demo, xong vi�
 | Đăng xuất / xóa credentials | Slash `/logout` xóa credentials local | Xóa API key/account trong config hoặc biến môi trường | Cùng mục đích dọn sạch; cách gọi khác nhau |
 | Xác nhận đã đăng xuất | `/status` báo signed-out | Chạy thử một prompt để thấy bị chặn | Bạn vẫn phải tự verify |
 | Dùng trên máy chung | `/logout` trước khi trả máy | Xóa key/account trước khi trả | Cùng nguyên tắc: dọn sạch trước khi rời |
+
+> **Tóm gọn 1 câu:** Trả máy mà không `/logout` thì như trả phòng khách sạn mà quên rút thẻ khỏi két — người kế tiếp mở được mọi thứ của bạn.
 
 ## Best practices (kèm "vì sao")
 

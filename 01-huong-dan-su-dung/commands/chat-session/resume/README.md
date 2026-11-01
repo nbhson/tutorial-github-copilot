@@ -18,6 +18,8 @@ Không phải việc nào cũng xong trong một buổi. `/resume` giữ lại m
 
 **Nếu làm sai thì sao?** Ngộ nhận phổ biến là resume về là model đọc lại được toàn bộ trạng thái cũ. Nó không. Thêm nữa, nếu phiên cũ mở lại sau khi code trên đĩa đã đổi, model có thể trả lời theo phiên bản cũ — phải `git diff` + test lại trước khi tin. Xem ❌/✅.
 
+> **Tóm gọn 1 câu:** `/resume` mở lại cuộc trò chuyện chứ không khôi phục trạng thái hệ thống — nhắc lại bối cảnh và `git diff` trước khi tin.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** việc dở hôm qua nay làm tiếp; chat bị đóng nhầm do tắt IDE/crash; muốn rẽ nhánh từ một chat cũ thành hai hướng.

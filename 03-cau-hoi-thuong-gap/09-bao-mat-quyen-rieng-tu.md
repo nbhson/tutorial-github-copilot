@@ -13,6 +13,8 @@
 | ZDR tương đương? | Enterprise + data residency/Azure routing | 6 |
 | File nhạy cảm? | Content exclusion 2 mức | 7 |
 
+> **Cách đọc bảng này:** đây là bảng "điều hướng nỗi lo" — dọc cột **Lo ngại** tìm đúng cái đang làm bạn trăn trở, cột **Câu trả lời ngắn** là đáp án gọn, cột **Câu** là chỗ đọc chi tiết.
+
 ---
 
 ## 1. Code của tôi có bị dùng để train model không?
@@ -42,6 +44,8 @@
 ## 3. Lỡ commit secret thì xử lý sao?
 
 **Trả lời 1 câu:** Thứ tự BẮT BUỘC: **xoay/revoke key TRƯỚC, dọn history SAU** — secret đã push lên GitHub coi như đã lộ; xóa commit mà không xoay key thì key vẫn sống trong tay kẻ đã clone.
+
+Ví von cho nhớ thứ tự: chìa khóa rơi giữa đám đông thì thay ổ khóa trước, dán thông báo "chìa cũ vô dụng" sau — cúi nhặt chìa (xóa history) mà chưa thay ổ (xoay key) là kẻ cầm bản chụp vẫn mở được cửa.
 
 > 📄 **Code ví dụ:** [`examples/02-3-lo-commit-secret-thi-xu-ly-sao.sh`](examples/02-3-lo-commit-secret-thi-xu-ly-sao.sh)
 
@@ -87,6 +91,8 @@ Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.g
 | Quyền | Tối thiểu, chỉ repo cần | Cấp tự động theo job |
 | Hạn | 30-90 ngày, tự xoay | Hết khi job xong |
 
+> **Cách đọc bảng này:** cột đầu so hai loại token như so hai loại thẻ: thẻ khách với thẻ nhân viên — mỗi loại có giới hạn quyền và thời hạn khác nhau, đọc kỹ để không dùng nhầm.
+
 > 📄 **Code ví dụ:** [`examples/06-8-token-pat-quan-ly-sao-cho-an.sh`](examples/06-8-token-pat-quan-ly-sao-cho-an.sh)
 
 > Đặt lịch 90 ngày rotate PAT MCP; offboard = revoke. Đặt tên token ghi rõ mục đích: `mcp-github-laptop-2026-10`.
@@ -118,3 +124,5 @@ Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.g
 5. Postmortem: thêm gate (push protection/CI check) để không lặp.
 
 Tham khảo chéo: [bài 03](03-modes-permissions.md) (exclusion cấu hình) · [bài 04](04-mcp-faq.md) (MCP secrets) · [bài 05](05-policies-guardrails-faq.md) (scanning + guardrails) · [bài 10](10-ci-sdk-review-web.md) (CI/review).
+
+> **Tóm gọn 1 câu:** Bảo mật Copilot là một chuỗi xích: quyền riêng tư → content exclusion → secret hygiene → push protection — mỗi mắt xích là một lớp phòng thủ, thiếu mắt nào thì tải trọng dồn sang mắt khác.

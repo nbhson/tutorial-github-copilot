@@ -16,6 +16,8 @@
 
 ## 1. Hai vấn đề, ba lớp công cụ
 
+Mục này nói về nguồn gốc hai nỗi đau (giẫm chân, đi sai đường) và ba lớp công cụ chữa chúng — đọc để biết vì sao worktree và checkpoint không thay thế nhau.
+
 ```text
 Vấn đề 1 — Giẫm chân: 2 sessions cùng sửa 1 working dir → conflict, đè file, test flaky.
   → Vá bằng worktrees: mỗi session 1 checkout riêng, branch riêng.
@@ -45,9 +47,13 @@ flowchart TD
 
 > **Ví dụ tiền (AI Credits):** argue với agent 10 turns mỗi turn tốn 1+ lượt gọi model; `git restore` + chat mới tốn ~0 credits thêm. Sai 2 lần vẫn sai → rewind luôn, đừng tiếc turns.
 
+> **Tóm gọn 1 câu:** Giẫm chân thì worktree, đi sai đường thì checkpoint — Git là sổ cái cuối cùng, checkpoint là Ctrl+Z của IDE, worktree là mỗi thợ một phòng.
+
 ---
 
 ## 2. Checkpoints: 3 cơ chế undo
+
+Mục này nói về ba cơ chế undo trong VS Code — đọc để chọn đúng mức "hỏng" với đúng công cụ, vì Copilot không có lệnh `/rewind` sẵn.
 
 > **Lưu ý quan trọng:** Copilot KHÔNG có lệnh `/rewind` như Claude Code. Bạn undo bằng đúng 3 cơ chế của VS Code dưới đây.
 
@@ -61,9 +67,13 @@ flowchart TD
 
 > **Nguyên tắc 30 giây:** sửa 2 lần vẫn sai → đừng argue, `git restore` + chat mới. Rẻ hơn 10 turns cãi nhau, và prompt mới có context sạch.
 
+> **Tóm gọn 1 câu:** Timeline vá từng file, Fork chat thử hướng khác, còn nát thật thì `git restore` + chat mới — giống lật bàn cờ, đánh ván mới.
+
 ---
 
 ## 3. Worktrees deep-dive (lệnh thuộc lòng)
+
+Mục này nói về bộ lệnh worktree cần thuộc — đọc để tạo, nhánh hoá và dọn worktree đúng quy ước, không ô workspace.
 
 > 📄 **Code ví dụ:** [`examples/02-3-worktrees-deep-dive-lenh-thuoc-long.sh`](examples/02-3-worktrees-deep-dive-lenh-thuoc-long.sh)
 
@@ -77,9 +87,13 @@ Dọn sau merge              → worktree tồn = branch tồn = nợ.
 
 > **Worktree rẻ hơn clone:** worktree chia sẻ `.git` objects của repo gốc, chỉ thêm working files (vài trăm MB) — `git clone` mới tốn gấp 5–10x vì copy cả `.git`. Verify: `du -sh ../myrepo-worktrees/feat-x`.
 
+> **Tóm gọn 1 câu:** Worktree là phòng làm việc phụ dùng chung kho đồ (`.git`) — rẻ hơn clone nhiều, nhưng xong việc phải dọn, còn tồn là còn nợ.
+
 ---
 
 ## 4. Branch strategy của coding agent (`copilot/*`)
+
+Mục này nói về phân làn đường cho agent và con người — đọc để review PR của agent không bị giẫm vào branch của nhau.
 
 ```text
 Luồng coding agent chuẩn:
@@ -100,9 +114,13 @@ Luồng coding agent chuẩn:
 
 > **Tin tốt 2026:** coding agent khởi động nhanh hơn 50% (changelog 19/03/2026) — tạo PR từ đầu và feedback loop nhanh hơn hẳn, nên luồng assign → review → iterate bớt chờ đợi.
 
+> **Tóm gọn 1 câu:** `copilot/*` là làn của agent, `feat/*` là làn của bạn, `main` là cổng có bảo vệ — ai đi cũng phải qua PR.
+
 ---
 
 ## 5. 3 worktree workflows copy-paste
+
+Mục này nói về ba pattern dùng worktree trong thực tế — đọc để chọn pattern đúng với kiểu việc đang có.
 
 | Pattern | Nôm na | Khi nào dùng |
 |---|---|---|
@@ -123,9 +141,13 @@ branch copilot/*):
 # hoặc close PR + delete branch copilot/*. Đừng để agent iterate quá 3 rounds.
 ```
 
+> **Tóm gọn 1 câu:** Ba pattern, một tinh thần: việc song song thì mỗi "thợ" một phòng — kể cả thợ là agent chạy trên hạ tầng GitHub.
+
 ---
 
 ## 6. Rewind: bảng quyết định 30 giây
+
+Mục này nói về bảng quyết định khi agent đi sai — đọc để phản xạ được "có rewind không, bằng gì" trong 30 giây thay vì ngồi đoán.
 
 | Tình huống | Ví dụ | Rewind? | Bằng gì |
 |---|---|---|---|
@@ -137,15 +159,21 @@ branch copilot/*):
 | Task đã commit PR | PR #45 đã 2 người review | Không | `git revert` / PR mới (checkpoints là local only) |
 | Coding agent sai trên cloud | `copilot/issue-123` sai spec | Không | Comment redirect / close + delete `copilot/*` |
 
+> **Cách đọc bảng này:** cột "Rewind?" là câu trả lời chốt; đọc từ trên xuống theo tình huống của bạn, và để ý quy luật — đã commit/push thì không rewind (phải revert/PR mới), còn chưa commit thì rewind càng sớm càng rẻ.
+
 | Hiểu nhầm | Sự thật |
 |---|---|
 | "Worktree là clone mới, tốn disk gấp đôi" | Chia sẻ `.git` objects, chỉ thêm working files — nhẹ hơn clone 5–10x |
 | "Checkpoint = commit" | Checkpoint chỉ ở máy bạn, mất khi xóa cache IDE; muốn bền phải `git commit` |
 | "Restore xong chat cũng quay lại" | Timeline chỉ quay code; quay cả chat phải Fork session |
 
+> **Tóm gọn 1 câu:** Rewind rẻ nhất lúc chưa commit — nên sai 2 lần thì dừng, quyết theo bảng 30 giây, đừng để agent kéo bạn đi tiếp đường nát.
+
 ---
 
 ## 7. Gotchas + pitfalls
+
+Mục này nói về các cạm bẫy vận hành worktree/checkpoint — đọc một lượt để khỏi phải vấp từng cái một lần.
 
 **4 gotchas ai cũng vấp 1 lần:**
 
@@ -159,6 +187,8 @@ branch copilot/*):
 | Push tay vào `copilot/*` của agent | Review qua PR, đừng đụng branch của nó |
 | Xóa worktree đang có window mở | Đóng window trước, hoặc `cd` ra rồi `remove` |
 | Agent lan scope mà vẫn argue 10 turns | Sai 2 lần → restore + new chat, rẻ hơn argue |
+
+> **Cách đọc bảng này:** cột "Pitfall" là chuyện sẽ xảy ra, cột "Fix" là thói quen phòng ngừa — quét lướt tuần một lần, dính cái nào thì quay lại cột "Fix" làm ngay.
 
 **Bài tập nhỏ:** (1) Tạo 2 worktrees pattern A, chạy 2 task nhỏ song song, merge + dọn. (2) Giao task sai hướng cho agent, để chạy 5 turns, rồi restore + new chat — so credits rewind-sớm vs argue-tiếp. (3) Thử Timeline restore 1 file + fork chat. (4) Giao 1 issue cho coding agent, review PR `copilot/*`: checkout local, request changes, merge, verify auto-delete.
 
@@ -175,6 +205,8 @@ branch copilot/*):
 | Bền hoá kết quả | `git commit` / PR | `git commit` / PR |
 
 > Nền Git là chung — khác biệt là *cách agent phơi thao tác quay lui*: Claude Code gói thành `/rewind`, Copilot để bạn ghép công cụ editor + Git. Cả hai đều coi `git commit`/PR là nguồn sự thật.
+
+> **Cách đọc bảng này:** so từng "Việc" mà bạn hay làm giữa hai cột Copilot/Claude Code — điểm khác lớn nhất là Copilot ghép 3 công cụ riêng lẻ, Claude Code gói sẵn một lệnh.
 
 **Link chéo:** Bài 06 (chạy nhiều agent local song song) · Bài 07 (branch protection + auto-delete cho `copilot/*`) · Bài 10 (scope Agent mode + approval) · Bài 12 (coding agent assign, auto-fix CI) · Bài 04 (chat history + model picker sau rewind).
 

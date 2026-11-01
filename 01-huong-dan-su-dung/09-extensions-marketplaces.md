@@ -28,11 +28,13 @@
 
 **Ngưỡng đóng gói:** cùng 1 bundle dùng ở **≥3 repos HOẶC** onboarding **≥1 người/tháng**. Dưới ngưỡng → commit `.github/` thẳng rẻ hơn (bài 05/06). Đóng gói quá sớm = tự tạo thêm artifact phải version + publish + sync; không đóng gói khi đã 10 repos = teammate cài tay 10 nơi, mỗi repo trôi một kiểu.
 
+> **Tóm gọn 1 câu:** `.github/` lẻ là nấu cơm từng bữa cho một người; extension/pack là dựng bếp chuẩn cho cả team — vượt ngưỡng ≥3 repos thì nấu một nồi đỡ tốn hơn.
+
 ---
 
 ## 2. 2 loại extensions — đừng nhầm
 
-Có 2 chợ khác nhau: **chợ GitHub** bán "người phục vụ biết gọi SaaS" (`@linear`, `@sentry`), **chợ VS Code** bán "đồ nghề cho editor" (lint, format, MCP local).
+Mục này nói về việc phân biệt hai "chợ" extension — đọc để biết loại nào giải quyết việc nào, khỏi cài nhầm chợ rồi than lệnh không chạy. Có 2 chợ khác nhau: **chợ GitHub** bán "người phục vụ biết gọi SaaS" (`@linear`, `@sentry`), **chợ VS Code** bán "đồ nghề cho editor" (lint, format, MCP local).
 
 | Loại | Nôm na | Cài ở đâu | Ví dụ | Khi nào dùng |
 |---|---|---|---|---|
@@ -53,6 +55,8 @@ Có 2 chợ khác nhau: **chợ GitHub** bán "người phục vụ biết gọi
 ```
 
 > Copilot Extensions đã **GA từ 19/02/2025**, dùng auth native third-party tokens, có trên VS Code, github.com, Visual Studio, JetBrains và GitHub Mobile. Chi tiết đầy đủ: [`../../copilot-extensions-ai-powered/README.md`](../../copilot-extensions-ai-powered/README.md) (EN).
+
+> **Tóm gọn 1 câu:** Gọi SaaS từ Chat thì đi chợ GitHub (`@-mention`), đồ nghề editor thì đi chợ VS Code — hai chợ hai loại hàng, đừng đi nhầm.
 
 ---
 
@@ -81,6 +85,8 @@ Có 2 chợ khác nhau: **chợ GitHub** bán "người phục vụ biết gọi
 | LaunchDarkly/PostHog | `@flags` | Check feature flags | Không dùng flags |
 | Notion/Confluence | `@docs` | Tra docs team | Docs đã local hết |
 
+> **Cách đọc bảng này:** đọc cột `@-mention` để biết gọi tên quầy nào; cột "Khi prune" chính là hướng dẫn dọn dẹp — mỗi quý ngó qua xem extension nào rơi vào đó thì gỡ.
+
 ```text
  Quy tắc: ≤5 Copilot Extensions. Quá → "@" list dài, Copilot chọn sai participant.
  Mỗi extension sâu nên có 1 prompt file kèm (vd .github/prompts/triage-sentry.prompt.md
@@ -90,9 +96,13 @@ Có 2 chợ khác nhau: **chợ GitHub** bán "người phục vụ biết gọi
 
 **Khi nào tự viết Copilot Extension riêng:** chỉ khi nhà bạn có món độc quyền (internal API/runbook) mà chợ chưa bán, và ≥3 teams dùng. Dưới ngưỡng → prompt file + MCP http server là đủ (bài 05/08) — viết extension là GitHub App (manifest, OAuth, hosting), overhead lớn. Khung high-level: tạo GitHub App → enable Copilot permission → định nghĩa skills → host endpoint → install org test → publish private marketplace. Secrets (APP_PRIVATE_KEY, WEBHOOK_SECRET) qua hosting env, KHÔNG commit.
 
+> **Tóm gọn 1 câu:** Tối đa 5 cái `@` thôi — mỗi extension một quầy, chợ đông quá thì Copilot dẫn khách nhầm quầy.
+
 ---
 
 ## 4. VS Code extensions: pack chuẩn team
+
+Mục này nói về việc đóng gói tooling editor thành pack cho cả team — đọc để biết ranh giới giữa "commit `.github/` thẳng" và "đóng pack".
 
 > 📄 **Code ví dụ:** [`examples/02-4-vs-code-extensions-pack-chuan-team.json`](examples/02-4-vs-code-extensions-pack-chuan-team.json)
 
@@ -102,9 +112,13 @@ Có 2 chợ khác nhau: **chợ GitHub** bán "người phục vụ biết gọi
 
 **Khi nào extension vs dotfiles:** 1–2 prompt files, 1 repo → commit `.github/` thẳng. Tooling editor (lint/format/git) → VS Code pack. Gọi SaaS từ Chat → `@-mention`. Chuẩn cross-repo → org template repo + pack (mục 5.2). Preferences cá nhân (theme, keymap) → không commit.
 
+> **Tóm gọn 1 câu:** Prompt file một repo thì commit thẳng, tooling editor thì pack, gọi SaaS thì `@` — đúng việc thì mới đúng cách đóng gói.
+
 ---
 
 ## 5. Cài + pin version + repo template
+
+Mục này nói về khâu vận hành sau khi đã chọn cách đóng gói — đọc để cập nhật có kiểm soát thay vì "bump latest" giữa sprint.
 
 ### 5.1. Pin version (tránh breaking giữa sprint)
 
@@ -136,9 +150,13 @@ Có 2 chợ khác nhau: **chợ GitHub** bán "người phục vụ biết gọi
 
 > 📄 **Code ví dụ:** [`examples/06-5-2-repo-template-thuc-te-hon-viet.sh`](examples/06-5-2-repo-template-thuc-te-hon-viet.sh)
 
+> **Tóm gọn 1 câu:** Pin version là khoá bếp trước khi ai đó tự ý đổi món giữa sprint — còn template repo thì biến onboarding thành một cái bấm "Use template".
+
 ---
 
 ## 6. Org policy allow/block + checklist review
+
+Mục này nói về tầng quyền của admin — đọc để biết dev thường chỉ xem + request, còn ai giữ chìa khóa org thì checklist gì.
 
 Dành cho admin/org owner (Business/Enterprise); dev thường chỉ xem + request.
 
@@ -165,9 +183,13 @@ Dành cho admin/org owner (Business/Enterprise); dev thường chỉ xem + reque
 | Version pinned? CHANGELOG có breaking? | Tránh gãy giữa sprint |
 | 2 extensions cùng chức năng? | Chọn 1, gỡ kia (đỡ conflict) |
 
+> **Cách đọc bảng này:** cột "Kiểm tra gì" là danh mục soát lần lượt từ trên xuống trước khi cho extension vào org; cột "Vì sao" nhắc bạn rằng từng dòng đều đụng tới quyền của chính bạn (đọc files, chạy shell, gọi mạng).
+
 ---
 
 ## 7. Hiểu nhầm + pitfalls
+
+Mục này nói về những niềm tin sai phổ biến quanh extension — đọc để nhận ra mình đang mắc câu nào trong bảng.
 
 | Hiểu nhầm / pitfall | Sự thật / fix |
 |---|---|
@@ -179,9 +201,13 @@ Dành cho admin/org owner (Business/Enterprise); dev thường chỉ xem + reque
 | Cài extension lạ, nó đọc `.env` | Không review permissions → checklist mục 6; content exclusion vẫn làm lưng (bài 07) |
 | 2 formatters conflict | `unwantedRecommendations` + `defaultFormatter` rõ ràng |
 
+> **Cách đọc bảng này:** bên trái là câu nói bạn sẽ nghe trong team (hoặc trong đầu), bên phải là sự thật/fix — cài gì lạ thì tìm dòng gần nhất mà đối chiếu trước khi bấm Install.
+
 ---
 
 ## 8. So sánh với Claude Code + bài tập + link chéo
+
+Mục này nói về chỗ hai công cụ khác nhau khi đóng gói chuẩn team, kèm bài tập thực hành — đọc để chọn hướng đúng với stack của team.
 
 | Việc | Copilot | Claude Code |
 |---|---|---|
@@ -190,6 +216,8 @@ Dành cho admin/org owner (Business/Enterprise); dev thường chỉ xem + reque
 | Tooling editor | VS Code extension pack | Không có tương đương (terminal-first) |
 | Pin version | `code --install-extension name@version` | Pin qua commit/revision của plugin |
 | Org policy allow/block | Org Settings → Copilot → Policies | Managed settings org-wide |
+
+> **Cách đọc bảng này:** so từng "Việc" mà team bạn cần giữa hai cột — nếu chỉ làm việc riêng trong editor thì VS Code pack là khác biệt lớn nhất; nếu chuẩn team cross-repo thì cả hai đều có đường riêng.
 
 **Bài tập nhỏ:**
 

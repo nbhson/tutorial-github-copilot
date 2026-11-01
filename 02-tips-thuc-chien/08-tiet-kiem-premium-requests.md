@@ -9,6 +9,8 @@
 
 ## 1. Cách tính: AI Credits là gì?
 
+Mục này giải thích "đồng tiền" của Copilot — đọc để hiểu mình trả theo đơn vị nào và mỗi hành động rút bao nhiêu từ ví, trước khi bàn cách tiết kiệm ở các mục sau.
+
 **Bảng gói hiện tại (từ 01/06/2026):**
 
 | Gói | Giá/tháng | Credits gồm sẵn |
@@ -19,6 +21,8 @@
 | Copilot Max | $100 | 20.000 AI credits (base 10.000 + flex 10.000) |
 | Copilot Business | $19/user | 1.900 AI credits/seat |
 | Copilot Enterprise | $39/user | 3.900 AI credits/seat (pooled) |
+
+> **Cách đọc bảng này:** đọc cột **Credits gồm sẵn** là chính — đó là "ngân sách tháng" của bạn; các gói cá nhân có phần base + flex (base là ngân sách cứng, flex là phần dự phòng), gói org thì cộng dồn theo seat.
 
 Credits dùng hết có thể mua thêm; mỗi lượt gọi model trừ theo **số tokens × hệ số của model** (model nhẹ rẻ hơn flagship nhiều). Xem usage: GitHub → Settings → Copilot → Usage; trong Copilot CLI dùng `/limits` để xem/đổi giới hạn credits của phiên.
 
@@ -48,7 +52,11 @@ Giảm 1 trong 3 là rẻ: **giảm turns** (prompt tốt + plan-first, ít retr
 
 > Rule: **việc rẻ thì dùng cách rẻ. Credits model mạnh để dành cho plan + implement khó.**
 
+> **Tóm gọn 1 câu:** AI Credits như tiền lương tháng: việc vặt trả bằng tiền lẻ (model nhẹ), để dành tiền lớn cho những lần mua sắm xứng đáng (plan, refactor, review khó).
+
 ## 3. Model routing: việc nào model nào?
+
+Mục này là phần "chọn đúng tiền mệnh giá" — bảng dưới đây chỉ rõ từng loại việc nên dùng model/mode nào, đọc để ngừng tiêu tiền trăm cho mua kẹo.
 
 | Việc | Ví dụ | Model | Mode | Vì sao |
 |---|---|---|---|---|
@@ -114,7 +122,11 @@ Hãy gõ 1 case mẫu → Tab Tab Tab → sửa số liệu.
 
 Ba chế độ chênh nhau cả chục lần về chi phí — chọn đúng chế độ tiết kiệm nhiều hơn mọi mẹo tối ưu prompt.
 
+> **Tóm gọn 1 câu:** Completions là xe đạp (gần như miễn phí), Ask/Edit là xe máy, Agent là xe container — chở bịch kẹo bằng container thì ai cũng phải trả giá.
+
 ## 5. Prune MCP/extensions + chat gọn
+
+Mục này là phần "dọn nhà": đồ không dùng để đó cũng chiếm chỗ — mỗi MCP server và mỗi turn rác trong chat đều rút ví bạn mỗi lượt gọi.
 
 **Prune checklist (mỗi tháng 1 lần):**
 
@@ -135,6 +147,8 @@ Ba chế độ chênh nhau cả chục lần về chi phí — chọn đúng ch�
 **Đo và so:** ghi số chats, turns/chat, số @workspace, số retries vì prompt ẩu tuần này; áp routing + prune tuần sau; so 2 cột trước/sau.
 
 ## 6. Đóng gói tri thức: trả 1 lần, dùng mãi
+
+Mục này là cách "viết một cuốn sách dùng chung thay vì chép tay công thức vào từng cuốn sổ": nội dung lặp lại bao nhiêu lần thì đóng gói một lần cho Copilot tự đọc.
 
 Paste spec 200 dòng vào 20 chats = trả 20 lần. Đưa vào file dùng chung = trả 1 lần:
 
@@ -157,6 +171,8 @@ Cẩn thận: đóng gói sai chỗ (nhét cả checklist dài vào instructions
 
 ## 8. Bảng tra nhanh: tốn bao nhiêu?
 
+Bảng dưới đây "gắn sao" mức đốt tiền cho từng thói quen — sao càng nhiều càng đắt; quét một lượt là biết ngay nên sửa thói quen nào trước.
+
 | Cách làm | Tốn tương đối | Cách rẻ hơn |
 |---|---|---|
 | Completions Tab | ★☆☆☆☆ | Luôn ưu tiên trước |
@@ -167,6 +183,8 @@ Cẩn thận: đóng gói sai chỗ (nhét cả checklist dài vào instructions
 | @workspace cả repo | +★★ | 1 lần rồi ghi file, sau đó đọc file |
 | MCP 12 servers | +★★ | Prune ≤6, tắt auto-approve write |
 | Retry prompt ẩu ×5 | ×5 | Sửa prompt (scope+verify+NEVER) rồi mới retry |
+
+> **Cách đọc bảng này:** dọc cột **Cách làm** để tìm thói quen của bạn, cột sao là mức "đau ví" từ nhẹ tới nặng, cột **Cách rẻ hơn** là lối thay thế — ưu tiên sửa mấy dòng nhiều sao nhất.
 
 > Quy tắc ngón tay: **Tab trước, Ask/Edit sau, Agent khi đáng, Coding Agent khi rảnh tay làm việc khác.**
 

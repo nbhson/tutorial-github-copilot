@@ -7,6 +7,8 @@ Cảm ơn bạn muốn đóng góp! Repo này là tài liệu tiếng Việt, m�
 
 ## Cách thêm bài mới đúng format
 
+Mục này là bản đồ cho việc "thêm bài": trước hết xác định bài của bạn thuộc loại nào (bài học, FAQ, tips hay lệnh), rồi chỉ đọc đúng phần đó — mỗi loại một khuôn, đừng trộn lẫn.
+
 ### Bài trong `01-huong-dan-su-dung/` (deep-dive `NN-ten-bai.md`)
 
 - Đặt tên: số tiếp theo + slug tiếng Việt không dấu, vd `13-copilot-cli-tu-a-den-z.md`.
@@ -34,7 +36,11 @@ Cảm ơn bạn muốn đóng góp! Repo này là tài liệu tiếng Việt, m�
 - File vàng để nhìn mẫu: `commands/code-actions/fix/README.md`.
 - Ví dụ phải riêng cho từng lệnh (cấm copy-paste ví dụ chung cho mọi lệnh). Ghi rõ mode nào dùng được (Ask/Edit/Agent) và cách kiểm tra bằng `/` trong Chat.
 
+> **Tóm gọn 1 câu:** Thêm bài giống nấu theo công thức có sẵn — chọn đúng khuôn cho đúng món, việc còn lại là đổ nội dung riêng của bạn vào.
+
 ## Quy ước đặt tên & văn phong
+
+Mục này chốt cách đặt tên file và giọng viết — giữ đúng quy ước là người khác tìm được bài của bạn mà không cần hỏi.
 
 - File/kebab-case không dấu: `NN-ten-tieng-viet.md`, folder lệnh 1 từ: `fix/`.
 - Tiếng Việt, xưng "bạn", code comments tiếng Việt không dấu (tránh lỗi encoding CI).
@@ -51,3 +57,5 @@ Cảm ơn bạn muốn đóng góp! Repo này là tài liệu tiếng Việt, m�
 - [ ] Workflow YAML mới: parse được (`python -c "import yaml..."`), secrets qua env,
       không hardcode token.
 - [ ] Không sửa file `.md` cũ (diff chỉ chứa file mới, trừ đợt viết lại có ghi rõ lý do).
+
+> **Tóm gọn 1 câu:** PR checklist là cửa soát vé cuối — tick đủ 7 ô thì PR mới qua cổng, thiếu một ô là bị trả về ngay.

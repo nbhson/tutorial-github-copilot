@@ -10,6 +10,8 @@ Hai lệnh này là kênh gửi ý kiến lên "ban quản lý" Copilot. `/feedb
 
 Vì GitHub chỉ sửa được cái nó tái hiện được. Một câu "Copilot dở" không giúp ích gì; còn "`/tests` sinh import sai, lặp lại bằng cách bôi đen hàm X rồi gọi `/tests`, extension 1.2.3" thì họ có thể đóng bug hoặc fix. `/feedback` nhanh, dùng cho việc nhẹ (vote + lý do); `/bug` dùng khi cần người ta tái hiện chính xác.
 
+> **Tóm gọn 1 câu:** Báo lỗi kiểu "bệnh nhân đến khám" — kèm triệu chứng, cách gây lại bệnh và hồ sơ (version), bác sĩ mới chữa được.
+
 **Nếu làm sai thì sao?** Báo thiếu bước lặp → bị đóng là "không tái hiện được". Báo nhầm do lỗi scope của bạn → mất thời gian cả hai bên. Dán log có secrets → rò rỉ thông tin. Cả ba đều tránh được bằng vài thao tác nhỏ.
 
 ## Khi nào dùng / khi nào đừng
@@ -24,6 +26,8 @@ Vì GitHub chỉ sửa được cái nó tái hiện được. Một câu "Copil
 |---|---|---|
 | `/feedback` | Vote tốt/xấu + lý do | Câu trả lời hay/dở, muốn góp ý nhanh |
 | `/bug` | Mô tả + bước lặp + version | Bug lặp lại được, cần GitHub tái hiện |
+
+> **Cách đọc bảng này:** hai dòng là hai kênh khác nhau — chọn kênh bằng câu hỏi "mình muốn họ *làm gì* với thông tin này": chỉ ghi nhận ý kiến thì `/feedback`, cần họ sửa được thì `/bug`.
 
 ## Cách gọi (copy-paste)
 
@@ -57,6 +61,8 @@ Nghiệp vụ: `/tests` sinh ra import sai mỗi lần bạn bôi đen hàm X, v
 | Báo nhầm do scope mình sai | Chưa kiểm tra scope | Gọn scope + thử lại trước khi báo |
 | Gửi feedback có secrets | Dán log chứa token | Soát secrets trước khi gửi |
 
+> **Cách đọc bảng này:** mỗi dòng là một kết cục không mong muốn; cột Nguyên nhân chỉ ra bạn quên bước nào, cột Fix là việc bổ sung ngay.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (`/feedback` + `/bug`) | Claude Code | Ghi chú |
@@ -64,6 +70,8 @@ Nghiệp vụ: `/tests` sinh ra import sai mỗi lần bạn bôi đen hàm X, v
 | Báo bug / góp ý trong sản phẩm | Slash command có sẵn `/feedback` và `/bug` | Báo qua kênh GitHub/issue của Anthropic, không có slash riêng | Cùng mục đích, khác đường vào |
 | Gửi kèm context | Form bắt mô tả + bước lặp + version | Tùy kênh, thường bạn tự soạn issue | Cùng nguyên tắc "tái hiện được mới xử được" |
 | Soát secrets | Bạn tự soát log trước khi gửi | Bạn tự soát | Không công cụ nào tự bảo vệ secret của bạn |
+
+> **Tóm gọn 1 câu:** Bug báo đủ "triệu chứng + cách gây lại + version" là bạn đang giao việc cho GitHub; thiếu một trong ba, bạn chỉ vừa xả stress.
 
 ## Best practices (kèm "vì sao")
 

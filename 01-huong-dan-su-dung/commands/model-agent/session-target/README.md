@@ -21,6 +21,8 @@ Chọn đúng nơi chạy theo việc:
 
 **Nếu làm sai thì sao?** Muốn chạy nền mà cứ dùng Local thì phải giữ cửa sổ mở; ngược lại, cần tool built-in của VS Code mà lại giao Cloud thì Cloud không thấy context local nên kết quả cụt.
 
+> **Tóm gọn 1 câu:** Cùng một bộ não, ba nơi để tay — việc cần "công cụ gì" quyết định chỗ chạy, không phải thói quen.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** bạn muốn agent chạy nền, chạy nhiều phiên, hoặc giao hẳn task async để nhận PR; hoặc cần mang một phiên đang làm sang nơi khác (handoff).
@@ -64,6 +66,8 @@ Nghiệp vụ: bạn có ba việc khác tính chất và muốn xếp đúng "n
 | Cloud không thấy tool quen dùng | Cloud dùng tool/model của service | Task cần tool VS Code/extension → ở lại Local/Copilot; giao Cloud task gọn, độc lập |
 | Tưởng đổi target = đổi model | Nhầm harness với model | Model đổi ở model picker; target đổi "nơi chạy + tay chân" |
 
+> **Cách đọc bảng này:** mỗi dòng là một triệu chứng bạn tự nhìn thấy (cột 1); lần theo cột Nguyên nhân để biết mình sai ở đâu, rồi lấy đúng Fix ở cột cuối — đọc theo dòng, đừng đọc cột dọc.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (Session Target) | Claude Code | Ghi chú |
@@ -71,6 +75,10 @@ Nghiệp vụ: bạn có ba việc khác tính chất và muốn xếp đúng "n
 | Chạy nền / nhiều phiên | Target Copilot trên Agent Host, nhiều phiên song song | Chạy nhiều phiên terminal/IDE | Copilot có sidebar quản lý session tập trung |
 | Giao hẳn lên cloud | Target Cloud → nhận PR | Không có target Cloud sẵn — tự dựng container/Actions | Copilot tích hợp cloud + PR thẳng |
 | Mang ngữ cảnh khi đổi nơi chạy | Handoff + `/delegate` | Mở phiên mới, tự khôi phục context | Cả hai đều cần chủ động giữ context |
+
+> **Cách đọc bảng này:** mỗi dòng là một nhu cầu ("tôi muốn X"); so cột Copilot với Claude Code để thấy mỗi bên giải quyết ra sao, cột Ghi chú là điểm khác biệt đáng nhớ nhất.
+
+> **Tóm gọn 1 câu:** Session Target là chọn "nơi agent đứng làm việc" — model vẫn vậy, nhưng tay chân và context theo chỗ chạy mà đổi.
 
 ## Best practices (kèm "vì sao")
 

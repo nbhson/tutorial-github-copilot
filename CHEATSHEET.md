@@ -6,6 +6,8 @@
 
 > **Cách đọc:** `lệnh` → ví dụ copy-paste ngay bên cạnh (sau `→`). Trong Chat, gõ `/` (slash), `@` (participant), `#` (biến) để xem list khả dụng ở máy bạn.
 
+> **Tóm gọn 1 câu:** Trang này là hộp dụng cụ xếp theo nơi làm việc (terminal → editor → giao việc → tính tiền) — mở đúng ngăn đang cần, lấy lệnh là đi ngay.
+
 ## CLI (terminal)
 
 *Khi nào dùng:* bạn đang đứng ở terminal và muốn sinh/giải thích một lệnh shell, hoặc giao hẳn task cho CLI agent — không cần mở IDE.
@@ -57,6 +59,8 @@
 | Session Target | `đáy khung Chat → Local (làm tay) / Copilot (chạy nền) / Cloud (giao hẳn, mở PR); Copilot → /delegate sang Cloud` |
 | `/model` đổi model | `/model → chọn model rẻ cho /explain, model mạnh cho agent/kiến trúc khó` |
 | `/usage` xem quota | `/usage → xem AI Credits đã dùng; hết thì đổi model nhẹ chờ reset` |
+
+> **Tóm gọn 1 câu:** Modes là hộp số của xe: việc nhỏ để số thấp (Ask/Edit), dốc mới về số cao (Agent/Autopilot) — và luôn nhìn pin (/usage) trước khi lên dốc dài.
 
 ## instructions / prompts / skills / MCP
 

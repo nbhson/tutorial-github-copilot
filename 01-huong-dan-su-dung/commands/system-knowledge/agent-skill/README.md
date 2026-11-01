@@ -10,6 +10,8 @@
 
 Skill nằm trong `.github/skills/<ten>/SKILL.md`, có `description` liệt kê từ khóa trigger. Khi câu nói của bạn khớp, model tự nạp đúng quy trình — bạn không cần nhớ tên lệnh, và kết quả ổn định hơn vì cùng input đi cùng các bước. So với gõ prompt tay mỗi lần: skill gọn hơn (không phải nhét lại checklist), và rẻ hơn instructions (chỉ nạp khi cần, không nạp mọi lượt).
 
+> **Tóm gọn 1 câu:** Skill là "sổ tay nghề model tự mở" — bạn nói việc, model tự rút đúng quy trình, tiền công trả bằng một câu `description` viết chuẩn.
+
 **Nếu làm sai thì sao?** Đóng quy trình vào skill nhưng `description` viết chung chung (“hỗ trợ deploy”) thì skill **không bao giờ tự kích hoạt** — bạn tưởng model đã biết, thực ra nó chưa từng thấy skill.
 
 ## Khi nào dùng / khi nào đừng
@@ -24,6 +26,8 @@ Skill nằm trong `.github/skills/<ten>/SKILL.md`, có `description` liệt kê 
 | Prompt (`/prompts`) | Bạn gõ tay tên prompt | Việc lặp lại muốn chủ động gọi, kiểm soát từng lần |
 | Skill (`/skills`) | Model tự kích hoạt theo `description` | Muốn model tự chọn cách làm chuẩn, không cần nhớ tên |
 | Agent | Bạn chạy như một “đồng nghiệp” riêng | Việc dài, cần persona/permission riêng |
+
+> **Cách đọc bảng này:** mỗi dòng là một cách đóng gói quy trình; hỏi lại mình "ai là người gọi nó" (cột giữa) là chọn được ngay — muốn tự tay gọi chọn Prompt, muốn model tự chọn chọn Skill.
 
 ## Cách gọi (copy-paste)
 
@@ -66,6 +70,8 @@ description: 'Deploy staging/prod kèm migrate + smoke test.
 | Nhầm skill với prompt | Chưa rõ khác biệt | Prompt = gọi tay; Skill = model tự gọi; Agent = người làm |
 | Skill quá to, hay bỏ bước | Ôm cả quy trình dài | Mỗi skill 1 kỹ năng; `SKILL.md` <100 dòng + ví dụ input/output |
 
+> **Cách đọc bảng này:** cột Triệu chứng là thứ bạn quan sát được, cột Nguyên nhân là chân thường, cột Fix là việc làm ngay — soi từng dòng để tìm đúng ca của mình.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (`/skills`) | Claude Code | Ghi chú |
@@ -73,6 +79,10 @@ description: 'Deploy staging/prod kèm migrate + smoke test.
 | Chuẩn skill | Agent Skills `SKILL.md` (Copilot tự dò cả `.claude/skills/`) | Agent Skills `SKILL.md` (Anthropic khởi xướng, ~40 tools) | Cùng chuẩn mở — viết 1 lần chạy nhiều agent |
 | Ai kích hoạt | Model tự nạp khi `description` khớp | Model tự nạp theo ngữ cảnh | Cùng tư tưởng “skill tự trigger” |
 | Lệnh xem danh sách | Có `/skills` | Không có lệnh tương đương — skill được dò trong `.claude/skills/` | Copilot cho xem list; Claude Code tự dò |
+
+> **Cách đọc bảng này:** cùng một chuẩn skill chạy ở cả hai công cụ; khác nhau nằm ở chỗ "ai dò, ai liệt kê" — đọc cột Ghi chú để nhớ điểm đó.
+
+> **Tóm gọn 1 câu:** Skill dùng chung một chuẩn mở với Claude Code — viết một lần, agent nào khớp `description` cũng tự dùng được.
 
 ## Best practices (kèm "vì sao")
 

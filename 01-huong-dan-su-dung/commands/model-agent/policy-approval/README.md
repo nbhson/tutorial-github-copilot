@@ -20,13 +20,19 @@ Ba mức cần nắm:
 | Ask | Hỏi bạn trước mỗi lần chạy | Lệnh ghi/xóa/MCP chưa chắc — mặc định an toàn |
 | Deny | Chặn hẳn, không cho chạy | Lệnh destructive: `rm`, force-push, migration prod |
 
+> **Cách đọc bảng này:** ba mức xếp theo độ mở của cổng — Allow mở toang, Ask mở có người soi, Deny khóa hẳn; khi phân vân một tool thuộc mức nào thì chọn Ask, đó là mức "chưa tin cũng chưa cần chặn hẳn".
+
 **Nếu làm sai thì sao?** Allow hết để "cho nhanh" là cách mở toang cửa. Ngược lại, deny cả những lệnh đọc lặp lại khiến bạn bấm Allow đến mỏi tay rồi bấm cho xong — bạn vô hiệu hóa chính cái gate mình dựng công phu.
+
+> **Tóm gọn 1 câu:** Cổng bảo vệ chỉ có giá trị khi bạn thật sự đọc từng lệnh đi qua — bấm Allow cho nhanh là tự dỡ chính cánh cổng mình dựng.
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** agent xin Allow chạy lệnh (terminal/MCP tool); muốn set baseline allow/ask/deny cho team; nghi policy org đang chặn một việc bạn cần.
 - **ĐỪNG dùng như chỗ "đổi cho xong":** đừng Allow một lệnh bạn chưa hiểu, chỉ để nó chạy tiếp. Cổng an toàn chỉ có giá trị khi bạn thật sự nhìn vào nó.
 - **Cho ai:** người duyệt lệnh cho agent, admin/tech lead set policy cho team.
+
+> **Tóm gọn 1 câu:** Đọc thì nới, ghi/xóa thì siết, phân vân thì Ask — thiết kế cổng sao cho bạn không bao giờ phải bấm Allow trong lúc mơ ngủ.
 
 ## Cách gọi (copy-paste)
 
@@ -58,13 +64,19 @@ Nghiệp vụ: agent đang làm task migration và xin chạy lệnh migration l
 
 ## Lỗi thường gặp
 
+Cảm giác "cái gate này hơi phiền" hoặc "sao nó không chạy được"? Ba ca dưới đây giải thích gần hết — tra theo Triệu chứng rồi áp Fix.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Bấm Allow mù cho qua | Mỏi tay | Deny mặc định cho lệnh ghi/xóa; chỉ allow tools đọc |
 | Không biết ai chặn | Nhầm policy vs bug | Hỏi admin tab Policies + xem audit log |
 | Mỗi máy 1 kiểu approval | Thiếu baseline team | Commit baseline vào repo + viết docs |
 
+> **Cách đọc bảng này:** đọc theo hàng từ Triệu chứng → Fix; hàng đầu là vòng xoắn nguy hiểm nhất — mỏi tay dẫn tới bấm mù, nên Fix nằm ở thiết kế baseline chứ không ở ý chí.
+
 ## So sánh với Claude Code
+
+Cũng dùng Claude Code? Bảng này đối chiếu mô hình duyệt quyền của hai bên — cùng tư tưởng deny-first, khác nhau ở nơi cất luật.
 
 | Việc | Copilot (policy approval) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -72,7 +84,11 @@ Nghiệp vụ: agent đang làm task migration và xin chạy lệnh migration l
 | Thứ tự ưu tiên | `deny > ask > allow`; org > team > personal | Allowlist + chế độ permission | Cùng tư tưởng deny-first |
 | Nơi đặt luật | `.vscode/settings.json` + org policy | `settings.json` + quản lý của org | Khác tên file, cùng ý nghĩa |
 
+> **Cách đọc bảng này:** đọc theo hàng so khớp tư duy; cột Ghi chú là chỗ an ủi — đổi tên file thôi, tư duy "đọc thì nới, ghi thì siết" áp được cho cả hai.
+
 ## Best practices (kèm "vì sao")
+
+Bốn quy tắc dưới đây giúp cổng bảo vệ vừa chắc vừa không mỏi tay — mỗi quy tắc kèm lý do.
 
 - **Allow cho tool chỉ-đọc, `ask`/`deny` cho phần còn lại.** *Vì sao?* Việc đọc lặp lại rất nhiều; thao tác ghi/xóa mới là chỗ rủi ro.
 - **Thuộc quy tắc `deny > ask > allow`.** *Vì sao?* Deny ở bất kỳ đâu cũng thắng — biết luật này bạn khỏi mất buổi tối "lách" bằng personal setting.

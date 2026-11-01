@@ -16,11 +16,15 @@ Nó cũng giúp bạn phân biệt hai chuyện rất khác nhau: **hết quota*
 
 **Nếu làm sai thì sao?** Nếu bạn coi mọi báo lỗi là bug và mở issue, bạn tốn thời gian cho một việc chỉ cần đổi model hoặc chờ reset. Ngược lại, coi "hết quota" là chuyện nhỏ rồi cứ đẩy task khó lên model mạnh thì hết tháng là tay trắng.
 
+> **Tóm gọn 1 câu:** `/usage` là công-tơ điện của Copilot — nhìn định kỳ để biết tiền đi đâu, và phân biệt được "hết tiền" với "mất điện".
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** đầu tuần muốn biết còn bao nhiêu; gặp báo quota exhausted; cuối tháng rút kinh nghiệm phân bổ.
 - **ĐỪNG dùng như chẩn đoán lỗi:** nếu thấy error mà chưa đọc kỹ message, đừng kết luận là quota trước khi xem nó nói gì.
 - **Cho ai:** người dùng plan cá nhân trả phí, admin theo dõi credit của team.
+
+> **Tóm gọn 1 câu:** Đầu tuần xem một lần, giao task lớn xem một lần — hai phút công-tơ tiết kiệm cả tháng khỏi phải dừng giữa đường vì hết credit.
 
 ## Cách gọi (copy-paste)
 
@@ -52,13 +56,19 @@ Nghiệp vụ: bạn đang giữa sprint, tự trả tiền theo usage, và sắ
 
 ## Lỗi thường gặp
 
+Ba ca dưới đây là cách ai cũng "cháy túi" hoặc mở ticket nhầm ít nhất một lần — tra theo Triệu chứng rồi áp Fix.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Hết quota giữa tháng | Dùng model mạnh cho việc nhẹ | Việc nhẹ → model rẻ; agent → mạnh; prune MCP |
 | Không biết ai xài nhiều (team) | Thiếu theo dõi org | Admin xem billing/seats + audit log |
 | Nhầm quota với bug | Báo error là tưởng hỏng | Đọc kỹ message: quota vs model unavailable khác nhau |
 
+> **Cách đọc bảng này:** đọc theo hàng từ Triệu chứng → Fix; hàng đầu là nguyên nhân "cháy" kinh điển, còn hàng cuối là cách tránh mở ticket sai — đọc kỹ message 10 giây trước khi kết luận.
+
 ## So sánh với Claude Code
+
+Cũng dùng Claude Code? Bảng này đối chiếu cách hai bên đo chi tiêu — đơn vị khác nhau nhưng đều cùng một chân lý: không đo thì không kiểm soát được.
 
 | Việc | Copilot (/usage) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -66,7 +76,11 @@ Nghiệp vụ: bạn đang giữa sprint, tự trả tiền theo usage, và sắ
 | Đơn vị tính | AI Credits (1 credit = $0.01) | Token / chi phí phiên | Cơ chế khác, cùng phải đo mới kiểm soát được |
 | Completions miễn phí | Code completion không trừ credit (plan trả phí) | Không có autocomplete truyền thống như Copilot | Điểm Copilot lợi thế ở gõ code từng dòng |
 
+> **Cách đọc bảng này:** đọc theo hàng so khớp tư duy; cột Ghi chú là chỗ đáng nhớ — cơ chế tính tiền khác nhau nhưng nguyên tắc "đo mới kiểm soát được" thì như nhau.
+
 ## Best practices (kèm "vì sao")
+
+Bốn thói quen dưới đây giúp công-tơ của bạn chạy chậm lại một cách có chủ đích — mỗi thói quen kèm lý do.
 
 - **Xem công-tơ đầu tuần và cuối tháng.** *Vì sao?* Thấy xu hướng sớm thì kịp chỉnh thói quen, thay vì cháy túi rồi mới tiếc.
 - **Đặt mặc định là model rẻ.** *Vì sao?* Phần lớn lượt chat là việc nhẹ; chỉ một số ít cần model mạnh, mà giá chênh rất nhiều.

@@ -18,6 +18,8 @@ Trí nhớ của bạn không phải nơi lưu tốt nhất cho hàng chục phi
 
 **Nếu làm sai thì sao?** Ngộ nhận lớn nhất là tin rằng mở lại chat cũ là model "nhớ hết". Thực tế history chỉ lưu **text hội thoại**, không lưu nguyên trạng thái tool của phiên (file đã đọc, lệnh đã chạy). Mở lại có thể thấy model "quên" chi tiết tool — xem ❌/✅.
 
+> **Tóm gọn 1 câu:** `/history` là sổ đầu bài của các phiên chat — tìm lại nhanh, nhưng nó giữ chữ chứ không giữ trạng thái tool nên mở lại phải nhắc bối cảnh.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** muốn tiếp tục việc hôm qua làm dở; so sánh hai cách giải quyết ở hai chat khác nhau; tìm lại prompt hay để lưu thành template.

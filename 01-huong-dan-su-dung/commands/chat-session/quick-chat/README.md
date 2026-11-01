@@ -18,6 +18,8 @@ Có những câu hỏi không xứng đáng để mở cả một Chat view: "h�
 
 **Nếu làm sai thì sao?** Hai lỗi thường gặp: (1) hỏi câu phức tạp cần context nhiều file — quick chat trả lời cộc, phải chuyển Chat view; (2) câu trả lời hay nhưng quên lưu vì quick chat không giữ lịch sử kỹ. Xem ❌/✅.
 
+> **Tóm gọn 1 câu:** Quick chat là kênh hỏi-và-quên 30 giây — câu hỏi vặt thì hợp, việc lớn hãy để Chat view lo.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** hỏi định nghĩa, cú pháp, "hàm này làm gì?" trong 30 giây; đang code dở và không muốn mở hẳn Chat view; câu hỏi xong không cần lưu lịch sử.

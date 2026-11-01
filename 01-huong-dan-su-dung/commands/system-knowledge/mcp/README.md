@@ -24,6 +24,8 @@ MCP server chạy **ngoài** VS Code: nó có thể rớt mạng, hết hạn to
 | Xem/reconnect server đang bật | `/mcp` | Đầu session, nghi tool rớt |
 | Thêm/sửa server mới vào config | `MCP add` (`.vscode/mcp.json`) | Cần tool ngoài mới (github/playwright/postgres) |
 
+> **Cách đọc bảng này:** hai dòng là hai việc hay bị làm lẫn — "xem và bật lại" thuộc `/mcp`, "thêm mới" thuộc `MCP add`; định vị đúng dòng trước khi thao tác.
+
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
@@ -66,6 +68,8 @@ thực ra server MCP chưa lên.
 | Auth fail | Token sai/thiếu env | Token qua `${input}`/env, không hardcode; test lại |
 | Server nặng (playwright) | Mỗi máy spawn riêng | Team share 1 remote `http`/`sse` server |
 
+> **Cách đọc bảng này:** cột Nguyên nhân chia lỗi thành hai tầng — sai cấu hình hay token rớt; xác định được tầng nào bạn mới biết sửa file hay kiểm kết nối.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (`/mcp`) | Claude Code | Ghi chú |
@@ -73,6 +77,8 @@ thực ra server MCP chưa lên.
 | Xem server/tool đang bật | Có `/mcp` liệt kê + reconnect | Có MCP, quản lý qua CLI/cấu hình | Cùng chuẩn giao thức MCP |
 | Khai báo server | `.vscode/mcp.json` | Cấu hình MCP riêng của Claude Code | Cùng ý tưởng, khác chỗ đặt file |
 | Tool gọi ra trong chat | `mcp__<server>__<tool>` | `mcp__<server>__<tool>` | Cách gọi tool nhất quán giữa hai bên |
+
+> **Tóm gọn 1 câu:** `/mcp` là cái nhìn vào bảng điện — nó không sửa gì, chỉ cho bạn biết cầu dao nào còn bật trước khi phán rằng nhà mất điện.
 
 ## Best practices (kèm "vì sao")
 

@@ -18,6 +18,8 @@ Khi phiên chat dài, hai việc cùng lúc trở nên khó: model quên đầu 
 
 **Nếu làm sai thì sao?** Rủi ro lớn nhất là **nén ẩu mất chi tiết**: chat quá dài, model tóm tắt bỏ sót file/số liệu quan trọng. Và vì model có thể "ảo giác" trong bản tóm tắt, bạn phải đọc lại trước khi share. Xem ❌/✅.
 
+> **Tóm gọn 1 câu:** `/summarize` giữ đúng thứ bạn bảo nó giữ — nói rõ file + quyết định + số liệu, rồi đọc lại trước khi share.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** chat >20 turns và model bắt đầu quên; bàn giao việc dở cho người/agent khác; trước khi `/new` mà muốn giữ tinh túy chat cũ.

@@ -49,6 +49,8 @@ Nghiệp vụ: sáng nay Copilot không gợi ý gì sau khi bạn đổi sang l
 | Popup đăng nhập bị chặn | Browser/proxy chặn popup | Mở browser mặc định, tắt chặn popup tạm thời |
 | Login xong vẫn không gợi ý | Chưa có seat / file bị exclusion | Kiểm tra seat + content exclusion + `/status` |
 
+> **Cách đọc bảng này:** đọc theo thứ tự xuất hiện khi debug — tìm đúng dòng triệu chứng, cột Fix là thao tác tiếp theo trong chuỗi loại trừ nguyên nhân.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (`/login`) | Claude Code | Ghi chú |
@@ -56,6 +58,8 @@ Nghiệp vụ: sáng nay Copilot không gợi ý gì sau khi bạn đổi sang l
 | Cách xác thực | OAuth qua tài khoản GitHub | Đăng nhập Anthropic hoặc dùng API key | Khác nhà cung cấp, cùng ý tưởng "1 login dùng nhiều bề mặt" |
 | Đổi account | Logout rồi login lại | Đổi key/account trong config | Cả hai đều khuyên đổi sạch thay vì chồng |
 | Kiểm chứng sau login | `/status` + thử ghost text | Chạy thử một prompt | Bạn vẫn là người verify |
+
+> **Tóm gọn 1 câu:** `/login` chỉ cấp chìa khóa vào cửa — còn vào đúng phòng (account/plan) hay không thì phải hỏi `/status` sau khi bước qua cửa.
 
 ## Best practices (kèm "vì sao")
 

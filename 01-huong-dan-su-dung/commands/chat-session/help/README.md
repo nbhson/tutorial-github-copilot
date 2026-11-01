@@ -18,6 +18,8 @@ Rất nhiều thắc mắc "sao lệnh này không chạy" thực ra là câu h�
 
 **Nếu làm sai thì sao?** Ngộ nhận phổ biến: thấy `/help` máy đồng nghiệp có lệnh mà máy mình không có, liền kết luận "extension lỗi". Thực ra thường là khác plan/version. Xem ❌/✅.
 
+> **Tóm gọn 1 câu:** `/help` là bản đồ lệnh của riêng máy bạn — thiếu lệnh thường là chuyện plan/version, không phải extension hỏng.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** mới cài và chưa biết có lệnh gì; nghi một lệnh vắng mặt do plan/version; onboard thành viên mới.

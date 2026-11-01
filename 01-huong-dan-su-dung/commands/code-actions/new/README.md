@@ -12,11 +12,15 @@ Phần tốn thời gian khi viết code mới không phải logic mà là khung
 
 **Nếu làm sai thì sao?** Hai cái bẫy. Một là **lệch style**: không có file mẫu, code sinh ra đúng logic nhưng khác convention repo (naming, cách xử lý lỗi), review mất thời gian sửa. Hai là **ôm đồm**: tả cả module trong một lần thì ra khối code to, khó review và dễ sai — hãy chia nhỏ theo bước (xem mục ❌/✅).
 
+> **Tóm gọn 1 câu:** `/new` là bạn cùng bàn viết bài giải nháp — đưa kèm một bài mẫu của lớp thì chữ viết ra đúng "font" của lớp ngay.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** sinh hàm/file/module mới từ mô tả đã rõ, tạo boilerplate theo mẫu repo, hoặc spike nhanh một ý tưởng.
 - **ĐỪNG dùng khi:** bạn cần *sửa* code đang có (`/fix`, `/refactor`), hoặc task mở cần tìm file + chạy test nhiều bước (dùng Agent mode).
 - **Cho ai:** dev viết code mới hằng ngày, người muốn spike nhanh 1 ý tưởng.
+
+> **Tóm gọn 1 câu:** Đề bài rõ + file mẫu + chia nhỏ = bản nháp dùng được ngay; ôm cả module một lần là tự mời diff khổng lồ.
 
 ## Cách gọi (copy-paste)
 
@@ -48,13 +52,19 @@ Nghiệp vụ: cần một helper gọi API có retry cho tầng network.
 
 ## Lỗi thường gặp
 
+Code sinh ra chưa ưng ý thì gần như luôn rơi vào một trong ba ca dưới đây — tra theo Triệu chứng rồi áp Fix tương ứng.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Code sinh ra không khớp style | Thiếu file mẫu | Attach 1 file mẫu + "theo đúng style file này" |
 | Thiếu xử lý lỗi/edge | Mô tả thiếu | Thêm "xử lý null/timeout/lỗi mạng" vào đề |
 | Sinh cả module quá to | Ôm đồm 1 lần | Chia: types → hàm → test, từng bước |
 
+> **Cách đọc bảng này:** đọc theo hàng từ Triệu chứng sang Fix; hàng "quá to" là ca đáng sợ nhất — chia nhỏ trước khi gọi lại thì đỡ tốn cả lượt review.
+
 ## So sánh với Claude Code
+
+Đang dùng song song hai công cụ? Bảng này chỉ chỗ `/new` tương ứng bên Claude Code và khác nhau thật sự ở đâu.
 
 | Việc | Copilot (`/new`) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -62,7 +72,11 @@ Nghiệp vụ: cần một helper gọi API có retry cho tầng network.
 | Khớp style repo | Khớp hơn khi bạn đính kèm file mẫu | Agent tự đọc repo tìm mẫu | Cả hai đều khớp hơn khi bạn chỉ đúng mẫu |
 | Kiểm chứng | Bạn chạy thử + viết test nhanh | Bạn vẫn phải chạy thử/test | Code nháp chưa chạy được coi như chưa xong |
 
+> **Cách đọc bảng này:** mỗi dòng một việc; cột Ghi chú nói lên khác biệt thật — hai cột giữa chủ yếu khác tên gọi, còn trách nhiệm chạy thử vẫn nằm ở bạn.
+
 ## Best practices (kèm "vì sao")
+
+Bốn quy tắc dưới đây giúp code `/new` sinh ra ít bị đập đi làm lại — mỗi quy tắc kèm lý do, không phải liệt kê suông.
 
 - **Đính kèm 1 file mẫu + "theo đúng style file này".** *Vì sao?* Style repo (naming, cách xử lý lỗi) khó tả bằng lời; một ví dụ cụ thể nhanh và chính xác hơn.
 - **Tả rõ xử lý lỗi/edge ngay trong đề.** *Vì sao?* Mặc định model đi đường chính, còn null/timeout/lỗi mạng là phần hay bị bỏ và hay gây bug.

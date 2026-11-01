@@ -18,6 +18,8 @@ Cố code nặng (refactor, debug sâu) trên điện thoại là vừa chậm v
 
 ## 2. Cơ chế: 5 mặt của Copilot
 
+Mục này vẽ bản đồ 5 "mặt nạ" Copilot tùy nơi bạn đứng. Đọc bảng để biết ở mỗi bề mặt nó mạnh chỗ nào, yếu chỗ nào — khỏi tưởng một công cụ xài được mọi việc.
+
 | Mặt | Ở đâu | Mạnh nhất | Yếu nhất |
 |---|---|---|---|
 | VS Code | Desktop IDE | Edit/Agent multi-files, debug sâu | Phải ngồi máy |
@@ -26,12 +28,18 @@ Cố code nặng (refactor, debug sâu) trên điện thoại là vừa chậm v
 | Coding Agent | Cloud sessions | Làm 1–2h bất đồng bộ, mở PR | Đắt, cần spec rõ |
 | Mobile/dev/voice | App, github.dev, voice | Xem, giao việc, duyệt nhanh | Không code nặng |
 
+> **Cách đọc bảng này:** dọc cột **Mặt** theo nơi bạn đang ở (máy bàn, terminal, web, điện thoại...), cột **Mạnh nhất/Yếu nhất** là hai mép của từng mặt — đọc cả hai để tránh gánh việc nặng sang nơi yếu.
+
 ```text
 [Mobile: đọc issue, giao agent] → [Cloud: agent code + CI] → [Web: review PR]
 → [VS Code/CLI: fix nhỏ + verify local] → [Mobile: duyệt merge]
 ```
 
+> **Tóm gọn 1 câu:** Copilot như bộ đồ many mặt: xa máy thì giao việc + duyệt nhẹ, ngồi máy mới là chỗ code sâu và verify nặng.
+
 ## 3. CLI trong terminal: 2 CLI khác nhau, đừng nhầm
+
+Mục này dẹp ngay khúc mắc phổ biến nhất: có **hai** công cụ tên gần giống nhau trong terminal — một cái chỉ đường, một cái lái xe. Đọc để biết cái nào làm gì.
 
 > - **`gh copilot`** (gh extension) — trợ lý lệnh shell: `suggest`/`explain`, không sửa code.
 > - **`copilot`** (Copilot CLI, binary riêng) — agent chạy cả task trong terminal, xoay 3 chế độ **standard → plan → autopilot** bằng `Shift+Tab`.
@@ -65,6 +73,8 @@ Trong phiên: `Shift+Tab` xoay standard → plan → autopilot; `/permissions` c
 Nhầm 2 CLI là lỗi phổ biến nhất: muốn agent làm cả task lại gõ `gh copilot` (chỉ suggest/explain), muốn hỏi lệnh nhanh lại mở `copilot` (khởi động agent cả đoạn) — vừa chậm vừa tốn.
 
 ## 4. github.com chat + Coding Agent
+
+Mục này nói về cách giao việc "từ xa tổng hành dinh": hỏi `@copilot` ngay trên web, hoặc assign cả một issue cho Coding Agent để nó tự code + mở PR trên cloud.
 
 **Hỏi ngay trên web** — bấm Copilot chat hoặc gõ `@copilot` trong comment trên repo/issue/PR:
 
@@ -106,7 +116,7 @@ Giao issue một dòng "fix refund" là agent tự đoán mọi thứ — PR v�
 
 ## 5. Mobile, github.dev & voice
 
-**Mobile (GitHub app):** đọc issue/PR, xem CI, duyệt merge, assign Copilot, comment `@copilot` hỏi/sửa nhỏ.
+**Mobile (GitHub app):** đọc issue/PR, xem CI, duyệt merge, assign Copilot, comment `@copilot` hỏi/sửa nhỏ. Ví von: điện thoại là điều khiển từ xa chứ không phải bàn làm việc — bấm nút giao việc và duyệt được, nhưng đừng đặt lò vi sóng lên đó để nấu cả bữa.
 
 ```text
 # Giao việc từ quán cà phê (comment):
@@ -173,6 +183,8 @@ Tổng bạn thao tác ~25 phút rải rác; agent làm 30 phút cloud; merge c�
 | Máy mượn | github.dev | Fix nhỏ, review | Setup nặng, secrets |
 | Họp/tay bận | Voice | Tóm tắt, tạo issue | Prompt dài, tên file khó |
 
+> **Cách đọc bảng này:** tìm dòng khớp "bạn đang ở đâu" trong cột đầu, cột **Dùng** là công cụ nên cầm lên, cột **Không nên** là việc đừng mơ làm ở đó.
+
 > Quy tắc ngón tay: **xa máy thì giao + duyệt, ngồi máy thì code + verify. Không cố code nặng trên điện thoại.**
 
 ### Before / After
@@ -182,6 +194,8 @@ Tổng bạn thao tác ~25 phút rải rác; agent làm 30 phút cloud; merge c�
 **After:** mobile xác nhận scope + done checklist mới assign → cloud code + CI → web đọc diff-stat + log → về máy `gh pr checkout 123 && npm test -- payments && npm run lint && npm run build` → merge khi V4 đủ.
 
 ## 9. Pitfalls + cách fix
+
+Bảng này gom các "vết xe cũ" khi làm việc ngoài máy chính — mỗi dòng một ca, soi cột Triệu chứng để phát hiện sớm, cột Fix để xử gọn.
 
 | Pitfall | Triệu chứng | Fix |
 |---|---|---|
@@ -194,6 +208,8 @@ Tổng bạn thao tác ~25 phút rải rác; agent làm 30 phút cloud; merge c�
 | 3 sessions cloud cùng scope | PRs conflict | Mỗi session 1 scope không giao (Tips 05) |
 | Quên bật protection | Agent merge bừa | Require PR + checks + review (Tips 06) |
 | Không theo dõi agent | Agent kẹt 2h không biết | Bật notification issue, check ~30p/lần, dừng khi blocker |
+
+> **Cách đọc bảng này:** dọc cột **Pitfall** để tìm thói quen của bạn, **Triệu chứng** xác nhận đúng bệnh, **Fix** trỏ về mục/kỹ thuật đã trình ở trên.
 
 ## 10. Bài tập cuối bài
 

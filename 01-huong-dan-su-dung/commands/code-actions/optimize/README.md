@@ -12,11 +12,15 @@ Hai việc `/optimize` làm mà gõ tay khó bằng: nó nêu **trước/sau** (
 
 **Nếu làm sai thì sao?** Optimize mù là cái bẫy tốn kém nhất: code phức tạp hơn, khó đọc hơn, mà chẳng nhanh hơn vì nút thắt nằm ở chỗ khác. Nguy hiểm hơn là **nhanh nhưng sai** — đổi logic ngầm ở một edge case hiếm. Vì vậy phải đo trước, và bắt buộc "giữ nguyên output mọi input" + chạy full test (xem mục ❌/✅).
 
+> **Tóm gọn 1 câu:** `/optimize` là bác sĩ "có kết quả xét nghiệm mới kê thuốc" — số đo trước, thuốc sau, và dặn kỹ là không đổi chứng bệnh chỉ để chạy nhanh hơn.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** bạn đã đo (profile/benchmark) thấy đúng đoạn này chậm, review phát hiện vòng lặp/query thừa rõ ràng, hoặc chuẩn bị scale cho path nóng.
 - **ĐỪNG dùng khi:** bạn chỉ *đoán* là chậm mà chưa profile (hãy đo trước), hoặc cần sửa tính đúng/sai chứ không phải tốc độ (đó là `/fix`).
 - **Cho ai:** dev giữ path nóng (API, query), người chuẩn bị scale trước khi lên production.
+
+> **Tóm gọn 1 câu:** Chạy nhanh hơn là kết quả phải đo được, không phải cảm giác — chưa có benchmark thì chưa tính tới chuyện optimize.
 
 ## Cách gọi (copy-paste)
 
@@ -48,13 +52,19 @@ Nghiệp vụ: `loadOrdersWithItems()` gọi DB trong vòng lặp — trang orde
 
 ## Lỗi thường gặp
 
+Đề xuất optimize chưa thuyết phục hoặc còn nghi ngại? Ba ca dưới đây phủ gần hết các tình huống — tra theo Triệu chứng rồi áp Fix.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Tối ưu mù khi chưa đo | Chưa profile đã optimize | Đo trước (profile/EXPLAIN), optimize sau |
 | Nhanh hơn nhưng sai edge | Đổi logic ngầm | Bắt "giữ nguyên output mọi input" + chạy full test |
 | Code khó đọc hơn nhiều | Trade-off không đáng | Chỉ optimize path nóng đã đo |
 
+> **Cách đọc bảng này:** đọc theo hàng từ Triệu chứng → Fix; hàng giữa là ca nguy hiểm nhất vì test cũng có thể không bắt được — đó là lý do phải khóa "giữ nguyên output" ngay từ prompt.
+
 ## So sánh với Claude Code
+
+Cũng dùng Claude Code? Bảng này cho biết `/optimize` ánh xạ sang bên kia ra sao và khác nhau thật sự ở khâu nào.
 
 | Việc | Copilot (`/optimize`) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -62,7 +72,11 @@ Nghiệp vụ: `loadOrdersWithItems()` gọi DB trong vòng lặp — trang orde
 | Nêu trước/sau | Đưa ra đề xuất để bạn phản biện | Agent tự đề xuất khi được hỏi | Cả hai đều là đề xuất, không phải bằng chứng |
 | Kiểm chứng | Bạn chạy benchmark + test | Bạn vẫn là người đo | Không agent nào tự đo hộ tốc độ thật |
 
+> **Cách đọc bảng này:** mỗi dòng một việc; nhớ cả hai công cụ đều chỉ đưa "đề xuất" — bằng chứng duy nhất là benchmark của bạn, không phải lời của agent.
+
 ## Best practices (kèm "vì sao")
+
+Bốn quy tắc dưới đây giữ cho `/optimize` không thành "độ xe mù" — mỗi quy tắc kèm lý do để bạn biết khi nào được ngoại lệ.
 
 - **Profile/EXPLAIN trước khi optimize.** *Vì sao?* Trực giác về "chỗ chậm" thường sai; chỉ số đo mới chỉ đúng nút thắt.
 - **Luôn viết "giữ nguyên output mọi input".** *Vì sao?* Đây là ràng buộc buộc bạn phải chứng minh tính đúng không bị đánh đổi lấy tốc độ.

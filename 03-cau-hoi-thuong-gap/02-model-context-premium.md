@@ -11,6 +11,8 @@
 | Debug khó, kiến trúc, multi-file | Model mạnh nhất (Claude Opus / GPT-5-class) | Chi phí cao nhưng đáng |
 | Tiết kiệm cuối chu kỳ | Về model mặc định, tắt Agent mode | Giữ AI Credits cho việc khó |
 
+> **Cách đọc bảng này:** cột **Việc** là loại việc bạn đang định làm, cột **Model nên chọn** là đáp án để chốt ngay trong picker; đọc cả cột **Vì sao** vài lần là thuộc lòng logic "việc dễ → model nhẹ".
+
 ---
 
 ## 1. Model picker ở đâu, đổi model thế nào?
@@ -27,6 +29,8 @@
 ## 2. AI Credits tính tiền thế nào?
 
 **Trả lời 1 câu:** Từ 01/06/2026 mọi lượt tính bằng **AI Credits (1 credit = $0.01)**: chi phí = giá mỗi token của model × số token — model đắt tốn nhiều Credits hơn, còn completions thì không tốn gì.
+
+Hãy hình dung Credits như tiền điện: mỗi thiết bị (model) có công suất khác nhau, bật điều hòa (model mạnh) cả ngày thì đồng hồ quay vù vù, còn bóng đèn LED (completions) thì gần như không đoán được ra trên hóa đơn.
 
 - **Cách cũ (trước 06/2026):** quota "premium requests"/tháng + multiplier ×3/×5/×10 theo request — **LEGACY**, chỉ còn thấy trong tài liệu cũ.
 - **Cách mới:** không còn multiplier theo request; model đắt có giá token cao → cùng 1 prompt tốn nhiều credits hơn.
@@ -52,6 +56,8 @@ Thứ tự tốn Credits tăng dần → **gõ tay được thì đừng chat; c
 ## 3. Context window là gì, Copilot nhét gì vào context?
 
 **Trả lời 1 câu:** Context là toàn bộ code + instructions + kết quả tool mà Copilot đọc mỗi lần gợi ý; tràn context thì gợi ý tệ, chat quên đầu bài, agent lặp vòng.
+
+Ví von: context là chiếc cặp Copilot mang theo mỗi lần gặp bạn — nhét cả ngăn kéo vào cặp thì chân chính nó lùi lại phía sau, càng đi càng chậm và quên mất mình định mang gì.
 
 Gồm: file đang mở (vùng quanh con trỏ), file liên quan (imports, file mở gần đây), `#file` / `#selection` bạn attach, `copilot-instructions.md` + instructions khớp `applyTo`, và (Agent mode) kết quả tool calls.
 
@@ -123,6 +129,8 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 > 📄 **Code ví dụ:** [`examples/05-9-het-ai-credits-giua-thang-thi-chua.sh`](examples/05-9-het-ai-credits-giua-thang-thi-chua.sh)
 
 **Ví dụ:** còn 100 Credits mà 10 ngày nữa mới reset → 10/ngày: chỉ bật model mạnh cho task blocker, còn lại model nhẹ. Đừng đợi cạn mới tiết kiệm — nhận cảnh báo 80% là bắt đầu.
+
+> **Tóm gọn 1 câu:** Credits là ví có hạn: đổi sang tiền lẻ khi lương sắp vơi, ưu tiên chi cho việc chặn dòng tiền (task blocker) — và bật đèn cảnh báo lúc 80% chứ đừng đợi 0%.
 
 ---
 

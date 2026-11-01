@@ -16,11 +16,15 @@ Khi gõ prompt tay, bạn tốn 1–2 câu chỉ để nói *sửa file nào, đ
 
 **Nếu làm sai thì sao?** Hai lỗi thường gặp: (1) quên bôi đen → model tự đoán scope và sửa cả file; (2) mô tả thiếu câu "giữ nguyên..." → nó tiện tay refactor luôn phần không hỏng. Cả hai đều dẫn tới diff to hơn dự kiến — xem mục ❌/✅ bên dưới.
 
+> **Tóm gọn 1 câu:** `/fix` là bác sĩ tiểu phẫu — chỉ mổ đúng chỗ bạn chỉ tay vào, còn bạn phải dặn "đừng cắt lân cận" thì đường may mới gọn.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** lỗi nhỏ, khu trú — null check, type error, test fail đúng 1 chỗ, sửa message/log/typo theo chuẩn repo, và bạn **đã biết lỗi nằm ở đâu**.
 - **ĐỪNG dùng khi:** bạn chưa biết lỗi ở đâu (dùng **Agent mode** để nó tự đi tìm), hoặc cần sửa nhiều file liên quan (dùng **Edit mode** với danh sách file bạn chọn).
 - **Cho ai:** dev sửa lỗi nhỏ lẻ hằng ngày — người muốn sửa đúng chỗ mà không kéo cả file vào context.
+
+> **Tóm gọn 1 câu:** Đã biết chỗ đau thì băng cá nhân (`/fix`); chưa tìm ra bệnh thì đừng mổ vội — chuyển Ask/Agent để khám trước.
 
 ## Cách gọi (copy-paste)
 
@@ -52,13 +56,19 @@ Nghiệp vụ: `login()` nhận email có dấu bị trả 500 vì `params` có 
 
 ## Lỗi thường gặp
 
+Khi kết quả `/fix` không như mong đợi, gần như luôn rơi vào một trong ba ca dưới đây — tra để biết lỗi của mình thuộc loại nào.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Sửa lan sang logic khác | Mô tả thiếu "giữ nguyên ..." | Thêm "không đổi logic khác" vào prompt |
 | Fix xong vẫn fail test | Lỗi sâu hơn 1 chỗ, không phải bug khu trú | Chuyển sang Edit/Agent mode để điều tra |
 | Không bôi đen mà gọi `/fix` | Model tự đoán scope | Bôi đen chính xác rồi gọi lại |
 
+> **Cách đọc bảng này:** đọc theo hàng, từ Triệu chứng → Nguyên nhân → Fix; hàng "fail test" là dấu hiệu lỗi lớn hơn `/fix` — gặp thì đổi mode ngay.
+
 ## So sánh với Claude Code
+
+Cũng dùng Claude Code? Bảng này cho biết `/fix` đối ứng bên kia ở đâu và khác nhau chỗ nào.
 
 | Việc | Copilot (`/fix`) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -66,7 +76,11 @@ Nghiệp vụ: `login()` nhận email có dấu bị trả 500 vì `params` có 
 | Lấy scope từ selection | Tự gắn selection khi bôi đen | Cũng hỗ trợ selection/`@file` | Cùng tư tưởng: đưa đúng chỗ đau, đừng đưa cả file |
 | Kiểm chứng | Bạn tự chạy test/lint | Cùng vậy — agent đề xuất, bạn vẫn là người verify | Đừng tin lời "đã sửa xong" của bất kỳ agent nào |
 
+> **Cách đọc bảng này:** mỗi dòng một việc; cột Ghi chú là chỗ khác biệt thật sự — còn hai cột giữa chỉ khác tên gọi và cách khởi động.
+
 ## Best practices (kèm "vì sao")
+
+Bốn thói quen dưới đây giúp mỗi lần `/fix` cho ra diff nhỏ nhất có thể — mỗi thói quen kèm lý do để bạn biết khi nào được ngoại lệ.
 
 - **Luôn bôi đen trước khi gọi `/fix`.** *Vì sao?* Selection chính là scope — không có nó, model phải đoán và dễ sửa thừa.
 - **Thêm câu "giữ nguyên API shape / không đổi logic khác".** *Vì sao?* Model có xu hướng "tiện tay" dọn dẹp chỗ không hỏng, làm diff phình.

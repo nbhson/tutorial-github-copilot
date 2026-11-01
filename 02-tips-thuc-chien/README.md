@@ -4,6 +4,8 @@
 
 Nhóm 01 dạy bạn *Copilot có những gì*. Nhóm 02 này dạy *dùng nó sao cho khôn*: 11 thói quen xếp thành 4 chặng — nền tảng (prompt + context), chất lượng (định nghĩa "xong" + debug), mở rộng (song song, guardrails, đóng gói), và tối ưu/team (tiết kiệm, chuẩn hóa, nâng cao). Mỗi bài đứng độc lập, nhưng ghép lại thành một quy trình: prompt rõ → chat sạch → plan trước → verify bằng log → tự động hóa rồi chuẩn hóa cho cả team.
 
+> **Cách đọc bảng này:** dọc cột **#** để theo thứ tự, cột **Mô tả 1 dòng** để chọn bài khớp việc bạn đang cần; bận thì nhảy thẳng qua Link, đừng đọc tuần tự như truyện.
+
 | # | Bài | Mô tả 1 dòng | Link |
 |---|-----|--------------|------|
 | 01 | Context hygiene | Giữ chat sạch để Copilot không "loạn" | [01-context-hygiene.md](./01-context-hygiene.md) |
@@ -20,12 +22,16 @@ Nhóm 01 dạy bạn *Copilot có những gì*. Nhóm 02 này dạy *dùng nó s
 
 ## Thứ tự đọc đề xuất
 
+Mục này trả lời câu hỏi "nên đọc bài nào trước" — 11 bài như 11 nấc thang, nấc dưới vững thì nấc trên mới có chỗ đặt chân.
+
 Không cần đọc đủ 11 bài mới dùng được. Bám 4 nhóm dưới đây, mỗi nhóm là một cấp độ trưởng thành — nhóm sau dựa trên nhóm trước:
 
 1. **Nền tảng (đọc trước):** 02 → 01 → 03 — viết prompt tốt, giữ chat sạch, làm việc theo plan.
 2. **Chất lượng:** 04 → 10 — định nghĩa "xong", rồi học chiêu debug.
 3. **Mở rộng:** 05 → 06 → 07 — parallel agents, guardrails, prompts/skills.
 4. **Tối ưu & team:** 08 → 09 → 11 — tiết kiệm credit, chuẩn hóa team, nâng cao CLI/Web.
+
+> **Tóm gọn 1 câu:** Nhóm 02 là một đường leo núi có 4 trạm nghỉ: đứng vững ở trạm prompt + context, bạn mới có sức trèo các đỉnh song song hóa và chuẩn hóa team.
 
 ## So sánh với Claude Code
 
@@ -40,6 +46,8 @@ Quen Claude Code thì bạn đã có nền cho gần hết nhóm này — dướ
 | Sửa lỗi nhanh | `/fix` dựng sẵn | Không có `/fix` dựng sẵn — tự tạo slash command | Copilot bấm-là-chạy — [bài 10](./10-debugging-power-moves.md) |
 | Tính chi phí | AI Credits (1 credit = 0,01 USD) | Gói subscription theo cửa sổ usage | Cơ chế khác nhau, cùng phải đo — [bài 08](./08-tiet-kiem-premium-requests.md) |
 | Code trên cloud | Coding Agent (assign issue) | Session cloud + tích hợp GitHub | Copilot gắn thẳng vào issue/PR — [bài 11](./11-nang-cao-cli-web-coding-agent.md) |
+
+> **Cách đọc bảng này:** dọc cột **Việc** tìm cái bạn hay làm với Claude Code, cột **Copilot** là tên gọi tương ứng ở bên này — phần lớn là đổi "tên gọi", không đổi tư duy.
 
 Quay về: [../README.md](../README.md) · Bài tổng: [00 — Tổng quan Copilot](../01-huong-dan-su-dung/00-tong-quan-copilot.md)
 

@@ -20,6 +20,8 @@ Không tái hiện được thì chưa debug, mới đang đoán.
 
 ## 2. Cơ chế: debug là thu hẹp search space
 
+Mục này dạy tư duy gốc của cả bài: debug không phải hành động "sửa", mà là hành động *thu hẹp* — giống tìm một cuốn sách trong thư viện, chia kệ đôi loại trừ dần thì nhanh hơn lật từng quyển.
+
 Mọi bug đều là 1 trong 3:
 
 | Loại | Dấu hiệu | Cách thu hẹp |
@@ -28,6 +30,8 @@ Mọi bug đều là 1 trong 3:
 | Biết vùng (test đỏ 1 module) | 3–5 files liên quan | Bisect: chia đôi, loại trừ |
 | Không biết gì (flaky, prod) | Log dài, không tái hiện | Log→prompt: tóm tắt rồi mới fix |
 
+> **Cách đọc bảng này:** chẩn đoán bug của bạn thuộc loại nào bằng cột **Dấu hiệu** trước, rồi cột **Cách thu hẹp** mới là technique nên dùng — chọn sai dòng là mọi bước sau đi sai hướng.
+
 ```text
 [Tái hiện] → [Failure gọn] → [Khoanh scope] → [/fix] → [Loop xanh] → [Regression test]
    ↑ nếu không tái hiện: thêm log/bisect, chưa cho fix
@@ -35,7 +39,11 @@ Mọi bug đều là 1 trong 3:
 
 Luôn đòi root cause trước fix: `"Giải thích root cause 3 bullet + file:line trước khi sửa. Không đoán, thiếu evidence thì hỏi thêm thay vì fix bừa."` Chọn sai loại bug là mọi bước sau đi sai hướng — dùng bisect cho bug đã có stack trace là thừa, dùng /fix cho bug flaky là sửa mù.
 
+> **Tóm gọn 1 câu:** Debug giỏi là chơi trò đoán số với khoảng thu hẹp dần: tái hiện được mới được sửa, mỗi vòng loại bỏ một nửa khả năng.
+
 ## 3. Move 1: /fix + debug session
+
+Mục này tập hợp các prompt "ra đòn" cho bug đã rõ chỗ — /fix với điều kiện đi kèm, như giao dao cho người biết và dặn rõ cắt chỗ nào.
 
 **/fix có scope (copy-paste):**
 
@@ -97,9 +105,11 @@ Thêm 1 regression test cover đúng case vừa fix:
 - Chạy full scope, đảm bảo không gãy test cũ.
 ```
 
-Vì sao loop trong 1 message? Mỗi message mới là 1 request + context mới — loop tại chỗ rẻ hơn bạn nhắc tay. Không giới hạn số lần đỏ thì agent cày 10 vòng vẫn đỏ mà context đã đầy rác.
+Vì sao loop trong 1 message? Mỗi message mới là 1 request + context mới — loop tại chỗ rẻ hơn bạn nhắc tay. Giống như nhờ một người sửa tới khi đèn xanh ngay tại chỗ, thay vì mỗi vòng lại gọi một người lạ đến và kể lại chuyện từ đầu. Không giới hạn số lần đỏ thì agent cày 10 vòng vẫn đỏ mà context đã đầy rác.
 
 ## 5. Move 3: bisect + log→prompt
+
+Mục này là hai chiêu cho lúc "mù tòa": chưa biết kẻ thủ phạm ở đâu thì chia đôi phạm vi (bisect), còn log 1000 dòng thì đừng dọn cả bãi rác về nhà — nhờ ai đó tóm tắt trước (log→prompt).
 
 **Bisect bằng git (khi chưa biết file nào gây lỗi):**
 
@@ -184,9 +194,13 @@ Tổng 30 phút, 0 lần cãi nhau, có regression test + logs.
 | Cãi 2 lần vẫn sai | Restore checkpoint | `Restore trước turn 1, re-prompt sạch` | Prompt mới hẹp hơn |
 | Sửa A hỏng B | Thu hẹp scope | `Chỉ sửa file X, diff --stat kiểm tra` | Diff gọn + full test xanh |
 
+> **Cách đọc bảng này:** dọc cột **Dấu hiệu** tìm đúng tình trạng bạn đang gặp, cột **Move đầu tiên** là chiêu mở màn, cột **Dừng khi** cho biết đạt đích — đi tới đó thì dừng, đừng sửa thừa.
+
 > Quy tắc ngón tay: **rõ thì /fix ngay, mờ thì bisect/log trước, cãi 2 lần thì restore.**
 
 ## 9. Pitfalls + cách fix
+
+Bảng này là "sổ khám bệnh" của các ca debug trước — mỗi dòng một ca, cột Triệu chứng giúp nhận diện mình đang ở ca nào để bốc đúng thuốc.
 
 | Pitfall | Triệu chứng | Fix |
 |---|---|---|
@@ -199,6 +213,8 @@ Tổng 30 phút, 0 lần cãi nhau, có regression test + logs.
 | Chạy lệnh nguy hiểm | Mất code/data | Tool approval blocklist rm/reset --hard (Tips 06) |
 | Quên regression test | Bug quay lại tháng sau | Mọi bug đều 1 test mới chứa issue id |
 | Chỉ chạy 1 file | Sửa A hỏng B | Focused xanh → full scope + build |
+
+> **Cách đọc bảng này:** quét từ trên xuống, thấy đúng "triệu chứng" của mình thì dừng lại đọc cột **Fix** — mỗi dòng là một cách gãy đã được ai trải qua rồi.
 
 Ba lỗi nhìn là nhớ:
 

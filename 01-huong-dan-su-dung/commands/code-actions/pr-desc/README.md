@@ -12,11 +12,15 @@ Body PR là nơi reviewer đọc **đầu tiên** — viết tốt thì được
 
 **Nếu làm sai thì sao?** Mặt trái là **PR quá to**: body có hay cỡ nào cũng không cứu được diff ôm nhiều mục đích — reviewer bối rối, comment lan man, merge chậm. Và body thiếu mục **rủi ro** khiến người merge không biết chỗ nào cần soi kỹ (xem mục ❌/✅).
 
+> **Tóm gọn 1 câu:** `/pr` viết bìa hồ sơ hộ — nhưng hồ sơ dày 40 trang thì bìa hay đến mấy reviewer cũng bỏ cuộc, nên tách PR nhỏ trước đã.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** bạn mở PR cho nhánh vừa xong, cần body nêu rõ đổi gì + test gì, hoặc muốn chuẩn hóa PR cho team dễ review.
 - **ĐỪNG dùng khi:** nhánh đang gộp nhiều việc không liên quan (hãy tách PR trước), hoặc bạn mới chỉ muốn xem diff để tự hiểu (`/diff` / `/review`).
 - **Cho ai:** mọi người mở PR, đặc biệt team cần chuẩn hóa format PR.
+
+> **Tóm gọn 1 câu:** Body PR là lời mở đầu với reviewer — đủ Đổi gì / Vì sao / Test / Rủi ro thì reviewer đọc một phút là vào việc, thiếu thì toi cả buổi chờ hỏi đáp.
 
 ## Cách gọi (copy-paste)
 
@@ -48,13 +52,19 @@ Nghiệp vụ: nhánh `feat/login-rate-limit` vừa thêm giới hạn số lầ
 
 ## Lỗi thường gặp
 
+Body ra chưa đạt? Ba ca dưới đây là nguyên nhân phổ biến nhất — tra theo Triệu chứng rồi áp Fix tương ứng.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Body chung chung | Diff quá to | Chia PR nhỏ; mỗi PR 1 mục đích |
 | Thiếu phần test/rủi ro | Prompt thiếu | Bắt buộc có mục Test + Rủi ro |
 | Title sai chuẩn team | Chưa nêu chuẩn | Nêu chuẩn title của team trong prompt |
 
+> **Cách đọc bảng này:** đọc theo hàng từ Triệu chứng → Fix; để ý cả ba Fix đều nằm ở phía bạn — `/pr` chỉ viết được hay khi đề bài của bạn rõ.
+
 ## So sánh với Claude Code
+
+Cũng dùng Claude Code? Bảng này cho biết `/pr` tương ứng bên kia ở đâu và điểm khác thật sự nằm ở cột nào.
 
 | Việc | Copilot (`/pr`) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -62,7 +72,11 @@ Nghiệp vụ: nhánh `feat/login-rate-limit` vừa thêm giới hạn số lầ
 | Đọc diff của nhánh | Tóm tắt từ diff/branch hiện tại | Agent tự đọc `git diff` khi được yêu cầu | Cả hai đều cần bạn nêu đúng nhánh/base |
 | Kiểm chứng | Bạn đọc lại body trước khi tạo PR | Bạn vẫn đọc lại | Tạo PR là hành động thật, bản nháp không tự đăng |
 
+> **Cách đọc bảng này:** mỗi dòng một việc; đọc cột Ghi chú để thấy ranh giới — bất kể công cụ nào, PR cũng chỉ tự đăng khi bạn bấm nút.
+
 ## Best practices (kèm "vì sao")
+
+Bốn thói quen dưới đây giúp PR của bạn được review nhanh và ít bị hỏi lại — mỗi thói quen kèm lý do, không phải liệt kê cho đủ dòng.
 
 - **Giữ PR một mục đích, diff nhỏ.** *Vì sao?* Reviewer tốn ít thời gian hơn, comment tập trung, merge nhanh hơn.
 - **Body luôn có mục Test đã chạy.** *Vì sao?* Reviewer cần biết bạn đã kiểm chứng gì để tin, thay vì tự đoán.

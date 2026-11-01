@@ -8,6 +8,8 @@ tools: [search]
 
 Tao bang Postgres moi hoan chinh: migration + RLS + test. Hoi ten bang neu user chua cho.
 
+> **Tóm gọn 1 câu:** Prompt này là quy trình 4 bước tạo bảng: hỏi đủ trước → migration mới (không sửa file cũ) → chạy + verify → báo kết quả. Legacy — với Agent Host, port sang skill `add-table`.
+
 ## Buoc 1 — Hoi thieu gi thi hoi (dung doan)
 
 - Ten bang? Cac cot (ten + kieu + nullable)? Co can `created_at/updated_at`?

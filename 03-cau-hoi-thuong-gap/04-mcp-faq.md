@@ -10,6 +10,8 @@
 | SSE / HTTP (server xa) | Server chạy sẵn có URL (team/self-host) | `https://mcp.internal.company.com/sse` |
 | Disabled / xóa entry | Tắt tạm server nguy hiểm | Postgres prod khi chưa cần |
 
+> **Cách đọc bảng này:** chọn transport giống chọn phương thức giao hàng — hàng nhẹ ở ngay máy mình thì stdio, hàng ở kho xa thì SSE/HTTP, hàng nguy hiểm thì chưa đặt mà tạm khóa (Disabled); cột Ví dụ là mẫu thật để so config.
+
 Mỗi MCP server expose 3 loại thành phần (không phải 3 loại server): **Tools** = tay (hàm gọi được, VD `github.create_pr`), **Resources** = mắt (dữ liệu đọc qua URI), **Prompts** = công thức nấu ăn (template sẵn). Không phải server nào cũng có đủ 3 — Tools là bắt buộc, Resources/Prompts tùy server.
 
 ---
@@ -17,6 +19,8 @@ Mỗi MCP server expose 3 loại thành phần (không phải 3 loại server): 
 ## 1. `mcp.json` nằm ở đâu, format chuẩn là gì?
 
 **Trả lời 1 câu:** VS Code đọc ở repo-level `.vscode/mcp.json` (commit share cả team) và user-level User Settings (đè lên repo); key chuẩn là `servers` — nhầm `mcpServers` (của tool khác) thì im lặng không chạy.
+
+Ví von: sai tên key giống gửi thư ghi sai địa chỉ — bưu tá (VS Code) không trả lại thư, không báo lỗi, chỉ lặng lẽ không giao hàng.
 
 > 📄 **Code ví dụ:** [`examples/01-1-mcp-json-nam-o-au-format-chuan.json`](examples/01-1-mcp-json-nam-o-au-format-chuan.json)
 
@@ -41,6 +45,8 @@ Mỗi MCP server expose 3 loại thành phần (không phải 3 loại server): 
 | `${input:...}` | Cao | Repo share cho team |
 | `${env:...}` | Trung bình–cao | Token riêng mỗi dev |
 | Hardcode trong `mcp.json` | CẤM | Không bao giờ |
+
+> **Cách đọc bảng này:** cột **An toàn** xếp từ chỗ được phép (cao) tới chỗ tuyệt đối không được (CẤM) — nguyên tắc chung: token không bao giờ nằm trong file được commit lên git.
 
 > 📄 **Code ví dụ:** [`examples/04-3-auth-cho-mcp-server-the-nao.sh`](examples/04-3-auth-cho-mcp-server-the-nao.sh)
 
@@ -113,6 +119,8 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)
 
+Đi đủ 5 bước theo thứ tự — MCP lỗi im lặng nên bước nào nhảy cóc là đoán mò:
+
 1. `python3 -c "import json;..."` validate `mcp.json`.
 2. Check key `servers` + entry server đúng format.
 3. Test transport tay: `npx ... --help` (stdio) / `curl` health (SSE).
@@ -120,3 +128,5 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 5. Reload IDE → đọc Output panel log server đó.
 
 Tham khảo chéo: [bài 03](03-modes-permissions.md) (tool approval) · [bài 08](08-loi-thuong-gap-troubleshooting.md) (lỗi tổng hợp) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (secrets + audit) · [../templates/.vscode/mcp.json](../templates/.vscode/mcp.json) (mẫu copy ngay).
+
+> **Tóm gọn 1 câu:** MCP là hệ dây điện nối Copilot với thế giới ngoài — `mcp.json` là bản vẽ, token là thẻ từ, log Output là đồng hồ đo điện; hỏng chỗ nào tra đúng chỗ đó theo thứ tự 5 bước.

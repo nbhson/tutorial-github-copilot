@@ -10,6 +10,8 @@ Nhóm này quyết định *ai làm việc và làm ở đâu*: chọn "bộ nã
 
 **Nếu làm sai?** Đừng bật Agent mode cho việc chỉ cần hỏi — nó có quyền chạy lệnh, sửa nhiều file, và diff sẽ to hơn bạn muốn. Ngược lại, đừng dùng Ask mode cho việc cần sửa xuyên nhiều file; bạn sẽ phải gõ tay lại từng bước.
 
+> **Tóm gọn 1 câu:** Nhóm này là bảng phân quyền cho "độ tự chủ" của AI — hỏi thì Ask, sửa có kiểm soát thì Edit, giao nguyên task thì Agent, còn model và nơi chạy là chọn "bộ não" và "nhà xưởng".
+
 | Lệnh | Mô tả 1 dòng | Chi tiết |
 |---|---|---|
 | `/model` | Đổi model giữa chat (mạnh/rẻ tùy task) | [./model-picker/README.md](./model-picker/README.md) |
@@ -23,7 +25,11 @@ Nhóm này quyết định *ai làm việc và làm ở đâu*: chọn "bộ nã
 | `Policy approval` | Xem/duyệt policy, approve chạy lệnh nhạy cảm | [./policy-approval/README.md](./policy-approval/README.md) |
 | `Session Target` | Chọn harness + nơi agent chạy: Local/Copilot/Cloud | [./session-target/README.md](./session-target/README.md) |
 
+> **Cách đọc bảng này:** mỗi dòng một lệnh, xếp theo nhóm (model → mode → agent riêng → quota → coding agent → quyền); đọc cột Mô tả 1 dòng là đủ định vị, bấm cột Chi tiết khi cần prompt mẫu và ví dụ.
+
 ## So sánh với Claude Code
+
+Bạn làm việc song song cả hai công cụ thì bảng này là bản "đối chiếu từ điển": mỗi khái niệm Copilot tương ứng gì bên Claude Code, chỗ nào không có thì đừng đi tìm.
 
 | Việc | Copilot | Claude Code |
 |---|---|---|
@@ -36,6 +42,8 @@ Nhóm này quyết định *ai làm việc và làm ở đâu*: chọn "bộ nã
 | Xem mức dùng / chi phí | `/usage` (AI Credits) | `/cost` (token & chi phí) |
 | Duyệt quyền chạy lệnh | Policy approval | `/permissions` + allow/deny trong settings |
 | Chọn nơi agent chạy (Local/Copilot/Cloud) | `Session Target` | Không có tương đương trực tiếp — Claude Code chạy local, hoặc qua CI/Actions |
+
+> **Cách đọc bảng này:** đọc theo cột Việc để so khớp tư duy, không học thuộc tên lệnh; dòng "không có tương đương" là chỗ hai công cụ khác bản chất chứ không phải thiếu tính năng.
 
 Quay về: [../README.md](../README.md) · Bài tổng: [../../04-chat-commands-toan-tap.md](../../04-chat-commands-toan-tap.md)
 

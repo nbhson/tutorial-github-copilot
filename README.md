@@ -30,6 +30,8 @@ Nguồn tổng hợp: GitHub Docs, VS Code Copilot docs, best-practices, guide v
 
 ## Lộ trình học đề xuất (5 ngày đủ hết)
 
+Mục này cho bạn một lịch học cụ thể: mỗi ngày học gì, dừng ở bài nào — bám theo nó là hết khóa trong một tuần làm việc, không cần tự khớp lịch.
+
 ```
 Ngày 1: 01 bài 00 → 04 (tổng quan, cài đặt, inline completions, Chat cơ bản)
 Ngày 2: 01 bài 05 → 09 (Ask/Edit/Agent mode, custom agent, instructions/prompts)
@@ -47,12 +49,16 @@ Quy tắc vàng (nhớ 4 câu này là đủ 80% sức mạnh):
 3. **instructions là gợi ý, policy/MCP-allowlist là luật** — rule nào hay bị quên thì đưa vào policy.
 4. **Việc ồn ào đẩy sang custom agent/sub-task** — Chat chính chỉ giữ quyết định.
 
+> **Tóm gọn 1 câu:** Bốn quy tắc vàng là 4 chiếc phao: context sạch, leo thang từ từ, luật cứng đặt đúng tầng, và việc ồn để dành cho thợ phụ.
+
 ## Cách dùng repo này (đọc 3 phút rồi hãy học)
 
 - Đọc theo thứ tự file `00-*` → `NN-*` trong mỗi folder (đã đánh số). Mỗi bài FAQ trong `03-*` theo cấu trúc gọn: **Trả lời 1 câu → giải thích + lệnh copy-paste → "Vẫn lỗi thì sao?" cuối file** — bận thì chỉ đọc "Trả lời 1 câu", rảnh thì làm theo lệnh.
 - Mọi code block đều copy-paste được. Template trong `templates/` dùng được ngay (copy `.github/` + `.vscode/` sang repo thật, sửa stack/lệnh/glob cho khớp).
 - Gõ `/` trong Copilot Chat để xem slash commands khả dụng, `@` để xem participants ở môi trường của bạn.
 - Kẹt ở đâu tra đó: `CHEATSHEET.md` (1 trang, lệnh nào cũng có ví dụ mini) → `01-huong-dan-su-dung/commands/` (47 lệnh, mỗi lệnh 1 folder chi tiết) → `03-cau-hoi-thuong-gap/` (11 bài FAQ, mỗi bài có mục "Vẫn lỗi thì sao?").
+
+> **Tóm gọn 1 câu:** Repo này là bản đồ + tủ tra: đi đường dài bằng lộ trình 5 ngày ở `01-`/`02-`, còn lúc kẹt việc thì mở đúng ngăn — cheatsheet cho cú pháp, FAQ cho lỗi, templates cho repo thật.
 
 ## So sánh với Claude Code
 

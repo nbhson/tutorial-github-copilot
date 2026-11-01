@@ -12,11 +12,15 @@ Docs viết tay hay bị bỏ qua, mà khi có thì thường thiếu đúng ph�
 
 **Nếu làm sai thì sao?** Mặt trái nguy hiểm là **docs cũ nhưng nghe rất chắc**: bạn đổi tham số, docs vẫn mô tả tham số cũ, người sau làm theo rồi dính bug. Một example trong docs mà chạy không được còn tệ hơn không có example, vì nó tạo niềm tin sai. Vì vậy sau mỗi lần đổi signature phải regen `/doc` (xem mục ❌/✅).
 
+> **Tóm gọn 1 câu:** `/doc` viết hộ nhãn mác cho lọ thuốc — nhưng công thức đổi thì nhớ in lại nhãn, kẻo người sau uống theo liều cũ.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** bạn vừa viết hàm public cần docs chuẩn, cần chuẩn hóa docs cũ thiếu params/example, hoặc muốn onboard dễ (đọc docs là hiểu module).
 - **ĐỪNG dùng khi:** hàm private/đơn giản mà tên đã nói hết (`getUserId()` thì khỏi), hoặc bạn cần *hiểu* code chứ không phải *viết docs* (đó là `/explain`).
 - **Cho ai:** người giữ API/hàm public, team đang chuẩn hóa docs cho module cũ.
+
+> **Tóm gọn 1 câu:** Cửa ra vào có người qua lại thì đáng gắn bảng chỉ dẫn — hàm tên đã tự kể hết công việc thì khỏi mất công dán biển.
 
 ## Cách gọi (copy-paste)
 
@@ -48,13 +52,19 @@ Nghiệp vụ: `parseInvoiceNumber()` trong `src/billing/` vừa được refact
 
 ## Lỗi thường gặp
 
+Mục này là bảng chẩn đoán: khi `/doc` cho kết quả không như mong đợi, soi cột Triệu chứng để tìm đúng ca của mình rồi đi ngang sang Fix.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Docs chung chung, thiếu example | Prompt thiếu yêu cầu example | Thêm "gồm 1 example chạy được" |
 | Docs sai params | Hàm đổi mà docs cũ | Regen `/doc` sau mỗi lần đổi signature |
 | Docs dài hơn code | Cố docs mọi thứ | Chỉ docs cho hàm public/phức tạp |
 
+> **Cách đọc bảng này:** đọc theo hàng — bắt đầu từ cột Triệu chứng (thứ bạn thấy), lần ngược về Nguyên nhân rồi áp thử cột Fix; ba hàng xếp từ hay gặp nhất xuống ít gặp hơn.
+
 ## So sánh với Claude Code
+
+Bạn cũng dùng Claude Code thì bảng này cho biết `/doc` ánh xạ sang công cụ kia ở đâu — đọc để khỏi đi tìm một lệnh không tồn tại.
 
 | Việc | Copilot (`/doc`) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -62,7 +72,11 @@ Nghiệp vụ: `parseInvoiceNumber()` trong `src/billing/` vừa được refact
 | Bám chuẩn docs của repo | Khớp hơn khi bạn nêu file/module mẫu | Agent tự tìm file mẫu trong repo | Cả hai đều cần bạn chỉ chuẩn nếu repo có style đặc thù |
 | Kiểm chứng | Bạn chạy thử example trong docs | Bạn vẫn phải chạy thử | Example chạy được mới là docs đáng tin |
 
+> **Cách đọc bảng này:** mỗi dòng là một việc; đáng đọc nhất là cột Ghi chú — nơi hai công cụ khác nhau thật sự, còn lại phần lớn chỉ khác tên gọi.
+
 ## Best practices (kèm "vì sao")
+
+Bốn mẹo dưới đây là tập quán của người giữ API — mỗi mẹo đều có lý do để bạn biết khi nào ngoại lệ được chấp nhận.
 
 - **Yêu cầu 1 example chạy được, không chỉ mô tả suông.** *Vì sao?* Example là thứ người dùng thật copy ra chạy — nó buộc docs phải khớp code.
 - **Regen `/doc` ngay sau khi đổi signature.** *Vì sao?* Docs cũ nói sai params sẽ dẫn người sau vào bug, mà họ lại tin vì "đã có docs".

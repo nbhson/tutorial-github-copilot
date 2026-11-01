@@ -18,6 +18,8 @@ Phần lớn thao tác sửa code hằng ngày rất nhỏ: thêm một null che
 
 **Nếu làm sai thì sao?** Hai lỗi hay gặp: (1) chưa bôi đen đã bấm nên không thấy gì; (2) yêu cầu quá to trong một lần khiến diff khó đọc. Cũng có trường hợp scope inline vẫn "ăn" ra ngoài vùng chọn nếu bạn không nói rõ. Xem ❌/✅.
 
+> **Tóm gọn 1 câu:** `Ctrl+I` là thì thầm ngay bên dòng code — bôi hẹp, một việc một lần, diff nhỏ thì review chắc tay.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** sửa một đoạn nhỏ 5–20 dòng ngay tại chỗ; đang đọc code và muốn hỏi nhanh về đoạn đó; muốn giữ dòng suy nghĩ, không chuyển tab.

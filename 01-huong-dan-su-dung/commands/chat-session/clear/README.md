@@ -18,6 +18,8 @@ Khi một phiên chat phình to, model bắt đầu quên đầu bài — nhưng
 
 **Nếu làm sai thì sao?** Có ba ngộ nhận hay gặp: (1) tưởng `/clear` xóa cả instructions; (2) clear xong vẫn lan man vì scope còn rộng; (3) mất việc dở vì quên export. Cả ba đều tránh được — xem mục ❌/✅ và bảng lỗi bên dưới.
 
+> **Tóm gọn 1 câu:** `/clear` là lau bảng chứ không đổi lớp — mạch hội thoại biến mất, còn instructions và MCP nằm trên file nên vẫn nguyên.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** chat dài quá và model bắt đầu quên đầu bài; muốn giữ instructions/MCP nhưng bỏ turns cũ; chuẩn bị paste task mới vào cùng repo.

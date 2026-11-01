@@ -12,6 +12,8 @@ Message tốt là message nói được cả **đổi gì** lẫn **vì sao** �
 
 **Nếu làm sai thì sao?** Cạm bẫy là **stage quá to rồi commit một cục**: diff lộn xộn thì message sinh ra cũng chung chung (`chore: update files`) — đúng cái bạn muốn tránh. Và nhớ `/commit` chỉ *gợi ý*: commit là hành động thật, bạn vẫn phải đọc lại message trước khi Enter (xem mục ❌/✅).
 
+> **Tóm gọn 1 câu:** `/commit` viết phiếu gửi từ đống hàng bạn đã gói — stage gọn thì message chuẩn, và bạn vẫn là người duyệt cuối trước khi Enter.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** bạn vừa stage xong và cần message gọn đúng chuẩn, team ép conventional commits, hoặc muốn message nêu được "đổi gì + vì sao".

@@ -20,13 +20,19 @@ Ba chế độ của Chat khác nhau ở mức quyền, đây là bảng để b
 | Edit | Sửa đúng files bạn tick, có kiểm soát | Đã biết sửa 1–5 file, muốn review từng hunk |
 | Agent | Tự tìm file, sửa, chạy terminal | Task mở nhiều bước, chưa biết chạm file nào |
 
+> **Cách đọc bảng này:** ba dòng xếp theo độ tự chủ tăng dần — Ask đứng đầu vì "rẻ" nhất; khi việc của bạn chỉ cần đọc thì đừng đi sâu xuống dưới.
+
 **Nếu làm sai thì sao?** Hai sai lầm hay gặp: (1) nhầm đang ở Edit/Agent mà tưởng Ask → code bị đổi; (2) ở mãi Ask dù đã hiểu rồi → bạn ngồi tự sửa tay trong khi Edit/Agent làm nhanh hơn. Ask là chế độ rẻ nhất để khảo sát, không phải "chế độ an toàn để không bao giờ phải sửa".
+
+> **Tóm gọn 1 câu:** Ask là kính cửa sổ chứ không phải cánh cửa — nhìn thoải mái nhưng muốn đi qua (sửa code) thì phải đổi mode, và dù chỉ nhìn cũng cần biết nhìn đâu (`#file`).
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** tìm hiểu code/kiến trúc trước khi đụng; so sánh phương án chưa muốn sửa; review kiểu "đoạn này làm gì, rủi ro gì?".
 - **ĐỪNG dùng khi:** bạn đã biết cần sửa file nào → chuyển **Edit mode**; hoặc task mở, chưa biết chạm file nào → chuyển **Agent mode**.
 - **Cho ai:** người mới (hỏi cho an toàn), reviewer, người đang cân nhắc phương án.
+
+> **Tóm gọn 1 câu:** Muốn hiểu trước khi đụng thì Ask là bước rẻ nhất — hiểu xong leo thang ngay, đừng biến chỗ khảo sát thành chỗ trú ẩn.
 
 ## Cách gọi (copy-paste)
 
@@ -58,13 +64,19 @@ Nghiệp vụ: bạn được giao sửa module auth của một repo lạ, mu�
 
 ## Lỗi thường gặp
 
+Câu trả lời "chắc mình bị hỏng gì đó" khi đang ở Ask? Ba ca dưới đây giải thích gần hết — tra theo Triệu chứng rồi áp Fix.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Hỏi trong Ask mà code vẫn đổi | Nhầm mode (đang Edit/Agent) | Nhìn lại dropdown mode trước khi Enter |
 | Ask trả lời thiếu vì không đọc file | Quên gắn scope | Gắn `#file`/`@workspace` ngay cả trong Ask |
 | Ở mãi Ask khi cần sửa | Sợ agent | Hiểu rồi → leo thang Edit/Agent |
 
+> **Cách đọc bảng này:** đọc theo hàng từ Triệu chứng → Fix; hàng giữa là ca phổ biến nhất — "Ask dở" thường thực ra là "thiếu scope", không phải lỗi mode.
+
 ## So sánh với Claude Code
+
+Cũng dùng Claude Code? Bảng này đối chiếu tư duy "chỉ đọc" của hai công cụ — chỗ khác bản chất nằm ở cách mỗi bên tách (hoặc không tách) mode riêng.
 
 | Việc | Copilot (Ask mode) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -72,7 +84,11 @@ Nghiệp vụ: bạn được giao sửa module auth của một repo lạ, mu�
 | Không sửa file | Ask cam kết không đụng file | Cần nói rõ "đừng sửa" hoặc dùng plan mode | Cùng mục đích: khảo sát trước khi thay đổi |
 | Lấy ngữ cảnh | Vẫn cần `#file`/`@workspace` | `@file` hoặc để agent tự đọc | Cả hai đều cần scope thì trả lời mới đúng |
 
+> **Cách đọc bảng này:** đọc theo hàng so khớp tư duy; cột Ghi chú nói rõ khác biệt thật — một bên làm thành mode, một bên làm thành cách dùng, đích đến thì giống nhau.
+
 ## Best practices (kèm "vì sao")
+
+Bốn thói quen dưới đây giúp Ask phát huy đúng vai "bước khảo sát rẻ nhất" — mỗi thói quen kèm lý do.
 
 - **Ask là bước đầu của task lớn.** *Vì sao?* Hiểu luồng trước khi sửa giúp bạn viết prompt cho Edit/Agent trúng hơn nhiều.
 - **Luôn gắn scope khi hỏi.** *Vì sao?* Ask không tự biết "module auth" của bạn ở đâu — không scope thì câu trả lời chung chung.

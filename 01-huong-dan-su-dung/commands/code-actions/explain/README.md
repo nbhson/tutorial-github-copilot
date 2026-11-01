@@ -12,11 +12,15 @@ Tự đọc thì bạn phải nhảy qua lại giữa hàm, caller, type... 15 p
 
 **Nếu làm sai thì sao?** Cạm bẫy lớn nhất không phải câu trả lời dở mà là **tin mù**. Model đọc code chứ không chạy code — gặp đoạn "mẹo" (đệ quy, side-effect ẩn, macro) nó có thể kể một câu chuyện nghe rất hợp lý mà sai. Vì vậy đọc xong phải tự diễn giải lại + chỉ ra được một edge case (xem mục ❌/✅).
 
+> **Tóm gọn 1 câu:** `/explain` là bạn đồng học giỏi kể lại bài cho bạn nghe — nhưng bạn phải tự làm lại một bài tập để chắc là nó kể đúng.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** bạn vừa mở một đoạn code người khác viết và cần hiểu trước khi review/sửa — code legacy, PR có đoạn khó, hoặc module mới trong lúc onboard.
 - **ĐỪNG dùng khi:** bạn cần nó *sửa* luôn (`/fix`, `/refactor`) hoặc cần hỏi xuyên cả repo kiểu "hàm này được gọi ở đâu" (`@workspace` hợp hơn cho việc đó).
 - **Cho ai:** người mới vào codebase, reviewer PR, ai phải đọc code legacy.
+
+> **Tóm gọn 1 câu:** Đoạn code lạ trước khi đụng tay thì `/explain` cho bản đồ, còn bước "đi thử đường" (kể lại + bắt edge case) vẫn phải là của bạn.
 
 ## Cách gọi (copy-paste)
 
@@ -48,13 +52,19 @@ Nghiệp vụ: một đồng nghiệp đã nghỉ để lại `src/middleware/ve
 
 ## Lỗi thường gặp
 
+Ba ca dưới đây chiếm phần lớn lần dùng `/explain` không đạt — đối chiếu để biết câu trả lời dở là do bạn khoanh sai hay do code quá "mẹo".
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Giải thích chung chung | Bôi quá ít hoặc quá nhiều (cả file) | Bôi 10–40 dòng trọng tâm + nêu tên file |
 | Giải thích sai logic tricky | Code quá "mẹo" hoặc thiếu context | Gắn thêm `#file` của caller + hỏi "check lại dòng X" |
 | Hiểu mà không verify | Tin luôn lời giải thích | Đặt breakpoint/log, chạy thử 1 case để đối chiếu |
 
+> **Cách đọc bảng này:** đọc từ Triệu chứng (thứ bạn đang thấy) sang Nguyên nhân rồi Fix; hàng nào khớp ca của bạn thì đọc kỹ hàng đó, khỏi học thuộc cả bảng.
+
 ## So sánh với Claude Code
+
+Nếu song song cả hai công cụ, bảng này chỉ chỗ `/explain` tương ứng với gì bên Claude Code — tránh việc cứ tìm nút bấm mà không có.
 
 | Việc | Copilot (`/explain`) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -62,7 +72,11 @@ Nghiệp vụ: một đồng nghiệp đã nghỉ để lại `src/middleware/ve
 | Lấy scope từ selection | Tự gắn selection khi bôi đen | Cũng đọc selection/`@file` khi bạn trỏ tới | Cùng tư tưởng: đưa đúng đoạn, đừng đưa cả file |
 | Kiểm chứng | Bạn tự kể lại / chạy thử | Cùng vậy — lời giải thích vẫn cần bạn đối chiếu | Không agent nào chạy code hộ để chứng minh nó hiểu đúng |
 
+> **Cách đọc bảng này:** mỗi dòng một việc; cột Ghi chú mới là chỗ hai công cụ thật sự khác nhau, hai cột giữa chủ yếu khác cách gọi.
+
 ## Best practices (kèm "vì sao")
+
+Bốn thói quen dưới đây biến `/explain` từ "đọc cho vui" thành công cụ hiểu code thật sự — mỗi thói quen kèm lý do.
 
 - **Luôn bôi đen 10–40 dòng trọng tâm.** *Vì sao?* Cả file làm loãng ngữ cảnh; một khối gọn cho câu trả lời sâu và đúng hơn.
 - **Nói rõ "giải thích như cho intern mới" (hoặc "như senior").** *Vì sao?* Cùng đoạn code, độ sâu bạn cần khác nhau — nói ra thì khỏi hỏi lại 2–3 lần.

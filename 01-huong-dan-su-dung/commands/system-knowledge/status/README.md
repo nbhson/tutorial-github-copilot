@@ -50,6 +50,8 @@ Nghiệp vụ: bạn mới clone repo, gõ `/fix` mà không thấy lệnh đâu
 | Status ok mà vẫn lỗi | Lỗi nằm ở scope/policy | Kiểm tra scope (`#file`) + policy org |
 | Quên check đầu session | Vào là hỏi ngay | `/status` → `/instructions` → `/mcp` mỗi repo mới |
 
+> **Cách đọc bảng này:** cả ba dòng đều có chung một "liều thuốc" là chạy `/status` trước — cột Fix cho thấy nó nằm ở vị trí nào trong chuỗi kiểm tra từng ca.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (`/status`) | Claude Code | Ghi chú |
@@ -57,6 +59,8 @@ Nghiệp vụ: bạn mới clone repo, gõ `/fix` mà không thấy lệnh đâu
 | Xem trạng thái/plan/model | Slash `/status` trong Chat | Không có slash tương đương; xem qua `/help`, `/config`, biến môi trường | Cùng mục đích "biết mình đang ở đâu", khác cách gọi |
 | Kiểm tra MCP | `/status` hiện MCP overview | `/mcp` hoặc xem config MCP | Copilot gộp vào status, Claude tách riêng |
 | Kiểm chứng | Bạn đọc và tự nói lại plan/model | Bạn tự kiểm | Không agent nào tự chịu trách nhiệm đúng/sai |
+
+> **Tóm gọn 1 câu:** `/status` là liếc bảng đồng hồ trước khi khởi hành — 30 giây đọc xăng và đèn báo, thay cả buổi ngồi đoán vì sao xe không nổ máy.
 
 ## Best practices (kèm "vì sao")
 

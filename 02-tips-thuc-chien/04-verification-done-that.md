@@ -20,12 +20,16 @@ Không log = chưa xong.
 
 ## 2. Thang verification 4 mức
 
+Mục này dựng thang đo "xong" từ thấp tới cao. Đọc để biết task của bạn cần mức evidence nào — đừng lấy V1 làm bằng chứng merge, cũng đừng đốt V4 cho một câu hỏi vặt.
+
 | Mức | Tên | Evidence | Khi nào đủ |
 |---|---|---|---|
 | V1 | Nhìn đúng | Copilot giải thích + snippet | Hỏi, research, docs nháp |
 | V2 | Chạy đúng chỗ | Focused test 1 file xanh + log | Bug nhỏ, edit 1 hàm |
 | V3 | Không gãy chỗ khác | Full scope test + lint + build xanh | Feature, refactor multi-files |
 | V4 | Người khác tin được | V3 + review PASS + diff gọn | Merge main, giao team, release |
+
+> **Cách đọc bảng này:** mỗi dòng là một mức, xếp từ V1 (nhẹ nhất) tới V4 (nặng nhất). Đọc ngang: cột **Evidence** cho biết phải đem ra bằng chứng gì, cột **Khi nào đủ** cho biết dừng ở mức nào là chấp nhận được.
 
 ```text
 V2 (bug nhỏ): "Chạy `npm test -- auth` focused, dán log pass/fail. Đủ."
@@ -35,7 +39,11 @@ V4 (merge):   "V3 + review [SEVERITY] + git diff --stat chỉ chạm scope cho p
 
 Mức V tỉ lệ thuận với độ gần main: merge mà chỉ có V2 là tuyên bố "không gãy chỗ khác" khi chưa chạy full scope; ngược lại bắt full CI cho câu hỏi "hàm này nghĩa gì" là đốt AI Credits vô ích.
 
+> **Tóm gọn 1 câu:** Verification là chiếc cân: càng gần main, càng phải bỏ nhiều evidence lên đĩa — V1 cho câu hỏi, V4 cho merge.
+
 ## 3. Checklist done cho 4 loại task (copy-paste)
+
+Mục này phát sẵn bốn phiếu kiểm định in sẵn — mỗi loại task một mẫu. Hãy hình dung như giấy khám sức khỏe: xe máy, ô tô, xe tải mỗi loại một biểu mẫu, đừng cầm phiếu xe máy đi khám xe tải. Tick đủ mới được ra khỏi xưởng.
 
 **A — BUG:**
 
@@ -82,6 +90,8 @@ Done khi:
 
 Mẹo team: lưu 4 checklist vào `.github/prompts/verify-*.prompt.md` để gọi `/verify-bug`, `/verify-feature`; nếu chạy Agent Host thì gói thành Agent Skills (`SKILL.md`) — xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 
+> **Tóm gọn 1 câu:** Định nghĩa done là phiếu kiểm định in sẵn tick bằng evidence — hết phiếu mới được rời xưởng, đừng nghiệm vụ bằng lời nói.
+
 ## 4. Bắt Copilot iterate tới xanh
 
 **Loop tới xanh (thêm vào mọi prompt code):**
@@ -114,6 +124,8 @@ Không có mục này = chưa xong, đừng nói done.
 
 ## 5. Copilot review gate: reviewer khó tính
 
+Mục này dựng lớp chốt cuối: kiểm định độc lập. Giống như tác giả không nên tự biên tập bài của mình — thợ nào cũng tin sản phẩm của thợ ấy, nên phần review luôn giao cho một "cặp mắt lạ".
+
 Đừng để người viết tự review. Mở chat mới (chưa thấy reasoning cũ) với prompt adversarial:
 
 ```text
@@ -144,6 +156,8 @@ Branch protection: require status checks (test/lint/build) + require review.
 
 Kết hợp 3 nguồn: Copilot code review quét mỗi PR (rẻ, nhanh) → chat Reviewer fresh soi sâu trước merge → người review cuối chốt và chịu trách nhiệm.
 
+> **Tóm gọn 1 câu:** Review gate là ba lớp lưới xếp chồng: bot quét thô mỗi PR, reviewer fresh soi kỹ trước merge, người chốt cuối và ký tên chịu trách nhiệm.
+
 > Lưu ý 2026: review Balanced (mặc định từ 28/09/2026) tốn AI Credits + GitHub Actions minutes.
 
 ## 6. Walkthrough: fix bug tới xanh trong 30 phút
@@ -159,7 +173,11 @@ Bối cảnh: login email có dấu bị 500, file `src/auth/login.ts:42`.
 | 20–28 | Review gate | Chat Reviewer fresh → prompt mục 5 → PASS/NEEDS-FIX |
 | 28–30 | Chốt done | Checklist BUG mục 3 tick đủ → commit `fix: normalizeEmail dau + regression test` |
 
+> **Cách đọc bảng này:** đọc theo dòng thời gian từ trên xuống — mỗi dòng là một chặng 30 phút, cột "Prompt / lệnh" là thứ bạn chép vào chat y nguyên.
+
 ## 7. Bảng tra nhanh: evidence nào cho task nào?
+
+Bảng này là tấm lưới tra của cả bài — chọn đúng dòng loại task đang làm là biết ngay cần đem ra những bằng chứng nào, không phải đọc lại toàn bộ.
 
 | Task | Test | Lint/Build | Diff | Review | Dòng dặn 1 câu |
 |---|---|---|---|---|---|
@@ -169,6 +187,8 @@ Bối cảnh: login email có dấu bị 500, file `src/auth/login.ts:42`.
 | Feature multi-files | Full scope | Lint + build | --stat scope | Bắt buộc fresh | `3 logs + review PASS` |
 | Refactor | Full scope từng bước | Lint + build | --stat gọn | Bắt buộc fresh | `Mỗi bước 1 log xanh` |
 | Merge main | Full CI xanh | Full CI | PR diff | Người + Copilot | `CI xanh + 2 reviews` |
+
+> **Cách đọc bảng này:** dọc theo cột **Task** để tìm đúng loại việc đang làm, rồi đọc ngang lấy mức test/lint/diff/review; cột cuối là câu dặn chép thẳng vào prompt.
 
 > Quy tắc ngón tay: **càng gần main càng cần evidence nặng. Hỏi thì V1 đủ, merge thì phải V4.**
 
@@ -194,6 +214,8 @@ Bối cảnh: login email có dấu bị 500, file `src/auth/login.ts:42`.
 | Quên lint/build | CI đỏ sau push | Mọi prompt feature đều có 3 logs |
 | Dán log cắt đầu cắt đuôi | Giấu lỗi | Dặn paste 10 dòng cuối + exit code |
 | Verify bằng mắt | Quên edge case | Checklist A–D tick đủ mới commit |
+
+> **Cách đọc bảng này:** cột **Triệu chứng** mô tả "bệnh" bạn đang gặp, cột **Fix** là đơn thuốc — thấy đúng triệu chứng thì chữa theo cột bên cạnh, đừng bốc thuốc khác.
 
 ## 10. Bài tập cuối bài
 

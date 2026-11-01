@@ -58,6 +58,8 @@ Vừa có bản Copilot mới vừa còn bản cũ → 2 extension tranh nhau
 | Extension cũ sau update IDE | Quên update theo | Update IDE → update extensions → reload |
 | Cài extension lạ không rõ nguồn | Nghe đồn hay | Chỉ cài từ Marketplace/docs chính thức; kiểm tra trước |
 
+> **Cách đọc bảng này:** ba dòng là ba "mầm bệnh" môi trường; trị đúng ca bằng cột Fix, đừng thử tất cả — mỗi Fix là một thao tác tách bạch để biết cái nào có tác dụng.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (`/extensions`) | Claude Code | Ghi chú |
@@ -65,6 +67,10 @@ Vừa có bản Copilot mới vừa còn bản cũ → 2 extension tranh nhau
 | Copilot Extensions (GitHub App, gọi qua `@`) | Có — cài/quản lý qua GitHub + VS Code | Tương đương gần nhất là plugin/marketplace | Cùng tư tưởng “1 gói dùng chung”; khác cơ chế phân phối |
 | VS Code extension (đồ nghề editor) | Có (`Ctrl+Shift+X`) | Không có tương đương trực tiếp (terminal-first) | Copilot gắn chặt editor; Claude Code không quản extension editor |
 | Đóng gói share team | Extension pack + `.vscode/extensions.json` | Plugin (`.claude-plugin/` + marketplace) | Cả hai đều có cơ chế đóng gói để share |
+
+> **Cách đọc bảng này:** file phân hai loại "extension" dễ lẫn (Copilot Extensions vs extension editor của VS Code) — mỗi dòng là một khía cạnh của hai loại đó; cột Ghi chú cho biết mức tương đương với Claude Code.
+
+> **Tóm gọn 1 câu:** `/extensions` là bản kê khai "đồ đạc trong nhà" — dọn thừa, giữ đúng vai, Copilot hết hành xử lạ mà bạn khỏi đổ oan model.
 
 ## Best practices (kèm "vì sao")
 

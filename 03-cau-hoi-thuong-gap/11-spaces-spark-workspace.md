@@ -10,6 +10,8 @@
 | **Copilot Spark** | ⚰️ **Đã gỡ** (đóng cửa 31/08/2026) | Không còn — app đã deploy vẫn chạy |
 | **Copilot Workspace** | ⚰️ **Sunset 2025** — hấp thụ vào coding agent | Không còn — dùng coding agent |
 
+> **Cách đọc bảng này:** bảng này là "bản tin an ninh" — cột **Trạng thái** cho biết tính năng đang sống hay đã chết; dòng có ✅ còn xài được, dòng có ⚰️ là di tích lịch sử.
+
 ---
 
 ## 1. Copilot Spaces là gì?
@@ -17,6 +19,8 @@
 **Trả lời 1 câu:** Spaces là "thư mục ngữ cảnh" trên github.com — gom repos, files, issues, PRs, docs + custom instructions vào một nơi để Copilot trả lời dựa trên đúng bộ context đó, thay vì mỗi lần hỏi lại phải dán link.
 
 - **Nguồn context:** repos, file/folder, issues, PRs, file markdown — nguồn từ GitHub tự đồng bộ khi repo thay đổi.
+
+> **Tóm gọn 1 câu:** Spaces là "cặp tài liệu chuẩn bị sẵn" cho từng cuộc họp: Copilot mở đúng tập tài liệu đó ra trả lời, thay vì mỗi lần gặp lại phải nhờ bạn lục lại từng link.
 - **Custom instructions:** chỉ dẫn riêng cho Space (VD "trả lời theo chuẩn API của team").
 - **Chia sẻ:** Space cá nhân = private / share user / public (view-only); Space org = admin/editor/viewer.
 
@@ -34,6 +38,8 @@ Verify: câu trả lời cite đúng file/repo bạn đã thêm
 ## 2. Copilot Spark là gì, giờ còn không?
 
 **Trả lời 1 câu:** Spark là công cụ "vibe coding" tạo micro-app từ mô tả tự nhiên, nhưng đã **đóng cửa hoàn toàn 31/08/2026** — tại 10/2026 không còn cách tạo app Spark mới.
+
+Hãy hình dung Spark như quán cà phê miễn phí đã đóng cửa: ai từng mua vé vẫn ngồi uống trong quán (app cũ vẫn chạy), nhưng quán không nhận khách mới và đồ uống mới hết làm (llm() không còn backend).
 
 Lịch sử cuối (verify github.blog/changelog/2026-08-04):
 
@@ -109,6 +115,8 @@ Phân quyền: Space cá nhân = private / share user / public link (view-only);
 | App Spark hỏng tính năng AI | `llm()` chết (GitHub Models retired 30/07/2026) | Thay bằng gọi provider AI riêng |
 | Không edit được app Spark | Spark đóng 31/08/2026 | Dựng lại từ repo (nếu đã export) bằng coding agent |
 | Không tìm thấy Copilot Workspace | Sunset 2025 → coding agent | Assign issue cho Copilot / dùng Copilot CLI |
+
+> **Cách đọc bảng này:** đây là ma trận chẩn đoán cả 3 tính năng — dọc cột **Triệu chứng** tìm đúng hiện tượng, cột **Nguyên nhân khả dĩ** thường đã kèm mốc thời gian, cột **Xử lý** là hướng đi thay thế.
 
 > 📄 **Code ví dụ:** [`examples/05-8-troubleshooting-ca-3-ma-tran-trieu-chung.sh`](examples/05-8-troubleshooting-ca-3-ma-tran-trieu-chung.sh)
 

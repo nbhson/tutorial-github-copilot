@@ -10,6 +10,8 @@ Nhóm này là các "động tác nhanh" trên code bạn đang chọn: giải t
 
 **Nếu làm sai?** Quên bôi đen là lỗi phổ biến nhất: model tự đoán scope và sửa rộng hơn dự kiến. Còn `@terminal` không phải để "sửa giúp tôi" — nó *biến lỗi terminal thành task* có ngữ cảnh; nếu chỉ dán log rồi hỏi chung chung, agent sẽ đoán mò.
 
+> **Tóm gọn 1 câu:** Nhóm này là bộ động tác nhanh trên đoạn code trước mặt — bôi đen càng chính xác thì động tác càng gọn, còn việc lớn nhiều file thì phải đổi sang Agent mode.
+
 | Lệnh | Mô tả 1 dòng | Chi tiết |
 |---|---|---|
 | `/explain` | Giải thích code đang chọn bằng model hiện tại | [./explain/README.md](./explain/README.md) |
@@ -23,7 +25,11 @@ Nhóm này là các "động tác nhanh" trên code bạn đang chọn: giải t
 | `/refactor` | Refactor giữ behavior, tách hàm/file | [./refactor/README.md](./refactor/README.md) |
 | `@terminal` | Biến lỗi terminal thành task fix cho agent | [./debug-terminal/README.md](./debug-terminal/README.md) |
 
+> **Cách đọc bảng này:** mỗi dòng một lệnh, xếp theo nhóm việc (hiểu → chữa → đảm bảo → ghi lại → viết mới → chốt git); đọc cột Mô tả 1 dòng là đủ chọn, bấm cột Chi tiết khi cần prompt mẫu và ví dụ.
+
 ## So sánh với Claude Code
+
+Nếu bạn làm việc song song cả hai công cụ, bảng này cho biết mỗi lệnh Copilot "tương đương" bên Claude Code là gì — và chỗ nào không có, đừng đi tìm.
 
 | Việc | Copilot | Claude Code |
 |---|---|---|
@@ -34,6 +40,8 @@ Nhóm này là các "động tác nhanh" trên code bạn đang chọn: giải t
 | Gợi ý commit message | `/commit` | Không có built-in ổn định — nhiều người dùng custom command |
 | Tóm tắt diff thành PR | `/pr` | Không có built-in ổn định — dùng `gh` hoặc custom command |
 | Biến lỗi terminal thành task | `@terminal` | Không cần participant riêng — Claude Code chạy trong terminal nên tự thấy output |
+
+> **Cách đọc bảng này:** đọc cột Copilot trước, rồi nhìn sang Claude Code xem phải tự dựng gì; mỗi dòng ghi "không có built-in" là một chỗ bạn phải tự viết custom command.
 
 Quay về: [../README.md](../README.md) · Bài tổng: [../../04-chat-commands-toan-tap.md](../../04-chat-commands-toan-tap.md)
 

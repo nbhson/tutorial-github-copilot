@@ -12,11 +12,15 @@ Viết test là việc nhàm chán nhưng bắt buộc, và tốn thời gian nh
 
 **Nếu làm sai thì sao?** Rủi ro lớn nhất là **test ảo**: chỉ `assert true`, hoặc mock tới mức không còn kiểm tra gì thật. Nó chạy xanh, CI báo đẹp, mà bug vẫn nguyên — tệ hơn là không có test, vì bạn tưởng mình đã được bảo vệ. Vì vậy mỗi test phải *fail được* nếu logic sai (xem mục ❌/✅).
 
+> **Tóm gọn 1 câu:** `/tests` dựng khung bài kiểm tra hộ, nhưng đề thi ra sao là do bạn giao — giao đề chung chung thì có lớp nào chấm cũng được tròn điểm.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** bạn vừa viết/sửa một hàm và cần test bao lại, muốn tăng coverage cho module quan trọng, hoặc cần chuẩn hóa test mới theo mẫu repo.
 - **ĐỪNG dùng khi:** bạn cần *sửa code* để test pass (đó là `/fix`), hoặc cần test cho cả một luồng nhiều module (dùng Agent mode có scope).
 - **Cho ai:** dev tăng coverage, người cần test đúng mẫu repo trước khi mở PR.
+
+> **Tóm gọn 1 câu:** Vừa viết/sửa hàm là lúc gọi `/tests` — khi rực rỡ trong logic còn nhớ nhánh nào nguy hiểm hơn cả, để sau này nhìn lại là quên.
 
 ## Cách gọi (copy-paste)
 
@@ -48,13 +52,19 @@ Nghiệp vụ: `src/pricing/applyDiscount.ts` vừa thêm nhánh giảm giá the
 
 ## Lỗi thường gặp
 
+File test sinh ra chạy không được hoặc chạy "ảo"? Ba ca dưới đây là thủ phạm thường gặp — tra theo Triệu chứng rồi áp Fix.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Test sinh ra không chạy được | Sai import/framework so với repo | Nêu rõ framework + file mẫu trong prompt |
 | Test ảo (assert true) | Mô tả quá chung | Bắt "mỗi test phải fail nếu logic sai" + review tay |
 | Quên mock DB/API | Prompt thiếu | Thêm "mock DB/API theo mẫu X" |
 
+> **Cách đọc bảng này:** đọc theo hàng từ Triệu chứng → Fix; hàng "test ảo" nguy hiểm nhất vì nó xanh mà chẳng bảo vệ gì — review tay là bước không bỏ được.
+
 ## So sánh với Claude Code
+
+Cũng dùng Claude Code? Bảng này cho biết `/tests` ánh xạ sang bên kia ở đâu và khác thật sự ở khâu nào.
 
 | Việc | Copilot (`/tests`) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -62,7 +72,11 @@ Nghiệp vụ: `src/pricing/applyDiscount.ts` vừa thêm nhánh giảm giá the
 | Bám mẫu repo | Khớp hơn khi bạn đính kèm/nêu tên file mẫu | Agent tự đọc repo tìm mẫu | Cả hai đều xanh hơn khi bạn chỉ đúng file mẫu |
 | Kiểm chứng | Bạn chạy test, đọc kết quả | Bạn vẫn là người chạy và đọc | Test xanh là bằng chứng, không phải lời "đã viết xong" |
 
+> **Cách đọc bảng này:** mỗi dòng một việc; cột Ghi chú là chỗ hai công cụ gặp nhau — bằng chứng duy nhất là kết quả chạy, không phải chữ "đã viết xong".
+
 ## Best practices (kèm "vì sao")
+
+Bốn quy tắc dưới đây là ranh giới giữa "test thật" và "test trang trí" — mỗi quy tắc kèm lý do để bạn biết khi nào được ngoại lệ.
 
 - **Nêu framework + file test mẫu ngay trong prompt.** *Vì sao?* Repo nào cũng có kiểu test riêng (jest/vitest/pytest); chỉ đúng mẫu thì test mới chạy được ngay.
 - **Yêu cầu "mỗi test phải fail nếu logic sai".** *Vì sao?* Đây là hàng rào chống test ảo — assert true thì chạy xanh mà chẳng bảo vệ gì.

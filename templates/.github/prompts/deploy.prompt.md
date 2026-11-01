@@ -8,6 +8,8 @@ tools: [search]
 
 Quy trinh deploy chuan team. Lam tung buoc, dung khi xanh.
 
+> **Tóm gọn 1 câu:** Prompt này là checklist đẻ trứng — kiểm tra, dry-run, deploy thật, smoke test — đi từng nấc một, gãy ở nấc nào thì dừng ở nấc đó.
+
 ## Buoc 1 — Kiem tra truoc deploy
 
 1. `git status --short` phai sach (khong con change chua commit).

@@ -21,12 +21,16 @@ Việc cùng files -> không song song (sẽ conflict).
 
 ## 2. Cơ chế: 4 kiểu song song
 
+Mục này xếp ra 4 cách chạy cùng lúc — mỗi cách "khóa chui" một thứ khác nhau (context, branch, thư mục, vai trò). Đọc bảng để chọn đúng kiểu, vì chọn sai là hoặc conflict hoặc setup uổng.
+
 | Kiểu | Cô lập gì | Tốn gì | Khi dùng |
 |---|---|---|---|
 | Multi-chat | Context mỗi chat | Thêm AI Credits | Research, plan 2 phương án |
 | Coding Agent sessions | Branch + CI riêng | Thêm minutes + AI Credits | 2–3 issues độc lập |
 | Worktrees | Thư mục + branch riêng | Disk + setup | Song song code local nặng |
 | Custom agents | Vai (Planner/Reviewer/Tester) | Overhead nhỏ | Chia vai trong 1 task |
+
+> **Cách đọc bảng này:** cột **Cô lập gì** là chìa khóa — hiểu mỗi kiểu cách ly thứ gì thì hết phải đoán khi nào dùng; cột **Tốn gì** nhắc bạn fan-out không bao giờ miễn phí.
 
 Mỗi kiểu cô lập một thứ khác nhau — chọn đúng kiểu là hết conflict mà không cần dọn dẹp. Dùng multi-chat cho việc sửa code local nặng → 2 chat cùng ghi 1 working tree, file đè nhau; dùng worktree chỉ để research → setup nặng mà chẳng được gì.
 
@@ -39,9 +43,11 @@ Sơ đồ fan-out chuẩn:
              --gộp-->     [Chat chính: gộp + verify + review]
 ```
 
+> **Tóm gọn 1 câu:** Song song như bếp nhà hàng: nhiều nồi đun cùng lúc để tiết kiệm thời gian — nhưng mỗi nồi một bếp riêng, và luôn có đầu bếp chính đứng gộp món.
+
 ## 3. Kiểu 1: multi-chat song song (nhanh nhất)
 
-Không cần setup. Mở 2–3 chats VS Code (hoặc github.com + VS Code) cùng lúc.
+Không cần setup. Mở 2–3 chats VS Code (hoặc github.com + VS Code) cùng lúc — như mở ba cửa sổ từ điển trên bàn, tra song song đỡ lật đi lật lại một cuốn.
 
 **Ví dụ 1 — Research 3 modules (copy-paste):**
 
@@ -79,7 +85,7 @@ Issue #101 (auth): fix normalizeEmail dau, scope src/auth/**, done = npm test --
 Issue #102 (cart): fix total voucher 0d, scope src/cart/**, done = npm test -- cart xanh.
 ```
 
-Assign cả 2 cho Copilot cùng lúc — mỗi session tự tạo branch riêng (`copilot/fix-101`, `copilot/fix-102`), chạy CI riêng, mở PR draft riêng. Bạn chỉ việc review 2 PRs.
+Assign cả 2 cho Copilot cùng lúc — mỗi session tự tạo branch riêng (`copilot/fix-101`, `copilot/fix-102`), chạy CI riêng, mở PR draft riêng. Bạn chỉ việc review 2 PRs. Ví von: như giao hai đội thợ hai căn nhà khác nhau — mỗi đội thi công nhà mình, không đội nào đục tường nhà của đội kia.
 
 **Prompt giao để không conflict (câu này bắt buộc):**
 
@@ -102,6 +108,8 @@ Mở PR draft, dán log test xanh vào mô tả.
 > Lưu ý 2026: chạy được 2–3 sessions trong terminal bằng Copilot CLI (binary `copilot`, xoay Interactive/Plan/Autopilot bằng `Shift+Tab`, giới hạn credits bằng `/limits`). Xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
 
 ## 5. Kiểu 3: worktrees cô lập
+
+Mục này dành cho ai muốn hai agent "ở hai căn hộ riêng" trên cùng một máy: mỗi worktree là một bản sao thư mục + branch riêng, sửa bao nhiêu cũng không dẫm chân nhau.
 
 Khi muốn chạy 2 Agents local cùng lúc mà không conflict files:
 
@@ -152,6 +160,8 @@ Tuần tự mất 60 phút, song song mất 30 phút với chất lượng tươ
 
 ## 8. Bảng tra nhanh: chọn kiểu nào?
 
+Bảng này là bản đồ quyết định của cả bài. Đọc để trả lời trong 10 giây: tình huống hiện tại của bạn thuộc dòng nào — và dòng nào ghi "KHÔNG song song" thì ngoan ngoãn chạy tuần tự.
+
 | Tình huống | Kiểu đúng | Giới hạn gợi ý |
 |---|---|---|
 | Research 2–4 modules độc lập | Multi-chat | 3 chats + 1 chat gộp |
@@ -162,6 +172,8 @@ Tuần tự mất 60 phút, song song mất 30 phút với chất lượng tươ
 | Hỏi phụ khi đang implement | Chat phụ Ask | 1 chat phụ, không block chính |
 | Cùng 1 file, cùng hàm | **KHÔNG song song** | Tuần tự, 1 agent 1 lúc |
 
+> **Cách đọc bảng này:** đọc cột **Tình huống** để tìm đúng dòng của bạn, cột **Kiểu đúng** là đáp án, cột **Giới hạn gợi ý** là mức an toàn nên tuân theo.
+
 > Quy tắc ngón tay: **độc lập + khác files → song song. Phụ thuộc hoặc cùng file → tuần tự.**
 
 ### Before / After
@@ -171,6 +183,8 @@ Tuần tự mất 60 phút, song song mất 30 phút với chất lượng tươ
 **After (chuẩn — khác scope + gộp):** Chat A sửa `src/auth/**`, Chat B sửa `src/payments/**`, mỗi bên ghi research-*.md → chat chính gộp thành plan. 20 phút xong cả 2, 0 conflict.
 
 ## 9. Pitfalls + cách fix
+
+Bảng này là danh sách "vết thương" của người đi trước — mỗi dòng một cách gãy, đọc cột Triệu chứng để nhận bệnh sớm và cột Fix để chữa ngay.
 
 | Pitfall | Triệu chứng | Fix |
 |---|---|---|
@@ -183,6 +197,8 @@ Tuần tự mất 60 phút, song song mất 30 phút với chất lượng tươ
 | Song song task phụ thuộc | B làm sai vì A chưa xong | Vẽ dependency trước: B cần A → tuần tự |
 | Quá nhiều sessions | Tốn credits, review không xuể | Tối đa 2–3 song song, review xong mới fan-out tiếp |
 | Không save findings ra file | Chat gộp quên hết | Mỗi nhánh ghi ra docs/research-*.md |
+
+> **Cách đọc bảng này:** bảng dài nhất bài — quét cột **Pitfall** từ trên xuống, thấy cái nào sắp mắc thì dừng ở đó đọc Triệu chứng + Fix; coi như danh mục bệnh đã ai ghi sẵn tên.
 
 ## 10. So sánh với Claude Code
 

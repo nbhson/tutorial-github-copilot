@@ -1,5 +1,9 @@
 # Changelog — Khóa Học GitHub Copilot (tiếng Việt)
 
+File này là nhật ký sửa chữa của repo: mỗi đợt thay đổi một mục, mới nhất nằm trên cùng, ghi rõ thay đổi gì và đụng tới những file nào. Đọc nó khi bạn muốn biết "sao file này lại như vầy" hoặc kiểm tra một thay đổi đã verify ở đâu — còn muốn học Copilot thì đừng đọc từ đây, hãy quay về [README.md](./README.md).
+
+> **Tóm gọn 1 câu:** Changelog giống sổ sửa nhà — dòng trên cùng là đợt thợ gần nhất, đọc xuống là đi ngược về ngày móng được đóng.
+
 ## [Unreleased] — CẬP NHẬT SỰ KIỆN 2026-10-28 (verify github.blog/changelog + docs.github.com/copilot)
 
 - **Sửa bug version Grok (verify changelog 2026-10-28):** mọi chỗ ghi "Grok 4.5 → Grok **4.6**" đã đổi thành "Grok 4.5 → Grok **4.7**" — khớp changelog chính thức: Grok 4.7 GA trong Copilot **21/09/2026** (github.blog/changelog/2026-09-21) và bảng deprecation **19/10/2026** (github.blog/changelog/2026-10-19) chỉ định alternative của Grok 4.5 là **Grok 4.7**. Files chạm: `README.md`, `CHEATSHEET.md`, `CHANGELOG.md`, `01-huong-dan-su-dung/10-modes-permissions-availability.md`, `01-huong-dan-su-dung/14-models-chon-model-dung.md`. Ghi chú "(4.7 — verify)" cũ đã gỡ (đã verify).

@@ -12,11 +12,15 @@
 | Gọi Copilot từ code | Copilot SDK / API | App của bạn |
 | Dùng ngoài IDE | github.com/copilot, Mobile | Browser/app |
 
+> **Cách đọc bảng này:** dọc cột **Muốn** tìm việc bạn đang định tự động hóa, cột **Công cụ** là tên gọi để kiếm trên GitHub Actions marketplace, cột **Trigger** là sự kiện khởi động công cụ đó — đọc đủ ba cột là có kịch bản workflow hoàn chỉnh.
+
 ---
 
 ## 1. Actions + coding agent nối với nhau thế nào?
 
 **Trả lời 1 câu:** Luồng chuẩn: **Issue (mô tả + acceptance criteria) → assign `copilot` → agent code + mở PR → Actions CI (lint/test) gate → review → merge** — workflow không gọi agent trực tiếp; agent tự lắng nghe assignment, workflow chỉ cần đảm bảo CI xanh/đỏ đúng.
+
+Hãy hình dung đây như dây chuyền lắp ráp: nhân viên (agent) nhận đơn hàng từ issue, tự lắp, rồi gửi qua check chất lượng tự động (CI) — dây chuyền không đẩy việc cho nhân viên mà nhân viên tự nhận việc từ kho.
 
 > 📄 **Code ví dụ:** [`examples/01-1-actions-coding-agent-noi-voi-nhau-the.sh`](examples/01-1-actions-coding-agent-noi-voi-nhau-the.sh)
 
@@ -69,6 +73,8 @@ SDK bọc Copilot CLI + cung cấp sessions, permissions, custom tools, events. 
 | Chi phí | Theo seat/plan | GitHub Actions minutes (ngoài AI Credits) |
 | Khi nào dùng | Bật mặc định mọi repo | Team có chuẩn review riêng |
 
+> **Cách đọc bảng này:** so hai lớp review như so hai người gác cổng: Copilot review là bảo vệ tự động ai cũng có, workflow custom là thuê người gác riêng theo chuẩn nhà mình — cột **Chi phí** cho biết ai trả tiền.
+
 > 📄 **Code ví dụ:** [`examples/08-6-code-review-tu-ong-bat-o-au.sh`](examples/08-6-code-review-tu-ong-bat-o-au.sh)
 
 **Ví dụ:** PR 200 dòng → bot comment 5 Minor → người chỉ soi 1 Major logic → review nhanh gấp đôi.
@@ -116,3 +122,5 @@ SDK bọc Copilot CLI + cung cấp sessions, permissions, custom tools, events. 
 5. SDK lỗi → check token env + docs mới nhất.
 
 Tham khảo chéo: [bài 07](07-custom-agents-coding-agent-workflows.md) (viết issue cho agent) · [bài 05](05-policies-guardrails-faq.md) (guardrails CI) · [bài 02](02-model-context-premium.md) (quota) · [../templates/.github/workflows/](../templates/.github/workflows/) (mẫu workflows).
+
+> **Tóm gọn 1 câu:** Automation (CI + agent + review) là băng chuyền tự động trong nhà máy — workflow là bản vẽ máy móc, agent là robot chạy trên băng chuyền đó, và CI là cảm biến báo đỏ khi sản phẩm lỗi.

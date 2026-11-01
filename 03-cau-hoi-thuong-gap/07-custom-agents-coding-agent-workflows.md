@@ -11,11 +11,15 @@
 | security-reviewer | Soi auth/input/crypto/secrets | search + đọc diff |
 | coding agent (GitHub) | Làm task từ issue, mở PR | full trong sandbox + ruleset |
 
+> **Cách đọc bảng này:** mỗi dòng là một "nhân viên" trong đội — cột **Việc** là chuyên môn, cột **Tools cho phép** là chùm chìa khóa bạn trao; trao càng ít chìa, nhân viên càng khó gây hoang phế.
+
 ---
 
 ## 1. Custom agent "chạy loạn" — nguyên nhân và cách trị?
 
 **Trả lời 1 câu:** 3 nguyên nhân: thiếu `tools` khóa quyền (agent có full quyền), thiếu ranh giới trong body, task quá to — trị bằng khóa tools + 3 dòng ranh giới + chia nhỏ task.
+
+Hãy hình dung custom agent như nhân viên mới: không giao quyển sổ tay (tools) rõ ràng, không viết bản mô tả công việc (ranh giới), lại còn giao cả tấn việc — thì chớ trách nó "chạy loạn".
 
 ```markdown
 <!-- .github/agents/explorer.agent.md — trinh sat chi doc -->
@@ -83,6 +87,8 @@ Thêm rate-limit 100 req/phút cho /api/login.
 | CI đỏ | Check/job đỏ trên PR | Đọc log job đỏ đầu tiên, comment `@copilot` fix cụ thể |
 | PR sai scope | Agent sửa file ngoài issue | Request changes liệt kê file cần revert, hoặc checkout sửa tay |
 
+> **Cách đọc bảng này:** cột **Ca** là ba bệnh hay gặp nhất của PR từ agent, cột **Triệu chứng** giúp xác nhận đúng bệnh, cột **Cách xử** là lệnh/thao tác chữa — nhìn 10 giây là ra hướng xử.
+
 > 📄 **Code ví dụ:** [`examples/04-5-coding-agent-conflict-pr-fail-xu-ly.sh`](examples/04-5-coding-agent-conflict-pr-fail-xu-ly.sh)
 
 **Ví dụ:** CI đỏ job `test` thiếu import → comment trong PR: "@copilot thiếu import X ở file Y" → agent push fix.
@@ -90,6 +96,8 @@ Thêm rate-limit 100 req/phút cho /api/login.
 ## 6. Viết issue thế nào để agent làm đúng ngay lần 1?
 
 **Trả lời 1 câu:** Issue đủ 5 phần — **bối cảnh, mục tiêu, phạm vi file, acceptance criteria, lệnh verify** — thiếu phần nào agent tự đoán phần đó (và đoán sai).
+
+Ví von: giao việc cho agent cũng như giao việc cho thợ mới hoàn toàn — bản vẽ càng chi tiết, ngôi nhà càng đúng ý; chỉ nói "xây nhà đẹp" là đón nhận bất kỳ cái nhà nào.
 
 - Tốt: "Thêm 429 khi vượt 100 req/phút, chỉ src/auth/**, test expect 429, verify `npm test -- auth`."
 - Dở: "Làm rate limit đi."
@@ -123,6 +131,8 @@ Thêm rate-limit 100 req/phút cho /api/login.
 | Diff | Nhỏ (<300 dòng) | To (>500 dòng / >10 file) |
 | Vùng chạm | Không chạm auth/infra | Chạm migration/infra/auth |
 
+> **Cách đọc bảng này:** đây là "đồng hồ đo độ tin" — dọc từng tiêu chí xem PR agent rơi vào cột nào; chỉ cần 1 dòng rơi sang cột phải là chuyển sang review từng dòng.
+
 > 📄 **Code ví dụ:** [`examples/08-9-o-chat-luong-agent-khi-nao-tin.sh`](examples/08-9-o-chat-luong-agent-khi-nao-tin.sh)
 
 > Thước đo team: tỉ lệ PR agent merge không sửa (target >60% sau 1 tháng fine-tune issue template); track chi phí bằng dashboard AI Credits ở `github.com/settings/copilot`.
@@ -144,3 +154,5 @@ Thêm rate-limit 100 req/phút cho /api/login.
 5. Lặp 3 lần không xong → người checkout làm tiếp, đừng đốt AI Credits.
 
 Tham khảo chéo: [bài 06](06-prompts-agents-instructions.md) (viết agent đúng) · [bài 10](10-ci-sdk-review-web.md) (CI + review PR agent) · [bài 03](03-modes-permissions.md) (permissions) · [bài 05](05-policies-guardrails-faq.md) (guardrails repo).
+
+> **Tóm gọn 1 câu:** Custom agent là nhân viên cần bản mô tả công việc rõ (tools + ranh giới + issue đủ 5 phần) — làm khó nó thì lỗi là do bản giao việc, còn lặp 3 lần không xong thì đổi người (bạn) vào làm.

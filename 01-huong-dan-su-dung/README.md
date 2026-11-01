@@ -34,6 +34,8 @@ Muốn nhảy cóc? Bảng dưới đây mô tả đúng 1 dòng mỗi bài — 
 | 16 | Extensions/MCP: bảo mật & validate | Validate extension/MCP trước khi cài | [16-extensions-mcp-bao-mat-validate.md](./16-extensions-mcp-bao-mat-validate.md) |
 | 17 | Agent Customizations Hub | Bảng điện tổng: Customize Your Agent + Plugins/Skills/Instructions/Agents/Hooks/Tools + Voice/Dictation | [17-agent-customizations-hub.md](./17-agent-customizations-hub.md) |
 
+> **Cách đọc bảng này:** các bài xếp theo mạch leo thang từ số 00 → 17; mỗi dòng chỉ cần đọc cột "Mô tả 1 dòng" để quyết định có mở bài đó không — link ở cột Link là cửa vào bài học.
+
 ## Tra cứu lệnh chi tiết (`commands/`)
 
 Phần này dùng để tra nhanh khi đang làm việc — không cần đọc từ đầu.
@@ -57,6 +59,8 @@ Nếu bạn đã quen Claude Code, phần lớn khái niệm trong nhóm này ch
 | Hub quản trị tuỳ biến | Agent Customizations Hub (`Chat: Open Customizations`) | Không có màn hình hub tương đương | Copilot gom vào 1 chỗ, có profile `sandbox` — [bài 17](./17-agent-customizations-hub.md) |
 
 > **Đọc bảng này thế nào:** quen Claude Code thì bạn đã có nền cho gần hết nhóm này; cái cần học thêm là *tên file* của Copilot và khái niệm **Session Target** (Local/Copilot/Cloud) — thứ Claude Code không có tương đương trực tiếp.
+
+> **Tóm gọn 1 câu:** 18 bài của nhóm này là một đường leo thang — mỗi bậc thêm một tầng tự chủ cho Copilot, từ gợi ý chữ tới agent tự giao task.
 
 Quay về: [../README.md](../README.md) · Bài tổng: [00 — Tổng quan Copilot](./00-tong-quan-copilot.md)
 

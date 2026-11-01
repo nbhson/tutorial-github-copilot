@@ -25,6 +25,10 @@ Nhóm này lo phần "hậu cần" của Chat: bắt đầu một phiên mới, 
 | `Shortcuts` | Liệt kê phím tắt Chat trong IDE này | [./shortcuts/README.md](./shortcuts/README.md) |
 | `/summarize` | Tóm tắt hội thoại dài thành bản gọn giữ đà task | [./summarize/README.md](./summarize/README.md) |
 
+> **Cách đọc bảng này:** mỗi dòng là một lệnh, xếp gần theo vòng đời một phiên (mở đầu → đang lỡ dài → tìm lại → lưu/chèn context → sửa sai). Cột "Mô tả 1 dòng" đủ để chọn lệnh; cần cú pháp và ví dụ thì bấm sang cột "Chi tiết".
+
+> **Tóm gọn 1 câu:** Nhóm này là hậu cần của Chat — giữ phiên sạch và context đúng để model *nhớ đúng chuyện* và *đọc đúng file*, tiền đề của mọi câu trả lời tốt.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot | Claude Code |

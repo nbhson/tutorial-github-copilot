@@ -12,11 +12,15 @@
 | Enterprise / compliance nặng | Enterprise ($39/user) | SSO/SAML + org policy + audit | Đọc SSO doc nội bộ |
 | Thử trước khi mua | Free / Business trial 30 ngày | Như plan tương ứng | Set reminder trước ngày hết hạn |
 
+> **Cách đọc bảng này:** đây là mục lục của bài — dọc cột **Bạn là ai** tìm đúng chân dung của mình, rồi đi ngang lấy plan, cách cài và việc đầu tiên cần làm; câu hỏi chi tiết nằm ở 10 mục dưới.
+
 ---
 
 ## 1. Các plan khác nhau gì?
 
 **Trả lời 1 câu:** Cá nhân gồm Free / Pro / Pro+ / Max, tổ chức gồm Business / Enterprise — tất cả dùng chung đơn vị thanh toán **AI Credits (1 credit = $0.01)**, tính theo usage từ 01/06/2026.
+
+Hãy hình dung các plan như các loại sim: sim Free đủ dùng lướt web, sim Pro là gói tháng dân dã, Pro+/Max là gói data khủng, còn Business/Enterprise là hợp đồng doanh nghiệp — network vẫn là một, nhưng hợp đồng và "ai quản lý hạn mức" thì khác hẳn.
 
 Giá tham khảo 10/2026 (check `github.com/features/copilot` trước khi chốt):
 
@@ -36,6 +40,8 @@ Quy tắc tính tiền cần nhớ:
 
 Mấu chốt: **Free/Pro/Pro+/Max = tự trả, tự quản; Business/Enterprise = admin quản, policy đè lên setting cá nhân.**
 
+> **Tóm gọn 1 câu:** Chọn plan là chọn kiểu trả tiền điện: nhà riêng tự đóng tự ngắt, chung cư doanh nghiệp thì ban quản trị (admin) nắm đồng hồ chính — policy của họ luôn thắng nút bấm của bạn.
+
 > 📄 **Code ví dụ:** [`examples/01-1-cac-plan-khac-nhau-gi.sh`](examples/01-1-cac-plan-khac-nhau-gi.sh)
 
 > **Nếu vẫn lỗi:** chạy `gh auth status` xem đúng account chưa; mở `github.com/settings/copilot` đối chiếu plan thật; org thì hỏi admin seat đã gán chưa.
@@ -51,6 +57,8 @@ Hết trial: Free → suggestions dừng, chat báo hạn mức; Business trial 
 ## 3. Seat là gì, admin assign / thu hồi thế nào?
 
 **Trả lời 1 câu:** Seat = 1 ghế Copilot gắn với 1 GitHub user trong org, admin cấp ở `Org → Settings → Copilot → Access`; hết seat thì người kế tiếp báo "No seat available".
+
+Ví von dễ nhớ: seat là ghế xe khách — hợp đồng org mua bao nhiêu ghế thì đó là số người ngồi được; bạn đã join org mà chưa được sắp ghế thì vẫn phải đứng ngoài, không phải lỗi của bạn.
 
 Hai chế độ: allow all members (tốn seat theo headcount) hoặc selected teams/users (tiết kiệm). Credits org **pooled ở mức billing entity** — seat nào xài nhiều vẫn lấy chung hạn mức tổ chức.
 
@@ -113,6 +121,8 @@ Copilot đọc instructions tĩnh — repo trống vẫn setup được full khu
 
 ## Vẫn lỗi thì sao? (thứ tự debug chuẩn)
 
+Kể cả khi đã làm đúng mọi mục trên, vẫn có ca kẹt — mục này là "đường dây nóng" 5 bước, đi lần lượt từ nguyên nhân rẻ nhất tới đắt nhất.
+
 1. `gh auth status` — đúng account chưa, seat còn không.
 2. `code --list-extensions | grep -i copilot` — chỉ còn bản chính chủ.
 3. Update IDE + extension lên bản mới nhất.
@@ -120,3 +130,5 @@ Copilot đọc instructions tĩnh — repo trống vẫn setup được full khu
 5. Check `github.com/settings/copilot` — hạn mức/seat/policy có đỏ gì không.
 
 Tham khảo chéo: [bài 02](02-model-context-premium.md) (model + chi phí) · [bài 05](05-policies-guardrails-faq.md) (policy) · [bài 08](08-loi-thuong-gap-troubleshooting.md) (bảng lỗi full) · [../templates/README.md](../templates/README.md) (templates copy ngay).
+
+> **Tóm gọn 1 câu:** Cài Copilot giống lắp ổ khóa: đúng chìa (account), đúng cửa (extension chính chủ), đúng nhà (seat/policy org) — kiểm tra theo thứ tự đó là giải quyết được phần lớn sự cố.

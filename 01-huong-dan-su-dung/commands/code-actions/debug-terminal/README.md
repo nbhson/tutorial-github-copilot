@@ -12,6 +12,8 @@ Log lỗi thường dài và nhiễu — dòng quan trọng nằm lẫn giữa h
 
 **Nếu làm sai thì sao?** Nguy hiểm nhất là **tin vào fix mạo hiểm**: model gợi ý `rm -rf`, `git reset --hard`, `--force` — chạy theo là mất code. Và nếu thiếu ngữ cảnh (lệnh đã chạy, OS, branch) thì "fix" chỉ là đoán mò. Vì vậy hãy đọc kỹ, cấm lệnh phá hủy, và review trước khi chạy (xem mục ❌/✅).
 
+> **Tóm gọn 1 câu:** `@terminal` biến log đỏ thành danh sách việc có thứ tự — đưa đúng 30–50 dòng quanh lỗi thì chẩn đoán mới sắc, và đừng chạy theo lệnh phá hủy.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** terminal báo lỗi đỏ chưa hiểu, test fail với stack trace dài, hoặc lệnh build/deploy fail.

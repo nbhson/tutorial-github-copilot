@@ -20,6 +20,8 @@ Chat càng dài thì hai thứ xấu đi cùng lúc: model bị **loãng trọng
 
 **Nếu làm sai thì sao?** Lỗi hay gặp nhất là gõ `/new` khi việc đang dở còn dang dở mà chưa lưu gì — coi như mất luôn mạch. Cách tránh: `/export` trước khi `/new` nếu bạn còn cần phần cũ.
 
+> **Tóm gọn 1 câu:** `/new` là cắt cầu sang đầu bài mới — giữ cái gì thì `/export` trước, và mỗi task xứng đáng một tờ giấy trắng.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** bắt đầu task mới khác hẳn task cũ; chat hiện tại đã dài và model bắt đầu lan man; muốn chốt scope + model ngay từ turn 1.

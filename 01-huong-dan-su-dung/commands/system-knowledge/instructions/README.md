@@ -58,6 +58,8 @@ Sửa rule → /new (chat mới) → hỏi lại → model làm theo rule mới.
 | Nhiều rule mâu thuẫn | Thứ tự ưu tiên không rõ | Gom luật chung lên repo-wide, chi tiết đẩy xuống `applyTo` theo thư mục |
 | Sửa rồi model vẫn làm cũ | Chat cũ còn ngữ cảnh | `/new` rồi test lại |
 
+> **Cách đọc bảng này:** ba dòng là ba dấu hiệu "luật không ăn"; cột Nguyên nhân giúp khoanh vùng glob, thứ tự ưu tiên hay ngữ cảnh cũ — đừng sửa lung tung trước khi tìm đúng dòng.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (`/instructions`) | Claude Code | Ghi chú |
@@ -65,6 +67,10 @@ Sửa rule → /new (chat mới) → hỏi lại → model làm theo rule mới.
 | Xem luật đang nạp | Có lệnh `/instructions` liệt kê rule đang áp | Không có lệnh tương đương — mở `CLAUDE.md` / `.claude/` để đọc | Copilot có cách *hỏi* luật; Claude Code đọc file trực tiếp |
 | File luật trong repo | `.github/copilot-instructions.md` + `.github/instructions/*.instructions.md` (`applyTo`) | `CLAUDE.md` + `.claude/` | Cùng tư tưởng “file trong repo là luật” |
 | Luật theo thư mục | `applyTo` glob trong `*.instructions.md` | Chia nhỏ trong `.claude/` | Cùng mục tiêu, khác cơ chế khai báo |
+
+> **Cách đọc bảng này:** mỗi dòng là một nhu cầu quản luật ("xem luật nào ăn", "luật ở đâu", "luật theo thư mục"); đối chiếu cột giữa với cột phải để nhận ra tư tưởng chung là "file trong repo là luật".
+
+> **Tóm gọn 1 câu:** `/instructions` là "bảng nội quy đang dán trên tường lớp" — đừng tin nội quy có trong tủ (file đã viết), hãy tin nội quy đang dán (luật thật sự được nạp).
 
 ## Best practices (kèm "vì sao")
 

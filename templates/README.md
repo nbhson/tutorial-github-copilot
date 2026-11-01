@@ -14,6 +14,8 @@ Nguyên tắc: secrets CHỈ đi qua `${input}` / `${env}` / `${{ secrets.* }}` 
 
 > Chưa rõ MCP gồm những gì? Đọc mục 0 bài [FAQ 04](../03-cau-hoi-thuong-gap/04-mcp-faq.md) (Tools = hàm gọi như `github.create_pr`, Resources = dữ liệu đọc như `github://repos/.../issues/123`, Prompts = template như review-pr) rồi quay lại copy mẫu dưới đây.
 
+> **Tóm gọn 1 câu:** Thư mục này là bộ đồ nội thất đóng sẵn: chọn món đúng phòng, kê lại cho vừa nhà (sửa tên/lệnh/glob), còn lắp nguyên bộ vào nhà nhỏ thì chật chội không sài được.
+
 ## Từng file/folder là gì
 
 | Đường dẫn | Để làm gì | Khi nào đụng tới |
@@ -48,6 +50,8 @@ Nguyên tắc: secrets CHỈ đi qua `${input}` / `${env}` / `${{ secrets.* }}` 
 5. **MCP**: mở IDE → nhập token khi popup hỏi (github PAT + postgres replica URL). Postgres LUÔN trỏ read-replica + user readonly.
 6. **Workflows**: copy 2 file `.yml` nếu repo dùng GitHub Actions; check `permissions:` tối thiểu trước khi merge.
 7. **Verify cuối**: nhờ Copilot làm 1 task nhỏ end-to-end (sửa 1 handler + chạy test + review) để chắc mọi mảnh đều chạy.
+
+> **Tóm gọn 1 câu:** Setup 15 phút đi theo đúng thứ tự trên — luật chung trước, luật theo phòng sau, tool ngoài và CI nạp cuối cùng — vì mỗi tầng sau đều dựa vào tầng trước chạy đúng.
 
 ## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)
 

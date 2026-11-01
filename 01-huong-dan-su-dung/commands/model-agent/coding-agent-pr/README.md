@@ -21,11 +21,15 @@ Flow gọn gồm 4 chặng, mỗi chặng là một cơ hội bắt lỗi:
 
 **Nếu làm sai thì sao?** Merge mù theo tóm tắt, hoặc merge khi CI đỏ, đều dẫn tới cùng kết cục: sự cố trên môi trường thật. Có PR quá to không review nổi thì đừng cố — tách nhỏ rồi review.
 
+> **Tóm gọn 1 câu:** PR của agent là hàng về từ nhà máy — khoan chờ nhập kho: đọc phiếu (tóm tắt), soi hàng hóa (diff), kiểm tra tem (CI) rồi mới ký nhận.
+
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** review PR do coding agent mở; tóm tắt diff thành mô tả PR; quyết định merge/revert PR agent.
 - **ĐỪNG dùng khi:** bạn đang cần *viết* code chứ không phải review — lúc đó giao issue ([coding agent assign](../coding-agent-assign/README.md)) hoặc dùng Agent mode.
 - **Cho ai:** người phê duyệt PR, người nhận việc từ coding agent.
+
+> **Tóm gọn 1 câu:** Review PR agent cũng như review PR người — chỉ khác là bạn đừng có cái bẫy "bot viết chắc ổn" để tự lừa mình.
 
 ## Cách gọi (copy-paste)
 
@@ -57,13 +61,19 @@ Nghiệp vụ: agent mở PR "rate-limit" từ issue #142. Bạn là người re
 
 ## Lỗi thường gặp
 
+Ba ca dưới đây là những chặng nào đó bị bỏ qua trong băng chuyền — tra theo Triệu chứng rồi áp Fix.
+
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Merge mù PR agent | Tin 100% tóm tắt | Đọc diff + CI, chạy thử staging trước merge |
 | CI đỏ vẫn merge | Bỏ qua CI | Đỏ → bắt agent fix, xanh mới merge |
 | PR quá to khó review | Issue ôm đồm | Giữ PR nhỏ; to quá → tách |
 
+> **Cách đọc bảng này:** đọc theo hàng từ Triệu chứng → Fix; hàng "CI đỏ vẫn merge" đáng nhớ nhất — CI là cửa chặn duy nhất hoạt động tự động, bỏ qua nó là bạn tự làm mất người gác cổng.
+
 ## So sánh với Claude Code
+
+Cũng dùng Claude Code? Bảng này đối chiếu chỗ hai công cụ gặp nhau: cùng ra PR, cùng cần người duyệt — khác nhau ở nguồn tạo PR.
 
 | Việc | Copilot (coding agent PR) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -71,7 +81,11 @@ Nghiệp vụ: agent mở PR "rate-limit" từ issue #142. Bạn là người re
 | Nguồn thay đổi | Từ issue được assign | Từ phiên làm việc bạn chạy | Khác nguồn, cùng đích: PR cần người duyệt |
 | Trách nhiệm đúng/sai | Người review + CI quyết định | Người review + CI quyết định | Không agent nào tự chịu trách nhiệm merge |
 
+> **Cách đọc bảng này:** đọc theo hàng so khớp; hàng cuối là chỗ hai công cụ giống nhau hoàn toàn — trách nhiệm merge luôn thuộc về người và CI, không bao giờ thuộc về agent.
+
 ## Best practices (kèm "vì sao")
+
+Bốn thói quen dưới đây là quy trình ký nhận hàng trước khi nhập kho — mỗi thói quen kèm lý do.
 
 - **CI phải xanh trước khi merge.** *Vì sao?* Đây là bằng chứng khách quan duy nhất rằng thay đổi không phá gì.
 - **Đọc diff, không chỉ đọc tóm tắt.** *Vì sao?* Tóm tắt do agent viết và luôn "có vẻ đúng" — diff mới là sự thật.

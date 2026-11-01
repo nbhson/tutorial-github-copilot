@@ -52,6 +52,8 @@ Nghiệp vụ: dọn dẹp máy — xóa các branch local đã merge vào main 
 | `gh copilot: not found` | Chưa cài extension | `gh extension install github/gh-copilot` |
 | Gợi ý sai OS | Lệnh Linux trên Mac/Win | Nêu rõ OS trong prompt |
 
+> **Cách đọc bảng này:** cột Triệu chứng là những gì bạn thấy trên màn hình, cột Nguyên nhân trả lời "vì sao", cột Fix là thao tác làm ngay — dùng như bảng chẩn đoán, tìm đúng dòng rồi làm theo Fix.
+
 ## So sánh với Claude Code
 
 | Việc | Copilot (`gh copilot suggest`) | Claude Code | Ghi chú |
@@ -59,6 +61,10 @@ Nghiệp vụ: dọn dẹp máy — xóa các branch local đã merge vào main 
 | Gợi ý lệnh shell | gh extension, gợi ý + giải thích flag | Là agent đầy đủ trong terminal, không phải công cụ tra lệnh | Khác mục đích: một cái tra lệnh, một cái làm việc |
 | Chạy lệnh | Bạn tự copy + chạy | Agent chạy trong terminal | Copilot tách "gợi ý" khỏi "chạy" → bạn kiểm soát hơn |
 | Kiểm chứng | Bạn chạy dry-run | Bạn review lệnh agent đề xuất | Cả hai: bạn vẫn là người chịu trách nhiệm |
+
+> **Cách đọc bảng này:** tương tự cli-explain — điểm nhấn là "gợi ý" tách khỏi "chạy"; cột Ghi chú giải thích vì sao sự tách đó giữ bạn an toàn.
+
+> **Tóm gọn 1 câu:** `suggest` là hỏi đường trong terminal — nó chỉ đường, còn bạn vẫn phải nhìn biển báo (flag) trước khi lái.
 
 ## Best practices (kèm "vì sao")
 
