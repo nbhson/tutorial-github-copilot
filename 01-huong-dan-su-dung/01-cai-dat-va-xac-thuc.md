@@ -20,15 +20,21 @@ Luồng chuẩn: tạo account → chọn plan → cài extension (VS Code / Jet
 
 Copilot 2026 là **hệ multi-model + multi-surface**: một tài khoản, nhiều "động cơ" (model) và nhiều nơi chạy (IDE, web, terminal).
 
+"Multi-model" nghĩa là bạn có nhiều động cơ khác nhau để tháo lắp vào cùng một xe; "multi-surface" nghĩa là chiếc xe đó chạy được trên nhiều loại đường.
+
 - **Là gì (1 câu):** hệ multi-model + multi-surface, không còn là 1 extension gợi ý code.
 - **Nôm na:** ngày xưa là xe số 1 tốc độ; nay là xe ga có nhiều chế độ lái (GPT-5.2-Codex / Claude / Gemini) + chạy được cả đường phố (IDE) lẫn cao tốc (cloud).
 - **Ví dụ kỹ thuật:** cùng prompt "thêm rate-limit", chọn model rẻ ra code đơn giản, chọn model mạnh ra code + test + giải thích trade-off.
 
 Từ 2025–2026: multi-model picker (đổi GPT/Claude/Gemini ngay trong Chat), Agent mode tự đọc/sửa/chạy terminal, coding agent trên github.com (assign issue → PR, khởi động nhanh hơn 50% từ 03/2026), `AGENTS.md` + Agent Skills, **Copilot CLI GA 03/2026** (agentic trong terminal cho mọi subscriber trả phí), **GPT-5.2-Codex GA 01/2026**.
 
+> **Tóm gọn 1 câu:** Copilot 2026 không còn "một động cơ gợi ý code" mà là hệ nhiều model, chạy được ở nhiều bề mặt.
+
 ---
 
 ## 2. Plans + trial: chọn gói nào?
+
+Mục này giúp bạn chọn gói đúng như chọn gói điện thoại: đủ dùng, không trả tiền cho thứ không xài.
 
 > **Plan là gì?** Gói trả phí quyết định bạn có bao nhiêu **AI Credits** (hạn mức dùng) + dùng được model nào. Nôm na: như gói cước điện thoại — gói rẻ dùng cơ bản, gói doanh nghiệp có thêm quản lý + policy.
 
@@ -39,6 +45,8 @@ Từ 2025–2026: multi-model picker (đổi GPT/Claude/Gemini ngay trong Chat),
 | Dev cá nhân | Pro / Pro+ / Max | AI Credits cá nhân + full IDE + CLI | Credits nhiều nhất ở Max |
 | Team 5–50 người | Business | Credits + org policy + usage dashboard | Admin quản lý seats, content exclusion |
 | Corp / compliance | Enterprise | BYOK, audit log, policy chi tiết | Cần admin setup SSO + policy |
+
+> **Cách đọc bảng này:** Tìm dòng đúng "bạn là ai" — cột "Chọn" là gói nên lấy, "Lưu ý" là điều kiện kèm theo.
 
 ### 2.1. Giá tham khảo (10/2026 — luôn check lại tại `github.com/settings/copilot`)
 
@@ -55,11 +63,17 @@ Từ 2025–2026: multi-model picker (đổi GPT/Claude/Gemini ngay trong Chat),
 
 > Free/Student có hạn mức credits không công bố số cụ thể (check dashboard). Giá đổi theo quý — `github.com/pricing` là chuẩn cuối.
 
+> **Cách đọc bảng này:** Mỗi dòng là 1 gói: giá tháng đổi lấy số credits kèm — ước lượng nhu cầu dùng agent nhiều hay ít để chọn.
+
 **Vì sao quan trọng?** Chọn sai plan hoặc là thiếu credits giữa việc (agent mode dừng giữa task, code dở dang), hoặc trả tiền cho tính năng không ai dùng.
+
+> **Tóm gọn 1 câu:** Chọn plan theo mức dùng thật: Free thử, Pro/Pro+ cho dev cá nhân, Business/Enterprise khi cần quản lý team.
 
 ### 2.2. Đăng ký trial + verify (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-2-2-ang-ky-trial-verify-copy-paste.sh`](examples/01-2-2-ang-ky-trial-verify-copy-paste.sh)
+
+> **Tóm gọn 1 câu:** Đăng ký trial + verify làm theo file script kèm dưới — chép lệnh từng bước là xong.
 
 ### 2.3. Hoạt động nào tốn AI Credits?
 
@@ -73,6 +87,8 @@ Từ 2025–2026: multi-model picker (đổi GPT/Claude/Gemini ngay trong Chat),
 
 > Admin Business/Enterprise xem usage theo user tại org settings — ai cháy credits nhiều nhất lộ ngay (chi tiết bài 07).
 
+> **Cách đọc bảng này:** Cột giữa trả lời "tốn tiền hay không", cột phải giải thích mức — gõ autocomplete thoải mái, agent mode thì tính từng token.
+
 ---
 
 ## 3. VS Code setup (mạnh nhất)
@@ -80,6 +96,10 @@ Từ 2025–2026: multi-model picker (đổi GPT/Claude/Gemini ngay trong Chat),
 VS Code là bề mặt mạnh nhất 2026: agent mode full tools + MCP + custom agents + skills.
 
 > **OAuth login là gì?** Cách VS Code nhờ GitHub xác nhận "đúng là bạn" mà không gõ mật khẩu vào VS Code — click "Sign in" → browser mở `github.com/login/oauth` → Allow → VS Code nhận token lưu local. Token hết hạn thì sign out + sign in lại, không phải cài lại extension.
+
+OAuth giống "ra thẻ căn cước ở cổng": GitHub xác nhận bạn là ai rồi phát thẻ ra vào (token) — thẻ hết hạn thì đổi thẻ, không cần làm lại hồ sơ.
+
+> **Tóm gọn 1 câu:** VS Code là "trạm chính" của Copilot 2026 — login bằng OAuth một lần là dùng được cả agent mode lẫn Chat.
 
 > 📄 **Code ví dụ:** [`examples/02-3-vs-code-setup-manh-nhat.sh`](examples/02-3-vs-code-setup-manh-nhat.sh)
 
@@ -101,6 +121,8 @@ Verify bằng mắt (3 giây):
 
 > `useInstructionFiles: true` là quan trọng nhất — bật thì `.github/copilot-instructions.md` mới được load (chi tiết bài 03).
 
+> **Tóm gọn 1 câu:** Verify 3 giây bằng mắt (icon + ghost text + Chat), bật `useInstructionFiles` ngay để instructions hoạt động.
+
 ---
 
 ## 4. JetBrains / Visual Studio / Neovim
@@ -114,6 +136,8 @@ Quy tắc: **Neovim/VS/JetBrains để gõ + hỏi nhanh. VS Code để agent.**
 | Agent mode | Full tools (đọc/sửa/terminal/MCP) | Hạn chế (terminal tool yếu) | Hạn chế (terminal tool yếu) | Không full |
 | Khi nào dùng | Mặc định; task multi-file + terminal | Dev Java/Kotlin/Python/Go | Dev .NET/C++ | Gõ nhanh, fix nhỏ |
 
+> **Cách đọc bảng này:** Mỗi cột là 1 IDE: hàng "Cài extension" + "Verify" là hai việc cần làm ngay, hàng "Agent mode" cho biết sức mạnh thật của từng chỗ.
+
 ```text
 # JetBrains: Settings (Ctrl+Alt+S) → Plugins → Marketplace → "GitHub Copilot" → Install
 #   → Restart → Tools → "Sign in to GitHub" → OAuth.
@@ -122,6 +146,8 @@ Quy tắc: **Neovim/VS/JetBrains để gõ + hỏi nhanh. VS Code để agent.**
 ```
 
 > 📄 **Code ví dụ:** [`examples/05-4-jetbrains-visual-studio-neovim.sh`](examples/05-4-jetbrains-visual-studio-neovim.sh)
+
+> **Tóm gọn 1 câu:** IDE nào cũng cài được Copilot, nhưng "đội thợ" mạnh nhất vẫn là VS Code — IDE khác để gõ và hỏi nhanh.
 
 ---
 
@@ -141,6 +167,8 @@ Quy tắc: **Neovim/VS/JetBrains để gõ + hỏi nhanh. VS Code để agent.**
 
 > **Nguyên tắc an toàn:** với lệnh nguy hiểm (`rm`, `find -delete`, `docker prune`) — explain trước, chạy khô (`| head`) sau, rồi mới chạy thật.
 
+> **Tóm gọn 1 câu:** Nhớ hai CLI: `copilot` là agent mới đầy đủ, `gh copilot` là trợ lý cũ chỉ suggest/explain — với lệnh nguy hiểm thì explain trước rồi hãy chạy.
+
 ---
 
 ## 6. Login, verify, xử lý lỗi
@@ -155,6 +183,8 @@ Copilot CLI + gh: gh auth login (chọn đúng account TRƯỚC khi cài copilot
 Có 2 account (cá nhân + công ty)? Login sai account = sai quota/policy cả buổi.
 Fix: click icon → Sign out → sign in lại đúng account.
 ```
+
+Login sai account giống "quẹt thẻ nhầm ví": máy vẫn chạy, nhưng tiêu tiền (quota) của ví khác — luôn xem `gh auth status` trước.
 
 ### 6.2. Verify tổng + bảng lỗi hay gặp
 
@@ -173,6 +203,8 @@ Fix: click icon → Sign out → sign in lại đúng account.
 
 Extensions tự update theo setting. Update tay: `gh extension upgrade github/gh-copilot`; Neovim `git -C ~/.config/nvim/pack/github/start/copilot.vim pull`. Sau update verify lại: `gh copilot --version` + "Copilot: Check Status" → Active.
 
+> **Cách đọc bảng này:** Đọc cột "Triệu chứng" trước để tìm đúng dòng bệnh của mình, rồi chép cột "Fix" chạy luôn.
+
 ### 6.3. Walkthrough 15 phút: session đầu chuẩn
 
 ```text
@@ -184,6 +216,10 @@ chạy dev bằng lệnh nào, test bằng lệnh nào. Không sửa gì, chỉ 
 Bước 4 (3 phút): lưu kết quả vào .github/copilot-instructions.md (mẫu ở bài 00).
 Bước 5 (2 phút): mở chat mới, hỏi lại câu cũ để kiểm tra instructions có load không.
 ```
+
+Walkthrough này là "buổi tập sự đầu tiên": 15 phút để quen nhịp chọn mode, ra prompt khôn, và lưu tri thức repo lại cho lần sau.
+
+> **Tóm gọn 1 câu:** Session đầu chuẩn = mở Chat Agent mode → prompt "tóm tắt repo" → lưu instructions → hỏi lại để kiểm tra.
 
 ---
 
@@ -208,7 +244,11 @@ Bước 5 (2 phút): mở chat mới, hỏi lại câu cũ để kiểm tra inst
 | "`gh copilot: command not found` là máy hỏng" | Chỉ là chưa chạy `gh extension install github/gh-copilot` |
 | "Copilot CLI = `gh copilot`" | CLI GA 03/2026 là binary `copilot` riêng (agentic); `gh copilot` chỉ suggest/explain lệnh shell |
 
+> **Cách đọc bảng này:** Cột trái là lời đồn thường nghe, cột phải là sự thật — đối chiếu trước khi kết luận "tool hỏng".
+
 **Bài học:** kiểm tra account là bước số 0 khi debug (`gh auth status` trước khi nghi tool hỏng); nhiều lỗi CLI chỉ là thiếu một extension, không phải hỏng cài đặt.
+
+> **Tóm gọn 1 câu:** Debug Copilot luôn bắt đầu từ account (`gh auth status`) — tool hiếm khi hỏng, account hay sai.
 
 ---
 
@@ -219,6 +259,8 @@ Bước 5 (2 phút): mở chat mới, hỏi lại câu cũ để kiểm tra inst
 3. **(15 phút) CLI drill:** dùng `gh copilot suggest` giải 3 việc thật (git cleanup, docker, ffmpeg...). Chạy thử trong thư mục test trước. Alias `cps/cpe` vào shell config.
 4. **(15 phút) Session đầu chuẩn:** trên 1 repo thật, chạy đủ walkthrough mục 6.3. Lưu `copilot-instructions.md` nháp đầu tiên.
 
+> **Tóm gọn 1 câu:** Bốn bài tập biến lý thuyết thành phản xạ: verify bằng mắt, lập bảng IDE, giải lệnh bằng CLI, và chạy session đầu chuẩn.
+
 ---
 
 ## Link chéo
@@ -228,6 +270,8 @@ Bước 5 (2 phút): mở chat mới, hỏi lại câu cũ để kiểm tra inst
 - **Bài 03 — Instructions**: file `copilot-instructions.md` vừa tạo cần cắt <200 dòng.
 - **Bài 04 — Chat commands**: tra cứu `/`, `@`, `#`.
 - **Bài 07 — Policies**: quota, model gating, content exclusion.
+
+> **Tóm gọn 1 câu:** Bản đồ bài học: 00 tổng quan → 02 bề mặt → 03 instructions → 04 chat → 07 policies, đọc theo nhu cầu.
 
 ## Reference
 

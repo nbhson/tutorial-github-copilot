@@ -11,9 +11,13 @@
 - Khai server trong `.vscode/mcp.json`, chọn đúng transport `stdio`/`http`/`sse`, secrets qua `${VAR}`.
 - Đặt **approval** `deny > ask > allow` đúng chỗ và prune MCP gọn ≤6 servers.
 
+> **Tóm gọn 1 câu:** Bài này dạy bạn cắm Copilot ra thế giới ngoài bằng MCP — cài đúng chỗ, khóa approval đúng mức, và giữ danh bạ gọn gàng.
+
 ---
 
 ## 1. MCP là gì — khi nào cần, khi nào đừng
+
+Mục này trả lời câu hỏi đầu tiên bạn phải hỏi trước khi cài bất kỳ server nào: mình có thực sự cần MCP không?
 
 **Định nghĩa 1 câu:** MCP (Model Context Protocol) là **chuẩn cắm chung** để Copilot gọi ra thế giới ngoài (GitHub, DB, browser, Linear...) — như USB-C: 1 chuẩn cắm cho mọi máy, không cần mỗi hãng viết 1 kiểu tích hợp.
 
@@ -31,9 +35,13 @@
 - Hỏi việc **ngoài repo** (PRs, issues, DB, web, tickets) → cần MCP server tương ứng.
 - **MCP = reach (vươn tay ra ngoài); instructions/skills = cách dùng reach đó cho đúng** (schema DB nào, format nào — bài 03/05).
 
+> **Tóm gọn 1 câu:** MCP chỉ đáng cài khi dữ liệu nằm ngoài repo — dữ liệu trong repo thì `@workspace` đã đủ.
+
 ---
 
 ## 2. Một lời gọi MCP đi qua 4 nhân vật
+
+Mục này mổ xẻ hành trình của một câu hỏi từ lúc bạn gõ tới lúc nhận kết quả. Biết rõ từng chặng sẽ giúp bạn đoán đúng chỗ hỏng khi tools không chạy.
 
 ```text
  Bạn gõ → Copilot Chat (model suy luận "cần bếp nào?") → MCP Client (trong VS Code,
@@ -55,9 +63,15 @@
 | MCP Server | Process riêng (`npx ...`) khai trong `mcp.json` | MCP Client spawn (stdio) hoặc gọi HTTP/SSE |
 | Hệ ngoài | github.com, Postgres, Chrome, Linear... | Chỉ MCP Server (giữ token) |
 
+> **Cách đọc bảng này:** Mỗi dòng là một nhân vật trong chuỗi — cột 2 nói nó là gì thật, cột 3 cho biết ai là người ra lệnh cho nó.
+
+> **Tóm gọn 1 câu:** Câu hỏi của bạn đi qua 4 trạm: Chat → Client → Server → hệ ngoài, và token chỉ ở trạm Server.
+
 ---
 
 ## 3. File `.vscode/mcp.json` + 3 transports
+
+Mục này chỉ chỗ khai báo server và các "đường dây" nối tới server. Khai đúng file + đúng transport là 2 điều kiện bắt buộc để tools hiện lên trong Chat.
 
 `mcp.json` là "danh bạ bếp": mỗi bếp ở đâu, gọi bằng cách nào, secrets lấy từ đâu. Khai sai là nguyên nhân số 1 khiến tools không hiện.
 
@@ -69,6 +83,8 @@
 | `mcp.json` / `.mcp.json` (root repo) | `mcpServers` | Portable, CLI đọc | Tùy |
 | `~/.copilot/mcp-config.json` | `mcpServers` | User profile, mọi máy | Không |
 | `~/.vscode/mcp.json` | — | Personal global (VS Code) | Không |
+
+> **Cách đọc bảng này:** Mỗi dòng là một chỗ đặt file cấu hình — cột 2 là key JSON bắt buộc dùng ở đó, cột 4 cho biết file đó có được commit lên git không.
 
 > Lưu ý: Copilot CLI đọc `~/.mcp-config.json` + `.mcp.json` ở repo — **từ CLI v1.0.39 CLI không còn đọc `.vscode/mcp.json`** (BREAKING). Cấu hình repo trên github.com (Settings → Copilot → MCP servers) dùng key `mcpServers`, bắt buộc mảng `tools`, secret prefix `COPILOT_MCP_`.
 
@@ -82,11 +98,17 @@
 | `http` | Gọi quán qua app (remote streamable HTTP) | Server remote mới (linear, internal API) | URL + headers auth qua env. **Khuyên dùng cho remote mới** |
 | `sse` | Điện thoại bàn cũ (remote streaming cũ) | Server remote cũ (notion, vài SaaS) | Dần thay bằng `http` — giữ nếu docs yêu cầu |
 
+> **Cách đọc bảng này:** Mỗi dòng là một kiểu "đường dây" nối Copilot với server — cột 3 là tình huống nên chọn kiểu đó, cột 4 là cái bẫy cần nhớ.
+
 > 📄 **Code ví dụ:** [`examples/02-3-file-vscode-mcp-json-3-transports.sh`](examples/02-3-file-vscode-mcp-json-3-transports.sh)
+
+> **Tóm gọn 1 câu:** Khai server trong `mcp.json` với key đúng theo vị trí file, và chọn transport: local dùng `stdio`, remote mới dùng `http`, remote cũ dùng `sse`.
 
 ---
 
 ## 4. 3 thành phần của 1 MCP server
+
+Mục này giải phẫu một server: bên trong nó có gì, và Copilot dùng từng bộ phận đó thế nào. Hiểu được điều này, bạn đọc docs của server mới mà không bỡ ngỡ.
 
 Nhớ công thức: **Tools = tay (làm), Resources = mắt (đọc), Prompts = gói gia vị pha sẵn.** Cả 3 nằm trong cùng 1 server — tác giả server quyết định expose gì; Tools là bắt buộc, Resources/Prompts là tùy chọn (server thiếu Resources là bình thường, không phải lỗi).
 
@@ -107,9 +129,13 @@ Nhớ công thức: **Tools = tay (làm), Resources = mắt (đọc), Prompts = 
  # → kể được list_prs, get_pr, create_pr... Nếu trả "chỉ có tools" → bình thường.
 ```
 
+> **Tóm gọn 1 câu:** Một server = Tools (tay làm) + Resources (mắt đọc) + Prompts (công thức sẵn) — Tools bắt buộc, hai cái còn lại tùy tác giả.
+
 ---
 
 ## 5. Tools approval (allow/ask/deny)
+
+Mục này là phần an toàn quan trọng nhất của bài: cho Copilot làm gì được, làm gì phải xin phép, và làm gì cấm hẳn.
 
 Approval là **gác cổng**: mỗi lần Copilot muốn bấm nút (Tool), gác cổng tra sổ → cho qua (allow) / hỏi bạn (ask) / cấm (deny). Nôm na: "xem TV (read) cứ xem, ra đường (browser/terminal) phải hỏi, sờ ổ điện (prod DB) thì cấm".
 
@@ -127,9 +153,13 @@ Approval là **gác cổng**: mỗi lần Copilot muốn bấm nút (Tool), gác
  # 3. gọi postgres-prod (deny) → "blocked by policy". Sai → check settings + org policy đè.
 ```
 
+> **Tóm gọn 1 câu:** Gác cổng approval theo luật `deny > ask > allow`: đọc thì cho qua, ghi thì phải hỏi, prod thì cấm hẳn.
+
 ---
 
 ## 6. 5 server day-one (copy-paste)
+
+Mục này là phần thực hành: 5 server đáng cài ngay ngày đầu, kèm file cấu hình chép vào là chạy. Mỗi server giải một nhu cầu khác nhau.
 
 **GitHub — impact cao nhất, cài đầu tiên:**
 
@@ -162,11 +192,15 @@ applyTo: "**/*.sql"
 
 > 📄 **Code ví dụ:** [`examples/08-6-5-server-day-one-copy-paste.sh`](examples/08-6-5-server-day-one-copy-paste.sh)
 
+> **Tóm gọn 1 câu:** Bộ khởi động 5 server: GitHub (PR/issue), Playwright (nhìn UI), Postgres (đọc DB), Fetch/Brave (tra web), Linear/Notion (tickets).
+
 ---
 
 ## 7. Secrets + marketplace
 
 ### 7.1. Secrets matrix (thuộc lòng)
+
+Mục này trả lời câu hỏi sống còn: làm sao dùng token mà không bao giờ lộ token vào git.
 
 Secrets **luôn đi qua biến môi trường `${VAR}`** — không khắc mật khẩu két lên cửa két; cửa chỉ ghi "hỏi chủ nhà".
 
@@ -182,7 +216,11 @@ Secrets **luôn đi qua biến môi trường `${VAR}`** — không khắc mật
  # (token nằm trong `git log -p`, trong fork/clone; bot quét GitHub tìm thấy trong vài phút).
 ```
 
+> **Tóm gọn 1 câu:** Secrets chỉ đi qua `${VAR}` — dính token thật vào file thì git history giữ mãi, phải rotate ngay.
+
 ### 7.2. Marketplace + registry (2026)
+
+Mục này chỉ chỗ mua "bếp làm sẵn" thay vì tự khai từng dòng cấu hình.
 
 ```text
  VS Code → Ctrl+Shift+P → "MCP: Browse Servers": browse → Install → VS Code tự chèn
@@ -200,9 +238,15 @@ GitHub MCP server có 2 dạng:
 | Chọn toolset / read-only | Path `/x/{toolset}`, `/readonly`; header `X-MCP-Toolsets`, `X-MCP-Readonly: true` | Cùng cơ chế |
 | Khi nào dùng | Dùng ngay, cloud/không có Docker | Tự host/offline |
 
+> **Cách đọc bảng này:** Mỗi cột là một cách chạy GitHub MCP server — so hàng "Cần gì" và "Khi nào dùng" để chọn: muốn dùng ngay thì remote, muốn tự host thì Docker.
+
+> **Tóm gọn 1 câu:** Cài nhanh thì dùng marketplace "MCP: Browse Servers", và GitHub server chạy được 2 kiểu: remote hosted (dùng ngay) hoặc Docker (tự host).
+
 ---
 
 ## 8. Prune — giữ MCP khỏe
+
+Mục này dạy thói quen bảo dưỡng: định kỳ vứt server không dùng, giữ bộ tools gọn để Copilot không bị "ngợp".
 
 **Sweet spot 3–6 servers, đừng quá ~10 tools visible** — menu 100 món thì bồi bàn loạn: quá nhiều tools → Copilot chọn sai/bỏ sót, IDE chậm, bề mặt lộ secret to.
 
@@ -214,6 +258,8 @@ GitHub MCP server có 2 dạng:
 | Fetch / Brave | Hay tra docs ngoài | Ít tra web / đã có docs local |
 | Linear / Notion / Jira / Slack | Team sống trong đó | Team không dùng / đã migrate |
 
+> **Cách đọc bảng này:** Mỗi dòng là một server phổ biến — cột 2 là lý do đáng cài, cột 3 là dấu hiệu cho biết nên tháo nó ra.
+
 ```text
  Prune flow (2 tuần/lần, 10 phút):
  1. "MCP: List Servers" → server nào disconnected lâu? 2 tuần rồi có gọi không?
@@ -223,9 +269,13 @@ GitHub MCP server có 2 dạng:
  # Kỳ vọng: còn 3-6 servers connected, tools gọn, secrets sạch.
 ```
 
+> **Tóm gọn 1 câu:** Giữ 3–6 servers là đủ — mỗi 2 tuần prune một lần, server nào 0 calls thì disable rồi xóa.
+
 ---
 
 ## 9. Pitfalls + hiểu nhầm
+
+Mục này là danh sách cái bẫy thực tế — mỗi hàng là một điều nhiều người tin nhầm kèm sự thật đằng sau.
 
 | Hiểu nhầm / pitfall | Sự thật / Fix |
 |---|---|
@@ -238,6 +288,10 @@ GitHub MCP server có 2 dạng:
 | "MCP thay instructions/skills" | MCP = tay vươn ra ngoài; instructions = cách dùng tay đó. Cần cả 2 |
 | Approval `allow` hết cho tiện | Side-effect giữ `ask`; chỉ read-only mới `allow`. `deny` luôn thắng `allow` (mục 5) |
 
+> **Cách đọc bảng này:** Cột trái là câu bạn hay nghe ai đó nói, cột phải là sự thật hoặc cách xử lý đúng — đọc theo cặp là ra ngay.
+
+> **Tóm gọn 1 câu:** Đừng cài MCP cho việc trong repo, đừng tích trữ servers, đừng paste token vào file — ba lỗi này chiếm gần hết mọi sự cố.
+
 ---
 
 ## Bài tập
@@ -246,16 +300,22 @@ GitHub MCP server có 2 dạng:
 2. **(15 phút)** Cài Postgres dev + viết `db.instructions.md`. Test SELECT, verify prod guard (hỏi prod → phải từ chối).
 3. **(10 phút)** Chạy prune flow (mục 8): tìm server 0 calls → disable; audit secrets bằng grep — exit code phải = 1.
 
+> **Tóm gọn 1 câu:** Cài GitHub server, khóa DB bằng instructions, rồi prune — ba việc này là bài tập về nhà bắt buộc của bài.
+
 ## Link qua
 
 - Instructions kèm MCP (schema DB, format) → bài 03. Skill gọi MCP theo quy trình → bài 05.
 - Agents lock `tools` khi gọi MCP → bài 06. MCP allowlist + exclusion (defense in depth) → bài 07.
 - Tool approval chi tiết → bài 10. MCP trong Actions + coding agent cloud (remote only) → bài 12.
 
+> **Tóm gọn 1 câu:** Muốn đào sâu thì đi tiếp: bài 03/05 (cách dùng tay), bài 07/10 (khóa tay), bài 12 (tay trên cloud).
+
 ## Reference
 
 - GitHub Copilot docs: https://docs.github.com/copilot
 - VS Code Copilot docs: https://code.visualstudio.com/docs/copilot
 - Model Context Protocol (chuẩn chung): https://modelcontextprotocol.io
+
+> **Tóm gọn 1 câu:** Ba nguồn chính thức đáng bookmark: docs Copilot của GitHub, docs Copilot của VS Code, và spec của MCP.
 
 > **Chốt:** MCP chỉ đáng cài khi dữ liệu nằm *ngoài* repo — và khi đã cài, giữ reach có kỷ luật: secrets qua env, read cho qua, write phải hỏi, prod thì cấm.

@@ -10,13 +10,19 @@
 - Phân biệt 3 thứ dễ gộp làm một: **model** (não) · **session target/harness** (nơi + ai thực thi) · **permission level** (mức tự duyệt).
 - Bọc an toàn khi để agent chạy tự động: sandbox + worktree riêng + git sạch; và tra được "sao không thấy setting X?" — thường là do plan, không phải bug.
 
+> **Tóm gọn 1 câu:** Chọn đúng mode và persona, siết quyền theo `deny > ask > allow`, bọc agent bằng sandbox + git sạch — vậy là bạn cầm lái thay vì bị lái.
+
 ---
 
 ## 1. Vì sao modes + permissions?
 
-**Nôm na:** Modes là 3 nấc số xe (Ask = chỉ nghe; Edit = chạy chậm trong sân; Agent = tự chạy xa), permissions là người gác cổng (cho / hỏi / cấm). Agent có quyền đọc files + chạy shell + gọi MCP — không gate thì 1 prompt-injection trong issue text đủ khiến nó chạy lệnh xóa hay exfiltrate `.env`.
-- Allow hết để "cho nhanh" → 1 prompt nhiễm độc là agent tự chạy lệnh phá; siết quá tay (deny cả read-only lặp lại) → bấm Allow mỏi tay rồi bấm mù. Mục tiêu: **nới việc đọc, siết việc ghi/xoá/chạy**.
+Mục này giải thích hai thứ cần phân biệt trước khi config: mode (agent tự chủ tới đâu) và permission (được chạm vào gì).
+
+**Nôm na:** Modes là 3 nấc số xe — Ask = chỉ nghe, Edit = chạy chậm trong sân, Agent = tự chạy xa. Permissions là người gác cổng: cho, hỏi, hay cấm. Agent có quyền đọc files + chạy shell + gọi MCP. Không gate thì 1 prompt-injection trong issue text đủ khiến nó chạy lệnh xóa hay exfiltrate `.env`.
+- Allow hết để "cho nhanh" → 1 prompt nhiễm độc là agent tự chạy lệnh phá. Siết quá tay (deny cả read-only lặp lại) → bấm Allow mỏi tay rồi bấm mù. Mục tiêu: **nới việc đọc, siết việc ghi/xoá/chạy**.
 - Files quản lý: `.vscode/settings.json` (team, commit) + user settings (personal) + org policy (admin, đè cả 2). **Thứ tự thắng: org policy > team settings > personal; deny ở đâu cũng thắng allow.**
+
+> **Tóm gọn 1 câu:** Mode là nấc số, permission là người gác cổng — nới việc đọc, siết việc ghi/xoá/chạy.
 
 ---
 
@@ -27,6 +33,8 @@
 | **Ask** | Chỉ đọc + trả lời | Hỏi hiểu code, task mới chưa rõ scope | `"Giải thích auth flow"` |
 | **Edit** | Sửa đúng files bạn chỉ | Sửa nhỏ 1–3 files đã biết rõ | `"Đổi label button X"` |
 | **Agent** | Tự plan + sửa + chạy test + iterate | Task multi-file, refactor, feature mới | `"Migrate auth sang session + chạy tests"` |
+
+> **Cách đọc bảng này:** Mỗi dòng là một mode — cột 2 cho biết Copilot được làm gì, cột 3 chỉ khi nào nên dùng, cột 4 là ví dụ câu bạn gõ vào Chat.
 
 ```text
 Cây chọn mode 10 giây: Task mới chưa hiểu scope → Ask (đọc + outline). Đã biết
@@ -44,6 +52,8 @@ Agent loop: plan → edit → run terminal/tests → đọc lỗi → fix → l�
 - Undo: git diff review trước accept; checkpoint chat (bài 11).
 ```
 
+> **Tóm gọn 1 câu:** Việc nhỏ dùng Ask/Edit, việc nhiều file mới dùng Agent — và Agent luôn cần dây cương: scope hẹp, approval để ask, review diff trước khi accept.
+
 ### 2.1. Agent personas (UI mới): Interactive / Plan / Autopilot
 
 | Persona | Mức tự chủ | Khi dùng |
@@ -51,6 +61,8 @@ Agent loop: plan → edit → run terminal/tests → đọc lỗi → fix → l�
 | **Interactive** | Thấp — duyệt trước mỗi thay đổi/shell | Việc cần trông, repo chưa có test |
 | **Plan** | Không sửa code — chỉ đọc rồi ra kế hoạch | Task mở/lớn, cần duyệt trước |
 | **Autopilot** | Cao — tự chạy tới khi xong, tự duyệt tool | Việc dài/lặp, tin scope + đã bật sandbox (mục 4.4) |
+
+> **Cách đọc bảng này:** Mỗi dòng là một kiểu lái — cột 2 là mức tự chủ tăng dần từ trên xuống, cột 3 cho biết tình huống nào nên chọn loại nào.
 
 ```text
 Nơi chọn: VS Code dropdown agent ở khung Chat; CLI: Shift+Tab xoay standard →
@@ -69,15 +81,19 @@ tiếp tục sau lỗi); Allow all = permission level tắt phê duyệt tool (c
 không tự bảo đảm xong task). Cả hai nên bọc bằng sandbox + worktree riêng + git sạch.
 ```
 
+> **Tóm gọn 1 câu:** Interactive là làm một bước hỏi một bước, Plan chỉ vẽ bản đồ không đụng code, Autopilot tự lái tới đích — càng tự chủ càng cần bọc sandbox + git sạch.
+
 ### 2.2. Session Target / harness: Local / Copilot / Cloud
 
-Model = "não"; **harness** = "tay chân + nhà xưởng" (ai thực thi tool, chạy ở đâu). Đổi Session Target **không phải** đổi model.
+Model = "não"; **harness** = "tay chân + nhà xưởng" (ai thực thi tool, chạy ở đâu). Hãy tưởng tượng: cùng một đầu bếp (model), nhưng nấu ở bếp nhà, bếp quán, hay bếp công ty (harness) thì ra món và cách làm khác nhau. Đổi Session Target **không phải** đổi model.
 
 | Target | Harness chạy ở đâu | Truy cập code | Chọn khi |
 |---|---|---|---|
 | **Local** | Extension host VS Code (máy bạn) | Workspace hiện tại | Cần tool built-in/extension, model cấu hình trong VS Code (gồm BYOK) |
 | **Copilot** | Agent Host (nền Copilot SDK), chạy nền, nhiều phiên song song | Folder hiện tại hoặc worktree cô lập | Session chạy nền, nhiều phiên song song; session mở lại được ở cửa sổ khác |
 | **Cloud** | Hạ tầng remote của provider | 1 GitHub repo → mở PR | Task gọn, async, cần team review. KHÔNG truy cập tool/context local |
+
+> **Cách đọc bảng này:** Mỗi dòng là một nơi chạy session — cột 2 cho biết code được thực thi ở đâu, cột 4 là tình huống nên chọn nơi đó.
 
 ```text
 - Handoff: đổi target giữa phiên mang theo history; chỉ khởi tạo được từ session Local.
@@ -86,6 +102,8 @@ Model = "não"; **harness** = "tay chân + nhà xưởng" (ai thực thi tool, c
   .mcp.json + ~/.copilot/mcp-config.json + nạp SDK Policy Hooks.
 # Verify: Session Target control ở đáy khung Chat; Agent Sessions sidebar xem mọi session.
 ```
+
+> **Tóm gọn 1 câu:** Model là bộ não, harness là nhà xưởng — Local chạy trên máy bạn, Copilot chạy nền nhiều phiên, Cloud chạy trên GitHub và kết thúc bằng PR.
 
 ---
 
@@ -103,6 +121,8 @@ Model = "não"; **harness** = "tay chân + nhà xưởng" (ai thực thi tool, c
 ```
 
 > **"Premium requests" là cách gọi cũ (legacy). Từ 01/06/2026 Copilot tính bằng AI Credits** (usage-based billing): **1 AI credit = $0.01**, chi phí = giá per-token × số token. **Code completions và next edit suggestions KHÔNG trừ AI Credits** trên mọi plan trả phí.
+
+> **Tóm gọn 1 câu:** AI Credits là tiền xu nội bộ của Copilot — việc thường ngày dùng model rẻ, còn autocomplete thì miễn phí hoàn toàn.
 
 ---
 
@@ -125,6 +145,8 @@ org policy > team .vscode/settings.json > personal → deny ở đâu cũng th�
 
 `managed-settings.json` (enterprise) dùng cùng bộ `permissions.deny/ask/allow`: `ask` KHÔNG bị bypass/YOLO mode; lệnh không khớp rule nào → mặc định hỏi; allowlist thực tế = giao (intersection) các nguồn; `permissions.disableBypassPermissionsMode` tắt hẳn bypass mode.
 
+> **Tóm gọn 1 câu:** Chọn pattern allow cho việc đọc, ask cho việc ghi/chạy, deny cho việc nguy hiểm — và nhớ thứ tự thắng: deny > ask > allow, org policy > team > personal.
+
 ### 4.3. Permissions UI: Manual / Assisted / Allow all
 
 Núm ga tự duyệt của cả session, nằm TRƯỚC bộ allow/ask/deny per-tool:
@@ -135,6 +157,8 @@ Núm ga tự duyệt của cả session, nằm TRƯỚC bộ allow/ask/deny per-
 | **Assisted** (experimental) | LLM judge chấm rủi ro từng tool call: an toàn → tự chạy, còn lại → hỏi | Không — judge có thể chấm sai | Giảm mỏi tay nhưng vẫn có lưới (bật `chat.assistedPermissions.enabled`, chỉ Agent Host) |
 | **Allow all** | Tự duyệt HẾT, không popup | Không — override toàn bộ | Gần như không bao giờ — thay bằng sandbox |
 
+> **Cách đọc bảng này:** Ba dòng là ba mức của núm ga tự duyệt — cột 3 quan trọng nhất: mức đó còn tôn trọng bộ allow/ask/deny bạn đã đặt hay không.
+
 ```text
 CLI parity (Copilot CLI): /permissions [default|assisted|allow-all|show] — /allow-all
 và /yolo = alias; --allow-all-tools | --allow-all-urls | --yolo. Org:
@@ -142,6 +166,8 @@ permissions.disableBypassPermissionsMode="allow-auto-only" → chặn full allow
 nhưng vẫn cho /permissions assisted. Org ẩn/hạ mức: ChatToolsAutoApprove (ẩn
 Assisted + Allow all + Autopilot), ChatToolsEligibleForAutoApproval + TerminalEnableAutoApprove.
 ```
+
+> **Tóm gọn 1 câu:** Để Manual cho việc hàng ngày, Assisted khi mỏi tay mà vẫn muốn lưới an toàn, còn Allow all thì gần như đừng bao giờ bật — thay bằng sandbox.
 
 ### 4.4. Sandboxing for terminal
 
@@ -152,6 +178,8 @@ Assisted + Allow all + Autopilot), ChatToolsEligibleForAutoApproval + TerminalEn
 | **Tắt** (mặc định) | Quy tắc permission/approval khác vẫn áp dụng; lệnh cần duyệt vẫn hỏi |
 | **Bật** | Giới hạn file + mạng; lệnh TRONG sandbox auto-approve (đã bị giới hạn) |
 
+> **Cách đọc bảng này:** Hai dòng là hai vị trí công tắc sandbox — cột phải cho biết điều gì thay đổi với các lệnh agent chạy.
+
 > 📄 **Code ví dụ:** [`examples/02-4-4-sandboxing-for-terminal.jsonc`](examples/02-4-4-sandboxing-for-terminal.jsonc)
 
 ```text
@@ -160,6 +188,8 @@ Assisted + Allow all + Autopilot), ChatToolsEligibleForAutoApproval + TerminalEn
 chạy NGOÀI sandbox (nếu allowUnsandboxedCommands=true) → approve = bỏ giới hạn, chỉ
 approve khi thật tin. Kết hợp chuẩn: Autopilot + Sandbox on + worktree riêng + git sạch (bài 11).
 ```
+
+> **Tóm gọn 1 câu:** Sandbox giống cái chuồng nuôi cho lệnh agent — trong chuồng thì tự chạy thoải mái vì đã bị khoá chân, còn xin ra ngoài chuồng thì bạn phải duyệt tay.
 
 ## 5. Content exclusion + duplication detection + telemetry
 
@@ -199,6 +229,8 @@ Telemetry / audit:
 | Copilot code review required check + coding agent (assign issue → PR) | ✗ / ✓ (repo public/personal) | ✓ | ✓ (+ org controls) |
 | Custom models / IP indemnity | ✗ | Hạn chế | ✓ |
 
+> **Cách đọc bảng này:** Mỗi dòng là một khả năng, mỗi cột là một gói — dấu ✓/✗ cho biết gói đó có hay không; nhiều "setting không thấy" đơn giản vì gói chưa đủ cao.
+
 ### 6.1. Bảng giá + AI Credits (10/2026)
 
 | Plan | Giá | AI Credits kèm/tháng |
@@ -209,6 +241,8 @@ Telemetry / audit:
 | Max | $100/tháng | 20.000 (base 10.000 + flex 10.000) |
 | Business | $19/seat/tháng | 1.900/seat (gộp pooled ở billing entity) |
 | Enterprise | $39/seat/tháng | 3.900/seat (gộp pooled) |
+
+> **Cách đọc bảng này:** Mỗi dòng là một gói — cột giữa là giá tháng, cột cuối là số AI Credits kèm theo; gói càng đắt càng có nhiều credits.
 
 ```text
 Cơ chế (usage-based billing, hiệu lực 01/06/2026):
@@ -221,6 +255,8 @@ Cơ chế (usage-based billing, hiệu lực 01/06/2026):
   user hết hạn mức xin tăng budget, admin approve/adjust/deny (GA 09/2026).
 # Gặp "sao không thấy setting X?" → tra bảng trên trước khi kết luận bug.
 ```
+
+> **Tóm gọn 1 câu:** Một credit đáng $0.01 và chỉ chat/agent mới trừ — plan trả phí dùng Auto được giảm 10%, còn hết credits thì admin nên đặt cap budget từ trước.
 
 > **Code review:** có trên Pro/Pro+/Max/Business/Enterprise (Free chỉ "Review selection" trong VS Code); mặc định kiểu **Comment** (không tính phê duyệt bắt buộc); effort mặc định **Balanced** từ 28/09/2026 (trước đó Lite).
 
@@ -239,6 +275,8 @@ Cơ chế (usage-based billing, hiệu lực 01/06/2026):
 | "Setting không thấy = bug" | Sai. Tra bảng plans (mục 6) trước — Individual thiếu nhiều setting org |
 | "Copilot có PreToolUse hooks như Claude" | Đúng một phần — hooks in-process (`.github/hooks/*.json`) nhưng **preview + chỉ Local**, không phải security boundary (bài 17) |
 
+> **Cách đọc bảng này:** Cột trái là lời đồn hay gặp, cột phải là sự thật — nhớ cột phải là đủ để tự vệ trong review.
+
 ```text
 "Setting X không thấy / không có tác dụng?"
 ├─ 1. Plan gì? (Individual không có org policy/content exclusion/audit)
@@ -248,6 +286,8 @@ Cơ chế (usage-based billing, hiệu lực 01/06/2026):
 ├─ 6. Model không hiện? (pool khác nhau theo surface + plan; Free/Student bắt buộc Auto)
 └─ 7. Vẫn không có → docs.github.com/copilot + Community Discussion
 ```
+
+> **Tóm gọn 1 câu:** Trước khi kêu bug, lần lượt hỏi: đúng plan chưa, đúng scope chưa, reload chưa, mode đúng chưa — chín trên mười case là trả lời được ở đây.
 
 ---
 
@@ -261,9 +301,13 @@ Cơ chế (usage-based billing, hiệu lực 01/06/2026):
 | Ranh giới cứng | Org policy + server gates (branch protection, push protection, review required) | Hooks + permission deny |
 | Undo phiên | Timeline / fork chat / `git restore` (không có `/rewind`) | `/rewind` có sẵn |
 
+> **Cách đọc bảng này:** Mỗi dòng là một việc cài đặt — so xem cùng việc đó Copilot đặt luật ở đâu và Claude Code đặt ở đâu.
+
 **Best practices (kèm "vì sao"):** chọn mode theo kích thước việc (Agent cho việc một dòng là cách đốt AI Credits nhanh nhất) · nới việc đọc (allow), siết việc ghi/chạy (ask/deny) — terminal và MCP write có thể xoá hoặc gửi dữ liệu ra ngoài · deny-first ở org/team, đừng lách bằng personal — deny thắng mọi nơi · bọc Autopilot/Allow all bằng sandbox + worktree riêng + git sạch · gặp "setting không thấy" thì tra plan trước khi báo bug.
 
 **Link chéo:** Bài 03 (instructions vs permissions) · Bài 06 (`tools`/`model` trong frontmatter agent) · Bài 07 (content exclusion + branch protection) · Bài 08 (tool approval theo MCP server) · Bài 09 (org allow/block extensions) · Bài 11 (scope Agent mode bằng worktree + undo) · Bài 12 (coding agent permissions trên cloud) · Bài 17 (hooks preview).
+
+> **Tóm gọn 1 câu:** Hai công cụ khác tên nhưng chung nguyên tắc — nới đọc, siết ghi, deny thắng mọi nơi, và luôn có ranh giới cứng phía ngoài agent.
 
 ---
 

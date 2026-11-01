@@ -7,7 +7,7 @@
 
 ## 1. Vì sao prompt quyết định output?
 
-Copilot không đọc được ý nghĩ. Nguyên nhân số 1 của "sửa lan man, đọc 100 files, đổi API không hỏi" không phải model lười, mà là bạn cho nó **quyền tự do quá rộng**:
+Copilot không đọc được ý nghĩ. Nguyên nhân số 1 của "sửa lan man, đọc 100 files, đổi API không hỏi" không phải model lười, mà là bạn cho nó **quyền tự do quá rộng** — như giao chìa khóa cả tòa nhà cho thợ sửa cái khóa cửa:
 
 - `"fix login"` không scope → model tự đoán scope, tự đoán done, tự đoán verify.
 - `"@workspace investigate auth"` với repo 500 files → mời model đi lạc.
@@ -20,7 +20,11 @@ Mỗi prompt tốt làm 3 việc:
 
 Đắt rẻ: viết prompt kỹ 2 phút tiết kiệm 20 phút restore + retry. Plan-first ([Tips 03](./03-plan-first-workflow.md)) chính là "prompt đắt" cho task lớn — trả 1 turn plan để tránh 10 turns code sai.
 
+> **Tóm gọn 1 câu:** Prompt ẩu thì model tự đoán lung tung; prompt tốt thu hẹp phạm vi, định nghĩa "xong", và gài vòng tự sửa.
+
 ## 2. Giải phẫu prompt tốt: 4 thành phần
+
+Mục này bóc prompt tốt ra làm 4 mảnh — thiếu mảnh nào là output lệch mảnh đó.
 
 **1 — Scope files nào** (càng cụ thể càng rẻ):
 
@@ -64,7 +68,11 @@ Xong đối chiếu totals ở summary vs raw, lệch thì fix trước khi show
 Không tạo file mới, chỉ trả lời trong chat.
 ```
 
+> **Tóm gọn 1 câu:** Prompt tốt gồm 4 mảnh: scope files, mục tiêu end-state, độ phân giải, format output — đủ cả 4 thì model làm đúng ngay lần đầu.
+
 ## 3. Ba gia vị nâng chất lượng
+
+Mục này thêm 3 "gia vị" làm prompt đậm đà hơn: tiêu chí xong, cách tự kiểm, và cấm địa.
 
 1. **Success criteria** — done phải check được bằng lệnh: `Done = npm test -- payments xanh + npm run lint 0 error` (xem [Tips 04](./04-verification-done-that.md)).
 2. **Cách verify** — bắt Copilot tự iterate:
@@ -83,7 +91,11 @@ Nếu đỏ, fix tiếp trong message này tới khi xanh hoặc dừng sau 3 l�
 
 Mẹo: gom ràng buộc chung vào `.github/copilot-instructions.md` (<200 dòng), chỉ để ràng buộc riêng task trong prompt.
 
+> **Tóm gọn 1 câu:** Thêm 3 gia vị: success criteria đo được, dặn Copilot tự chạy test rồi sửa tiếp, và ghi rõ NEVER những chỗ không được đụng.
+
 ## 4. Sáu mẫu prompt theo task (copy-paste)
+
+Mục này là 6 mẫu sẵn dùng — cứ chọn mẫu đúng loại việc rồi thay biến vào.
 
 **Mẫu 1 — BUG:**
 
@@ -141,7 +153,11 @@ Mỗi kết quả kèm evidence: quote/số dòng/file:line.
 Output: table + 3 bullet insight + confidence 1 dòng.
 ```
 
+> **Tóm gọn 1 câu:** Bug, feature, refactor, research, review, data — mỗi loại việc có một mẫu prompt riêng, copy là dùng được ngay.
+
 ## 5. Đóng gói prompt tái dùng
+
+Mục này nói về việc "nấu sẵn" prompt để lần sau chỉ hâm lại — không gõ lại từ đầu.
 
 Viết mẫu 6 lần → lần 7 vẫn gõ lại. Lưu vào `.github/prompts/*.prompt.md`, gọi `/tên-file`, team dùng chung:
 
@@ -169,7 +185,11 @@ Gọi: `/bug-fix scope=src/payments bugDescription="refund quá 30 ngày bị 50
 
 > **Lưu ý 2026:** prompt files `.prompt.md` đã deprecated cho Agent Host (Cloud) — vẫn chạy Local/VS Code. Việc mới nên chuyển sang **Agent Skills** (`SKILL.md`, chuẩn mở, chạy mọi harness). Xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 
+> **Tóm gọn 1 câu:** Lưu prompt hay dùng vào file và gọi bằng `/tên-file` — cả team dùng chung một chuẩn.
+
 ## 6. Walkthrough: từ prompt tệ tới prompt tốt
+
+Mục này đi qua từng vòng sửa prompt trên một tình huống thật — xem mỗi vòng "đúc thêm 1 mảnh" được gì.
 
 Tình huống: refactor file `auth.ts` 800 dòng.
 
@@ -178,6 +198,8 @@ Tình huống: refactor file `auth.ts` 800 dòng.
 | 0 — tệ | `"Refactor auth cho sạch"` | Đọc 40 files, đổi API, thêm dep, test đỏ 5 chỗ, mất 45 phút restore |
 | 1 — thêm scope + end-state | `"Refactor #file:src/auth.ts thành 3 modules login/session/types. Giữ public API."` | Đỡ hơn nhưng không tự chạy test, phải nhắc 2 turns |
 | 2 — đạt chuẩn | Xem dưới | 1 turn plan + 3 turns implement sạch, tổng 15 phút |
+
+> **Cách đọc bảng này:** Đọc theo cột "Round" từ trên xuống: mỗi dòng là một phiên bản prompt (cột "Prompt") và kết quả kiếm được (cột "Kết quả") — thấy rõ mỗi vòng thêm chi tiết tiết kiệm bao nhiêu thời gian.
 
 ```text
 Refactor #file:src/auth.ts (~800 dòng) thành src/auth/login.ts, session.ts, types.ts.
@@ -189,7 +211,11 @@ Trước khi code, trình outline 5 bullet files/hàm sẽ di chuyển và chờ
 
 Bài học: **mỗi vòng thêm 1 thành phần (scope → end-state → verify → constraints → format) là bớt 2–3 turns sửa.**
 
+> **Tóm gọn 1 câu:** Bắt đầu từ prompt tệ, thêm dần scope, end-state, verify và ràng buộc — mỗi mảnh giúp bớt 2–3 turns sửa.
+
 ## 7. Bảng sai → sửa
+
+Mục này là "bảng bệnh": prompt ẩu hay gặp, vì sao hỏng, và thuốc chữa.
 
 | Sai (prompt ẩu) | Vì sao hỏng | Sửa |
 |---|---|---|
@@ -199,6 +225,8 @@ Bài học: **mỗi vòng thêm 1 thành phần (scope → end-state → verify 
 | Mô tả solution thay vì problem | Ép model theo hướng sai | Mô tả problem + constraints, để Ask đề xuất solution |
 | Không format output | Nhận prose 100 dòng khó review | Ép format: table / checklist / file:line |
 | Không dùng prompt files/skills | 5 người 5 kiểu prompt | Đóng gói theo [Tips 07](./07-thiet-ke-prompts-skills.md) |
+
+> **Cách đọc bảng này:** Cột "Sai" là prompt hay gặp, "Vì sao hỏng" là hệ quả, "Sửa" là cách khắc phục — soi bảng mỗi khi output lệch mong đợi.
 
 ### Non-coder guide
 
@@ -212,7 +240,11 @@ Mỗi lý do kèm 2 quotes + số lượng. Output table.
 
 Prompt khởi động: `"Phỏng vấn tôi để hiểu project này, hỏi từng câu một: project làm gì, dữ liệu ở đâu, output muốn gì, cái gì không được đụng. Khi đủ thì tạo copilot-instructions.md <100 dòng."`
 
+> **Tóm gọn 1 câu:** Non-coder dùng cùng công thức 4 mảnh, chỉ thay "file/test" bằng "nguồn dữ liệu/đối chiếu số".
+
 ## 8. Checklist trước khi Enter
+
+Mục này là "10 câu hỏi chốt hạ" trước khi bấm Enter — đủ 10 ô là prompt đạt chuẩn.
 
 - [ ] Có **scope** cụ thể (#file/#selection/glob)?
 - [ ] Có **mục tiêu end-state** (xong thì trông thế nào)?
@@ -227,7 +259,11 @@ Prompt khởi động: `"Phỏng vấn tôi để hiểu project này, hỏi t�
 
 > Tick đủ 10 ô → prompt của bạn thuộc top 5%.
 
+> **Tóm gọn 1 câu:** Chấm prompt bằng 10 ô checklist trước khi Enter — thiếu ô nào bổ sung ô đó.
+
 ## 9. Bài tập cuối bài
+
+Mục này cho 3 bài tập thực hành để công thức "thấm vào tay".
 
 **Bài 1 (10 phút):** Lấy 3 prompts gần nhất, chấm theo 4 thành phần — thiếu mảnh nào? Viết lại prompt tệ nhất thành bản đủ 4 mảnh + verify + NEVER.
 
@@ -237,7 +273,11 @@ Prompt khởi động: `"Phỏng vấn tôi để hiểu project này, hỏi t�
 
 > Đạt: sau 1 tuần, ≥80% prompts của bạn có scope + verify + NEVER mà không cần cố nhớ.
 
+> **Tóm gọn 1 câu:** Làm 3 bài tập: chấm prompt cũ, viết lại theo mẫu, rồi đóng gói prompt hay dùng thành file team chung.
+
 ## Tham khảo chéo
+
+Mục này dẫn tới các Tips liên quan — đọc tiếp theo đúng thứ tự cần thiết.
 
 - [Tips 01](./01-context-hygiene.md) — scope gọn + chat sạch
 - [Tips 03](./03-plan-first-workflow.md) — Ask → Edit → Agent leo thang

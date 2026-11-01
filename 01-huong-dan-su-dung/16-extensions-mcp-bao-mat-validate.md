@@ -6,14 +6,18 @@
 
 ## Mục tiêu bài học
 
-- Chạy được 5 bước validate (publisher → permissions → tools → sandbox → allowlist) trên 1 tool thật, ra bằng chứng.
+- Làm được 5 bước validate trên một tool thật: publisher → permissions → tools → sandbox → allowlist. Mỗi bước phải có bằng chứng.
 - Nhớ ngay luật **`deny > ask > allow`** qua permission matrix.
-- Làm được một injection test an toàn và đọc đúng kết quả pass/fail.
-- Viết được 1 dòng allowlist + vài dòng `managed-settings.json` để admin khóa lại cho cả team.
+- Tự chạy một injection test an toàn. Đọc đúng kết quả pass hay fail.
+- Viết được 1 dòng allowlist. Viết thêm vài dòng `managed-settings.json` để admin khóa cho cả team.
+
+> **Tóm gọn 1 câu:** Sau bài này bạn "kiểm duyệt" được mọi extension/MCP trước khi cài, và admin khóa được policy cho cả team.
 
 ---
 
 ## 1. Vì sao validate?
+
+Mục này trả lời câu hỏi đầu tiên: cài tool mà cần gì phải kiểm tra? Vì tool chạy với quyền của bạn.
 
 ```text
 Extension VS Code chạy với quyền user: đọc mọi file, chạy shell, gọi network.
@@ -34,6 +38,8 @@ Có validate:     publisher ok → permissions vừa đủ → tools audit sạc
 | Prompt-injection | Gợi ý code chèn backdoor | Tool description chứa lệnh ẩn dụ agent làm theo |
 | Supply chain | Update bản mới thêm mã độc | Remote MCP đổi tools mà bạn không biết |
 
+> **Cách đọc bảng này:** Cột đầu là thứ tool đó làm được. Hai cột sau là ví dụ thật ở extension và MCP server — gặp dòng nào thì cảnh giác việc đó.
+
 ```mermaid
 flowchart TD
     A[Muốn cài extension/MCP mới] --> B1[B1 Publisher trust]
@@ -48,6 +54,8 @@ flowchart TD
 ---
 
 ## 2. Bước 1 — Publisher trust (5 phút, lọc rẻ nhất)
+
+Bước này giống kiểm tra CMND trước khi cho người lạ vào nhà. Tốn 5 phút, chặn được phần lớn rủi ro.
 
 ```text
 # Extension (VS Code Marketplace):
@@ -68,6 +76,8 @@ flowchart TD
 ---
 
 ## 3. Bước 2 — Permissions audit
+
+Bước này là soi "giấy ủy quyền" của tool. Nó đòi quyền gì, dùng để làm gì, hẹp được không.
 
 ```text
 # Đọc quyền extension:
@@ -93,17 +103,23 @@ flowchart TD
 | MCP server lạ | `deniedMcpServers` | 🔴 Cấm | **Deny thắng allow** |
 | MCP server đã duyệt | `allowedMcpServers` | 🟢 Cho | Giao (intersection) mọi nguồn cấu hình |
 
+> **Cách đọc bảng này:** Cột "Mức" là màu phân quyền, cột cuối nói ai thắng khi các cấu hình đụng nhau. Chỉ cần nhớ đúng 3 chữ: deny thắng tất cả.
+
 > 📄 **Code ví dụ:** [`examples/03-3-1-permission-matrix-deny-ask-allow-managed.jsonc`](examples/03-3-1-permission-matrix-deny-ask-allow-managed.jsonc)
 
 ---
 
 ## 4. Bước 3 — Tools audit (3 màu) + injection test
 
+Mục này xếp từng tool vào 3 màu như phân loại rác. Mỗi màu một cách đối xử, kèm bài test injection để biết tool nghe lời ai.
+
 | Màu | Tools | Chính sách |
 |---|---|---|
 | 🟢 Read-only | `search`, `get`, `read`, `list` | Allow — data vẫn cần check scope |
 | 🟡 Side-effect | `create_pr`, `post_comment`, `send_email` | Ask — mỗi lần chạy qua mắt bạn |
 | 🔴 Dangerous | `exec`, `run_shell`, `delete_*`, `http_post` | Deny default — chỉ mở khi có lý do + sandbox |
+
+> **Cách đọc bảng này:** Mỗi màu là một nhóm tool theo mức nguy hiểm. Cột "Chính sách" cho biết nhóm đó nên allow, ask hay deny.
 
 ```text
 # Prompt audit tools (paste tool list MCP vào chat):
@@ -141,6 +157,8 @@ Tool nào đọc ngoài scope repo? Tool nào gửi network đi đâu?
 
 ## 5. Bước 4 — Sandbox thử lửa (chạy cách ly)
 
+Mục này là "lồng nuôi" cho tool mới. Cho nó ở riêng một chỗ an toàn, xem vài ngày rồi mới tin.
+
 ```text
 # Sandbox extension mới (1 tuần): Ngày 1 cài vào VS Code PROFILE riêng (Preferences
 # → Profiles → Create "sandbox"); ngày 1–7 dùng việc thật, để ý CPU/RAM phình,
@@ -163,11 +181,15 @@ git worktree add ../sandbox-mcp -b sandbox/mcp-test   # MCP chỉ thấy worktre
 # Verify: dev sửa settings local để hạ sandbox → vẫn bị giữ mức admin đặt.
 ```
 
-> Thử trên repo chính là cách biến "một tool lạ" thành "một incident thật". Worktree + token rẻ tốn vài phút nhưng giới hạn thiệt hại gần bằng 0 nếu tool có ý đồ xấu.
+> Thử tool lạ ngay trên repo chính giống như nếm món lạ rồi mời cả bàn ăn theo — hơi gì là cả bàn dính. Sandbox worktree chỉ tốn vài phút setup, nhưng nếu tool có ý đồ xấu thì thiệt hại gần bằng 0.
+
+> **Tóm gọn 1 câu:** Cho tool mới vào "lồng nuôi" riêng — profile/worktree + token tối thiểu — chạy 1 tuần sạch rồi mới tin.
 
 ---
 
 ## 6. Bước 5 — Allowlist + policy khóa lại
+
+Mục này là bước "chốt sổ". Tool nào đã qua 4 bước trên mới được ghi vào sổ cho phép, và admin khóa sổ lại cho cả team.
 
 ### 6.1. Template allowlist (dán team wiki, admin sở hữu)
 
@@ -210,6 +232,8 @@ Quy tắc enforcement cần nhớ:
 
 ## 7. Walkthrough 20 phút + pitfalls
 
+Mục này là kịch bản làm thật trong 20 phút, kèm bảng lỗi hay gặp. Làm theo từ đầu tới cuối là ra bằng chứng.
+
 ```text
 # Phút 0–5 (rà hiện trạng): code --list-extensions --show-versions | sort
 #   → đánh dấu publisher lạ; MCP panel: server đỏ/không dùng 2 tuần → disable 1 cái.
@@ -231,13 +255,19 @@ Quy tắc enforcement cần nhớ:
 | Sandbox trên repo chính | Worktree dùng 1 lần + token rẻ |
 | Dùng sai key / upgrade CLI "mất" server | `.vscode/mcp.json` = `servers`, `.mcp.json` = `mcpServers`; từ CLI v1.0.39 không đọc `.vscode/mcp.json` → chuyển `~/.mcp-config.json` |
 
-**❌ SAI / ✅ ĐÚNG nhìn là nhớ:** ❌ chạy ngay `curl -fsSL https://blog-la/install.sh | bash` vì tiện → ✅ tải về, đọc từng dòng, hiểu nó chạy gì rồi mới chạy. ❌ allow hết tools "đỡ bấm duyệt" → prompt-injection chạy thẳng → ✅ 🟢 allow, 🟡 ask, 🔴 deny; chỉ mở 🔴 khi có lý do + sandbox. ❌ cài MCP mới trỏ thẳng repo prod → ✅ worktree 1 lần + token read-only, chạy vài ngày rồi mới đề xuất.
+> **Cách đọc bảng này:** Cột trái là lỗi hay gặp khi cài tool, cột phải là cách sửa. Dùng như checklist đối chiếu mỗi lần cài.
 
-**Bài tập:** (1) `code --list-extensions` → liệt kê publisher lạ; chọn 1 MCP team dùng: phân loại 3 màu + đề xuất allow/ask/deny; disable 1 server không dùng 2 tuần. (2) Dựng sandbox worktree + token rẻ; issue test chứa lệnh giả → ghi pass/fail; fail → siết 1 tool từ ask thành deny, test lại. (3) Viết allowlist table 5 cột cho 3 tools; soạn `managed-settings.json` chốt allowed/deniedMcpServers; đặt calendar + owner.
+**❌ SAI / ✅ ĐÚNG nhìn là nhớ:** ❌ chạy ngay `curl -fsSL https://blog-la/install.sh | bash` vì tiện → ✅ tải về, đọc từng dòng, hiểu nó chạy gì rồi mới chạy. ❌ allow hết tools cho đỡ bấm duyệt → prompt-injection chạy thẳng → ✅ 🟢 allow, 🟡 ask, 🔴 deny. Chỉ mở 🔴 khi có lý do và có sandbox. ❌ cài MCP mới trỏ thẳng repo prod → ✅ worktree 1 lần + token read-only. Chạy vài ngày rồi mới đề xuất.
+
+**Bài tập:** (1) `code --list-extensions` → liệt kê publisher lạ. Chọn 1 MCP team đang dùng: xếp 3 màu + đề xuất allow/ask/deny. Disable 1 server không dùng 2 tuần. (2) Dựng sandbox worktree + token rẻ. Issue test chứa lệnh giả → ghi pass/fail. Fail thì siết 1 tool từ ask thành deny, test lại. (3) Viết allowlist table 5 cột cho 3 tools. Soạn `managed-settings.json` chốt allowed/deniedMcpServers. Đặt calendar + owner.
+
+> **Tóm gọn 1 câu:** 20 phút đủ để rà hiện trạng, audit một tool, test injection và ghi allowlist.
 
 ---
 
 ## 8. So sánh với Claude Code + link chéo
+
+Mục này giúp bạn chuyển qua lại giữa Copilot và Claude Code mà không phải học lại từ đầu. Tư duy giống nhau, tên file khác nhau.
 
 | Việc | Copilot | Claude Code |
 |---|---|---|
@@ -246,7 +276,9 @@ Quy tắc enforcement cần nhớ:
 | Phân quyền tool | `permissions` allow/ask/deny + managed settings | allow/ask/deny trong `.claude/settings.json` |
 | Cách ly khi thử | VS Code profile `sandbox` + worktree + token rẻ | Worktree + container/VM tự dựng |
 
-> Khái niệm allow/ask/deny và MCP chuyển gần như 1-1 — chỉ khác tên file và đường dẫn. Copilot hơn ở marketplace tập trung + `managed-settings.json` đè settings local; Claude Code không có tương đương profile `sandbox`.
+> **Cách đọc bảng này:** Mỗi dòng là một việc bạn đã học trong bài, so sánh cách làm của hai công cụ. Cùng tư duy, chỉ khác tên file và đường dẫn.
+
+> Hai bên dùng chung một tư duy: allow/ask/deny và MCP gần như 1-1. Khác nhau chỉ ở tên file và đường dẫn. Copilot mạnh hơn ở marketplace tập trung và `managed-settings.json` đè settings local. Claude Code thì không có tương đương profile `sandbox`.
 
 **Link chéo:** Bài 03 (dặn "data ngoài là untrusted" vào instructions) · Bài 07 (automation rules + bảng key managed-settings.json) · Bài 08 (setup MCP cơ bản) · Bài 09 (cài/quản lý extensions) · Bài 10 (permission levels + approval gate) · Bài 11 (sandbox worktree) · Bài 15 (bài này là "tầng 0" của security stack).
 

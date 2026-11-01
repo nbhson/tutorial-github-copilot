@@ -7,7 +7,9 @@
 
 ## 1. Vì sao phải chuẩn hóa?
 
-Không chuẩn hóa, team bạn sẽ: 5 người 5 kiểu prompt, output 5 kiểu, review mệt; luật quan trọng nằm trong đầu 1 người; guardrails chỉ trên máy bạn; người mới mất 2 tuần mò.
+Mục này giải thích vì sao chuẩn hóa Copilot cho cả team quan trọng — trước khi đi vào cách làm. Chuẩn hóa nghĩa là cả team dùng chung một bộ luật, một bộ công cụ, một cách làm việc — thay vì mỗi người một kiểu như mỗi nhà một kiểu niêm tết.
+
+Không chuẩn hóa, team bạn sẽ: 5 người 5 kiểu prompt, output 5 kiểu, review mệt; luật quan trọng nằm trong đầu 1 người — người đó nghỉ phép là team "mất trí nhớ"; guardrails (rào chắn an toàn) chỉ trên máy bạn; người mới mất 2 tuần mò.
 
 ```text
 Người mới vào → đọc 1 README + chạy 30 phút onboarding → dùng Copilot đúng kiểu team.
@@ -17,7 +19,11 @@ Luật đổi → sửa 1 file trong repo, cả team hưởng.
 
 > Rule: **cái gì team phải nhớ thì viết ra file và commit. Trí nhớ không phải hệ thống.**
 
+> **Tóm gọn 1 câu:** không chuẩn hóa thì luật sống trong đầu từng người và mất theo người nghỉ việc — chuẩn hóa là đưa luật vào repo, clone là có.
+
 ## 2. Cơ chế: 4 tài sản commit vào repo
+
+Mục này liệt kê "tài sản" cần đưa vào git — tức những file cấu hình mà clone repo về là có ngay, khỏi ai phải hướng dẫn miệng.
 
 | Tài sản | Đường dẫn | Ai sửa | Review |
 |---|---|---|---|
@@ -26,6 +32,8 @@ Luật đổi → sửa 1 file trong repo, cả team hưởng.
 | Prompt files (legacy) | `.github/prompts/*.prompt.md` | Cả team đề xuất | PR + 1 reviewer (Local only) |
 | Custom agents | `.github/agents/*.md` | Leads + contributors | PR + test thử |
 | Gates | `verify.yml`, `CODEOWNERS`, `pre-commit` | Leads / DevOps | PR + CI xanh |
+
+> **Cách đọc bảng này:** mỗi dòng là một loại file cấu hình — cột 2 cho biết nó nằm ở đâu trong repo, cột 3–4 quy định ai được sửa và phải qua mấy vòng duyệt.
 
 Cấu trúc repo chuẩn:
 
@@ -52,7 +60,11 @@ docs/
 
 Tất cả commit vào git → clone repo là có, không cần setup miệng.
 
+> **Tóm gọn 1 câu:** 5 tài sản — instructions, skills, prompts, agents, gates — cùng sống trong `.github/`, commit là cả team dùng được ngay.
+
 ## 3. Commit instructions/skills/agents
+
+Mục này là phần thực hành: từng bước tạo và commit các file cấu hình team. Làm theo 3 ví dụ là có bộ khung hoàn chỉnh.
 
 **Ví dụ 1 — copilot-instructions.md team (copy-paste):**
 
@@ -101,7 +113,11 @@ Output: [SEVERITY] file:line + verdict + 3 gaps ưu tiên.
 
 Versioning: mọi thay đổi qua PR (mô tả lý do + ví dụ trước/sau); tag `skills-v1.2` khi release để rollback nhanh. Sửa trực tiếp không qua PR → mỗi máy một bản, không có mốc rollback.
 
+> **Tóm gọn 1 câu:** commit instructions + skills + agents qua PR, tag version khi release — thay đổi nào cũng có mốc quay lui.
+
 ## 4. Org policy + branch protection
+
+Mục này nâng lên cấp tổ chức (org): luật không chỉ nằm trong repo mà còn được GitHub tự động bắt tuân thủ. Org policy là luật chung cả tổ chức, branch protection là khoá cửa của nhánh chính.
 
 **Org Copilot policy (checklist):**
 
@@ -145,7 +161,11 @@ Repo → Settings → Branches → main:
 
 Cảnh báo: bật protection quá sớm với 3 reviewers cho mọi PR nhỏ → team thấy chậm và lách thay vì tuân theo.
 
+> **Tóm gọn 1 câu:** org policy + branch protection biến luật thành việc GitHub tự chặn — nhưng siết từ từ, đừng khóa cửa ngày đầu team còn đang tập.
+
 ## 5. Review workflow cho PR từ Copilot
+
+Mục này thiết kế quy trình duyệt code do Copilot viết — nguyên tắc: máy soi trước, người chốt sau, không ai merge "chân phương". PR (pull request) là yêu cầu gộp code của bạn vào nhánh chính, kèm cơ chế duyệt.
 
 **3 lớp review:**
 
@@ -170,7 +190,11 @@ Bỏ 1 lớp (vd merge luôn sau lớp 1) thì bug tốn kém nhất rơi xuốn
 
 **Mô tả PR mẫu từ Coding Agent (copy-paste khung):** `## Issue` (Closes #101 + mô tả 1 dòng) → `## Scope` (files đụng + diff --stat) → `## Evidence` (10 dòng cuối log test/lint/build + link CI run) → `## Reviews` (Copilot review PASS + /team-review PASS, 0 HIGH).
 
+> **Tóm gọn 1 câu:** ba lớp review — máy quét, reviewer fresh, người chốt — cắt lớp nào thì bug đó bay thẳng xuống prod, nơi sửa đắt nhất.
+
 ## 6. Onboarding 30 phút cho người mới
+
+Mục này dựng bài "hướng dẫn nhập môn" cho thành viên mới: 30 phút là biết dùng Copilot đúng kiểu team. Onboarding nôm na là quá trình "hội nhập" — hướng dẫn người mới từ số 0 tới tự làm được.
 
 Tạo `docs/copilot-onboarding.md`:
 
@@ -201,9 +225,13 @@ Tạo `docs/copilot-onboarding.md`:
 - [ ] Biết Evidence + review 3 lớp trước khi nhờ merge
 ```
 
-Buddy: ngày 1 review 2 PR đầu của người mới; tuần 1 người mới đề xuất 1 cải tiến skills (tạo PR).
+Buddy: ngày 1 review 2 PR đầu của người mới; tuần 1 người mới đề xuất 1 cải tiến skills (tạo PR). Buddy là người kèm cặp — như "anh chị hướng dẫn" thời đi học nghề.
+
+> **Tóm gọn 1 câu:** onboarding 30 phút gồm setup, Ask, fix + verify, plan + review — kèm buddy soi 2 PR đầu là người mới tự chạy được.
 
 ## 7. Walkthrough: chuẩn hóa 1 repo 60 phút
+
+Mục này gom toàn bộ bài thành một kế hoạch 60 phút chia theo từng khối 10 phút — dùng như checklist ngày đầu chuẩn hóa.
 
 | Phút | Việc | Làm gì |
 |---|---|---|
@@ -214,7 +242,13 @@ Buddy: ngày 1 review 2 PR đầu của người mới; tuần 1 người mới 
 | 45–55 | Onboarding | Viết docs/copilot-onboarding.md 30 phút (mục 6) |
 | 55–60 | Share | Mở PR `chore: copilot team setup`, tag cả team, hẹn 30p demo |
 
+> **Cách đọc bảng này:** đọc theo dòng thời gian từ 0 đến 60 phút — mỗi khối một việc, cột cuối chỉ rõ làm gì trong khối đó.
+
+> **Tóm gọn 1 câu:** chuẩn hóa một repo chỉ tốn 60 phút theo đúng 6 khối — làm xong mở PR chia sẻ cho cả team.
+
 ## 8. Pitfalls + cách fix
+
+Mục này liệt kê các lỗi hay gặp khi chuẩn hóa team và cách sửa — coi như kinh nghiệm người đi trước dặn lại.
 
 | Pitfall | Triệu chứng | Fix |
 |---|---|---|
@@ -226,7 +260,11 @@ Buddy: ngày 1 review 2 PR đầu của người mới; tuần 1 người mới 
 | Knowledge base cũ | Copilot trả lời theo spec cũ | Owner + ngày review mỗi quarter |
 | Review qua loa | PR Copilot lọt bug | Checklist mục 5 + ai merge người chịu |
 
+> **Cách đọc bảng này:** cột 1 là lỗi, cột 2 là triệu chứng giúp bạn nhận ra mình đang mắc, cột 3 là cách xử lý.
+
 ## 9. Bài tập cuối bài
+
+Ba bài dưới đây đưa chuẩn hóa từ lý thuyết vào repo thật của bạn.
 
 **Bài 1 (20 phút):** Hỏi 3 đồng nghiệp: prompt/skill hay dùng nhất? Luật nào hay quên nhất? Ghi top 3 prompt + top 3 luật → 6 files đầu tiên cần đóng gói. So với cấu trúc mục 2: repo thiếu gì nhất?
 
@@ -236,7 +274,11 @@ Buddy: ngày 1 review 2 PR đầu của người mới; tuần 1 người mới 
 
 > Đạt: sau 1 tháng, 100% PR từ Copilot có Evidence, người mới tự onboard 30 phút không cần hỏi.
 
+> **Tóm gọn 1 câu:** làm 3 bài — khảo sát team, commit bộ khung đầu tiên, chạy thử onboarding — và đo kết quả sau một tháng.
+
 ## Tham khảo chéo
+
+Mục này dẫn tới các bài liên quan khi cần đi sâu từng phần.
 
 - [Tips 06](./06-policies-guardrails-recipes.md) — guardrails recipes
 - [Tips 07](./07-thiet-ke-prompts-skills.md) — thiết kế skills chuẩn 2026

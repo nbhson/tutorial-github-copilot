@@ -6,11 +6,15 @@
 
 ## Mục tiêu bài học
 
+Mục này là bản đồ của cả bài: hết phần này bạn biết mình sẽ biết làm được gì.
+
 - Mở đúng **màn hình Agent Customizations** và nhận ra nó hiển thị theo harness đang chọn.
 - Dùng ô `Customize Your Agent` để draft instructions/skills/agents, rồi tự kiểm chứng trước khi lưu.
 - Phân biệt **7 cards Explore** (Plugins, MCP Servers, Skills, Instructions, Agents, Hooks, Tools) và **2 cards Other** (Voice, Dictation).
 - Chọn đúng thành phần khi gặp một nhu cầu cụ thể (tra bảng quyết định).
 - Biết đường migrate prompt files → skills và cách kiểm chứng customization có "ngấm" không.
+
+> **Tóm gọn 1 câu:** Sau bài này bạn mở được hub, dùng được Customize Your Agent, chọn đúng card cho từng nhu cầu và kiểm chứng mọi thay đổi.
 
 ---
 
@@ -21,7 +25,7 @@
 Vấn đề hub giải quyết:
 
 - Customizations nằm rải rác: `.github/`, `.claude/`, `~/.copilot/`, VS Code profile — không biết agent đang đọc cái nào.
-- Mỗi harness (Local/Copilot/Cloud — bài 10) đọc **định dạng + vị trí khác nhau** — file đặt sai chỗ = agent không thấy.
+- Mỗi harness (Local/Copilot/Cloud — bài 10) đọc **định dạng + vị trí khác nhau** — file đặt sai chỗ = agent không thấy, như gửi thư sai bưu cục.
 - Plugin lạ có thể mang theo **hooks + MCP chạy code trên máy bạn** — cần 1 chỗ review trước khi tin.
 
 ```mermaid
@@ -52,6 +56,8 @@ Luật scope theo harness (thuộc lòng):
 - Editor có syntax highlighting + validation — tạo file trong editor thay vì viết tay ngoài.
 # Verify: cùng 1 card, đổi Session Target Local ↔ Copilot → list vị trí đổi theo.
 ```
+
+> **Tóm gọn 1 câu:** Hub là bảng điện tổng để xem và quản mọi tuỳ biến của agent — và luôn nhớ editor đang đọc theo harness nào.
 
 ---
 
@@ -87,6 +93,8 @@ Cách chạy:
 | Team muốn cài 1 bộ tuỳ biến đóng gói sẵn | Cài **Plugin** |
 | Agent có quá nhiều/không đúng tool | Mở **Tools** rà soát |
 
+> **Cách đọc bảng này:** Cột trái là triệu chứng bạn đang gặp, cột phải là thay đổi nhỏ nhất nên thử trước — cứ tra từ trên xuống, chọn dòng khớp nhất.
+
 **4 thành phần dễ nhầm nhất — chọn theo câu hỏi bạn đang có:**
 
 | Thành phần | Trả lời câu hỏi | File sống ở đâu | Ví dụ |
@@ -96,13 +104,19 @@ Cách chạy:
 | **Agents** | Ai chịu trách nhiệm? | `.github/agents/<ten>.agent.md` | `security-reviewer` (chỉ đọc, cấm sửa) |
 | **Hooks** | Hệ thống tự động làm gì khi có sự kiện? (tất định) | `.github/hooks/*.json` | `PostToolUse` → chạy prettier sau khi agent sửa file |
 
+> **Cách đọc bảng này:** Mỗi dòng là một thành phần; cột "Trả lời câu hỏi" giúp bạn chọn đúng thứ cần tạo, hai cột cuối cho biết file nằm đâu và ví dụ thật.
+
 > Luật tầng: Instructions + Skills dẫn dắt model (quên được); Hooks chạy **tất định**; Agents gói instructions + tool + model thành persona; MCP/Tools bổ sung khả năng; Plugins đóng gói để phân phối. Việc bắt buộc → hook, gợi ý → instructions.
+
+> **Tóm gọn 1 câu:** Tra bảng trước khi tạo: gợi ý → Instructions, quy trình → Skill, vai trò → Agent, việc bắt buộc → Hook, kết nối ngoài → MCP, gói sẵn → Plugin.
 
 ---
 
 ## 4. 7 cards Explore chi tiết
 
 ### 4.1. Plugins — hộp cơm trưa đóng sẵn
+
+Mục này nói về Plugins: gói tuỳ biến đóng hộp, cài là có cả bộ — tiện nhưng phải kiểm tra bên trong hộp trước khi ăn.
 
 - **Agent Plugins 1.0**: chuẩn mở, portable giữa VS Code / Copilot CLI / Copilot app / SDK — thư mục có `plugin.json` + `skills/` + `mcp.json`; phần riêng Copilot ở namespace `com.github.copilot/`.
 - Cài: hub → Plugins → Discover/Browse Marketplace (bật `chat.customizations.marketplace.enabled`; filter `@type:skill`, `@type:mcp`). Tắt plugin → toàn bộ skill/agent/hook/MCP của nó biến mất.
@@ -116,20 +130,32 @@ Cách chạy:
 # 4. Ưu tiên plugin nhỏ (1 skill rõ việc, tool hẹp) — mở rộng sau khi giải thích được.
 ```
 
+> **Tóm gọn 1 câu:** Plugin là hộp cơm đóng sẵn nhiều thành phần — đọc plugin.json, kiểm tra hooks/MCP và thử bản nhỏ trước khi tin.
+
 ### 4.2. MCP Servers — cổng giao hàng
+
+Mục này hướng dẫn cài MCP server — cổng kết nối agent với thế giới bên ngoài như DB, API, issue tracker.
 
 - Thêm: hub → MCP Servers hoặc `MCP: Add Server` (guided). Prefer format portable để Agent Host đọc native.
 - Vị trí: workspace `.mcp.json` (portable, root repo) — legacy `.vscode/mcp.json` (Agent Host không đọc trực tiếp, VS Code forward hộ, trừ server cần `${input:...}`); user `~/.copilot/mcp-config.json`.
 - Bật/tắt không đụng file config; `chat.mcp.autostart`, `chat.mcp.discovery.enabled`.
 
+> **Tóm gọn 1 câu:** MCP server là cổng giao hàng ra thế giới ngoài — đặt file ở đúng vị trí portable thì mọi harness đều đọc được.
+
 ### 4.3. Skills — công thức món khó
+
+Mục này nói về Skills: quy trình từng bước ghi thành file để agent tự đọc và làm theo đúng công thức.
 
 - Chuẩn mở (agentskills.io), portable qua VS Code / CLI / app / cloud agent / Codex (experimental): `SKILL.md` (frontmatter + body) + scripts/templates.
 - Frontmatter: `description` (BẮT BUỘC, ≤1024 ký tự — viết "làm gì + khi nào dùng" để agent biết lúc nào load), `user-invocable`, `disable-model-invocation`, `context: fork` (experimental — chạy subagent riêng, giữ context chính sạch).
 - Vị trí: workspace `.github/skills/<ten>/SKILL.md` (+ `.claude/skills/`, `.agents/skills/`); personal `~/.copilot/skills/`. Tên frontmatter PHẢI khớp tên thư mục.
 - Gọi: agent tự load khi task khớp, hoặc `/<ten-skill>`. Skill từ plugin: KHÔNG tự thêm tiền tố namespace (plugin tự prefix, vd `/my-plugin:test-runner`).
 
+> **Tóm gọn 1 câu:** Skill là công thức nấu món khó — `SKILL.md` đúng vị trí, description rõ "làm gì + khi nào dùng" là agent tự biết giờ nấu.
+
 ### 4.4. Instructions — nội quy bếp
+
+Mục này nói về Instructions: nội quy mà agent nên tuân theo — khác hook ở chỗ model vẫn có thể "quên nội quy".
 
 | Harness | Project (always-on) | Targeted |
 |---|---|---|
@@ -137,17 +163,27 @@ Cách chạy:
 | Claude | `CLAUDE.md` | Markdown trong `.claude/rules` |
 | Codex | `AGENTS.md` | `AGENTS.md` trong subfolder |
 
+> **Cách đọc bảng này:** Mỗi dòng là một harness; cột giữa là file luôn được đọc cho cả project, cột phải là file áp cho từng nhóm file riêng.
+
 - Personal: `~/.copilot/instructions` / `~/.claude/rules`; Local user = VS Code profile storage (cũ — nên migrate).
 - Frontmatter `*.instructions.md`: `name`, `description`, `applyTo` (glob; Claude rules dùng `paths`).
 - Verify: mở References trong câu trả lời → thấy file instructions được kèm? `AGENTS.md` đặt root repo (cross-agent).
 
+> **Tóm gọn 1 câu:** Instructions là nội quy bếp — đặt đúng file theo harness, và kiểm tra bằng References xem nội quy có được kèm thật không.
+
 ### 4.5. Agents — đầu bếp chuyên món
+
+Mục này nói về custom Agents: gói một vai trò riêng (kèm tool, model, quy tắc) thành "đầu bếp chuyên món" gọi được khi cần.
 
 - File `.agent.md`: frontmatter YAML + body Markdown; tham chiếu tool bằng `#tool:<ten>`.
 - Frontmatter hay dùng: `description`, `name`, `argument-hint`, `tools` (built-in/MCP/extension; `server/*` = cả server), `agents` (`*` = mọi subagent, `[]` = cấm), `model` (1 model hoặc list ưu tiên), `user-invocable: false` (chỉ làm subagent), `handoffs` (nút chuyển agent, `send: true` = tự gửi), `hooks` (preview, chỉ Local).
 - Subagent: agent cha gọi agent con (`chat.subagents.allowInvocationsFromSubagents` cho gọi đệ quy). Chi tiết bài 06.
 
+> **Tóm gọn 1 câu:** Custom agent là đầu bếp chuyên món — frontmatter khai tool/model/hạn chế, body mô tả cách làm việc.
+
 ### 4.6. Hooks — chuông báo cháy tự động
+
+Mục này nói về Hooks: code chạy tất định tại một sự kiện — không phụ thuộc model có nhớ hay không, như chuông cháy kêu là chạy, không xin phép.
 
 - Harness nào chạy thì dùng hook implementation của harness đó — file giống nhau ≠ hành vi giống nhau (events/matchers/payloads khác nhau).
 - Local: workspace `.github/hooks/*.json`; user `~/.copilot/hooks/*.json`; Claude format `.claude/settings.json` (cần `chat.useClaudeHooks`, mặc định tắt); agent-scoped trong `.agent.md`.
@@ -159,7 +195,11 @@ Cách chạy:
 # check matcher/event name đúng schema của harness đang dùng (Local vs Copilot khác nhau).
 ```
 
+> **Tóm gọn 1 câu:** Hook là chuông tự động kêu đúng sự kiện — nhớ rằng cùng file nhưng hành vi khác nhau giữa các harness.
+
 ### 4.7. Tools — dao thớt được phép dùng
+
+Mục này nói về Tools: từng "dao thớt" agent được cầm — liệt kê, chọn lọc và giới hạn số lượng.
 
 - 3 họ: built-in (đọc/ghi, terminal, search), MCP (từ server đã cài), extension (Language Model Tools API).
 - Local: tools picker trong Chat (`Configure Tools`) — chọn theo từng request. Copilot harness: card **Tools** chọn theo profile (giữ qua session).
@@ -178,6 +218,10 @@ Cách chạy:
 | Permissions | Hành động nào cần phê duyệt | `deny > ask > allow`; Manual/Assisted/Allow all (bài 10) |
 | Hook | Logic tất định tại sự kiện | `PreToolUse` chặn lệnh nguy hiểm |
 
+> **Cách đọc bảng này:** Bốn dòng phân biệt Server (nguồn cung), Tool (từng hành động), Permissions (ai cho phép) và Hook (tự động theo sự kiện) — tra khi rối giữa các khái niệm.
+
+> **Tóm gọn 1 câu:** Tools là bộ dao được cấp cho agent — bật để thấy nhưng chạy hay không do permission quyết, và mỗi request chỉ cầm tối đa 128 cây.
+
 ---
 
 ## 5. 2 cards Other: Voice Mode + Dictation
@@ -187,10 +231,14 @@ Cách chạy:
 | **Voice Mode** | Hội thoại thoại 2 chiều trong chat | `agents.voice.enabled` (chỉ VS Code Local; KHÔNG có trên Business/Enterprise) | Cấu hình giọng, speed, hotword; cần mic |
 | **Dictation** | Nói → chèn text vào ô prompt | `chat.dictation.enabled` | Làm sạch bằng LLM: `dictation.experimental.llmCleanup` |
 
+> **Cách đọc bảng này:** Hai dòng là hai card "giọng nói"; cột giữa cho biết vai trò, cột "Bật ở đâu" là setting cần bật.
+
 - File hướng dẫn riêng (đọc cùng voice/dictation): personal `~/.copilot/voice.md`, `~/.copilot/dictation.md`; workspace `.github/voice.md`, `.github/dictation.md` — vd "tổng hợp ngắn gọn, không đọc nguyên code" cho Voice Mode.
 - Dictation + LLM cleanup: model sửa lời nói thành câu lệnh có cấu trúc (rất hợp với prompt dài tiếng Việt, tên biến tiếng Anh).
 
 > Voice/Dictation là **giao tiếp**, không phải tuỳ biến hành vi agent — muốn agent "nói kiểu gì" thì vẫn là Instructions.
+
+> **Tóm gọn 1 câu:** Voice Mode và Dictation là kênh giao tiếp bằng giọng nói — bật bằng setting riêng và cấu hình kiểu nói qua file hướng dẫn riêng.
 
 ---
 
@@ -207,7 +255,11 @@ Cách chạy:
 | 3. Cài thêm | Ai được cài plugin/MCP lạ? | Policy/managed settings: chốt danh sách marketplace + tắt marketplace lạ |
 | 4. Runtime | Chạy được tới đâu? | Permission level + sandboxing (bài 10) + audit log |
 
+> **Cách đọc bảng này:** Bốn lớp từ ngoài vào trong: repo chuẩn hóa, repo con kế thừa, ai được cài thêm, và giới hạn khi chạy — lần lượt siết từng lớp.
+
 > Luật sắt: mọi thứ trong `.github/` đi qua **PR review**; mọi thứ cá nhân (`~/.copilot/`) chỉ ảnh hưởng người đó. Team cần quy ước "được thêm gì vào `.github/` mà không phải hỏi" — nếu chưa có, mặc định là phải PR.
+
+> **Tóm gọn 1 câu:** Cài bản personal trước, review qua PR cho phần team, và siết 4 lớp governance từ repo tới runtime.
 
 ---
 
@@ -244,6 +296,8 @@ Kiểm chứng customization có "ngấm" (đừng tin là đủ — phải th�
 | "Skill từ plugin phải thêm prefix" | Không tự thêm — plugin tự prefix (`/my-plugin:test-runner`) |
 | "Voice Mode cấu hình được ở công ty" | `agents.voice.enabled` không có trên Business/Enterprise |
 
+> **Cách đọc bảng này:** Cột trái là câu người ta hay nói sai, cột phải là thực tế đúng — đối chiếu để tránh dính bẫy khi cấu hình.
+
 ---
 
 ## 9. Walkthrough 20 phút + bài tập
@@ -277,6 +331,8 @@ Kiểm chứng customization có "ngấm" (đừng tin là đủ — phải th�
 3. Viết 1 hook `PreToolUse` chặn `git push --force`; verify nó chặn được (Local).
 4. Bật `chat.customizations.promptMigration.enabled`, để VS Code đề xuất migrate 1 prompt file → skill, xem diff trước khi nhận.
 
+> **Tóm gọn 1 câu:** Dựng hub trong 20 phút bằng walkthrough, tránh 5 pitfall, rồi chốt bằng 4 bài tập thực hành.
+
 ---
 
 ## 10. So với Claude Code + link chéo
@@ -291,7 +347,11 @@ Kiểm chứng customization có "ngấm" (đừng tin là đủ — phải th�
 | MCP | `.mcp.json` (portable) + `~/.copilot/mcp-config.json` | `.mcp.json` + `~/.claude.json` |
 | Hub quản trị | Agent Customizations (1 màn hình) | rải theo thư mục |
 
+> **Cách đọc bảng này:** Mỗi dòng là một loại tuỳ biến; so sánh cột Copilot và Claude Code để biết cùng một việc file đặt ở đâu cho mỗi harness.
+
 - `AGENTS.md` + `.mcp.json` + skills là **chuẩn mở** — một repo có thể phục vụ cả 2 harness song song; chỉ phần hooks là khác implementation sâu nhất.
 - Link chéo: permissions/sandboxing → bài 10; subagents/handoffs → bài 06; MCP bảo mật validate → bài 16; chống lặp với worktrees → bài 11; CLI automation → bài 12.
 
 > **Chốt bài:** Hub để **nhìn tổng thể** (ai đang đọc gì), `Customize Your Agent` để **tăng tốc viết**, PR review để **chốt thay đổi team**. Quy tắc → Instructions, quy trình → Skill, vai trò → Agent, sự kiện → Hook, khả năng → MCP/Tools, phân phối → Plugin. Kiểm chứng bằng References + eval, đừng tin lời agent tự báo.
+
+> **Tóm gọn 1 câu:** Dùng hub để nhìn tổng thể, dùng chuẩn mở để phục vụ cả hai harness, và luôn kiểm chứng bằng References + eval.

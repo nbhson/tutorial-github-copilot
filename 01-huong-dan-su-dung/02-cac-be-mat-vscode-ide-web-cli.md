@@ -7,14 +7,20 @@
 
 ## Mục tiêu bài học
 
+Mục này nêu trước những việc bạn sẽ làm được sau khi đọc. Đọc xong quay lại đây để tự kiểm tra.
+
 - Trả lời được trong 10 giây, cho mỗi task: **code chạy ở đâu và agent thấy được gì**.
 - Phân biệt **local agent** vs **coding agent cloud** và biết task nào hợp bên nào.
 - Phân biệt **Session Target (Local / Copilot / Cloud)** — công tắc bên trong VS Code Chat.
 - Dùng **Copilot CLI** an toàn: `explain` trước, chạy sau với lệnh nguy hiểm.
 
+> **Tóm gọn 1 câu:** Sau bài này, nhìn task nào bạn cũng biết ngay nên chạy nó ở "quầy" nào.
+
 ---
 
 ## 1. Khái niệm cốt lõi
+
+Mục này giải thích từ khóa "bề mặt" — khái niệm nền của cả bài. Nắm được từ này bạn mới chọn đúng chỗ làm việc cho từng task.
 
 **1 câu định nghĩa:** "bề mặt" (surface) là nơi bạn gặp Copilot — VS Code, web GitHub, terminal, điện thoại.
 
@@ -24,10 +30,14 @@
 
 ### Câu hỏi duy nhất cần hỏi: **"Code sẽ chạy ở đâu, và agent thấy được gì?"**
 
+Trước khi bắt việc nào, cũng dừng 10 giây hỏi câu này. Câu trả lời quyết định luôn bề mặt bạn cần dùng.
+
 | Nhóm | Nơi code chạy | Agent thấy được gì | Gồm |
 |---|---|---|---|
 | **Local** (máy bạn) | Trên máy của bạn | File máy bạn, `.env`, DB local, MCP local, setting VS Code | VS Code, Visual Studio, JetBrains, Neovim, Copilot CLI, GH Desktop |
 | **Cloud** (GitHub) | Máy chủ GitHub/provider | Chỉ code trong repo + CI. **Không** thấy setting local, `.env`, DB máy bạn | github.com chat, coding agent, github.dev |
+
+> **Cách đọc bảng này:** Cột giữa là điểm khác biệt then chốt — agent "thấy được gì" quyết định task nào làm nổi. Đọc theo cột, đừng đọc theo dòng.
 
 Đây là lý do GitHub tách: task 5 phút (fix typo) cần độ trễ thấp → local. Task 2 giờ (migrate, refactor 50 file) cần máy chạy tiếp khi bạn gập laptop → cloud. Không bề mặt nào thắng mọi trường hợp.
 
@@ -35,9 +45,13 @@
 
 > Phân biệt 2 từ: **bề mặt** = nơi bạn gặp Copilot (phạm vi cả bài); **Session Target** = công tắc *bên trong* VS Code Chat chọn harness + nơi chạy (Local/Copilot/Cloud — mục 3.4).
 
+> **Tóm gọn 1 câu:** Trước mỗi task, hỏi "code chạy ở đâu, agent thấy gì" — trả lời xong là biết chọn Local hay Cloud.
+
 ---
 
 ## 2. Bảng quyết định nhanh + 5 task mẫu
+
+Mục này là bản "tra nhanh": nhìn bảng chọn bề mặt, nhìn 5 task mẫu biết cách áp.
 
 | Bề mặt | Nơi code chạy | Config nào được dùng | Khi nào dùng |
 |---|---|---|---|
@@ -51,6 +65,8 @@
 | **Mobile** | Điện thoại | Chỉ repo | Đọc/giải thích PR ngoài giờ |
 | **Copilot CLI** | Terminal bạn | `.mcp.json` / repo config | Agentic trong terminal + gợi ý lệnh shell |
 | **GH Desktop** | Máy bạn (GUI git) | Không | Commit message/PR summary nhanh |
+
+> **Cách đọc bảng này:** Hàng nào "Nơi code chạy" là "Máy bạn" thì được dùng tài nguyên máy bạn; hàng nào là cloud thì chỉ giới hạn trong repo. Chọn theo cột "Khi nào dùng".
 
 ```text
 5 task mẫu:
@@ -71,9 +87,13 @@ Cây hỏi 10 giây (dán lên màn hình):
    Có  -> Copilot CLI, đừng mở IDE. Không -> về câu 1
 ```
 
+> **Tóm gọn 1 câu:** Bảng chọn bề mặt + cây hỏi 10 giây là bộ lọc 2 tầng: hỏi môi trường trước, hỏi nơi chạy sau, cuối cùng mới tới CLI.
+
 ---
 
 ## 3. VS Code — bề mặt mạnh nhất
+
+Mục này nói về bề mặt đầy đủ nhất. Nếu chỉ nhớ được một chỗ để làm việc, hãy nhớ VS Code.
 
 Agent mode full tools: read/edit/search/terminal/MCP trong 1 loop; model picker + mode picker (Ask/Edit/Agent) ngay trong Chat; đọc config repo đầy đủ (`.github/copilot-instructions.md`, `*.instructions.md`, `.github/prompts/`, `.github/agents/`, `.vscode/mcp.json`); inline diff + Accept/Reject từng hunk.
 
@@ -82,6 +102,8 @@ Agent mode full tools: read/edit/search/terminal/MCP trong 1 loop; model picker 
 | **Ask** | Không | Không | Hỏi, giải thích, tra cứu (`@workspace` + `#file`) |
 | **Edit** | Có (files bạn chọn) | Không/hạn chế | Sửa có scope rõ, bạn kiểm soát files |
 | **Agent** | Có (tự tìm files) | Có | Task mở, multi-file, cần verify bằng test |
+
+> **Cách đọc bảng này:** Hai cột giữa cho biết mode được phép làm gì. Càng sang phải càng "tự do" — và càng cần bạn canh chừng.
 
 ```text
 # Flow khuyến nghị: chưa rõ -> Ask; rõ scope -> Edit; việc mở -> Agent.
@@ -101,6 +123,8 @@ Up/Down trong input   lịch sử prompt
 
 ### 3.1. Session Target: Local / Copilot / Cloud (phần dễ nhầm nhất)
 
+Mục này giải nghĩa công tắc khiến nhiều người nhầm nhất trong VS Code Chat. Hiểu được nó là hết cảnh "sao agent behaves lạ".
+
 **Nôm na:** Model = chọn **tài xế** (bộ não). Session Target = chọn **loại xe + nơi chạy** (ai thực thi tool, chạy ở đâu). Đổi target **không phải** đổi model — model đổi ở model picker.
 
 | Target | Chạy ở đâu | Truy cập code | Khi dùng |
@@ -109,6 +133,8 @@ Up/Down trong input   lịch sử prompt
 | **Copilot** | Agent Host (máy bạn / remote / Dev Container), **chạy nền** | Folder hiện tại hoặc worktree cô lập | Chạy nền, nhiều phiên song song, mở lại ở cửa sổ/browser khác |
 | **Cloud** | Hạ tầng remote của provider | 1 GitHub repo → mở PR | Task gọn, async, cần team review |
 | **Claude / Codex** | Máy bạn (hoặc Agent Host, experimental) | Folder hiện tại hoặc worktree | Đã quen workflow + permission của provider đó |
+
+> **Cách đọc bảng này:** So cột "Chạy ở đâu" và "Truy cập code" là thấy ngay mỗi target là một "chỗ chạy" khác nhau. Cột "Khi dùng" là gợi ý chọn nhanh.
 
 **Điểm khác Local vs Copilot:** cả hai có thể chạy trên máy bạn, nhưng **Local** nằm trong extension host (tương tác, 1 cửa sổ, dùng tool của VS Code/extension), còn **Copilot** chạy trên **Agent Host** (nền tảng Copilot SDK) — chạy nền, nhiều phiên song song, session do host sở hữu nên mở lại được ở nơi khác.
 
@@ -122,9 +148,13 @@ Up/Down trong input   lịch sử prompt
 # Không thấy Copilot/Cloud -> check đăng nhập GitHub + extension + policy.
 ```
 
+> **Tóm gọn 1 câu:** Session Target là chọn "xe + nơi chạy", model là chọn "tài xế" — đổi target không đổi model.
+
 ---
 
 ## 4. Các IDE khác: Visual Studio, JetBrains, Neovim
+
+Mục này cho bạn biết: nếu không dùng VS Code thì còn lại gì và mất gì.
 
 **Visual Studio (.NET/C++):** mạnh ghost text + Chat cho solution lớn, hiểu MSBuild/C# tốt; agent mode hạn chế terminal tools. Verify: mở `.cs` → ghost text; View → Copilot Chat; thử Edit nhỏ 1 method.
 
@@ -136,11 +166,17 @@ Up/Down trong input   lịch sử prompt
 
 > Cố ép agent mode ở IDE thiếu terminal tool rồi kết luận "Copilot dở" là hiểu nhầm tốn thời gian — chuyển bề mặt rẻ hơn cãi với tool.
 
+> **Tóm gọn 1 câu:** IDE khác dùng được Copilot nhưng ít tool hơn VS Code — task khó hãy chuyển bề mặt, đừng đổ lỗi cho Copilot.
+
 ---
 
 ## 5. Cloud: github.com chat + coding agent
 
+Mục này nói về hai thứ chạy trên cloud GitHub: hỏi đáp trên web, và giao việc cho agent qua đêm.
+
 ### 5.1. github.com Chat (hỏi trên web)
+
+Đây là Copilot trên trình duyệt: không cài gì cả, mở repo là hỏi được.
 
 ```text
 Vào repo trên github.com -> icon Copilot (góc phải) -> hỏi bằng tiếng Việt/Anh.
@@ -149,7 +185,11 @@ Mạnh: không cần setup local, hỏi từ điện thoại được.
 Yếu: không thấy settings local, không chạy terminal local, không MCP local.
 ```
 
+> **Tóm gọn 1 câu:** github.com Chat là "quầy hỏi nhanh" không cần máy dev — mạnh ở tiện, yếu ở không đụng được môi trường local.
+
 ### 5.2. Coding agent (assign issue → branch → PR)
+
+Mục này giới thiệu cách "thuê thợ" chạy qua đêm trên cloud GitHub.
 
 - **1 câu:** Copilot chạy trên máy cloud của GitHub, tự code rồi mở PR khi bạn assign issue cho nó.
 - **Nôm na:** gửi xe vào gara qua đêm — tối giao chìa khóa (issue), sáng nhận xe đã sửa (PR).
@@ -191,18 +231,28 @@ Fix crash POST /orders khi payload thiếu customerId (trả 422 + { code, messa
 | Chạy tiếp khi gập laptop | Không | Có |
 | Hợp task | Cần terminal/DB/MCP local | Task độc lập, verify bằng CI, việc qua đêm |
 
+> **Cách đọc bảng này:** Hàng "Chạy tiếp khi gập laptop" là lý do tồn tại của coding agent. Hàng "Config dùng" là lý do đừng giao việc cần DB local cho nó.
+
+> **Tóm gọn 1 câu:** Coding agent = gara qua đêm: giao issue đúng scope, sáng nhận PR, review như review junior dev.
+
 ---
 
 ## 6. Các bề mặt nhỏ
+
+Mục này điểm nhanh vài công cụ phụ. Biết chúng làm được gì và không làm được gì là đủ.
 
 - **github.dev:** nhấn `.` khi xem repo trên github.com → VS Code web. Ghost text + Chat cơ bản; không terminal thật, không MCP local. Sửa nhanh không clone.
 - **GitHub Mobile:** đọc/giải thích PR khi đi đường, duyệt coding-agent PR. Không dùng viết code nghiêm túc.
 - **GitHub Desktop:** tích hợp Copilot — gợi ý commit message + PR body summary. Verify: stage files → nút "Generate commit message" → duyệt trước khi commit.
 - **Windows Terminal:** Copilot CLI hỗ trợ gợi ý lệnh PowerShell ngay trong terminal. PowerShell suggestion kém hơn bash/zsh — test kỹ trước khi Enter.
 
+> **Tóm gọn 1 câu:** Các bề mặt nhỏ dùng để đọc, duyệt và sửa tạm — việc nghiêm túc vẫn quay về IDE hoặc coding agent.
+
 ---
 
 ## 7. Copilot CLI
+
+Mục này phân biệt 2 công cụ tên gần giống nhau trong terminal — nhầm 2 cái này là bối rối ngay.
 
 > **2 CLI khác nhau — đừng nhầm:**
 > - `copilot` (Copilot CLI): **GA 03/2026** cho mọi subscriber trả phí — agent hoàn chỉnh trong terminal, 3 persona (Shift+Tab xoay standard → plan → autopilot; hoặc `--mode=interactive|plan|autopilot`), đổi model `/model`, `/permissions`, `/sandbox`, `--max-ai-credits N`. Tích hợp GitHub (repo/issue/PR).
@@ -222,9 +272,13 @@ Fix crash POST /orders khi payload thiếu customerId (trả 422 + { code, messa
 
 > Tin mới 10/2026: VS Code 1.141 có Agents window xem sessions side-by-side + "Open worktree cleanup"; Copilot app hỗ trợ 2 account tách biệt; JetBrains có controls riêng — đừng assume parity với VS Code.
 
+> **Tóm gọn 1 câu:** `gh copilot` để gợi ý/explain lệnh shell, `copilot` là agent hoàn chỉnh trong terminal — nhớ đúng tên thì đúng việc.
+
 ---
 
 ## 8. Hiểu nhầm thường gặp + pitfalls
+
+Mục này gom những chỗ hay sai và cách né. Đọc kỹ một lần, tiết kiệm nhiều lần debug.
 
 | Hiểu nhầm | Sự thật | Ví dụ |
 |---|---|---|
@@ -234,6 +288,8 @@ Fix crash POST /orders khi payload thiếu customerId (trả 422 + { code, messa
 | "CLI suggest luôn đúng" | Gợi ý, có thể sai flag nguy hiểm | Luôn `explain` + chạy khô trước |
 | "Local và Copilot giống nhau vì đều 'máy bạn'" | Khác harness: Local = extension host (tương tác); Copilot = Agent Host (nền, nhiều phiên) | Muốn chạy nền → Copilot; cần tool VS Code → Local |
 | "Đổi Session Target là đổi model" | Target đổi "nơi chạy + tay chân"; model đổi ở model picker | Hỏi "não" → model picker; hỏi "xe + nơi chạy" → Session Target |
+
+> **Cách đọc bảng này:** Cột "Sự thật" là phần cần nhớ. Mỗi dòng tương ứng một tình huống bạn sẽ gặp thật — đối chiếu với trải nghiệm của mình.
 
 ```text
 # Lưu ý config theo bề mặt:
@@ -255,14 +311,20 @@ Fix crash POST /orders khi payload thiếu customerId (trả 422 + { code, messa
 
 **Best practices:** chọn bề mặt theo "code chạy ở đâu" · task khó ở lại IDE, task mở đẩy sang Agent/VS Code · coding agent chỉ nhận task verify được bằng CI · một task = một issue/PR trên coding agent · mobile/web để đọc review, không viết code.
 
+> **Tóm gọn 1 câu:** Sai lầm hay gặp đều quy về một gốc: quên hỏi "code chạy ở đâu, agent thấy gì" trước khi giao việc.
+
 ---
 
 ## 9. Bài tập nhỏ
+
+Mục này cho bài tập tay để kiến thức trên không nằm trên giấy. Làm đủ 4 bài là thuộc bài.
 
 1. **(15 phút) So sánh Ask/Edit/Agent:** cùng 1 task nhỏ, chạy lần lượt 3 modes trong VS Code. Ghi lại: mode nào sửa đúng nhất, tốn mấy turns, diff khác nhau ra sao.
 2. **(20 phút) Coding agent end-to-end:** tạo 1 issue test (scope 1–2 files, có lệnh verify), assign cho copilot, review PR nó mở. Liệt kê 3 điểm nó làm tốt + 3 điểm bạn phải sửa tay.
 3. **(15 phút) CLI drill:** giải 3 việc terminal thật bằng `suggest` + `explain`. Ghi lại lệnh nào chạy được ngay, lệnh nào phải sửa tay.
 4. **(15 phút) Session Target:** liệt kê target khả dụng; chạy 1 task nhỏ ở Local rồi Handoff sang target khác, kiểm tra ngữ cảnh còn nguyên không.
+
+> **Tóm gọn 1 câu:** Làm đủ 4 bài tập là bạn đã chạm tay vào cả 4 nhóm bề mặt: mode, cloud agent, CLI và Session Target.
 
 ---
 
@@ -273,5 +335,7 @@ Fix crash POST /orders khi payload thiếu customerId (trả 422 + { code, messa
 - VS Code Copilot docs: https://code.visualstudio.com/docs/copilot
 - Copilot coding agent: https://docs.github.com/copilot/using-github-copilot/coding-agent
 - GitHub CLI Copilot extension: https://github.com/github/gh-copilot
+
+> **Tóm gọn 1 câu:** Muốn đào sâu thêm, đọc docs chính thức của Copilot và VS Code — bài tiếp theo sẽ nói về instructions và rules.
 
 > **Chốt bài 02:** trước mỗi task, tự hỏi "code chạy ở đâu và agent thấy được gì" — trả lời xong là chọn đúng quầy. Local cho việc cần môi trường máy bạn, Cloud cho việc độc lập chạy qua đêm, Copilot target để chạy nền nhiều phiên, CLI cho việc terminal.

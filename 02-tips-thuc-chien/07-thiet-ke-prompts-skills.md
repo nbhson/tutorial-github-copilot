@@ -9,7 +9,9 @@
 
 ## 1. Vì sao phải tái dùng?
 
-Dấu hiệu bạn đang nợ prompt: mỗi bug gõ lại từ đầu, mỗi lần một kiểu; đồng nghiệp hỏi "prompt hôm qua là gì?" → không nhớ; team 5 người 5 cách dặn Copilot; luật quan trọng phải nhắc miệng mỗi chat.
+Mục này cho bạn thấy "bệnh" chung của team khi ai cũng giữ prompt riêng trong đầu. Nhận ra bệnh rồi mới thấy vì sao cần đóng gói.
+
+Dấu hiệu bạn đang "nợ" prompt: mỗi lần gặp bug là gõ lại từ đầu, mỗi lần một kiểu. Đồng nghiệp hỏi "prompt hôm qua là gì?" thì bạn lục mãi không ra. Team 5 người thì có 5 cách dặn Copilot. Luật quan trọng phải nhắc miệng mỗi phiên chat — nhắc thiếu là quên.
 
 ```text
 Trước: gõ 10 dòng mỗi lần × 20 lần = 200 dòng + 20 kiểu khác nhau
@@ -18,9 +20,13 @@ Sau:  viết 1 file 30 dòng, gọi lại 20 lần, output đồng nhất
 
 > Rule: **prompt dùng >2 lần thì đóng gói thành file. Luật áp mọi turn thì thành instructions.**
 
-Nợ prompt không nằm ở việc gõ 10 dòng — nằm ở chỗ mỗi lần gõ bạn *sót một dòng khác nhau*. Đóng gói biến những dòng dễ sót thành một file cố định.
+Bản chất nợ prompt không nằm ở việc gõ 10 dòng. Nó nằm ở chỗ mỗi lần gõ, bạn *sót một dòng khác nhau*. Đóng gói giống như viết công thức nấu ăn ra giấy thay vì nhớ trong đầu: lần nào cũng đủ nguyên liệu, không bỗng dưng thiếu muối.
+
+> **Tóm gọn 1 câu:** Prompt mà phải gõ lại từ đầu nhiều lần là nợ — đóng gói thành file để lần nào cũng ra cùng một kết quả.
 
 ## 2. Cơ chế: 3 loại tài sản tái dùng
+
+Mục này giải thích 3 loại "tài sản" bạn có thể đóng gói, và khác nhau ở chỗ nào. Hiểu được khác biệt này thì sau này mới chọn đúng loại, không nhét sai chỗ.
 
 | Loại | File | Kích hoạt | Khi dùng |
 |---|---|---|---|
@@ -28,11 +34,15 @@ Nợ prompt không nằm ở việc gõ 10 dòng — nằm ở chỗ mỗi lần
 | Instructions | `.github/copilot-instructions.md` + `*.instructions.md` | Tự áp mọi turn / theo glob | Luật, convention, cấm địa |
 | Skills (chuẩn 2026) | `.github/skills/*/SKILL.md` | Copilot tự nhận diện theo description | Procedure nhiều bước: release, migrate |
 
+> **Cách đọc bảng này:** mỗi dòng là 1 loại tài sản. Cột **File** cho biết đặt ở đâu, cột **Kích hoạt** cho biết nó chạy khi nào (bạn chủ động gọi hay Copilot tự bật), cột **Khi dùng** là tình huống phù hợp nhất.
+
 ```text
 Prompt = bạn gọi khi cần (chủ động).
 Instructions = tự chạy ngầm (bị động).
 Skill = procedure dài, Copilot tự biết khi nào dùng.
 ```
+
+Nói đời thường cho dễ nhớ: prompt file giống cuốn công thức bạn tự mở ra khi nấu — muốn dùng thì mới lấy. Instructions giống tờ giấy dán luật lên cửa tủ lạnh: ai vào bếp cũng thấy, khỏi ai nhắc. Skill giống quy trình vận hành từng bước (SOP): Copilot tự biết lúc nào cần lật ra dùng.
 
 Nơi đặt chuẩn:
 
@@ -47,11 +57,15 @@ Nơi đặt chuẩn:
     team-bug/SKILL.md              # chuẩn 2026, chạy Local + Cloud
 ```
 
-Phân biệt nhanh khi chọn: nhét luật 1 dòng vào prompt file → mỗi lần phải nhớ gọi; nhét quy trình 10 bước vào prompt file → phình, quên nửa sau; nhét task lặp vào instructions → nạp lại mỗi turn, tốn credit.
+Chọn nhanh, tránh nhét sai chỗ: nhét luật 1 dòng vào prompt file thì mỗi lần phải nhớ gọi — mệt. Nhét quy trình 10 bước vào prompt file thì nó phình ra, quên nửa sau. Nhét task lặp vào instructions thì nó nạp lại mỗi turn — tốn credit vô ích.
+
+> **Tóm gọn 1 câu:** Ba loại khác nhau ở cách kích hoạt — prompt file bạn tự gọi, instructions tự chạy ngầm, skill là quy trình dài Copilot tự nhận diện.
 
 ## 3. Prompt files (.prompt.md) — legacy, chỉ Local
 
-Frontmatter chuẩn:
+Mục này giới thiệu cách đóng gói đời đầu. Giờ nó chỉ chạy trên Local/VS Code, nhưng nhiều repo cũ vẫn đang dùng nên bạn cần nhận ra nó.
+
+Frontmatter là khối `---` ngay đầu file — giống dòng ghi trên bìa hộp: khai báo mode, tools và mô tả để Copilot biết chạy kiểu gì:
 
 ```markdown
 ---
@@ -84,9 +98,17 @@ Fix bug mô tả trong ${input:bugDescription} tại ${input:scope}.
 
 Gọi: `/team-bug scope=src/payments bugDescription="refund quá 30 ngày bị 500"`
 
+Cú pháp `${input:tên}` là chỗ trống để điền — giống mẫu đơn có ô trống, gọi lúc nào Copilot hỏi lần đó.
+
 > Repo cũ đã có prompt file → giữ chạy Local, port dần sang skill.
 
+> **Tóm gọn 1 câu:** Prompt file = 1 file markdown có frontmatter + variables, gọi bằng `/tên-file`; chỉ chạy Local nên việc mới nên chuyển sang skill.
+
 ## 4. Instructions: luật tự áp theo scope
+
+Mục này nói về loại thứ hai: luật không cần gọi, đến turn nào cũng tự áp. File root áp cho cả repo; file scoped áp đúng từng thư mục.
+
+"Scope" nghĩa là phạm vi áp dụng. Ta giới hạn bằng `applyTo` với một glob. Glob đơn giản là mẫu so khớp đường dẫn, giống bộ lọc: `src/payments/**` nghĩa là "mọi file trong src/payments".
 
 **Root instructions (<200 dòng):**
 
@@ -118,11 +140,15 @@ applyTo: "src/payments/**"
 - Không gọi trực tiếp DB, qua repository layer.
 ```
 
-Kiểm tra chất lượng: glob càng hẹp càng tốt (`src/payments/**` tốt hơn `src/**`); mỗi file <50 dòng chỉ luật riêng scope đó; luật chung để root, không lặp lại ở files con.
+Ba điểm kiểm tra chất lượng. Một: glob càng hẹp càng tốt (`src/payments/**` tốt hơn `src/**`) — hẹp thì ít gây tác dụng phụ ngoài ý muốn. Hai: mỗi file scoped giữ dưới 50 dòng, chỉ chứa luật riêng scope đó. Ba: luật chung để ở root một chỗ, đừng lặp lại ở các file con — lặp là khi sửa sẽ sót.
+
+> **Tóm gọn 1 câu:** Instructions là luật tự áp không cần gọi — luật chung để root, luật riêng từng module tách file với `applyTo` glob hẹp.
 
 ## 5. Skills (SKILL.md): procedure nhiều bước
 
-Khi procedure >5 bước, prompt file quá dài → tách thành skill.
+Mục này nói về loại mạnh nhất chuẩn 2026. Procedure nghĩa là quy trình nhiều bước — khi nó vượt quá 5 bước, prompt file sẽ phình và dễ quên, nên tách thành skill.
+
+Skill giống bộ SOP dán ở quầy pha chế: ai làm đúng việc đó thì lật ra, làm theo từng bước, khỏi nhớ trong đầu. Copilot đọc `description` trong SKILL.md và tự biết lúc nào cần dùng.
 
 **Ví dụ — skills/release/SKILL.md (copy-paste):**
 
@@ -153,11 +179,17 @@ allowed-tools: [shell, edit]
 
 Gọi tự nhiên: `"Dùng skill release để release patch tuần này."` — Copilot tự nhận diện description khớp → load procedure.
 
-**Khi nào tách skill:** procedure >5 bước và dùng >1 lần/tháng; cần variables + checks + rollback; muốn Copilot tự trigger. Không tách khi chỉ 2–3 bước (prompt file đủ) hoặc luật 1 dòng (instructions đủ).
+**Khi nào tách skill:** procedure >5 bước và dùng >1 lần/tháng; cần variables + checks + rollback; muốn Copilot tự trigger. Không tách khi chỉ 2–3 bước (prompt file đủ) hoặc luật 1 dòng (instructions đủ). Cứ nghĩ như chia đồ trong nhà: đồ dùng hàng ngày để ngăn gần tay, đồ ít dùng cất kho — skill là "kho" cho quy trình dài.
+
+> **Tóm gọn 1 câu:** Skill là file SKILL.md mô tả quy trình nhiều bước, Copilot đọc description tự kích hoạt — quy trình nào dài và dùng nhiều thì nên tách thành skill.
 
 > Bảo mật: skill tải từ repo ngoài có thể chứa prompt injection / script độc hại — luôn đọc kỹ SKILL.md và script tham chiếu trước khi cài, chỉ pre-approve `shell`/`bash` cho skill bạn hoàn toàn tin.
 
 ## 6. Few-shot + variables chuẩn
+
+Mục này dạy 2 chiêu làm prompt đáng tin hơn: biến (variables) để điền chỗ thay đổi, và few-shot để cho Copilot "học theo mẫu".
+
+Few-shot nghĩa là "cho xem vài ví dụ mẫu" — như dạy thợ phụ bằng cách làm mẫu một lần, thay vì miêu tả suông cả ngày. Variables là các "ô trống" trong mẫu đơn, gọi lúc nào điền lúc đó:
 
 | Cú pháp | Ý nghĩa | Ví dụ |
 |---|---|---|
@@ -165,6 +197,8 @@ Gọi tự nhiên: `"Dùng skill release để release patch tuần này."` — 
 | `${input:tên:default}` | Có default | `${input:planFile:plan.md}` |
 | `${selection}` | Đoạn đang bôi | Dùng cho edit |
 | `${file}` | File đang mở | Dùng cho review |
+
+> **Cách đọc bảng này:** cột **Cú pháp** là cách viết trong prompt file, cột **Ý nghĩa** cho biết Copilot xử lý nó thế nào khi chạy, cột **Ví dụ** là tình huống hay dùng nhất.
 
 Mọi prompt file/skill nên có **1 ví dụ input → output đúng** ở cuối để Copilot bắt chước:
 
@@ -178,9 +212,13 @@ Output đúng:
 - Evidence: log + diff --stat chỉ chạm src/payments/**
 ```
 
-Lợi ích: output đồng nhất, dễ review, Copilot ít sáng tạo bừa, người mới đọc ví dụ là hiểu cách dùng.
+Lợi ích: output đồng nhất, dễ review, Copilot ít sáng tạo bừa. Người mới đọc ví dụ là hiểu cách dùng ngay — tiết kiệm cả buổi bàn luận.
+
+> **Tóm gọn 1 câu:** Variables biến chỗ hay đổi thành ô điền, few-shot cho 1 ví dụ đúng để Copilot bắt chước — cả hai giúp output đồng nhất mỗi lần gọi.
 
 ## 7. Walkthrough: đóng gói 1 prompt team — 35 phút
+
+Mục này là bài thực hành tổng hợp: biến một prompt bạn đang gõ tay thành tài sản cả team dùng được, trong 35 phút.
 
 | Phút | Việc | Làm gì |
 |---|---|---|
@@ -191,7 +229,13 @@ Lợi ích: output đồng nhất, dễ review, Copilot ít sáng tạo bừa, n
 | 25–30 | Share | Commit + PR, nhờ 1 đồng nghiệp trigger thử, ghi feedback 3 dòng |
 | 30–35 | Version | Thêm vào README team: khi nào dùng skill, khi nào review |
 
+> **Tóm gọn 1 câu:** Chọn 1 prompt dùng nhiều → viết thành skill có variables + few-shot → test trên task thật → tách luật chung → commit cho cả team.
+
+> **Cách đọc bảng này:** mỗi dòng là 1 mốc thời gian trong 35 phút. Cột **Phút** là khung giờ, cột **Việc** là tên bước, cột **Làm gì** là hành động cụ thể cần xong trong mốc đó.
+
 ## 8. Bảng tra nhanh: dùng loại nào?
+
+Mục này là "bảng cử nhân" để lôi ra tra khi phân vân — đối chiếu nhu cầu hiện tại với cột giữa là biết dùng gì ngay.
 
 | Nhu cầu | Dùng gì | Gọi thế nào |
 |---|---|---|
@@ -202,9 +246,15 @@ Lợi ích: output đồng nhất, dễ review, Copilot ít sáng tạo bừa, n
 | Procedure >5 bước | **Skill** | Tự trigger / gọi tên skill |
 | Hỏi 1 lần, không tái dùng | Chat thường | Gõ tay + new chat |
 
+> **Cách đọc bảng này:** tìm dòng khớp nhu cầu của bạn ở cột **Nhu cầu**, rồi nhìn cột **Dùng gì** để chọn và cột **Gọi thế nào** để biết cách kích hoạt.
+
 > Quy tắc ngón tay: **1 dòng → instructions, 1 task lặp → skill (2026) / prompt file (legacy Local), 1 quy trình dài → skill.**
 
+> **Tóm gọn 1 câu:** Phân vân thì tra bảng: task lặp → skill/prompt file, luật chung → instructions, hỏi 1 lần rồi thôi → gõ tay trong chat.
+
 ## 9. Pitfalls + cách fix
+
+Mục này liệt kê các lỗi hay gặp khi đóng gói prompt, kèm triệu chứng để bạn tự soi và cách sửa. Pitfall nghĩa là "bẫy" — chỗ ai cũng té ít nhất một lần.
 
 | Pitfall | Triệu chứng | Fix |
 |---|---|---|
@@ -217,6 +267,8 @@ Lợi ích: output đồng nhất, dễ review, Copilot ít sáng tạo bừa, n
 | Skill description chung chung | Không bao giờ trigger | 1–2 câu use-case + trigger keywords |
 | Không version/commit | Mỗi máy một bản | Commit `.github/` + skills/ vào repo (xem Tips 09) |
 
+> **Cách đọc bảng này:** cột **Pitfall** là cái bẫy, cột **Triệu chứng** là dấu hiệu cho thấy bạn đã dính bẫy, cột **Fix** là cách xử lý tương ứng.
+
 Ba lỗi khó chịu nhất:
 
 ```text
@@ -227,7 +279,11 @@ Ba lỗi khó chịu nhất:
 ✅ ĐÚNG: luật chung ở copilot-instructions.md, file con chỉ giữ luật riêng scope
 ```
 
+> **Tóm gọn 1 câu:** File quá dài, thiếu variables, thiếu ví dụ và glob quá rộng là 4 cái bẫy phổ biến nhất — kiểm tra 4 điểm này trước khi share cho team.
+
 ## 10. Bài tập cuối bài
+
+Mục này là phần về nhà. Làm đủ 3 bài thì bạn mới thực sự "biết" chứ không chỉ "đọc hiểu" — mỗi bài ra một tài sản dùng được thật.
 
 **Bài 1 (15 phút):** Lấy prompt dùng >2 lần/tuần, lưu thành `.github/prompts/my-first.prompt.md` (frontmatter + variables + few-shot). Gọi lại `/my-first` trên task thật, so output trước/sau.
 
@@ -236,6 +292,8 @@ Ba lỗi khó chịu nhất:
 **Bài 3 (30 phút):** Chọn 1 procedure >5 bước (release/migrate/onboarding), viết `skills/<tên>/SKILL.md` theo mẫu mục 5. Nhờ Copilot dùng cho task thật, ghi lại bước nào còn thiếu.
 
 > Đạt: sau 1 tháng, team bạn có ≥3 skills/prompts + instructions gọn + 1 skill dài, mọi output đồng format.
+
+> **Tóm gọn 1 câu:** Làm hết 3 bài tập để biến kiến thức thành tài sản thật: 1 prompt file, bộ instructions gọn, và 1 skill cho quy trình dài.
 
 ## Tham khảo chéo
 

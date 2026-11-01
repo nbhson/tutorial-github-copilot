@@ -7,16 +7,16 @@
 
 ## 1. Vì sao context hygiene quyết định kết quả?
 
-Cùng model, cùng repo — chỉ khác cách quản lý context là kết quả khác một trời một vực:
+Cùng một model, cùng một repo — khác nhau mỗi cách quản lý context thôi mà kết quả cách một trời một vực. Context hiểu nôm na là "bộ nhớ làm việc" mà Copilot mang theo mỗi lần bạn hỏi: toàn bộ những gì đã mở, đã paste, đã nói trước đó. Giống như bàn làm việc của bạn: bàn càng chất nhiều giấy tờ cũ, càng khó tìm được tờ ghi chú quan trọng.
 
-- 1 chat từ sáng: fix CSS → hỏi deploy → viết SQL → refactor auth. 90 phút sau Copilot quên rule, sửa A hỏng B.
-- Đổi model mạnh hơn mà vẫn dở — vì gốc rễ là **chat đầy rác**, không phải model yếu.
+- 1 chat từ sáng: fix CSS → hỏi deploy → viết SQL → refactor auth. 90 phút sau Copilot quên rule, sửa A hỏng B. Cứ tưởng bạn nhờ một người cùng lúc đi chợ, trả điện, đón con — người đó sẽ quên hết cả ba.
+- Đổi model mạnh hơn mà vẫn dở — vì gốc rễ là **chat đầy rác**, không phải model yếu. Đổi xe sang chạy trên đường đầy ổ gà thì vẫn ùn tắc thôi.
 
-Ba quy tắc vàng:
+Ba quy tắc vàng, nhớ ba câu này là đủ:
 
-1. **Files persist, chat thì không.** Cái quan trọng thì lưu ra instructions / knowledge base.
-2. **1 task = 1 chat sạch.** Đổi task là new chat.
-3. **Việc ồn ào đẩy sang chỗ khác** (custom agent, chat phụ, file trung gian) — chat chính chỉ để ra quyết định.
+1. **Files persist, chat thì không.** Cái quan trọng thì lưu ra instructions / knowledge base. File giống sổ tay — chép xuống là còn, nhớ trong đầu là có thể quên.
+2. **1 task = 1 chat sạch.** Đổi task là new chat. Như đổi việc thì đổi tờ nháp mới, đừng viết đè lên tờ cũ.
+3. **Việc ồn ào đẩy sang chỗ khác** (custom agent, chat phụ, file trung gian) — chat chính chỉ để ra quyết định, như phòng họp chỉ bàn chuyện lớn, không chứa đồ vứt.
 
 | Con số cần ghim | Ý nghĩa | Hành động |
 |---|---|---|
@@ -24,9 +24,13 @@ Ba quy tắc vàng:
 | `3–5 files` | Số files gắn mỗi câu hỏi | Quá thì thu hẹp hoặc tách chat |
 | `2 lần sai` | Ngưỡng dừng cãi | Restore checkpoint, re-prompt hẹp |
 
+> **Cách đọc bảng này:** mỗi dòng là một con số cần nhớ. Cột giữa giải thích số đó đếm cái gì, cột phải là việc cụ thể cần làm khi chạm ngưỡng.
+
+> **Tóm gọn 1 câu:** context là bộ nhớ làm việc của Copilot — càng bẩn càng dở, nên cứ một việc một chat sạch và mọi thứ quan trọng đều đưa ra file.
+
 ## 2. Copilot nhét gì vào context?
 
-Mỗi turn gửi đi (cộng dồn từ đầu phiên):
+Mỗi turn gửi đi (cộng dồn từ đầu phiên) — "turn" nôm na là mỗi lần bạn bấm Enter gửi câu hỏi:
 
 ```text
 [system + custom instructions + prompt files/skills khả dụng]
@@ -36,23 +40,25 @@ Mỗi turn gửi đi (cộng dồn từ đầu phiên):
 + [prompt mới của bạn]
 ```
 
-Nghĩa là **mọi thứ bạn mở đều bị tính thuế** (tính qua AI Credits):
+Nghĩa là **mọi thứ bạn mở đều bị tính thuế** (tính qua AI Credits — đơn vị trả tiền cho mỗi lần model đọc/xử lý, như tiền điện tính theo kWh):
 
-- Mở 20 tabs để explore → 20 files nằm trong history.
-- Gắn `#codebase` cả repo → hàng chục nghìn tokens mỗi turn.
-- Paste log 800 dòng → 800 dòng đó gánh theo 20 turns sau.
+- Mở 20 tabs để explore → 20 files nằm trong history. Như mời 20 người vào phòng họp cho một cuộc trò chuyện 3 người.
+- Gắn `#codebase` cả repo → hàng chục nghìn tokens mỗi turn. Token là đơn vị đếm chữ mà model đọc, càng nhiều càng tốn và càng loãng.
+- Paste log 800 dòng → 800 dòng đó gánh theo 20 turns sau. Tại sao? Vì chat không có "quên" — nó mang cả lịch sử đi đến tận cùng.
 
 Vì sao chat dài tự dở — 3 cơ chế:
 
-1. **Attention dilution:** chat đầy rác thì rule quan trọng bị chìm — instructions "không đụng generated/" bị quên khi chat 100K tokens.
-2. **Recency bias + lost-in-the-middle:** model nhớ rõ đầu/cuối chat, quên giữa — quyết định chốt ở turn 12 bị chôn dưới log ở turn 40. Fix: ghi quyết định ra `docs/decisions.md`.
-3. **Không auto-compact:** Copilot Chat không tự tóm tắt chat cũ — chat 50 turns vẫn gánh cả 50 turns. Fix: **bạn phải chủ động new chat**. (Claude Code có auto-compact.)
+1. **Attention dilution:** chat đầy rác thì rule quan trọng bị chìm. Attention dilution giống như bạn đang nghe giảng mà xung quanh ồn ào — lời quan trọng vẫn ở đó nhưng bạn không còn "nghe" được nó. Instructions "không đụng generated/" bị quên khi chat 100K tokens.
+2. **Recency bias + lost-in-the-middle:** model nhớ rõ đầu/cuối chat, quên giữa — như đọc một tờ giấy dài, mắt bạn nhớ câu đầu và câu cuối mà lướt qua đoạn giữa. Quyết định chốt ở turn 12 bị chôn dưới log ở turn 40. Fix: ghi quyết định ra `docs/decisions.md`.
+3. **Không auto-compact:** Copilot Chat không tự tóm tắt chat cũ — chat 50 turns vẫn gánh cả 50 turns, như cái ba lô không bao giờ được dỡ bớt. Fix: **bạn phải chủ động new chat**. (Claude Code có auto-compact.)
 
 > Lưu ý: thấy model quên rule mà viết instructions dài hơn là thêm rác — mọi vấn đề "chat dài" xử bằng new chat + ghi quyết định ra file.
 
+> **Tóm gọn 1 câu:** mọi thứ trong chat đều bị tính tiền và làm model "điếc" dần — chat dài tự dở vì rác dồn lại, không phải vì model yếu.
+
 ## 3. Thói quen 1: new chat mỗi task
 
-Nút New Chat (`Cmd/Ctrl+Shift+P → Chat: New Chat`) xóa toàn bộ history, giữ file trên đĩa + nạp lại instructions. Tokens về ~0 — đây là đòn bẩy rẻ nhất.
+Mục này nói về thói quen rẻ nhất mà hiệu quả nhất: xong việc là đóng chat. Nút New Chat (`Cmd/Ctrl+Shift+P → Chat: New Chat`) xóa toàn bộ history, giữ file trên đĩa + nạp lại instructions. Tokens về ~0 — đây là đòn bẩy rẻ nhất. Giống như dọn bàn làm việc về trạng thái trắng trước khi bắt đầu việc mới.
 
 **Khi nào new chat:** xong 1 việc; paste log khổng lồ xong việc; chuẩn bị share màn hình; Copilot trả lời lạc đề.
 
@@ -78,13 +84,15 @@ Output 8 bullet + file:line để tôi paste sang chat mới.
 
 Rồi paste summary sang chat mới kèm: `"Tiếp tục từ summary chat trước: [paste 8 bullet]. Đọc docs/decisions.md và chỉ làm bước 3 trong plan.md."`
 
-> Sai lầm kinh điển: 1 chat đi từ bugfix → feature → refactor. Việc sau thừa hưởng toàn bộ rác của việc trước.
+> Sai lầm kinh điển: 1 chat đi từ bugfix → feature → refactor. Việc sau thừa hưởng toàn bộ rác của việc trước — như người làm chung nhà bạn vừa nhớ nhầm việc của khách trước.
+
+> **Tóm gọn 1 câu:** new chat là nút reset rẻ nhất — xong việc là đóng, trước khi đóng thì tóm tắt quyết định ra file để không mất gì.
 
 ## 4. Thói quen 2: attachments gọn + @workspace scope hẹp
 
-Copilot VS Code có nhiều cách gắn context: `#file` (1 file), `#selection` (đoạn bôi đen), `#codebase`/`@workspace` (cả repo — đắt nhất), `#terminalLastCommand`, `#testFailure` (lỗi vừa chạy).
+Mục này dạy cách "đưa đúng tờ giấy cần thiết" thay vì cả ngăn kéo. Copilot VS Code có nhiều cách gắn context: `#file` (1 file), `#selection` (đoạn bôi đen), `#codebase`/`@workspace` (cả repo — đắt nhất), `#terminalLastCommand`, `#testFailure` (lỗi vừa chạy). Ký hiệu `#` nghĩa là "cầm cái này xem giúp tôi".
 
-Rule: **ưu tiên `#file` + `#selection`, hạn chế `@workspace`.**
+Rule: **ưu tiên `#file` + `#selection`, hạn chế `@workspace`.** Càng hẹp càng rẻ và càng chính xác — như đưa đúng tờ hóa đơn cho nhân viên thay vì để họ lục cả két.
 
 **Ví dụ 1 — Gắn hẹp cho bug (copy-paste):**
 
@@ -121,11 +129,15 @@ Chọn công cụ theo tình huống:
 | Explore repo lạ | `@workspace` 1 lần + ghi ra plan.md | Chỉ đắt 1 lần, sau đó new chat |
 | Hỏi kiến trúc/chính sách | Knowledge base / docs | Không cần quét code raw |
 
+> **Cách đọc bảng này:** tìm dòng khớp việc bạn đang làm ở cột 1, cột 2 chỉ dụng cụ nên gắn, cột 3 giải thích vì sao chọn nó.
+
 > Mẹo: explore bằng `@workspace` xong → **ghi findings ra file → new chat** chỉ đọc file đó. Đừng mang chat explore nặng đi implement tiếp.
+
+> **Tóm gọn 1 câu:** gắn context hẹp như đưa đúng tờ giấy cần — `#file`/`#selection` là mặc định, `@workspace` chỉ dành cho khám phá một lần rồi ghi ra file.
 
 ## 5. Thói quen 3: knowledge base + instructions thay vì paste
 
-Mỗi lần paste spec là "trả thuế" cho mọi turn sau, và quên paste 1 lần là Copilot làm sai. Cái gì lặp lại thì đưa vào file một lần:
+Mục này giải quyết một thói quen tốn kém: cứ gặp việc là paste lại spec. Mỗi lần paste là "trả thuế" cho mọi turn sau, và quên paste 1 lần là Copilot làm sai. Cái gì lặp lại thì đưa vào file một lần — giống viết sổ tay nội quy một lần, khỏi nhắc miệng mỗi ngày:
 
 - **Custom instructions** — tạo `.github/copilot-instructions.md` (<200 dòng, luật hay sai nhất front-load lên đầu):
 
@@ -150,11 +162,15 @@ Mỗi lần paste spec là "trả thuế" cho mọi turn sau, và quên paste 1 
 | Cách dùng | Gọi `@payments-docs <câu hỏi>` khi cần | Tự nạp mọi turn |
 | Khi nào dùng | Cần tra cứu | Cần tự nhớ mọi turn |
 
+> **Cách đọc bảng này:** hai cột giữa so sánh hai "kho trí nhớ" — cái nào đựng loại gì, dùng ra sao. Hàng cuối cho biết lúc nào nên chọn cái nào.
+
 > Lưu ý 2026: prompt files (`.prompt.md`) đã deprecated cho Agent Host — việc lặp nên chuyển sang **Agent Skills** (`SKILL.md`). Xem [Tips 07](./07-thiet-ke-prompts-skills.md).
+
+> **Tóm gọn 1 câu:** cái gì lặp lại thì cất vào file một lần — instructions cho luật cần nhớ mọi turn, knowledge base cho tài liệu cần tra khi hỏi.
 
 ## 6. Thói quen 4: custom agent cô lập + checkpoints
 
-Tạo custom agents (chat modes) với vai hẹp: `Planner` (chỉ plan), `Reviewer` (chỉ review), `Tester` (chỉ test). Mỗi vai chỉ thấy một phần context → hết cảnh "LGTM mù" (model tự khen code mình vừa viết).
+Mục này dạy cách tách người làm và người kiểm tra. Tạo custom agents (chat modes) với vai hẹp: `Planner` (chỉ plan), `Reviewer` (chỉ review), `Tester` (chỉ test). Mỗi vai chỉ thấy một phần context → hết cảnh "LGTM mù" (model tự khen code mình vừa viết — giống bạn chấm bài chấm chính mình, hiếm khi trừ điểm được).
 
 **Ví dụ 1 — Tạo Planner agent (copy-paste frontmatter):**
 
@@ -191,9 +207,13 @@ Timeline / Checkpoint → Restore điểm trước turn 1 → re-prompt sạch:
 Trước khi sửa, đọc src/auth/__tests__/login.test.ts và liệt kê 3 cases phải giữ xanh."
 ```
 
-Rule: **correct 2 lần vẫn sai → dừng cãi, restore checkpoint.** Leo thang Ask → Edit → Agent xem [Tips 03](./03-plan-first-workflow.md).
+Rule: **correct 2 lần vẫn sai → dừng cãi, restore checkpoint.** Checkpoint giống nút save trong game: đi sai là quay về điểm đã lưu, khỏi chơi lại từ đầu. Leo thang Ask → Edit → Agent xem [Tips 03](./03-plan-first-workflow.md).
+
+> **Tóm gọn 1 câu:** tách vai (planner/reviewer/tester) để model không tự chấm bài mình, và sai 2 lần là quay về checkpoint chứ không cãi tiếp.
 
 ## 7. Chẩn đoán chat bẩn — cứu ngay
+
+Mục này là bảng "bác sĩ chẩn đoán": chat đang có vấn đề gì và thuốc gì uống ngay.
 
 | Dấu hiệu | Chẩn đoán | Cứu ngay |
 |---|---|---|
@@ -203,6 +223,8 @@ Rule: **correct 2 lần vẫn sai → dừng cãi, restore checkpoint.** Leo tha
 | Gắn @workspace mọi câu hỏi | Thuế context nặng | Đổi sang #file/#selection, @workspace chỉ khi explore |
 | Paste log 1000 dòng vào chat chính | Rác kéo dài 20 turns | Paste vào file → chat phụ tóm tắt, chat chính chỉ nhận summary |
 | Model hỏi lại file vừa đọc | Mất references sau new chat | Gắn lại #file + dặn đọc — chi phí bình thường |
+
+> **Cách đọc bảng này:** cột 1 là triệu chứng bạn đang thấy, cột 2 là tên bệnh, cột 3 là liều thuốc — làm đúng cột 3 là hết.
 
 ## 8. Bảng tra nhanh: công cụ dọn context
 
@@ -215,7 +237,11 @@ Rule: **correct 2 lần vẫn sai → dừng cãi, restore checkpoint.** Leo tha
 | Knowledge base | Lấy docs gọn | Rẻ | Hỏi spec, chính sách |
 | Checkpoint / Timeline | Quay về điểm cũ | Rẻ | Đi sai hướng, muốn quay lại |
 
+> **Cách đọc bảng này:** mỗi dòng là một công cụ. Cột giữa trả lời hai câu hỏi then chốt: nó có giữ lại gì không, và tốn tiền không — đọc cột cuối để biết lúc nào dùng.
+
 > Quy tắc ngón tay: **khác task → new chat; fix 1 chỗ → #selection; explore rộng → @workspace 1 lần rồi ghi file; hỏi spec → knowledge base; sai hướng → restore checkpoint.**
+
+> **Tóm gọn 1 câu:** mỗi việc dọn context có một công cụ riêng — tra bảng này khi chưa biết chọn cái nào.
 
 ## 9. Pitfalls + cách fix
 
@@ -229,7 +255,11 @@ Rule: **correct 2 lần vẫn sai → dừng cãi, restore checkpoint.** Leo tha
 | New chat xong tiếc decisions | Tóm tắt ra docs/decisions.md trước khi reset |
 | Gắn ảnh chụp code thay vì file | Gắn #file để Copilot đọc text thật |
 
+> **Cách đọc bảng này:** cột trái là lỗi hay mắc, cột phải là cách sửa tương ứng — dò cột trái xem bạn đang mắc cái nào.
+
 ## 10. Bài tập cuối bài
+
+Làm tay ba bài dưới đây để biến kiến thức thành phản xạ. Đọc không làm thì tuần sau quên sạch.
 
 **Bài 1 (15 phút):** Mở repo hay làm nhất — đếm tabs + turns chat hiện tại, ghi top 2 kẻ ngốn context. Rút gọn instructions <200 dòng, đóng tabs chỉ giữ 5 files.
 
@@ -239,7 +269,11 @@ Rule: **correct 2 lần vẫn sai → dừng cãi, restore checkpoint.** Leo tha
 
 > Chấm điểm: sau 1 tuần, số lần new chat tăng gấp đôi và sửa A hỏng B giảm một nửa → đạt.
 
+> **Tóm gọn 1 câu:** làm cả ba bài — đếm tabs, tách chat theo phase, so sánh context hẹp/rộng — để thói quen dọn context thành bản năng.
+
 ## Tham khảo chéo
+
+Mục này liệt kê các bài liên quan — đọc tiếp bài nào khớp vấn đề bạn đang gặp.
 
 - [Tips 02](./02-prompt-engineering.md) — viết prompt gọn để đỡ rác từ đầu
 - [Tips 03](./03-plan-first-workflow.md) — Ask → Edit → Agent leo thang

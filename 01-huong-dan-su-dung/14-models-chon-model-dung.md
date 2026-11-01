@@ -16,7 +16,9 @@
 
 ## 1. Vì sao chọn model?
 
-Mỗi task có 3 chiều cần cân: **chất lượng suy luận — tốc độ — chi phí (AI Credits)**.
+Signpost: mục này giải thích vì sao "model mạnh nhất" không phải lúc nào cũng là lựa chọn đúng — để bạn khỏi đốt credits oan.
+
+Mỗi task có 3 chiều cần cân: **chất lượng suy luận — tốc độ — chi phí (AI Credits)**. Tưởng như thuê thợ: thợ bậc thầy sửa cái vặn ốc thì phí tổn gấp mười, mà kết quả thì y hệt thợ bình thường.
 
 - Model reasoning đắt sửa typo → tốn gấp 5–10 lần mà kết quả y hệt model rẻ.
 - Model mini thiết kế kiến trúc → thiếu depth, refactor 3 lần vẫn sai — tổng credits cao hơn chạy 1 lần model mạnh đúng ngay.
@@ -46,9 +48,13 @@ flowchart TD
     K -->|Vẫn stuck| L[Leo 1 nấc: mini→mid→flagship→reasoning]
 ```
 
+> **Tóm gọn 1 câu:** Chọn model như chọn thợ: việc khó thuê thợ giỏi, việc cơ học thuê thợ rẻ — và luôn kiểm tra hóa đơn sau 1 tuần.
+
 ---
 
 ## 2. Bản đồ models trên Copilot 2026
+
+Signpost: mục này là "cuốn danh bạ" các model — nhưng nhớ rằng danh bạ đổi số điện thoại mỗi quý.
 
 > Danh sách model đổi theo quý — tra model picker thực tế, đừng học thuộc lòng. Bảng dưới là khung phân loại để route đúng, không phải catalog bất biến.
 
@@ -59,6 +65,8 @@ flowchart TD
 | **Claude-tier** | Nhà văn tinh tế — viết hay, review khéo | Claude Sonnet 5.5, Opus 5.5, Haiku 5.5 (việc nhỏ) | Docs, PR description, review wording giữ style |
 | **Gemini-tier** | Thủ thư nhớ cả thư viện — context khổng lồ | Gemini 4 Argon, 3.8 Flash | Tóm tắt monorepo, task cross-file rộng |
 | **Mini/Flash-tier** | Xe ôm nhanh rẻ — việc nhỏ gọi ngay | GPT-5.6 Luna, Claude Haiku 5.5, Gemini 3.8 Flash, MAI-Code-1.1-Flash | Autocomplete, rename, CRUD, 5 chats explore song song |
+
+> **Cách đọc bảng này:** cột "Nôm na" là hình dung dễ nhớ nhất — đọc nó trước. Cột "Ví dụ trên picker" chỉ đúng tại thời điểm 10/2026, có thể đã đổi; cột "Khi nào dùng" là chỉ dẫn chọn.
 
 ```text
 Roster 10/2026 (verify picker + docs.github.com/copilot/reference/ai-models/supported-models):
@@ -89,6 +97,8 @@ GPT-5.2-Codex GA 01/2026, GPT-5.3-Codex là bản Codex hiện hành trên VS Co
 
 ## 3. Model picker + auto tier
 
+Signpost: mục này nói về 2 cách chọn model trong Copilot — chọn tay qua picker, hoặc để Auto tự route.
+
 > 📄 **Code ví dụ:** [`examples/01-3-model-picker-auto-tier.sh`](examples/01-3-model-picker-auto-tier.sh)
 
 ```text
@@ -116,11 +126,15 @@ Quy tắc đổi model tay (giữ 3 điều):
 
 > 📄 **Code ví dụ:** [`examples/02-3-model-picker-auto-tier.jsonc`](examples/02-3-model-picker-auto-tier.jsonc)
 
+> **Tóm gọn 1 câu:** Auto tier tự route theo sức khỏe + độ khó; nếu chọn tay thì đổi theo phase, đừng để flagship "nợ mượt" từ chat cũ.
+
 ---
 
 ## 4. AI Credits (tiền thật)
 
-> **Từ 01/06/2026 Copilot tính bằng AI Credits (usage-based billing) — thuật ngữ "premium requests"/multiplier là cách gọi legacy.** 1 AI credit = $0.01; chi phí 1 lượt = giá per-token của model × số token.
+Signpost: mục này là phần "tiền nong" — AI Credits là đơn vị tính tiền thật khi dùng model.
+
+> **Từ 01/06/2026 Copilot tính bằng AI Credits (usage-based billing) — thuật ngữ "premium requests"/multiplier là cách gọi legacy.** 1 AI credit = $0.01; chi phí 1 lượt = giá per-token của model × số token. Per-token là đơn vị giá theo từng "mảnh chữ" AI xử lý — dùng càng nhiều chữ, trả càng nhiều.
 
 ```text
 Vì sao credits cháy nhanh hơn bạn nghĩ:
@@ -141,6 +155,8 @@ Vì sao credits cháy nhanh hơn bạn nghĩ:
 | Business | $19/seat/tháng | 1.900/seat (pooled) |
 | Enterprise | $39/seat/tháng | 3.900/seat (pooled) |
 
+> **Cách đọc bảng này:** mỗi dòng là 1 gói dịch vụ; cột giữa là giá tháng, cột phải là số credits được cấp. "Pooled" nghĩa là credits cả team gộp chung một hồ tiêu — ai dùng nhiều ăn nhiều phần chung.
+
 ```text
 Giữ credits sống hết tháng:
 1. Default chat = tier giá rẻ. Flagship chỉ đích danh khi checklist 3✓ (mục 2).
@@ -149,12 +165,16 @@ Giữ credits sống hết tháng:
 4. Cuối tuần: dashboard AI credits by model (bài 13) → model nào > 50% thì gate.
 ```
 
+> **Tóm gọn 1 câu:** 1 credit = 1 cent — flagship + agent là combo đốt tiền nhanh nhất, autocomplete thì free.
+
 ## 5. BYOK + enterprise policy: gate model cho team
+
+Signpost: mục này dành cho admin — nhưng dev nên đọc để hiểu vì sao picker của mình "thiếu" model.
 
 Dành cho admin/org owner; dev đọc để đối chiếu picker với policy.
 
 - **BYOK (Bring Your Own Key):** Enterprise dùng Azure/OpenAI key riêng cho Copilot thay vì GitHub-hosted models — data residency + billing riêng + model allowlist công ty. Hỏi admin bạn có BYOK không trước khi assume data đi đâu. Theo surface (10/2026): Visual Studio ✓ đầy đủ; VS Code / JetBrains / Eclipse / Xcode một phần; NeoVim ✗.
-- **Model gating (policy):** admin cấm/bật models theo team (interns chỉ mini+mid, seniors mới flagship; team payments cấm model X...).
+- **Model gating (policy):** admin cấm/bật models theo team (interns chỉ mini+mid, seniors mới flagship; team payments cấm model X...). Gating giống kiểm soát ra vào: từng team có thẻ từ riêng, mở đúng cửa cần mở.
 
 ```text
 # Checklist admin gate model (github.com → Org/Ent Settings → Copilot → Policies):
@@ -178,9 +198,13 @@ Dành cho admin/org owner; dev đọc để đối chiếu picker với policy.
 # Review quota mỗi thứ hai (15 phút — bài 13 mục 7.3).
 ```
 
+> **Tóm gọn 1 câu:** Admin gate model bằng allowlist theo team + review dashboard hàng tháng; dev nhớ hỏi admin trước khi tự phán đoán policy.
+
 ---
 
 ## 6. Khi nào dùng model nào (bảng dán tường) + route theo phase
+
+Signpost: mục này là "poster dán tường" — 10 dòng task phổ biến kèm model nên dùng.
 
 Cột "Model" là tên VAI TRÒ — tên chính thức 10/2026 xem mục 2.
 
@@ -196,6 +220,8 @@ Cột "Model" là tên VAI TRÒ — tên chính thức 10/2026 xem mục 2.
 | Giải thích tinh tế, review wording | PR description + review comments | Claude-tier | Văn + style tốt hơn |
 | Thuật toán/logic khó | Tối ưu query N+1, retry backoff | Reasoning | Thinking dài |
 | Demo live cần nhanh | Demo sprint review 5 phút | Mid-tier nhanh | Reasoning chậm làm demo chết |
+
+> **Cách đọc bảng này:** tìm dòng khớp task bạn đang làm; cột "Vì sao" giải thích logic chọn — hiểu lý do thì tự suy ra task mới không có trong bảng.
 
 ```text
 Route theo phase (3 kịch bản dán wiki):
@@ -216,9 +242,15 @@ Kịch bản C — review quan trọng:
 | "Tên model học thuộc 1 lần dùng mãi" | Tên đổi theo quý — copy exact từ picker, đừng gõ trí nhớ |
 | "Agent + flagship từ đầu cho chắc" | Combo đốt credits nhanh nhất (50 steps × giá cao). Agent mid trước, stuck mới leo |
 
+> **Cách đọc bảng này:** cột trái là lời "phán" nghe hợp lý nhưng sai; cột phải là sự thật kèm con số. Đọc trước khi tranh luận với đồng nghiệp.
+
+> **Tóm gọn 1 câu:** Bảng dán tường: plan → flagship, thi công → mid, việc cơ học → mini, monorepo → Gemini, văn hay → Claude.
+
 ---
 
 ## 7. Pitfalls + bài tập
+
+Signpost: mục này gom 9 cái bẫy thực tế kèm cách thoát — đọc kỹ trước khi lập team dùng Copilot.
 
 | Pitfall | Fix |
 |---|---|
@@ -231,6 +263,10 @@ Kịch bản C — review quan trọng:
 | Quên giá per-token × số bước agentic | Xem usage dashboard hàng tuần (bài 13) |
 | Policy gate nhưng không verify | Check picker + hỏi admin đối chiếu |
 | Không review credits hàng tuần | Block 15 phút thứ 2 (bài 13 mục 7.3) |
+
+> **Cách đọc bảng này:** cột trái là lỗi hay gặp, cột phải là cách sửa tương ứng. Cặp "lỗi ↔ fix" đứng cùng hàng — tìm theo lỗi đang gặp.
+
+> **Tóm gọn 1 câu:** 3 bẫy chết người: default flagship, gõ tên model từ trí nhớ, quên review credits hàng tuần.
 
 **Bài tập nhỏ:** (1) Cùng 1 task nhỏ chạy 3 chats (mini → mid → flagship) — tier nào là "đủ"? Ghi lý do vào wiki. (2) Task 3+ files: flagship plan (không code) → chat mới mid implement — so quality + credits với full-flagship. (3) Bug logic khó: mid 15 phút → stuck thì reasoning, ghi khác biệt; task monorepo: thử Gemini-tier so với mid. (4) Mở billing usage: % đã dùng, sống hết tháng không? Liệt kê picker vs policy team — lệch chỗ nào báo admin.
 
@@ -245,6 +281,8 @@ Kịch bản C — review quan trọng:
 | Gate model cho team | Org/Enterprise policy allowlist | Phụ thuộc Anthropic provider |
 | BYOK / data residency | BYOK (Azure/OpenAI key riêng) cho Enterprise | Phụ thuộc provider |
 | Kiểm chứng chi phí | Billing/usage dashboard (AI Credits, theo model) | Bạn tự quản theo provider/plan |
+
+> **Cách đọc bảng này:** mỗi dòng là 1 việc cần làm khi quản model; đọc ngang để so 2 công cụ xử lý việc đó thế nào.
 
 > Copilot có "model picker đa nhà trong 1 tài khoản" + auto tier; Claude Code nhất quán 1 nhà. Phần "chọn model" là điểm phải học lại nhiều nhất khi đổi công cụ.
 

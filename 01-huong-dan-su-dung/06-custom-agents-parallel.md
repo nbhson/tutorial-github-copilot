@@ -6,14 +6,20 @@
 
 ## Mục tiêu bài học
 
+Mục này cho biết hết bài bạn làm được gì — đọc xong biết ngay có đáng đầu tư 40 phút hay không.
+
 - Viết được **4 custom agents** (explorer, planner, security-reviewer, tester), hiểu từng field trong `.agent.md` và chọn đúng công cụ trong 30 giây (`@workspace` / agent / skill / coding agent).
 - Chạy song song **3 sessions** (mỗi session 1 branch/worktree) không conflict, route việc dễ sang model rẻ.
+
+> **Tóm gọn 1 câu:** Hết bài bạn có 4 "nhân viên ảo" chuyên trách và biết điều phối 3 việc cùng lúc mà không giẫm chân nhau.
 
 ---
 
 ## 1. Vì sao cần custom agent?
 
-**Định nghĩa 1 câu:** Custom agent là "nhân viên" Copilot có persona riêng + danh sách tools khóa trong frontmatter + model riêng — chạy ở session riêng rồi trả về **tóm tắt**.
+Mục này giải thích lý do phải tách việc cho agent riêng. Nếu không tách, chat chính của bạn sẽ như một người vừa đi chợ, vừa nấu cơm, vừa trông con — cuối cùng việc gì cũng dở.
+
+**Định nghĩa 1 câu:** Custom agent là "nhân viên" Copilot có persona riêng + danh sách tools khóa trong frontmatter + model riêng — chạy ở session riêng rồi trả về **tóm tắt**. Nôm na: bạn thuê ô sin làm ở căn phòng riêng. Nó xong việc chỉ đưa bạn tờ báo cáo, chứ không kéo cả đống rác phòng nó sang nhà bạn.
 
 ```text
  KHÔNG agent: "auth flow thế nào?" → Copilot đọc 50 files → context đầy → câu hỏi kế bị quá tải.
@@ -35,9 +41,13 @@
 
 > **Nếu làm sai?** Spawn agent cho task 1 file → overhead ăn hết phần lời. Cho agent read-only full tools "cho mạnh" → nó sửa lung tung ngoài scope. Khóa bằng `tools` — xem mục 3.
 
+> **Tóm gọn 1 câu:** Việc cần đọc nhiều files thì thuê agent riêng để chat chính sạch; việc lẻ tẻ thì hỏi thẳng đừng thuê.
+
 ---
 
 ## 2. `@workspace` vs custom agent — chọn 30 giây
+
+Mục này dạy bạn chọn đúng công cụ chỉ trong 30 giây, tránh việc thuê thám tử chỉ để hỏi "nhà vệ sinh ở đâu".
 
 `@workspace` là **hỏi anh bảo vệ tòa nhà** — biết hết, hỏi gì đáp nấy, nhanh. Custom agent là **thuê thám tử** — giao việc, trả báo cáo gọn, có bộ chuẩn riêng. "Phòng 302 ở đâu?" → hỏi bảo vệ. "Điều tra 30 hộ tầng 3" → thuê thám tử.
 
@@ -48,13 +58,19 @@
 | Skill (bài 05) | Quy trình lặp 1 bước | chat "deploy staging" → skill tự load |
 | Coding agent (GitHub) | Task độc lập ~30 phút, không cần trông | Assign issue #123 cho `copilot` (bài 11/12) |
 
+> **Cách đọc bảng này:** Cột "Khi nào" là dấu hiệu để chọn — đọc hàng khớp với tình huống của bạn nhất rồi dùng đúng "Cách" đó.
+
 **Điểm khác biệt quyết định:** `@workspace` dùng tools mặc định của bạn. Custom agent **khóa tools** trong frontmatter — dù bạn dụ "sửa luôn giúp anh" thì agent read-only vẫn không sửa được. Đây là guard, không phải bug.
+
+> **Tóm gọn 1 câu:** Hỏi nhanh thì dùng `@workspace`, việc cần đúng chuẩn và lặp lại mới nên giao cho custom agent.
 
 ---
 
 ## 3. Anatomy file `.agent.md`
 
-File `.agent.md` = **frontmatter (thẻ căn cước: tên, khi nào gọi, tools, model)** + **body (JD: quy trình, output mẫu, cấm gì)**.
+Mục này mổ xẻ file `.agent.md` — đọc xong bạn tự viết được agent đầu tiên thay vì chỉ copy mẫu.
+
+File `.agent.md` = **frontmatter (thẻ căn cước: tên, khi nào gọi, tools, model)** + **body (JD: quy trình, output mẫu, cấm gì)**. Hiểu nôm na: frontmatter là phần "hồ sơ nhân viên" dán ngoài cửa, body là bản mô tả công việc chi tiết trong phòng.
 
 **Vị trí file (2026):**
 
@@ -75,6 +91,8 @@ File `.agent.md` = **frontmatter (thẻ căn cước: tên, khi nào gọi, tool
 | `handoff` | Cách bàn giao | Tùy | `summary-only` = chỉ trả tóm tắt (giữ chat chính sạch) |
 | `target` | Chạy ở đâu | Tùy | Local → `vscode`; giao cloud → `github-coding-agent` |
 
+> **Cách đọc bảng này:** Cột "Nôm na" giải nghĩa field bằng lời đời thường; cần biết có bắt buộc hay không thì nhìn cột "Bắt buộc?".
+
 **`handoff` — 3 kiểu bàn giao:**
 
 | Giá trị | Chat chính nhận gì | Khi nào dùng |
@@ -83,9 +101,13 @@ File `.agent.md` = **frontmatter (thẻ căn cước: tên, khi nào gọi, tool
 | `full` | Toàn bộ nội dung agent thấy | Cần xem chi tiết để tự quyết |
 | `plan-file` | Path file plan + tóm tắt 10 dòng | Task multi-file cần duyệt trước khi code (planner) |
 
+> **Cách đọc bảng này:** Chọn theo "Khi nào dùng" — cột giữa cho biết bạn sẽ nhận lại gì trên chat chính sau khi agent xong việc.
+
 **Body** viết như viết skill (bài 05): steps đánh số, lệnh cụ thể, output format bắt buộc, non-goals rõ (xem 4 agent mẫu dưới).
 
 **Verify sau khi tạo:** mở Chat MỚI → gõ `/` hoặc `@` phải thấy agent; thử dụ agent read-only sửa code → phải bị chặn bởi allowlist `tools`.
+
+> **Tóm gọn 1 câu:** `.agent.md` gồm frontmatter khai báo agent là ai và body quy định nó làm gì, cấm gì — viết xong nhớ mở chat mới để load.
 
 ---
 ## 4. 4 agents mẫu hoàn chỉnh (copy-paste)
@@ -126,6 +148,8 @@ Cấm: lan man lịch sử, paste cả file vào report, đề xuất refactor n
  # Verify: summary ≤30 dòng, không 1 dòng code bị thay đổi
 ```
 
+> **Tóm gọn 1 câu:** Explorer là "trinh sát chỉ nhìn": đọc hết mà không sửa nổi một dòng, trả về bản tóm tắt ngắn cho chat chính.
+
 ### 4.2. Agent 2 — Planner (viết plan, không đụng source)
 
 **Nôm na:** Ông kiến trúc sư chỉ vẽ bản vẽ, cấm cầm búa đóng.
@@ -159,6 +183,8 @@ Output: path plan file + tóm tắt 10 dòng để chat chính duyệt nhanh.
  # Verify: có plans/*.md đủ 5 mục, không sửa source
 ```
 
+> **Tóm gọn 1 câu:** Planner chỉ vẽ bản vẽ (plan trong `plans/`) chứ không đóng đinh — bạn duyệt plan xong mới cho người khác code.
+
 ### 4.3. Agent 3 — Security reviewer (read-only + git diff)
 
 **Nôm na:** Ông thanh tra chỉ soi lỗi, cấm sửa hộ (để người viết tự sửa mà nhớ).
@@ -189,6 +215,8 @@ Không finding = nói rõ "đã check X, Y, Z — không thấy issue" (đừng 
  # gọi "dùng agent security-reviewer review PR này".
  # Kỳ vọng: bắt được lỗi + gắn CRITICAL + chỉ đúng file:line.
 ```
+
+> **Tóm gọn 1 câu:** Security reviewer là thanh tra chỉ soi và báo lỗi kèm mức độ, tuyệt đối không sửa hộ để người viết tự sửa mà nhớ.
 
 ### 4.4. Agent 4 — Tester (chạy test, báo pass/fail)
 
@@ -221,9 +249,13 @@ Output:
 
 > **Mẹo:** `description` quá dài (>500 ký tự) → auto-trigger kém. Giữ 1–2 câu, chi tiết dồn vào body.
 
+> **Tóm gọn 1 câu:** Tester chỉ bấm máy chạy test rồi dán tem PASS/FAIL kèm phán đoán nguyên nhân, không tự tay sửa code.
+
 ---
 
 ## 5. Chạy song song: 3 cách
+
+Mục này chỉ ra 3 đường chạy nhiều việc cùng lúc — chọn đường nào tùy việc đó chạy local hay cloud, và bạn có muốn trông nó hay không.
 
 **Cách 1 — VS Code multi-chat** (local, xem kết quả ngay) · **Cách 2 — multi coding-agent sessions** (cloud, giao qua đêm sáng review PRs) · **Cách 3 — Agent Task nền** (local, việc ồn chạy background trong khi bạn code tay).
 
@@ -246,9 +278,15 @@ Output:
 
 > Trần thực tế: **N ≤ 3 concurrent**. Quá con số đó bạn không review nổi + bill AI Credits nổ.
 
+> **Tóm gọn 1 câu:** Cùng lúc chạy tối đa 3 sessions — nhiều hơn là bạn tự đào hố review và tiền điện.
+
 ---
 
 ## 6. Orchestration patterns + cost math (AI Credits)
+
+Mục này cho bạn 3 "kịch bản đạo diễn" để phối agent, kèm cách bấm máy tính tiền trước khi bấm nút chạy — để không ôm hờn bill cuối tháng.
+
+AI Credits là "xăng" của Copilot: mỗi lần model chạy là tốn một ít. Muốn đi xa thì tính trước xem xe tốn bao nhiêu lít.
 
 ```text
  Pattern A — Parallel research (task mới, chưa biết gì về codebase):
@@ -279,6 +317,8 @@ Output:
 
 Check bill: `github.com/settings/copilot` → Usage → AI Credits theo ngày/user. Mỗi thứ 6 hỏi: "tuần rồi sessions nào đáng, sessions nào phí?"
 
+> **Tóm gọn 1 câu:** Chọn pattern theo độ khó của task và luôn nhẩm cost trước — thứ 6 hàng tuần soi bill để bỏ session phí.
+
 ---
 
 ## 7. Pitfalls + hiểu nhầm
@@ -292,18 +332,30 @@ Check bill: `github.com/settings/copilot` → Usage → AI Credits theo ngày/us
 | "`description` viết dài cho kỹ" | >500 ký tự → auto-trigger kém. 1–2 câu nhiều từ khóa, chi tiết dồn body |
 | Tester chạy full suite 20 phút | Body tester: focused trước, full chỉ khi yêu cầu rõ |
 
+> **Cách đọc bảng này:** Cột trái là điều bạn hay tưởng lầm, cột phải là sự thật và cách xử — đối chiếu trước khi gặp sự cố.
+
+> **Tóm gọn 1 câu:** Đa số hiểu nhầm xoay quanh "nhiều = tốt": thực tế là khóa tools chặt, chạy ít session, mô tả ngắn gọn thì mới hiệu quả.
+
 ---
 
 ## Bài tập
+
+Phần này là chỗ thực hành — đọc không làm thì kiến thức vẫn chỉ nằm trên giấy.
 
 1. **(20 phút)** Cài 4 agents mục 4. Test explorer + tester lên repo thật — so sánh số turns vs hỏi trực tiếp.
 2. **(20 phút)** Chạy pattern B cho 1 task multi-file: explorer → planner → duyệt → implement → tester.
 3. **(15 phút)** Pattern C: implementer viết, reviewer fresh-chat review — đếm findings reviewer bắt được mà implementer miss. Rồi fan-out 2 explorers model rẻ, tra usage dashboard: theo công thức mục 6 có đáng không?
 
+> **Tóm gọn 1 câu:** Cài 4 agents, chạy 3 patterns trên repo thật, rồi dùng số liệu cost tự kết luận có đáng hay không.
+
 ## Link qua
+
+Phần này chỉ đường sang các bài liên quan — muốn đào sâu mảng nào thì theo link đó.
 
 - Skill 1 bước vs custom agent multi-bước → bài 05. Instructions cho facts nền → bài 03.
 - Khóa `tools` agent + MCP allowlist (defense in depth) → bài 07. Agents gọi MCP tools → bài 08.
 - Mỗi session 1 worktree + branch `copilot/*` → bài 11. Coding agent assign + CI → bài 12.
+
+> **Tóm gọn 1 câu:** Skill/instructions ở bài 03–05, khóa tools ở bài 07–08, chạy cloud ở bài 11–12 — bài này là điểm hẹn của tất cả.
 
 **Chốt:** Chat chính đừng ôm hết — việc ồn giao cho agent hẹp đã khóa tools, gom về vài dòng summary. Việc <5 files hỏi trực tiếp; trần 3 session song song; thứ bạn không review nổi thì không tính là đã xong.

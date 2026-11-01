@@ -7,17 +7,23 @@
 
 ## 1. Vì sao phải plan-first?
 
+Mục này giải thích tư tưởng xuyên suốt bài: bắt Copilot lập kế hoạch trước, rồi mới cho code. Plan-first giống vẽ bản đồ nhà trước khi xây — không có bản đồ, thợ vẫn xây được, nhưng xây xong mới khớp cửa thì tốn gấp mười.
+
 Copilot code rất nhanh — nhanh tới mức nếu bạn đưa sai hướng, nó cũng "hoàn thành" sai hướng trong vài phút:
 
-- Gõ `làm feature payments giúp tôi` → code 200 dòng sai spec, test đỏ, mất 1 giờ revert.
-- Không biết nó sẽ sửa files nào → review diff như mò kim.
+- Gõ `làm feature payments giúp tôi` → code 200 dòng sai spec, test đỏ, mất 1 giờ revert. Revert nghĩa là quay ngược lại bản cũ — mất công làm lại từ đầu.
+- Không biết nó sẽ sửa files nào → review diff như mò kim. Diff là danh sách thay đổi giữa bản cũ và bản mới.
 - Hỏi 3 lần, mỗi lần đi một hướng khác nhau.
 
 Lợi ích đo được: 1 turn plan (vài AI Credits) tránh 10 turns code sai; plan lưu `plan.md` → chat nào, người nào, Coding Agent nào cũng tiếp tục được; bạn vẫn là người quyết định kiến trúc.
 
 > Rule: **task >2 steps hoặc >1 file → bắt buộc plan trước.**
 
+> **Tóm gọn 1 câu:** cho code trước hỏi sau là trả tiền hai lần — một turn plan rẻ thay cho mười turn sửa sai, và plan.md giữ mọi người đi cùng một hướng.
+
 ## 2. Cơ chế: 5 nấc thang Copilot
+
+Mục này mô tả toàn bộ các "mức quyền" bạn có thể giao cho Copilot, xếp từ thấp tới cao. Hiểu 5 nấc này thì bạn biết chỗ mình đang đứng và nên leo lên hay hạ xuống.
 
 | Nấc | Mode | Quyền | Khi dùng |
 |---|---|---|---|
@@ -27,13 +33,17 @@ Lợi ích đo được: 1 turn plan (vài AI Credits) tránh 10 turns code sai;
 | 4 | Agent | Tự đọc/sửa/chạy lệnh | Task vừa, multi-files |
 | 5 | Coding Agent | Làm bất đồng bộ trên GitHub issue | Task độc lập, có spec rõ |
 
+> **Cách đọc bảng này:** xếp theo nấc từ 1 tới 5 — mỗi nấc là một mức quyền bạn cấp cho Copilot (cột Quyền) và tình huống phù hợp (cột Khi dùng). Bắt đầu nấc thấp rồi leo lên.
+
 Leo thang đúng: **luôn bắt đầu thấp nhất có thể** — Ask không xong → Plan → Edit → Agent → Coding Agent. Nấc thang chính là "mức độ tin tưởng" bạn cấp: nhảy thẳng Agent cho task mơ hồ là vừa tốn credits vừa mất kiểm soát; mãi kẹt ở Ask cho việc đáng giao Agent là tự làm chậm mình.
 
 > Lưu ý 2026: ngoài 5 nấc trên, VS Code/CLI còn có persona **Plan** và **Autopilot** (xoay bằng `Shift+Tab` trong CLI, dropdown trong Chat) — Autopilot tự chạy tới xong, vẫn tốn AI Credits.
 
+> **Tóm gọn 1 câu:** 5 nấc Ask → Plan → Edit → Agent → Coding Agent là 5 mức tin tưởng — cứ đứng nấc thấp nhất đủ dùng, việc mơ hồ thì chưa leo lên cao.
+
 ## 3. Nấc 1–2: Ask + Plan (không code)
 
-Ask mode không sửa code, chỉ đọc + trả lời. Dùng để hiểu trước khi làm.
+Mục này nói về hai nấc thấp nhất — nơi chưa có dòng code nào được viết. Ask mode không sửa code, chỉ đọc + trả lời. Dùng để hiểu trước khi làm — như đọc bản đồ và hỏi đường trước khi lên xe.
 
 **Ví dụ 1 — Ask hiểu module (copy-paste):**
 
@@ -71,7 +81,11 @@ Hỏi từng câu một, khi đủ thì mới trình plan.
 
 Pattern này cực hợp cho non-coder / BA: bạn chỉ trả lời, Copilot lo cấu trúc.
 
+> **Tóm gọn 1 câu:** hai nấc đầu chỉ nói không làm — Ask để hiểu, Plan để chốt phương án kèm câu "chờ tôi duyệt, không code trong message này".
+
 ## 4. Nấc 3–4: Edit + Agent (code có kiểm soát)
+
+Mục này về lúc cho phép viết code — nhưng có dây xích: Edit chỉ sửa đúng vùng bạn chọn, Agent được đi rộng hơn nhưng vẫn phải theo plan đã duyệt.
 
 **Edit — dao mổ cho việc nhỏ** (chỉ sửa vùng bạn chọn):
 
@@ -101,7 +115,11 @@ Ràng buộc: đừng đụng src/generated/, đừng commit.
 
 Quy tắc an toàn cho Agent: luôn gắn `plan.md` đã duyệt; 1 phase / 1 chat; luôn dặn dừng sau N lần đỏ. Gate verify xem [Tips 04](./04-verification-done-that.md).
 
+> **Tóm gọn 1 câu:** Edit là dao mổ cho một vùng nhỏ, Agent là thợ phụ tay cho việc nhiều file — cả hai đều phải đeo "đề bài" là plan.md đã duyệt.
+
 ## 5. Nấc 5: Coding Agent giao issue (bất đồng bộ)
+
+Mục này về nấc cao nhất: giao việc cho Copilot chạy trên GitHub, không cần bạn ngồi canh chat. Bất đồng bộ nghĩa là nó làm nền trong lúc bạn làm việc khác — như gửi giặt đồ ở tiệm rồi đi làm, quay lại lấy là xong.
 
 Khi plan đã rõ và việc độc lập, assign cho Copilot Coding Agent trên GitHub.
 
@@ -138,7 +156,11 @@ Nếu test đỏ sau 3 lần, dừng và comment blocker vào issue.
 
 > Lưu ý 2026: ngoài github.com, chạy được agent trong terminal bằng Copilot CLI (binary `copilot`, 3 chế độ Interactive/Plan/Autopilot, xoay `Shift+Tab`, `/permissions`, `/limits` giới hạn credits). Xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
 
+> **Tóm gọn 1 câu:** Coding Agent là giao việc qua issue rồi quay lại nhận PR — chỉ giao khi spec rõ, có plan duyệt và checklist done.
+
 ## 6. Mẫu plan.md chuẩn + prompt duyệt
+
+Mục này cho sẵn mẫu bản kế hoạch và cách nhờ model soi lại plan trước khi duyệt. Plan.md giống hợp đồng thi công: ghi rõ ai sửa file nào, từng giai đoạn nghiệm thu thế nào.
 
 ```markdown
 # Plan: POST /api/payments/refund
@@ -187,7 +209,11 @@ Tôi duyệt xong mới cho implement.
 
 Sau khi duyệt: `"Plan đã duyệt. Save plan.md, commit 'docs: approve refund plan'. Từ giờ mọi chat implement chỉ đọc plan.md này, không tự sáng tạo ngoài."`
 
+> **Tóm gọn 1 câu:** plan.md chuẩn gồm mục tiêu, files đọc/sửa, steps theo phase, risks, cấm địa và verify từng phase — duyệt bằng prompt "reviewer khó tính" rồi lưu và commit.
+
 ## 7. Walkthrough: feature payments 60 phút
+
+Mục này ghép mọi thứ trên thành một kịch bản có đồng hồ — làm theo để thấy tổng thời gian thực tế của cả quy trình.
 
 | Phút | Nấc | Việc |
 |---|---|---|
@@ -198,9 +224,15 @@ Sau khi duyệt: `"Plan đã duyệt. Save plan.md, commit 'docs: approve refund
 | 45–55 | Agent | Chat mới: `"Đọc plan.md, làm Phase 2. Chạy test + build, dán 2 logs."` |
 | 55–60 | Review | Chat Reviewer fresh: `"Review diff vs plan.md, [SEVERITY] file:line, verdict PASS/NEEDS-FIX."` |
 
+> **Cách đọc bảng này:** đọc theo cột Phút là một dòng thời gian 60 phút; cột Nấc cho biết đang ở mức quyền nào, cột Việc là prompt copy-paste được cho từng đoạn.
+
 Tổng: 5 chats gọn, 1 plan duyệt, 0 lần revert lớn. Nếu giao Coding Agent: phút 30 assign issue kèm plan.md link, 2 giờ sau kiểm tra PR draft.
 
+> **Tóm gọn 1 câu:** feature đủ lớn trong 60 phút gồm 5 chat ngắn theo đúng thứ tự Ask → Plan → Duyệt → Implement → Review, không một lần revert lớn.
+
 ## 8. Bảng tra nhanh: chọn nấc nào?
+
+Mục này là bảng tra cứu để trả lời một câu hỏi duy nhất: việc này nên giao ở nấc nào.
 
 | Dấu hiệu task | Nấc đúng | Prompt mẫu 1 dòng |
 |---|---|---|
@@ -212,9 +244,15 @@ Tổng: 5 chats gọn, 1 plan duyệt, 0 lần revert lớn. Nếu giao Coding A
 | Việc độc lập, spec rõ, 1–2 giờ | Coding Agent | `Assign issue #X, mở PR draft + log xanh` |
 | Muốn thử 2 hướng | 2 chats Plan song song | Mỗi chat 1 phương án, so pros/cons |
 
+> **Cách đọc bảng này:** tìm dòng khớp "dấu hiệu" việc bạn đang có ở cột 1 — cột 2 là nấc nên đứng, cột 3 là prompt mẫu gõ ngay được.
+
 > Quy tắc ngón tay: **chưa có plan duyệt thì chưa cho code. Chưa rõ thì hỏi. Rõ rồi mới leo nấc.**
 
+> **Tóm gọn 1 câu:** dò dòng khớp dấu hiệu việc của bạn trong bảng là biết ngay nấc nào và prompt nào dùng.
+
 ## 9. Pitfalls + cách fix
+
+Mục này liệt kê những lỗi hay mắc khi áp plan-first và cách sửa — đọc trước để khỏi bước vào bẫy.
 
 | Pitfall | Triệu chứng | Fix |
 |---|---|---|
@@ -228,7 +266,11 @@ Tổng: 5 chats gọn, 1 plan duyệt, 0 lần revert lớn. Nếu giao Coding A
 | Edit cho task multi-files | Sửa chỗ này quên chỗ kia | Edit chỉ cho 1 vùng; multi-files dùng Agent |
 | Quên dặn dừng khi đỏ | Agent vá 10 lần càng hỏng | Luôn dặn đỏ sau 3 lần → dừng + báo blocker |
 
+> **Cách đọc bảng này:** cột 1 là lỗi, cột 2 là dấu hiệu cho thấy bạn đang mắc, cột 3 là thuốc chữa — dùng cột 2 để tự soi.
+
 ## 10. Bài tập cuối bài
+
+Ba bài dưới đây luyện việc chọn nấc và chạy quy trình trên việc thật của bạn.
 
 **Bài 1 (15 phút):** Liệt kê 5 tasks tuần này, gắn mỗi task 1 nấc (Ask/Plan/Edit/Agent/Coding Agent) + lý do 1 dòng. Task nào từng làm sai nấc → viết lại prompt đúng nấc.
 
@@ -238,7 +280,11 @@ Tổng: 5 chats gọn, 1 plan duyệt, 0 lần revert lớn. Nếu giao Coding A
 
 > Đạt: sau 2 tuần, 100% task >2 steps của bạn có plan.md duyệt trước khi code.
 
+> **Tóm gọn 1 câu:** làm 3 bài trên việc thật — phân nấc, chạy flow đầy đủ, giao issue — để tiêu chuẩn "chưa plan thì chưa code" thành thói quen.
+
 ## Tham khảo chéo
+
+Mục này dẫn tới các bài liên quan trong chuỗi tips.
 
 - [Tips 01](./01-context-hygiene.md) — 1 task 1 chat sạch
 - [Tips 02](./02-prompt-engineering.md) — 6 mẫu prompt + prompt files
