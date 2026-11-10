@@ -6,27 +6,24 @@
   // PHÂN TẦNG CẤU HÌNH — đọc kỹ trước khi sửa:
   //
   //   Personal (user settings)
-  //     Vị trí: ~/.config/Code/User/settings.json  (TRÊN MÁY CÁ NHÂN)
+  //     Vị trí: ~/Library/Application Support/Code/User/settings.json (macOS)
+  //             ~/.config/Code/User/settings.json (Linux)
+  //             %APPDATA%\Code\User\settings.json (Windows)
   //     Commit?: ❌ KHÔNG
-  //     Dùng cho: ngôn ngữ trả lời, style riêng, instructions[].text
-  //     Ví dụ:
-  //       {
-  //         "github.copilot.chat.codeGeneration.instructions": [
-  //           { "text": "Trả lời bằng tiếng Việt, ngắn gọn." }
-  //         ]
-  //       }
+  //     Dùng cho: ngôn ngữ trả lời, style riêng, instructions[].text, personal preferences
   //
   //   Repo (file này — .vscode/settings.json trong repo)
-  //     Vị trí: .vscode/settings.json  (TRONG REPO)
+  //     Vị trí: .vscode/settings.json (TRONG REPO)
   //     Commit?: ✅ CÓ — toàn team dùng chung
-  //     Dùng cho: quy tắc kỹ thuật, tool approval, exclude paths...
+  //     Dùng cho: quy tắc kỹ thuật, tool approval, exclude paths, terminal allow/deny...
   //
   //   Org policy (Business/Enterprise)
   //     Vị trí: github.com → Org Settings → Copilot → Policies
   //     Commit?: N/A — admin quản lý
   //
-  // THỨ TỰ THẮNG KHI XUNG ĐỘT (priority):
-  //   user settings < org policy < repo copilot-instructions.md < *.instructions.md (applyTo)
+  // THỨ TỰ ƯU TIÊN khi xung đột (cao hơn ghi đè thấp hơn):
+  //   org policy > repo settings (.vscode/settings.json) > user settings (máy cá nhân)
+  //   Trong repo settings (tool approval): deny > ask > allow
   //
   // QUY TẮC VÀNG:
   //   - Personal preferences → user settings máy bạn (KHÔNG commit)
@@ -54,7 +51,11 @@
     "**/*.key",
     "**/secrets/**",
     "**/.env*",
-    "**/credentials*.json"
+    "**/credentials*.json",
+    "**/*.secret",
+    "**/id_rsa*",
+    "**/.npmrc",
+    "**/.pypirc"
   ],
 
   // ---------- 3. ENABLE / DISABLE theo file type ----------
@@ -66,12 +67,38 @@
     "env": false
   },
 
+  // ---------- 3.5. FORMAT / LINT ON SAVE (từ 03-4-vs-code-extensions-pack-chuan-team.jsonc) ----------
+  // Tự động format và fix lỗi khi lưu file — giúp codeチーム đồng nhất.
+  // Tham khảo: 03-4-vs-code-extensions-pack-chuan-team.jsonc
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // ---------- 3.6. FILES / SEARCH EXCLUDE (tối ưu index workspace) ----------
+  // Tham khảo: 01-3-bat-codebase-indexing-copy-paste.sh
+  // node_modules, dist, .next, coverage… không cần Copilot đọc → index nhanh hơn, ít nhiễu.
+  // Đây là setting VS Code chuẩn (không phải Copilot riêng), commit cho team.
+  // "files.exclude": {
+  //   "**/node_modules": true,
+  //   "**/dist": true,
+  //   "**/.next": true,
+  //   "**/coverage": true
+  // },
+  // "search.exclude": {
+  //   "**/node_modules": true,
+  //   "**/dist": true,
+  //   "**/.next": true,
+  //   "**/coverage": true
+  // },
+
   // ---------- 4. LANGUAGE GATING ----------
   // Chỉ bật gợi ý cho các ngôn ngữ team dùng → gợi ý chuẩn hơn, ít nhiễu.
   // Repo-level — đặt trong .vscode/settings.json (commit cho team).
   // Cá nhân muốn khác → thêm vào ~/.config/Code/User/settings.json
   "github.copilot.chat.language": {
-    "enabled": ["typescript", "python", "go"],
+    "enabled": ["typescript", "javascript", "python", "go", "java", "csharp", "rust", "php"],
     "disabled": []
   },
 
@@ -83,13 +110,104 @@
   "github.copilot.chat.toolAutoRun": "ask",
 
   // Chi tiết approval cho từng tool. Commit cho team.
+  // Lưu ý: đây là policy cấp "tool" (tool-level), khác với cấp "lệnh" (command-level)
+  // ở section 5.1 bên dưới.
+  // Tên tool thường dùng: search, read, fetch, terminal, playwright, deploy, ...
+  // Alias thường gặp: github-mcp / github-mcp-read, postgres-prod / postgres-write
   "github.copilot.chat.tools": {
-    "terminal": "ask",        // chạy shell → hỏi trước (an toàn)
-    "github-mcp": "allow",    // GitHub MCP (read-only PRs, issues) → cho qua
-    "postgres-prod": "deny"   // DB prod → cấm hẳn
+    "search": "allow",       // tìm files/symbols → an toàn
+    "read": "allow",         // đọc file → cho qua
+    "fetch": "allow",        // fetch web docs → cho qua
+    "github-mcp": "allow",   // GitHub MCP (read-only PRs, issues) → cho qua
+    // "github-mcp-read": "allow", // alias nhẹ nhàng hơn cho GitHub read-only
+    "terminal": "ask",       // chạy shell → hỏi trước (an toàn)
+    "playwright": "ask",     // browser automation → hỏi
+    "postgres-prod": "deny", // DB prod → cấm hẳn
+    // "postgres-write": "deny",   // alias cho DB write
+    "deploy": "deny"         // deploy → cấm (chỉ CI/human làm)
   },
 
-  // ---------- 6. MODEL SELECTION ----------
+  // ---------- 5.5. MCP SERVER APPROVAL (theo từng server MCP) ----------
+  // Phân quyền cho từng MCP server (khác với tool-level ở section 5).
+  // Tham khảo: 03-5-tools-approval-allow-ask-deny.jsonc
+  // "github.copilot.chat.mcp.tools": {
+  //   "github": "allow",            // đọc PR/issues — read-only, an toàn
+  //   "fetch": "allow",             // đọc docs web — an toàn
+  //   "playwright": "ask",          // browser click có side effects
+  //   "postgres-dev": "ask",        // query sai tốn thời gian, write nguy hiểm
+  //   "postgres-prod": "deny"       // DB prod: cấm hẳn
+  // },
+
+  // ---------- 5.1. TERMINAL COMMAND AUTO-APPROVE (experimental, VS Code ≥1.102) ----------
+  // Quy tắc cho từng LỆNH TERMINAL cụ thể khi agent chạy shell (runInTerminal).
+  // Gộp hợp với tool-level approval ở trên (section 5). Luồng kiểm tra:
+  //   1. Nếu tool "terminal" bị "deny" → chặn hẳn (không qua section 5.1)
+  //   2. Nếu tool "terminal" = "ask" → kiểm tra autoApprove commands:
+  //      - Khớp "true"  → chạy luôn, không hỏi (cho phép / auto-approve)
+  //      - Khớp "false" → bắt buộc hỏi lại (từ chối auto-chấp thuận)
+  //      - Không khớp   → hỏi lại (mặc định theo "terminal": "ask")
+  //
+  // Cách bật/tắt tính năng này toàn cục:
+  //   "chat.tools.terminal.enableAutoApprove": true   // bật (mặc định true)
+  //
+  // Khóa (key) có thể là:
+  //   - Tiền tố lệnh: "npm" sẽ khớp "npm install", "npm run test", ...
+  //   - Regex: bao trong /.../, có thể có flags: /pattern/i
+  //   - Chuỗi hoàn chỉnh: "git status"
+  //
+  // Giá trị: true = cho phép tự chạy | false = bắt buộc hỏi lại
+  // Ưu tiên: false (deny) > true (allow). Các scope user/workspace được gộp.
+  //
+  // Các setting cũ (bị deprecated): github.copilot.chat.agent.terminal.allowList / denyList
+  //   → hãy dùng "chat.tools.terminal.autoApprove" thay thế.
+
+  // Bật tính năng auto-approve terminal (khuyến nghị khai báo rõ ràng)
+  "chat.tools.terminal.enableAutoApprove": true,
+
+  // Bỏ qua default auto-approve rules của VS Code (mặc định false = giữ default)
+  // "chat.tools.terminal.ignoreDefaultAutoApproveRules": false,
+
+  // Tự động approve các npm script trong workspace (mặc định false)
+  // "chat.tools.terminal.autoApproveWorkspaceNpmScripts": false,
+
+  // Danh sách lệnh chi tiết (commit cho team)
+  "chat.tools.terminal.autoApprove": {
+    // --- DEV / BUILD: cho phép tự chạy (không hỏi) ---
+    "npm": true,          // npm install, npm ci, npm run ... (tất cả)
+    "npx": true,          // npx ... (tất cả)
+    "node": true,         // node ... (chạy script/node)
+    // "/^npm run (test|lint|build|dev|start)$/": true,  // ví dụ regex: chỉ các script whitelist
+    // "pnpm": true,       // nếu team dùng pnpm
+    // "yarn": true,       // nếu team dùng yarn
+    // "cargo": true,      // nếu team dùng Rust
+    // "pip": true,        // nếu team dùng Python pip
+    // "mvn": true,        // nếu team dùng Java Maven
+    // "gradle": true,     // nếu team dùng Gradle
+    // "dotnet": true,     // nếu team dùng .NET
+
+    // --- GIT: từ chối tự chạy (luôn hỏi lại) ---
+    "git": false         // git commit/push/reset/... → luôn hỏi lại
+  },
+
+  // ---------- 6. GITHUB COPILOT - GIT INTEGRATION ----------
+  // Tự động sinh commit message bằng Copilot (nếu extension hỗ trợ)
+  // "git.commitMessageGeneration": "copilot",
+  // "git.commitMessageUseCopilot": true,
+
+  // ---------- 7. LOCALE / CHAT / INLINE CHAT ----------
+  // Ngôn ngữ phản hồi Copilot (mặc định theo VS Code locale)
+  // "github.copilot.chat.localeOverride": "en",
+
+  // Vị trí hiển thị Chat panel (sidebar/panel/editor)
+  // "chat.location": "sidebar",
+
+  // Tùy chỉnh chat (theme, font, v.v. — thường để personal)
+  // "chat.customization": {},
+
+  // Inline Chat: hiển thị gợi ý khi chọn code
+  // "inlineChat.enabled": true,
+
+  // ---------- 8. MODEL SELECTION ----------
   // Model mặc định cho chat (tên exact từ picker — roster đổi theo quý).
   // Repo-level: "github.copilot.chat.model" + "completions.model"
   // Personal override: thêm vào ~/.config/Code/User/settings.json
@@ -102,30 +220,40 @@
   // Default model gợi ý cho team (commented — uncomment + đổi tên exact khi cần).
   // "github.copilot.chat.defaultModel": "<model rẻ trong roster 2026>"
 
-  // ---------- 7. SANDBOX (Agent mode) ----------
-  // Nhốt terminal agent vào giới hạn file + mạng, lệnh trong đó auto-approve.
+  // ---------- 9. SANDBOX (Agent mode) ----------
+  // Nhốt terminal agent vào giới hạn file + mạng.
   // Repo-level — đặt trong .vscode/settings.json (commit cho team).
   // Cá nhân muốn override → ~/.config/Code/User/settings.json
   // Hỗ trợ: macOS, Linux, WSL2.
-  "chat.agent.sandbox.enabled": "off",                  // off | on
-  "chat.agent.sandbox.network.allowNetwork": false,     // chặn mạng khi sandbox bật
-  "chat.agent.sandbox.allowUnsandboxedCommands": false, // không cho chạy lệnh ngoài chuồng
+  // Giá trị: "off" | "on"
+  "chat.agent.sandbox.enabled": "off",
 
-  // ---------- 8. ASSISTED PERMISSIONS + AUTO-ACCEPT ----------
-  // Hiện Assisted mode trong permission picker.
+  // Chặn mạng khi sandbox bật
+  "chat.agent.sandbox.network.allowNetwork": false,
+
+  // Không cho chạy lệnh ngoài chuồng sandbox
+  "chat.agent.sandbox.allowUnsandboxedCommands": false,
+
+  // (Tùy chọn) Giới hạn đường dẫn sandbox có thể ghi/đọc — ví dụ:
+  // "chat.agent.sandbox.fileSystem.mac": ["/Users/nguyenson/Github/tutorial/tutorial-github-copilot"],
+  // "chat.agent.sandbox.fileSystem.linux": ["${workspaceFolder}"],
+
+  // ---------- 10. ASSISTED PERMISSIONS + AUTO-ACCEPT ----------
+  // Hiện Assisted mode trong permission picker (xem mức quyền trước khi bấm Allow).
   "chat.assistedPermissions.enabled": true,
 
   // Giây chờ auto-accept edit (0 = tắt — khuyến nghị 0 khi review kỹ).
+  // >0 sẽ tự chấp nhận edit sau N giây nếu không tác động.
   "chat.editing.autoAcceptDelay": 0,
 
-  // ---------- 9. TELEMETRY ----------
+  // ---------- 11. TELEMETRY ----------
   // Mức thu thập telemetry client-side: "off" | "error" | "crash" | "all"
   // Personal override: thêm vào ~/.config/Code/User/settings.json
   // Lưu ý: tắt local KHÔNG nghĩa là hết log — org audit log (Business+) ghi server-side.
   // "telemetry.telemetryLevel": "all",
   // "github.copilot.telemetry": true
 
-  // ---------- 10. MCP (Model Context Protocol) ----------
+  // ---------- 12. MCP (Model Context Protocol) ----------
   // Đọc servers từ .vscode/mcp.json (cùng thư mục .vscode).
   // Secrets MCP chỉ qua ${input:...}/${env:...} trong mcp.json — KHÔNG hardcode token.
   "mcp.enabled": true
