@@ -16,7 +16,7 @@ Tái hiện 1 lệnh → lấy failure gọn → khoanh 1 file → /fix có scop
 Không tái hiện được thì chưa debug, mới đang đoán.
 ```
 
-> Rule: **correct 2 lần vẫn sai → dừng cãi, thu hẹp scope hoặc restore checkpoint.**
+> Rule: **correct 2 lần vẫn sai → dừng cãi, thu hẹp scope hoặc restore checkpoint.** · 📄 [VS Code Docs: Debugging & fixing issues](https://code.visualstudio.com/docs/agents/guides/prompt-examples#debugging-and-fixing-issues)
 
 ## 2. Cơ chế: debug là thu hẹp search space
 
@@ -39,7 +39,7 @@ Mọi bug đều là 1 trong 3:
 
 Luôn đòi root cause trước fix: `"Giải thích root cause 3 bullet + file:line trước khi sửa. Không đoán, thiếu evidence thì hỏi thêm thay vì fix bừa."` Chọn sai loại bug là mọi bước sau đi sai hướng — dùng bisect cho bug đã có stack trace là thừa, dùng /fix cho bug flaky là sửa mù.
 
-> **Tóm gọn 1 câu:** Debug giỏi là chơi trò đoán số với khoảng thu hẹp dần: tái hiện được mới được sửa, mỗi vòng loại bỏ một nửa khả năng.
+> **Tóm gọn 1 câu:** Debug giỏi là chơi trò đoán số với khoảng thu hẹp dần: tái hiện được mới được sửa, mỗi vòng loại bỏ một nửa khả năng. · 📄 [VS Code Docs: Choose a recovery action](https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#choose-a-recovery-action)
 
 ## 3. Move 1: /fix + debug session
 
@@ -73,7 +73,7 @@ Hỏi tôi tối đa 3 câu để lấy thêm evidence:
 Khi đủ evidence mới đề xuất fix.
 ```
 
-/fix không kèm scope và câu "không refactor" thì model tiện tay dọn chỗ không hỏng — diff phình, dễ mang bug mới vào.
+/fix không kèm scope và câu "không refactor" thì model tiện tay dọn chỗ không hỏng — diff phình, dễ mang bug mới vào. · 📄 [VS Code Docs: Fix coding errors](https://code.visualstudio.com/docs/editing/copilot-smart-actions#fix-coding-errors)
 
 ## 4. Move 2: test failure loop tới xanh
 
@@ -105,7 +105,7 @@ Thêm 1 regression test cover đúng case vừa fix:
 - Chạy full scope, đảm bảo không gãy test cũ.
 ```
 
-Vì sao loop trong 1 message? Mỗi message mới là 1 request + context mới — loop tại chỗ rẻ hơn bạn nhắc tay. Giống như nhờ một người sửa tới khi đèn xanh ngay tại chỗ, thay vì mỗi vòng lại gọi một người lạ đến và kể lại chuyện từ đầu. Không giới hạn số lần đỏ thì agent cày 10 vòng vẫn đỏ mà context đã đầy rác.
+Vì sao loop trong 1 message? Mỗi message mới là 1 request + context mới — loop tại chỗ rẻ hơn bạn nhắc tay. Giống như nhờ một người sửa tới khi đèn xanh ngay tại chỗ, thay vì mỗi vòng lại gọi một người lạ đến và kể lại chuyện từ đầu. Không giới hạn số lần đỏ thì agent cày 10 vòng vẫn đỏ mà context đã đầy rác. · 📄 [VS Code Docs: Run tests & investigate failures](https://code.visualstudio.com/docs/agents/guides/test-code-with-ai#run-tests-and-investigate-failures)
 
 ## 5. Move 3: bisect + log→prompt
 
@@ -121,7 +121,7 @@ Lưu ý: bisect mà không tái hiện được lỗi một cách ổn định t
 
 **Log→prompt — đừng paste log thô:**
 
-> 📄 **Code ví dụ:** [`./examples/10-debugging-power-moves/2-move-3-bisect-log-prompt.sh`](./examples/10-debugging-power-moves/2-move-3-bisect-log-prompt.sh)
+> 📄 **Code ví dụ:** [`./examples/10-debugging-power-moves/2-move-3-bisect-log-prompt.sh`](./examples/10-debugging-power-moves/2-move-3-bisect-log-prompt.sh) · 📄 [VS Code Docs: History & Blame](https://code.visualstudio.com/docs/sourcecontrol/history)
 
 ```text
 # Bước 2: mở chat phụ, gắn file log:
@@ -164,7 +164,7 @@ Bug flaky: 10 lần chạy đỏ 3 lần.
 Không fix ngay, thu thập evidence trước.
 ```
 
-`#terminalLastCommand` — hoặc mở inline chat ngay trong terminal (`⌘I`/`Ctrl+I`) — cho model thấy đúng output thật thay vì bản bạn copy tay (dễ sai/sót) — copy thiếu dòng stack quan trọng là model chẩn đoán lệch, mất thêm vòng.
+`#terminalLastCommand` — hoặc mở inline chat ngay trong terminal (`⌘I`/`Ctrl+I`) — cho model thấy đúng output thật thay vì bản bạn copy tay (dễ sai/sót) — copy thiếu dòng stack quan trọng là model chẩn đoán lệch, mất thêm vòng. · 📄 [VS Code Docs: Terminal inline chat](https://code.visualstudio.com/docs/chat/inline-chat#use-terminal-inline-chat)
 
 ## 7. Walkthrough: bug 500 trong 30 phút
 
@@ -179,7 +179,7 @@ Bối cảnh: POST /api/payments/refund quá 30 ngày bị 500, log dài.
 | 20–25 | Mở rộng | `"Chạy thêm lint + build, dán 2 logs. Thêm 1 regression test days=31."` |
 | 25–30 | Review | Chat Reviewer fresh: `"Review diff vs plan, [SEVERITY] file:line, PASS/NEEDS-FIX."` → commit |
 
-Tổng 30 phút, 0 lần cãi nhau, có regression test + logs.
+Tổng 30 phút, 0 lần cãi nhau, có regression test + logs. · 📄 [VS Code Docs: Reproduce the bug](https://code.visualstudio.com/docs/agents/guides/fix-a-bug-with-agents#reproduce-the-bug)
 
 ## 8. Bảng tra nhanh: lỗi nào move nào?
 
@@ -196,7 +196,7 @@ Tổng 30 phút, 0 lần cãi nhau, có regression test + logs.
 
 > **Cách đọc bảng này:** dọc cột **Dấu hiệu** tìm đúng tình trạng bạn đang gặp, cột **Move đầu tiên** là chiêu mở màn, cột **Dừng khi** cho biết đạt đích — đi tới đó thì dừng, đừng sửa thừa.
 
-> Quy tắc ngón tay: **rõ thì /fix ngay, mờ thì bisect/log trước, cãi 2 lần thì restore.**
+> Quy tắc ngón tay: **rõ thì /fix ngay, mờ thì bisect/log trước, cãi 2 lần thì restore.** · 📄 [VS Code Docs: Debug Chat Interactions](https://code.visualstudio.com/docs/agents/agent-troubleshooting/chat-debug-view)
 
 ## 9. Pitfalls + cách fix
 
@@ -214,7 +214,7 @@ Bảng này là "sổ khám bệnh" của các ca debug trước — mỗi dòng
 | Quên regression test | Bug quay lại tháng sau | Mọi bug đều 1 test mới chứa issue id |
 | Chỉ chạy 1 file | Sửa A hỏng B | Focused xanh → full scope + build |
 
-> **Cách đọc bảng này:** quét từ trên xuống, thấy đúng "triệu chứng" của mình thì dừng lại đọc cột **Fix** — mỗi dòng là một cách gãy đã được ai trải qua rồi.
+> **Cách đọc bảng này:** quét từ trên xuống, thấy đúng "triệu chứng" của mình thì dừng lại đọc cột **Fix** — mỗi dòng là một cách gãy đã được ai trải qua rồi. · 📄 [VS Code Docs: Debug Chat Interactions](https://code.visualstudio.com/docs/agents/agent-troubleshooting/chat-debug-view)
 
 Ba lỗi nhìn là nhớ:
 

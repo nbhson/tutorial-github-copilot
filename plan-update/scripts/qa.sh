@@ -29,7 +29,9 @@ for f in pathlib.Path('.').rglob('*.md'):
     s = str(f)
     if s.startswith('plan-update') or s.startswith('./plan-update') or '.git' in s or s.endswith('CHANGELOG.md'): continue
     for i, line in enumerate(f.read_text(encoding='utf-8', errors='ignore').splitlines(), 1):
-        if FORB.search(line) and not FREE.search(line):
+        # go URL khong anh huong: tu khoa ma chi tinh trong van ban, khong tinh duong dan tai lieu
+        scan = re.sub(r'\]\([^)]+\)|https?://\S+', '', line)
+        if FORB.search(scan) and not FREE.search(line):
             n += 1
             if len(samples) < 8: samples.append(f'{s}:{i}:{line[:70]}')
 print(n, '|', ' ~ '.join(samples))

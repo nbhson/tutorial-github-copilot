@@ -20,7 +20,7 @@ Mục này cho bạn biết sau 30 phút sẽ mang được gì về — như da
 
 ## 1. Vì sao Copilot 2026 khác trước?
 
-Copilot không còn là một extension gõ tắt: **một subscription chạy trên nhiều bề mặt** — editor (VS Code, JetBrains, Visual Studio), terminal (**Copilot CLI**), github.com + mobile, và cloud — và bạn đổi model ngay trong chat. Docs GitHub ghi mọi plan, kể cả Free, đều kèm Copilot CLI và Copilot app. Cả khoá mặc định thao tác trên **Copilot harness** — runtime chung cho VS Code + CLI + Copilot app, chạy trong **Agent Host**; định nghĩa harness và bản đồ bề mặt thuộc **bài 00 và 02**, bài này không lặp.
+Copilot không còn là một extension gõ tắt: **một subscription chạy trên nhiều bề mặt** — editor (VS Code, JetBrains, Visual Studio), terminal (**Copilot CLI**), github.com + mobile, và cloud — và bạn đổi model ngay trong chat. Docs GitHub ghi mọi plan, kể cả Free, đều kèm Copilot CLI và Copilot app. Cả khoá mặc định thao tác trên **Copilot harness** — runtime chung cho VS Code + CLI + Copilot app, chạy trong **Agent Host**; định nghĩa harness và bản đồ bề mặt thuộc **bài 00 và 02**, bài này không lặp. · 📄 [GitHub Docs: About GitHub Copilot](https://docs.github.com/en/copilot/get-started/about-github-copilot)
 
 ## 2. Plan: chọn trước khi cài
 
@@ -38,7 +38,7 @@ Tiền, 1 dòng: billing hiện hành là **GitHub AI Credits — 1 credit = $0,
 
 > **Vì sao quan trọng?** Sai plan thì hoặc thiếu credits (agent dừng giữa task, code dở dang), hoặc trả tiền cho tính năng không ai dùng.
 > **Nếu làm sai?** Đăng ký một nơi, login một nơi: `github.com/settings/copilot` không hiện plan nghĩa là **đang sai tài khoản**, không phải extension hỏng — kiểm tài khoản trước khi debug bất cứ gì (§6.1).
-> **Tóm gọn 1 câu:** Chọn gói nhỏ đủ dùng; xác nhận subscription active trên đúng tài khoản trước khi cài.
+> **Tóm gọn 1 câu:** Chọn gói nhỏ đủ dùng; xác nhận subscription active trên đúng tài khoản trước khi cài. · 📄 [GitHub Docs: Plans for GitHub Copilot](https://docs.github.com/en/copilot/get-started/plans)
 
 ## 3. VS Code setup (trọng tâm của khoá)
 
@@ -52,7 +52,7 @@ Tiền, 1 dòng: billing hiện hành là **GitHub AI Credits — 1 credit = $0,
 3. Mo mot REPO THAT (khong phai folder trong) de agent doc duoc workspace context.
 ```
 
-> 📄 [`./examples/01-cai-dat-va-xac-thuc/cai-vs-code-va-dang-nhap.sh`](./examples/01-cai-dat-va-xac-thuc/cai-vs-code-va-dang-nhap.sh) — lệnh đầy đủ, kể cả chọn account cho từng workspace/profile · [`./examples/01-cai-dat-va-xac-thuc/verify-vs-code-30-giay.sh`](./examples/01-cai-dat-va-xac-thuc/verify-vs-code-30-giay.sh) — 30 giây verify bằng mắt + bảng phím tắt.
+> 📄 [`./examples/01-cai-dat-va-xac-thuc/cai-vs-code-va-dang-nhap.sh`](./examples/01-cai-dat-va-xac-thuc/cai-vs-code-va-dang-nhap.sh) — lệnh đầy đủ, kể cả chọn account cho từng workspace/profile · [`./examples/01-cai-dat-va-xac-thuc/verify-vs-code-30-giay.sh`](./examples/01-cai-dat-va-xac-thuc/verify-vs-code-30-giay.sh) — 30 giây verify bằng mắt + bảng phím tắt. · 📄 [VS Code Docs: GitHub Copilot Setup](https://code.visualstudio.com/docs/setup/copilot)
 
 ### 3.1. Settings nên bật — và một setting không cần bật
 
@@ -66,17 +66,17 @@ Tiền, 1 dòng: billing hiện hành là **GitHub AI Credits — 1 credit = $0,
 
 > **Vì sao quan trọng?** VS Code có hàng trăm setting, nhưng đúng ba cái dưới đây quyết định "Copilot có hiện ra hay không"; phần còn lại cứ để mặc định.
 > **Nếu làm sai?** Nhét `github.copilot.chat.codeGeneration.useInstructionFiles: true` vào `.vscode/settings.json` rồi tưởng đã bật instructions: đó là setting của **Local harness**, Copilot harness không cần nó — muốn chắc thì verify bằng **Chat: Open Customizations** + mục **References** (§6.3 và bài 03).
-> **Tóm gọn 1 câu:** Kiểm ba setting "Copilot có hiện hay không" trước, rồi mới tới 30 giây verify bằng mắt ở §7.
+> **Tóm gọn 1 câu:** Kiểm ba setting "Copilot có hiện hay không" trước, rồi mới tới 30 giây verify bằng mắt ở §7. · 📄 [VS Code Docs: AI Settings Reference](https://code.visualstudio.com/docs/agents/reference/ai-settings)
 
 ## 4. JetBrains / Visual Studio / Neovim (ghi nhanh)
 
 JetBrains và Visual Studio có extension chính thức; Neovim dùng plugin `github/copilot.vim`. Ba bề mặt này mạnh về gõ + hỏi nhanh; **năng lực agent khác nhau giữa các bề mặt là việc của bài 02** — bài này không lặp bảng so sánh. Đường cài từng IDE (JetBrains: `Ctrl+Alt+S` → Plugins → Marketplace → "GitHub Copilot"; Visual Studio: Extensions → Manage Extensions; Neovim: `:Copilot setup` rồi `:Copilot status` = `Enabled`):
 
-> 📄 [`./examples/00-tong-quan-copilot/jetbrains-visual-studio-neovim.sh`](./examples/00-tong-quan-copilot/jetbrains-visual-studio-neovim.sh)
+> 📄 [`./examples/00-tong-quan-copilot/jetbrains-visual-studio-neovim.sh`](./examples/00-tong-quan-copilot/jetbrains-visual-studio-neovim.sh) · 📄 [GitHub Docs: Copilot in IDEs](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-in-ides)
 
 ## 5. Copilot CLI — đừng nhầm với `gh copilot`
 
-**Copilot CLI** là binary tên **`copilot`** (`brew install --cask copilot-cli` · `npm install -g @github/copilot` · `winget install GitHub.Copilot`), chạy đúng Copilot harness trong terminal; lần đầu gõ `/login` (hoặc `copilot login`). **`gh copilot` chỉ là extension cộng đồng của GitHub CLI** — 2 lệnh `suggest`/`explain` cho lệnh shell, tiện khi quên flag, nhưng không phải Copilot CLI. Nhầm hai cái là install xong ngồi hỏi "sao terminal không có agent". CLI sâu hơn (flags, modes, headless, CI/CD): **bài 12** · hai lệnh `gh copilot`: [cli-suggest](commands/local/system-knowledge/cli-suggest/README.md).
+**Copilot CLI** là binary tên **`copilot`** (`brew install --cask copilot-cli` · `npm install -g @github/copilot` · `winget install GitHub.Copilot`), chạy đúng Copilot harness trong terminal; lần đầu gõ `/login` (hoặc `copilot login`). **`gh copilot` chỉ là extension cộng đồng của GitHub CLI** — 2 lệnh `suggest`/`explain` cho lệnh shell, tiện khi quên flag, nhưng không phải Copilot CLI. Nhầm hai cái là install xong ngồi hỏi "sao terminal không có agent". CLI sâu hơn (flags, modes, headless, CI/CD): **bài 12** · hai lệnh `gh copilot`: [cli-suggest](commands/local/system-knowledge/cli-suggest/README.md). · 📄 [GitHub Docs: Copilot CLI](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-cli)
 
 ## 6. Login, verify, xử lý lỗi
 
@@ -100,7 +100,7 @@ gh extension list      # thay gh-copilot? chi khi do `gh copilot suggest/explain
 gh auth status         # dung account (ca nhan vs cong ty) — kiem dau tien
 ```
 
-> 📄 [`./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh`](./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh)
+> 📄 [`./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh`](./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh) · 📄 [VS Code Docs: Debug Chat Interactions](https://code.visualstudio.com/docs/agents/agent-troubleshooting/chat-debug-view)
 
 | Triệu chứng | Nguyên nhân likely | Fix (copy-paste) |
 |---|---|---|
@@ -130,9 +130,9 @@ Buoc 5 (2 phut): "Chat: Open Customizations" -> tab Instructions -> file phai du
 
 **Vì sao quan trọng?** Đây là "bài thi" của cả khối cài đặt + xác thực: mỗi bước chạm đúng một thứ có thể hỏng (extension, account, index, instructions) và bước cuối tự kiểm chứng bằng chính docs VS Code — Customizations editor chứng minh file được **khám ra**, mục References chứng minh nó **được gửi vào request**.
 **Nếu làm sai?** Bỏ bước 5 — instructions lưu rồi nhưng chưa session nào đọc qua, bạn chỉ phát hiện khi một người khác chạy repo này.
-> **Tóm gọn 1 câu:** Session đầu chuẩn = mở Chat → Agent → prompt "tóm tắt repo" → lưu instructions → **verify bằng Customizations editor + References**, rồi hỏi lại trong chat mới.
+> **Tóm gọn 1 câu:** Session đầu chuẩn = mở Chat → Agent → prompt "tóm tắt repo" → lưu instructions → **verify bằng Customizations editor + References**, rồi hỏi lại trong chat mới. · 📄 [VS Code Docs: Agents Quickstart](https://code.visualstudio.com/docs/agents/quickstart)
 
-> 📄 **Code ví dụ (chạy tuần tự là xong walkthrough):** [`./examples/01-cai-dat-va-xac-thuc/cai-vs-code-va-dang-nhap.sh`](./examples/01-cai-dat-va-xac-thuc/cai-vs-code-va-dang-nhap.sh) · [`./examples/01-cai-dat-va-xac-thuc/dang-ky-plan-va-verify-tai-khoan.sh`](./examples/01-cai-dat-va-xac-thuc/dang-ky-plan-va-verify-tai-khoan.sh) · [`./examples/01-cai-dat-va-xac-thuc/verify-vs-code-30-giay.sh`](./examples/01-cai-dat-va-xac-thuc/verify-vs-code-30-giay.sh)
+> 📄 **Code ví dụ (chạy tuần tự là xong walkthrough):** [`./examples/01-cai-dat-va-xac-thuc/cai-vs-code-va-dang-nhap.sh`](./examples/01-cai-dat-va-xac-thuc/cai-vs-code-va-dang-nhap.sh) · [`./examples/01-cai-dat-va-xac-thuc/dang-ky-plan-va-verify-tai-khoan.sh`](./examples/01-cai-dat-va-xac-thuc/dang-ky-plan-va-verify-tai-khoan.sh) · [`./examples/01-cai-dat-va-xac-thuc/verify-vs-code-30-giay.sh`](./examples/01-cai-dat-va-xac-thuc/verify-vs-code-30-giay.sh) · 📄 [VS Code Docs: Troubleshooting](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting)
 
 ## 7. Checklist sau cài đặt (30 giây bằng mắt + 3 lệnh)
 
@@ -142,7 +142,7 @@ Buoc 5 (2 phut): "Chat: Open Customizations" -> tab Instructions -> file phai du
 - [ ] `AGENTS.md` / `.github/copilot-instructions.md` hiện trong **Chat: Open Customizations**.
 - [ ] `gh auth status` đúng account (cá nhân vs công ty).
 - [ ] `copilot --version` chạy được; `gh extension list` thấy `gh-copilot` **nếu** bạn dùng `suggest/explain`.
-- [ ] Đã chạy walkthrough §6.3 trên 1 repo thật — 📄 lệnh verify từng thứ: [`./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh`](./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh) · settings nền: [`./examples/01-cai-dat-va-xac-thuc/settings-nen-bat.jsonc`](./examples/01-cai-dat-va-xac-thuc/settings-nen-bat.jsonc).
+- [ ] Đã chạy walkthrough §6.3 trên 1 repo thật — 📄 lệnh verify từng thứ: [`./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh`](./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh) · settings nền: [`./examples/01-cai-dat-va-xac-thuc/settings-nen-bat.jsonc`](./examples/01-cai-dat-va-xac-thuc/settings-nen-bat.jsonc). · 📄 [GitHub Docs: Quickstart: Copilot in your IDE](https://docs.github.com/en/copilot/get-started/quickstart-for-using-github-copilot-in-your-ide)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -154,14 +154,14 @@ Buoc 5 (2 phut): "Chat: Open Customizations" -> tab Instructions -> file phai du
 | Ghost text không hiện → kết luận Copilot hỏng | Bỏ qua nguyên nhân thật: tắt cho ngôn ngữ / file quá lớn / 2 bản cài | Chạy dọc bảng §6.2 trước khi kết luận |
 | Nghĩ `Ctrl+Alt+I` là Quick Chat | Không tìm thấy ô nhập nhỏ, tưởng phím bị gỡ | `Ctrl+Alt+I` = mở **Chat view**; Quick Chat = `Ctrl+Shift+Alt+L`; inline chat = `Ctrl+I` |
 
-**Bài học:** 90% lỗi setup không phải tool hỏng mà là **account** hoặc **tên tool** — luôn bắt đầu debug bằng `gh auth status`, rồi đọc bảng §6.2, cuối cùng mới nghĩ tới cài lại.
+**Bài học:** 90% lỗi setup không phải tool hỏng mà là **account** hoặc **tên tool** — luôn bắt đầu debug bằng `gh auth status`, rồi đọc bảng §6.2, cuối cùng mới nghĩ tới cài lại. · 📄 [VS Code Docs: Start with basic checks](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#start-with-basic-checks)
 
 ## Best practices (kèm "Vì sao?")
 
 - **Chạy `gh auth status` đầu mỗi ngày làm việc, không đợi có lỗi.** *Vì sao:* login sai account chỉ lộ ra ở lỗi quota hay policy đầu tiên, và lỗi đó trông hệt "tool hỏng".
 - **Bảo đảm subscription active (plan hoặc Free) trước khi cài.** *Vì sao:* chưa active thì sign in vẫn được nhưng mọi thứ lỗi — bạn sẽ debug sai chỗ.
 - **Đưa nguyên walkthrough §6.3 vào onboarding người mới.** *Vì sao:* 15 phút đó là "health check" toàn máy: extension, account, index, instructions — mỗi bước soi đúng một chỗ.
-- **Dùng một profile browser duy nhất cho OAuth (VS Code, CLI, github.com).** *Vì sao:* ai có 2 tài khoản rất hay dính "browser nhớ account cũ" — sign out trên browser trước, rồi sign in lại trong IDE.
+- **Dùng một profile browser duy nhất cho OAuth (VS Code, CLI, github.com).** *Vì sao:* ai có 2 tài khoản rất hay dính "browser nhớ account cũ" — sign out trên browser trước, rồi sign in lại trong IDE. · 📄 [VS Code Docs: Apply the workflow to your project](https://code.visualstudio.com/docs/agents/best-practices#apply-the-workflow-to-your-project)
 
 ## Bài tập
 
@@ -179,7 +179,7 @@ Buoc 5 (2 phut): "Chat: Open Customizations" -> tab Instructions -> file phai du
 ## Reference
 
 - GitHub — [Plans for GitHub Copilot](https://docs.github.com/en/copilot/get-started/plans) (Free / Pro / Pro+ / Max + Student, Business, Enterprise) · [Models and pricing — GitHub AI Credits](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) (1 credit = $0,01, per-token, code completions không trừ credits) · quản lý subscription: [github.com/settings/copilot](https://github.com/settings/copilot)
-- GitHub — [Install Copilot CLI](https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli) (`brew install --cask copilot-cli` / `npm install -g @github/copilot` / `winget install GitHub.Copilot`, `/login`) · [CLI command reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference) (`copilot --version`, `copilot update`)
+- GitHub — [Install Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli) (`brew install --cask copilot-cli` / `npm install -g @github/copilot` / `winget install GitHub.Copilot`, `/login`) · [CLI command reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference) (`copilot --version`, `copilot update`)
 - VS Code — [Set up GitHub Copilot](https://code.visualstudio.com/docs/setup/copilot) ("Use AI Features", GHE, đổi account, `chat.disableAIFeatures`) · [Agent harnesses](https://code.visualstudio.com/docs/agents/concepts/agent-harnesses) · [Cheat sheet — phím tắt](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet) · [Custom instructions reference](https://code.visualstudio.com/docs/agents/reference/custom-instructions-reference) (settings instructions thuộc Local harness)
 - Khác — [GitHub CLI](https://cli.github.com/) · extension cộng đồng `gh copilot`: [github/gh-copilot](https://github.com/github/gh-copilot) · [github/copilot.vim](https://github.com/github/copilot.vim) · JetBrains [GitHub Copilot plugin](https://plugins.jetbrains.com/plugin/17718-github-copilot)
 

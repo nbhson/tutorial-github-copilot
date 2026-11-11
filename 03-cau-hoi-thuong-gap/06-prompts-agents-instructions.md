@@ -12,7 +12,7 @@
 | Custom agent | `.github/agents/*.agent.md` | Chọn trong agent picker | Chính thức |
 | Prompt tái dùng | `.github/prompts/*.prompt.md` | Gọi tay `/tên-prompt` | **Chỉ chạy ở Local harness (VS Code)** — Copilot harness không nạp |
 
-> **Cách đọc bảng này:** đây là "địa chỉ nhà" của từng loại file — cột **Đường dẫn chuẩn** phải khớp từng ký tự, cột **Kích hoạt** cho biết tự chạy hay phải gọi tay, cột **Trạng thái 2026** cảnh báo cái nào đang cũ — 📄 file thật cho từng dòng: [`../templates/.github/`](../templates/.github/).
+> **Cách đọc bảng này:** đây là "địa chỉ nhà" của từng loại file — cột **Đường dẫn chuẩn** phải khớp từng ký tự, cột **Kích hoạt** cho biết tự chạy hay phải gọi tay, cột **Trạng thái 2026** cảnh báo cái nào đang cũ — 📄 file thật cho từng dòng: [`../templates/.github/`](../templates/.github/). · 📄 [VS Code Docs: Choose a customization scope](https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope)
 
 ---
 
@@ -24,7 +24,7 @@ Ví von cho dễ phân: instructions là tạp dước đeo sẵn vào việc (t
 
 > 📄 **Code ví dụ:** [`./examples/02-model-context-premium/file-nao-copilot-tu-load-file-nao.sh`](./examples/02-model-context-premium/file-nao-copilot-tu-load-file-nao.sh)
 
-> "Đã tạo file mà Copilot không biết" — check đường dẫn + tên file trước tiên (đuôi phải là `.instructions.md` chứ không phải `.md` trơn).
+> "Đã tạo file mà Copilot không biết" — check đường dẫn + tên file trước tiên (đuôi phải là `.instructions.md` chứ không phải `.md` trơn). · 📄 [VS Code Docs: Discovery & activation](https://code.visualstudio.com/docs/agents/reference/custom-instructions-reference#discovery-and-activation)
 
 ## 2. `applyTo` viết sao cho đúng?
 
@@ -34,7 +34,7 @@ Ví von cho dễ phân: instructions là tạp dước đeo sẵn vào việc (t
 
 > 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/applyto-viet-sao-cho-ung.sh`](./examples/06-prompts-agents-instructions/applyto-viet-sao-cho-ung.sh)
 
-> Glob sai root là lý do số 1 khiến instructions "không load".
+> Glob sai root là lý do số 1 khiến instructions "không load". · 📄 [VS Code Docs: Apply instructions to specific files](https://code.visualstudio.com/docs/agent-customization/custom-instructions#apply-instructions-to-specific-files-or-tasks)
 
 ## 3. Frontmatter lỗi — các bẫy phổ biến?
 
@@ -50,13 +50,13 @@ tools: [github-mcp, search, edit]
 ---
 ```
 
-> Prompt/agent "không hiện trong picker" — 70% là frontmatter hỏng. `tools` sai tên làm agent lỗi lúc chạy — thử bỏ hẳn `tools` để test, rồi thêm lại từng cái.
+> Prompt/agent "không hiện trong picker" — 70% là frontmatter hỏng. `tools` sai tên làm agent lỗi lúc chạy — thử bỏ hẳn `tools` để test, rồi thêm lại từng cái. · 📄 [VS Code Docs: Troubleshoot instructions](https://code.visualstudio.com/docs/agent-customization/custom-instructions#troubleshoot-instructions)
 
 ## 4. `copilot-instructions.md` bao nhiêu dòng là vừa?
 
 **Trả lời 1 câu:** Giữ **<200 dòng** — dài quá context phình, phần cuối bị cắt, rule quan trọng chìm. Phần dài tách sang `*.instructions.md` theo path, procedure dài tách thành `SKILL.md`.
 
-> 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/copilot-instructions-md-bao-nhieu-dong-la.sh`](./examples/06-prompts-agents-instructions/copilot-instructions-md-bao-nhieu-dong-la.sh)
+> 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/copilot-instructions-md-bao-nhieu-dong-la.sh`](./examples/06-prompts-agents-instructions/copilot-instructions-md-bao-nhieu-dong-la.sh) · 📄 [VS Code Docs: Context window & compaction](https://code.visualstudio.com/docs/agents/concepts/context#context-window-and-compaction)
 
 **Ví dụ:** file chính 350 dòng (React + API + deploy) → tách React sang `frontend-react.instructions.md`, deploy sang skill → còn 120 dòng.
 
@@ -66,7 +66,7 @@ tools: [github-mcp, search, edit]
 
 > 📄 **Code ví dụ:** [`./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh`](./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh)
 
-> **Chat cũ giữ context cũ** — mở chat mới trước khi kết luận instructions sai.
+> **Chat cũ giữ context cũ** — mở chat mới trước khi kết luận instructions sai. · 📄 [VS Code Docs: Verify your instructions](https://code.visualstudio.com/docs/agent-customization/custom-instructions#verify-your-instructions)
 
 ## 6. Prompt files (`*.prompt.md`) — chỉ Local harness
 
@@ -86,7 +86,7 @@ tools: [search, edit]
 
 > 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/prompt-files-prompt-md-legacy.sh`](./examples/06-prompts-agents-instructions/prompt-files-prompt-md-legacy.sh)
 
-> Repo chỉ chạy Local và đã có prompt file ổn → giữ tạm, port dần sang Skill.
+> Repo chỉ chạy Local và đã có prompt file ổn → giữ tạm, port dần sang Skill. · 📄 [VS Code Docs: Prompt file locations](https://code.visualstudio.com/docs/agent-customization/prompt-files#locations)
 
 ## 7. Custom agent (`*.agent.md`) viết sao, khi nào cần?
 
@@ -103,7 +103,7 @@ tools: [search]
 - Trả về: danh sách file liên quan + thứ tự đọc đề xuất.
 ```
 
-Mẫu sẵn trong `templates/.github/agents/`.
+Mẫu sẵn trong `templates/.github/agents/`. · 📄 [VS Code Docs: Custom agent file structure](https://code.visualstudio.com/docs/agents/reference/custom-agent-file-reference#file-structure)
 
 ## 8. Agent Skills (`SKILL.md`) khác gì prompt/agent?
 
@@ -127,7 +127,7 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 
 > **Cách đọc bảng này:** dọc cột **Tiêu chí** so ba cách đóng gói như so ba cách giao hàng: gọi tay (prompt), chọn thủ công (custom agent), hay tự nhận việc (Skill) — cột nào thắng ở hàng "Kích hoạt" và "Chạy ở đâu" là lời giải cho vì sao 2026 khuyến nghị Skill.
 
-> **Model không gọi skill:** `description` quá mơ hồ là lý do phổ biến nhất — viết theo cặp "dùng khi..." / "không dùng cho...".
+> **Model không gọi skill:** `description` quá mơ hồ là lý do phổ biến nhất — viết theo cặp "dùng khi..." / "không dùng cho...". · 📄 [VS Code Docs: Skills vs custom instructions](https://code.visualstudio.com/docs/agent-customization/agent-skills#agent-skills-vs-custom-instructions)
 
 ## 9. Thứ tự ưu tiên khi nhiều instructions cùng khớp 1 file?
 
@@ -135,13 +135,13 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 
 > 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/thu-tu-uu-tien-khi-nhieu-instructions.sh`](./examples/06-prompts-agents-instructions/thu-tu-uu-tien-khi-nhieu-instructions.sh)
 
-> Đừng viết 2 instructions mâu thuẫn cho cùng path — hành vi sẽ khó đoán.
+> Đừng viết 2 instructions mâu thuẫn cho cùng path — hành vi sẽ khó đoán. · 📄 [VS Code Docs: Resolve conflicting instructions](https://code.visualstudio.com/docs/agent-customization/custom-instructions#resolve-conflicting-instructions)
 
 ## 10. Test instructions mới có hiệu quả không?
 
 **Trả lời 1 câu:** 3 phép thử trong chat mới: **test load** (hỏi quy tắc, phải kể đúng), **test hành vi** (task vi phạm phải bị từ chối), **test nhiễu** (task ngoài scope không bị ảnh hưởng).
 
-> 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/test-instructions-moi-co-hieu-qua-khong.sh`](./examples/06-prompts-agents-instructions/test-instructions-moi-co-hieu-qua-khong.sh)
+> 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/test-instructions-moi-co-hieu-qua-khong.sh`](./examples/06-prompts-agents-instructions/test-instructions-moi-co-hieu-qua-khong.sh) · 📄 [VS Code Docs: Verify the improvement](https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-3-verify-the-improvement)
 
 **Ví dụ:** thêm "NEVER sửa migrations" → test "sửa giúp migration 003" → Copilot phải từ chối + đề xuất tạo migration mới. 2 phút test đỡ 2 tuần "sao nó không nghe".
 
@@ -159,4 +159,4 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 
 Tham khảo chéo: [bài 05](05-policies-guardrails-faq.md) (quy tắc ALWAYS/NEVER) · [bài 02](02-model-context-premium.md) (context + nhiễu) · [bài 07](07-custom-agents-coding-agent-workflows.md) (custom agent workflows) · [../templates/README.md](../templates/README.md).
 
-> **Tóm gọn 1 câu:** File Copilot không load chỉ có 3 thủ phạm: sai địa chỉ, sai giấy khai sinh (frontmatter), sai vùng phủ (glob) — soi ba chỗ đó theo thứ tự là tìm ra 90% ca.
+> **Tóm gọn 1 câu:** File Copilot không load chỉ có 3 thủ phạm: sai địa chỉ, sai giấy khai sinh (frontmatter), sai vùng phủ (glob) — soi ba chỗ đó theo thứ tự là tìm ra 90% ca. · 📄 [VS Code Docs: Troubleshoot customization issues](https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues)

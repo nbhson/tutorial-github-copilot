@@ -26,7 +26,7 @@ Mục này giải thích "đồng tiền" của Copilot — đọc để hiểu 
 
 Credits dùng hết có thể mua thêm; mỗi lượt gọi model trừ theo **số tokens × hệ số của model** (model nhẹ rẻ hơn flagship nhiều). Xem usage: GitHub → Settings → Copilot → Usage; trong Copilot CLI dùng `/limits` để xem/đổi giới hạn credits của phiên.
 
-> Bài cũ nào còn đo tiết kiệm bằng đơn vị tính tiền cũ: nguyên tắc giữ nguyên, chỉ đổi đơn vị đo sang AI Credits.
+> Bài cũ nào còn đo tiết kiệm bằng đơn vị tính tiền cũ: nguyên tắc giữ nguyên, chỉ đổi đơn vị đo sang AI Credits. · 📄 [VS Code Docs: AI credits & model costs](https://code.visualstudio.com/docs/agents/concepts/language-models#ai-credits-and-model-costs)
 
 ## 2. Vì sao tốn credits?
 
@@ -52,7 +52,7 @@ Giảm 1 trong 3 là rẻ: **giảm turns** (prompt tốt + plan-first, ít retr
 
 > Rule: **việc rẻ thì dùng cách rẻ. Credits model mạnh để dành cho plan + implement khó.**
 
-> **Tóm gọn 1 câu:** AI Credits như tiền lương tháng: việc vặt trả bằng tiền lẻ (model nhẹ), để dành tiền lớn cho những lần mua sắm xứng đáng (plan, refactor, review khó). 📄 Meo kiem credits + plan nền: [`14-6-meo-kiem-credits.md`](../01-huong-dan-su-dung/examples/14-models-chon-model-dung/meo-kiem-credits.md) · [`14-2-plan-nen-chon-nao.md`](../01-huong-dan-su-dung/examples/14-models-chon-model-dung/plan-nen-chon-nao.md).
+> **Tóm gọn 1 câu:** AI Credits như tiền lương tháng: việc vặt trả bằng tiền lẻ (model nhẹ), để dành tiền lớn cho những lần mua sắm xứng đáng (plan, refactor, review khó). 📄 Meo kiem credits + plan nền: [`14-6-meo-kiem-credits.md`](../01-huong-dan-su-dung/examples/14-models-chon-model-dung/meo-kiem-credits.md) · [`14-2-plan-nen-chon-nao.md`](../01-huong-dan-su-dung/examples/14-models-chon-model-dung/plan-nen-chon-nao.md). · 📄 [VS Code Docs: Inspect token usage & caching](https://code.visualstudio.com/docs/agents/guides/optimize-usage#inspect-token-usage-and-caching)
 
 ## 3. Model routing: việc nào model nào?
 
@@ -77,7 +77,7 @@ VS Code → Settings → Copilot:
 # Kỳ vọng: 80% chat hằng ngày chạy model nhẹ, chỉ thay khi thật sự cần.
 ```
 
-**Ví dụ 2 — Khi nào KHÔNG tiếc credits:**
+**Ví dụ 2 — Khi nào KHÔNG tiếc credits:** · 📄 [VS Code Docs: Choose models based on evidence](https://code.visualstudio.com/docs/agents/guides/optimize-usage#choose-models-based-on-evidence)
 
 ```text
 ĐÁNG tiền:
@@ -122,7 +122,7 @@ Hãy gõ 1 case mẫu → Tab Tab Tab → sửa số liệu.
 
 Ba chế độ chênh nhau cả chục lần về chi phí — chọn đúng chế độ tiết kiệm nhiều hơn mọi mẹo tối ưu prompt.
 
-> **Tóm gọn 1 câu:** Completions là xe đạp (gần như miễn phí), Ask/Edit là xe máy, Agent là xe container — chở bịch kẹo bằng container thì ai cũng phải trả giá.
+> **Tóm gọn 1 câu:** Completions là xe đạp (gần như miễn phí), Ask/Edit là xe máy, Agent là xe container — chở bịch kẹo bằng container thì ai cũng phải trả giá. · 📄 [VS Code Docs: Plan and delegate before implementing](https://code.visualstudio.com/docs/agents/guides/optimize-usage#plan-and-delegate-before-you-implement)
 
 ## 5. Prune MCP/extensions + chat gọn
 
@@ -144,7 +144,7 @@ Mục này là phần "dọn nhà": đồ không dùng để đó cũng chiếm 
 3. Log dài → paste vào file, chat chính chỉ nhận summary 5 bullet.
 ```
 
-**Đo và so:** ghi số chats, turns/chat, số #codebase, số retries vì prompt ẩu tuần này; áp routing + prune tuần sau; so 2 cột trước/sau.
+**Đo và so:** ghi số chats, turns/chat, số #codebase, số retries vì prompt ẩu tuần này; áp routing + prune tuần sau; so 2 cột trước/sau. · 📄 [VS Code Docs: Keep the tool catalog focused](https://code.visualstudio.com/docs/agents/guides/optimize-usage#keep-the-tool-catalog-focused)
 
 ## 6. Đóng gói tri thức: trả 1 lần, dùng mãi
 
@@ -156,7 +156,7 @@ Paste spec 200 dòng vào 20 chats = trả 20 lần. Đưa vào file dùng chung
 - **Instructions** thay paste NEVER mỗi chat — mọi chat tự áp luật từ `.github/copilot-instructions.md`.
 - **Skills** thay gõ lại prompt (chuẩn 2026): `.github/skills/team-bug/SKILL.md` — nói "fix bug" là tự load; prompt files `.prompt.md` legacy chỉ chạy Local. Xem [Tips 07](./07-thiet-ke-prompts-skills.md). 📄 3 file đóng gói thật: [`../templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`../templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`../01-huong-dan-su-dung/examples/03-instructions-memory-rules/agents-md-portability-viet-1-lan-chay.sh`](../01-huong-dan-su-dung/examples/03-instructions-memory-rules/agents-md-portability-viet-1-lan-chay.sh).
 
-Cẩn thận: đóng gói sai chỗ (nhét cả checklist dài vào instructions) thì nạp lại mỗi turn — càng tốn hơn.
+Cẩn thận: đóng gói sai chỗ (nhét cả checklist dài vào instructions) thì nạp lại mỗi turn — càng tốn hơn. · 📄 [VS Code Docs: Ground the agent before exploring](https://code.visualstudio.com/docs/agents/guides/optimize-usage#ground-the-agent-before-broad-exploration)
 
 ## 7. Walkthrough: audit usage trong 50 phút
 
@@ -168,6 +168,8 @@ Cẩn thận: đóng gói sai chỗ (nhét cả checklist dài vào instructions
 | 25–35 | Prune | Tắt extensions/MCP thừa, bật tool approval, thu gọn instructions <200 dòng |
 | 35–45 | Đóng gói | Lưu 2 skills/prompts dùng nhiều nhất, tạo knowledge base cho docs hay paste |
 | 45–50 | Đo lại | Tuần sau so credits/tuần + số retry + chất lượng (test xanh? review PASS?) |
+
+📄 [VS Code Docs: Monitor your usage](https://code.visualstudio.com/docs/agents/guides/optimize-usage#monitor-your-usage)
 
 ## 8. Bảng tra nhanh: tốn bao nhiêu?
 
@@ -186,7 +188,7 @@ Bảng dưới đây "gắn sao" mức đốt tiền cho từng thói quen — s
 
 > **Cách đọc bảng này:** dọc cột **Cách làm** để tìm thói quen của bạn, cột sao là mức "đau ví" từ nhẹ tới nặng, cột **Cách rẻ hơn** là lối thay thế — ưu tiên sửa mấy dòng nhiều sao nhất.
 
-> Quy tắc ngón tay: **Tab trước, Ask/Edit sau, Agent khi đáng, cloud agent khi rảnh tay làm việc khác.**
+> Quy tắc ngón tay: **Tab trước, Ask/Edit sau, Agent khi đáng, cloud agent khi rảnh tay làm việc khác.** · 📄 [VS Code Docs: Thinking effort](https://code.visualstudio.com/docs/agents/concepts/language-models#thinking-effort)
 
 ## 9. Pitfalls + cách fix
 
@@ -202,6 +204,8 @@ Bảng dưới đây "gắn sao" mức đốt tiền cho từng thói quen — s
 | Tắt completions | Mọi việc đều thành chat | Bật completions, Tab trước khi chat |
 | Không đo usage | Không biết tốn đâu | Xem usage weekly, audit 50 phút mục 7 |
 
+📄 [VS Code Docs: Monitor your usage](https://code.visualstudio.com/docs/agents/guides/optimize-usage#monitor-your-usage)
+
 ## 10. So sánh với Claude Code
 
 | Việc | Copilot | Claude Code | Ghi chú |
@@ -215,7 +219,7 @@ Bảng dưới đây "gắn sao" mức đốt tiền cho từng thói quen — s
 
 📄 4 họ tool của Copilot (ai tiêu credit cái nào): [`00-4-bon-ho-tool-copilot.md`](../01-huong-dan-su-dung/examples/00-tong-quan-copilot/bon-ho-tool-copilot.md).
 
-> Nguyên tắc tối ưu giống hệt nhau — chỉ khác đơn vị đo tiền. Copilot đo bằng AI Credits từng lượt nên "thấy" được tiền đi đâu; Claude Code đo bằng hạn mức gói nên càng phải kiểm soát bằng thói quen.
+> Nguyên tắc tối ưu giống hệt nhau — chỉ khác đơn vị đo tiền. Copilot đo bằng AI Credits từng lượt nên "thấy" được tiền đi đâu; Claude Code đo bằng hạn mức gói nên càng phải kiểm soát bằng thói quen. · 📄 [GitHub Docs: Models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)
 
 ## 11. Bài tập cuối bài
 

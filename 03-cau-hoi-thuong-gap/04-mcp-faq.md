@@ -10,7 +10,7 @@
 | SSE / HTTP (server xa) | Server chạy sẵn có URL (team/self-host) | `https://mcp.internal.company.com/sse` |
 | Disabled / xóa entry | Tắt tạm server nguy hiểm | Postgres prod khi chưa cần |
 
-> **Cách đọc bảng này:** chọn transport giống chọn phương thức giao hàng — hàng nhẹ ở ngay máy mình thì stdio, hàng ở kho xa thì SSE/HTTP, hàng nguy hiểm thì chưa đặt mà tạm khóa (Disabled); cột Ví dụ là mẫu thật để so config.
+> **Cách đọc bảng này:** chọn transport giống chọn phương thức giao hàng — hàng nhẹ ở ngay máy mình thì stdio, hàng ở kho xa thì SSE/HTTP, hàng nguy hiểm thì chưa đặt mà tạm khóa (Disabled); cột Ví dụ là mẫu thật để so config. · 📄 [GitHub Docs: MCP (GitHub Docs)](https://docs.github.com/en/copilot/concepts/customizations/mcp)
 
 Mỗi MCP server expose 3 loại thành phần (không phải 3 loại server): **Tools** = tay (hàm gọi được, VD `github.create_pr`), **Resources** = mắt (dữ liệu đọc qua URI), **Prompts** = công thức nấu ăn (template sẵn). Không phải server nào cũng có đủ 3 — Tools là bắt buộc, Resources/Prompts tùy server.
 
@@ -24,7 +24,7 @@ Ví von: sai tên file hoặc sai key giống gửi thư ghi sai địa chỉ �
 
 > 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-json-nam-o-au-format-chuan.json`](./examples/04-mcp-faq/mcp-json-nam-o-au-format-chuan.json)
 
-> **Sai chỗ/sai key = lỗi âm thầm:** sửa đúng nội dung mà IDE đọc file khác hoặc bỏ qua key lạ — "chẳng có gì xảy ra" dù config trông đúng.
+> **Sai chỗ/sai key = lỗi âm thầm:** sửa đúng nội dung mà IDE đọc file khác hoặc bỏ qua key lạ — "chẳng có gì xảy ra" dù config trông đúng. · 📄 [VS Code Docs: MCP configuration file](https://code.visualstudio.com/docs/agents/reference/mcp-configuration#configuration-file)
 
 ## 2. stdio vs SSE/HTTP khác nhau gì?
 
@@ -34,7 +34,7 @@ Ví von: sai tên file hoặc sai key giống gửi thư ghi sai địa chỉ �
 
 > 📄 **Code ví dụ:** [`./examples/04-mcp-faq/stdio-vs-sse-http-khac-nhau-gi.sh`](./examples/04-mcp-faq/stdio-vs-sse-http-khac-nhau-gi.sh)
 
-> **Chọn sai transport là lỗi âm thầm:** MCP panel báo `disconnected` mà chẳng rõ lý do. 1 mình vọc → stdio; team dùng chung / server nặng → SSE.
+> **Chọn sai transport là lỗi âm thầm:** MCP panel báo `disconnected` mà chẳng rõ lý do. 1 mình vọc → stdio; team dùng chung / server nặng → SSE. · 📄 [VS Code Docs: Configuration structure](https://code.visualstudio.com/docs/agents/reference/mcp-configuration#configuration-structure)
 
 ## 3. Auth cho MCP server thế nào?
 
@@ -48,13 +48,13 @@ Ví von: sai tên file hoặc sai key giống gửi thư ghi sai địa chỉ �
 
 > **Cách đọc bảng này:** cột **An toàn** xếp từ chỗ được phép (cao) tới chỗ tuyệt đối không được (CẤM) — nguyên tắc chung: token không bao giờ nằm trong file được commit lên git.
 
-> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/auth-cho-mcp-server-the-nao.sh`](./examples/04-mcp-faq/auth-cho-mcp-server-the-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/auth-cho-mcp-server-the-nao.sh`](./examples/04-mcp-faq/auth-cho-mcp-server-the-nao.sh) · 📄 [VS Code Docs: Authentication & secrets](https://code.visualstudio.com/docs/agents/reference/mcp-configuration#authentication-and-secrets)
 
 ## 4. Tools không hiện trong Copilot — debug theo thứ tự nào?
 
 **Trả lời 1 câu:** 5 bước đừng nhảy cóc: validate JSON → check key (`servers` cho `.vscode/mcp.json`, `mcpServers` cho `.mcp.json`) → test process → reload IDE → đọc log MCP panel.
 
-> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/tools-khong-hien-trong-copilot-debug-theo.sh`](./examples/04-mcp-faq/tools-khong-hien-trong-copilot-debug-theo.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/tools-khong-hien-trong-copilot-debug-theo.sh`](./examples/04-mcp-faq/tools-khong-hien-trong-copilot-debug-theo.sh) · 📄 [VS Code Docs: If the server does not work](https://code.visualstudio.com/docs/agent-customization/mcp-servers#if-the-server-does-not-work)
 
 Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS Code → View → Output → chọn MCP server đó.
 
@@ -66,7 +66,7 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 
 > 📄 **Code ví dụ:** [`./examples/04-mcp-faq/secrets-trong-mcp-placeholders-viet-sao.sh`](./examples/04-mcp-faq/secrets-trong-mcp-placeholders-viet-sao.sh)
 
-> Không có ngoại lệ "tạm paste rồi xóa sau": git history giữ mãi, bot quét GitHub tìm thấy trong vài phút. Đã lỡ commit → `git rm` + **xoay token ngay**.
+> Không có ngoại lệ "tạm paste rồi xóa sau": git history giữ mãi, bot quét GitHub tìm thấy trong vài phút. Đã lỡ commit → `git rm` + **xoay token ngay**. · 📄 [VS Code Docs: Input variables for sensitive data](https://code.visualstudio.com/docs/agents/reference/mcp-configuration#input-variables-for-sensitive-data)
 
 ## 6. MCP postgres trỏ prod — làm sao không phá data?
 
@@ -76,13 +76,13 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 
 > 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-postgres-tro-prod-lam-sao-khong.sh`](./examples/04-mcp-faq/mcp-postgres-tro-prod-lam-sao-khong.sh)
 
-> Cần migrate → làm tay bằng migration tool, không qua MCP.
+> Cần migrate → làm tay bằng migration tool, không qua MCP. · 📄 [VS Code Docs: MCP server sandboxing](https://code.visualstudio.com/docs/agents/run/security#mcp-server-sandboxing)
 
 ## 7. MCP GitHub server cần scope token nào?
 
 **Trả lời 1 câu:** Token tối thiểu làm được việc — fine-grained PAT chỉ repo cần (read-only nếu chỉ đọc), tạo PAT riêng cho MCP, đừng reuse PAT deploy.
 
-> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-github-server-can-scope-token-nao.sh`](./examples/04-mcp-faq/mcp-github-server-can-scope-token-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-github-server-can-scope-token-nao.sh`](./examples/04-mcp-faq/mcp-github-server-can-scope-token-nao.sh) · 📄 [GitHub Docs: Use the GitHub MCP server](https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/copilot-for-common-tasks/use-the-github-mcp-server)
 
 ## 8. MCP Playwright (browser) dùng khi nào?
 
@@ -92,7 +92,7 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 
 > 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-playwright-browser-dung-khi-nao.sh`](./examples/04-mcp-faq/mcp-playwright-browser-dung-khi-nao.sh)
 
-> Thiếu browser → `npx playwright install chromium`; boot app local trước; làm backend thuần thì tắt server cho nhẹ máy.
+> Thiếu browser → `npx playwright install chromium`; boot app local trước; làm backend thuần thì tắt server cho nhẹ máy. · 📄 [VS Code Docs: Use browser tools](https://code.visualstudio.com/docs/agents/run/tools#use-browser-tools)
 
 ## 9. Nhiều MCP servers cùng lúc — quản lý sao cho nhẹ?
 
@@ -100,7 +100,7 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 
 > 📄 **Code ví dụ:** [`./examples/04-mcp-faq/nhieu-mcp-servers-cung-luc-quan-ly.sh`](./examples/04-mcp-faq/nhieu-mcp-servers-cung-luc-quan-ly.sh)
 
-> Ngày làm backend → `github + postgres`; ngày làm UI → thêm `playwright`. Không bật cả 3 trừ khi cần.
+> Ngày làm backend → `github + postgres`; ngày làm UI → thêm `playwright`. Không bật cả 3 trừ khi cần. · 📄 [VS Code Docs: Control or remove a server](https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#control-or-remove-a-server)
 
 ## 10. MCP log đọc ở đâu, lỗi nào hay gặp?
 
@@ -113,7 +113,7 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 | `ECONNREFUSED` | SSE server chưa chạy | Start server / check URL |
 | `JSON parse error` | `mcp.json` sai cú pháp | Validate JSON (câu 4) |
 
-> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-log-oc-o-au-loi-nao.sh`](./examples/04-mcp-faq/mcp-log-oc-o-au-loi-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-log-oc-o-au-loi-nao.sh`](./examples/04-mcp-faq/mcp-log-oc-o-au-loi-nao.sh) · 📄 [VS Code Docs: View server output](https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#view-server-output)
 
 ---
 
@@ -131,4 +131,4 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 
 Tham khảo chéo: [bài 03](03-modes-permissions.md) (tool approval) · [bài 08](08-loi-thuong-gap-troubleshooting.md) (lỗi tổng hợp) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (secrets + audit) · [../templates/.mcp.json](../templates/.mcp.json) (mẫu Copilot harness) · [../templates/.vscode/mcp.json](../templates/.vscode/mcp.json) (mẫu Local harness, copy ngay).
 
-> **Tóm gọn 1 câu:** MCP là hệ dây điện nối Copilot với thế giới ngoài — `mcp.json` là bản vẽ, token là thẻ từ, log Output là đồng hồ đo điện; hỏng chỗ nào tra đúng chỗ đó theo thứ tự 5 bước.
+> **Tóm gọn 1 câu:** MCP là hệ dây điện nối Copilot với thế giới ngoài — `mcp.json` là bản vẽ, token là thẻ từ, log Output là đồng hồ đo điện; hỏng chỗ nào tra đúng chỗ đó theo thứ tự 5 bước. · 📄 [GitHub Docs: Enterprise MCP allowlist](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-mcp-usage/configure-enterprise-allowlist)

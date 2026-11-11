@@ -46,7 +46,7 @@ Nguồn tên model + availability: [docs — supported models](https://docs.gith
 2. **Model to không thắng mọi việc.** Khớp *tính chất* việc với *thế mạnh* model: context dài → Gemini; suy luận từng bước → o1. Giao việc 15 credit cho model 400 credit không làm kết quả "xịn hơn", chỉ đắt hơn.
 3. **Model mới không mặc định đắt hơn.** Dòng base/LTS giá thường thấp hơn dòng "tên + version" cùng nhà, và `auto` còn được giảm giá so với đích danh (§5) — bảng này lỗi thời theo quý, công thức §4 thì không.
 
----
+--- · 📄 [VS Code Docs: Tokens & context limits](https://code.visualstudio.com/docs/agents/concepts/language-models#tokens)
 
 ## 4. AI Credits — bản đồ chi phí
 
@@ -108,7 +108,7 @@ Với **Copilot CLI**, docs dùng hai khóa trong `~/.copilot/config.json`:
 - Máy có Ollama chạy local: model thường **tự hiện diện** trong `/model`, không cần khai — gõ `/model` kiểm tra trước khi sửa config.
 - Custom provider nâng cao còn có `~/.copilot/providers.json`; thêm model trên VS Code / web / cloud agent làm khác nhau ở đâu — xem [14-5](./examples/14-models-chon-model-dung/mcp-add-vscode-cli-cloud.md).
 
----
+--- · 📄 [VS Code Docs: Customize the model picker](https://code.visualstudio.com/docs/agent-customization/language-models#customize-the-model-picker)
 
 ## 8. Ba quyết định nhanh
 
@@ -116,7 +116,7 @@ Với **Copilot CLI**, docs dùng hai khóa trong `~/.copilot/config.json`:
 2. **Việc khớp thế mạnh một model cụ thể** (bảng §2) → gọi đích danh, trả giá niêm yết, đổi lấy kết quả đúng dạng.
 3. **Cần kết quả "gần như đúng ngay lần đầu"** — merge blocker, phân tích ngược — → model mạnh + effort high, chấp nhận credits bằng 3–4 lần dòng trung bình của §2; xong việc quay về 1.
 
----
+--- · 📄 [VS Code Docs: Compare Model Results](https://code.visualstudio.com/docs/agents/run/compare-models)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -129,7 +129,7 @@ Với **Copilot CLI**, docs dùng hai khóa trong `~/.copilot/config.json`:
 | Đọc `additional_usage: {limit: 12}` là 12 credits | Cả hai khóa budget đều USD; 12 credits chỉ là $0,12 | §6 |
 | Mặc định model mới = đắt hơn | Base/LTS và auto có thể rẻ hơn model tên + version cùng nhà; so bằng công thức §4 | §4 |
 
----
+--- · 📄 [VS Code Docs: Models missing in picker](https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#not-all-models-are-available-in-the-language-model-picker)
 
 ## Best practices
 
@@ -139,7 +139,7 @@ Với **Copilot CLI**, docs dùng hai khóa trong `~/.copilot/config.json`:
 4. Thử model lạ → BYOK; việc sản xuất chính → model trong gói cho hóa đơn gọn một chỗ.
 5. Đầu mỗi quý: mở trang model list tìm chữ *retirement* — pin nào sắp bay thì đổi trước khi nó tự rơi về auto.
 
----
+--- · 📄 [VS Code Docs: Choose the right model](https://code.visualstudio.com/docs/agents/best-practices#choose-the-right-model)
 
 ## Bài tập
 

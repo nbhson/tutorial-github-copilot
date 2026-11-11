@@ -98,7 +98,7 @@ Repo này viết cho Copilot, nhưng nếu bạn đã quen Claude Code thì chuy
 ## Phiên bản & nguồn
 
 - GitHub Copilot **(2026)**. Kiểm tra Copilot CLI bằng `copilot --version`; extension cộng đồng `gh copilot` xem bằng `gh extension list`.
-- Docs gốc: https://docs.github.com/copilot — VS Code Copilot: https://code.visualstudio.com/docs/setup/copilot
+- Docs gốc: https://docs.github.com/en/copilot — VS Code Copilot: https://code.visualstudio.com/docs/setup/copilot
 - **Cập nhật sự kiện 2026-10-16** (verify `github.blog/changelog` + docs):
   - Model mới: `Gemini 4 Argon` GA 13/10 (Pro+/Max/Business/Enterprise, mạnh nhất ở CLI) · `Claude Haiku 5.5` GA 07/10 (Pro→Enterprise, subagent/quick-edit rẻ-nhanh) · `HydraFusion Max` mới 14/10 (research preview, pool Opus 5.5 + GPT-6 Astra/6.1 Sol/6 Luna).
   - Sắp gỡ **19/10/2026**: Gemini 3.7 Flash, GPT-5.5, GPT-5.4 (+mini), GPT-5 mini, Grok 4.5 → thay bằng 3.8 Flash / GPT-5.6 Sol/Luna / Grok 4.7.

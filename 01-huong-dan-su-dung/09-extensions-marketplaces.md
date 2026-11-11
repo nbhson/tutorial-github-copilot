@@ -37,13 +37,13 @@ Ba cái bẫy tên đã làm hỏng bài này bản cũ:
 
 > **Vì sao quan trọng?** Đúng tầng = đúng file = đúng harness. Cấu hình để sai tầng không báo lỗi to — nó chỉ **im lặng không chạy** (vd: MCP khai trong `.vscode/mcp.json` thì session Copilot harness không thấy).
 > **Nếu làm sai?** Team "cài plugin" bằng cách install extension editor → skills không vào agent; hoặc đi tìm "Copilot Extension" theo tutorial 2024 → không tồn tại nữa.
-> **Tóm gọn 1 câu:** Trước khi cài, hỏi ba câu: *editor hay agent? file nào đọc config này? harness nào đang chạy?*
+> **Tóm gọn 1 câu:** Trước khi cài, hỏi ba câu: *editor hay agent? file nào đọc config này? harness nào đang chạy?* · 📄 [VS Code Docs: What plugins provide](https://code.visualstudio.com/docs/agent-customization/agent-plugins#what-plugins-provide)
 
 ## 2. ⚠️ "Copilot Extensions" — cái tên chỉ còn trong tài liệu cũ
 
 **Copilot Extensions** (GitHub App do bên thứ ba viết, thêm capability vào chat) bị khai tử theo lộ trình: deprecated 24/09/2025, **retired 10/11/2025** ([thông báo gốc](https://github.blog/changelog/2025-09-24-deprecate-github-copilot-extensions-github-apps/)). Product GA 19/02/2025 chỉ là mốc lịch sử; không còn marketplace để cài. Người dùng được chuyển sang đường tương đương: **Agent Plugins (bài 17), MCP (bài 08), connectors** — còn prompt/chat kiểu cũ đang deprecated ở Local xem [`commands/local/model-agent/participants/README.md`](commands/local/model-agent/participants/README.md).
 
-**Một ngoại lệ để không loạn:** menu `/extensions` trong *Copilot CLI* là thứ khác — CLI extensions dạng module JavaScript (experimental), không phải "Copilot Extensions" đã retired.
+**Một ngoại lệ để không loạn:** menu `/extensions` trong *Copilot CLI* là thứ khác — CLI extensions dạng module JavaScript (experimental), không phải "Copilot Extensions" đã retired. · 📄 [GitHub Docs: Copilot Extensions (concept)](https://docs.github.com/en/copilot/concepts/customizations/extensions)
 
 ## 3. Tầng 1 — extension pack cho VS Code: commit "cả team dùng đồ này"
 
@@ -70,7 +70,7 @@ Cài + verify bằng CLI (`code --install-extension <publisher.name>` → `code 
 **Extension host là gì:** docs định nghĩa *"the server that runs your UI, extensions, and other pieces"* — process chạy extensions; host chết thì debug/terminal/extensions liệt, không phải "Copilot lỗi". Đây cũng là lý do pack nên **ít mà chất**: mở rộng là thêm process vào máy mỗi dev.
 
 > **Vì sao quan trọng?** Đây là cách rẻ nhất để một người setup hộ cả team: file 10 dòng commit một lần, không còn cảnh "sao máy anh chạy được mà máy em không".
-> **Nếu làm sai?** Pack 30 extension "cho đủ" → mỗi dev tải thêm 30 extension về máy và trả giá tốc độ mà không ai giải trình được từng cái để làm gì.
+> **Nếu làm sai?** Pack 30 extension "cho đủ" → mỗi dev tải thêm 30 extension về máy và trả giá tốc độ mà không ai giải trình được từng cái để làm gì. · 📄 [GitHub Docs: Copilot extensions](https://docs.github.com/en/copilot/concepts/customizations/extensions)
 
 ### 3.2 Pin version — mặc định auto-update, và hệ quả
 
@@ -97,17 +97,17 @@ Chỉ một lệnh: `copilot plugin marketplace add OWNER/REPO` — repo đó ph
 - Slash `/plugin …` chỉ tồn tại trong session Copilot harness; Local harness không chạy Agent Plugins.
 
 > **Vì sao quan trọng?** Marketplace nội bộ = cách phát đồ nghề cho cả org không cần "xin chợ": một Git repo thường + code review + pin sha là đủ nguồn tin cậy.
-> **Nếu làm sai?** Cài plugin từ repo lạ không đọc manifest — plugin chứa hooks/MCP nghĩa là **code chạy trên máy bạn**; đọc "hộp" trước khi lắp (best practice bài 16–17).
+> **Nếu làm sai?** Cài plugin từ repo lạ không đọc manifest — plugin chứa hooks/MCP nghĩa là **code chạy trên máy bạn**; đọc "hộp" trước khi lắp (best practice bài 16–17). · 📄 [VS Code Docs: Configure plugin marketplaces](https://code.visualstudio.com/docs/agent-customization/agent-plugins#configure-marketplaces-in-settings)
 
 ## 5. Tầng 3 — MCP và connectors: agent chạm hệ thống ngoài
 
-Bài này không dạy MCP (đồ của **bài 08**); chỉ chốt vị trí trong bản đồ: **MCP server** bạn tự nuôi và khai (`.mcp.json` root repo key `mcpServers` · `~/.copilot/mcp-config.json` · `.vscode/mcp.json` là của **Local harness**, key `servers` — Copilot harness không đọc nó: [`commands/local/system-knowledge/vscode-mcp-json/README.md`](commands/local/system-knowledge/vscode-mcp-json/README.md)); **connector** là MCP do GitHub host — bạn chỉ bấm Connect, không có file cấu hình, và nó chỉ phục vụ **Copilot harness**: dấu hiệu nhận là nhãn `Connector: <name>` trong MCP Servers ([`commands/copilot/system-knowledge/connector/README.md`](commands/copilot/system-knowledge/connector/README.md)).
+Bài này không dạy MCP (đồ của **bài 08**); chỉ chốt vị trí trong bản đồ: **MCP server** bạn tự nuôi và khai (`.mcp.json` root repo key `mcpServers` · `~/.copilot/mcp-config.json` · `.vscode/mcp.json` là của **Local harness**, key `servers` — Copilot harness không đọc nó: [`commands/local/system-knowledge/vscode-mcp-json/README.md`](commands/local/system-knowledge/vscode-mcp-json/README.md)); **connector** là MCP do GitHub host — bạn chỉ bấm Connect, không có file cấu hình, và nó chỉ phục vụ **Copilot harness**: dấu hiệu nhận là nhãn `Connector: <name>` trong MCP Servers ([`commands/copilot/system-knowledge/connector/README.md`](commands/copilot/system-knowledge/connector/README.md)). · 📄 [VS Code Docs: Connect a service](https://code.visualstudio.com/docs/agent-customization/copilot-connectors#connect-a-service)
 
 ## 6. Repo template — sinh repo mới là mang theo cả pack
 
 Tech lead dựng một repo chuẩn (pack §3 + instructions + skills + hooks + workflows), bật **Settings → General → Template repository**; mỗi repo mới `gh repo create <tên> --template <org>/<template-repo>` là mang nguyên bộ. Điểm hay: pack đi theo tự nhiên, không ai phải nhớ cài gì. Demo + verify: [`./examples/09-extensions-marketplaces/repo-template.sh`](./examples/09-extensions-marketplaces/repo-template.sh).
 
-Lưu ý portability khi template chứa đồ nghề agent: skill nằm trong `.github/skills/` (dạng `*.prompt.md` là format cũ — port trước khi đưa vào template, công thức ở bài 05); workflow/`extensions.json` thì mang sang y nguyên.
+Lưu ý portability khi template chứa đồ nghề agent: skill nằm trong `.github/skills/` (dạng `*.prompt.md` là format cũ — port trước khi đưa vào template, công thức ở bài 05); workflow/`extensions.json` thì mang sang y nguyên. · 📄 [VS Code Docs: Share the configuration](https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-4-share-the-configuration)
 
 ## 7. Org gate — admin khoá tầng nào bằng gì (chi tiết: bài 16)
 
@@ -127,14 +127,14 @@ Nguyên tắc chung: settings do dev giữ thì dev đổi được; **muốn "c
 | Để auto-update mặc định chạy giữa sprint | extension/plugin đổi hành vi lúc nào không hay | pin version (`@TAG`/sha, `COPILOT_AUTO_UPDATE=false`), nâng cuối sprint sau test |
 | Tưởng `copilot-plugins` built-in như `awesome-copilot` | lệnh cài fail vì chưa add nguồn | `copilot plugin marketplace add github/copilot-plugins` trước khi cài |
 
-📄 Ba file mà bảng này nhắc tới: [`./examples/09-extensions-marketplaces/vs-code-pack-settings.jsonc`](./examples/09-extensions-marketplaces/vs-code-pack-settings.jsonc) (pack) · [`./examples/09-extensions-marketplaces/marketplace-json-pin-sha.json`](./examples/09-extensions-marketplaces/marketplace-json-pin-sha.json) (marketplace) · [`examples/01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (`.vscode/mcp.json` của Local).
+📄 Ba file mà bảng này nhắc tới: [`./examples/09-extensions-marketplaces/vs-code-pack-settings.jsonc`](./examples/09-extensions-marketplaces/vs-code-pack-settings.jsonc) (pack) · [`./examples/09-extensions-marketplaces/marketplace-json-pin-sha.json`](./examples/09-extensions-marketplaces/marketplace-json-pin-sha.json) (marketplace) · [`examples/01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (`.vscode/mcp.json` của Local). · 📄 [VS Code Docs: Repair marketplace installations](https://code.visualstudio.com/docs/agent-customization/overview#repair-marketplace-installations)
 
 ## Best practices (kèm vì sao)
 
 - **Pack ≤10 extension, mỗi cái có lý do ghi cạnh ID.** *Vì sao:* mỗi extension là code chạy trên máy người cài (extension host); pack "cho đủ" làm chậm mọi người mà không ai giải trình được.
 - **Chung từ 3 repo trở lên → đưa vào pack/template, đừng dạy miệng.** *Ngưỡng 3 repo:* lần thứ 3 giải thích "cài gì" là lúc file `.vscode/extensions.json` đáng được commit hơn một tin nhắn.
 - **Đọc manifest trước khi cài plugin từ nguồn lạ.** *Vì sao:* plugin có thể mang hooks/MCP = lệnh chạy trên máy bạn; publisher + repo source là hai thứ kiểm được bằng 5 phút.
-- **Khoá tầng ở đúng tầng:** auto-update tắt bằng setting, nguồn plugin chặn bằng `strictKnownMarketplaces`, không "nhắc nhau". *Vì sao:* cái gì dev đổi được thì không phải chính sách.
+- **Khoá tầng ở đúng tầng:** auto-update tắt bằng setting, nguồn plugin chặn bằng `strictKnownMarketplaces`, không "nhắc nhau". *Vì sao:* cái gì dev đổi được thì không phải chính sách. · 📄 [VS Code Docs: Discover and install existing customizations](https://code.visualstudio.com/docs/agent-customization/overview#discover-and-install-existing-customizations-preview)
 
 ## Bài tập
 

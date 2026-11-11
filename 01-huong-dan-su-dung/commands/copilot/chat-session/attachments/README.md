@@ -5,7 +5,7 @@
 
 ## 1 câu nôm na
 
-Kẹp tài liệu vào câu hỏi — hỏi về file nào thì kẹp file đó vào: gõ `#` để gọi context items (file, folder, symbol, terminal output, source control changes...), bấm **Add Context** (`+`) mở picker, hoặc kéo-thả file/ảnh vào Chat input. Câu hỏi xuyên file ("hàm này ai gọi") cứ hỏi thẳng agent — nó có sẵn công cụ search + đọc file. **`@workspace`, `@terminal`... là chat participants đã deprecated, không chạy trong Copilot harness.**
+Kẹp tài liệu vào câu hỏi — hỏi về file nào thì kẹp file đó vào: gõ `#` để gọi context items (file, folder, symbol, terminal output, source control changes...), bấm **Add Context** (`+`) mở picker, hoặc kéo-thả file/ảnh vào Chat input. Câu hỏi xuyên file ("hàm này ai gọi") cứ hỏi thẳng agent — nó có sẵn công cụ search + đọc file. **`@workspace`, `@terminal`... là chat participants đã deprecated, không chạy trong Copilot harness.** · 📄 [VS Code Docs: Sessions (concept)](https://code.visualstudio.com/docs/agents/concepts/sessions)
 
 ## Vì sao dùng Attach / #file?
 
@@ -15,12 +15,12 @@ Kẹp tài liệu vào câu hỏi — hỏi về file nào thì kẹp file đó 
 - **Ít token hơn** — đưa 1–3 file thay vì cả repo.
 - **Ít sửa sai hơn** — scope càng hẹp, diff càng đúng chỗ.
 
-**Nếu làm sai thì sao?** Hai cực đều hại: (1) quên attach nên model đoán mò; (2) attach cả repo nên chậm và tốn token. Thêm rủi ro âm thầm: attach file chứa token mà không soát.
+**Nếu làm sai thì sao?** Hai cực đều hại: (1) quên attach nên model đoán mò; (2) attach cả repo nên chậm và tốn token. Thêm rủi ro âm thầm: attach file chứa token mà không soát. · 📄 [VS Code Docs: Sessions (concept)](https://code.visualstudio.com/docs/agents/concepts/sessions)
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** mọi prompt về code; muốn model đọc đúng file thay vì đoán; cần đính kèm ảnh lỗi UI, log, file ngoài workspace (Add Context → Files → Attach).
-- **ĐỪNG dùng khi:** câu hỏi hoàn toàn ngoài code (định nghĩa chung, cú pháp ngôn ngữ) — attach chỉ thêm nhiễu.
+- **ĐỪNG dùng khi:** câu hỏi hoàn toàn ngoài code (định nghĩa chung, cú pháp ngôn ngữ) — attach chỉ thêm nhiễu. · 📄 [VS Code Docs: Pick the right tool](https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task)
 
 | Cách | Hỏi được gì | Khi nào dùng |
 |---|---|---|
@@ -33,13 +33,13 @@ Kẹp tài liệu vào câu hỏi — hỏi về file nào thì kẹp file đó 
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
-> Kiểm tra: gõ `#` trong ô Chat xem có danh sách context items không; hoặc bấm **Add Context** (`+`). Thiếu → kiểm tra extension Copilot Chat đã bật.
+> Kiểm tra: gõ `#` trong ô Chat xem có danh sách context items không; hoặc bấm **Add Context** (`+`). Thiếu → kiểm tra extension Copilot Chat đã bật. · 📄 [VS Code Docs: Add files as context](https://code.visualstudio.com/docs/chat/copilot-chat-context#add-files-as-context)
 
 ## Ví dụ thật
 
 Nghiệp vụ: bạn cần biết field `customerId` được đọc/ghi ở đâu trong repo trước khi đổi kiểu dữ liệu của nó, và muốn model xác nhận đã đọc đúng file trung tâm.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Prompt examples](https://code.visualstudio.com/docs/agents/guides/prompt-examples)
 
 **Kết quả mong đợi:** Model liệt kê đúng file đã đọc + trả lời trúng scope; không sửa sai file.
 
@@ -53,11 +53,13 @@ Nghiệp vụ: bạn cần biết field `customerId` được đọc/ghi ở đ�
 
 **✅ ĐÚNG — gắn đúng 1–3 context item liên quan nhất, chỉ rõ muốn model đọc gì:**
 
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh) · 📄 [VS Code Docs: Choose a troubleshooting path](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path)
 
 **Bài học:** Scope vừa đủ là 1–3 mục liên quan nhất. Rộng quá tốn token, hẹp quá model thiếu dữ liệu; `@`-participants đã về hưu — dùng `#` và hỏi thẳng agent.
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: Reset conversation context](https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#reset-conversation-context)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
@@ -65,25 +67,25 @@ Nghiệp vụ: bạn cần biết field `customerId` được đọc/ghi ở đ�
 | Quên attach → model đoán mò | Tưởng model tự đọc cả repo | Luôn gắn `#file`/`#symbol` hoặc nêu scope rõ khi hỏi agent |
 | Gõ `@workspace` không ai trả lời | Participant đã deprecated trong Copilot harness | Hỏi thẳng agent + `#`-mentions; vì sao: [participants](../../../local/model-agent/participants/README.md) |
 | Attach file chứa secret | Soát không kỹ | Kiểm tra file trước khi attach/share/export |
-
 ## So sánh với Claude Code
+
+📄 [VS Code Docs: Agent Harnesses](https://code.visualstudio.com/docs/agents/concepts/agent-harnesses)
 
 | Việc | Copilot (`Attach / #file`) | Claude Code | Ghi chú |
 |---|---|---|---|
 | Đưa file vào context | `#file`, `#symbol`, kéo-thả, Add Context | `@file` hoặc để agent tự đọc | Cùng tư tưởng: đưa đúng file, đừng cả repo |
 | Hỏi quan hệ xuyên file | Hỏi thẳng agent — nó có tool search/đọc file | Agent tự search trong repo | Copilot không cần `@participant` |
-
 ## Best practices (kèm "vì sao")
 
 - **Mỗi prompt code đều phải có scope.** *Vì sao?* Model không tự thấy repo; thiếu scope là nguyên nhân số 1 của "sửa sai file".
 - **Giữ 1–3 mục, không attach cả repo.** *Vì sao?* Context rộng làm chậm và loãng trọng tâm.
-- **Soát secret trước khi attach.** *Vì sao?* File attach có thể đi vào export/share; kiểm trước rẻ hơn gỡ sau.
+- **Soát secret trước khi attach.** *Vì sao?* File attach có thể đi vào export/share; kiểm trước rẻ hơn gỡ sau. · 📄 [VS Code Docs: Exclude files from chat context](https://code.visualstudio.com/docs/agents/guides/optimize-usage#exclude-files-from-chat-context)
 
 ## Bài tập nhỏ
 
 1. **(3 phút)** Hỏi cùng một câu về `src/auth/login.ts` hai lần: một lần không attach, một lần `#file` — so sánh độ trúng.
 2. **(5 phút)** Hỏi agent "hàm X được gọi ở đâu" không attach, rồi hỏi lại khi đã gắn `#file` hai chỗ nghi ngờ; so số bước model phải tự dò.
-3. **(5 phút)** Kéo-thả một screenshot UI vào Chat và hỏi "component nào render khối này"; kiểm model đọc đúng ảnh.
+3. **(5 phút)** Kéo-thả một screenshot UI vào Chat và hỏi "component nào render khối này"; kiểm model đọc đúng ảnh. · 📄 [VS Code Docs: Add files as context](https://code.visualstudio.com/docs/chat/copilot-chat-context#add-files-as-context)
 
 ## Tham khảo
 

@@ -35,7 +35,7 @@ Hai giới hạn docs VS Code ghi rõ: instructions **không đảm bảo model 
 
 > **Vì sao quan trọng?** Luật đúng thì mọi task sau tự đúng không phải nhắc lại; luật sai thì mọi task sau sai theo — cả hai trường hợp bạn đều trả tiền ở mỗi turn.
 > **Nếu làm sai?** Không có instructions: agent tự đoán lệnh test + style (và đoán sai). Nhét 500 dòng wiki: trả credits cho rác mỗi turn, luật thật chìm mất.
-> **Tóm gọn 1 câu:** File rẻ nhất và lãi nhất bạn từng viết — một lần dọn, mọi task sau đỡ phải giải thích lại.
+> **Tóm gọn 1 câu:** File rẻ nhất và lãi nhất bạn từng viết — một lần dọn, mọi task sau đỡ phải giải thích lại. · 📄 [VS Code Docs: How customizations combine](https://code.visualstudio.com/docs/agents/concepts/customization#how-customizations-combine)
 
 ## 2. Ba loại file — và một mẫu tối thiểu
 
@@ -59,7 +59,7 @@ Docs VS Code khuyên bắt đầu từ **một quy ước mà agent hay bỏ qu�
 
 Bản hoàn chỉnh cho hai loại project phổ biến (lệnh đã verify — thay project của bạn vào): 📄 [`./examples/03-instructions-memory-rules/mau-instructions-backend.md`](./examples/03-instructions-memory-rules/mau-instructions-backend.md) (Node + Express, kèm biến thể Python) · 📄 [`./examples/03-instructions-memory-rules/mau-instructions-frontend.md`](./examples/03-instructions-memory-rules/mau-instructions-frontend.md) (Next.js + Prisma) · 📄 tạo đủ 3 loại file trong 1 phút: [`./examples/00-tong-quan-copilot/loai-file-phan-biet-va-at.sh`](./examples/00-tong-quan-copilot/loai-file-phan-biet-va-at.sh)
 
-> **Tóm gọn 1 câu:** Luật chung để `copilot-instructions.md`, luật theo thư mục để `*.instructions.md`, luật đa-tool để `AGENTS.md`.
+> **Tóm gọn 1 câu:** Luật chung để `copilot-instructions.md`, luật theo thư mục để `*.instructions.md`, luật đa-tool để `AGENTS.md`. · 📄 [VS Code Docs: Formats & locations](https://code.visualstudio.com/docs/agents/reference/custom-instructions-reference#supported-formats-and-locations)
 
 ## 3. Personal, Repo, Org — nạp thế nào, ai phân xử
 
@@ -76,7 +76,7 @@ Khác với luật cũ "file cao nhất thắng" hay dạy trước đây:
 
 Verify file đã nạp (docs VS Code, đúng thứ tự): **1) `Chat: Open Customizations` → tab Instructions** phải liệt kê file (kiểm *discovery*) → **2) chat mới** xin một việc nhỏ, không nhắc lại rule trong prompt → **3) giãn phần References**: thấy `.github/copilot-instructions.md` = đã được *đưa vào*. Vẫn làm sai = rule mơ hồ/mâu thuẫn, không phải "chưa nạp".
 
-> **Tóm gọn 1 câu:** Đừng tin "rule đã có" chỉ vì bạn đã viết ra — tin danh sách trong Customizations editor và References của câu trả lời.
+> **Tóm gọn 1 câu:** Đừng tin "rule đã có" chỉ vì bạn đã viết ra — tin danh sách trong Customizations editor và References của câu trả lời. · 📄 [VS Code Docs: Discovery & activation](https://code.visualstudio.com/docs/agents/reference/custom-instructions-reference#discovery-and-activation)
 
 ## 4. Rules theo đường dẫn: `applyTo` và `excludeAgent`
 
@@ -105,7 +105,7 @@ Ba sự thật docs GitHub: (1) trên **GitHub.com**, path-specific hiện **ch�
 
 Giới hạn thực hành: ≤8 file, mỗi file <50 dòng. Verify: sửa file trong subtree rồi hỏi "rules nào đang áp cho folder này?" → phải kể đúng nội dung; sửa file ngoài subtree mà rule vẫn đọc = glob quá rộng.
 
-> **Tóm gọn 1 câu:** Glob hẹp nhất có thể — rule chỉ nạp đúng lúc cần thì vừa đỡ tốn credits vừa đỡ áp sai chỗ. Bản hoàn chỉnh để copy (kèm 2 bước verify): 📄 [`./examples/03-instructions-memory-rules/mau-python-rules.instructions.md`](./examples/03-instructions-memory-rules/mau-python-rules.instructions.md).
+> **Tóm gọn 1 câu:** Glob hẹp nhất có thể — rule chỉ nạp đúng lúc cần thì vừa đỡ tốn credits vừa đỡ áp sai chỗ. Bản hoàn chỉnh để copy (kèm 2 bước verify): 📄 [`./examples/03-instructions-memory-rules/mau-python-rules.instructions.md`](./examples/03-instructions-memory-rules/mau-python-rules.instructions.md). · 📄 [VS Code Docs: File patterns (applyTo)](https://code.visualstudio.com/docs/agents/reference/custom-instructions-reference#file-patterns)
 
 ## 5. `AGENTS.md` — viết một lần, nhiều agent đọc
 
@@ -117,7 +117,7 @@ Giới hạn thực hành: ≤8 file, mỗi file <50 dòng. Verify: sửa file t
 
 Mỗi lần đổi toolchain: `diff <(sort AGENTS.md) <(sort .github/copilot-instructions.md) | head -30` — trùng >50% thì gộp về một nơi (script đầy đủ: 📄 [`./examples/03-instructions-memory-rules/agents-md-portability-viet-1-lan-chay.sh`](./examples/03-instructions-memory-rules/agents-md-portability-viet-1-lan-chay.sh)).
 
-> **Tóm gọn 1 câu:** Thứ chung để `AGENTS.md`, thứ riêng để file riêng từng tool — mỗi sự thật chỉ viết một nơi.
+> **Tóm gọn 1 câu:** Thứ chung để `AGENTS.md`, thứ riêng để file riêng từng tool — mỗi sự thật chỉ viết một nơi. · 📄 [VS Code Docs: Instruction formats & settings](https://code.visualstudio.com/docs/agent-customization/custom-instructions#instruction-formats-and-settings)
 
 ## 6. Front-load & chống phình
 
@@ -131,7 +131,7 @@ Model đọc instructions từ trên xuống và chú ý phần đầu hơn ph�
 | Schema/format dài (endpoints, error codes) | file `docs/` + 1 dòng link — link **không đảm bảo** nội dung tới được model, agent mở khi cần |
 | Quy ước chung nhiều repo trong org | organization instructions qua settings UI (mục 3) |
 
-> **Tóm gọn 1 câu:** Instructions chỉ giữ phần dùng mỗi ngày; phần nặng đẩy sang skill, docs, agent.
+> **Tóm gọn 1 câu:** Instructions chỉ giữ phần dùng mỗi ngày; phần nặng đẩy sang skill, docs, agent. · 📄 [VS Code Docs: Write effective instructions](https://code.visualstudio.com/docs/agent-customization/custom-instructions#write-effective-instructions)
 
 ## 7. Copilot Memory — phần bạn không phải viết vào file nữa
 
@@ -142,7 +142,7 @@ Instructions là **luật bạn chủ động viết và review**; **Copilot Mem
 - **Hai chi phí phải biết:** memory nạp vào context **tính vào token → AI credits**; fact để đó mà không dùng sẽ **hết hạn** (docs GitHub: mặc định 90 ngày, org/enterprise chỉnh 7–180; docs VS Code ghi 28 ngày — xem `plan-update/07`). Fork **không** copy memory, fact không gộp toàn org.
 - **Bản experimental cho team thích file hơn cloud:** `chat.copilot.memory.local.enabled` lưu repository facts vào `.github/copilot-memories.jsonl` trong working tree — **không** có user scope, **không** bị policy GitHub che chở, và **dễ bị commit kèm secret** → review file này như review instructions.
 
-> **Vì sao quan trọng?** Memory tiết kiệm đúng phần tốn kém nhất của instructions: sự thật về repo và về bạn, nạp tự động, không chiếm dòng nào trong file luật. **Nếu làm sai?** Quên kiểm memory: agent "nhớ" quy ước lỗi thời và làm theo, trong khi file luật của bạn nói ngược lại — triệu chứng trông hệt "instructions không ăn". Đừng để secret vào memory cũng như vào instructions: cả hai đều là chỗ người khác đọc được.
+> **Vì sao quan trọng?** Memory tiết kiệm đúng phần tốn kém nhất của instructions: sự thật về repo và về bạn, nạp tự động, không chiếm dòng nào trong file luật. **Nếu làm sai?** Quên kiểm memory: agent "nhớ" quy ước lỗi thời và làm theo, trong khi file luật của bạn nói ngược lại — triệu chứng trông hệt "instructions không ăn". Đừng để secret vào memory cũng như vào instructions: cả hai đều là chỗ người khác đọc được. · 📄 [VS Code Docs: Memory scopes](https://code.visualstudio.com/docs/agents/run/memory#memory-scopes)
 
 ## 8. Hiểu nhầm thường gặp
 
@@ -157,6 +157,8 @@ Instructions là **luật bạn chủ động viết và review**; **Copilot Mem
 | "Rules chung chung ('viết code sạch')" | Không kiểm chứng được. Viết lại dạng check được: "file >300 dòng thì tách" |
 | "Để secret trong instructions" | File này commit vào git — chỉ ghi "lấy từ 1Password `<tên>`", không paste giá trị |
 
+📄 [VS Code Docs: Context, knowledge & memory](https://code.visualstudio.com/docs/agents/concepts/context#context-knowledge-and-memory)
+
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
 | ❌ SAI | Hệ quả | ✅ ĐÚNG |
@@ -166,14 +168,14 @@ Instructions là **luật bạn chủ động viết và review**; **Copilot Mem
 | Chép lệnh test từ README cũ, agent chạy fail 3 lần | cháy credits, context loạn | chạy tay từng lệnh, chỉ ghi lệnh PASS + ngày VERIFIED |
 | `copilot-instructions.md` 500 dòng, copy cả wiki framework | trả tiền cho rác mỗi turn, luật thật chìm | <200 dòng; phần dài đẩy sang `docs/` hoặc skill (bài 05) |
 
-**Bài học:** mọi ca "rule không ăn" giải bằng 3 câu hỏi theo thứ tự: file có được *discovery* không (Customizations editor) → có được *đưa vào* không (References) → có *được tuân* không (rule mơ hồ hay mâu thuẫn).
+**Bài học:** mọi ca "rule không ăn" giải bằng 3 câu hỏi theo thứ tự: file có được *discovery* không (Customizations editor) → có được *đưa vào* không (References) → có *được tuân* không (rule mơ hồ hay mâu thuẫn). · 📄 [VS Code Docs: Troubleshoot instructions](https://code.visualstudio.com/docs/agent-customization/custom-instructions#troubleshoot-instructions)
 
 ## Best practices
 
 - **Một sự thật, một nơi ở.** *Vì sao:* hai bản sao sẽ lệch nhau, và không có universal precedence để biết bên nào thắng.
 - **Lệnh luôn kèm ngày VERIFIED.** *Vì sao:* instructions cũ hơn toolchain là loại rác đắt nhất — bạn trả credits cho nó mỗi turn.
 - **Luật cá nhân để `~/.copilot/`, luật team commit vào repo.** *Vì sao:* chuẩn chỉ mình bạn thấy sẽ chết ngay khi bạn nghỉ phép.
-- **Sửa rule là verify lại bằng chat mới + References.** *Vì sao:* chat cũ ôm context cũ — không có cách nào chắc rule được nạp lại.
+- **Sửa rule là verify lại bằng chat mới + References.** *Vì sao:* chat cũ ôm context cũ — không có cách nào chắc rule được nạp lại. · 📄 [VS Code Docs: Provide the right context](https://code.visualstudio.com/docs/agents/best-practices#provide-the-right-context)
 
 ## Bài tập
 

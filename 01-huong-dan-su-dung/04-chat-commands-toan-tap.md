@@ -34,11 +34,11 @@ them regression test, chay npm test xac nhan.
 
 Phím chính thức (bảng đầy đủ ở [shortcuts](commands/copilot/chat-session/shortcuts/README.md)): mở Chat view `Ctrl+Alt+I` (macOS `⌃⌘I`) · chat mới `Ctrl+N` (`⌘N`) · inline chat trong editor **và** terminal `Ctrl+I` (`⌘I`) · **Quick Chat `Ctrl+Shift+Alt+L`** (`⇧⌥⌘L`).
 
-> **Tóm gọn 1 câu:** gõ `/` để xem, `#` để gắn — và đọc availability trước khi đổ lỗi cho công cụ.
+> **Tóm gọn 1 câu:** gõ `/` để xem, `#` để gắn — và đọc availability trước khi đổ lỗi cho công cụ. · 📄 [VS Code Docs: Cheat Sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet)
 
 ## 2. Nhóm 1 — Chat session (7)
 
-Vòng đời một phiên chat: mở, tìm lại, lưu, quay lui — như giấy tờ trên bàn làm việc.
+Vòng đời một phiên chat: mở, tìm lại, lưu, quay lui — như giấy tờ trên bàn làm việc. · 📄 [VS Code Docs: Manage Sessions](https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions)
 
 | Lệnh / thao tác | Là gì (nôm na) | Availability | Chi tiết |
 |---|---|---|---|
@@ -52,7 +52,7 @@ Vòng đời một phiên chat: mở, tìm lại, lưu, quay lui — như giấy
 
 ## 3. Nhóm 2 — Model & Agent (8)
 
-Đổi "động cơ" (model), "người làm" (agent), "nơi chạy" (Session Target) — bản chất harness ở bài 02 §3.1.
+Đổi "động cơ" (model), "người làm" (agent), "nơi chạy" (Session Target) — bản chất harness ở bài 02 §3.1. · 📄 [VS Code Docs: Change the model for chat](https://code.visualstudio.com/docs/agent-customization/language-models#change-the-model-for-chat)
 
 | Lệnh / thao tác | Là gì (nôm na) | Availability | Chi tiết |
 |---|---|---|---|
@@ -67,7 +67,7 @@ Vòng đời một phiên chat: mở, tìm lại, lưu, quay lui — như giấy
 
 ## 4. Nhóm 3 — Code actions (6)
 
-Việc nhỏ một bước trên code đang chọn: bôi đen rồi gọi lệnh, khỏi mô tả dài dòng.
+Việc nhỏ một bước trên code đang chọn: bôi đen rồi gọi lệnh, khỏi mô tả dài dòng. · 📄 [VS Code Docs: Smart Actions](https://code.visualstudio.com/docs/editing/copilot-smart-actions)
 
 | Lệnh / thao tác | Là gì (nôm na) | Availability | Chi tiết |
 |---|---|---|---|
@@ -93,7 +93,7 @@ Việc nhỏ một bước trên code đang chọn: bôi đen rồi gọi lệnh
 | **Enterprise knowledge base** | Hỏi tri thức team (docs, wiki) ngay trên GitHub.com | GitHub.com (Enterprise) | [knowledge-base](commands/cloud/system-knowledge/knowledge-base/README.md) |
 | `gh copilot suggest` / `explain` | Gợi ý / giải thích lệnh shell | terminal — **extension cộng đồng của GitHub CLI**, không thuộc docs nào | [suggest](commands/local/system-knowledge/cli-suggest/README.md) · [explain](commands/local/system-knowledge/cli-explain/README.md) |
 
-> Copilot Extensions (GitHub App, gọi bằng `@`) đã **retired 10/11/2025** — đường mở rộng hiện hành là Agent Plugins (mục 6) + MCP + connectors → [bài 09](./09-extensions-marketplaces.md).
+> Copilot Extensions (GitHub App, gọi bằng `@`) đã **retired 10/11/2025** — đường mở rộng hiện hành là Agent Plugins (mục 6) + MCP + connectors → [bài 09](./09-extensions-marketplaces.md). · 📄 [VS Code Docs: Memory files](https://code.visualstudio.com/docs/agents/run/memory#manage-memory-files)
 
 ## 6. Slash chính thức hay bị bỏ sót (availability chép nguyên văn docs VS Code)
 
@@ -112,7 +112,7 @@ Việc nhỏ một bước trên code đang chọn: bôi đen rồi gọi lệnh
 | `/plugin list\|install\|update\|enable\|disable\|uninstall\|marketplace add\|browse\|remove` | quản lý Agent Plugins (bài 17) | **chỉ Copilot harness session** | [plugins](commands/copilot/system-knowledge/plugins/README.md) |
 | `/<skill-name>` (vd `/webapp-testing`) | gọi agent skill / reusable prompt theo tên | mọi harness (skill) — bài 05 | [agent-skill](commands/copilot/system-knowledge/agent-skill/README.md) |
 
-> **Tóm gọn 1 câu:** lệnh có trong docs mà không thấy trong list của bạn thì gần như luôn là **đúng availability rồi**, không phải bug.
+> **Tóm gọn 1 câu:** lệnh có trong docs mà không thấy trong list của bạn thì gần như luôn là **đúng availability rồi**, không phải bug. · 📄 [VS Code Docs: Use Chat](https://code.visualstudio.com/docs/chat/chat-overview#send-a-chat-request)
 
 ## 7. Công thức 5 lệnh session đầu — chỉ dùng lệnh có trong index (làm 1 lần/repo)
 
@@ -122,7 +122,7 @@ Nghi thức "khai trương" repo, giống kiểm tra máy trước khi lái đư
 2. **`Chat: Open Customizations`** → xem repo đang nạp gì: instructions, skills, MCP, hooks (bài 03/05/08).
 3. **`/sandbox policy`** trong một Copilot session → đọc effective policy; phía org xem **settings → policies** (bài 10/16).
 4. **`/plan`** với task thật đầu tiên → để agent research + đề xuất plan, duyệt rồi mới cho sửa.
-5. **`/clear`** khi đổi task; session dài mà còn liên quan thì **`/compact`** — conversation "đuối" là tín hiệu cần nén.
+5. **`/clear`** khi đổi task; session dài mà còn liên quan thì **`/compact`** — conversation "đuối" là tín hiệu cần nén. · 📄 [VS Code Docs: Organize & Triage Sessions](https://code.visualstudio.com/docs/agents/run/sessions/organize-sessions)
 
 ## 8. Walkthrough: sửa một bug bằng lệnh (10 phút)
 
@@ -139,14 +139,14 @@ fix, them regression test, chay npm test xac nhan.
 /fix them null check cho params, giu nguyen API shape
 ```
 
-Git flow (✨ ở ô commit message, ✨ ở Create Pull Request view — bản palette `Chat: Commit Staged…`/`Pull: Create PR…` có thể vẫn còn trong một số build), lỗi terminal bằng Terminal Inline Chat và bản tương đương khi đứng ở shell (`copilot -p "…"`, `copilot --continue`) — `gh copilot` là extension cộng đồng đã archived, không phải đường hiện hành (xem `commands/local/system-knowledge/cli-suggest/`) xem ở 📄 [`./examples/04-chat-commands-toan-tap/git-flow-va-lenh-terminal.sh`](./examples/04-chat-commands-toan-tap/git-flow-va-lenh-terminal.sh).
+Git flow (✨ ở ô commit message, ✨ ở Create Pull Request view — bản palette `Chat: Commit Staged…`/`Pull: Create PR…` có thể vẫn còn trong một số build), lỗi terminal bằng Terminal Inline Chat và bản tương đương khi đứng ở shell (`copilot -p "…"`, `copilot --continue`) — `gh copilot` là extension cộng đồng đã archived, không phải đường hiện hành (xem `commands/local/system-knowledge/cli-suggest/`) xem ở 📄 [`./examples/04-chat-commands-toan-tap/git-flow-va-lenh-terminal.sh`](./examples/04-chat-commands-toan-tap/git-flow-va-lenh-terminal.sh). · 📄 [VS Code Docs: Fix a Bug](https://code.visualstudio.com/docs/agents/guides/fix-a-bug-with-agents)
 
 ## 9. Khi lệnh hoặc model "biến mất"
 
 - **Đọc availability trước, nghi gating sau:** `/plugin` chỉ Copilot harness session; `/help` `/rename` `/models` `/tools` chỉ local chat; trong nhóm customization, Copilot chỉ có `/prompts` và `/hooks`.
 - **Model & AI Credits:** model mạnh tiêu phí nhiều hơn. Billing hiện hành là **AI Credits** (1 credit = $0.01, trừ theo token; code completions **không** bị trừ) — hết thì đổi model rẻ ở picker, xem dashboard, CLI `/limits` (bài 14).
 - **Org policy & BYOK:** managed settings có thể khoá model/harness/customization — kiểm chứng bằng `Developer: Policy Diagnostics` (bài 10/16).
-- **Flow 30 giây:** gõ `/` xem list thật → `Chat: Open Customizations` xem gì đang nạp → so cột availability mục 6 → vẫn mờ thì `/troubleshoot` (local hoặc Copilot CLI).
+- **Flow 30 giây:** gõ `/` xem list thật → `Chat: Open Customizations` xem gì đang nạp → so cột availability mục 6 → vẫn mờ thì `/troubleshoot` (local hoặc Copilot CLI). · 📄 [VS Code Docs: Copilot FAQ trong VS Code](https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -159,13 +159,13 @@ Git flow (✨ ở ô commit message, ✨ ở Create Pull Request view — bản 
 | "Lệnh vắng mặt là Copilot hỏng" | mất nửa ngày debug công cụ | availability theo surface/harness/role/enabled features — tra mục 6 trước |
 | "Việc một dòng cũng mở Agent" | Agent đọc chục file, đốt credits oan | `/explain` `/fix` trên selection; việc mở → `/plan` rồi mới Agent |
 
-**Bài học:** bảng slash nào cũng có cột availability — đọc nó rẻ hơn đọc debug log.
+**Bài học:** bảng slash nào cũng có cột availability — đọc nó rẻ hơn đọc debug log. · 📄 [VS Code Docs: Debug and fix problems](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#debug-and-fix-problems)
 
 ## Best practices
 
 - **Gắn `#file:`/`#selection` ngay turn 1.** *Vì sao?* tiết kiệm nguyên một turn agent quét repo đoán file — loại token rẻ nhất là token không phải trả.
 - **`/clear` mỗi task; dài mà còn liên quan → `/compact`; muốn thử hướng khác từ conversation cũ → `/fork` (cần Agent Host session).** *Vì sao?* context sạch giảm "hallucination thừa kế", compact giữ đà mà rẻ, fork giữ history cho cả hai nhánh.
-- **Tra cột availability trước khi kết luận lệnh mất; việc chạm nhiều file luôn bắt đầu bằng `/plan`; repo mới thì chạy công thức mục 7 một lần.** *Vì sao?* quá nửa "bug reported" là tra nhầm chỗ, một plan sai sửa 10 file khó hoàn tác hơn chạy lại lần hai, và lỗi gating phát hiện trong 5 phút rẻ hơn 5 ngày (org đông người: thêm `Developer: Policy Diagnostics`).
+- **Tra cột availability trước khi kết luận lệnh mất; việc chạm nhiều file luôn bắt đầu bằng `/plan`; repo mới thì chạy công thức mục 7 một lần.** *Vì sao?* quá nửa "bug reported" là tra nhầm chỗ, một plan sai sửa 10 file khó hoàn tác hơn chạy lại lần hai, và lỗi gating phát hiện trong 5 phút rẻ hơn 5 ngày (org đông người: thêm `Developer: Policy Diagnostics`). · 📄 [VS Code Docs: Write effective prompts](https://code.visualstudio.com/docs/agents/best-practices#write-effective-prompts)
 
 ## Bài tập
 
@@ -183,6 +183,6 @@ Git flow (✨ ở ô commit message, ✨ ở Create Pull Request view — bản 
 
 - VS Code — [AI features cheat sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet) (nguồn duy nhất cho bảng slash + phím) · [Add context](https://code.visualstudio.com/docs/chat/copilot-chat-context) · [Tools reference](https://code.visualstudio.com/docs/agents/reference/tools-reference) · [Manage sessions](https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions) (`/compact`, `/fork`) · [Inline chat](https://code.visualstudio.com/docs/chat/inline-chat) · [Agent Customizations editor](https://code.visualstudio.com/docs/agent-customization/overview)
 - VS Code — [Prompt files](https://code.visualstudio.com/docs/agent-customization/prompt-files) · [Agent plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins) · [Approvals & permission levels](https://code.visualstudio.com/docs/agents/run/approvals) (kèm lệnh permission/Autopilot) · [Agent sandboxing](https://code.visualstudio.com/docs/agents/run/agent-sandboxing) (`/sandbox policy`) · [Migrate customizations](https://code.visualstudio.com/docs/agent-customization/migrate-customizations) (participants deprecated) · [Move to Copilot harness](https://code.visualstudio.com/docs/agents/run/move-to-copilot)
-- GitHub — [Copilot CLI command reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference) (`/status`, `/cost`) · [Models and pricing — AI Credits](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) · [About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent)
+- GitHub — [Copilot CLI command reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference) (`/status`, `/cost`) · [Models and pricing — AI Credits](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) · [About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github)
 
 **Chốt:** bài 04 để **mở ra tra**, không để đọc hết — tìm nhóm → đọc availability → gõ lệnh; và bạn thôi trả tiền cho những turn "file nào nhỉ?".

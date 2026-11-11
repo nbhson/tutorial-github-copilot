@@ -11,7 +11,7 @@ Copilot **không có hooks native** như một số agent khác, nên bài này 
 
 Không guardrails, Copilot sẽ: đụng `src/generated/`, đổi schema, commit thẳng main; thêm dependency vì tiện; chạy `rm -rf`/`git reset --hard` khi được full quyền; gọi MCP ngoài luồng, rò secret vào prompt.
 
-> Rule: **luật nào bạn phải nhắc >2 lần thì viết thành guardrail, đừng nhắc miệng nữa.**
+> Rule: **luật nào bạn phải nhắc >2 lần thì viết thành guardrail, đừng nhắc miệng nữa.** · 📄 [VS Code Docs: Recommended security baseline](https://code.visualstudio.com/docs/agents/run/security#recommended-security-baseline)
 
 ## 2. Cơ chế: 4 lớp phòng thủ sâu
 
@@ -33,7 +33,7 @@ Lọt 1 lớp không sao, còn 3 lớp sau.
 
 Cảnh báo hay gặp nhất: viết "đừng chạy `rm -rf`" vào instructions rồi tin là chặn được — không, instructions chỉ *dặn miệng*, phải có **tool approval** mới chặn thật lúc lệnh sắp chạy.
 
-> **Tóm gọn 1 câu:** Guardrails là thành trì nhiều tầng: chữ viết là cổng ngoài, git hook là tường, CI là hào, approval là ô cửa sổ cuối cùng — lọt tầng này còn tầng kia.
+> **Tóm gọn 1 câu:** Guardrails là thành trì nhiều tầng: chữ viết là cổng ngoài, git hook là tường, CI là hào, approval là ô cửa sổ cuối cùng — lọt tầng này còn tầng kia. · 📄 [VS Code Docs: Trust boundaries](https://code.visualstudio.com/docs/agents/run/security#trust-boundaries)
 
 ## 3. Lớp 1: instruction enforcement
 
@@ -72,7 +72,7 @@ applyTo: "src/payments/**"
 - Test bắt buộc: `npm test -- payments` xanh.
 ```
 
-**Recipe 3 — Prompt files có gate sẵn:** file `.prompt.md` (mode: agent) mở đầu bằng "Đọc plan.md, liệt kê files sẽ sửa — file ngoài plan → hỏi trước" và kết thúc bằng gate chạy test/lint/build + `git diff --stat` lệch scope thì dừng. Chi tiết xem [Tips 07](./07-thiet-ke-prompts-skills.md).
+**Recipe 3 — Prompt files có gate sẵn:** file `.prompt.md` (mode: agent) mở đầu bằng "Đọc plan.md, liệt kê files sẽ sửa — file ngoài plan → hỏi trước" và kết thúc bằng gate chạy test/lint/build + `git diff --stat` lệch scope thì dừng. Chi tiết xem [Tips 07](./07-thiet-ke-prompts-skills.md). · 📄 [VS Code Docs: How instructions apply](https://code.visualstudio.com/docs/agent-customization/custom-instructions#how-instructions-apply)
 
 ## 4. Lớp 2: pre-commit + local gates
 
@@ -90,7 +90,7 @@ Nguyên tắc: **gate nhanh để ở local, gate nặng để cho CI** — bắ
 
 > 📄 **Code ví dụ:** [`./examples/06-policies-guardrails-recipes/lop-2-pre-commit-local-gates.json`](./examples/06-policies-guardrails-recipes/lop-2-pre-commit-local-gates.json)
 
-> 📄 **Code ví dụ:** [`./examples/06-policies-guardrails-recipes/2-lop-2-pre-commit-local-gates.sh`](./examples/06-policies-guardrails-recipes/2-lop-2-pre-commit-local-gates.sh)
+> 📄 **Code ví dụ:** [`./examples/06-policies-guardrails-recipes/2-lop-2-pre-commit-local-gates.sh`](./examples/06-policies-guardrails-recipes/2-lop-2-pre-commit-local-gates.sh) · 📄 [VS Code Docs: Hook decisions & failures](https://code.visualstudio.com/docs/agent-customization/hooks#decisions-and-failures)
 
 **Recipe 6 — Tool approval trong VS Code:**
 
@@ -117,7 +117,7 @@ Repo → Settings → Branches → Add rule (main):
 
 **Recipe 8 — CI workflow gate (copy-paste):**
 
-> 📄 **Code ví dụ:** [`./examples/06-policies-guardrails-recipes/lop-3-branch-protection-ci-gates.yaml`](./examples/06-policies-guardrails-recipes/lop-3-branch-protection-ci-gates.yaml) — bài tập walkthrough dùng lại bộ file §3–4 + [`../01-huong-dan-su-dung/examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh`](../01-huong-dan-su-dung/examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh) (hook deny lệnh nguy hiểm).
+> 📄 **Code ví dụ:** [`./examples/06-policies-guardrails-recipes/lop-3-branch-protection-ci-gates.yaml`](./examples/06-policies-guardrails-recipes/lop-3-branch-protection-ci-gates.yaml) — bài tập walkthrough dùng lại bộ file §3–4 + [`../01-huong-dan-su-dung/examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh`](../01-huong-dan-su-dung/examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh) (hook deny lệnh nguy hiểm). · 📄 [GitHub Docs: Copilot enterprise policies](https://docs.github.com/en/copilot/concepts/enterprise/policies)
 
 **Recipe 9 — CODEOWNERS + org policy:**
 
@@ -140,7 +140,7 @@ GitHub Org → Copilot → Policies:
 
 Mục này nói về cánh cửa cuối cùng trước thế giới ngoài: MCP và lệnh terminal. MCP mở đường ra DB, deploy, web — cũng là nơi dễ rò secret nhất. Nguyên tắc: **mặc định từ chối, chỉ mở đúng cái cần.**
 
-> **Tóm gọn 1 câu:** MCP là cửa sau của ngôi nhà: chốt cửa mặc định, chỉ mở đúng người quen cần vào — cả nhà không cần chìa khóa mọi cánh cửa. 📄 Walkthrough dùng lại đúng 5 file ở §3–4 + [kịch bản allow/ask/deny](../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc).
+> **Tóm gọn 1 câu:** MCP là cửa sau của ngôi nhà: chốt cửa mặc định, chỉ mở đúng người quen cần vào — cả nhà không cần chìa khóa mọi cánh cửa. 📄 Walkthrough dùng lại đúng 5 file ở §3–4 + [kịch bản allow/ask/deny](../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc). · 📄 [VS Code Docs: Manage tool approvals](https://code.visualstudio.com/docs/agents/run/approvals#manage-tool-approvals)
 
 **Recipe 10 — Prune MCP + approval hỏi trước (mỗi tháng 1 lần):**
 
@@ -177,6 +177,8 @@ Instructions thêm:
 | 35–40 | 3 | CODEOWNERS (recipe 9), tạo PR mẫu kiểm tra CI + review |
 | 40–45 | 4 | Audit MCP/extensions, tắt server thừa, auto-approve OFF (📄 kịch bản allow/ask/deny: [`../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc`](../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc)). Kiểm chứng: thử cố ý sai 3 kiểu (sửa `generated/`, commit main, chạy lệnh lạ) → phải bị chặn ≥1 lớp với log BLOCKED |
 
+📄 [VS Code Docs: Scope & isolation](https://code.visualstudio.com/docs/agents/run/security#scope-and-isolation)
+
 ## 8. Pitfalls + cách fix
 
 | Pitfall | Triệu chứng | Fix |
@@ -188,7 +190,7 @@ Instructions thêm:
 | Guardrails chỉ trên máy bạn | Người khác vẫn đi lạc | Commit instructions/prompts/CI vào repo (xem Tips 09) |
 | Secret lọt vào chat | Rò rỉ token | Recipe 11 + gitignore + review PR |
 
-> **Cách đọc bảng này:** quét cột **Pitfall** xem bạn đang mắc ca nào, cột **Triệu chứng** giúp xác nhận đúng bệnh, cột **Fix** trỏ về recipe đúng để dựng lại chốt chặn.
+> **Cách đọc bảng này:** quét cột **Pitfall** xem bạn đang mắc ca nào, cột **Triệu chứng** giúp xác nhận đúng bệnh, cột **Fix** trỏ về recipe đúng để dựng lại chốt chặn. · 📄 [VS Code Docs: Hook decisions & failures](https://code.visualstudio.com/docs/agent-customization/hooks#decisions-and-failures)
 
 Bài học lớn nhất: **guardrail bị bypass còn tệ hơn không có** — siết quá chặt ngay từ đầu khiến team lách bằng `--no-verify`, chọn độ chặt sao cho team chịu đi qua nó.
 

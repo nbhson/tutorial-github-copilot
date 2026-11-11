@@ -19,7 +19,7 @@ Luật đổi → sửa 1 file trong repo, cả team hưởng.
 
 > Rule: **cái gì team phải nhớ thì viết ra file và commit. Trí nhớ không phải hệ thống.**
 
-> **Tóm gọn 1 câu:** không chuẩn hóa thì luật sống trong đầu từng người và mất theo người nghỉ việc — chuẩn hóa là đưa luật vào repo, clone là có.
+> **Tóm gọn 1 câu:** không chuẩn hóa thì luật sống trong đầu từng người và mất theo người nghỉ việc — chuẩn hóa là đưa luật vào repo, clone là có. · 📄 [VS Code Docs: Establish a baseline](https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#establish-a-baseline)
 
 ## 2. Cơ chế: 4 tài sản commit vào repo
 
@@ -60,7 +60,7 @@ docs/
 
 Tất cả commit vào git → clone repo là có, không cần setup miệng.
 
-> **Tóm gọn 1 câu:** 5 tài sản — instructions, skills, prompts, agents, gates — cùng sống trong `.github/`, commit là cả team dùng được ngay.
+> **Tóm gọn 1 câu:** 5 tài sản — instructions, skills, prompts, agents, gates — cùng sống trong `.github/`, commit là cả team dùng được ngay. · 📄 [VS Code Docs: Customization scope](https://code.visualstudio.com/docs/agents/concepts/customization#customization-scope)
 
 ## 3. Commit instructions/skills/agents
 
@@ -113,7 +113,7 @@ Output: [SEVERITY] file:line + verdict + 3 gaps ưu tiên.
 
 Versioning: mọi thay đổi qua PR (mô tả lý do + ví dụ trước/sau); tag `skills-v1.2` khi release để rollback nhanh. Sửa trực tiếp không qua PR → mỗi máy một bản, không có mốc rollback.
 
-> **Tóm gọn 1 câu:** commit instructions + skills + agents qua PR, tag version khi release — thay đổi nào cũng có mốc quay lui. 📄 Bộ tài sản commit mẫu: [`../templates/.github/`](../templates/.github/) · script cài pack VS Code: [`../01-huong-dan-su-dung/examples/09-extensions-marketplaces/vs-code-pack-install.sh`](../01-huong-dan-su-dung/examples/09-extensions-marketplaces/vs-code-pack-install.sh).
+> **Tóm gọn 1 câu:** commit instructions + skills + agents qua PR, tag version khi release — thay đổi nào cũng có mốc quay lui. 📄 Bộ tài sản commit mẫu: [`../templates/.github/`](../templates/.github/) · script cài pack VS Code: [`../01-huong-dan-su-dung/examples/09-extensions-marketplaces/vs-code-pack-install.sh`](../01-huong-dan-su-dung/examples/09-extensions-marketplaces/vs-code-pack-install.sh). · 📄 [VS Code Docs: Choose a customization scope](https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope)
 
 ## 4. Org policy + branch protection
 
@@ -163,7 +163,7 @@ Repo → Settings → Branches → main:
 
 Cảnh báo: bật protection quá sớm với 3 reviewers cho mọi PR nhỏ → team thấy chậm và lách thay vì tuân theo.
 
-> **Tóm gọn 1 câu:** org policy + branch protection biến luật thành việc GitHub tự chặn — nhưng siết từ từ, đừng khóa cửa ngày đầu team còn đang tập.
+> **Tóm gọn 1 câu:** org policy + branch protection biến luật thành việc GitHub tự chặn — nhưng siết từ từ, đừng khóa cửa ngày đầu team còn đang tập. · 📄 [VS Code Docs: Copilot Enterprise managed settings](https://code.visualstudio.com/docs/enterprise/manage-ai-settings#copilot-enterprise-managed-settings)
 
 ## 5. Review workflow cho PR từ Copilot
 
@@ -192,7 +192,7 @@ Bỏ 1 lớp (vd merge luôn sau lớp 1) thì bug tốn kém nhất rơi xuốn
 
 **Mô tả PR mẫu từ cloud agent (copy-paste khung):** `## Issue` (Closes #101 + mô tả 1 dòng) → `## Scope` (files đụng + diff --stat) → `## Evidence` (10 dòng cuối log test/lint/build + link CI run) → `## Reviews` (Copilot review PASS + /team-review PASS, 0 HIGH).
 
-> **Tóm gọn 1 câu:** ba lớp review — máy quét, reviewer fresh, người chốt — cắt lớp nào thì bug đó bay thẳng xuống prod, nơi sửa đắt nhất.
+> **Tóm gọn 1 câu:** ba lớp review — máy quét, reviewer fresh, người chốt — cắt lớp nào thì bug đó bay thẳng xuống prod, nơi sửa đắt nhất. · 📄 [GitHub Docs: Use Copilot code review](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review)
 
 ## 6. Onboarding 30 phút cho người mới
 
@@ -229,7 +229,7 @@ Tạo `docs/copilot-onboarding.md`:
 
 Buddy: ngày 1 review 2 PR đầu của người mới; tuần 1 người mới đề xuất 1 cải tiến skills (tạo PR). Buddy là người kèm cặp — như "anh chị hướng dẫn" thời đi học nghề.
 
-> **Tóm gọn 1 câu:** onboarding 30 phút gồm setup, Ask, fix + verify, plan + review — kèm buddy soi 2 PR đầu là người mới tự chạy được.
+> **Tóm gọn 1 câu:** onboarding 30 phút gồm setup, Ask, fix + verify, plan + review — kèm buddy soi 2 PR đầu là người mới tự chạy được. · 📄 [VS Code Docs: Agents Quickstart](https://code.visualstudio.com/docs/agents/quickstart)
 
 ## 7. Walkthrough: chuẩn hóa 1 repo 60 phút
 
@@ -246,7 +246,7 @@ Mục này gom toàn bộ bài thành một kế hoạch 60 phút chia theo từ
 
 > **Cách đọc bảng này:** đọc theo dòng thời gian từ 0 đến 60 phút — mỗi khối một việc, cột cuối chỉ rõ làm gì trong khối đó.
 
-> **Tóm gọn 1 câu:** chuẩn hóa một repo chỉ tốn 60 phút theo đúng 6 khối — làm xong mở PR chia sẻ cho cả team. 📄 Script dựng đủ nền trong 1 lần: [`../01-huong-dan-su-dung/examples/09-extensions-marketplaces/repo-template.sh`](../01-huong-dan-su-dung/examples/09-extensions-marketplaces/repo-template.sh) · copy pack vào project: [`../templates/examples/01-cach-copy-vao-project-3-buoc.sh`](../templates/examples/01-cach-copy-vao-project-3-buoc.sh).
+> **Tóm gọn 1 câu:** chuẩn hóa một repo chỉ tốn 60 phút theo đúng 6 khối — làm xong mở PR chia sẻ cho cả team. 📄 Script dựng đủ nền trong 1 lần: [`../01-huong-dan-su-dung/examples/09-extensions-marketplaces/repo-template.sh`](../01-huong-dan-su-dung/examples/09-extensions-marketplaces/repo-template.sh) · copy pack vào project: [`../templates/examples/01-cach-copy-vao-project-3-buoc.sh`](../templates/examples/01-cach-copy-vao-project-3-buoc.sh). · 📄 [VS Code Docs: Verify a customization](https://code.visualstudio.com/docs/agent-customization/overview#verify-a-customization)
 
 ## 8. Pitfalls + cách fix
 
@@ -262,7 +262,7 @@ Mục này liệt kê các lỗi hay gặp khi chuẩn hóa team và cách sửa
 | Knowledge base cũ | Copilot trả lời theo spec cũ | Owner + ngày review mỗi quarter |
 | Review qua loa | PR Copilot lọt bug | Checklist mục 5 + ai merge người chịu |
 
-> **Cách đọc bảng này:** cột 1 là lỗi, cột 2 là triệu chứng giúp bạn nhận ra mình đang mắc, cột 3 là cách xử lý.
+> **Cách đọc bảng này:** cột 1 là lỗi, cột 2 là triệu chứng giúp bạn nhận ra mình đang mắc, cột 3 là cách xử lý. · 📄 [GitHub Docs: Review Copilot output](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/review-copilot-output)
 
 ## 9. Bài tập cuối bài
 

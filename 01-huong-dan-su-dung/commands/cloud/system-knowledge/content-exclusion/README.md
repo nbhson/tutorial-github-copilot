@@ -6,7 +6,7 @@
 
 ## 1 câu nôm na
 
-Content exclusion là **két sắt** của repo: bạn bỏ file nhạy cảm vào danh sách, Copilot không được mở. Gặp chỗ "tự nhiên không có gợi ý", câu hỏi đầu tiên nên là "file này có nằm trong exclusion không?" thay vì "Copilot bị lỗi".
+Content exclusion là **két sắt** của repo: bạn bỏ file nhạy cảm vào danh sách, Copilot không được mở. Gặp chỗ "tự nhiên không có gợi ý", câu hỏi đầu tiên nên là "file này có nằm trong exclusion không?" thay vì "Copilot bị lỗi". · 📄 [GitHub Docs: Customizations (concept)](https://docs.github.com/en/copilot/concepts/customizations)
 
 ## Vì sao dùng Content exclusion?
 
@@ -18,16 +18,16 @@ Vì secrets không được phép đi vào prompt, index hay transcript, và đ�
 | Nội dung không nuôi gợi ý ở file khác, cũng không vào câu trả lời chat/agent | Code bên cạnh không "học" từ file secrets; hỏi về nó sẽ không có nội dung |
 | Không được soi trong Copilot code review | PR có đụng file đó vẫn "sạch" với review |
 
-Cả ba hàng trên đều là **chủ ý** của policy — hàng đầu dễ bị hiểu nhầm nhất vì nó trông hệt một cú lỗi.
+Cả ba hàng trên đều là **chủ ý** của policy — hàng đầu dễ bị hiểu nhầm nhất vì nó trông hệt một cú lỗi. · 📄 [GitHub Docs: Customizations (concept)](https://docs.github.com/en/copilot/concepts/customizations)
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** repo có `.env`, `*.pem`, `secrets/**`; gặp hiện tượng "chỗ có chỗ không gợi ý"; đang audit bảo mật.
-- **ĐỪNG nhầm khi:** bạn muốn siết quyền chạy lệnh của agent (đó là tool permissions/sandbox, không phải exclusion); hoặc bạn chỉ muốn file biến khỏi tìm kiếm — đó là `.gitignore` / `files.exclude` / `search.exclude` của VS Code, **chỉ ảnh hưởng search/index, không chặn Copilot đọc**.
+- **ĐỪNG nhầm khi:** bạn muốn siết quyền chạy lệnh của agent (đó là tool permissions/sandbox, không phải exclusion); hoặc bạn chỉ muốn file biến khỏi tìm kiếm — đó là `.gitignore` / `files.exclude` / `search.exclude` của VS Code, **chỉ ảnh hưởng search/index, không chặn Copilot đọc**. · 📄 [GitHub Docs: Comparing customizations](https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations)
 
 ## Cách gọi (copy-paste)
 
-> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.jsonc`](examples/01-cach-goi-copy-paste.jsonc)
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.jsonc`](examples/01-cach-goi-copy-paste.jsonc) · 📄 [GitHub Docs: Exclude content from Copilot](https://docs.github.com/en/copilot/how-tos/configure-content-exclusion/exclude-content-from-copilot)
 
 Đường đặt: **Settings → Copilot → Content exclusion** ở repo/org/enterprise (chỉ **Copilot Business / Enterprise** — gói cá nhân không có org policy để set); mỗi dòng một path dạng `- "/PATH"` (fnmatch, không phân biệt hoa/thường, `#` để comment).
 
@@ -41,7 +41,7 @@ Cả ba hàng trên đều là **chủ ý** của policy — hàng đầu dễ b
 
 `secrets/prod.json` chứa key thật; bạn để ý Copilot không gợi ý gì khi mở file đó và cần xác nhận đây là chủ ý chứ không phải lỗi.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [GitHub Docs: Create custom agents](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents)
 
 **Kết quả mong đợi:** mở `src/utils/format.ts` vẫn có gợi ý; `secrets/prod.json` thì không, và chat hỏi về nó cũng không thấy nội dung.
 
@@ -55,11 +55,13 @@ Cả ba hàng trên đều là **chủ ý** của policy — hàng đầu dễ b
 
 **✅ ĐÚNG — hẹp, đúng thứ cần chặn:**
 
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.jsonc`](examples/04-neu-lam-sai-thi-sao-sai-ung.jsonc)
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.jsonc`](examples/04-neu-lam-sai-thi-sao-sai-ung.jsonc) · 📄 [GitHub Docs: Troubleshoot common issues](https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues)
 
 **Bài học:** chặn sai đắt theo hai hướng — quên chặn thì secret vào transcript, chặn rộng thì Copilot "đui" cả repo mà không ai hiểu vì sao.
 
 ## Lỗi thường gặp
+
+📄 [GitHub Docs: Review exclusion changes](https://docs.github.com/en/copilot/how-tos/configure-content-exclusion/review-changes)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
@@ -67,26 +69,26 @@ Cả ba hàng trên đều là **chủ ý** của policy — hàng đầu dễ b
 | Vừa sửa policy mà chưa hiệu lực | Cache policy phía IDE | Đợi tới 30 phút hoặc reload cửa sổ |
 | Agent vẫn đọc file qua tool khác | Third-party MCP/CLI không bị ràng buộc | Coi exclusion là guardrail của tool GitHub, không phải ranh giới OS |
 | Muốn ẩn file khỏi tìm kiếm | Nhầm với `.gitignore`/`files.exclude` | Đó là exclusion của VS Code, khác bản chất |
-
 ## So sánh với Claude Code
+
+📄 [GitHub Docs: Comparing customizations](https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations)
 
 | Việc cần làm | Copilot in the cloud | Claude Code | Ghi chú |
 |---|---|---|---|
 | Cấm model đọc file | Content exclusion đặt trên GitHub.com, server gửi policy về client | Không có cơ chế server-side tương đương — chặn bằng `.claude/settings.json` (permissions) | Một bên là boundary GitHub thực thi, một bên là cấu hình máy bạn |
 | Mất gợi ý inline | **Có**, ngay trong file bị exclude | Không áp (Claude Code không có inline completions) | Đừng diễn giải "mất gợi ý = hỏng" |
 | Kiểm ai đổi policy | Audit log `copilot.content_exclusion_changed` | Lịch sử commit của file settings | Copilot có log riêng, không phụ thuộc git |
-
 ## Best practices (kèm "vì sao")
 
 - **Đặt exclusion trước khi bật indexing.** *Vì sao?* Index đã chứa secret thì xóa/đặt lại muộn hơn và đắt hơn nhiều.
 - **Viết path tuyệt đối theo repo (`- "/secrets/**"`) và hạn chế `**/*`.** *Vì sao?* Glob rộng là cách phổ biến nhất để vô hiệu hóa Copilot mà không ai hiểu vì sao.
 - **Test hai chiều sau mỗi lần đổi.** *Vì sao?* Một chiều "không có gợi ý" không đủ để kết luận — phải thấy chiều "có gợi ý" vẫn hoạt động.
-- **Chỉ cần ẩn khỏi một agent thì dùng `excludeAgent`.** *Vì sao?* `excludeAgent: "code-review"` / `"cloud-agent"` trong file instructions nhẹ hơn exclusion cứng; exclusion thật thì đổi xong nên soi audit log.
+- **Chỉ cần ẩn khỏi một agent thì dùng `excludeAgent`.** *Vì sao?* `excludeAgent: "code-review"` / `"cloud-agent"` trong file instructions nhẹ hơn exclusion cứng; exclusion thật thì đổi xong nên soi audit log. · 📄 [GitHub Docs: Content exclusion (concept)](https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/content-exclusion)
 
 ## Bài tập nhỏ
 
 1. **(5 phút)** Mở Settings → Copilot → Content exclusion của repo bạn, chép danh sách path ra và tự giải thích từng path chặn cái gì.
-2. **(7 phút)** Test hai chiều: hỏi "explain this file" trên một file bị exclude và một file thường — so phản ứng; rồi thử `excludeAgent: "cloud-agent"` trong file instructions và so với exclusion ở Settings.
+2. **(7 phút)** Test hai chiều: hỏi "explain this file" trên một file bị exclude và một file thường — so phản ứng; rồi thử `excludeAgent: "cloud-agent"` trong file instructions và so với exclusion ở Settings. · 📄 [GitHub Docs: Exclude content from Copilot](https://docs.github.com/en/copilot/how-tos/configure-content-exclusion/exclude-content-from-copilot)
 
 ## Tham khảo
 

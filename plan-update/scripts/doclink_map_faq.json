@@ -1,0 +1,767 @@
+{
+  "_doc": "Map tung section (cau hoi) cua 11 file FAQ -> trang tai lieu chinh thuc. Ap dung boi apply_doclinks.py.",
+  "m": [
+    [
+      "01-tai-khoan-pricing-cai-dat",
+      "## Bảng tổng hợp",
+      "https://docs.github.com/en/copilot/reference/copilot-feature-matrix",
+      "Copilot feature matrix"
+    ],
+    [
+      "01-tai-khoan-pricing-cai-dat",
+      "## 1. Các plan",
+      "https://docs.github.com/en/copilot/get-started/plans",
+      "Plans for GitHub Copilot"
+    ],
+    [
+      "01-tai-khoan-pricing-cai-dat",
+      "## 2. Trial",
+      "https://docs.github.com/en/copilot/how-tos/manage-your-account/get-started-with-a-copilot-plan",
+      "Get started with a Copilot plan"
+    ],
+    [
+      "01-tai-khoan-pricing-cai-dat",
+      "## 3. Seat",
+      "https://docs.github.com/en/copilot/reference/copilot-billing/seat-assignment",
+      "Seat assignment"
+    ],
+    [
+      "01-tai-khoan-pricing-cai-dat",
+      "## 4. Cài đặt",
+      "https://code.visualstudio.com/docs/setup/copilot",
+      "GitHub Copilot Setup"
+    ],
+    [
+      "01-tai-khoan-pricing-cai-dat",
+      "## 5. Sign-in",
+      "https://code.visualstudio.com/docs/setup/copilot#use-a-different-github-account-with-copilot",
+      "Use a different GitHub account"
+    ],
+    [
+      "01-tai-khoan-pricing-cai-dat",
+      "## 6. Policy",
+      "https://docs.github.com/en/copilot/concepts/enterprise/policies",
+      "Copilot policies"
+    ],
+    [
+      "01-tai-khoan-pricing-cai-dat",
+      "## 7. Lỗi cài đặt",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#start-with-basic-checks",
+      "Start with basic checks"
+    ],
+    [
+      "01-tai-khoan-pricing-cai-dat",
+      "## 8. Bắt đầu repo",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#establish-a-baseline",
+      "Establish a baseline"
+    ],
+    [
+      "01-tai-khoan-pricing-cai-dat",
+      "## 9. Báo lỗi",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#report-an-unresolved-issue",
+      "Report an unresolved issue"
+    ],
+    [
+      "01-tai-khoan-pricing-cai-dat",
+      "## Vẫn lỗi thì sao",
+      "https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues",
+      "Troubleshoot common issues"
+    ],
+    [
+      "02-model-context-premium",
+      "## Bảng tổng hợp",
+      "https://docs.github.com/en/copilot/reference/ai-models/model-comparison",
+      "Model comparison"
+    ],
+    [
+      "02-model-context-premium",
+      "## 1. Model picker",
+      "https://code.visualstudio.com/docs/agent-customization/language-models#change-the-model-for-chat",
+      "Change the model for chat"
+    ],
+    [
+      "02-model-context-premium",
+      "## 2. AI Credits",
+      "https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing",
+      "Models and pricing"
+    ],
+    [
+      "02-model-context-premium",
+      "## 3. Context window",
+      "https://code.visualstudio.com/docs/agents/concepts/context#context-window-and-compaction",
+      "Context window & compaction"
+    ],
+    [
+      "02-model-context-premium",
+      "## 4. Tràn context",
+      "https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#compact-the-current-conversation",
+      "Compact the conversation"
+    ],
+    [
+      "02-model-context-premium",
+      "## 5. BYOK",
+      "https://docs.github.com/en/copilot/concepts/models/bring-your-own-key",
+      "Bring your own key"
+    ],
+    [
+      "02-model-context-premium",
+      "## 6. Nên dùng model nào",
+      "https://code.visualstudio.com/docs/agents/concepts/language-models#choose-the-right-model",
+      "Choose the right model"
+    ],
+    [
+      "02-model-context-premium",
+      "## 7. Sao cùng 1 prompt",
+      "https://code.visualstudio.com/docs/agents/concepts/language-models#auto-model-selection",
+      "Auto model selection"
+    ],
+    [
+      "02-model-context-premium",
+      "## 8. Có khóa model cố định",
+      "https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-default-models",
+      "Manage default models"
+    ],
+    [
+      "02-model-context-premium",
+      "## 9. Hết AI Credits",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#i-reached-my-inline-suggestions-or-ai-credits-limit",
+      "Reached the AI credits limit"
+    ],
+    [
+      "02-model-context-premium",
+      "## Vẫn lỗi thì sao",
+      "https://docs.github.com/en/copilot/how-tos/manage-and-track-spending/monitor-ai-usage",
+      "Monitor AI usage"
+    ],
+    [
+      "03-modes-permissions",
+      "## 1. Ask / Edit / Agent",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet",
+      "Cheat Sheet"
+    ],
+    [
+      "03-modes-permissions",
+      "## 2. Tool approval",
+      "https://code.visualstudio.com/docs/agents/run/approvals#tool-approval",
+      "Tool approval"
+    ],
+    [
+      "03-modes-permissions",
+      "## 3. Content exclusion",
+      "https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/content-exclusion",
+      "Content exclusion"
+    ],
+    [
+      "03-modes-permissions",
+      "## 4. Agent sửa nhầm file",
+      "https://code.visualstudio.com/docs/agents/run/review-code-edits#undo-changes-at-the-right-scope",
+      "Undo changes at the right scope"
+    ],
+    [
+      "03-modes-permissions",
+      "## 5. Cho agent chạy lệnh terminal",
+      "https://code.visualstudio.com/docs/agents/run/approvals#automatically-approve-terminal-commands",
+      "Automatically approve terminal commands"
+    ],
+    [
+      "03-modes-permissions",
+      "## 6. Edit mode sửa lan",
+      "https://code.visualstudio.com/docs/agents/run/review-code-edits#require-approval-before-sensitive-edits",
+      "Require approval before sensitive edits"
+    ],
+    [
+      "03-modes-permissions",
+      "## 7. Ask mode có sợ lộ",
+      "https://code.visualstudio.com/docs/agents/reference/workspace-context#improve-agent-search-with-exclusion-settings",
+      "Exclusion settings"
+    ],
+    [
+      "03-modes-permissions",
+      "## 8. UI 2026",
+      "https://code.visualstudio.com/docs/agents/run/approvals#permission-levels",
+      "Permission levels"
+    ],
+    [
+      "03-modes-permissions",
+      "## 9. Team thống nhất",
+      "https://code.visualstudio.com/docs/agents/run/security#recommended-security-baseline",
+      "Recommended security baseline"
+    ],
+    [
+      "03-modes-permissions",
+      "## 10. Khi nào KHÔNG nên",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "03-modes-permissions",
+      "## 11. Session Target",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses"
+    ],
+    [
+      "03-modes-permissions",
+      "## Vẫn lỗi thì sao",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/chat-debug-view",
+      "Debug Chat Interactions"
+    ],
+    [
+      "04-mcp-faq",
+      "## Bảng tổng hợp",
+      "https://docs.github.com/en/copilot/concepts/customizations/mcp",
+      "MCP (GitHub Docs)"
+    ],
+    [
+      "04-mcp-faq",
+      "## 1. `mcp.json`",
+      "https://code.visualstudio.com/docs/agents/reference/mcp-configuration#configuration-file",
+      "MCP configuration file"
+    ],
+    [
+      "04-mcp-faq",
+      "## 2. stdio vs SSE",
+      "https://code.visualstudio.com/docs/agents/reference/mcp-configuration#configuration-structure",
+      "Configuration structure"
+    ],
+    [
+      "04-mcp-faq",
+      "## 3. Auth cho MCP",
+      "https://code.visualstudio.com/docs/agents/reference/mcp-configuration#authentication-and-secrets",
+      "Authentication & secrets"
+    ],
+    [
+      "04-mcp-faq",
+      "## 4. Tools không hiện",
+      "https://code.visualstudio.com/docs/agent-customization/mcp-servers#if-the-server-does-not-work",
+      "If the server does not work"
+    ],
+    [
+      "04-mcp-faq",
+      "## 5. Secrets trong MCP",
+      "https://code.visualstudio.com/docs/agents/reference/mcp-configuration#input-variables-for-sensitive-data",
+      "Input variables for sensitive data"
+    ],
+    [
+      "04-mcp-faq",
+      "## 6. MCP postgres trỏ prod",
+      "https://code.visualstudio.com/docs/agents/run/security#mcp-server-sandboxing",
+      "MCP server sandboxing"
+    ],
+    [
+      "04-mcp-faq",
+      "## 7. MCP GitHub server",
+      "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/copilot-for-common-tasks/use-the-github-mcp-server",
+      "Use the GitHub MCP server"
+    ],
+    [
+      "04-mcp-faq",
+      "## 8. MCP Playwright",
+      "https://code.visualstudio.com/docs/agents/run/tools#use-browser-tools",
+      "Use browser tools"
+    ],
+    [
+      "04-mcp-faq",
+      "## 9. Nhiều MCP servers",
+      "https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#control-or-remove-a-server",
+      "Control or remove a server"
+    ],
+    [
+      "04-mcp-faq",
+      "## 10. MCP log",
+      "https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#view-server-output",
+      "View server output"
+    ],
+    [
+      "04-mcp-faq",
+      "## Vẫn lỗi thì sao",
+      "https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-mcp-usage/configure-enterprise-allowlist",
+      "Enterprise MCP allowlist"
+    ],
+    [
+      "05-policies-guardrails-faq",
+      "## Bảng tổng hợp",
+      "https://docs.github.com/en/copilot/reference/supported-surfaces-for-policies",
+      "Supported surfaces for policies"
+    ],
+    [
+      "05-policies-guardrails-faq",
+      "## 1. Instruction",
+      "https://code.visualstudio.com/docs/agent-customization/custom-instructions#how-instructions-apply",
+      "How instructions apply"
+    ],
+    [
+      "05-policies-guardrails-faq",
+      "## 2. Viết quy tắc",
+      "https://code.visualstudio.com/docs/agent-customization/custom-instructions#write-effective-instructions",
+      "Write effective instructions"
+    ],
+    [
+      "05-policies-guardrails-faq",
+      "## 3. Pre-commit",
+      "https://code.visualstudio.com/docs/agent-customization/hooks#decisions-and-failures",
+      "Hook decisions & failures"
+    ],
+    [
+      "05-policies-guardrails-faq",
+      "## 4. Branch protection",
+      "https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule",
+      "Managing a branch protection rule"
+    ],
+    [
+      "05-policies-guardrails-faq",
+      "## 5. Secret scanning",
+      "https://docs.github.com/en/code-security/concepts/secret-security/push-protection",
+      "Push protection"
+    ],
+    [
+      "05-policies-guardrails-faq",
+      "## 6. Ép conventional commits",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Smart Actions"
+    ],
+    [
+      "05-policies-guardrails-faq",
+      "## 7. Giới hạn cloud agent",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/configuring-agent-settings",
+      "Configuring agent settings"
+    ],
+    [
+      "05-policies-guardrails-faq",
+      "## 8. Audit",
+      "https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events",
+      "Agentic audit log events"
+    ],
+    [
+      "05-policies-guardrails-faq",
+      "## 9. Guardrail cho lệnh",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-automation-rationale-and-approvals",
+      "Automation rationale & approvals"
+    ],
+    [
+      "05-policies-guardrails-faq",
+      "## 10. Checklist guardrails",
+      "https://code.visualstudio.com/docs/agents/run/security#trust-boundaries",
+      "Trust boundaries"
+    ],
+    [
+      "05-policies-guardrails-faq",
+      "## Vẫn lỗi thì sao",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#check-customization-diagnostics",
+      "Check customization diagnostics"
+    ],
+    [
+      "06-prompts-agents-instructions",
+      "## Bảng tổng hợp",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "06-prompts-agents-instructions",
+      "## 1. File nào Copilot tự load",
+      "https://code.visualstudio.com/docs/agents/reference/custom-instructions-reference#discovery-and-activation",
+      "Discovery & activation"
+    ],
+    [
+      "06-prompts-agents-instructions",
+      "## 2. `applyTo`",
+      "https://code.visualstudio.com/docs/agent-customization/custom-instructions#apply-instructions-to-specific-files-or-tasks",
+      "Apply instructions to specific files"
+    ],
+    [
+      "06-prompts-agents-instructions",
+      "## 3. Frontmatter lỗi",
+      "https://code.visualstudio.com/docs/agent-customization/custom-instructions#troubleshoot-instructions",
+      "Troubleshoot instructions"
+    ],
+    [
+      "06-prompts-agents-instructions",
+      "## 4. `copilot-instructions.md`",
+      "https://code.visualstudio.com/docs/agents/concepts/context#context-window-and-compaction",
+      "Context window & compaction"
+    ],
+    [
+      "06-prompts-agents-instructions",
+      "## 5. Instructions không load",
+      "https://code.visualstudio.com/docs/agent-customization/custom-instructions#verify-your-instructions",
+      "Verify your instructions"
+    ],
+    [
+      "06-prompts-agents-instructions",
+      "## 6. Prompt files",
+      "https://code.visualstudio.com/docs/agent-customization/prompt-files#locations",
+      "Prompt file locations"
+    ],
+    [
+      "06-prompts-agents-instructions",
+      "## 7. Custom agent",
+      "https://code.visualstudio.com/docs/agents/reference/custom-agent-file-reference#file-structure",
+      "Custom agent file structure"
+    ],
+    [
+      "06-prompts-agents-instructions",
+      "## 8. Agent Skills",
+      "https://code.visualstudio.com/docs/agent-customization/agent-skills#agent-skills-vs-custom-instructions",
+      "Skills vs custom instructions"
+    ],
+    [
+      "06-prompts-agents-instructions",
+      "## 9. Thứ tự ưu tiên",
+      "https://code.visualstudio.com/docs/agent-customization/custom-instructions#resolve-conflicting-instructions",
+      "Resolve conflicting instructions"
+    ],
+    [
+      "06-prompts-agents-instructions",
+      "## 10. Test instructions",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-3-verify-the-improvement",
+      "Verify the improvement"
+    ],
+    [
+      "06-prompts-agents-instructions",
+      "## Vẫn lỗi thì sao",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "07-custom-agents-coding-agent-workflows",
+      "## Bảng tổng hợp",
+      "https://code.visualstudio.com/docs/agent-customization/custom-agents#when-to-use-a-custom-agent",
+      "When to use a custom agent"
+    ],
+    [
+      "07-custom-agents-coding-agent-workflows",
+      "## 1. Custom agent",
+      "https://code.visualstudio.com/docs/agent-customization/custom-agents#troubleshoot-custom-agents",
+      "Troubleshoot custom agents"
+    ],
+    [
+      "07-custom-agents-coding-agent-workflows",
+      "## 2. Workflow 3 pha",
+      "https://code.visualstudio.com/docs/agents/run/subagents#orchestration-patterns",
+      "Orchestration patterns"
+    ],
+    [
+      "07-custom-agents-coding-agent-workflows",
+      "## 3. Security-reviewer",
+      "https://code.visualstudio.com/docs/agent-customization/custom-agents#use-a-custom-agent",
+      "Use a custom agent"
+    ],
+    [
+      "07-custom-agents-coding-agent-workflows",
+      "## 4. Cloud agent trên GitHub",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/start-copilot-sessions",
+      "Start Copilot sessions"
+    ],
+    [
+      "07-custom-agents-coding-agent-workflows",
+      "## 5. Cloud agent conflict",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/troubleshoot-cloud-agent",
+      "Troubleshoot cloud agent"
+    ],
+    [
+      "07-custom-agents-coding-agent-workflows",
+      "## 6. Viết issue",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/kick-off-a-task",
+      "Kick off a task"
+    ],
+    [
+      "07-custom-agents-coding-agent-workflows",
+      "## 7. Nhiều agents cùng làm",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work/delegating-and-parallelizing-work-with-agents",
+      "Delegating & parallelizing agent work"
+    ],
+    [
+      "07-custom-agents-coding-agent-workflows",
+      "## 8. Handoff",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions#hand-off-a-session",
+      "Hand off a session"
+    ],
+    [
+      "07-custom-agents-coding-agent-workflows",
+      "## 9. Đo chất lượng agent",
+      "https://docs.github.com/en/copilot/reference/copilot-usage-metrics/interpret-copilot-metrics",
+      "Interpret Copilot metrics"
+    ],
+    [
+      "07-custom-agents-coding-agent-workflows",
+      "## 10. Dọn dẹp sau agent",
+      "https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#clean-up-session-worktrees",
+      "Clean up session worktrees"
+    ],
+    [
+      "07-custom-agents-coding-agent-workflows",
+      "## Vẫn lỗi thì sao",
+      "https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#prevent-the-agent-from-drifting",
+      "Prevent the agent from drifting"
+    ],
+    [
+      "08-loi-thuong-gap-troubleshooting",
+      "## Bảng tổng hợp",
+      "https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues",
+      "Troubleshoot common issues"
+    ],
+    [
+      "08-loi-thuong-gap-troubleshooting",
+      "## 1. Copilot báo Offline",
+      "https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-network-errors",
+      "Troubleshoot network errors"
+    ],
+    [
+      "08-loi-thuong-gap-troubleshooting",
+      "## 2. No suggestions",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#inline-suggestions-are-not-working-in-the-editor",
+      "Inline suggestions not working"
+    ],
+    [
+      "08-loi-thuong-gap-troubleshooting",
+      "## 3. Chat error",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#chat-features-arent-working-for-me",
+      "Chat features aren't working"
+    ],
+    [
+      "08-loi-thuong-gap-troubleshooting",
+      "## 4. `gh copilot` CLI fail",
+      "https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli",
+      "Install Copilot CLI"
+    ],
+    [
+      "08-loi-thuong-gap-troubleshooting",
+      "## 5. MCP tools đột nhiên mất",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#troubleshoot-mcp-servers",
+      "Troubleshoot MCP servers"
+    ],
+    [
+      "08-loi-thuong-gap-troubleshooting",
+      "## 6. Completions gợi ý sai",
+      "https://code.visualstudio.com/docs/editing/ai-powered-suggestions#guide-suggestions-with-your-code",
+      "Guide suggestions with your code"
+    ],
+    [
+      "08-loi-thuong-gap-troubleshooting",
+      "## 7. Agent lặp vòng",
+      "https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#diagnose-repeated-failures",
+      "Diagnose repeated failures"
+    ],
+    [
+      "08-loi-thuong-gap-troubleshooting",
+      "## 8. Sau update IDE",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#view-logs-for-github-copilot",
+      "View logs for GitHub Copilot"
+    ],
+    [
+      "08-loi-thuong-gap-troubleshooting",
+      "## 9. Nghi org policy chặn",
+      "https://docs.github.com/en/copilot/reference/enterprise-administrators/policy-conflicts",
+      "Policy conflicts"
+    ],
+    [
+      "08-loi-thuong-gap-troubleshooting",
+      "## 10. Thứ tự debug tổng",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "08-loi-thuong-gap-troubleshooting",
+      "## Vẫn lỗi thì sao",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#report-an-unresolved-issue",
+      "Report an unresolved issue"
+    ],
+    [
+      "09-bao-mat-quyen-rieng-tu",
+      "## Bảng tổng hợp",
+      "https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings",
+      "Security, governance & network settings"
+    ],
+    [
+      "09-bao-mat-quyen-rieng-tu",
+      "## 1. Code của tôi có bị dùng",
+      "https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/session-data",
+      "Session data"
+    ],
+    [
+      "09-bao-mat-quyen-rieng-tu",
+      "## 2. Duplication detection",
+      "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/set-up-copilot/configure-in-ide",
+      "Configure Copilot in your IDE"
+    ],
+    [
+      "09-bao-mat-quyen-rieng-tu",
+      "## 3. Lỡ commit secret",
+      "https://docs.github.com/en/code-security/concepts/secret-security/secret-leakage-risks",
+      "Secret leakage risks"
+    ],
+    [
+      "09-bao-mat-quyen-rieng-tu",
+      "## 4. Secret scanning",
+      "https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning",
+      "Secret scanning"
+    ],
+    [
+      "09-bao-mat-quyen-rieng-tu",
+      "## 5. Audit logs",
+      "https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/review-audit-logs",
+      "Review audit logs"
+    ],
+    [
+      "09-bao-mat-quyen-rieng-tu",
+      "## 6. ZDR",
+      "https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/manage-access/manage-network-access",
+      "Manage network access"
+    ],
+    [
+      "09-bao-mat-quyen-rieng-tu",
+      "## 7. Content exclusion",
+      "https://docs.github.com/en/copilot/how-tos/configure-content-exclusion/exclude-content-from-copilot",
+      "Exclude content from Copilot"
+    ],
+    [
+      "09-bao-mat-quyen-rieng-tu",
+      "## 8. Token/PAT",
+      "https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens",
+      "Managing personal access tokens"
+    ],
+    [
+      "09-bao-mat-quyen-rieng-tu",
+      "## 9. Review PR của cloud agent",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review",
+      "Use Copilot code review"
+    ],
+    [
+      "09-bao-mat-quyen-rieng-tu",
+      "## 10. Checklist bảo mật",
+      "https://docs.github.com/en/code-security/concepts/secret-security/public-monitoring",
+      "Public monitoring"
+    ],
+    [
+      "09-bao-mat-quyen-rieng-tu",
+      "## Vẫn lỗi thì sao",
+      "https://code.visualstudio.com/docs/agents/run/security#security-risks-to-be-aware-of",
+      "Security risks to be aware of"
+    ],
+    [
+      "10-ci-sdk-review-web",
+      "## Bảng tổng hợp",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-automations",
+      "About automations"
+    ],
+    [
+      "10-ci-sdk-review-web",
+      "## 1. Actions + cloud agent",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/copilot-cli-in-github-actions",
+      "Copilot CLI in GitHub Actions"
+    ],
+    [
+      "10-ci-sdk-review-web",
+      "## 2. Workflow `copilot-review.yml`",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review",
+      "Use Copilot code review"
+    ],
+    [
+      "10-ci-sdk-review-web",
+      "## 3. Workflow `copilot-ci-triage.yml`",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-dynamic-workflows",
+      "Use dynamic workflows"
+    ],
+    [
+      "10-ci-sdk-review-web",
+      "## 4. Secrets trong workflow",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/configure-secrets-and-variables",
+      "Configure secrets & variables"
+    ],
+    [
+      "10-ci-sdk-review-web",
+      "## 5. Copilot SDK",
+      "https://docs.github.com/en/copilot/how-tos/copilot-sdk",
+      "Copilot SDK how-to"
+    ],
+    [
+      "10-ci-sdk-review-web",
+      "## 6. Code review tự động",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/set-up-copilot/configure-code-review",
+      "Configure code review"
+    ],
+    [
+      "10-ci-sdk-review-web",
+      "## 7. github.com/copilot",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/chat-with-copilot/chat-in-github",
+      "Chat with Copilot on GitHub"
+    ],
+    [
+      "10-ci-sdk-review-web",
+      "## 8. Copilot trên Mobile",
+      "https://docs.github.com/en/copilot/concepts/copilot-surfaces/github-copilot-app",
+      "GitHub Copilot app"
+    ],
+    [
+      "10-ci-sdk-review-web",
+      "## 9. Auto-merge PR",
+      "https://docs.github.com/en/pull-requests/how-tos/merge-and-close-pull-requests/automatically-merging-a-pull-request",
+      "Automatically merging a pull request"
+    ],
+    [
+      "10-ci-sdk-review-web",
+      "## 10. Đo hiệu quả automation",
+      "https://docs.github.com/en/copilot/concepts/billing-and-usage/copilot-usage-metrics",
+      "Copilot usage metrics"
+    ],
+    [
+      "10-ci-sdk-review-web",
+      "## Vẫn lỗi thì sao",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/troubleshoot-cloud-agent",
+      "Troubleshoot cloud agent"
+    ],
+    [
+      "11-spaces-spark-workspace",
+      "## Trạng thái nhanh",
+      "https://docs.github.com/en/copilot/concepts/enterprise/learning-about-new-features-and-models",
+      "Learning about new features and models"
+    ],
+    [
+      "11-spaces-spark-workspace",
+      "## 1. Copilot Spaces là gì",
+      "https://docs.github.com/en/copilot/concepts/prompting-and-context/spaces",
+      "Copilot Spaces"
+    ],
+    [
+      "11-spaces-spark-workspace",
+      "## 2. Copilot Spark",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/agent-apps",
+      "Agent apps"
+    ],
+    [
+      "11-spaces-spark-workspace",
+      "## 3. Copilot Workspace",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/research-plan-iterate",
+      "Research, plan, iterate"
+    ],
+    [
+      "11-spaces-spark-workspace",
+      "## 4. Truy cập Spaces",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/copilot-spaces/create-copilot-spaces",
+      "Create Copilot Spaces"
+    ],
+    [
+      "11-spaces-spark-workspace",
+      "## 5. Muốn \"",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-agent-apps",
+      "Use agent apps"
+    ],
+    [
+      "11-spaces-spark-workspace",
+      "## 6. Muốn workflow",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/kick-off-a-task",
+      "Kick off a task"
+    ],
+    [
+      "11-spaces-spark-workspace",
+      "## 7. Quản lý Spaces bằng code",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/copilot-spaces/collaborate-with-others",
+      "Collaborate with others in Spaces"
+    ],
+    [
+      "11-spaces-spark-workspace",
+      "## 8. Troubleshooting",
+      "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/customize-copilot/extend-copilot-with-tools-and-context/use-copilot-spaces",
+      "Use Copilot Spaces in your IDE"
+    ]
+  ]
+}

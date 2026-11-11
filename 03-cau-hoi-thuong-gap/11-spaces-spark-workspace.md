@@ -10,7 +10,7 @@
 | **Copilot Spark** | ⚰️ **Đã gỡ** (đóng cửa 31/08/2026) | Không còn — app đã deploy vẫn chạy |
 | **Copilot Workspace** | ⚰️ **Sunset 2025** — hấp thụ vào cloud agent | Không còn — dùng cloud agent |
 
-> **Cách đọc bảng này:** bảng này là "bản tin an ninh" — cột **Trạng thái** cho biết tính năng đang sống hay đã chết; dòng có ✅ còn xài được, dòng có ⚰️ là di tích lịch sử.
+> **Cách đọc bảng này:** bảng này là "bản tin an ninh" — cột **Trạng thái** cho biết tính năng đang sống hay đã chết; dòng có ✅ còn xài được, dòng có ⚰️ là di tích lịch sử. · 📄 [GitHub Docs: Learning about new features and models](https://docs.github.com/en/copilot/concepts/enterprise/learning-about-new-features-and-models)
 
 ---
 
@@ -33,7 +33,7 @@
 Verify: câu trả lời cite đúng file/repo bạn đã thêm
 ```
 
-> **Sai lầm phổ biến:** ném cả org vào một Space → context loãng, trả lời lan man, tốn token. Space tốt = một nhiệm vụ, ít nguồn, instructions ngắn. **Không thấy Spaces:** cần Copilot license (mở cho mọi plan kể cả Free); thử `github.com/copilot/spaces` trực tiếp.
+> **Sai lầm phổ biến:** ném cả org vào một Space → context loãng, trả lời lan man, tốn token. Space tốt = một nhiệm vụ, ít nguồn, instructions ngắn. **Không thấy Spaces:** cần Copilot license (mở cho mọi plan kể cả Free); thử `github.com/copilot/spaces` trực tiếp. · 📄 [GitHub Docs: Copilot Spaces](https://docs.github.com/en/copilot/concepts/prompting-and-context/spaces)
 
 ## 2. Copilot Spark là gì, giờ còn không?
 
@@ -47,7 +47,7 @@ Lịch sử cuối (verify github.blog/changelog/2026-08-04):
 - **04/08/2026:** Spark ngừng nhận user/app mới.
 - **31/08/2026:** Spark đóng cửa; đường export code app cũ qua workbench → `…` → **Create repository** cũng khép lại sau đó.
 
-App **đã deploy** vẫn tiếp tục chạy — chỉ việc chỉnh sửa trong workbench là không còn. **App hỏng phần AI:** `llm()` không còn backend nào cả; thay bằng gọi trực tiếp provider (Anthropic/OpenAI/xAI) từ app bạn.
+App **đã deploy** vẫn tiếp tục chạy — chỉ việc chỉnh sửa trong workbench là không còn. **App hỏng phần AI:** `llm()` không còn backend nào cả; thay bằng gọi trực tiếp provider (Anthropic/OpenAI/xAI) từ app bạn. · 📄 [GitHub Docs: Agent apps](https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/agent-apps)
 
 ## 3. Copilot Workspace đâu rồi?
 
@@ -61,7 +61,7 @@ App **đã deploy** vẫn tiếp tục chạy — chỉ việc chỉnh sửa tro
 
 > 📄 **Code ví dụ:** [`./examples/11-spaces-spark-workspace/copilot-workspace-au-roi.sh`](./examples/11-spaces-spark-workspace/copilot-workspace-au-roi.sh)
 
-> **Không thấy nút assign Copilot:** repo private của org Free plan (cloud agent cần plan trả phí); hoặc org policy tắt cloud agent — hỏi admin bật.
+> **Không thấy nút assign Copilot:** repo private của org Free plan (cloud agent cần plan trả phí); hoặc org policy tắt cloud agent — hỏi admin bật. · 📄 [GitHub Docs: Research, plan, iterate](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/research-plan-iterate)
 
 ## 4. Truy cập Spaces ở đâu, ai dùng được?
 
@@ -69,7 +69,7 @@ App **đã deploy** vẫn tiếp tục chạy — chỉ việc chỉnh sửa tro
 
 Phân quyền: Space cá nhân = private / share user / public link (view-only); Space org = member thấy theo vai trò admin/editor/viewer hoặc "No access" ẩn hẳn.
 
-> 📄 **Code ví dụ:** [`./examples/11-spaces-spark-workspace/truy-cap-spaces-o-au-ai-dung.sh`](./examples/11-spaces-spark-workspace/truy-cap-spaces-o-au-ai-dung.sh)
+> 📄 **Code ví dụ:** [`./examples/11-spaces-spark-workspace/truy-cap-spaces-o-au-ai-dung.sh`](./examples/11-spaces-spark-workspace/truy-cap-spaces-o-au-ai-dung.sh) · 📄 [GitHub Docs: Create Copilot Spaces](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/copilot-spaces/create-copilot-spaces)
 
 ## 5. Muốn "vibe coding" tạo app như Spark, giờ dùng gì?
 
@@ -84,11 +84,11 @@ Phân quyền: Space cá nhân = private / share user / public link (view-only);
 
 > 📄 **Code ví dụ:** [`./examples/11-spaces-spark-workspace/muon-vibe-coding-tao-app-nhu-spark.sh`](./examples/11-spaces-spark-workspace/muon-vibe-coding-tao-app-nhu-spark.sh)
 
-> Agent làm sai ý: issue viết spec cụ thể hơn (stack, cấu trúc thư mục, tiêu chí xong); chia nhỏ thành nhiều issue thay vì 1 issue khổng lồ.
+> Agent làm sai ý: issue viết spec cụ thể hơn (stack, cấu trúc thư mục, tiêu chí xong); chia nhỏ thành nhiều issue thay vì 1 issue khổng lồ. · 📄 [GitHub Docs: Use agent apps](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-agent-apps)
 
 ## 6. Muốn workflow "issue → PR" như Workspace cũ?
 
-**Trả lời 1 câu:** Gán issue cho **Copilot cloud agent** — đọc issue, lập kế hoạch, sửa code, tự mở draft PR; bạn review và comment để nó sửa tiếp (dùng Copilot CLI khi cần chạy local).
+**Trả lời 1 câu:** Gán issue cho **Copilot cloud agent** — đọc issue, lập kế hoạch, sửa code, tự mở draft PR; bạn review và comment để nó sửa tiếp (dùng Copilot CLI khi cần chạy local). · 📄 [GitHub Docs: Kick off a task](https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/kick-off-a-task)
 
 | Bạn từng làm ở Workspace | Bây giờ làm ở đâu |
 |---|---|
@@ -103,7 +103,7 @@ Phân quyền: Space cá nhân = private / share user / public link (view-only);
 
 > 📄 **Code ví dụ:** [`./examples/11-spaces-spark-workspace/quan-ly-spaces-bang-code-spaces-api.sh`](./examples/11-spaces-spark-workspace/quan-ly-spaces-bang-code-spaces-api.sh)
 
-> 404 + config trông đúng → bản preview cũ có schema khác, API đã GA 18/05/2026.
+> 404 + config trông đúng → bản preview cũ có schema khác, API đã GA 18/05/2026. · 📄 [GitHub Docs: Collaborate with others in Spaces](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/copilot-spaces/collaborate-with-others)
 
 ## 8. Troubleshooting cả 3 (ma trận triệu chứng)
 
@@ -122,4 +122,4 @@ Phân quyền: Space cá nhân = private / share user / public link (view-only);
 
 ---
 
-> **Chốt:** nhớ 1 dòng — "Spaces cho Copilot biết **đọc gì**, cloud agent **làm** việc thay bạn, Spark/Workspace là **di tích** lịch sử." Trạng thái các tính năng này có thể đổi tiếp sau 10/2026 — nguồn verify: github.blog changelog (24/09/2025, 18/05/2026, 04/08/2026) + docs.github.com/copilot. Quay về: [../README.md](../README.md) · Lỗi chung: [bài 08](08-loi-thuong-gap-troubleshooting.md).
+> **Chốt:** nhớ 1 dòng — "Spaces cho Copilot biết **đọc gì**, cloud agent **làm** việc thay bạn, Spark/Workspace là **di tích** lịch sử." Trạng thái các tính năng này có thể đổi tiếp sau 10/2026 — nguồn verify: github.blog changelog (24/09/2025, 18/05/2026, 04/08/2026) + docs.github.com/copilot. Quay về: [../README.md](../README.md) · Lỗi chung: [bài 08](08-loi-thuong-gap-troubleshooting.md). · 📄 [GitHub Docs: Use Copilot Spaces in your IDE](https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/customize-copilot/extend-copilot-with-tools-and-context/use-copilot-spaces)

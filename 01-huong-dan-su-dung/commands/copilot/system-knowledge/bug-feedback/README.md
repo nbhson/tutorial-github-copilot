@@ -13,32 +13,32 @@ Kênh gửi ý kiến lên "ban quản lý" Copilot: vote tốt/xấu cho một 
 | Copilot CLI | `/feedback`, `/bug` (docs CLI: "Provide feedback about the CLI") | bug của chính Copilot CLI |
 | GitHub.com | mở issue ở repo liên quan (`microsoft/vscode-copilot-release` cho Copilot trong VS Code) hoặc `gh issue create` | bug cần thread để theo dõi, có ảnh/log |
 
-Một điều bắt buộc trước khi gửi: soát secrets, đừng để lộ token trong log bạn dán vào.
+Một điều bắt buộc trước khi gửi: soát secrets, đừng để lộ token trong log bạn dán vào. · 📄 [VS Code Docs: Customize AI agents (overview)](https://code.visualstudio.com/docs/agent-customization/overview)
 
 ## Vì sao phải báo đúng cách?
 
 Vì GitHub chỉ sửa được cái nó tái hiện được. Một câu "Copilot dở" không giúp ích gì; còn "`/tests` sinh import sai, lặp lại bằng cách bôi đen hàm X rồi gọi `/tests`, extension 1.2.3" thì họ có thể đóng bug hoặc fix. Vote/góp ý nhanh đi kênh feedback; bug cần tái hiện chính xác đi kênh issue.
 
-> **Tóm gọn 1 câu:** Báo lỗi kiểu "bệnh nhân đến khám" — kèm triệu chứng, cách gây lại bệnh và hồ sơ (version), bác sĩ mới chữa được.
+> **Tóm gọn 1 câu:** Báo lỗi kiểu "bệnh nhân đến khám" — kèm triệu chứng, cách gây lại bệnh và hồ sơ (version), bác sĩ mới chữa được. · 📄 [VS Code Docs: Customize AI agents (overview)](https://code.visualstudio.com/docs/agent-customization/overview)
 
 **Nếu làm sai thì sao?** Báo thiếu bước lặp → bị đóng là "không tái hiện được". Báo nhầm do lỗi scope của bạn → mất thời gian cả hai bên. Dán log có secrets → rò rỉ thông tin. Cả ba đều tránh được bằng vài thao tác nhỏ.
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** thấy câu trả lời hay/dở muốn vote; gặp bug lặp lại được; muốn đề xuất cải thiện tính năng.
-- **ĐỪNG báo bug khi:** nguyên nhân là scope/prompt của bạn chưa đúng. Gọn scope và thử lại trước; nếu vẫn lỗi một cách lặp lại được thì mới báo.
+- **ĐỪNG báo bug khi:** nguyên nhân là scope/prompt của bạn chưa đúng. Gọn scope và thử lại trước; nếu vẫn lỗi một cách lặp lại được thì mới báo. · 📄 [VS Code Docs: Choose a customization scope](https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope)
 
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
-> Gõ `/` trong Chat view mà không thấy `/feedback`/`/bug`? Đúng rồi đấy — hai slash đó thuộc **Copilot CLI**. Trong VS Code hãy dùng `Chat: Provide Feedback` (F1 → gõ "feedback").
+> Gõ `/` trong Chat view mà không thấy `/feedback`/`/bug`? Đúng rồi đấy — hai slash đó thuộc **Copilot CLI**. Trong VS Code hãy dùng `Chat: Provide Feedback` (F1 → gõ "feedback"). · 📄 [VS Code Docs: Report an unresolved issue](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#report-an-unresolved-issue)
 
 ## Ví dụ thật
 
 Nghiệp vụ: `/tests` sinh ra import sai mỗi lần bạn bôi đen hàm X, và bạn lặp lại được đều đặn.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Create project instructions](https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions)
 
 **Kết quả mong đợi:** bug có đủ context (prompt + version + bước lặp) để GitHub tái hiện; bạn nhận được xác nhận/issue tham chiếu.
 
@@ -50,9 +50,11 @@ Nghiệp vụ: `/tests` sinh ra import sai mỗi lần bạn bôi đen hàm X, v
 
 ✅ ĐÚNG: "mô tả ngắn: `/tests` sai import; bước lặp: bôi đen hàm X → `/tests`; kỳ vọng/thực tế; version extension + VS Code".
 
-**Bài học:** càng tái hiện được thì bug càng mau được xử lý. Bước lặp + version là hai phần không được thiếu.
+**Bài học:** càng tái hiện được thì bug càng mau được xử lý. Bước lặp + version là hai phần không được thiếu. · 📄 [VS Code Docs: Troubleshoot customization issues](https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues)
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: Collect network diagnostics](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#collect-network-diagnostics)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
@@ -60,26 +62,26 @@ Nghiệp vụ: `/tests` sinh ra import sai mỗi lần bạn bôi đen hàm X, v
 | Báo nhầm do scope mình sai | Chưa kiểm tra scope | Gọn scope + thử lại trước khi báo |
 | Gửi feedback có secrets | Dán log chứa token | Soát secrets trước khi gửi |
 | Gửi xong không ai trả lời | Sai surface, sai repo | BUG CLI → `/bug`; Copilot VS Code → `microsoft/vscode-copilot-release` |
-
 ## So sánh với Claude Code
+
+📄 [GitHub Docs: Comparing customizations](https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations)
 
 | Việc | Copilot | Claude Code | Ghi chú |
 |---|---|---|---|
 | Báo bug / góp ý trong sản phẩm | `Chat: Provide Feedback` (VS Code) · `/feedback` + `/bug` (CLI) · issue trên GitHub.com | `/bug` + `/feedback` trong CLI | Cùng ý tưởng "gửi từ trong công cụ", khác tên lệnh theo surface |
 | Gửi kèm context | Form/issue yêu cầu mô tả + bước lặp + version | Tự soạn mô tả | Cùng nguyên tắc "tái hiện được mới xử được" |
 | Soát secrets | Bạn tự soát log trước khi gửi | Bạn tự soát | Không công cụ nào tự bảo vệ secret của bạn |
-
 ## Best practices (kèm "vì sao")
 
 - **Luôn kèm bước lặp + version.** *Vì sao?* Không có chúng thì bug dễ bị đóng là "không tái hiện được".
 - **Chọn đúng surface cho đúng loại chuyện.** *Vì sao?* Vote chất lượng câu trả lời thì gửi feedback; bug cần người sửa thì mở issue — nhầm kênh là mất công cả hai bên.
 - **Soát secrets trước khi dán log.** *Vì sao?* Log dễ chứa token; gửi đi là rò rỉ vĩnh viễn.
-- **Chưa chắc là bug thì thử lại với scope gọn.** *Vì sao?* Phần lớn "bug" là do scope/prompt — loại trừ trước khi phiền GitHub.
+- **Chưa chắc là bug thì thử lại với scope gọn.** *Vì sao?* Phần lớn "bug" là do scope/prompt — loại trừ trước khi phiền GitHub. · 📄 [GitHub Docs: View Copilot logs](https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/view-logs)
 
 ## Bài tập nhỏ
 
 1. **(5 phút)** Viết một bản báo cáo bug giả cho lỗi bạn từng gặp, đủ 3 phần: mô tả, bước lặp, version. Đọc lại xem người khác có tái hiện được không.
-2. **(10 phút)** Lấy một câu trả lời gần đây, gửi feedback kèm lý do cụ thể (đúng chỗ nào / thiếu chỗ nào).
+2. **(10 phút)** Lấy một câu trả lời gần đây, gửi feedback kèm lý do cụ thể (đúng chỗ nào / thiếu chỗ nào). · 📄 [VS Code Docs: Report an unresolved issue](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#report-an-unresolved-issue)
 
 ## Tham khảo
 

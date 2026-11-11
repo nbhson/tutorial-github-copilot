@@ -12,7 +12,7 @@
 | Enterprise / compliance nặng | Enterprise ($39/user) | SSO/SAML + org policy + audit | Đọc SSO doc nội bộ |
 | Thử trước khi mua | Free / Business trial 30 ngày | Như plan tương ứng | Set reminder trước ngày hết hạn |
 
-> **Cách đọc bảng này:** đây là mục lục của bài — dọc cột **Bạn là ai** tìm đúng chân dung của mình, rồi đi ngang lấy plan, cách cài và việc đầu tiên cần làm; câu hỏi chi tiết nằm ở 10 mục dưới.
+> **Cách đọc bảng này:** đây là mục lục của bài — dọc cột **Bạn là ai** tìm đúng chân dung của mình, rồi đi ngang lấy plan, cách cài và việc đầu tiên cần làm; câu hỏi chi tiết nằm ở 10 mục dưới. · 📄 [GitHub Docs: Copilot feature matrix](https://docs.github.com/en/copilot/reference/copilot-feature-matrix)
 
 ---
 
@@ -43,7 +43,7 @@ Mấu chốt: **Free/Pro/Pro+/Max = tự trả, tự quản; Business/Enterprise
 
 > 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/cac-plan-khac-nhau-gi.sh`](./examples/01-tai-khoan-pricing-cai-dat/cac-plan-khac-nhau-gi.sh)
 
-> **Nếu vẫn lỗi:** chạy `gh auth status` xem đúng account chưa; mở `github.com/settings/copilot` đối chiếu plan thật; org thì hỏi admin seat đã gán chưa.
+> **Nếu vẫn lỗi:** chạy `gh auth status` xem đúng account chưa; mở `github.com/settings/copilot` đối chiếu plan thật; org thì hỏi admin seat đã gán chưa. · 📄 [GitHub Docs: Plans for GitHub Copilot](https://docs.github.com/en/copilot/get-started/plans)
 
 ## 2. Trial hoạt động thế nào, hết trial thì sao?
 
@@ -51,7 +51,7 @@ Mấu chốt: **Free/Pro/Pro+/Max = tự trả, tự quản; Business/Enterprise
 
 Hết trial: Free → suggestions dừng, chat báo hạn mức; Business trial → org bị downgrade, seat mất, cloud agent PR dở dang vẫn giữ nhưng không tạo mới được. Không có lệnh CLI xem trial — check web `github.com/settings/copilot` → "Trial ends on..." và đặt reminder trước 3 ngày.
 
-> **Khi nào áp dụng:** trước khi onboarding team >5 người — luôn trial Business trước, đừng mua blind.
+> **Khi nào áp dụng:** trước khi onboarding team >5 người — luôn trial Business trước, đừng mua blind. · 📄 [GitHub Docs: Get started with a Copilot plan](https://docs.github.com/en/copilot/how-tos/manage-your-account/get-started-with-a-copilot-plan)
 
 ## 3. Seat là gì, admin assign / thu hồi thế nào?
 
@@ -63,7 +63,7 @@ Hai chế độ: allow all members (tốn seat theo headcount) hoặc selected t
 
 > 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/seat-la-gi-admin-assign-thu-hoi.sh`](./examples/01-tai-khoan-pricing-cai-dat/seat-la-gi-admin-assign-thu-hoi.sh)
 
-> **Khi nào áp dụng:** khi dev báo "Copilot đòi mua dù đã join org" — 90% là chưa được assign seat.
+> **Khi nào áp dụng:** khi dev báo "Copilot đòi mua dù đã join org" — 90% là chưa được assign seat. · 📄 [GitHub Docs: Seat assignment](https://docs.github.com/en/copilot/reference/copilot-billing/seat-assignment)
 
 ## 4. Cài đặt thế nào cho sạch: VS Code / JetBrains / Neovim / CLI?
 
@@ -76,7 +76,7 @@ Hai chế độ: allow all members (tốn seat theo headcount) hoặc selected t
 | Neovim | `github/copilot.vim` hoặc `zbirenbaum/copilot.lua` | `:Copilot auth` |
 | CLI | `gh extension install github/gh-copilot` hoặc binary `copilot` | `gh auth login` / `copilot init` |
 
-> 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/cai-at-the-nao-cho-sach-vs.sh`](./examples/01-tai-khoan-pricing-cai-dat/cai-at-the-nao-cho-sach-vs.sh)
+> 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/cai-at-the-nao-cho-sach-vs.sh`](./examples/01-tai-khoan-pricing-cai-dat/cai-at-the-nao-cho-sach-vs.sh) · 📄 [VS Code Docs: GitHub Copilot Setup](https://code.visualstudio.com/docs/setup/copilot)
 
 Bản CLI độc lập 2026 là binary `copilot` (slash `/limits` + `/usage` cho chi phí, `copilot mcp list` cho MCP) — xem [bài 10](10-ci-sdk-review-web.md).
 
@@ -86,13 +86,13 @@ Bản CLI độc lập 2026 là binary `copilot` (slash `/limits` + `/usage` cho
 
 Lỗi kinh điển: máy công ty login nhầm account cá nhân → policy org không áp dụng, bill sai chỗ. Check trước khi đổi: `gh auth status` + `gh api user --jq .login`. Đổi: `gh auth logout && gh auth login --web -h github.com`, hoặc `gh auth switch --user <login>` nếu có nhiều account. Freelancer 2 account nên dùng 2 VS Code profile riêng để khỏi lẫn seat/bill.
 
-> **Khi nào áp dụng:** đầu mỗi máy mới, khi bill sai, và khi policy org "không ăn" (thường do sai account).
+> **Khi nào áp dụng:** đầu mỗi máy mới, khi bill sai, và khi policy org "không ăn" (thường do sai account). · 📄 [VS Code Docs: Use a different GitHub account](https://code.visualstudio.com/docs/setup/copilot#use-a-different-github-account-with-copilot)
 
 ## 6. Policy của org đè lên setting cá nhân ra sao?
 
 **Trả lời 1 câu:** Với Business/Enterprise, policy org **luôn thắng** setting cá nhân — bạn bật trong IDE cũng bị ép tắt.
 
-Triệu chứng: setting tự revert sau restart, model picker thiếu model, chat báo "disabled by your administrator". Dev không tự xem được policy — check `github.com/organizations/<ORG>/settings/copilot` → Policies tab, hoặc hỏi admin. Chi tiết [bài 05](05-policies-guardrails-faq.md).
+Triệu chứng: setting tự revert sau restart, model picker thiếu model, chat báo "disabled by your administrator". Dev không tự xem được policy — check `github.com/organizations/<ORG>/settings/copilot` → Policies tab, hoặc hỏi admin. Chi tiết [bài 05](05-policies-guardrails-faq.md). · 📄 [GitHub Docs: Copilot policies](https://docs.github.com/en/copilot/concepts/enterprise/policies)
 
 ## 7. Lỗi cài đặt kinh điển?
 
@@ -100,13 +100,13 @@ Triệu chứng: setting tự revert sau restart, model picker thiếu model, ch
 
 > 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/loi-cai-at-kinh-ien.sh`](./examples/01-tai-khoan-pricing-cai-dat/loi-cai-at-kinh-ien.sh)
 
-> **Khi nào áp dụng:** khi suggestions/chat đột nhiên chết sau update IDE hoặc sau khi vọc extension.
+> **Khi nào áp dụng:** khi suggestions/chat đột nhiên chết sau update IDE hoặc sau khi vọc extension. · 📄 [VS Code Docs: Start with basic checks](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#start-with-basic-checks)
 
 ## 8. Bắt đầu repo mới: 5 việc setup đầu?
 
 **Trả lời 1 câu:** Verify suggestions chạy → copy `templates/` (copilot-instructions + mcp.json + settings) → thêm instructions theo stack → thêm MCP nếu cần data ngoài repo → thêm content exclusion cho path nhạy cảm.
 
-> 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/bat-au-repo-moi-5-viec-setup.sh`](./examples/01-tai-khoan-pricing-cai-dat/bat-au-repo-moi-5-viec-setup.sh)
+> 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/bat-au-repo-moi-5-viec-setup.sh`](./examples/01-tai-khoan-pricing-cai-dat/bat-au-repo-moi-5-viec-setup.sh) · 📄 [VS Code Docs: Establish a baseline](https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#establish-a-baseline)
 
 Copilot đọc instructions tĩnh — repo trống vẫn setup được full khung, chỉ cần sửa ~20% cho khớp stack thật (template ghi `npm test` mà bạn dùng `pnpm` thì sửa ngay, không Copilot gợi ý sai lệnh cả tháng). Team thì commit `.github/` + `.vscode/` để người sau khỏi setup lại.
 
@@ -114,7 +114,7 @@ Copilot đọc instructions tĩnh — repo trống vẫn setup được full khu
 
 **Trả lời 1 câu:** Báo qua GitHub Discussions (`github.com/community`) hoặc Support ticket (Business/Enterprise), kèm đủ 3 thứ: plan + IDE version + log thì mới xử lý nhanh.
 
-> 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/bao-loi-nho-ho-tro-github-the.sh`](./examples/01-tai-khoan-pricing-cai-dat/bao-loi-nho-ho-tro-github-the.sh)
+> 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/bao-loi-nho-ho-tro-github-the.sh`](./examples/01-tai-khoan-pricing-cai-dat/bao-loi-nho-ho-tro-github-the.sh) · 📄 [VS Code Docs: Report an unresolved issue](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#report-an-unresolved-issue)
 
 ---
 
@@ -130,4 +130,4 @@ Kể cả khi đã làm đúng mọi mục trên, vẫn có ca kẹt — mục n
 
 Tham khảo chéo: [bài 02](02-model-context-premium.md) (model + chi phí) · [bài 05](05-policies-guardrails-faq.md) (policy) · [bài 08](08-loi-thuong-gap-troubleshooting.md) (bảng lỗi full) · [../templates/README.md](../templates/README.md) (templates copy ngay) · 📄 script verify tổng hợp: [`../01-huong-dan-su-dung/examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh`](../01-huong-dan-su-dung/examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh).
 
-> **Tóm gọn 1 câu:** Cài Copilot giống lắp ổ khóa: đúng chìa (account), đúng cửa (extension chính chủ), đúng nhà (seat/policy org) — kiểm tra theo thứ tự đó là giải quyết được phần lớn sự cố.
+> **Tóm gọn 1 câu:** Cài Copilot giống lắp ổ khóa: đúng chìa (account), đúng cửa (extension chính chủ), đúng nhà (seat/policy org) — kiểm tra theo thứ tự đó là giải quyết được phần lớn sự cố. · 📄 [GitHub Docs: Troubleshoot common issues](https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues)

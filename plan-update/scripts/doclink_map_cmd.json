@@ -1,0 +1,3425 @@
+{
+  "_doc": "Sinh boi gen_cmd_map.py — moi section cua README lenh -> trang docs tuong ung.",
+  "m": [
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/cloud-agent-session",
+      "## 1 câu nôm na",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-github-copilot-agents",
+      "About GitHub Copilot agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/cloud-agent-session",
+      "## Vì sao phải chỉnh đủ 3 chiều?",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-github-copilot-agents",
+      "About GitHub Copilot agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/cloud-agent-session",
+      "## Khi nào dùng / khi nào đừng",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work",
+      "Choosing & delegating agent work"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/cloud-agent-session",
+      "## Ba chiều, một bảng",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/start-copilot-sessions",
+      "Start Copilot sessions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/cloud-agent-session",
+      "## Cách gọi (copy-paste)",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/start-copilot-sessions",
+      "Start Copilot sessions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/cloud-agent-session",
+      "## Ví dụ thật",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/research-plan-iterate",
+      "Research, plan, iterate"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/cloud-agent-session",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues",
+      "Troubleshoot common issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/cloud-agent-session",
+      "## Lỗi thường gặp",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/troubleshoot-cloud-agent",
+      "Troubleshoot cloud agent"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/cloud-agent-session",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/cloud-agent-session",
+      "## Best practices (kèm \"vì sao\")",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/use-cloud-agent-on-github",
+      "Use cloud agent on GitHub"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/cloud-agent-session",
+      "## Bài tập nhỏ",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/start-copilot-sessions",
+      "Start Copilot sessions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-assign",
+      "## 1 câu nôm na",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-github-copilot-agents",
+      "About GitHub Copilot agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-assign",
+      "## Vì sao dùng Copilot cloud agent?",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-github-copilot-agents",
+      "About GitHub Copilot agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-assign",
+      "## Khi nào dùng / khi nào đừng",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work",
+      "Choosing & delegating agent work"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-assign",
+      "## Cách gọi (copy-paste)",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/kick-off-a-task",
+      "Kick off a task"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-assign",
+      "## Ví dụ thật",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/research-plan-iterate",
+      "Research, plan, iterate"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-assign",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues",
+      "Troubleshoot common issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-assign",
+      "## Lỗi thường gặp",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/troubleshoot-cloud-agent",
+      "Troubleshoot cloud agent"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-assign",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-assign",
+      "## Best practices (kèm \"vì sao\")",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/research-plan-iterate",
+      "Research, plan, iterate"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-assign",
+      "## Bài tập nhỏ",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/kick-off-a-task",
+      "Kick off a task"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-pr",
+      "## 1 câu nôm na",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-github-copilot-agents",
+      "About GitHub Copilot agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-pr",
+      "## Vì sao dùng Copilot code review?",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-github-copilot-agents",
+      "About GitHub Copilot agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-pr",
+      "## Khi nào dùng / khi nào đừng",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work",
+      "Choosing & delegating agent work"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-pr",
+      "## Cách gọi (copy-paste)",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/watch-and-fix-pull-requests",
+      "Watch and fix pull requests"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-pr",
+      "## Ví dụ thật",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/research-plan-iterate",
+      "Research, plan, iterate"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-pr",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues",
+      "Troubleshoot common issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-pr",
+      "## Lỗi thường gặp",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/troubleshoot-cloud-agent",
+      "Troubleshoot cloud agent"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-pr",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-pr",
+      "## Best practices (kèm \"vì sao\")",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/review-copilot-output",
+      "Review Copilot output"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/model-agent/coding-agent-pr",
+      "## Bài tập nhỏ",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/watch-and-fix-pull-requests",
+      "Watch and fix pull requests"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/audit-log",
+      "## 1 câu nôm na",
+      "https://docs.github.com/en/copilot/concepts/customizations",
+      "Customizations (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/audit-log",
+      "## Vì sao dùng?",
+      "https://docs.github.com/en/copilot/concepts/customizations",
+      "Customizations (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/audit-log",
+      "## Khi nào dùng / khi nào đừng",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/audit-log",
+      "## Cách gọi (copy-paste)",
+      "https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events",
+      "Agentic audit log events"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/audit-log",
+      "## Schema event agentic (nguyên văn docs 11/2026)",
+      "https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events",
+      "Agentic audit log events"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/audit-log",
+      "## Ví dụ thật — \"AI có mở PR lúc 2h sáng không?\"",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents",
+      "Create custom agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/audit-log",
+      "## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)",
+      "https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/review-audit-logs",
+      "Review audit logs"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/audit-log",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/audit-log",
+      "## Best practices (kèm \"vì sao\")",
+      "https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-enterprise/manage-agents/monitor-agentic-activity",
+      "Monitor agentic activity"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/audit-log",
+      "## Bài tập nhỏ",
+      "https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events",
+      "Agentic audit log events"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/content-exclusion",
+      "## 1 câu nôm na",
+      "https://docs.github.com/en/copilot/concepts/customizations",
+      "Customizations (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/content-exclusion",
+      "## Vì sao dùng Content exclusion?",
+      "https://docs.github.com/en/copilot/concepts/customizations",
+      "Customizations (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/content-exclusion",
+      "## Khi nào dùng / khi nào đừng",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/content-exclusion",
+      "## Cách gọi (copy-paste)",
+      "https://docs.github.com/en/copilot/how-tos/configure-content-exclusion/exclude-content-from-copilot",
+      "Exclude content from Copilot"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/content-exclusion",
+      "## Ví dụ thật",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents",
+      "Create custom agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/content-exclusion",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues",
+      "Troubleshoot common issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/content-exclusion",
+      "## Lỗi thường gặp",
+      "https://docs.github.com/en/copilot/how-tos/configure-content-exclusion/review-changes",
+      "Review exclusion changes"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/content-exclusion",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/content-exclusion",
+      "## Best practices (kèm \"vì sao\")",
+      "https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/content-exclusion",
+      "Content exclusion (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/content-exclusion",
+      "## Bài tập nhỏ",
+      "https://docs.github.com/en/copilot/how-tos/configure-content-exclusion/exclude-content-from-copilot",
+      "Exclude content from Copilot"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/knowledge-base",
+      "## 1 câu nôm na",
+      "https://docs.github.com/en/copilot/concepts/customizations",
+      "Customizations (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/knowledge-base",
+      "## Vì sao dùng Copilot Spaces?",
+      "https://docs.github.com/en/copilot/concepts/customizations",
+      "Customizations (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/knowledge-base",
+      "## Khi nào dùng / khi nào đừng",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/knowledge-base",
+      "## Cách gọi (copy-paste)",
+      "https://docs.github.com/en/copilot/concepts/prompting-and-context/repository-indexing",
+      "Repository indexing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/knowledge-base",
+      "## Ví dụ thật",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents",
+      "Create custom agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/knowledge-base",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues",
+      "Troubleshoot common issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/knowledge-base",
+      "## Lỗi thường gặp",
+      "https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues",
+      "Troubleshoot common issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/knowledge-base",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/knowledge-base",
+      "## Best practices (kèm \"vì sao\")",
+      "https://docs.github.com/en/copilot/concepts/prompting-and-context/context-management",
+      "Context management"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/cloud/system-knowledge/knowledge-base",
+      "## Bài tập nhỏ",
+      "https://docs.github.com/en/copilot/concepts/prompting-and-context/repository-indexing",
+      "Repository indexing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/attachments",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/attachments",
+      "## Vì sao dùng Attach / #file?",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/attachments",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/attachments",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/chat/copilot-chat-context#add-files-as-context",
+      "Add files as context"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/attachments",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples",
+      "Prompt examples"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/attachments",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/attachments",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#reset-conversation-context",
+      "Reset conversation context"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/attachments",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/attachments",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/optimize-usage#exclude-files-from-chat-context",
+      "Exclude files from chat context"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/attachments",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/chat/copilot-chat-context#add-files-as-context",
+      "Add files as context"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/checkpoints",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/checkpoints",
+      "## Vì sao dùng Restore checkpoint?",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/checkpoints",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/checkpoints",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/review-code-edits#restore-a-checkpoint",
+      "Restore a checkpoint"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/checkpoints",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples",
+      "Prompt examples"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/checkpoints",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/checkpoints",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#recover-unwanted-changes",
+      "Recover unwanted changes"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/checkpoints",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/checkpoints",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/run/review-code-edits#choose-your-review-approach",
+      "Choose your review approach"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/checkpoints",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/review-code-edits#restore-a-checkpoint",
+      "Restore a checkpoint"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/clear",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/clear",
+      "## Vì sao dùng /clear?",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/clear",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/clear",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/guides/optimize-usage#start-new-chats-for-new-tasks",
+      "Start new chats for new tasks"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/clear",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples",
+      "Prompt examples"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/clear",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/clear",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/concepts/context#context-window-and-compaction",
+      "Context window & compaction"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/clear",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/clear",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/best-practices#manage-context-and-sessions",
+      "Manage context & sessions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/clear",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/guides/optimize-usage#start-new-chats-for-new-tasks",
+      "Start new chats for new tasks"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/compact",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/compact",
+      "## Vì sao dùng /compact?",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/compact",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/compact",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#compact-conversation-context",
+      "Compact conversation context"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/compact",
+      "## Ví dụ thật (lấy đúng nghiệp vụ của lệnh này)",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples",
+      "Prompt examples"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/compact",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/compact",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#compact-the-current-conversation",
+      "Compact the conversation"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/compact",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/compact",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/optimize-usage#manage-context-with-compaction",
+      "Manage context with compaction"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/compact",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#compact-conversation-context",
+      "Compact conversation context"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/fork",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/fork",
+      "## Vì sao dùng /fork?",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/fork",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/fork",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#fork-a-chat-session",
+      "Fork a chat session"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/fork",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples",
+      "Prompt examples"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/fork",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/fork",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#fork-the-conversation",
+      "Fork the conversation"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/fork",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/fork",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/optimize-usage#fork-conversations",
+      "Fork conversations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/fork",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#fork-a-chat-session",
+      "Fork a chat session"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/history",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/history",
+      "## Vì sao dùng Session History?",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/history",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/history",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/sessions/session-history",
+      "Session History"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/history",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples",
+      "Prompt examples"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/history",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/history",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/run/sessions/session-history#reindex-the-session-store",
+      "Reindex the session store"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/history",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/history",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/run/sessions/session-history#what-gets-tracked",
+      "What gets tracked"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/history",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/sessions/session-history",
+      "Session History"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/inline-chat",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/inline-chat",
+      "## Vì sao dùng Ctrl+I?",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/inline-chat",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/inline-chat",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/chat/inline-chat#use-editor-inline-chat",
+      "Editor inline chat"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/inline-chat",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples",
+      "Prompt examples"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/inline-chat",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/inline-chat",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/reference/ai-settings#inline-chat-settings",
+      "Inline chat settings"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/inline-chat",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/inline-chat",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/chat/inline-chat#inline-chat-in-active-editing-sessions",
+      "Inline chat in editing sessions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/inline-chat",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/chat/inline-chat#use-editor-inline-chat",
+      "Editor inline chat"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/new-chat",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/new-chat",
+      "## Vì sao dùng chat mới?",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/new-chat",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/new-chat",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/chat-view#start-a-session",
+      "Start a session"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/new-chat",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples",
+      "Prompt examples"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/new-chat",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/new-chat",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#start-a-new-or-related-conversation",
+      "Start a new or related conversation"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/new-chat",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/new-chat",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions#choose-a-new-chat-a-fork-or-a-new-session",
+      "New chat, fork, or new session"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/new-chat",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/chat-view#start-a-session",
+      "Start a session"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/quick-chat",
+      "## Quick Chat là gì?",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/quick-chat",
+      "## Cách mở",
+      "https://code.visualstudio.com/docs/chat/inline-chat#use-quick-chat",
+      "Use Quick Chat"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/quick-chat",
+      "## Cách sử dụng",
+      "https://code.visualstudio.com/docs/chat/inline-chat#use-quick-chat",
+      "Use Quick Chat"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/quick-chat",
+      "## Điều hướng",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#essential-keyboard-shortcuts",
+      "Chat and agent keyboard shortcuts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/quick-chat",
+      "## Mẹo",
+      "https://code.visualstudio.com/docs/agents/run/agents-window#start-a-quick-chat",
+      "Start a quick chat"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/quick-chat",
+      "## Bài tập",
+      "https://code.visualstudio.com/docs/chat/inline-chat#use-quick-chat",
+      "Use Quick Chat"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/quick-chat",
+      "## Tình trạng thường gặp",
+      "https://code.visualstudio.com/docs/agents/reference/ai-settings#chat-settings",
+      "Chat settings"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/resume",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/resume",
+      "## Vì sao dùng danh sách phiên?",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/resume",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/resume",
+      "## Cách mở lại phiên (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#find-and-resume-a-session",
+      "Find and resume a session"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/resume",
+      "## Ví dụ thật (lấy đúng nghiệp vụ của lệnh này)",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples",
+      "Prompt examples"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/resume",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/resume",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#find-a-missing-session",
+      "Find a missing session"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/resume",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/resume",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#continue-between-the-chat-view-and-agents-window",
+      "Continue across views"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/resume",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#find-and-resume-a-session",
+      "Find and resume a session"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/shortcuts",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/shortcuts",
+      "## Vì sao dùng phím tắt?",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#essential-keyboard-shortcuts",
+      "Chat and agent keyboard shortcuts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/shortcuts",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/shortcuts",
+      "## Bảng phím (docs cheat-sheet)",
+      "https://code.visualstudio.com/docs/configure/keybindings#keyboard-shortcuts-editor",
+      "Keyboard shortcuts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/shortcuts",
+      "## Cách đổi phím (copy-paste)",
+      "https://code.visualstudio.com/docs/configure/keybindings#keyboard-shortcuts-editor",
+      "Keyboard shortcuts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/shortcuts",
+      "## Ví dụ thật (lấy đúng nghiệp vụ của lệnh này)",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples",
+      "Prompt examples"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/shortcuts",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/shortcuts",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/configure/keybindings#troubleshooting-keyboard-shortcuts",
+      "Troubleshoot keybindings"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/shortcuts",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/shortcuts",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/configure/keybindings#customize-shortcuts-for-ui-actions",
+      "Customize shortcuts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/shortcuts",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/configure/keybindings#keyboard-shortcuts-editor",
+      "Keyboard shortcuts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/troubleshoot",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/troubleshoot",
+      "## Vì sao dùng /troubleshoot?",
+      "https://code.visualstudio.com/docs/agents/concepts/sessions",
+      "Sessions (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/troubleshoot",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/troubleshoot",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting",
+      "Troubleshoot agents in VS Code"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/troubleshoot",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples",
+      "Prompt examples"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/troubleshoot",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/troubleshoot",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#report-an-unresolved-issue",
+      "Report an unresolved issue"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/troubleshoot",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/troubleshoot",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/chat-debug-view",
+      "Debug Chat Interactions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/troubleshoot",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting",
+      "Troubleshoot agents in VS Code"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/commit-message",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/commit-message",
+      "## Vì sao dùng sparkle sinh message?",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/commit-message",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature",
+      "Choose a feature"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/commit-message",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#generate-a-commit-message-and-pr-information",
+      "Generate commit message"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/commit-message",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/commit-message",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/commit-message",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/sourcecontrol/troubleshooting",
+      "Git troubleshooting"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/commit-message",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/commit-message",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/sourcecontrol/staging-commits",
+      "Staging & commits"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/commit-message",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#generate-a-commit-message-and-pr-information",
+      "Generate commit message"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/debug-terminal",
+      "## Nôm na là",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/debug-terminal",
+      "## Vì sao dùng debug terminal?",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/debug-terminal",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature",
+      "Choose a feature"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/debug-terminal",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#fix-terminal-errors",
+      "Fix terminal errors"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/debug-terminal",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/debug-terminal",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/debug-terminal",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#diagnose-repeated-failures",
+      "Diagnose repeated failures"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/debug-terminal",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/debug-terminal",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/chat/inline-chat#use-terminal-inline-chat",
+      "Terminal inline chat"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/debug-terminal",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#fix-terminal-errors",
+      "Fix terminal errors"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/doc",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/doc",
+      "## Vì sao dùng /doc?",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/doc",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature",
+      "Choose a feature"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/doc",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#generate-documentation",
+      "Generate documentation"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/doc",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/doc",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/doc",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/explore-a-codebase#5-record-what-you-verified",
+      "Record what you verified"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/doc",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/doc",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts",
+      "Crafting effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/doc",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#generate-documentation",
+      "Generate documentation"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/explain",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/explain",
+      "## Vì sao dùng /explain?",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/explain",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature",
+      "Choose a feature"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/explain",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#explain-code",
+      "Explain code"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/explain",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/explain",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/explain",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/explore-a-codebase#4-check-the-explanation-against-tests",
+      "Check the explanation against tests"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/explain",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/explain",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/explore-a-codebase#1-define-the-question",
+      "Define the question"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/explain",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#explain-code",
+      "Explain code"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/fix",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/fix",
+      "## Vì sao dùng /fix (thay vì gõ prompt tay)?",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/fix",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature",
+      "Choose a feature"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/fix",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#fix-coding-errors",
+      "Fix coding errors"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/fix",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/fix",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/fix",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/fix-a-bug-with-agents#add-a-failing-regression-test",
+      "Add a failing regression test"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/fix",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/fix",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/fix-a-bug-with-agents#implement-and-test-the-fix",
+      "Implement and test the fix"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/fix",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#fix-coding-errors",
+      "Fix coding errors"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/new",
+      "## Nôm na là",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/new",
+      "## Vì sao dùng /new?",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/new",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature",
+      "Choose a feature"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/new",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/new",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/new",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/new",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/add-a-feature#1-define-the-feature",
+      "Define the feature"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/new",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/new",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/add-a-feature#3-review-a-plan-before-editing",
+      "Review a plan before editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/new",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/optimize",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/optimize",
+      "## Vì sao tối ưu qua inline chat?",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/optimize",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature",
+      "Choose a feature"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/optimize",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/editing/refactoring#refactoring-actions",
+      "Refactoring actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/optimize",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/optimize",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/optimize",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/refactor-safely#5-check-callers-and-compatibility",
+      "Check callers & compatibility"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/optimize",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/optimize",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/refactor-safely#3-choose-a-bounded-plan",
+      "Choose a bounded plan"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/optimize",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/editing/refactoring#refactoring-actions",
+      "Refactoring actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/plan",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/plan",
+      "## Vì sao dùng /plan?",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/plan",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature",
+      "Choose a feature"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/plan",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/planning#ask-the-current-agent-to-plan",
+      "Ask the current agent to plan"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/plan",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/plan",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/plan",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/run/planning#review-and-refine-the-plan",
+      "Review and refine the plan"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/plan",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/plan",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/best-practices#plan-first-then-implement",
+      "Plan first, then implement"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/plan",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/planning#ask-the-current-agent-to-plan",
+      "Ask the current agent to plan"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/pr-desc",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/pr-desc",
+      "## Vì sao dùng ✨ sinh PR description?",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/pr-desc",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature",
+      "Choose a feature"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/pr-desc",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#generate-a-commit-message-and-pr-information",
+      "Generate PR information"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/pr-desc",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/pr-desc",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/pr-desc",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/sourcecontrol/github#creating-pull-requests",
+      "Creating pull requests"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/pr-desc",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/pr-desc",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/sourcecontrol/github#use-ai-assistance-for-pull-requests",
+      "AI assistance for PRs"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/pr-desc",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#generate-a-commit-message-and-pr-information",
+      "Generate PR information"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/refactor",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/refactor",
+      "## Vì sao refactor qua AI/Code Actions?",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/refactor",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature",
+      "Choose a feature"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/refactor",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/editing/refactoring#code-actions-quick-fixes-and-refactorings",
+      "Quick fixes & refactorings"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/refactor",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/refactor",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/refactor",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/refactor-safely#2-establish-regression-coverage",
+      "Establish regression coverage"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/refactor",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/refactor",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/refactor-safely#4-refactor-in-reviewable-steps",
+      "Refactor in reviewable steps"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/refactor",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/editing/refactoring#code-actions-quick-fixes-and-refactorings",
+      "Quick fixes & refactorings"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/tests",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/tests",
+      "## Vì sao dùng /tests?",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions",
+      "Copilot smart actions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/tests",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature",
+      "Choose a feature"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/tests",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#generate-tests",
+      "Generate tests"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/tests",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing",
+      "Code generation & editing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/tests",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/tests",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/test-code-with-ai#run-tests-and-investigate-failures",
+      "Run tests & investigate failures"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/tests",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/tests",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/test-code-with-ai#review-assertions-and-coverage",
+      "Review assertions & coverage"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/code-actions/tests",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/editing/copilot-smart-actions#generate-tests",
+      "Generate tests"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/agent-mode",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/agent-mode",
+      "## Vì sao dùng Agent mode?",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/agent-mode",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/agent-mode",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/chat-view#work-with-the-agent",
+      "Work with the agent"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/agent-mode",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts",
+      "Crafting effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/agent-mode",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/agent-mode",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#agents-are-not-available-in-chat",
+      "Agents not available"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/agent-mode",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work",
+      "Choosing & delegating agent work"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/agent-mode",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/best-practices#plan-first-then-implement",
+      "Plan first, then implement"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/agent-mode",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/chat-view#work-with-the-agent",
+      "Work with the agent"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ai-credits",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ai-credits",
+      "## Vì sao phải theo dõi AI Credits?",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ai-credits",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ai-credits",
+      "## Cách gọi (copy-paste)",
+      "https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing",
+      "Models and pricing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ai-credits",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts",
+      "Crafting effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ai-credits",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ai-credits",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#i-reached-my-inline-suggestions-or-ai-credits-limit",
+      "Reached the AI credits limit"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ai-credits",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/billing-and-usage/individuals/usage-limits",
+      "Usage limits"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ai-credits",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/optimize-usage#monitor-your-usage",
+      "Monitor your usage"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ai-credits",
+      "## Bài tập nhỏ",
+      "https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing",
+      "Models and pricing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode",
+      "## Vì sao dùng Ask?",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/chat/chat-overview#send-a-chat-request",
+      "Send a chat request"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts",
+      "Crafting effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/chat/chat-overview#troubleshoot-chat-interactions",
+      "Troubleshoot chat interactions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work",
+      "Choosing & delegating agent work"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/chat/chat-overview#get-better-responses",
+      "Get better responses"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/chat/chat-overview#send-a-chat-request",
+      "Send a chat request"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/custom-agent",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/custom-agent",
+      "## Vì sao dùng Custom agent?",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/custom-agent",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/custom-agent",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agent-customization/custom-agents#when-to-use-a-custom-agent",
+      "When to use a custom agent"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/custom-agent",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts",
+      "Crafting effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/custom-agent",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/custom-agent",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/custom-agents#troubleshoot-custom-agents",
+      "Troubleshoot custom agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/custom-agent",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/run/subagents#when-to-use-subagents",
+      "When to use subagents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/custom-agent",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agent-customization/custom-agents#write-effective-agent-instructions",
+      "Write effective agent instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/custom-agent",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agent-customization/custom-agents#when-to-use-a-custom-agent",
+      "When to use a custom agent"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/model-picker",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/model-picker",
+      "## Ba cách mở, ba surface khác nhau",
+      "https://code.visualstudio.com/docs/agent-customization/language-models#customize-the-model-picker",
+      "Customize the model picker"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/model-picker",
+      "## Vì sao dùng model picker?",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/model-picker",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/model-picker",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agent-customization/language-models#customize-the-model-picker",
+      "Customize the model picker"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/model-picker",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts",
+      "Crafting effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/model-picker",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/model-picker",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#not-all-models-are-available-in-the-language-model-picker",
+      "Models missing in picker"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/model-picker",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work",
+      "Choosing & delegating agent work"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/model-picker",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/concepts/language-models#choose-the-right-model",
+      "Choose the right model"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/model-picker",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agent-customization/language-models#customize-the-model-picker",
+      "Customize the model picker"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval",
+      "## Hai tầng cổng, đừng nhầm",
+      "https://code.visualstudio.com/docs/agents/run/approvals#manage-tool-approvals",
+      "Manage tool approvals"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/approvals#manage-tool-approvals",
+      "Manage tool approvals"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts",
+      "Crafting effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/run/approvals#reset-tool-confirmations",
+      "Reset tool confirmations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/run/approvals#claude-permission-modes",
+      "Claude permission modes"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/run/approvals#prevent-tools-from-being-auto-approved",
+      "Prevent auto-approval"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/approvals#manage-tool-approvals",
+      "Manage tool approvals"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/sandbox-policy",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/sandbox-policy",
+      "## Vì sao dùng /sandbox policy?",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/sandbox-policy",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/sandbox-policy",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/agent-sandboxing#understand-the-sandbox-boundary",
+      "Understand the sandbox boundary"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/sandbox-policy",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts",
+      "Crafting effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/sandbox-policy",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/sandbox-policy",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/run/agent-sandboxing#troubleshoot-agent-sandboxing",
+      "Troubleshoot agent sandboxing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/sandbox-policy",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/understanding-local-sandboxing",
+      "Understanding local sandboxing"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/sandbox-policy",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/run/agent-sandboxing#inspect-the-effective-sandbox-policy",
+      "Inspect the effective policy"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/sandbox-policy",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/agent-sandboxing#understand-the-sandbox-boundary",
+      "Understand the sandbox boundary"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/session-target",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/session-target",
+      "## Vì sao dùng Session Target?",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/session-target",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/session-target",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/agent-harnesses",
+      "Choose an Agent Harness"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/session-target",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts",
+      "Crafting effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/session-target",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/session-target",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#why-cant-i-see-a-copilot-session-i-already-started",
+      "Session not visible"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/session-target",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/session-target",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/best-practices#choose-the-right-agent-harness",
+      "Choose the right agent harness"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/model-agent/session-target",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/agent-harnesses",
+      "Choose an Agent Harness"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/agent-skill",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/agent-skill",
+      "## Vì sao dùng skill?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/agent-skill",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/agent-skill",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agent-customization/agent-skills#skillmd-file-format",
+      "SKILL.md file format"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/agent-skill",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/agent-skill",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/agent-skill",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/agent-skills#common-issues",
+      "Skill common issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/agent-skill",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agent-customization/agent-skills#agent-skills-vs-custom-instructions",
+      "Skills vs custom instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/agent-skill",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agent-customization/agent-skills#best-practices",
+      "Skill best practices"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/agent-skill",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agent-customization/agent-skills#skillmd-file-format",
+      "SKILL.md file format"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/bug-feedback",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/bug-feedback",
+      "## Vì sao phải báo đúng cách?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/bug-feedback",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/bug-feedback",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#report-an-unresolved-issue",
+      "Report an unresolved issue"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/bug-feedback",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/bug-feedback",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/bug-feedback",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#collect-network-diagnostics",
+      "Collect network diagnostics"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/bug-feedback",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/bug-feedback",
+      "## Best practices (kèm \"vì sao\")",
+      "https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/view-logs",
+      "View Copilot logs"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/bug-feedback",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#report-an-unresolved-issue",
+      "Report an unresolved issue"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/connector",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/connector",
+      "## Vì sao dùng connector?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/connector",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/connector",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agent-customization/copilot-connectors#connect-a-service",
+      "Connect a service"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/connector",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/connector",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/connector",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/copilot-connectors#troubleshoot-a-connection",
+      "Troubleshoot a connection"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/connector",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/connector",
+      "## Best practices (kèm \"vì sao\")",
+      "https://docs.github.com/en/copilot/reference/supported-connectors",
+      "Supported connectors"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/connector",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agent-customization/copilot-connectors#connect-a-service",
+      "Connect a service"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/hooks",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/hooks",
+      "## Vì sao dùng /hooks?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/hooks",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/hooks",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agent-customization/hooks#choose-the-hook-implementation-for-your-session",
+      "Choose the hook implementation"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/hooks",
+      "## Ví dụ thật — chặn lệnh nguy hiểm bằng preToolUse",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/hooks",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/hooks",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/hooks#troubleshoot-hooks",
+      "Troubleshoot hooks"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/hooks",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agent-customization/migrate-customizations#migrate-hooks",
+      "Migrate hooks"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/hooks",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agent-customization/hooks#security-considerations",
+      "Hook security considerations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/hooks",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agent-customization/hooks#choose-the-hook-implementation-for-your-session",
+      "Choose the hook implementation"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/instructions",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/instructions",
+      "## Vì sao phải kiểm tra luật đang nạp?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/instructions",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/instructions",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agent-customization/custom-instructions#create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/instructions",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/instructions",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/instructions",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/custom-instructions#troubleshoot-instructions",
+      "Troubleshoot instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/instructions",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/reference/custom-instructions-reference#supported-formats-and-locations",
+      "Formats & locations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/instructions",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agent-customization/custom-instructions#write-effective-instructions",
+      "Write effective instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/instructions",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agent-customization/custom-instructions#create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/login",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/login",
+      "## Vì sao phải để ý chuyện login?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/login",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/login",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/setup/copilot#set-up-github-copilot",
+      "Set up GitHub Copilot"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/login",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/login",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/login",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#my-copilot-subscription-is-not-detected-in-vs-code",
+      "Subscription not detected"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/login",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/login",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/setup/copilot#use-a-different-github-account-with-copilot",
+      "Use a different GitHub account"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/login",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/setup/copilot#set-up-github-copilot",
+      "Set up GitHub Copilot"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/logout",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/logout",
+      "## Vì sao phải logout?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/logout",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/logout",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/setup/copilot#remove-ai-features-from-vs-code",
+      "Remove AI features from VS Code"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/logout",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/logout",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/logout",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#can-i-use-vs-code-without-signing-in",
+      "VS Code without signing in"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/logout",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/logout",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/setup/copilot#disable-ai-features-for-a-workspace",
+      "Disable AI features for a workspace"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/logout",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/setup/copilot#remove-ai-features-from-vs-code",
+      "Remove AI features from VS Code"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp-add",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp-add",
+      "## Vì sao phải chọn đúng chỗ đặt?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp-add",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp-add",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agent-customization/mcp-servers#find-and-install-a-server",
+      "Find and install an MCP server"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp-add",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp-add",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp-add",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/mcp-servers#if-the-server-does-not-work",
+      "If the server does not work"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp-add",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp-add",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agent-customization/mcp-servers#choose-a-configuration-destination",
+      "Choose a configuration destination"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp-add",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agent-customization/mcp-servers#find-and-install-a-server",
+      "Find and install an MCP server"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp",
+      "## Vì sao phải kiểm MCP?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/reference/mcp-configuration",
+      "MCP configuration reference"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#troubleshoot-mcp-servers",
+      "Troubleshoot MCP servers"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/customizations/mcp",
+      "MCP (GitHub Docs)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#review-trust-and-isolation",
+      "Review trust & isolation"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/mcp",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/reference/mcp-configuration",
+      "MCP configuration reference"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/plugins",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/plugins",
+      "## Vì sao dùng /plugin?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/plugins",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/plugins",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agent-customization/agent-plugins#what-plugins-provide",
+      "What plugins provide"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/plugins",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/plugins",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/plugins",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/agent-plugins#troubleshooting",
+      "Plugin troubleshooting"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/plugins",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agent-customization/agent-plugins#cross-tool-compatibility",
+      "Cross-tool compatibility"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/plugins",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agent-customization/agent-plugins#verify-a-plugin-after-installation",
+      "Verify a plugin after install"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/plugins",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agent-customization/agent-plugins#what-plugins-provide",
+      "What plugins provide"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/status",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/status",
+      "## Vì sao phải kiểm trạng thái?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/status",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/status",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/setup/copilot",
+      "GitHub Copilot Setup"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/status",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/status",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/status",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#github-copilot-subscription",
+      "Copilot subscription FAQ"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/status",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/status",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#start-with-basic-checks",
+      "Start with basic checks"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/status",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/setup/copilot",
+      "GitHub Copilot Setup"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/telemetry",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/telemetry",
+      "## Vì sao phải quan tâm Telemetry?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/telemetry",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/telemetry",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/configure/telemetry",
+      "Telemetry in VS Code"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/telemetry",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions",
+      "Create project instructions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/telemetry",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/telemetry",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/guides/monitoring-agents#what-gets-collected",
+      "What gets collected"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/telemetry",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations",
+      "Comparing customizations"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/telemetry",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/monitoring-agents#enable-otel-monitoring",
+      "Enable OTel monitoring"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/telemetry",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/configure/telemetry",
+      "Telemetry in VS Code"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/export",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/export",
+      "## Vì sao dùng Chat: Export Chat…?",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/export",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/export",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/sessions/session-history#export-or-copy-a-conversation",
+      "Export or copy a conversation"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/export",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts",
+      "Crafting effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/export",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/export",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/chat-debug-view",
+      "Debug Chat Interactions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/export",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work",
+      "Choosing & delegating agent work"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/export",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/run/sessions/session-history#share-a-session",
+      "Share a session"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/export",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/sessions/session-history#export-or-copy-a-conversation",
+      "Export or copy a conversation"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/help",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/help",
+      "## Vì sao dùng /help?",
+      "https://code.visualstudio.com/docs/agents/concepts/agents",
+      "Agents (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/help",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/help",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet",
+      "Cheat Sheet"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/help",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts",
+      "Crafting effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/help",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path",
+      "Choose a troubleshooting path"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/help",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting",
+      "Troubleshoot agents in VS Code"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/help",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work",
+      "Choosing & delegating agent work"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/help",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts",
+      "Crafting effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/chat-session/help",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet",
+      "Cheat Sheet"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/edit-mode",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/edit-mode",
+      "## Vì sao dùng Edit mode?",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/edit-mode",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/edit-mode",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/run/review-code-edits#review-pending-edits-with-the-working-set",
+      "Review pending edits"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/edit-mode",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/run/chat-view#work-with-the-agent",
+      "Work with the agent"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/edit-mode",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#start-with-basic-checks",
+      "Start with basic checks"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/edit-mode",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/run/review-code-edits#local-harness-specific-behavior",
+      "Local harness specific behavior"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/edit-mode",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/edit-mode",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/run/review-code-edits#configure-review-controls",
+      "Configure review controls"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/edit-mode",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/run/review-code-edits#review-pending-edits-with-the-working-set",
+      "Review pending edits"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/participants",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/participants",
+      "## Vì sao bài này tồn tại?",
+      "https://code.visualstudio.com/docs/agents/concepts/agent-harnesses",
+      "Agent Harnesses (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/participants",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/participants",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agent-customization/migrate-customizations#replace-chat-participants",
+      "Replace chat participants"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/participants",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/run/chat-view#work-with-the-agent",
+      "Work with the agent"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/participants",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#start-with-basic-checks",
+      "Start with basic checks"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/participants",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/migrate-customizations#if-you-maintain-a-participant",
+      "If you maintain a participant"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/participants",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/participants",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/run/subagents#subagents-by-harness",
+      "Subagents by harness"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/model-agent/participants",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agent-customization/migrate-customizations#replace-chat-participants",
+      "Replace chat participants"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-explain",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-explain",
+      "## Vì sao dùng gh copilot explain?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-explain",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-explain",
+      "## Cách gọi (copy-paste)",
+      "https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/overview",
+      "Use Copilot CLI"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-explain",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide",
+      "Customize Copilot guide"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-explain",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#check-customization-diagnostics",
+      "Check customization diagnostics"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-explain",
+      "## Lỗi thường gặp",
+      "https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference",
+      "CLI command reference"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-explain",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/concepts/customization",
+      "Customization layer (concept)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-explain",
+      "## Best practices (kèm \"vì sao\")",
+      "https://docs.github.com/en/copilot/how-tos/copilot-cli/cli-best-practices",
+      "Copilot CLI best practices"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-explain",
+      "## Bài tập nhỏ",
+      "https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/overview",
+      "Use Copilot CLI"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-suggest",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-suggest",
+      "## Vì sao dùng gh copilot suggest?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-suggest",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-suggest",
+      "## Cách gọi (copy-paste)",
+      "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/copilot-for-common-tasks/get-ide-code-suggestions",
+      "Get code suggestions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-suggest",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide",
+      "Customize Copilot guide"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-suggest",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#check-customization-diagnostics",
+      "Check customization diagnostics"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-suggest",
+      "## Lỗi thường gặp",
+      "https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues",
+      "Troubleshoot common issues"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-suggest",
+      "## So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/overview",
+      "Use Copilot CLI"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-suggest",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/editing/ai-powered-suggestions#tips-tricks",
+      "Suggestions tips & tricks"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/cli-suggest",
+      "## Bài tập nhỏ",
+      "https://docs.github.com/en/copilot/how-tos/copilot-in-your-ide/copilot-for-common-tasks/get-ide-code-suggestions",
+      "Get code suggestions"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/prompt-file",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/prompt-file",
+      "## Vì sao dùng /prompts?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/prompt-file",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/prompt-file",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agent-customization/prompt-files#create-a-prompt-file",
+      "Create a prompt file"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/prompt-file",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide",
+      "Customize Copilot guide"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/prompt-file",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#check-customization-diagnostics",
+      "Check customization diagnostics"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/prompt-file",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/prompt-files#troubleshoot-prompt-files",
+      "Troubleshoot prompt files"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/prompt-file",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agent-customization/migrate-customizations#convert-prompt-files-to-skills",
+      "Convert prompt files to skills"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/prompt-file",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agent-customization/prompt-files#tips-for-writing-effective-prompts",
+      "Tips for effective prompts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/prompt-file",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agent-customization/prompt-files#create-a-prompt-file",
+      "Create a prompt file"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/vscode-mcp-json",
+      "## 1 câu nôm na",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/vscode-mcp-json",
+      "## Vì sao tách bài này khỏi bài MCP?",
+      "https://code.visualstudio.com/docs/agent-customization/overview",
+      "Customize AI agents (overview)"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/vscode-mcp-json",
+      "## Khi nào dùng / khi nào đừng",
+      "https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope",
+      "Choose a customization scope"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/vscode-mcp-json",
+      "## Cách gọi (copy-paste)",
+      "https://code.visualstudio.com/docs/agents/reference/mcp-configuration#configuration-file",
+      "MCP configuration file"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/vscode-mcp-json",
+      "## Ví dụ thật",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide",
+      "Customize Copilot guide"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/vscode-mcp-json",
+      "## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#check-customization-diagnostics",
+      "Check customization diagnostics"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/vscode-mcp-json",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/reference/mcp-configuration#environment-variable-references",
+      "Environment variable references"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/vscode-mcp-json",
+      "## So sánh với Claude Code",
+      "https://code.visualstudio.com/docs/agents/reference/mcp-configuration#editor-managed-configuration-for-local-harness-compatibility",
+      "Local harness compatibility"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/vscode-mcp-json",
+      "## Best practices (kèm \"vì sao\")",
+      "https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#share-and-reuse-configuration",
+      "Share and reuse configuration"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/local/system-knowledge/vscode-mcp-json",
+      "## Bài tập nhỏ",
+      "https://code.visualstudio.com/docs/agents/reference/mcp-configuration#configuration-file",
+      "MCP configuration file"
+    ]
+  ]
+}

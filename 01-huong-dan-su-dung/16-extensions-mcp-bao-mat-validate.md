@@ -32,7 +32,7 @@ Mục tiêu biến bài này thành quy trình có bằng chứng, không thành
 
 **Vì sao quan trọng?** Một tool vào máy là vào **cả stack**: nó chạy lúc agent làm việc, tức mọi lớp phòng thủ downstream (approval, checkpoint) chỉ còn là giấy — vì chính tool được phép làm việc xấu.
 **Nếu làm sai?** Cài theo blog → `http_post` gửi `.env` ra ngoài → chỉ phát hiện khi bill lạ; từ đó cả team mất tin tưởng vào mọi tool đã cài.
-**Tóm gọn 1 câu:** Không validate = tự chọn ngày incident tới; validate một lần là mua sự yên tâm cho cả quý.
+**Tóm gọn 1 câu:** Không validate = tự chọn ngày incident tới; validate một lần là mua sự yên tâm cho cả quý. · 📄 [VS Code Docs: Extension Runtime Security](https://code.visualstudio.com/docs/configure/extensions/extension-runtime-security)
 
 ## 2. Stack an toàn 4 tầng — funnel validate
 
@@ -54,7 +54,7 @@ Qua ca 4 tang -> ghi dong allowlist. Trung red flag -> go + ghi ly do vao bien b
 
 **Transport lạ — 3 luật của bài này** (nơi đặt config + key `servers`/`mcpServers`: bài 08 là chủ): pin mọi thứ bạn không tự build — `serverUrl` về domain của bạn, `serverCommand` là package **exact version**, không `@latest` từ blog (mẫu pin: [`./examples/16-extensions-mcp-bao-mat-validate/mcp-server-pin-version-token.json`](./examples/16-extensions-mcp-bao-mat-validate/mcp-server-pin-version-token.json)); token read-only riêng, không dùng token prod; cấu hình cho Local harness (`.vscode/mcp.json`) → [vscode-mcp-json](commands/local/system-knowledge/vscode-mcp-json/README.md). ⚠️ docs: *"A Git worktree separates code changes, but is not a security boundary"* — worktree chỉ là chỗ thử, rào chắn thật là sandbox + policy (mục 4).
 
-> **Tóm gọn 1 câu:** Tầng nào cũng chỉ hỏi một câu: "tool này cần quyền đó để làm gì, và nếu mất quyền đó nó có chết không?"
+> **Tóm gọn 1 câu:** Tầng nào cũng chỉ hỏi một câu: "tool này cần quyền đó để làm gì, và nếu mất quyền đó nó có chết không?" · 📄 [VS Code Docs: Extension policy precedence](https://code.visualstudio.com/docs/enterprise/extensions#precedence-and-rules)
 
 ## 3. `plugin.json`: Agent Plugins schema đóng `com.github.copilot/` (bài 16 là CHỦ)
 
@@ -94,7 +94,7 @@ Mẫu đầy đủ — 10 field được phép, không thừa không thiếu (b�
 
 **Vì sao quan trọng?** Đây là bước "mở hộp kiểm hàng": đọc 10 dòng manifest cho biết plugin **thực sự nạp gì** (skills? MCP server nào? hook sự kiện gì?) — README hứa agent + skill + hook, nhưng manifest 1.0 khai `agents` sai ô thì agent đó không tồn tại.
 **Nếu làm sai?** Cài plugin có field lạ → không lỗi, component nằm trong field đó **âm thầm không load** — bạn tưởng đã cài chuẩn team, kỳ thực chỉ có vỏ rỗng.
-**Tóm gọn 1 câu:** Trước khi cho plugin vào máy, đọc `plugin.json` như đọc tờ khai: thứ không khai thì không có — thứ khai sai ô thì hải quan bỏ qua.
+**Tóm gọn 1 câu:** Trước khi cho plugin vào máy, đọc `plugin.json` như đọc tờ khai: thứ không khai thì không có — thứ khai sai ô thì hải quan bỏ qua. · 📄 [VS Code Docs: Agent Plugins reference](https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference)
 
 ## 4. Org policy: allowlist + pin commit SHA (bài 16 là CHỦ)
 
@@ -112,7 +112,7 @@ Allowlist cá nhân không cứu được team; ba từ khóa: **ghi sổ** — 
 - Cùng key nhưng **mỗi client hỗ trợ khác nhau** (Copilot CLI · VS Code · Copilot app · Copilot in the cloud) — đối chiếu bảng *Client support by key* trước khi tuyên bố "đã khóa". Trên github.com, org phải bật policy MCP servers trước — không bật thì server không chạy (Business/Enterprise).
 - **Pin bằng full commit SHA — địa chỉ không ai đổi được:** `chat.plugins.marketplaces` nhận `owner/repo#<ref>` → thay `<ref>` bằng **SHA 40 ký tự** (docs: *"For reproducible installations, use a full 40-character commit SHA"* — branch/tag bị force-push được, SHA thì không); mỗi plugin entry trong `marketplace.json` nhận `source.sha` (mẫu [`./examples/09-extensions-marketplaces/marketplace-json-pin-sha.json`](./examples/09-extensions-marketplaces/marketplace-json-pin-sha.json)); MCP/extension cũng vậy — version exact trong `serverCommand`, token service-account read-only riêng, rotation 90 ngày *(thực hành)*.
 
-> **Tóm gọn 1 câu:** allowlist giấy + `strictKnownMarketplaces` sắt + SHA làm địa chỉ — nghĩa là "cửa do policy giữ, không do kỷ luật từng người".
+> **Tóm gọn 1 câu:** allowlist giấy + `strictKnownMarketplaces` sắt + SHA làm địa chỉ — nghĩa là "cửa do policy giữ, không do kỷ luật từng người". · 📄 [VS Code Docs: Allow specific versions](https://code.visualstudio.com/docs/enterprise/extensions#allow-specific-versions-or-platforms)
 
 ## 5. Audit checklist — một lần khi cài, mỗi quý một lần rà
 
@@ -130,7 +130,7 @@ DINH KY (quy): chay ./examples/16-extensions-mcp-bao-mat-validate/audit-dinh-ky-
 
 Sổ allowlist dán wiki team (admin sở hữu, mỗi quý review): `| Tool | Publisher | Version/SHA pin | Quyền | Owner | Review date |` — thêm khi đủ bằng chứng 4 tầng + 1 reviewer approve; **gỡ trong 24h** khi: không dùng 1 quý / CVE chưa patch / publisher đổi chủ. Bằng chứng tool nào chạy lúc nào: audit log github.com (không chứa prompt — bài 15 mục 7.2); chi tiết hơn → `telemetry` OTEL về endpoint công ty. Script audit quý (dùng ở fence trên): 📄 [`./examples/16-extensions-mcp-bao-mat-validate/audit-dinh-ky-quy.sh`](./examples/16-extensions-mcp-bao-mat-validate/audit-dinh-ky-quy.sh).
 
-> **Tóm gọn 1 câu:** Cài là quan hệ dài hạn — checklist quý chính là "đăng kiểm": pin còn hạn? tool có leo quyền? publisher còn là chủ cũ?
+> **Tóm gọn 1 câu:** Cài là quan hệ dài hạn — checklist quý chính là "đăng kiểm": pin còn hạn? tool có leo quyền? publisher còn là chủ cũ? · 📄 [VS Code Docs: Agent plugins settings](https://code.visualstudio.com/docs/agents/reference/ai-settings#agent-plugins-settings)
 
 ## 6. Pre-release: tự test trước khi publish + đừng đưa key vào manifest
 
@@ -146,7 +146,7 @@ Bạn sắp **publish** plugin? docs VS Code ("Test and distribute a plugin") c�
 
 **Dùng plugin Claude Code làm nguồn — docs cho phép import, đừng "chỉnh" file của người khác:** VS Code + CLI tự nhận format Claude (manifest `.claude-plugin/plugin.json`, token `${CLAUDE_PLUGIN_ROOT}`); ví dụ marketplace source ngay trong docs là `anthropics/claude-code#<sha>`. Khi cần sửa: **update source package, not installation cache** (docs nguyên văn) — fork repo gốc, sửa, tự publish; đừng mó vào `~/.copilot/installed-plugins/`.
 
-> **Tóm gọn 1 câu:** Plugin đáng publish là plugin đã chạy đủ 5 bước + manifest không còn một ký tự key nào — bạn vừa validate chính mình bằng đúng quy trình mục 2.
+> **Tóm gọn 1 câu:** Plugin đáng publish là plugin đã chạy đủ 5 bước + manifest không còn một ký tự key nào — bạn vừa validate chính mình bằng đúng quy trình mục 2. · 📄 [VS Code Docs: Extension Marketplace](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace)
 
 ## 7. Extensions VS Code và Claude Code — cùng tư duy, đúng bài chủ
 
@@ -157,7 +157,7 @@ Bạn sắp **publish** plugin? docs VS Code ("Test and distribute a plugin") c�
 | Phân quyền tool | `permissions` deny>ask>allow + managed settings (mục 4) | allow/ask/deny trong `.claude/settings.json` — không enterprise override |
 | Cách ly khi thử | VS Code profile + worktree + token tối thiểu (bài 11) → **sandbox + policy** mới là ranh giới thật | Worktree + container/VM tự dựng |
 
-📄 Các file mà bảng này nhắc: [`./examples/16-extensions-mcp-bao-mat-validate/plugin-json-legacy-manifest.json`](./examples/16-extensions-mcp-bao-mat-validate/plugin-json-legacy-manifest.json)+[`-schema-dong.json`](./examples/09-extensions-marketplaces/plugin-json-schema-dong.json) (`plugin.json`) · [`./examples/09-extensions-marketplaces/marketplace-json-pin-sha.json`](./examples/09-extensions-marketplaces/marketplace-json-pin-sha.json) (`marketplace.json`) · [`./examples/16-extensions-mcp-bao-mat-validate/managed-settings-org-lock.json`](./examples/16-extensions-mcp-bao-mat-validate/managed-settings-org-lock.json) (managed settings).
+📄 Các file mà bảng này nhắc: [`./examples/16-extensions-mcp-bao-mat-validate/plugin-json-legacy-manifest.json`](./examples/16-extensions-mcp-bao-mat-validate/plugin-json-legacy-manifest.json)+[`-schema-dong.json`](./examples/09-extensions-marketplaces/plugin-json-schema-dong.json) (`plugin.json`) · [`./examples/09-extensions-marketplaces/marketplace-json-pin-sha.json`](./examples/09-extensions-marketplaces/marketplace-json-pin-sha.json) (`marketplace.json`) · [`./examples/16-extensions-mcp-bao-mat-validate/managed-settings-org-lock.json`](./examples/16-extensions-mcp-bao-mat-validate/managed-settings-org-lock.json) (managed settings). · 📄 [VS Code Docs: Cross-tool compatibility](https://code.visualstudio.com/docs/agent-customization/agent-plugins#cross-tool-compatibility)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -169,7 +169,7 @@ Bạn sắp **publish** plugin? docs VS Code ("Test and distribute a plugin") c�
 | Thêm MCP vào allowlist rồi quên; 2 quý sau tool leo quyền, pin vẫn `latest` | mỗi quý chạy `./examples/16-extensions-mcp-bao-mat-validate/audit-dinh-ky-quy.sh`: diff tool list, siết version/SHA, đổi token |
 | "Tạm bật all tools cho tiện, mai siết sau" | deny-first từ ngày 1: 🟢 allow · 🟡 ask · 🔴 deny; mở 🔴 phải kèm lý do + sandbox |
 
-**Bài học:** kẻ thù không phải tool độc — mà là *quyền ta tự tay trao mà không đọc tờ khai*.
+**Bài học:** kẻ thù không phải tool độc — mà là *quyền ta tự tay trao mà không đọc tờ khai*. · 📄 [VS Code Docs: Check customization diagnostics](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#check-customization-diagnostics)
 
 ## Best practices
 
@@ -177,7 +177,7 @@ Bạn sắp **publish** plugin? docs VS Code ("Test and distribute a plugin") c�
 - **Pin full SHA thay vì branch/tag.** *Vì sao:* branch có thể force-push trong im lặng; docs gọi SHA là địa chỉ "immune to force-pushes".
 - **`strictKnownMarketplaces` là cổng, `enabledPlugins` là danh sách bắt buộc/cấm.** *Vì sao:* allowlist chỉ chặn thứ bạn biết; strict chặn cả con đường "cài từ nơi chưa từng nghe".
 - **Đọc manifest bằng mắt schema, không bằng mắt giới thiệu.** *Vì sao:* field ngoài schema đóng không báo lỗi — chúng biến mất; chỉ tờ khai đúng ô mới chạy.
-- **Test injection trước, cho vào allowlist sau.** *Vì sao:* tool làm theo lệnh ẩn trong issue text thì mọi lớp permissions chỉ còn trang trí.
+- **Test injection trước, cho vào allowlist sau.** *Vì sao:* tool làm theo lệnh ẩn trong issue text thì mọi lớp permissions chỉ còn trang trí. · 📄 [VS Code Docs: MCP server sandboxing](https://code.visualstudio.com/docs/agents/run/security#mcp-server-sandboxing)
 
 ## Bài tập
 

@@ -20,7 +20,7 @@ Mỗi prompt tốt làm 3 việc:
 
 Đắt rẻ: viết prompt kỹ 2 phút tiết kiệm 20 phút restore + retry. Plan-first ([Tips 03](./03-plan-first-workflow.md)) chính là "prompt đắt" cho task lớn — trả 1 turn plan để tránh 10 turns code sai.
 
-> **Tóm gọn 1 câu:** Prompt ẩu thì model tự đoán lung tung; prompt tốt thu hẹp phạm vi, định nghĩa "xong", và gài vòng tự sửa.
+> **Tóm gọn 1 câu:** Prompt ẩu thì model tự đoán lung tung; prompt tốt thu hẹp phạm vi, định nghĩa "xong", và gài vòng tự sửa. · 📄 [VS Code Docs: Tips for effective prompts](https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts)
 
 ## 2. Giải phẫu prompt tốt: 4 thành phần
 
@@ -68,7 +68,7 @@ Xong đối chiếu totals ở summary vs raw, lệch thì fix trước khi show
 Không tạo file mới, chỉ trả lời trong chat.
 ```
 
-> **Tóm gọn 1 câu:** Prompt tốt gồm 4 mảnh: scope files, mục tiêu end-state, độ phân giải, format output — đủ cả 4 thì model làm đúng ngay lần đầu. 📄 Prompt thành file tái dùng: [`../templates/.github/prompts/add-table.prompt.md`](../templates/.github/prompts/add-table.prompt.md) · [`../templates/.github/prompts/review-pr.prompt.md`](../templates/.github/prompts/review-pr.prompt.md).
+> **Tóm gọn 1 câu:** Prompt tốt gồm 4 mảnh: scope files, mục tiêu end-state, độ phân giải, format output — đủ cả 4 thì model làm đúng ngay lần đầu. 📄 Prompt thành file tái dùng: [`../templates/.github/prompts/add-table.prompt.md`](../templates/.github/prompts/add-table.prompt.md) · [`../templates/.github/prompts/review-pr.prompt.md`](../templates/.github/prompts/review-pr.prompt.md). · 📄 [VS Code Docs: Prompt examples](https://code.visualstudio.com/docs/agents/guides/prompt-examples#general-coding-and-technology-questions)
 
 ## 3. Ba gia vị nâng chất lượng
 
@@ -91,7 +91,7 @@ Nếu đỏ, fix tiếp trong message này tới khi xanh hoặc dừng sau 3 l�
 
 Mẹo: gom ràng buộc chung vào `.github/copilot-instructions.md` (<200 dòng), chỉ để ràng buộc riêng task trong prompt.
 
-> **Tóm gọn 1 câu:** Thêm 3 gia vị: success criteria đo được, dặn Copilot tự chạy test rồi sửa tiếp, và ghi rõ NEVER những chỗ không được đụng.
+> **Tóm gọn 1 câu:** Thêm 3 gia vị: success criteria đo được, dặn Copilot tự chạy test rồi sửa tiếp, và ghi rõ NEVER những chỗ không được đụng. · 📄 [VS Code Docs: Multi-turn conversation examples](https://code.visualstudio.com/docs/agents/guides/prompt-examples#multi-turn-conversation-examples)
 
 ## 4. Sáu mẫu prompt theo task (copy-paste)
 
@@ -153,7 +153,7 @@ Mỗi kết quả kèm evidence: quote/số dòng/file:line.
 Output: table + 3 bullet insight + confidence 1 dòng.
 ```
 
-> **Tóm gọn 1 câu:** Bug, feature, refactor, research, review, data — mỗi loại việc có một mẫu prompt riêng, copy là dùng được ngay.
+> **Tóm gọn 1 câu:** Bug, feature, refactor, research, review, data — mỗi loại việc có một mẫu prompt riêng, copy là dùng được ngay. · 📄 [VS Code Docs: Code generation & editing prompts](https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing)
 
 ## 5. Đóng gói prompt tái dùng
 
@@ -185,7 +185,7 @@ Gọi: `/bug-fix scope=src/payments bugDescription="refund quá 30 ngày bị 50
 
 > **Lưu ý 2026:** prompt files `.prompt.md` đã deprecated cho Agent Host (Cloud) — vẫn chạy Local/VS Code. Việc mới nên chuyển sang **Agent Skills** (`SKILL.md`, chuẩn mở, chạy mọi harness). Xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 
-> **Tóm gọn 1 câu:** Lưu prompt hay dùng vào file và gọi bằng `/tên-file` — cả team dùng chung một chuẩn.
+> **Tóm gọn 1 câu:** Lưu prompt hay dùng vào file và gọi bằng `/tên-file` — cả team dùng chung một chuẩn. · 📄 [VS Code Docs: Skills as slash commands](https://code.visualstudio.com/docs/agent-customization/agent-skills#use-skills-as-slash-commands)
 
 ## 6. Walkthrough: từ prompt tệ tới prompt tốt
 
@@ -211,7 +211,7 @@ Trước khi code, trình outline 5 bullet files/hàm sẽ di chuyển và chờ
 
 Bài học: **mỗi vòng thêm 1 thành phần (scope → end-state → verify → constraints → format) là bớt 2–3 turns sửa.**
 
-> **Tóm gọn 1 câu:** Bắt đầu từ prompt tệ, thêm dần scope, end-state, verify và ràng buộc — mỗi mảnh giúp bớt 2–3 turns sửa.
+> **Tóm gọn 1 câu:** Bắt đầu từ prompt tệ, thêm dần scope, end-state, verify và ràng buộc — mỗi mảnh giúp bớt 2–3 turns sửa. · 📄 [VS Code Docs: Best Practices](https://code.visualstudio.com/docs/agents/best-practices)
 
 ## 7. Bảng sai → sửa
 
@@ -226,7 +226,7 @@ Mục này là "bảng bệnh": prompt ẩu hay gặp, vì sao hỏng, và thu�
 | Không format output | Nhận prose 100 dòng khó review | Ép format: table / checklist / file:line |
 | Không dùng prompt files/skills | 5 người 5 kiểu prompt | Đóng gói theo [Tips 07](./07-thiet-ke-prompts-skills.md) |
 
-> **Cách đọc bảng này:** Cột "Sai" là prompt hay gặp, "Vì sao hỏng" là hệ quả, "Sửa" là cách khắc phục — soi bảng mỗi khi output lệch mong đợi.
+> **Cách đọc bảng này:** Cột "Sai" là prompt hay gặp, "Vì sao hỏng" là hệ quả, "Sửa" là cách khắc phục — soi bảng mỗi khi output lệch mong đợi. · 📄 [VS Code Docs: Debugging prompts](https://code.visualstudio.com/docs/agents/guides/prompt-examples#debugging-and-fixing-issues)
 
 ### Non-coder guide
 
@@ -259,7 +259,7 @@ Mục này là "10 câu hỏi chốt hạ" trước khi bấm Enter — đủ 10
 
 > Tick đủ 10 ô → prompt của bạn thuộc top 5%.
 
-> **Tóm gọn 1 câu:** Chấm prompt bằng 10 ô checklist trước khi Enter — thiếu ô nào bổ sung ô đó.
+> **Tóm gọn 1 câu:** Chấm prompt bằng 10 ô checklist trước khi Enter — thiếu ô nào bổ sung ô đó. · 📄 [VS Code Docs: Write effective prompts](https://code.visualstudio.com/docs/agents/best-practices#write-effective-prompts)
 
 ## 9. Bài tập cuối bài
 

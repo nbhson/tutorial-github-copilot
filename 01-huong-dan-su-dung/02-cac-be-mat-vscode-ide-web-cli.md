@@ -35,7 +35,7 @@
 
 **Vì sao quan trọng?** Nó quyết định chia việc: task 5 phút (fix typo) cần độ trễ thấp → local; task 2 giờ (migrate, refactor 50 file) cần chạy tiếp khi gập laptop → cloud. Không bề mặt nào thắng mọi trường hợp.
 
-> **Tóm gọn 1 câu:** Trước mỗi task hỏi "code chạy ở đâu, agent thấy gì" — trả lời xong là biết chọn Local hay Cloud.
+> **Tóm gọn 1 câu:** Trước mỗi task hỏi "code chạy ở đâu, agent thấy gì" — trả lời xong là biết chọn Local hay Cloud. · 📄 [GitHub Docs: Where to use GitHub Copilot](https://docs.github.com/en/copilot/get-started/where-to-use-github-copilot)
 
 ## 2. Bảng quyết định: chọn bề mặt trong 30 giây
 
@@ -67,7 +67,7 @@ Task 4: "Quên flag docker/git"                    -> gh copilot suggest/explain
 Task 5: "Review PR của cloud agent lúc đang cafe" -> github.com chat / Mobile
 ```
 
-> **Tóm gọn 1 câu:** Bảng trên là tầng lọc thứ nhất: hỏi "cần môi trường máy bạn không", hỏi "cần chạy tiếp khi tắt máy không", cuối cùng mới tính tới terminal. Tài liệu cài theo IDE khác: 📄 [`./examples/00-tong-quan-copilot/jetbrains-visual-studio-neovim.sh`](./examples/00-tong-quan-copilot/jetbrains-visual-studio-neovim.sh).
+> **Tóm gọn 1 câu:** Bảng trên là tầng lọc thứ nhất: hỏi "cần môi trường máy bạn không", hỏi "cần chạy tiếp khi tắt máy không", cuối cùng mới tính tới terminal. Tài liệu cài theo IDE khác: 📄 [`./examples/00-tong-quan-copilot/jetbrains-visual-studio-neovim.sh`](./examples/00-tong-quan-copilot/jetbrains-visual-studio-neovim.sh). · 📄 [VS Code Docs: Choose an Agent Harness](https://code.visualstudio.com/docs/agents/run/agent-harnesses)
 
 ## 3. Session Target: 2 câu hỏi trong 1 picker
 
@@ -96,7 +96,7 @@ Trích nguyên văn docs: *"the Claude and Codex experience is focused on the co
 
 **Lỗi thường gặp:** chọn bừa harness bên thứ ba cho task cần DB local → agent chỉ thấy repo, fail. ✅ Đổi về Copilot + máy bạn trước khi chạy lệnh verify.
 
-> **Tóm gọn 1 câu:** Một picker trả lời 2 câu hỏi — "xe + tài xế" (harness) và "đường chạy" (nơi chạy); mọi task của cloud agent chỉ thấy repo.
+> **Tóm gọn 1 câu:** Một picker trả lời 2 câu hỏi — "xe + tài xế" (harness) và "đường chạy" (nơi chạy); mọi task của cloud agent chỉ thấy repo. · 📄 [VS Code Docs: Agent Harnesses (khái niệm)](https://code.visualstudio.com/docs/agents/concepts/agent-harnesses)
 
 ## 4. Chạy agent trên cloud: assign issue là xong
 
@@ -122,7 +122,7 @@ Definition of done: PR co test moi + screenshot truong hop sai
 
 > **Billing:** cloud agent **và** chat trên github.com đều tiêu **AI credits** (1 credit = $0.01, per-token) — còn lại bao nhiêu xem ở Settings → Copilot.
 
-> **Tóm gọn 1 câu:** Task độc lập + scope rõ + lệnh verify → assign issue → review PR.
+> **Tóm gọn 1 câu:** Task độc lập + scope rõ + lệnh verify → assign issue → review PR. · 📄 [VS Code Docs: Cloud Sessions](https://code.visualstudio.com/docs/agents/run/cloud-sandbox-sessions)
 
 ## 5. Chat trên github.com + Copilot cloud agent
 
@@ -137,7 +137,7 @@ Definition of done: PR co test moi + screenshot truong hop sai
 
 **Lỗi thường gặp:** chờ cloud agent merge hộ → không bao giờ xảy ra. ✅ Merge luôn là việc của người; đọc code trước khi bấm.
 
-> **Tóm gọn 1 câu:** Chat để đọc và hiểu; cloud agent để làm ra PR — vẫn bắt buộc qua review.
+> **Tóm gọn 1 câu:** Chat để đọc và hiểu; cloud agent để làm ra PR — vẫn bắt buộc qua review. · 📄 [GitHub Docs: Copilot on GitHub](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github)
 
 ## 6. Các IDE khác: JetBrains, Visual Studio, Neovim
 
@@ -151,7 +151,7 @@ Definition of done: PR co test moi + screenshot truong hop sai
 
 > **Đọc bảng này:** VS Code dẫn đầu tính năng — khi so sánh IDE, tìm docs JetBrains/MS rồi hãy kết luận (kỷ luật đối chiếu docs, bài 00 §4). File MCP cấu hình chung vẫn là `.mcp.json` ở thư mục project — docs VS Code hướng dẫn dùng cùng file cho các editor.
 
-> **Tóm gọn 1 câu:** VS Code dẫn đầu; JetBrains/VS mạnh trong hệ sinh thái riêng; Neovim để gõ nhanh và fix nhỏ.
+> **Tóm gọn 1 câu:** VS Code dẫn đầu; JetBrains/VS mạnh trong hệ sinh thái riêng; Neovim để gõ nhanh và fix nhỏ. · 📄 [GitHub Docs: Copilot in IDEs](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-in-ides)
 
 ## 7. Copilot CLI: agent trong terminal + gợi ý lệnh
 
@@ -168,7 +168,7 @@ Definition of done: PR co test moi + screenshot truong hop sai
 
 > Gợi ý lệnh shell trong CLI (nhận bằng **Tab**, mở rộng bằng Ctrl+Space) chạy **offline, không gửi prompt đi đâu**; còn Windows Terminal chỉ là bề mặt *chat* với cloud agent (**Ctrl+Alt+Space** mở panel).
 
-> **Tóm gọn 1 câu:** Copilot CLI làm việc trong terminal, `gh copilot` chỉ giải thích/gợi ý lệnh, Local harness là bộ máy cũ trong VS Code Chat — ba thứ khác nhau.
+> **Tóm gọn 1 câu:** Copilot CLI làm việc trong terminal, `gh copilot` chỉ giải thích/gợi ý lệnh, Local harness là bộ máy cũ trong VS Code Chat — ba thứ khác nhau. · 📄 [GitHub Docs: Copilot CLI](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-cli)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -177,12 +177,12 @@ Definition of done: PR co test moi + screenshot truong hop sai
 - ❌ Chọn cloud cho task cần DB local.
   ✅ Cloud không thấy `.env` / DB máy bạn — chạy local hoặc đổi task.
 - ❌ `gh copilot suggest` rồi than "nó không chịu làm".
-  ✅ Nó chỉ gợi ý — muốn tự làm thì dùng Copilot CLI.
+  ✅ Nó chỉ gợi ý — muốn tự làm thì dùng Copilot CLI. · 📄 [VS Code Docs: Session not visible](https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#why-cant-i-see-a-copilot-session-i-already-started)
 
 ## Best practices
 
 - Ghi rõ **target** ở đầu session (đang local hay cloud) — đừng mặc định "biết rồi".
-- Task cloud đầu tiên: việc độc lập, scope 1-2 file, có lệnh verify; review PR của cloud agent bằng checklist như review người, có người thứ hai approve.
+- Task cloud đầu tiên: việc độc lập, scope 1-2 file, có lệnh verify; review PR của cloud agent bằng checklist như review người, có người thứ hai approve. · 📄 [VS Code Docs: Choose the right agent harness](https://code.visualstudio.com/docs/agents/best-practices#choose-the-right-agent-harness)
 
 ## Bài tập
 
@@ -202,7 +202,7 @@ Definition of done: PR co test moi + screenshot truong hop sai
 - [VS Code — Run agent harnesses in VS Code](https://code.visualstudio.com/docs/agents/run/agent-harnesses) — chạy Copilot/Local/Claude/Codex, đổi harness bằng `/model`
 - [VS Code — AI features cheat sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet) — bề mặt nào dùng được tính năng nào
 - [VS Code — Move your Copilot sessions to the cloud](https://code.visualstudio.com/docs/agents/run/move-to-copilot) — hand off session, cloud chat khi target là cloud
-- [GitHub — About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent) — assign issue, PR, secrets từ Actions
+- [GitHub — About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github) — assign issue, PR, secrets từ Actions
 - [github.com/github/copilot-cli](https://github.com/github/copilot-cli) — Copilot CLI: Tab, gợi ý offline, `/allow`
 - [github.com/github/gh-copilot](https://github.com/github/gh-copilot) — extension `gh copilot` cộng đồng
 - [GitHub — Models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) — AI credits, giá per-token

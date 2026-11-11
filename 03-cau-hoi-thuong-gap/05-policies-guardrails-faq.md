@@ -12,7 +12,7 @@
 | Agent làm việc cấm | Instructions "KHÔNG" + approval | Prompt + IDE |
 | PR chưa review đã merge | Required reviewers + status checks | GitHub server |
 
-> **Cách đọc bảng này:** dọc cột **Muốn chặn** tìm đúng điều bạn sợ xảy ra, cột **Công cụ** là thiết bị cần lắp, cột **Chặn ở tầng** cho biết nó nằm ở máy bạn hay trên server GitHub — càng về server càng không ai tắt được.
+> **Cách đọc bảng này:** dọc cột **Muốn chặn** tìm đúng điều bạn sợ xảy ra, cột **Công cụ** là thiết bị cần lắp, cột **Chặn ở tầng** cho biết nó nằm ở máy bạn hay trên server GitHub — càng về server càng không ai tắt được. · 📄 [GitHub Docs: Supported surfaces for policies](https://docs.github.com/en/copilot/reference/supported-surfaces-for-policies)
 
 ---
 
@@ -30,7 +30,7 @@ Coi đây như checklist "vì sao thư không tới tay người nhận": sai đ
 
 > 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/instruction-khong-an-vi-sao-copilot-van.sh`](./examples/05-policies-guardrails-faq/instruction-khong-an-vi-sao-copilot-van.sh)
 
-> Đi tăng cường độ câu chữ ("KHÔNG, TUYỆT ĐỐI KHÔNG...") trong khi file nằm sai thư mục thì câu cấm có mạnh đến mấy cũng không được nạp.
+> Đi tăng cường độ câu chữ ("KHÔNG, TUYỆT ĐỐI KHÔNG...") trong khi file nằm sai thư mục thì câu cấm có mạnh đến mấy cũng không được nạp. · 📄 [VS Code Docs: How instructions apply](https://code.visualstudio.com/docs/agent-customization/custom-instructions#how-instructions-apply)
 
 ## 2. Viết quy tắc "cấm" sao cho Copilot nghe lời?
 
@@ -48,7 +48,7 @@ Coi đây như checklist "vì sao thư không tới tay người nhận": sai đ
 - Yếu: "Cẩn thận khi sửa migrations." — Mạnh: "NEVER sửa `db/migrations/**`. DB change → tạo file migration mới + chạy `npm run migrate:up`."
 - Yếu: "Nhớ chạy test." — Mạnh: "ALWAYS chạy `npm test -- <file-lien-quan>` sau mỗi sửa."
 
-> Rule quan trọng đặt lên top 20 dòng file — rule nằm cuối file dài dễ bị cắt khỏi context.
+> Rule quan trọng đặt lên top 20 dòng file — rule nằm cuối file dài dễ bị cắt khỏi context. · 📄 [VS Code Docs: Write effective instructions](https://code.visualstudio.com/docs/agent-customization/custom-instructions#write-effective-instructions)
 
 ## 3. Pre-commit tương đương: chặn commit xấu thế nào?
 
@@ -66,7 +66,7 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 
 > **Cách đọc bảng này:** ba dòng là ba lớp rào xếp từ trong nhà ra tới cổng — lint/test bắt lỗi tại chỗ, gitleaks bắt secret trước khi commit, push protection là cánh cổng cuối của GitHub.
 
-> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/pre-commit-tuong-uong-chan-commit-xau.sh`](./examples/05-policies-guardrails-faq/pre-commit-tuong-uong-chan-commit-xau.sh)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/pre-commit-tuong-uong-chan-commit-xau.sh`](./examples/05-policies-guardrails-faq/pre-commit-tuong-uong-chan-commit-xau.sh) · 📄 [VS Code Docs: Hook decisions & failures](https://code.visualstudio.com/docs/agent-customization/hooks#decisions-and-failures)
 
 ## 4. Branch protection: chặn push main + ép review thế nào?
 
@@ -74,7 +74,7 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 
 > 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/branch-protection-chan-push-main-ep-review.sh`](./examples/05-policies-guardrails-faq/branch-protection-chan-push-main-ep-review.sh)
 
-> Dựng **trước** khi onboarding Copilot cloud agent — nó cũng phải tuân ruleset.
+> Dựng **trước** khi onboarding Copilot cloud agent — nó cũng phải tuân ruleset. · 📄 [GitHub Docs: Managing a branch protection rule](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/managing-a-branch-protection-rule)
 
 ## 5. Secret scanning + push protection bật thế nào?
 
@@ -83,13 +83,13 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 - **Secret scanning:** quét repo tìm secret đã lộ → alert trong `Security → Secret scanning`.
 - **Push protection:** chặn ngay lúc `git push`, bypass có lý do (lưu audit log).
 
-> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/secret-scanning-push-protection-bat-the-nao.sh`](./examples/05-policies-guardrails-faq/secret-scanning-push-protection-bat-the-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/secret-scanning-push-protection-bat-the-nao.sh`](./examples/05-policies-guardrails-faq/secret-scanning-push-protection-bat-the-nao.sh) · 📄 [GitHub Docs: Push protection](https://docs.github.com/en/code-security/concepts/secret-security/push-protection)
 
 ## 6. Ép conventional commits / lint trước khi agent commit?
 
 **Trả lời 1 câu:** commitlint hook local (chặn ngay khi commit) + status check CI (PR không merge được nếu đỏ) — agent và người cùng bị ép một chuẩn.
 
-> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/ep-conventional-commits-lint-truoc-khi-agent.yaml`](./examples/05-policies-guardrails-faq/ep-conventional-commits-lint-truoc-khi-agent.yaml)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/ep-conventional-commits-lint-truoc-khi-agent.yaml`](./examples/05-policies-guardrails-faq/ep-conventional-commits-lint-truoc-khi-agent.yaml) · 📄 [VS Code Docs: Smart Actions](https://code.visualstudio.com/docs/editing/copilot-smart-actions)
 
 **Ví dụ:** agent commit `fix stuff` → commitlint chặn → agent tự sửa thành `fix(auth): handle expired session`.
 
@@ -97,19 +97,19 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 
 **Trả lời 1 câu:** Admin (Enterprise) cấu hình ở org policy (cloud agent bật cho repo nào); dev ghi rõ repo + branch + phạm vi file trong issue để agent không lan ra ngoài.
 
-> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/gioi-han-coding-agent-chi-cho-no.sh`](./examples/05-policies-guardrails-faq/gioi-han-coding-agent-chi-cho-no.sh)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/gioi-han-coding-agent-chi-cho-no.sh`](./examples/05-policies-guardrails-faq/gioi-han-coding-agent-chi-cho-no.sh) · 📄 [GitHub Docs: Configuring agent settings](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/configuring-agent-settings)
 
 ## 8. Audit: biết ai/agent đã làm gì?
 
 **Trả lời 1 câu:** 3 nguồn log: git history (commit agent có `Co-authored-by: Copilot`), org audit log (ai đổi policy/assign seat), PR timeline (agent ghi comment từng bước).
 
-> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/audit-biet-ai-agent-a-lam-gi.sh`](./examples/05-policies-guardrails-faq/audit-biet-ai-agent-a-lam-gi.sh)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/audit-biet-ai-agent-a-lam-gi.sh`](./examples/05-policies-guardrails-faq/audit-biet-ai-agent-a-lam-gi.sh) · 📄 [GitHub Docs: Agentic audit log events](https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events)
 
 ## 9. Guardrail cho lệnh nguy hiểm trong CI?
 
 **Trả lời 1 câu:** Secrets qua `${{ secrets.* }}` → `env`, KHÔNG `echo` secret, KHÔNG flag skip-verification/bypass; job đụng prod dùng `environment:` + required reviewers.
 
-> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/guardrail-cho-lenh-nguy-hiem-trong-ci.yaml`](./examples/05-policies-guardrails-faq/guardrail-cho-lenh-nguy-hiem-trong-ci.yaml)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/guardrail-cho-lenh-nguy-hiem-trong-ci.yaml`](./examples/05-policies-guardrails-faq/guardrail-cho-lenh-nguy-hiem-trong-ci.yaml) · 📄 [GitHub Docs: Automation rationale & approvals](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-automation-rationale-and-approvals)
 
 ## 10. Checklist guardrails cho repo mới (5 phút)?
 
@@ -117,7 +117,7 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 
 > 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/checklist-guardrails-cho-repo-moi-5-phut.sh`](./examples/05-policies-guardrails-faq/checklist-guardrails-cho-repo-moi-5-phut.sh)
 
-> Đây là definition-of-done trước khi bật cloud agent — thiếu 1 tick là mở một đường lách qua guardrail.
+> Đây là definition-of-done trước khi bật cloud agent — thiếu 1 tick là mở một đường lách qua guardrail. · 📄 [VS Code Docs: Trust boundaries](https://code.visualstudio.com/docs/agents/run/security#trust-boundaries)
 
 ---
 
@@ -131,4 +131,4 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 
 Tham khảo chéo: [bài 03](03-modes-permissions.md) (content exclusion) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (secrets + audit sâu) · [bài 10](10-ci-sdk-review-web.md) (CI workflows) · [../templates/README.md](../templates/README.md).
 
-> **Tóm gọn 1 câu:** Quy tắc nhắc miệng là lời khuyên, quy tắc khóa ở server là luật — cái nào phạm vào là mất tài sản thì phải đưa từ "lời khuyên" lên thành "luật".
+> **Tóm gọn 1 câu:** Quy tắc nhắc miệng là lời khuyên, quy tắc khóa ở server là luật — cái nào phạm vào là mất tài sản thì phải đưa từ "lời khuyên" lên thành "luật". · 📄 [VS Code Docs: Check customization diagnostics](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#check-customization-diagnostics)

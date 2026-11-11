@@ -37,7 +37,7 @@ Pattern ACI — 5 dòng thuộc lòng (Agentic CI):
 > **Vì sao quan trọng?** Năm dòng này là toàn bộ "bộ não an toàn" thay cho người trực: thiếu dòng nào thì đúng tai nạn đó — thiếu timeout là treo 6h, thiếu "output chỉ để đọc" là RCE từ prompt-injection.
 > **Nếu làm sai?** Phổ biến nhất: tin robot 100% → cho routine tự merge lúc 2h sáng; hoặc nới guardrails "cho đỡ vướng" → code AI chạy mù thẳng vào main.
 
-> **Tóm gọn 1 câu:** CI không có ai bấm Allow, nên ACI thay con người bằng scope hẹp, timeout rõ và hàng rào không nới — robot vắng người vẫn phải ở trong hàng rào.
+> **Tóm gọn 1 câu:** CI không có ai bấm Allow, nên ACI thay con người bằng scope hẹp, timeout rõ và hàng rào không nới — robot vắng người vẫn phải ở trong hàng rào. · 📄 [GitHub Docs: Automation rationale & approvals](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/about-automation-rationale-and-approvals)
 
 ## 2. Copilot CLI — binary `copilot`, chạy cả trong pipeline
 
@@ -60,7 +60,7 @@ Copilot CLI đưa agent vào terminal: agentic workflows, nhiều model, tích h
 
 > 📄 **Code ví dụ:** [`./examples/12-copilot-sdk-ci-cd-automation/copilot-cli-automation.sh`](./examples/12-copilot-sdk-ci-cd-automation/copilot-cli-automation.sh)
 
-> **Tóm gọn 1 câu:** CLI đưa agent vào terminal — nhưng trong CI thì output của nó chỉ là *gợi ý*: ghi file, người duyệt, timeout, check exit code.
+> **Tóm gọn 1 câu:** CLI đưa agent vào terminal — nhưng trong CI thì output của nó chỉ là *gợi ý*: ghi file, người duyệt, timeout, check exit code. · 📄 [GitHub Docs: Copilot CLI in GitHub Actions](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/copilot-cli-in-github-actions)
 
 ## 3. Copilot SDK — khi "dùng sẵn" không đủ
 
@@ -91,7 +91,7 @@ await session.close();
 - **Khi nào chọn gì:** việc thường trong pipeline → CLI hoặc giao **Copilot cloud agent** (mục 6); quy trình đặc thù cần tool/UI riêng lồng backend → mới tới SDK; cần agent trên GitHub mà không giữ máy bật → cloud agent.
 - **Verify mẫu chạy được:** `export GITHUB_TOKEN="$(gh auth token)"` → `npx tsx examples/copilot-review.ts` → terminal in 5–10 dòng findings; thử prompt "xoá hết files" → từ chối vì allowlist hẹp.
 
-> 📄 **Code ví dụ:** [`./examples/02-cac-be-mat-vscode-ide-web-cli/copilot-sdk-build-agent-rieng.ts`](./examples/02-cac-be-mat-vscode-ide-web-cli/copilot-sdk-build-agent-rieng.ts) (bản đầy đủ) · [`./examples/02-cac-be-mat-vscode-ide-web-cli/copilot-sdk-build-agent-rieng.sh`](./examples/02-cac-be-mat-vscode-ide-web-cli/copilot-sdk-build-agent-rieng.sh) (chạy + verify)
+> 📄 **Code ví dụ:** [`./examples/02-cac-be-mat-vscode-ide-web-cli/copilot-sdk-build-agent-rieng.ts`](./examples/02-cac-be-mat-vscode-ide-web-cli/copilot-sdk-build-agent-rieng.ts) (bản đầy đủ) · [`./examples/02-cac-be-mat-vscode-ide-web-cli/copilot-sdk-build-agent-rieng.sh`](./examples/02-cac-be-mat-vscode-ide-web-cli/copilot-sdk-build-agent-rieng.sh) (chạy + verify) · 📄 [GitHub Docs: SDK quickstart](https://docs.github.com/en/copilot/get-started/sdk-quickstart)
 
 ## 4. Routine ca đêm: triage CI fail (GitHub Actions)
 
@@ -105,13 +105,13 @@ Nightly triage — luồng 4 bước (workflow đầy đủ ở examples):
 4. github-script mở issue gom report → on-call sáng đọc, quyết định fix.
 ```
 
-> 📄 **Code ví dụ (copy-paste vào `.github/workflows/`):** [`./examples/12-copilot-sdk-ci-cd-automation/routine-triage.yml`](./examples/12-copilot-sdk-ci-cd-automation/routine-triage.yml) — có `workflow_dispatch` để chạy tay từng bước trước khi tin schedule.
+> 📄 **Code ví dụ (copy-paste vào `.github/workflows/`):** [`./examples/12-copilot-sdk-ci-cd-automation/routine-triage.yml`](./examples/12-copilot-sdk-ci-cd-automation/routine-triage.yml) — có `workflow_dispatch` để chạy tay từng bước trước khi tin schedule. · 📄 [VS Code Docs: Run automations on repository events](https://code.visualstudio.com/docs/agents/run/automations#run-on-repository-events)
 
 ## 5. Gate code-quality cho PR mới (workflow + Rulesets)
 
 Workflow thứ hai biến Copilot thành "trực cửa PR": mỗi PR mở/sửa → request **Copilot code review** + comment diff-stat cho người review.
 
-> 📄 **Code ví dụ:** [`./examples/12-copilot-sdk-ci-cd-automation/workflow-code-quality.yml`](./examples/12-copilot-sdk-ci-cd-automation/workflow-code-quality.yml)
+> 📄 **Code ví dụ:** [`./examples/12-copilot-sdk-ci-cd-automation/workflow-code-quality.yml`](./examples/12-copilot-sdk-ci-cd-automation/workflow-code-quality.yml) · 📄 [GitHub Docs: Use Copilot code review](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review)
 
 Dựng gate thành quy tắc repo (Settings → Rules → **Rulesets** — chủ sở hữu: bài 15): **Require Copilot code review: ON** · required checks (lint, test): ON · dismiss stale reviews: ON. Giữ gate sống được thì lo **precision**:
 
@@ -133,7 +133,7 @@ Dựng gate thành quy tắc repo (Settings → Rules → **Rulesets** — chủ
 
 Giao nhiều issue cùng lúc (fan-out) — ba gạch thuộc bài 06 (chủ sở hữu song song): mỗi agent một **vùng code riêng**, issue ghi phạm vi rõ; lane `copilot/*` vs `feat/*` ở bài 11 §5; gộp PR nào merge trước thì rebase các PR còn lại.
 
-> **Vì sao quan trọng?** Chất lượng PR là cái bóng của chất lượng issue: issue mơ hồ = thuê robot rồi chỉ đường bằng tiếng nước ngoài — nó đoán mò 3 rounds rồi bạn vẫn phải làm lại từ đầu.
+> **Vì sao quan trọng?** Chất lượng PR là cái bóng của chất lượng issue: issue mơ hồ = thuê robot rồi chỉ đường bằng tiếng nước ngoài — nó đoán mò 3 rounds rồi bạn vẫn phải làm lại từ đầu. · 📄 [GitHub Docs: Start Copilot sessions](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/start-copilot-sessions)
 
 ## 7. Secrets & vệ sinh pipeline (thuộc lòng)
 
@@ -143,6 +143,8 @@ CẤM:   hardcode token trong code/prompt/file committed; echo secret ra log (t�
 Audit: grep -rniE "ghp_|gho_|sk-|xox_" examples/ .github/workflows/ → phải TRỐNG
        (ra kết quả = token lộ → xoá + rotate NGAY, lịch sử dùng git filter-repo/BFG).
 ```
+
+📄 [VS Code Docs: Remote connections & GitHub environments](https://code.visualstudio.com/docs/agents/run/security#remote-connections-and-github-environments)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -155,14 +157,14 @@ Audit: grep -rniE "ghp_|gho_|sk-|xox_" examples/ .github/workflows/ → phải T
 | Merge PR của agent không review | Tin robot 100%, diff lan scope | Review như PR người + required checks ON + iterate ≤3 rounds |
 | Issue một dòng "làm cái này đi" | Agent đoán mò, đốt AI Credits 3 rounds | Template issue + label "ready" + criteria đo được |
 
-**Bài học:** mọi tai nạn automation đều bắt đầu từ một quyền bạn giao "cho tiện" — scope hẹp, quyền hẹp, output để đọc, merge để người.
+**Bài học:** mọi tai nạn automation đều bắt đầu từ một quyền bạn giao "cho tiện" — scope hẹp, quyền hẹp, output để đọc, merge để người. · 📄 [GitHub Docs: Troubleshoot cloud agent](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/troubleshoot-cloud-agent)
 
 ## Best practices
 
 - **Chạy `workflow_dispatch` từng bước trước khi tin schedule.** *Vì sao:* ca đêm lỗi là lỗi không ai thấy lúc 2h; nút chạy tay cho bạn thấy từng step đỏ/xanh ngay chiều nay.
 - **Cắt output trước khi nhét vào prompt (`head -c 40000`).** *Vì sao:* log/phần diff phình = tốn AI Credits + model lạc đề trong nhiễu.
 - **Chọn thứ rẻ nhất giải quyết được việc: CLI → cloud agent → SDK.** *Vì sao:* SDK là bộ đồ nghề nặng cuối bảng — dùng SDK cho việc mà một cờ CLI làm được là tự mua bug về nuôi.
-- **Ghi exit code check sau mỗi bước Copilot trong pipeline.** *Vì sao:* `0/1/2` không được check thì step sau ăn output dở mà chạy tiếp như đúng.
+- **Ghi exit code check sau mỗi bước Copilot trong pipeline.** *Vì sao:* `0/1/2` không được check thì step sau ăn output dở mà chạy tiếp như đúng. · 📄 [GitHub Docs: Automate Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/automate-copilot-cli)
 
 ## Bài tập
 
@@ -177,7 +179,7 @@ Audit: grep -rniE "ghp_|gho_|sk-|xox_" examples/ .github/workflows/ → phải T
 
 ## Reference
 
-- GitHub — [Copilot CLI command reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference) (cờ, `-p`, limits, checkpoint) · [Install Copilot in the CLI](https://docs.github.com/en/copilot/how-tos/set-up/install-copilot-cli) · [About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent) (modes, permissions, environments) · [Models & pricing / AI credits](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) · [Changelog](https://github.blog/changelog/)
+- GitHub — [Copilot CLI command reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference) (cờ, `-p`, limits, checkpoint) · [Install Copilot in the CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli) · [About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github) (modes, permissions, environments) · [Models & pricing / AI credits](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) · [Changelog](https://github.blog/changelog/)
 - VS Code — [Agent Host Architecture](https://code.visualstudio.com/docs/agents/concepts/agent-host) + [AHP open spec](https://microsoft.github.io/agent-host-protocol) (giao thức host↔client — không phải tên SDK) · [AI features cheat sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet)
 
 **Chốt:** CI không có người bấm Allow, nên "bộ não an toàn" phải nằm ở thiết kế — ACI 5 dòng, `-p` non-interactive, secrets qua env, output chỉ để người đọc; và chốt merge là thứ quyền lực cuối cùng bạn không giao cho robot.

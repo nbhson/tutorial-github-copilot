@@ -7,7 +7,7 @@
 
 Mở sổ đầu bài cũ ra xem lại rồi viết tiếp từ chỗ hôm qua dừng. Lưu ý trước: **không có slash `/history`** — VS Code không dạy lệnh này. Lịch sử nằm ở **danh sách phiên (Session History)**: đầu Chat view (gom theo thời gian, theo workspace) hoặc sidebar Agents window (xuyên workspace).
 
-Gõ `/` không thấy "history" là đúng thiết kế. Đây cũng là bước đệm cho việc mở lại phiên: chưa nhớ tên thì lướt list, đã biết tên thì tìm filter/Chronicle.
+Gõ `/` không thấy "history" là đúng thiết kế. Đây cũng là bước đệm cho việc mở lại phiên: chưa nhớ tên thì lướt list, đã biết tên thì tìm filter/Chronicle. · 📄 [VS Code Docs: Sessions (concept)](https://code.visualstudio.com/docs/agents/concepts/sessions)
 
 ## Vì sao dùng Session History?
 
@@ -19,25 +19,25 @@ Trí nhớ của bạn không phải nơi lưu tốt nhất cho hàng chục phi
 
 **Nếu làm sai thì sao?** Ngộ nhận lớn nhất là tin rằng mở lại chat cũ là model "nhớ hết". History giữ transcript hội thoại; các trạng thái tool (file đang mở, output terminal đang treo) có thể không còn nguyên. Mở lại nên nhắc lại vài dòng bối cảnh — xem ❌/✅.
 
-> **Tóm gọn 1 câu:** Session History là sổ đầu bài của các phiên chat — tìm lại nhanh, nhưng mở lại thì vẫn phải nhắc bối cảnh trước khi giao việc.
+> **Tóm gọn 1 câu:** Session History là sổ đầu bài của các phiên chat — tìm lại nhanh, nhưng mở lại thì vẫn phải nhắc bối cảnh trước khi giao việc. · 📄 [VS Code Docs: Sessions (concept)](https://code.visualstudio.com/docs/agents/concepts/sessions)
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** muốn tiếp tục việc hôm qua làm dở; so sánh hai cách giải quyết ở hai chat khác nhau; tìm lại prompt hay để lưu thành template.
 - **ĐỪNG dùng khi:** bạn chỉ muốn một đầu bài sạch để bắt task mới — mở chat mới (`Ctrl+N`), lục history làm gì cho thêm nhiễu.
-- **Cho ai:** người làm việc multi-day, hay so sánh solution giữa các phiên khác nhau.
+- **Cho ai:** người làm việc multi-day, hay so sánh solution giữa các phiên khác nhau. · 📄 [VS Code Docs: Pick the right tool](https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task)
 
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
-> List ẩn trong Chat view? Chuột phải vùng chat trống → **Show Sessions**. Phiên đã xong bị ẩn? Đổi filter sang **Archived** (Chat view) / **Done** (Agents window). Tìm theo chủ đề/file thay vì lướt list: hỏi Chronicle (`/chronicle:search <từ khóa>`, docs session-history).
+> List ẩn trong Chat view? Chuột phải vùng chat trống → **Show Sessions**. Phiên đã xong bị ẩn? Đổi filter sang **Archived** (Chat view) / **Done** (Agents window). Tìm theo chủ đề/file thay vì lướt list: hỏi Chronicle (`/chronicle:search <từ khóa>`, docs session-history). · 📄 [VS Code Docs: Session History](https://code.visualstudio.com/docs/agents/run/sessions/session-history)
 
 ## Ví dụ thật
 
 Nghiệp vụ: tuần trước bạn thử hai hướng fix bug timezone — một ở chat "tz-utc-offset", một ở chat "tz-library". Giờ cần mở lại chat dùng thư viện để so với hướng còn lại.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Prompt examples](https://code.visualstudio.com/docs/agents/guides/prompt-examples)
 
 **Kết quả mong đợi:** Thấy list phiên cũ theo thời gian; mở lại đúng phiên, tiếp tục không cần giải thích lại từ đầu.
 
@@ -51,38 +51,40 @@ Nghiệp vụ: tuần trước bạn thử hai hướng fix bug timezone — m�
 
 **✅ ĐÚNG — mở list phiên, chọn đúng chat, nhắc 3 dòng bối cảnh rồi hỏi tiếp:**
 
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh) · 📄 [VS Code Docs: Choose a troubleshooting path](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path)
 
 **Bài học:** Cửa vào lịch sử là danh sách phiên (và Chronicle khi cần search), không phải slash. Mở lại thì nhắc lại bối cảnh bằng lời.
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: Reindex the session store](https://code.visualstudio.com/docs/agents/run/sessions/session-history#reindex-the-session-store)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Không thấy chat hôm qua | Chat ở máy/profile khác, hoặc đã archive | Check đúng VS Code profile + máy; bật filter **Archived/Done** |
 | Mở lại nhưng model quên chi tiết tool | Trạng thái tool không đi theo transcript | Tóm tắt lại 3 dòng rồi hỏi tiếp |
 | List quá dài khó tìm | Đặt tên chat xấu + không tìm theo chủ đề | Đặt tên rõ; hỏi Chronicle theo file/chủ đề; export chat hay ra file |
-
 ## So sánh với Claude Code
+
+📄 [VS Code Docs: Agent Harnesses](https://code.visualstudio.com/docs/agents/concepts/agent-harnesses)
 
 | Việc | Copilot (Session History) | Claude Code | Ghi chú |
 |---|---|---|---|
 | Xem lại phiên cũ | Danh sách phiên (Chat view/Agents window) + filter Archived | `claude --resume` chọn session | Cùng ý tưởng: liệt kê phiên để mở lại |
 | Tìm theo nội dung | `/chronicle:search <q>` (docs session-history) | Đọc lại từng session | Copilot có lớp search, Claude lướt list |
 | So sánh hai phiên | Mở từng phiên trong list | Mở từng session | Không bên nào "diff" hai phiên tự động |
-
 ## Best practices (kèm "vì sao")
 
 - **Đặt tên chat có nghĩa, đừng để mặc định.** *Vì sao?* List dài cỡ nào cũng tìm được nếu tên gợi đúng việc.
 - **Export chat giá trị cao ngay khi xong.** *Vì sao?* History nằm theo profile/máy — file export thì cầm được, bàn giao được.
 - **Mở lại chat cũ thì nhắc lại bối cảnh.** *Vì sao?* Transcript không đảm bảo còn nguyên trạng thái tool; nhắc lại giúp model bắt nhịp nhanh.
-- **Dùng history để so sánh, không để gộp.** *Vì sao?* Gộp nhiều phiên vào một chỗ dễ làm lẫn context; giữ tách phiên rõ ràng dễ đối chiếu hơn.
+- **Dùng history để so sánh, không để gộp.** *Vì sao?* Gộp nhiều phiên vào một chỗ dễ làm lẫn context; giữ tách phiên rõ ràng dễ đối chiếu hơn. · 📄 [VS Code Docs: What gets tracked](https://code.visualstudio.com/docs/agents/run/sessions/session-history#what-gets-tracked)
 
 ## Bài tập nhỏ
 
 1. **(3 phút)** Mở danh sách phiên ở đầu Chat view, đếm xem bạn có bao nhiêu phiên chưa đặt tên. Đặt lại tên cho 3 phiên quan trọng nhất.
 2. **(5 phút)** Tìm một chat cũ, mở lại, nhắn follow-up mà **không** nhắc bối cảnh — ghi lại model quên gì; rồi nhắc bối cảnh và hỏi lại.
-3. **(5 phút)** Lấy một prompt hay trong history, xuất chat ra file (palette: "Chat: Export Chat…") làm template dùng lại.
+3. **(5 phút)** Lấy một prompt hay trong history, xuất chat ra file (palette: "Chat: Export Chat…") làm template dùng lại. · 📄 [VS Code Docs: Session History](https://code.visualstudio.com/docs/agents/run/sessions/session-history)
 
 ## Tham khảo
 

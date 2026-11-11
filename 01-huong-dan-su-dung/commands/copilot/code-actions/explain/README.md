@@ -5,7 +5,7 @@
 
 ## 1 câu nôm na
 
-Chỉ vào đoạn code lạ rồi hỏi "đoạn này làm gì vậy?". Bạn **bôi đen 10–40 dòng trọng tâm** rồi gọi `/explain` — nó giảng từng bước ngay trong khung Chat; còn bôi cả file thì câu trả lời chung chung, đọc xong chẳng đọng lại gì.
+Chỉ vào đoạn code lạ rồi hỏi "đoạn này làm gì vậy?". Bạn **bôi đen 10–40 dòng trọng tâm** rồi gọi `/explain` — nó giảng từng bước ngay trong khung Chat; còn bôi cả file thì câu trả lời chung chung, đọc xong chẳng đọng lại gì. · 📄 [VS Code Docs: Copilot smart actions](https://code.visualstudio.com/docs/editing/copilot-smart-actions)
 
 ## Vì sao dùng /explain?
 
@@ -13,7 +13,7 @@ Tự đọc thì bạn phải nhảy qua lại giữa hàm, caller, type... 15 p
 
 **Nếu làm sai thì sao?** Cạm bẫy lớn nhất không phải câu trả lời dở mà là **tin mù**. Model đọc code chứ không chạy code — gặp đoạn "mẹo" (đệ quy, side-effect ẩn, macro) nó có thể kể một câu chuyện nghe rất hợp lý mà sai. Vì vậy đọc xong phải tự diễn giải lại + chỉ ra được một edge case (xem mục ❌/✅).
 
-> **Tóm gọn 1 câu:** `/explain` là bạn đồng học giỏi kể lại bài cho bạn nghe — nhưng bạn phải tự làm lại một bài tập để chắc là nó kể đúng.
+> **Tóm gọn 1 câu:** `/explain` là bạn đồng học giỏi kể lại bài cho bạn nghe — nhưng bạn phải tự làm lại một bài tập để chắc là nó kể đúng. · 📄 [VS Code Docs: Copilot smart actions](https://code.visualstudio.com/docs/editing/copilot-smart-actions)
 
 ## Khi nào dùng / khi nào đừng
 
@@ -21,19 +21,19 @@ Tự đọc thì bạn phải nhảy qua lại giữa hàm, caller, type... 15 p
 - **ĐỪNG dùng khi:** bạn cần nó *sửa* luôn (`/fix`, `/refactor`) hoặc cần hỏi xuyên cả repo kiểu "hàm này được gọi ở đâu" — gắn symbol/`#` context rồi hỏi trong session lớn, đừng bám `@workspace` (participant đã deprecated).
 - **Cho ai:** người mới vào codebase, reviewer PR, ai phải đọc code legacy.
 
-> **Tóm gọn 1 câu:** Đoạn code lạ trước khi đụng tay thì `/explain` cho bản đồ, còn bước "đi thử đường" (kể lại + bắt edge case) vẫn phải là của bạn.
+> **Tóm gọn 1 câu:** Đoạn code lạ trước khi đụng tay thì `/explain` cho bản đồ, còn bước "đi thử đường" (kể lại + bắt edge case) vẫn phải là của bạn. · 📄 [VS Code Docs: Choose a feature](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature)
 
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
-> Gõ `/` trong Chat mà không thấy `/explain`? Docs ghi availability phụ thuộc surface/harness/role — kiểm tra bạn đang ở Chat view hay Agents window, phiên Ask hay Agent, rồi kết luận.
+> Gõ `/` trong Chat mà không thấy `/explain`? Docs ghi availability phụ thuộc surface/harness/role — kiểm tra bạn đang ở Chat view hay Agents window, phiên Ask hay Agent, rồi kết luận. · 📄 [VS Code Docs: Explain code](https://code.visualstudio.com/docs/editing/copilot-smart-actions#explain-code)
 
 ## Ví dụ thật
 
 Nghiệp vụ: một đồng nghiệp đã nghỉ để lại `src/middleware/verifySignedRequest.ts` — bạn không rõ nó chặn request theo tiêu chí nào.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Code generation & editing](https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing)
 
 **Kết quả mong đợi:** từng bước đúng logic, chỉ rõ input/output, và liệt kê edge case (ví dụ header thiếu thì nhánh nào chạy).
 
@@ -47,21 +47,22 @@ Nghiệp vụ: một đồng nghiệp đã nghỉ để lại `src/middleware/ve
 
 **✅ ĐÚNG — khoanh 10–40 dòng trọng tâm + nêu tên file:**
 
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh) · 📄 [VS Code Docs: Choose a troubleshooting path](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path)
 
 **Bài học:** `/explain` càng khoanh gọn thì trả lời càng sâu; bôi cả file chỉ nhận lại mô tả bề mặt.
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: Check the explanation against tests](https://code.visualstudio.com/docs/agents/guides/explore-a-codebase#4-check-the-explanation-against-tests)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Giải thích chung chung | Bôi quá ít hoặc quá nhiều (cả file) | Bôi 10–40 dòng trọng tâm + nêu tên file |
 | Giải thích sai logic tricky | Code quá "mẹo" hoặc thiếu context | Gắn thêm `#file` của caller + hỏi "check lại dòng X" |
 | Hiểu mà không verify | Tin luôn lời giải thích | Đặt breakpoint/log, chạy thử 1 case để đối chiếu |
-
 ## So sánh với Claude Code
 
-Nếu song song cả hai công cụ, bảng này chỉ chỗ `/explain` tương ứng với gì bên Claude Code — tránh việc cứ tìm nút bấm mà không có.
+Nếu song song cả hai công cụ, bảng này chỉ chỗ `/explain` tương ứng với gì bên Claude Code — tránh việc cứ tìm nút bấm mà không có. · 📄 [GitHub Docs: Third-party coding agents](https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents)
 
 | Việc | Copilot (`/explain`) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -76,13 +77,13 @@ Bốn thói quen dưới đây biến `/explain` từ "đọc cho vui" thành c�
 - **Luôn bôi đen 10–40 dòng trọng tâm.** *Vì sao?* Cả file làm loãng ngữ cảnh; một khối gọn cho câu trả lời sâu và đúng hơn.
 - **Nói rõ "giải thích như cho intern mới" (hoặc "như senior").** *Vì sao?* Cùng đoạn code, độ sâu bạn cần khác nhau — nói ra thì khỏi hỏi lại 2–3 lần.
 - **Gắn `#file` của caller khi logic phụ thuộc chỗ gọi.** *Vì sao?* Nhiều hàm chỉ hiểu đúng khi biết ai truyền gì vào; thiếu caller là đoán.
-- **Tự kể lại + chỉ ra 1 edge case sau khi đọc.** *Vì sao?* Đây là cách duy nhất biến "đọc xong thấy hiểu" thành "hiểu thật".
+- **Tự kể lại + chỉ ra 1 edge case sau khi đọc.** *Vì sao?* Đây là cách duy nhất biến "đọc xong thấy hiểu" thành "hiểu thật". · 📄 [VS Code Docs: Define the question](https://code.visualstudio.com/docs/agents/guides/explore-a-codebase#1-define-the-question)
 
 ## Bài tập nhỏ
 
 1. **(5 phút)** Bôi cả một file rồi `/explain`, sau đó bôi đúng 20 dòng trọng tâm và hỏi lại. Ghi lại câu trả lời nào dùng được.
 2. **(10 phút)** Chọn 1 hàm legacy trong repo: `/explain` rồi tự kể lại từng bước trong 4 câu. Chỗ nào kể không nổi chính là chỗ bạn còn chưa hiểu.
-3. **(10 phút)** Tìm 1 edge case mà `/explain` không nhắc tới, viết 1 test case chứng minh nó bằng cách chạy thật.
+3. **(10 phút)** Tìm 1 edge case mà `/explain` không nhắc tới, viết 1 test case chứng minh nó bằng cách chạy thật. · 📄 [VS Code Docs: Explain code](https://code.visualstudio.com/docs/editing/copilot-smart-actions#explain-code)
 
 ## Tham khảo
 

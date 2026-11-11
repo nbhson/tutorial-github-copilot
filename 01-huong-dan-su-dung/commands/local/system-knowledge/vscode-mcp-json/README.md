@@ -5,21 +5,21 @@
 
 ## 1 câu nôm na
 
-`.vscode/mcp.json` là "dải điện gắn trong tủ extension host": Local harness đọc nó, key gốc là **`servers`**, và nó chơi được cả hai món riêng của Local là `${input:…}` (hỏi secret khi khởi động) lẫn sandbox per-server. Copilot harness chạy ở phòng khác, dùng ổ điện khác: **`.mcp.json` ở root repo** (key `mcpServers`) + `~/.copilot/mcp-config.json` — và theo docs hướng migrate, `${input:}`/sandbox per-server **không port** sang đó.
+`.vscode/mcp.json` là "dải điện gắn trong tủ extension host": Local harness đọc nó, key gốc là **`servers`**, và nó chơi được cả hai món riêng của Local là `${input:…}` (hỏi secret khi khởi động) lẫn sandbox per-server. Copilot harness chạy ở phòng khác, dùng ổ điện khác: **`.mcp.json` ở root repo** (key `mcpServers`) + `~/.copilot/mcp-config.json` — và theo docs hướng migrate, `${input:}`/sandbox per-server **không port** sang đó. · 📄 [VS Code Docs: Customize AI agents (overview)](https://code.visualstudio.com/docs/agent-customization/overview)
 
 ## Vì sao tách bài này khỏi bài MCP?
 
-Các bài [../../../copilot/system-knowledge/mcp/README.md](../../../copilot/system-knowledge/mcp/README.md) và [../../../copilot/system-knowledge/mcp-add/README.md](../../../copilot/system-knowledge/mcp-add/README.md) dạy đường mặc định của **Copilot harness** (`.mcp.json` + `~/.copilot/mcp-config.json`). Phần Local cũ bị nhét lẫn vào đó, khiến người đọc tưởng `.vscode/mcp.json` là file chung của mọi harness. Hậu quả thật: thêm server "đã test ngon" trong phiên Local, mở phiên Copilot thì tool không có — và người dùng đổ oan cho model.
+Các bài [../../../copilot/system-knowledge/mcp/README.md](../../../copilot/system-knowledge/mcp/README.md) và [../../../copilot/system-knowledge/mcp-add/README.md](../../../copilot/system-knowledge/mcp-add/README.md) dạy đường mặc định của **Copilot harness** (`.mcp.json` + `~/.copilot/mcp-config.json`). Phần Local cũ bị nhét lẫn vào đó, khiến người đọc tưởng `.vscode/mcp.json` là file chung của mọi harness. Hậu quả thật: thêm server "đã test ngon" trong phiên Local, mở phiên Copilot thì tool không có — và người dùng đổ oan cho model. · 📄 [VS Code Docs: Customize AI agents (overview)](https://code.visualstudio.com/docs/agent-customization/overview)
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** bạn còn chạy session Local harness (`*.prompt.md`, mode Edit — xem [../prompt-file/README.md](../prompt-file/README.md), [../../model-agent/edit-mode/README.md](../../model-agent/edit-mode/README.md)); hoặc audit file cũ để migrate.
 - **ĐỪNG dùng khi:** session chạy Copilot harness — file này nằm im, không ai đọc; khai báo server vào `.mcp.json` (root) như [../../../copilot/system-knowledge/mcp-add/README.md](../../../copilot/system-knowledge/mcp-add/README.md).
-- **ĐỪNG coi nó là "file MCP mặc định của Copilot"** — câu đó đúng ở thời Local, sai từ khi khoá học mặc định dạy Copilot harness.
+- **ĐỪNG coi nó là "file MCP mặc định của Copilot"** — câu đó đúng ở thời Local, sai từ khi khoá học mặc định dạy Copilot harness. · 📄 [VS Code Docs: Choose a customization scope](https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope)
 
 ## Cách gọi (copy-paste)
 
-> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh) · 📄 [VS Code Docs: MCP configuration file](https://code.visualstudio.com/docs/agents/reference/mcp-configuration#configuration-file)
 
 Hình dạng file Local (đặt tại `.vscode/mcp.json` trong repo):
 
@@ -35,7 +35,7 @@ Bản Copilot harness đặt ở **root repo**, tên `.mcp.json`, key `mcpServer
 
 Nghiệp vụ: server đọc DB staging đang chạy tốt ở phiên Local; team chuyển sang Copilot harness và "mất tool DB".
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Customize Copilot guide](https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide)
 
 **Kết quả mong đợi:** sau khi chuyển khai báo sang `.mcp.json` (root) + `mcpServers` và đổi `${input:dsn}` thành env, server xuất hiện trong card MCP Servers của Agent Customizations editor; phiên Copilot gọi được tool.
 
@@ -49,9 +49,11 @@ Nghiệp vụ: server đọc DB staging đang chạy tốt ở phiên Local; tea
 **❌ SAI — bê nguyên `${input:dsn}` sang `.mcp.json`.** Cú pháp input không port sang Copilot; server khởi động với giá trị rác hoặc chết.
 **✅ ĐÚNG — thay bằng biến môi trường** đặt ngoài file (shell/profile); sandbox per-server kiểu Local cũng bỏ, dùng sandbox của Copilot harness.
 
-**Bài học:** hai file cùng nói về MCP nhưng thuộc hai harness khác nhau — đổi harness là đổi *file*, không phải đổi *setting*.
+**Bài học:** hai file cùng nói về MCP nhưng thuộc hai harness khác nhau — đổi harness là đổi *file*, không phải đổi *setting*. · 📄 [VS Code Docs: Check customization diagnostics](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#check-customization-diagnostics)
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: Environment variable references](https://code.visualstudio.com/docs/agents/reference/mcp-configuration#environment-variable-references)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
@@ -60,27 +62,27 @@ Nghiệp vụ: server đọc DB staging đang chạy tốt ở phiên Local; tea
 | `${input:}` không hỏi secret trong Copilot | Đúng thiết kế — không port | Chuyển secret sang env var |
 | Trùng server giữa hai file, agent "lật bật" tool | Một server khai 2 nơi, cả 2 harness cùng mở | Mỗi harness một nguồn khai báo; file cũ đổi hậu tố `.bak` khi migrate |
 | Không rõ thứ tự nạp MCP phía Copilot CLI | Docs CLI: `~/.copilot/mcp-config.json` (thấp nhất) → plugin → `--additional-mcp-config` (cao nhất) | Trùng tên thì nguồn bậc cao thắng; đọc docs CLI để chắc |
-
 ## So sánh với Claude Code
+
+📄 [VS Code Docs: Local harness compatibility](https://code.visualstudio.com/docs/agents/reference/mcp-configuration#editor-managed-configuration-for-local-harness-compatibility)
 
 | Việc | Copilot | Claude Code | Ghi chú |
 |---|---|---|---|
 | File MCP project | `.mcp.json` root repo (`mcpServers`) | `.mcp.json` root repo | Copilot theo định dạng file mà Claude Code dùng; `.vscode/mcp.json` chỉ là di sản Local |
 | File user-level | `~/.copilot/mcp-config.json` | Cấu hình user của CLI Claude | Đều "mọi project cùng thấy" |
 | Secret trong MCP config | env var (khuyến nghị) | env / expansion trong config | Không ai trong hai bên khuyến nghị secret hard-code trong file |
-
 ## Best practices (kèm "vì sao")
 
 - **Nhãn harness ngay đầu file khi còn giữ cả hai:** comment "LOCAL ONLY" trong `.vscode/mcp.json`. *Vì sao?* Người sau trong team không mất buổi chiều đoán file nào còn sống.
 - **Migrate là chuyển hẳn, không "để phòng khi".** *Vì sao?* Hai bản khai cùng tên tạo tool trùng, hành vi agent khó tái hiện để debug.
 - **Secret luôn nằm ngoài file commit.** *Vì sao?* `.vscode/mcp.json` và `.mcp.json` đều nằm trong repo; token trong git diff là token đã lộ.
-- **Kiểm tra bằng card MCP Servers của Customizations editor trước khi hỏi "tool đâu".** *Vì sao?* Nó cho biết harness hiện tại có thấy server không, cắt đôi nghi ngờ.
+- **Kiểm tra bằng card MCP Servers của Customizations editor trước khi hỏi "tool đâu".** *Vì sao?* Nó cho biết harness hiện tại có thấy server không, cắt đôi nghi ngờ. · 📄 [VS Code Docs: Share and reuse configuration](https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#share-and-reuse-configuration)
 
 ## Bài tập nhỏ
 
 1. **(4 phút)** `cat .vscode/mcp.json` trong repo của bạn: đếm số server dưới key `servers` và số chỗ dùng `${input:`.
 2. **(8 phút)** Migrate một server ít rủi ro sang `.mcp.json` (root, key `mcpServers`, env thay `${input:}`); xác nhận nó hiện trong card MCP Servers khi đang Copilot harness.
-3. **(3 phút)** Ghi 3 dòng vào tài liệu onboarding: harness nào đọc file nào, key gốc từng file.
+3. **(3 phút)** Ghi 3 dòng vào tài liệu onboarding: harness nào đọc file nào, key gốc từng file. · 📄 [VS Code Docs: MCP configuration file](https://code.visualstudio.com/docs/agents/reference/mcp-configuration#configuration-file)
 
 ## Tham khảo
 

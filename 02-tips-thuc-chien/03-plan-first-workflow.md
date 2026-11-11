@@ -19,7 +19,7 @@ Lợi ích đo được: 1 turn plan (vài AI Credits) tránh 10 turns code sai;
 
 > Rule: **task >2 steps hoặc >1 file → bắt buộc plan trước.**
 
-> **Tóm gọn 1 câu:** cho code trước hỏi sau là trả tiền hai lần — một turn plan rẻ thay cho mười turn sửa sai, và plan.md giữ mọi người đi cùng một hướng.
+> **Tóm gọn 1 câu:** cho code trước hỏi sau là trả tiền hai lần — một turn plan rẻ thay cho mười turn sửa sai, và plan.md giữ mọi người đi cùng một hướng. · 📄 [VS Code Docs: Plan Work](https://code.visualstudio.com/docs/agents/run/planning)
 
 ## 2. Cơ chế: 5 nấc thang Copilot
 
@@ -39,7 +39,7 @@ Leo thang đúng: **luôn bắt đầu thấp nhất có thể** — Ask không 
 
 > Lưu ý 2026: ngoài 5 nấc trên, trong Chat có built-in agents **Ask / Plan / Agent**; **Autopilot là một agent mode** chọn ở mode picker (còn ở CLI là chế độ `plan`/`autopilot`, xoay bằng `Shift+Tab`) — Autopilot tự chạy tới xong, vẫn tiêu tốn AI Credits như chat thường.
 
-> **Tóm gọn 1 câu:** 5 nấc Ask → Plan → Edit → Agent → cloud agent là 5 mức tin tưởng — cứ đứng nấc thấp nhất đủ dùng, việc mơ hồ thì chưa leo lên cao.
+> **Tóm gọn 1 câu:** 5 nấc Ask → Plan → Edit → Agent → cloud agent là 5 mức tin tưởng — cứ đứng nấc thấp nhất đủ dùng, việc mơ hồ thì chưa leo lên cao. · 📄 [VS Code Docs: Best Practices](https://code.visualstudio.com/docs/agents/best-practices)
 
 ## 3. Nấc 1–2: Ask + Plan (không code)
 
@@ -81,7 +81,7 @@ Hỏi từng câu một, khi đủ thì mới trình plan.
 
 Pattern này cực hợp cho non-coder / BA: bạn chỉ trả lời, Copilot lo cấu trúc.
 
-> **Tóm gọn 1 câu:** hai nấc đầu chỉ nói không làm — Ask để hiểu, Plan để chốt phương án kèm câu "chờ tôi duyệt, không code trong message này". 📄 Slug: [`/plan`](../01-huong-dan-su-dung/commands/copilot/code-actions/plan/README.md) · [`/ask`](../01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode/README.md).
+> **Tóm gọn 1 câu:** hai nấc đầu chỉ nói không làm — Ask để hiểu, Plan để chốt phương án kèm câu "chờ tôi duyệt, không code trong message này". 📄 Slug: [`/plan`](../01-huong-dan-su-dung/commands/copilot/code-actions/plan/README.md) · [`/ask`](../01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode/README.md). · 📄 [VS Code Docs: Ask the current agent to plan](https://code.visualstudio.com/docs/agents/run/planning#ask-the-current-agent-to-plan)
 
 ## 4. Nấc 3–4: Edit + Agent (code có kiểm soát)
 
@@ -115,7 +115,7 @@ Ràng buộc: đừng đụng src/generated/, đừng commit.
 
 Quy tắc an toàn cho Agent: luôn gắn `plan.md` đã duyệt; 1 phase / 1 chat; luôn dặn dừng sau N lần đỏ. Gate verify xem [Tips 04](./04-verification-done-that.md).
 
-> **Tóm gọn 1 câu:** Edit là dao mổ cho một vùng nhỏ, Agent là thợ phụ tay cho việc nhiều file — cả hai đều phải đeo "đề bài" là plan.md đã duyệt. 📄 Worktree "1 phase / 1 chat": [`../01-huong-dan-su-dung/examples/06-custom-agents-parallel/chay-song-song-3-cach.sh`](../01-huong-dan-su-dung/examples/06-custom-agents-parallel/chay-song-song-3-cach.sh).
+> **Tóm gọn 1 câu:** Edit là dao mổ cho một vùng nhỏ, Agent là thợ phụ tay cho việc nhiều file — cả hai đều phải đeo "đề bài" là plan.md đã duyệt. 📄 Worktree "1 phase / 1 chat": [`../01-huong-dan-su-dung/examples/06-custom-agents-parallel/chay-song-song-3-cach.sh`](../01-huong-dan-su-dung/examples/06-custom-agents-parallel/chay-song-song-3-cach.sh). · 📄 [VS Code Docs: Choose your review approach](https://code.visualstudio.com/docs/agents/run/review-code-edits#choose-your-review-approach)
 
 ## 5. Nấc 5: cloud agent giao issue (bất đồng bộ)
 
@@ -156,7 +156,7 @@ Nếu test đỏ sau 3 lần, dừng và comment blocker vào issue.
 
 > Lưu ý 2026: ngoài github.com, chạy được agent trong terminal bằng Copilot CLI (binary `copilot`, xoay chế độ **standard → plan → autopilot** bằng `Shift+Tab`, `/permissions` quyền, `/limits` giới hạn credits). Xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
 
-> **Tóm gọn 1 câu:** cloud agent là giao việc qua issue rồi quay lại nhận PR — chỉ giao khi spec rõ, có plan duyệt và checklist done.
+> **Tóm gọn 1 câu:** cloud agent là giao việc qua issue rồi quay lại nhận PR — chỉ giao khi spec rõ, có plan duyệt và checklist done. · 📄 [VS Code Docs: Cloud Sessions](https://code.visualstudio.com/docs/agents/run/cloud-sandbox-sessions)
 
 ## 6. Mẫu plan.md chuẩn + prompt duyệt
 
@@ -209,7 +209,7 @@ Tôi duyệt xong mới cho implement.
 
 Sau khi duyệt: `"Plan đã duyệt. Save plan.md, commit 'docs: approve refund plan'. Từ giờ mọi chat implement chỉ đọc plan.md này, không tự sáng tạo ngoài."`
 
-> **Tóm gọn 1 câu:** plan.md chuẩn gồm mục tiêu, files đọc/sửa, steps theo phase, risks, cấm địa và verify từng phase — duyệt bằng prompt "reviewer khó tính" rồi lưu và commit.
+> **Tóm gọn 1 câu:** plan.md chuẩn gồm mục tiêu, files đọc/sửa, steps theo phase, risks, cấm địa và verify từng phase — duyệt bằng prompt "reviewer khó tính" rồi lưu và commit. · 📄 [VS Code Docs: Implement or save the plan](https://code.visualstudio.com/docs/agents/run/planning#implement-or-save-the-plan)
 
 ## 7. Walkthrough: feature payments 60 phút
 
@@ -228,7 +228,7 @@ Mục này ghép mọi thứ trên thành một kịch bản có đồng hồ �
 
 Tổng: 5 chats gọn, 1 plan duyệt, 0 lần revert lớn. Nếu giao cloud agent: phút 30 assign issue kèm plan.md link, 2 giờ sau kiểm tra PR draft.
 
-> **Tóm gọn 1 câu:** feature đủ lớn trong 60 phút gồm 5 chat ngắn theo đúng thứ tự Ask → Plan → Duyệt → Implement → Review, không một lần revert lớn. 📄 Giấy tờ cần sẵn: [`04-3-mau-instructions-backend.md`](../01-huong-dan-su-dung/examples/03-instructions-memory-rules/mau-instructions-backend.md) · checkpoints: [`../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/checkpoints-4-co-che.sh`](../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/checkpoints-4-co-che.sh).
+> **Tóm gọn 1 câu:** feature đủ lớn trong 60 phút gồm 5 chat ngắn theo đúng thứ tự Ask → Plan → Duyệt → Implement → Review, không một lần revert lớn. 📄 Giấy tờ cần sẵn: [`04-3-mau-instructions-backend.md`](../01-huong-dan-su-dung/examples/03-instructions-memory-rules/mau-instructions-backend.md) · checkpoints: [`../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/checkpoints-4-co-che.sh`](../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/checkpoints-4-co-che.sh). · 📄 [VS Code Docs: Review a plan before editing](https://code.visualstudio.com/docs/agents/guides/add-a-feature#3-review-a-plan-before-editing)
 
 ## 8. Bảng tra nhanh: chọn nấc nào?
 
@@ -248,7 +248,7 @@ Mục này là bảng tra cứu để trả lời một câu hỏi duy nhất: v
 
 > Quy tắc ngón tay: **chưa có plan duyệt thì chưa cho code. Chưa rõ thì hỏi. Rõ rồi mới leo nấc.**
 
-> **Tóm gọn 1 câu:** dò dòng khớp dấu hiệu việc của bạn trong bảng là biết ngay nấc nào và prompt nào dùng.
+> **Tóm gọn 1 câu:** dò dòng khớp dấu hiệu việc của bạn trong bảng là biết ngay nấc nào và prompt nào dùng. · 📄 [VS Code Docs: Choose isolation](https://code.visualstudio.com/docs/agents/guides/delegate-two-tasks#2-choose-isolation)
 
 ## 9. Pitfalls + cách fix
 
@@ -266,7 +266,7 @@ Mục này liệt kê những lỗi hay mắc khi áp plan-first và cách sửa
 | Edit cho task multi-files | Sửa chỗ này quên chỗ kia | Edit chỉ cho 1 vùng; multi-files dùng Agent |
 | Quên dặn dừng khi đỏ | Agent vá 10 lần càng hỏng | Luôn dặn đỏ sau 3 lần → dừng + báo blocker |
 
-> **Cách đọc bảng này:** cột 1 là lỗi, cột 2 là dấu hiệu cho thấy bạn đang mắc, cột 3 là thuốc chữa — dùng cột 2 để tự soi.
+> **Cách đọc bảng này:** cột 1 là lỗi, cột 2 là dấu hiệu cho thấy bạn đang mắc, cột 3 là thuốc chữa — dùng cột 2 để tự soi. · 📄 [VS Code Docs: Review and refine the plan](https://code.visualstudio.com/docs/agents/run/planning#review-and-refine-the-plan)
 
 ## 10. Bài tập cuối bài
 

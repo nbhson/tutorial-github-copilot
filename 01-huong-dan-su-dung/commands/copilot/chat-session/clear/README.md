@@ -7,7 +7,7 @@
 
 Gấp cuốn sổ cũ lại cắm vào ngăn kéo, mở cuốn mới — phấn, bảng và nội quy lớp vẫn nguyên. Docs định nghĩa `/clear` là: **mở chat mới VÀ archive (hoặc mark done) chat hiện tại**. Chat cũ không biến mất — nó nằm trong filter **Archived** của danh sách phiên và mở lại được.
 
-Còn cái bạn "mang theo" là cấu hình: instructions trong repo nạp lại từ file, MCP giữ kết nối. Gắn scope gọn thì 1–2 turns là vào việc.
+Còn cái bạn "mang theo" là cấu hình: instructions trong repo nạp lại từ file, MCP giữ kết nối. Gắn scope gọn thì 1–2 turns là vào việc. · 📄 [VS Code Docs: Sessions (concept)](https://code.visualstudio.com/docs/agents/concepts/sessions)
 
 ## Vì sao dùng /clear?
 
@@ -19,25 +19,25 @@ Khi một phiên chat phình to, model bắt đầu quên đầu bài — nhưng
 
 **Nếu làm sai thì sao?** Hai ngộ nhận hay gặp: (1) tưởng `/clear` xóa history mãi mãi — không, nó archive; muốn mất hẳn là Delete; (2) clear xong vẫn lan man vì scope chat mới còn rộng. Xem ❌/✅.
 
-> **Tóm gọn 1 câu:** `/clear` = "chat mới + gấp chat cũ lại" — mạch hội thoại được cất vào ngăn Archived, còn instructions và MCP nằm trên file nên vẫn nguyên.
+> **Tóm gọn 1 câu:** `/clear` = "chat mới + gấp chat cũ lại" — mạch hội thoại được cất vào ngăn Archived, còn instructions và MCP nằm trên file nên vẫn nguyên. · 📄 [VS Code Docs: Sessions (concept)](https://code.visualstudio.com/docs/agents/concepts/sessions)
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** chat dài quá và model bắt đầu quên đầu bài; chuyển sang đầu việc khác trong cùng repo mà muốn gọn danh sách; giữ instructions/MCP đã setup.
 - **ĐỪNG dùng khi:** bạn muốn chat cũ vẫn active để hỏi tiếp ngay — khi đó chỉ mở chat mới (`Ctrl+N`), hoặc nếu chat dài mà chưa quên đầu bài thì `/compact` (nén ngữ cảnh, giữ nguyên phiên).
-- **Cho ai:** ai cũng dùng được — nhất là người mở một chat rồi hỏi dồn cả ngày.
+- **Cho ai:** ai cũng dùng được — nhất là người mở một chat rồi hỏi dồn cả ngày. · 📄 [VS Code Docs: Pick the right tool](https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task)
 
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
-> Kiểm tra: gõ `/` trong ô Chat, tìm `/clear` (mục chat reference). Availability phụ thuộc surface/harness/role — không thấy thì xem trạng thái Copilot + plan trước khi kết luận lỗi công cụ.
+> Kiểm tra: gõ `/` trong ô Chat, tìm `/clear` (mục chat reference). Availability phụ thuộc surface/harness/role — không thấy thì xem trạng thái Copilot + plan trước khi kết luận lỗi công cụ. · 📄 [VS Code Docs: Start new chats for new tasks](https://code.visualstudio.com/docs/agents/guides/optimize-usage#start-new-chats-for-new-tasks)
 
 ## Ví dụ thật
 
 Nghiệp vụ: bạn đang giữa phiên sửa `payment.ts` với MCP `github` đang kết nối, đã 30 turns và model bắt đầu nhắc lại chuyện cũ. Bạn muốn sang trang mới nhưng **giữ** MCP và instructions.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Prompt examples](https://code.visualstudio.com/docs/agents/guides/prompt-examples)
 
 **Kết quả mong đợi:** Chat mới mở ra sạch; chat cũ chuyển sang Archived; instructions + MCP vẫn còn ở chat mới.
 
@@ -51,38 +51,40 @@ Nghiệp vụ: bạn đang giữa phiên sửa `payment.ts` với MCP `github` �
 
 **✅ ĐÚNG — biết `/clear` = chat mới + archive; cần giữ bằng chứng vẫn export trước:**
 
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh) · 📄 [VS Code Docs: Choose a troubleshooting path](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path)
 
 **Bài học:** `/clear` không phải thùng rác — nó là trang mới + tủ lưu. Cái mất duy nhất là mạch hội thoại đang hiện; cấu hình nằm ở file nên không sao.
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: Context window & compaction](https://code.visualstudio.com/docs/agents/concepts/context#context-window-and-compaction)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Tưởng mất chat cũ sau `/clear` | Không biết nó được archive | Bật filter **Archived** trong danh sách phiên, mở lại bình thường |
 | Chat mới vẫn trả lời lan man | Scope chưa gọn (attach cả repo từ câu đầu) | Mở đầu bằng 1–3 `#file` liên quan |
 | Lo mất instructions/MCP | Nhầm "clear turns" với "reset cấu hình" | Yên tâm: chúng nạp lại từ file, không nằm trong turns |
-
 ## So sánh với Claude Code
+
+📄 [VS Code Docs: Agent Harnesses](https://code.visualstudio.com/docs/agents/concepts/agent-harnesses)
 
 | Việc | Copilot (`/clear`) | Claude Code | Ghi chú |
 |---|---|---|---|
 | Sang phiên sạch | `/clear` mở chat mới + archive chat hiện tại | `/clear` xóa conversation history của phiên | Claude "xóa", Copilot "cất" — khác nhau chỗ này |
 | Giữ cấu hình repo | Instructions + MCP nạp lại từ file | `CLAUDE.md` + `.claude/` vẫn còn | Cả hai đều không mất config |
 | Nén thay vì cắt | Dùng `/compact` nếu muốn giữ phiên | `/compact` tương tự | Chat dài nhưng chưa đổi việc → compact |
-
 ## Best practices (kèm "vì sao")
 
 - **Còn việc dở thì export trước khi `/clear`.** *Vì sao?* Chat archived vẫn mở được, nhưng bản export là văn bản bền để bàn giao/so sánh.
 - **Clear khi bắt đầu chủ đề mới trong cùng repo.** *Vì sao?* Giữ nguyên instructions/MCP đã setup, chỉ bỏ hội thoại không còn liên quan.
 - **Sau clear, gắn scope lại từ đầu.** *Vì sao?* Chat mới mà vẫn attach dàn trải thì context nhanh phình lại như cũ.
-- **Đừng clear liên tục cho chat ngắn.** *Vì sao?* Chat chưa có vấn đề context; clear chỉ thêm một lần gấp-sổ mở-sổ vô ích.
+- **Đừng clear liên tục cho chat ngắn.** *Vì sao?* Chat chưa có vấn đề context; clear chỉ thêm một lần gấp-sổ mở-sổ vô ích. · 📄 [VS Code Docs: Manage context & sessions](https://code.visualstudio.com/docs/agents/best-practices#manage-context-and-sessions)
 
 ## Bài tập nhỏ
 
 1. **(3 phút)** Trong một chat có MCP đang connected, gõ `/clear`; hỏi "liệt kê quy tắc đang áp dụng" ở chat mới — xác nhận instructions vẫn còn.
 2. **(5 phút)** So sánh `/clear` và `Ctrl+N`: ghi lại cái nào archive chat cũ, cái nào giữ chat cũ active.
-3. **(5 phút)** Tìm lại chính chat vừa archive qua filter **Archived** — xác nhận "clear" không phải "delete".
+3. **(5 phút)** Tìm lại chính chat vừa archive qua filter **Archived** — xác nhận "clear" không phải "delete". · 📄 [VS Code Docs: Start new chats for new tasks](https://code.visualstudio.com/docs/agents/guides/optimize-usage#start-new-chats-for-new-tasks)
 
 ## Tham khảo
 

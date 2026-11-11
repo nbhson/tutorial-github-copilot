@@ -5,7 +5,7 @@
 
 ## 1 câu nôm na
 
-Cổng bảo vệ trước máy bạn: lệnh lành cho qua, lệnh nguy hiểm phải "xuất trình". Khi agent xin chạy một lệnh (terminal/MCP), popup **Allow/Deny** hiện ra; còn team thì set baseline **allow/ask/deny** theo từng tool trong settings.
+Cổng bảo vệ trước máy bạn: lệnh lành cho qua, lệnh nguy hiểm phải "xuất trình". Khi agent xin chạy một lệnh (terminal/MCP), popup **Allow/Deny** hiện ra; còn team thì set baseline **allow/ask/deny** theo từng tool trong settings. · 📄 [VS Code Docs: Agents (concept)](https://code.visualstudio.com/docs/agents/concepts/agents)
 
 ## Hai tầng cổng, đừng nhầm
 
@@ -19,26 +19,26 @@ Cổng bảo vệ trước máy bạn: lệnh lành cho qua, lệnh nguy hiểm 
 | Ask | Hỏi bạn trước mỗi lần chạy | Lệnh ghi/xóa/MCP chưa chắc — mặc định an toàn |
 | Deny | Chặn hẳn, không cho chạy | Lệnh destructive: `rm`, force-push, migration prod |
 
-> **Ba luật thuộc lòng:** (1) thứ tự thắng `deny > ask > allow`, org > team > personal — deny ở đâu cũng thắng allow ở nơi khác; (2) allowlist thực tế là **giao (intersection)** các nguồn, không phải phép hợp; (3) `tools: []` = **lockdown**, agent không còn tool nào. CLI siết thêm bằng `--available-tools`, `--allow-tool`/`--deny-tool`.
+> **Ba luật thuộc lòng:** (1) thứ tự thắng `deny > ask > allow`, org > team > personal — deny ở đâu cũng thắng allow ở nơi khác; (2) allowlist thực tế là **giao (intersection)** các nguồn, không phải phép hợp; (3) `tools: []` = **lockdown**, agent không còn tool nào. CLI siết thêm bằng `--available-tools`, `--allow-tool`/`--deny-tool`. · 📄 [VS Code Docs: Manage tool approvals](https://code.visualstudio.com/docs/agents/run/approvals#manage-tool-approvals)
 
 **Nếu làm sai thì sao?** Allow hết để "cho nhanh" là mở toang cửa. Ngược lại, deny cả những lệnh đọc lặp lại khiến bạn mỏi tay rồi bấm cho xong — bạn vô hiệu hóa chính cái gate mình dựng công phu.
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** agent xin Allow chạy lệnh (terminal/MCP tool); muốn set baseline allow/ask/deny cho team; nghi policy org đang chặn một việc bạn cần.
-- **ĐỪNG dùng như chỗ "đổi cho xong":** đừng Allow một lệnh bạn chưa hiểu chỉ để nó chạy tiếp; đừng bật Allow all thay cho sandbox.
+- **ĐỪNG dùng như chỗ "đổi cho xong":** đừng Allow một lệnh bạn chưa hiểu chỉ để nó chạy tiếp; đừng bật Allow all thay cho sandbox. · 📄 [VS Code Docs: Pick the right tool](https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task)
 
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
-> Không thấy policy của org áp xuống máy bạn? Check bạn đã sign-in đúng account org (xem [../../system-knowledge/status/README.md](../../system-knowledge/status/README.md)) — policy chỉ áp khi session chạy bằng account thuộc org đó.
+> Không thấy policy của org áp xuống máy bạn? Check bạn đã sign-in đúng account org (xem [../../system-knowledge/status/README.md](../../system-knowledge/status/README.md)) — policy chỉ áp khi session chạy bằng account thuộc org đó. · 📄 [VS Code Docs: Manage tool approvals](https://code.visualstudio.com/docs/agents/run/approvals#manage-tool-approvals)
 
 ## Ví dụ thật
 
 Nghiệp vụ: agent đang làm task migration và xin chạy lệnh migration lên database.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Crafting effective prompts](https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts)
 
 **Kết quả mong đợi:** lệnh nguy hiểm bị chặn và hiện ra để bạn xem trước; các lệnh lành (đọc file, chạy test đọc) vẫn chạy trơn.
 
@@ -52,11 +52,13 @@ Nghiệp vụ: agent đang làm task migration và xin chạy lệnh migration l
 
 **✅ ĐÚNG — đọc lệnh, Deny mặc định cho thao tác ghi/xóa:**
 
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh) · 📄 [VS Code Docs: Choose a troubleshooting path](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path)
 
 **Bài học:** Deny là mặc định an toàn cho lệnh ghi/xóa. Chỉ Allow cho những tool đọc mà bạn thật sự tin.
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: Reset tool confirmations](https://code.visualstudio.com/docs/agents/run/approvals#reset-tool-confirmations)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
@@ -64,26 +66,26 @@ Nghiệp vụ: agent đang làm task migration và xin chạy lệnh migration l
 | Không biết ai chặn | Nhầm policy vs bug | Xem audit log + policy org, rồi hỏi admin |
 | Mỗi máy 1 kiểu approval | Thiếu baseline team | Commit baseline vào repo + viết docs |
 | Nới personal mà vẫn bị chặn | Org deny thắng (intersection) | Xin admin nới ở managed policy, không lách local |
-
 ## So sánh với Claude Code
+
+📄 [VS Code Docs: Claude permission modes](https://code.visualstudio.com/docs/agents/run/approvals#claude-permission-modes)
 
 | Việc | Copilot (policy approval) | Claude Code | Ghi chú |
 |---|---|---|---|
 | Duyệt lệnh trước khi chạy | Popup Allow/Deny; baseline allow/ask/deny theo tool | Permission prompt + allowlist trong `settings.json` | Cùng mô hình: đọc thì nới, ghi/xóa thì siết |
 | Núm ga tự duyệt | Manual / Assisted / Allow all | Permission modes + `--dangerously-skip-permissions` | Hai bên đều có cửa "tự hết", và hai bên đều khuyên đừng dùng |
 | Nơi đặt luật | Settings VS Code (team commit) + `managed-settings.json` (enterprise) + org policy trên GitHub.com | `settings.json` + managed settings của org | Cùng ý nghĩa: luật càng cao càng thắng |
-
 ## Best practices (kèm "vì sao")
 
 - **Allow cho tool chỉ-đọc, `ask`/`deny` cho phần còn lại.** *Vì sao?* Việc đọc lặp lại rất nhiều; thao tác ghi/xóa mới là chỗ rủi ro.
 - **Đừng lách deny bằng personal setting.** *Vì sao?* allowlist là intersection và `deny > ask > allow` — bạn chỉ làm mình hiểu sai trạng thái thật.
 - **Commit baseline của team vào repo.** *Vì sao?* Mỗi máy một kiểu approval thì review chung sẽ loạn; baseline chung giúp hành xử thống nhất.
-- **Thấy bị chặn thì xem policy/audit trước khi đoán bug.** *Vì sao?* Phần lớn ca "sao nó không cho chạy" là policy, không phải lỗi công cụ.
+- **Thấy bị chặn thì xem policy/audit trước khi đoán bug.** *Vì sao?* Phần lớn ca "sao nó không cho chạy" là policy, không phải lỗi công cụ. · 📄 [VS Code Docs: Prevent auto-approval](https://code.visualstudio.com/docs/agents/run/approvals#prevent-tools-from-being-auto-approved)
 
 ## Bài tập nhỏ
 
 1. **(3 phút)** Chạy một lệnh chỉ-đọc qua agent (ví dụ `git diff --stat`), xem nó có hỏi bạn không — nếu không, đó là allow đang hoạt động.
-2. **(5 phút)** Thử một lệnh nhạy cảm (ví dụ có `rm`) và chủ động Deny; xác nhận agent dừng lại thay vì lách.
+2. **(5 phút)** Thử một lệnh nhạy cảm (ví dụ có `rm`) và chủ động Deny; xác nhận agent dừng lại thay vì lách. · 📄 [VS Code Docs: Manage tool approvals](https://code.visualstudio.com/docs/agents/run/approvals#manage-tool-approvals)
 
 ## Tham khảo
 

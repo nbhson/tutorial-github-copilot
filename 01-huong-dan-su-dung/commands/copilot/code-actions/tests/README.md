@@ -5,7 +5,7 @@
 
 ## 1 câu nôm na
 
-Bảo "viết bài kiểm tra cho bài này, theo đúng mẫu lớp mình". Bạn bôi đen hàm rồi gọi `/tests`; điểm mấu chốt là **nói rõ framework + file test mẫu + cần mock gì** — thiếu mấy thứ đó thì test khó chạy, và dễ trượt thành "test ảo" luôn xanh.
+Bảo "viết bài kiểm tra cho bài này, theo đúng mẫu lớp mình". Bạn bôi đen hàm rồi gọi `/tests`; điểm mấu chốt là **nói rõ framework + file test mẫu + cần mock gì** — thiếu mấy thứ đó thì test khó chạy, và dễ trượt thành "test ảo" luôn xanh. · 📄 [VS Code Docs: Copilot smart actions](https://code.visualstudio.com/docs/editing/copilot-smart-actions)
 
 ## Vì sao dùng /tests?
 
@@ -13,7 +13,7 @@ Viết test là việc nhàm chán nhưng bắt buộc, và tốn thời gian nh
 
 **Nếu làm sai thì sao?** Rủi ro lớn nhất là **test ảo**: chỉ `assert true`, hoặc mock tới mức không còn kiểm tra gì thật. Nó chạy xanh, CI báo đẹp, mà bug vẫn nguyên — tệ hơn là không có test, vì bạn tưởng mình đã được bảo vệ. Vì vậy mỗi test phải *fail được* nếu logic sai (xem mục ❌/✅).
 
-> **Tóm gọn 1 câu:** `/tests` dựng khung bài kiểm tra hộ, nhưng đề thi ra sao là do bạn giao — giao đề chung chung thì có lớp nào chấm cũng được tròn điểm.
+> **Tóm gọn 1 câu:** `/tests` dựng khung bài kiểm tra hộ, nhưng đề thi ra sao là do bạn giao — giao đề chung chung thì có lớp nào chấm cũng được tròn điểm. · 📄 [VS Code Docs: Copilot smart actions](https://code.visualstudio.com/docs/editing/copilot-smart-actions)
 
 ## Khi nào dùng / khi nào đừng
 
@@ -21,19 +21,19 @@ Viết test là việc nhàm chán nhưng bắt buộc, và tốn thời gian nh
 - **ĐỪNG dùng khi:** bạn cần *sửa code* để test pass (đó là `/fix`), hoặc cần test cho cả một luồng nhiều module (dùng Agent mode có scope).
 - **Cho ai:** dev tăng coverage, người cần test đúng mẫu repo trước khi mở PR.
 
-> **Tóm gọn 1 câu:** Vừa viết/sửa hàm là lúc gọi `/tests` — khi rực rỡ trong logic còn nhớ nhánh nào nguy hiểm hơn cả, để sau này nhìn lại là quên.
+> **Tóm gọn 1 câu:** Vừa viết/sửa hàm là lúc gọi `/tests` — khi rực rỡ trong logic còn nhớ nhánh nào nguy hiểm hơn cả, để sau này nhìn lại là quên. · 📄 [VS Code Docs: Choose a feature](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature)
 
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
-> Gõ `/` trong Chat mà không thấy `/tests`? Docs ghi availability phụ thuộc surface/harness/role/tính năng — kiểm tra loại phiên đang mở trước khi kết luận lệnh hỏng.
+> Gõ `/` trong Chat mà không thấy `/tests`? Docs ghi availability phụ thuộc surface/harness/role/tính năng — kiểm tra loại phiên đang mở trước khi kết luận lệnh hỏng. · 📄 [VS Code Docs: Generate tests](https://code.visualstudio.com/docs/editing/copilot-smart-actions#generate-tests)
 
 ## Ví dụ thật
 
 Nghiệp vụ: `src/pricing/applyDiscount.ts` vừa thêm nhánh giảm giá theo hạng khách (VIP), chưa có test.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Code generation & editing](https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing)
 
 **Kết quả mong đợi:** file test theo đúng framework/mẫu repo, chạy xanh ngay hoặc chỉ cần sửa nhỏ.
 
@@ -47,26 +47,28 @@ Nghiệp vụ: `src/pricing/applyDiscount.ts` vừa thêm nhánh giảm giá the
 
 **✅ ĐÚNG — nêu framework + mẫu + bắt test fail được:**
 
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh) · 📄 [VS Code Docs: Choose a troubleshooting path](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path)
 
 **Bài học:** một test không thể đỏ khi logic sai thì vô giá trị — hãy yêu cầu rõ điều đó và review tay.
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: Run tests & investigate failures](https://code.visualstudio.com/docs/agents/guides/test-code-with-ai#run-tests-and-investigate-failures)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Test sinh ra không chạy được | Sai import/framework so với repo | Nêu rõ framework + file mẫu trong prompt |
 | Test ảo (assert true) | Mô tả quá chung | Bắt "mỗi test phải fail nếu logic sai" + review tay |
 | Quên mock DB/API | Prompt thiếu | Thêm "mock DB/API theo mẫu X" |
-
 ## So sánh với Claude Code
+
+📄 [GitHub Docs: Third-party coding agents](https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents)
 
 | Việc | Copilot (`/tests`) | Claude Code | Ghi chú |
 |---|---|---|---|
 | Sinh test cho hàm đang chọn | Slash command có sẵn `/tests` | Không có lệnh riêng — yêu cầu bằng prompt hoặc tự tạo command | Cùng việc, Copilot có sẵn nút |
 | Bám mẫu repo | Khớp hơn khi bạn đính kèm/nêu tên file mẫu | Agent tự đọc repo tìm mẫu | Cả hai đều xanh hơn khi bạn chỉ đúng file mẫu |
 | Kiểm chứng | Bạn chạy test, đọc kết quả | Bạn vẫn là người chạy và đọc | Test xanh là bằng chứng, không phải lời "đã viết xong" |
-
 ## Best practices (kèm "vì sao")
 
 Vài quy tắc dưới đây là ranh giới giữa "test thật" và "test trang trí" — mỗi quy tắc kèm lý do để bạn biết khi nào được ngoại lệ.
@@ -75,13 +77,13 @@ Vài quy tắc dưới đây là ranh giới giữa "test thật" và "test tran
 - **Yêu cầu "mỗi test phải fail nếu logic sai".** *Vì sao?* Đây là hàng rào chống test ảo — assert true thì chạy xanh mà chẳng bảo vệ gì.
 - **Luôn có case biên: null, rỗng, lỗi.** *Vì sao?* Bug thật thường nấp ở nhánh không ai nghĩ tới, chứ không ở đường đi chính.
 - **Sinh xong chạy test trước khi commit.** *Vì sao?* Test không chạy được thì không phải "test", chỉ là code trang trí.
-- **Quy ước test riêng của team → đóng gói thành custom agent `.github/agents/*.agent.md`.** *Vì sao?* Câu "viết test theo mẫu ta" lặp cả chục lần mỗi tuần; agent file nói một lần, VS Code đọc từ thư mục đó, CLI gọi bằng `--agent=TEST-AGENT`.
+- **Quy ước test riêng của team → đóng gói thành custom agent `.github/agents/*.agent.md`.** *Vì sao?* Câu "viết test theo mẫu ta" lặp cả chục lần mỗi tuần; agent file nói một lần, VS Code đọc từ thư mục đó, CLI gọi bằng `--agent=TEST-AGENT`. · 📄 [VS Code Docs: Review assertions & coverage](https://code.visualstudio.com/docs/agents/guides/test-code-with-ai#review-assertions-and-coverage)
 
 ## Bài tập nhỏ
 
 1. **(5 phút)** Bôi 1 hàm rồi `/tests` mà không nêu mẫu, sau đó nêu đúng file mẫu và hỏi lại. So xem lần nào chạy được ngay.
 2. **(10 phút)** Sinh test cho 1 hàm có nhánh null: tự tay kiểm tra nhánh đó đã có case chưa, thiếu thì bổ sung.
-3. **(10 phút)** Cố tình sửa logic 1 dòng cho sai, chạy test vừa sinh — test phải đỏ. Nếu vẫn xanh thì đó là test ảo, viết lại.
+3. **(10 phút)** Cố tình sửa logic 1 dòng cho sai, chạy test vừa sinh — test phải đỏ. Nếu vẫn xanh thì đó là test ảo, viết lại. · 📄 [VS Code Docs: Generate tests](https://code.visualstudio.com/docs/editing/copilot-smart-actions#generate-tests)
 
 ## Tham khảo
 

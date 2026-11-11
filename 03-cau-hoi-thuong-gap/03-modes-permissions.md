@@ -20,7 +20,7 @@
 - **Edit:** sửa trực tiếp file trong working set (file bạn mở/attach). Thường không chạy lệnh build/test trừ khi bạn bảo.
 - **Agent:** tự tìm file, sửa nhiều file, chạy terminal (lint/test/build), tạo file mới. Mỗi hành động nhạy cảm hiện **approval prompt**.
 
-> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/ask-edit-agent-khac-nhau-gi.sh`](./examples/03-modes-permissions/ask-edit-agent-khac-nhau-gi.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/ask-edit-agent-khac-nhau-gi.sh`](./examples/03-modes-permissions/ask-edit-agent-khac-nhau-gi.sh) · 📄 [VS Code Docs: Cheat Sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet)
 
 **Ví dụ:** hỏi "hàm này làm gì" → Ask. Sửa 1 hàm → Edit + attach file. Refactor auth 5 file + chạy test → Agent.
 
@@ -38,7 +38,7 @@ Giống hệt bảo vệ tòa nhà xin giấy ra vào: "cho vào lần này" (Al
 
 > 📄 **Code ví dụ:** [`./examples/03-modes-permissions/tool-approval-la-gi-sao-cu-hoi.sh`](./examples/03-modes-permissions/tool-approval-la-gi-sao-cu-hoi.sh)
 
-> **Hỏi hoài:** thường do task agent rộng (nhiều tool calls) hoặc chưa allow-for-workspace lệnh an toàn. Workspace mới → bộ nhớ approval reset.
+> **Hỏi hoài:** thường do task agent rộng (nhiều tool calls) hoặc chưa allow-for-workspace lệnh an toàn. Workspace mới → bộ nhớ approval reset. · 📄 [VS Code Docs: Tool approval](https://code.visualstudio.com/docs/agents/run/approvals#tool-approval)
 
 ## 3. Content exclusion là gì, cấu hình ở đâu?
 
@@ -50,7 +50,7 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 
 > 📄 **Code ví dụ:** [`./examples/03-modes-permissions/content-exclusion-la-gi-cau-hinh-o.sh`](./examples/03-modes-permissions/content-exclusion-la-gi-cau-hinh-o.sh)
 
-> **Khi nào áp dụng:** ngay khi repo có secret/key/hợp đồng — exclusion trước, code sau. Chi tiết [bài 09](09-bao-mat-quyen-rieng-tu.md). Lưu ý: file đã vào git thì exclusion không cứu được — phải xử lý ở tầng secret.
+> **Khi nào áp dụng:** ngay khi repo có secret/key/hợp đồng — exclusion trước, code sau. Chi tiết [bài 09](09-bao-mat-quyen-rieng-tu.md). Lưu ý: file đã vào git thì exclusion không cứu được — phải xử lý ở tầng secret. · 📄 [GitHub Docs: Content exclusion](https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/content-exclusion)
 
 ## 4. Agent sửa nhầm file thì xử lý sao?
 
@@ -58,7 +58,7 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 
 > 📄 **Code ví dụ:** [`./examples/03-modes-permissions/agent-sua-nham-file-thi-xu-ly.sh`](./examples/03-modes-permissions/agent-sua-nham-file-thi-xu-ly.sh)
 
-> **Thói quen bắt buộc:** `git diff --stat` trước khi commit sau mỗi task agent. Agent mode còn có timeline checkpoint — quay về checkpoint trước khi nó sửa sai.
+> **Thói quen bắt buộc:** `git diff --stat` trước khi commit sau mỗi task agent. Agent mode còn có timeline checkpoint — quay về checkpoint trước khi nó sửa sai. · 📄 [VS Code Docs: Undo changes at the right scope](https://code.visualstudio.com/docs/agents/run/review-code-edits#undo-changes-at-the-right-scope)
 
 ## 5. Cho agent chạy lệnh terminal an toàn thế nào?
 
@@ -68,7 +68,7 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 - Cân nhắc từng lần: `npm install`, `git commit`, `docker build`.
 - Không bao giờ auto-allow: `rm -rf`, `git push --force`, `kubectl delete`, `drop table`, `chmod 777`.
 
-> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/cho-agent-chay-lenh-terminal-an-toan.sh`](./examples/03-modes-permissions/cho-agent-chay-lenh-terminal-an-toan.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/cho-agent-chay-lenh-terminal-an-toan.sh`](./examples/03-modes-permissions/cho-agent-chay-lenh-terminal-an-toan.sh) · 📄 [VS Code Docs: Automatically approve terminal commands](https://code.visualstudio.com/docs/agents/run/approvals#automatically-approve-terminal-commands)
 
 ## 6. Edit mode sửa lan sang file khác — chặn thế nào?
 
@@ -76,13 +76,13 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 
 > 📄 **Code ví dụ:** [`./examples/03-modes-permissions/edit-mode-sua-lan-sang-file-khac.sh`](./examples/03-modes-permissions/edit-mode-sua-lan-sang-file-khac.sh)
 
-> **Đã ghi rõ mà vẫn lan:** đóng tab file không liên quan, Undo rồi thử lại với `#selection` đúng đoạn.
+> **Đã ghi rõ mà vẫn lan:** đóng tab file không liên quan, Undo rồi thử lại với `#selection` đúng đoạn. · 📄 [VS Code Docs: Require approval before sensitive edits](https://code.visualstudio.com/docs/agents/run/review-code-edits#require-approval-before-sensitive-edits)
 
 ## 7. Ask mode có sợ lộ file nhạy cảm không?
 
 **Trả lời 1 câu:** Ask chỉ đọc file bạn attach + instructions, không tự quét repo — nhưng `#file` secret vào chat là nội dung đó lên server model.
 
-> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/ask-mode-co-so-lo-file-nhay.sh`](./examples/03-modes-permissions/ask-mode-co-so-lo-file-nhay.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/ask-mode-co-so-lo-file-nhay.sh`](./examples/03-modes-permissions/ask-mode-co-so-lo-file-nhay.sh) · 📄 [VS Code Docs: Exclusion settings](https://code.visualstudio.com/docs/agents/reference/workspace-context#improve-agent-search-with-exclusion-settings)
 
 **Ví dụ:** debug lỗi Stripe → paste **đoạn code gọi API** (đã xóa key) thay vì `#file:secrets/stripe.ts` nguyên file. **Lỡ attach secret rồi:** coi như đã lộ, **xoay key ngay**, thêm path vào content exclusion.
 
@@ -101,7 +101,7 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 
 > 📄 **Code ví dụ:** [`./examples/03-modes-permissions/ui-2026-interactive-plan-autopilot-manual-assisted.sh`](./examples/03-modes-permissions/ui-2026-interactive-plan-autopilot-manual-assisted.sh)
 
-> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/ui-2026-interactive-plan-autopilot-manual-assisted.jsonc`](./examples/03-modes-permissions/ui-2026-interactive-plan-autopilot-manual-assisted.jsonc)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/ui-2026-interactive-plan-autopilot-manual-assisted.jsonc`](./examples/03-modes-permissions/ui-2026-interactive-plan-autopilot-manual-assisted.jsonc) · 📄 [VS Code Docs: Permission levels](https://code.visualstudio.com/docs/agents/run/approvals#permission-levels)
 
 **Ví dụ:** task refactor 8 file → **Plan** duyệt kế hoạch → **Interactive** code có kiểm soát. **Autopilot** chỉ trong worktree riêng + sandbox bật. Chi tiết [bài 10 — Modes, permissions, availability](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
 
@@ -117,13 +117,13 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 - File cấm đọc: **/*.pem, secrets/**, .env*.
 ```
 
-📄 File settings `.vscode/settings.json` đầy đủ + kịch bản allow/ask/deny: [`../01-huong-dan-su-dung/templates/.vscode/settings.json`](../templates/.vscode/settings.json) · [`../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc`](../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc).
+📄 File settings `.vscode/settings.json` đầy đủ + kịch bản allow/ask/deny: [`../01-huong-dan-su-dung/templates/.vscode/settings.json`](../templates/.vscode/settings.json) · [`../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc`](../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc). · 📄 [VS Code Docs: Recommended security baseline](https://code.visualstudio.com/docs/agents/run/security#recommended-security-baseline)
 
 ## 10. Khi nào KHÔNG nên dùng Agent mode?
 
 **Trả lời 1 câu:** 5 lúc: hotfix prod gấp, migration DB/infra, code legal/compliance, repo chưa có test, quota đỏ cuối tháng — dùng Ask/Edit hoặc làm tay.
 
-> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/khi-nao-khong-nen-dung-agent-mode.sh`](./examples/03-modes-permissions/khi-nao-khong-nen-dung-agent-mode.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/khi-nao-khong-nen-dung-agent-mode.sh`](./examples/03-modes-permissions/khi-nao-khong-nen-dung-agent-mode.sh) · 📄 [VS Code Docs: Pick the right tool](https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task)
 
 **Ví dụ:** hotfix thanh toán lỗi giữa đêm → Edit 1 file + chạy test tay, đừng bật agent quét cả repo. **Đã bật rồi mới nhận ra không nên:** Cancel ngay → `git diff --stat` → checkout hoàn tác file ngoài ý muốn.
 
@@ -140,7 +140,7 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 
 > 📄 **Code ví dụ:** [`./examples/03-modes-permissions/session-target-copilot-local-cloud-la-gi.sh`](./examples/03-modes-permissions/session-target-copilot-local-cloud-la-gi.sh)
 
-> **Lỗi hay gặp:** Cloud không thấy tool/context local — đừng giao việc cần file local cho Cloud. Chi tiết [bài 10 — Modes, permissions, availability](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
+> **Lỗi hay gặp:** Cloud không thấy tool/context local — đừng giao việc cần file local cho Cloud. Chi tiết [bài 10 — Modes, permissions, availability](../01-huong-dan-su-dung/10-modes-permissions-availability.md). · 📄 [VS Code Docs: Agent Harnesses](https://code.visualstudio.com/docs/agents/concepts/agent-harnesses)
 
 ---
 
@@ -158,4 +158,4 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 
 Tham khảo chéo: [bài 04](04-mcp-faq.md) (MCP approval) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 07](07-custom-agents-coding-agent-workflows.md) (agent workflows) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (exclusion).
 
-> **Tóm gọn 1 câu:** Mode là cấp bậc quyền hạn: Ask chỉ nói, Edit sửa đúng chỗ được giao, Agent tự do hành động — trao quyền càng nhiều, lưới an toàn (approval, exclusion) càng phải khít.
+> **Tóm gọn 1 câu:** Mode là cấp bậc quyền hạn: Ask chỉ nói, Edit sửa đúng chỗ được giao, Agent tự do hành động — trao quyền càng nhiều, lưới an toàn (approval, exclusion) càng phải khít. · 📄 [VS Code Docs: Debug Chat Interactions](https://code.visualstudio.com/docs/agents/agent-troubleshooting/chat-debug-view)

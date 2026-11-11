@@ -32,7 +32,7 @@ Mục này cho bạn biết 35 phút nữa sẽ mang được gì về — như 
 
 > **Vì sao quan trọng?** Hooks là tầng enforcement mạnh nhất mà **dev tự làm được**: chặn tool call *trước khi nó chạy*, thậm chí đổi tham số trước khi thực thi (`modifiedArgs`) — không phụ thuộc việc model "có nhớ luật" hay không.
 > **Nếu làm sai?** Tin vào định vị cũ "preview, chỉ Local, bỏ qua" → team dựng guard cho cloud agent bằng... lời dặn, trong khi một file JSON commit vào repo chặn được lệnh `rm -rf` ngay từ trước khi tool chạy.
-> **Tóm gọn 1 câu:** Docs nguyên văn: *"Hooks are supported in two Copilot surfaces: Copilot CLI and Copilot in the cloud"* — chỉ VS Code là Preview; trên CLI và cloud, hooks là tính năng hiện hành.
+> **Tóm gọn 1 câu:** Docs nguyên văn: *"Hooks are supported in two Copilot surfaces: Copilot CLI and Copilot in the cloud"* — chỉ VS Code là Preview; trên CLI và cloud, hooks là tính năng hiện hành. · 📄 [VS Code Docs: Choose the hook implementation](https://code.visualstudio.com/docs/agent-customization/hooks#choose-the-hook-implementation-for-your-session)
 
 ## 2. Schema, event và exit code — viết hook đầu tiên
 
@@ -79,7 +79,7 @@ Script `guard.sh` đầy đủ (allow/deny + demo `modifiedArgs`) → [`./exampl
 
 Ba chi tiết sống còn khi viết hook: **runaway guard** — 8 lần `block` liên tiếp thì CLI tự kết thúc turn, nên `agentStop` phải kiểm `stop_hook_active` để tự giới hạn; output của hook giới hạn **10 MiB/lần**; hook chạy **đồng bộ** — ghi log bằng append file, đừng gọi network đồng bộ, còn `notification` (CLI) là fire-and-forget đúng nghĩa. Muốn gọi service thay vì script: `type: "http"` (bắt buộc `https` cho `preToolUse`/`permissionRequest`; `http://localhost` cần `COPILOT_HOOK_ALLOW_LOCALHOST=1`).
 
-> **Tóm gọn 1 câu:** `matcher` lọc, exit code quyết, `preToolUse` là cửa duy nhất chặn được tool *trước khi* nó chạy — mọi thứ khác chỉ "góp ý sau".
+> **Tóm gọn 1 câu:** `matcher` lọc, exit code quyết, `preToolUse` là cửa duy nhất chặn được tool *trước khi* nó chạy — mọi thứ khác chỉ "góp ý sau". · 📄 [VS Code Docs: Hooks exit codes](https://code.visualstudio.com/docs/agents/reference/hooks-reference#exit-codes)
 
 ## 3. Đặt hook ở đâu, thứ tự load, và tầng "cấm tắt"
 
@@ -95,7 +95,7 @@ Ba chi tiết sống còn khi viết hook: **runaway guard** — 8 lần `block`
 - **Thứ tự load:** policy → user → project → plugins; mọi nguồn được **kết hợp** — cùng một event thì hook của cả máy lẫn repo đều chạy, không nguồn nào thay thế nguồn nào.
 - **Verify:** khởi động CLI in `! Invalid hook configuration in FILE: REASON` cho file/entry lỗi; `jq . .github/hooks/*.json`; `chmod +x` script; pipe test payload vào script và soi exit code + stdout JSON; nếu session bật sandbox, chạy `/sandbox policy <lệnh-hook>` (→ `commands/copilot/model-agent/sandbox-policy/README.md`) để thấy hook cần quyền gì.
 
-> **Tóm gọn 1 câu:** File trong `.github/hooks/` là của chung (team + cloud), file trong `~/.copilot/hooks/` là của riêng bạn, còn `policy.d` là của admin — dev không gỡ được. 📄 File `.github/hooks/guard.json` hoàn chỉnh do script sinh ra: [`./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh`](./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh).
+> **Tóm gọn 1 câu:** File trong `.github/hooks/` là của chung (team + cloud), file trong `~/.copilot/hooks/` là của riêng bạn, còn `policy.d` là của admin — dev không gỡ được. 📄 File `.github/hooks/guard.json` hoàn chỉnh do script sinh ra: [`./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh`](./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh). · 📄 [VS Code Docs: Choose a hook source](https://code.visualstudio.com/docs/agent-customization/hooks#choose-a-hook-source)
 
 ## 4. Guardrail stack: advisory → hook → law
 
@@ -128,7 +128,7 @@ pnpm exec lint-staged
 - Recipe B (pre-commit framework + gitleaks, đa ngôn ngữ): [`./examples/07-policies-guardrails-tu-dong-hoa/recipe-b-precommit-gitleaks.yaml`](./examples/07-policies-guardrails-tu-dong-hoa/recipe-b-precommit-gitleaks.yaml) + [`./examples/07-policies-guardrails-tu-dong-hoa/recipe-b-precommit-gitleaks.sh`](./examples/07-policies-guardrails-tu-dong-hoa/recipe-b-precommit-gitleaks.sh). Recipe C (git hook thuần chặn push thẳng vào main, không dependency): [`./examples/07-policies-guardrails-tu-dong-hoa/recipe-c-pre-push-block-main.sh`](./examples/07-policies-guardrails-tu-dong-hoa/recipe-c-pre-push-block-main.sh). Các recipe hook nâng cao hơn: [`commands/copilot/system-knowledge/hooks/README.md`](commands/copilot/system-knowledge/hooks/README.md).
 - Hai script hình mẫu cho lớp 2: guard allow/deny ([`./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh`](./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh)) và audit + gate ([`./examples/07-policies-guardrails-tu-dong-hoa/sec-gate-audit.sh`](./examples/07-policies-guardrails-tu-dong-hoa/sec-gate-audit.sh)) — `sessionStart`/`sessionEnd`/`postToolUse` log bằng cách **append file** (hook chạy đồng bộ nên việc trong hook phải nhẹ), id + repo lấy từ payload stdin.
 
-> **Tóm gọn 1 câu:** Dặn miệng cho model, chuông khói cho tool call, khoá cổng cho server — mỗi loại quy tắc đúng một tầng, đừng trộn.
+> **Tóm gọn 1 câu:** Dặn miệng cho model, chuông khói cho tool call, khoá cổng cho server — mỗi loại quy tắc đúng một tầng, đừng trộn. · 📄 [VS Code Docs: Recommended security baseline](https://code.visualstudio.com/docs/agents/run/security#recommended-security-baseline)
 
 ## 5. Org policies — 17 dòng, phần đầy đủ ở bài 16
 
@@ -139,7 +139,7 @@ pnpm exec lint-staged
 - **Network allowlist** (07 là chủ — bài 15 trỏ về): `https://*.githubcopilot.com/*` · `https://github.com/login/*` + `https://collector.github.com/*` · `https://copilot-telemetry.githubusercontent.com/telemetry` · `https://*.SUBDOMAIN.ghe.com` (data residency).
 - Copilot app và Copilot CLI theo **2 bộ policy client riêng** — bật ở app không có nghĩa bật ở CLI.
 
-> **Tóm gọn 1 câu:** Ở tầm org, vũ khí là managed settings + policy hooks — còn quy trình validate phần mở rộng và vận hành governance là việc của bài 16.
+> **Tóm gọn 1 câu:** Ở tầm org, vũ khí là managed settings + policy hooks — còn quy trình validate phần mở rộng và vận hành governance là việc của bài 16. · 📄 [VS Code Docs: Runtime policies & harness selection](https://code.visualstudio.com/docs/enterprise/manage-ai-settings#runtime-policies-and-harness-selection)
 
 ## 6. Content exclusion và các lớp server
 
@@ -154,7 +154,7 @@ Verify: mo .env -> icon Copilot bao "excluded"; yeu cau doc file do -> phai tu c
 
 Lớp 6–7 (server): branch protection + required checks — copy-paste [`./examples/07-policies-guardrails-tu-dong-hoa/lop-5-branch-protection-required-checks.sh`](./examples/07-policies-guardrails-tu-dong-hoa/lop-5-branch-protection-required-checks.sh), hoặc Rulesets (Settings → Rules → Rulesets: Restrict deletions, Block force pushes, Require PR + status checks, Require Copilot code review). Secret scanning + push protection + review gate CI (grep CRITICAL trong `gh pr view --json reviews` → exit 1): cả 4 bước test trong [`./examples/07-policies-guardrails-tu-dong-hoa/sec-gate-audit.sh`](./examples/07-policies-guardrails-tu-dong-hoa/sec-gate-audit.sh). Review gate: Copilot review mặc định chỉ là **comment**, không phải approval; chi phí theo **review effort Lite/Balanced/Max ≈ $0.25/$1.50/$10 mỗi review** (as of 11/2026) + phút Actions — kinh tế chi tiết ở bài 15.
 
-> **Tóm gọn 1 câu:** Exclusion bịt mắt model từ phía server nhưng không phải bức tường sắt — các lớp 6–7 (push protection, review gate, branch protection) mới là nơi "đã lọt cũng bị chặn".
+> **Tóm gọn 1 câu:** Exclusion bịt mắt model từ phía server nhưng không phải bức tường sắt — các lớp 6–7 (push protection, review gate, branch protection) mới là nơi "đã lọt cũng bị chặn". · 📄 [GitHub Docs: Content exclusion](https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/content-exclusion)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -167,12 +167,14 @@ Lớp 6–7 (server): branch protection + required checks — copy-paste [`./exa
 | "Bật content exclusion là file an toàn tuyệt đối" | MCP bên thứ ba / symlink vẫn lọt | exclusion + push protection + audit; 4 giới hạn docs ở mục 6 |
 | Tin "audit log giữ 180 ngày, có policy instruction enforcement" | claim không nguồn docs | chỉ dẫn những gì docs.github.com có — mục 5 |
 
+📄 [GitHub Docs: Policy conflicts](https://docs.github.com/en/copilot/reference/enterprise-administrators/policy-conflicts)
+
 ## Best practices (kèm vì sao)
 
 - **Đặt guard hook trong `.github/hooks/` và commit.** *Vì sao:* nguồn repo là nguồn duy nhất cloud agent đọc — guard sống cùng job, không phụ thuộc máy dev nào cài gì.
 - **Test hook bằng payload giả trên stdin trước khi tin nó chạy trong session.** *Vì sao:* "file hiện trong editor ≠ script đã execute"; exit code + stdout JSON sai là fail-open/fail-silent.
 - **Tổ chức muốn cấm thật → policy hooks + managed settings, không phải file repo.** *Vì sao:* `disableAllHooks` và việc xóa file trong repo đều do dev làm được; policy hooks thì không.
-- **Không log cả payload vào audit file.** *Vì sao:* payload chứa `toolArgs` — đường ngắn nhất để secret rò ra log; chỉ lấy `toolName`, `sessionId`, timestamp.
+- **Không log cả payload vào audit file.** *Vì sao:* payload chứa `toolArgs` — đường ngắn nhất để secret rò ra log; chỉ lấy `toolName`, `sessionId`, timestamp. · 📄 [VS Code Docs: Recommended security baseline](https://code.visualstudio.com/docs/agents/run/security#recommended-security-baseline)
 
 ## Bài tập
 
@@ -189,8 +191,8 @@ Lớp 6–7 (server): branch protection + required checks — copy-paste [`./exa
 
 ## Reference
 
-- GitHub — [Hooks reference](https://docs.github.com/en/copilot/reference/hooks-reference) (schema, events, exit codes, matcher, policy hooks, cloud sandbox) · [Hooks concept](https://docs.github.com/en/copilot/concepts/agents/hooks) (surfaces, performance, security) · [Using hooks with Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/use-hooks)
+- GitHub — [Hooks reference](https://docs.github.com/en/copilot/reference/hooks-reference) (schema, events, exit codes, matcher, policy hooks, cloud sandbox) · [Hooks concept](https://docs.github.com/en/copilot/concepts/customizations/hooks) (surfaces, performance, security) · [Using hooks with Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/use-hooks)
 - VS Code — [Configure agent hooks (Preview)](https://code.visualstudio.com/docs/agent-customization/hooks) · [Cheat sheet hỗ trợ customization theo surface](https://docs.github.com/en/copilot/reference/customization-cheat-sheet) (docs GitHub)
-- GitHub — [Content exclusion](https://docs.github.com/en/copilot/concepts/content-exclusion) · [Supported surfaces for policies](https://docs.github.com/en/copilot/reference/supported-surfaces-for-policies) · [About local sandboxing](https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/understanding-local-sandboxing) · [Models & pricing (AI credits)](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) · [CLI command reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference)
+- GitHub — [Content exclusion](https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/content-exclusion) · [Supported surfaces for policies](https://docs.github.com/en/copilot/reference/supported-surfaces-for-policies) · [About local sandboxing](https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/understanding-local-sandboxing) · [Models & pricing (AI credits)](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) · [CLI command reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference)
 
 **Chốt:** Hook là chuông khói có schema, exit code và fail-policy rõ ràng — chạy từ CLI tới cloud, không còn là "đồ Local preview"; nhưng nó vẫn chỉ là semi-law: quy tắc sống còn thì đưa lên `policy.d` và khoá server, rule nào bị quên 2 lần là phải nâng tầng ngay.

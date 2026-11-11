@@ -16,7 +16,7 @@ Mọi prompt code đều kèm: lệnh chạy + log dán + diff kiểm tra.
 Không log = chưa xong.
 ```
 
-> Rule: **không evidence thì chưa done, dù code nhìn đúng.**
+> Rule: **không evidence thì chưa done, dù code nhìn đúng.** · 📄 [VS Code Docs: Verify the feature](https://code.visualstudio.com/docs/agents/guides/add-a-feature#5-verify-the-feature-and-existing-behavior)
 
 ## 2. Thang verification 4 mức
 
@@ -39,7 +39,7 @@ V4 (merge):   "V3 + review [SEVERITY] + git diff --stat chỉ chạm scope cho p
 
 Mức V tỉ lệ thuận với độ gần main: merge mà chỉ có V2 là tuyên bố "không gãy chỗ khác" khi chưa chạy full scope; ngược lại bắt full CI cho câu hỏi "hàm này nghĩa gì" là đốt AI Credits vô ích.
 
-> **Tóm gọn 1 câu:** Verification là chiếc cân: càng gần main, càng phải bỏ nhiều evidence lên đĩa — V1 cho câu hỏi, V4 cho merge.
+> **Tóm gọn 1 câu:** Verification là chiếc cân: càng gần main, càng phải bỏ nhiều evidence lên đĩa — V1 cho câu hỏi, V4 cho merge. · 📄 [VS Code Docs: Run tests & investigate failures](https://code.visualstudio.com/docs/agents/guides/test-code-with-ai#run-tests-and-investigate-failures)
 
 ## 3. Checklist done cho 4 loại task (copy-paste)
 
@@ -90,7 +90,7 @@ Done khi:
 
 Mẹo team: lưu 4 checklist vào `.github/prompts/verify-*.prompt.md` để gọi `/verify-bug`, `/verify-feature`; nếu chạy Agent Host thì gói thành Agent Skills (`SKILL.md`) — xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 
-> **Tóm gọn 1 câu:** Định nghĩa done là phiếu kiểm định in sẵn tick bằng evidence — hết phiếu mới được rời xưởng, đừng nghiệm vụ bằng lời nói.
+> **Tóm gọn 1 câu:** Định nghĩa done là phiếu kiểm định in sẵn tick bằng evidence — hết phiếu mới được rời xưởng, đừng nghiệm vụ bằng lời nói. · 📄 [VS Code Docs: Review assertions & coverage](https://code.visualstudio.com/docs/agents/guides/test-code-with-ai#review-assertions-and-coverage)
 
 ## 4. Bắt Copilot iterate tới xanh
 
@@ -111,7 +111,7 @@ Nếu test cũ sai thật, báo lý do + file:line và chờ tôi quyết.
 
 Vì sao cần câu này? Vì Copilot (và cả dev vội) rất hay lách bằng cách xóa test khó — bạn tưởng đã sửa xong, thực ra vừa giấu bug đi.
 
-**Dặn dán evidence đúng chỗ:**
+**Dặn dán evidence đúng chỗ:** · 📄 [VS Code Docs: Diagnose repeated failures](https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#diagnose-repeated-failures)
 
 ```text
 Cuối message luôn có mục:
@@ -158,7 +158,7 @@ Kết hợp 3 nguồn: Copilot code review quét mỗi PR (rẻ, nhanh) → chat
 
 > **Tóm gọn 1 câu:** Review gate là ba lớp lưới xếp chồng: bot quét thô mỗi PR, reviewer fresh soi kỹ trước merge, người chốt cuối và ký tên chịu trách nhiệm.
 
-> Lưu ý 2026: review Balanced (mặc định từ 28/09/2026) tốn AI Credits + GitHub Actions minutes.
+> Lưu ý 2026: review Balanced (mặc định từ 28/09/2026) tốn AI Credits + GitHub Actions minutes. · 📄 [GitHub Docs: Copilot code review](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/code-review)
 
 ## 6. Walkthrough: fix bug tới xanh trong 30 phút
 
@@ -173,7 +173,7 @@ Bối cảnh: login email có dấu bị 500, file `src/auth/login.ts:42`.
 | 20–28 | Review gate | Chat Reviewer fresh → prompt mục 5 → PASS/NEEDS-FIX |
 | 28–30 | Chốt done | Checklist BUG mục 3 tick đủ → commit `fix: normalizeEmail dau + regression test` |
 
-> **Cách đọc bảng này:** đọc theo dòng thời gian từ trên xuống — mỗi dòng là một chặng 30 phút, cột "Prompt / lệnh" là thứ bạn chép vào chat y nguyên.
+> **Cách đọc bảng này:** đọc theo dòng thời gian từ trên xuống — mỗi dòng là một chặng 30 phút, cột "Prompt / lệnh" là thứ bạn chép vào chat y nguyên. · 📄 [VS Code Docs: Add a failing regression test](https://code.visualstudio.com/docs/agents/guides/fix-a-bug-with-agents#add-a-failing-regression-test)
 
 ## 7. Bảng tra nhanh: evidence nào cho task nào?
 
@@ -190,7 +190,7 @@ Bảng này là tấm lưới tra của cả bài — chọn đúng dòng loại
 
 > **Cách đọc bảng này:** dọc theo cột **Task** để tìm đúng loại việc đang làm, rồi đọc ngang lấy mức test/lint/diff/review; cột cuối là câu dặn chép thẳng vào prompt.
 
-> Quy tắc ngón tay: **càng gần main càng cần evidence nặng. Hỏi thì V1 đủ, merge thì phải V4.**
+> Quy tắc ngón tay: **càng gần main càng cần evidence nặng. Hỏi thì V1 đủ, merge thì phải V4.** · 📄 [VS Code Docs: Validate changes](https://code.visualstudio.com/docs/agents/run/agents-window#validate-changes)
 
 ## 8. So sánh với Claude Code
 
@@ -201,6 +201,8 @@ Bảng này là tấm lưới tra của cả bài — chọn đúng dòng loại
 | Review tự động trên PR | **Copilot code review** bật sẵn cho repo | CI + review người, không có bot review tương đương | Copilot có bot review tích hợp |
 | Reviewer "fresh" | Chat mới (agent Reviewer) | Mở phiên mới để review | Cả hai đều cần phiên sạch |
 | Chống xóa test để lách | Cấm trong prompt | Cấm trong prompt | Vấn đề nằm ở agent, không ở nhà cung cấp |
+
+📄 [GitHub Docs: Third-party coding agents](https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents)
 
 ## 9. Pitfalls + cách fix
 
@@ -215,7 +217,7 @@ Bảng này là tấm lưới tra của cả bài — chọn đúng dòng loại
 | Dán log cắt đầu cắt đuôi | Giấu lỗi | Dặn paste 10 dòng cuối + exit code |
 | Verify bằng mắt | Quên edge case | Checklist A–D tick đủ mới commit |
 
-> **Cách đọc bảng này:** cột **Triệu chứng** mô tả "bệnh" bạn đang gặp, cột **Fix** là đơn thuốc — thấy đúng triệu chứng thì chữa theo cột bên cạnh, đừng bốc thuốc khác.
+> **Cách đọc bảng này:** cột **Triệu chứng** mô tả "bệnh" bạn đang gặp, cột **Fix** là đơn thuốc — thấy đúng triệu chứng thì chữa theo cột bên cạnh, đừng bốc thuốc khác. · 📄 [VS Code Docs: Run tests & investigate failures](https://code.visualstudio.com/docs/agents/guides/test-code-with-ai#run-tests-and-investigate-failures)
 
 ## 10. Bài tập cuối bài
 

@@ -17,7 +17,7 @@
 | Nghi policy chặn | 9 | Hỏi admin Policies tab |
 | Không rõ nguyên nhân | 10 | Thứ tự debug tổng |
 
-> **Cách đọc bảng này:** đây là "quầy lễ tân" của bài — dọc cột **Triệu chứng** tìm đúng cái đang thấy trên máy, cột **Câu** chỉ bạn nhảy thẳng tới mục đó, cột **Fix 1 dòng** là cứu cánh nhanh khi đang gấp.
+> **Cách đọc bảng này:** đây là "quầy lễ tân" của bài — dọc cột **Triệu chứng** tìm đúng cái đang thấy trên máy, cột **Câu** chỉ bạn nhảy thẳng tới mục đó, cột **Fix 1 dòng** là cứu cánh nhanh khi đang gấp. · 📄 [GitHub Docs: Troubleshoot common issues](https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues)
 
 ---
 
@@ -27,7 +27,7 @@
 
 Giống điện thoại mất sóng: có thể do bạn ở trong hầm (proxy/firewall), do sim hết hạn (token), hoặc do nhà mạng sập (incident) — lần lượt loại trừ, đừng đổ lỗi cho cái máy ngay.
 
-> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/copilot-bao-offline-vi-sao-fix-sao.sh`](./examples/08-loi-thuong-gap-troubleshooting/copilot-bao-offline-vi-sao-fix-sao.sh)
+> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/copilot-bao-offline-vi-sao-fix-sao.sh`](./examples/08-loi-thuong-gap-troubleshooting/copilot-bao-offline-vi-sao-fix-sao.sh) · 📄 [GitHub Docs: Troubleshoot network errors](https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-network-errors)
 
 **Ví dụ:** máy công ty qua proxy → `api.github.com` timeout dù web vẫn mở → xin IT whitelist `*.github.com` + `*.githubcopilot.com`. Khi status bar Offline, cả 2 CLI + Copilot cloud agent vẫn hoạt động nếu có mạng — chỉ IDE bị ảnh hưởng.
 
@@ -37,7 +37,7 @@ Giống điện thoại mất sóng: có thể do bạn ở trong hầm (proxy/f
 
 > 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/no-suggestions-go-khong-ra-goi-y.sh`](./examples/08-loi-thuong-gap-troubleshooting/no-suggestions-go-khong-ra-goi-y.sh)
 
-> "Chỗ có chỗ không" → so file lỗi vs file test để khoanh vùng. Chỉ file `secrets/` không gợi ý → đúng ý exclusion, không phải lỗi.
+> "Chỗ có chỗ không" → so file lỗi vs file test để khoanh vùng. Chỉ file `secrets/` không gợi ý → đúng ý exclusion, không phải lỗi. · 📄 [VS Code Docs: Inline suggestions not working](https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#inline-suggestions-are-not-working-in-the-editor)
 
 ## 3. Chat error / quota exhausted / model unavailable?
 
@@ -51,7 +51,7 @@ Giống điện thoại mất sóng: có thể do bạn ở trong hầm (proxy/f
 
 > **Cách đọc bảng này:** dọc cột **Message** tìm đúng dòng chữ đỏ bạn vừa thấy trong chat, cột **Nghĩa** dịch error ra tiếng người, cột **Cách xử nhanh** là việc làm ngay.
 
-> Đổi model + chat mới loại trừ 80% ca — đừng kết luận "Copilot sập" trước khi thử.
+> Đổi model + chat mới loại trừ 80% ca — đừng kết luận "Copilot sập" trước khi thử. · 📄 [VS Code Docs: Chat features aren't working](https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#chat-features-arent-working-for-me)
 
 ## 4. `gh copilot` CLI fail (command not found / auth)?
 
@@ -65,7 +65,7 @@ Giống điện thoại mất sóng: có thể do bạn ở trong hầm (proxy/f
 
 > 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/gh-copilot-cli-fail-command-not-found.sh`](./examples/08-loi-thuong-gap-troubleshooting/gh-copilot-cli-fail-command-not-found.sh)
 
-> CLI chết mà IDE sống (hoặc ngược lại) là 2 "thằng" có auth riêng — fix auth từng thằng. Ngoài `gh copilot` còn có binary `copilot` độc lập (3 chế độ interactive/plan/autopilot) — xem [bài 12](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md).
+> CLI chết mà IDE sống (hoặc ngược lại) là 2 "thằng" có auth riêng — fix auth từng thằng. Ngoài `gh copilot` còn có binary `copilot` độc lập (3 chế độ interactive/plan/autopilot) — xem [bài 12](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md). · 📄 [GitHub Docs: Install Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/set-up-copilot-cli/install-copilot-cli)
 
 ## 5. MCP tools đột nhiên mất — thứ tự check?
 
@@ -75,7 +75,7 @@ Giống điện thoại mất sóng: có thể do bạn ở trong hầm (proxy/f
 
 **Ví dụ:** sau restart máy tools mất → `echo $TOKEN` rỗng (env mất cùng session) → export lại + mở IDE từ terminal.
 
-> **Lưu ý 2026:** Copilot CLI **không đọc** `.vscode/mcp.json` — CLI dùng `~/.copilot/mcp-config.json` + `.mcp.json` (root repo).
+> **Lưu ý 2026:** Copilot CLI **không đọc** `.vscode/mcp.json` — CLI dùng `~/.copilot/mcp-config.json` + `.mcp.json` (root repo). · 📄 [VS Code Docs: Troubleshoot MCP servers](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#troubleshoot-mcp-servers)
 
 ## 6. Completions gợi ý sai chuẩn team dù đã có instructions?
 
@@ -93,13 +93,13 @@ return res.status(400).json({ code: "BAD_INPUT", message, requestId });
 # Verify: gõ thử "return res.status(400).json({" -> gợi ý ra đúng shape
 ```
 
-> Chat đúng mà gõ tay sai → bổ sung ví dụ code, đừng viết thêm chữ.
+> Chat đúng mà gõ tay sai → bổ sung ví dụ code, đừng viết thêm chữ. · 📄 [VS Code Docs: Guide suggestions with your code](https://code.visualstudio.com/docs/editing/ai-powered-suggestions#guide-suggestions-with-your-code)
 
 ## 7. Agent lặp vòng / đơ / chạy mãi không xong?
 
 **Trả lời 1 câu:** Dấu hiệu cần can thiệp: lặp cùng lỗi 3 lần, task nhỏ chạy >20 phút, tool calls toàn retry — xử lý: **Cancel → đọc log vòng cuối → chia task nhỏ → chạy lại từng phần**, đừng để chạy tiếp "biết đâu được" (chỉ đốt AI Credits).
 
-> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/agent-lap-vong-o-chay-mai-khong.sh`](./examples/08-loi-thuong-gap-troubleshooting/agent-lap-vong-o-chay-mai-khong.sh)
+> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/agent-lap-vong-o-chay-mai-khong.sh`](./examples/08-loi-thuong-gap-troubleshooting/agent-lap-vong-o-chay-mai-khong.sh) · 📄 [VS Code Docs: Diagnose repeated failures](https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#diagnose-repeated-failures)
 
 ## 8. Sau update IDE/extension thì hỏng?
 
@@ -107,13 +107,13 @@ return res.status(400).json({ code: "BAD_INPUT", message, requestId });
 
 > 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/sau-update-ide-extension-thi-hong.sh`](./examples/08-loi-thuong-gap-troubleshooting/sau-update-ide-extension-thi-hong.sh)
 
-> Copilot chết ngay sau auto-update thì 99% do lệch version.
+> Copilot chết ngay sau auto-update thì 99% do lệch version. · 📄 [VS Code Docs: View logs for GitHub Copilot](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#view-logs-for-github-copilot)
 
 ## 9. Nghi org policy chặn nhưng không chắc?
 
 **Trả lời 1 câu:** Dấu hiệu: setting tự revert, model picker thiếu, chat báo "disabled by administrator", cloud agent "not enabled" → 99% là org policy; dev không xem được policy, phải hỏi admin chụp `Org Settings → Copilot → Policies` (gồm cả model allowlist, agent on/off, exclusions, Agent Skills/MCP/hooks).
 
-**Ví dụ:** cloud agent báo not enabled ở repo A nhưng repo B chạy → policy chỉ bật 5 repo pilot. Mọi fix local vô hiệu thì chuyển sang kênh admin, đừng vọc tiếp.
+**Ví dụ:** cloud agent báo not enabled ở repo A nhưng repo B chạy → policy chỉ bật 5 repo pilot. Mọi fix local vô hiệu thì chuyển sang kênh admin, đừng vọc tiếp. · 📄 [GitHub Docs: Policy conflicts](https://docs.github.com/en/copilot/reference/enterprise-administrators/policy-conflicts)
 
 ## 10. Thứ tự debug tổng (không rõ nguyên nhân)?
 
@@ -129,7 +129,7 @@ Ví von: đây là quy trình kiểm tra xe không nổ máy — xăng (auth) �
 6. Tắt instructions/MCP/Agent Skills custom tạm (loại trừ config).
 7. Hỏi admin (policy/seat) → báo GitHub Support kèm log.
 
-> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/thu-tu-debug-tong-khong-ro-nguyen.sh`](./examples/08-loi-thuong-gap-troubleshooting/thu-tu-debug-tong-khong-ro-nguyen.sh)
+> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/thu-tu-debug-tong-khong-ro-nguyen.sh`](./examples/08-loi-thuong-gap-troubleshooting/thu-tu-debug-tong-khong-ro-nguyen.sh) · 📄 [VS Code Docs: Choose a troubleshooting path](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path)
 
 **Ví dụ:** chạy 1 lèo → thấy `api:000` (mất mạng) → khỏi cần check 6 bước còn lại.
 
@@ -144,4 +144,4 @@ Ví von: đây là quy trình kiểm tra xe không nổ máy — xăng (auth) �
 
 Tham khảo chéo: [bài 01](01-tai-khoan-pricing-cai-dat.md) (auth/seat) · [bài 02](02-model-context-premium.md) (quota/model) · [bài 04](04-mcp-faq.md) (MCP) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 05](05-policies-guardrails-faq.md) (policy) · 📄 ma trận triệu chứng→nguyên nhân: [`./examples/08-loi-thuong-gap-troubleshooting/troubleshooting-ca-3-ma-tran-trieu-chung.sh`](./examples/08-loi-thuong-gap-troubleshooting/troubleshooting-ca-3-ma-tran-trieu-chung.sh).
 
-> **Tóm gọn 1 câu:** Troubleshooting Copilot là trò loại trừ có kỷ luật: auth → mạng → version → phiên sạch → config → policy — đi đúng trật tự thì ~90% ca tự gãy lộ ra nguyên nhân.
+> **Tóm gọn 1 câu:** Troubleshooting Copilot là trò loại trừ có kỷ luật: auth → mạng → version → phiên sạch → config → policy — đi đúng trật tự thì ~90% ca tự gãy lộ ra nguyên nhân. · 📄 [VS Code Docs: Report an unresolved issue](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#report-an-unresolved-issue)

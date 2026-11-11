@@ -8,7 +8,7 @@
 
 Space là "túi tài liệu" bạn gom cho Copilot: repo, file, PR/issue, ảnh, file upload, ghi chú. Hỏi trong space thì câu trả lời dựa trên đúng túi đó, và túi tự cập nhật khi nguồn trên GitHub thay đổi.
 
-Docs cũ gọi khái niệm này là *knowledge base*; hôm nay trang đó trả về **Copilot Spaces** — tên mới, cùng một việc.
+Docs cũ gọi khái niệm này là *knowledge base*; hôm nay trang đó trả về **Copilot Spaces** — tên mới, cùng một việc. · 📄 [GitHub Docs: Customizations (concept)](https://docs.github.com/en/copilot/concepts/customizations)
 
 ## Vì sao dùng Copilot Spaces?
 
@@ -21,17 +21,17 @@ Vì tri thức team nằm rải rác trong wiki, docs, runbook; hỏi người t
 | PR/issue/link | Dán URL | Trích đúng thread làm ngữ cảnh |
 | Upload / text | Upload từ máy, paste ghi chú | Chụp/scan tài liệu cũng vào được; **chỉ dùng được trên web, không qua IDE** |
 
-> **Cách đọc bảng này:** hàng 1–2 là khác biệt hay bị hiểu nhầm nhất — attach repo để tìm, attach file để đọc trọn; chọn sai thì hoặc thiếu ngữ cảnh hoặc loãng câu trả lời.
+> **Cách đọc bảng này:** hàng 1–2 là khác biệt hay bị hiểu nhầm nhất — attach repo để tìm, attach file để đọc trọn; chọn sai thì hoặc thiếu ngữ cảnh hoặc loãng câu trả lời. · 📄 [GitHub Docs: Customizations (concept)](https://docs.github.com/en/copilot/concepts/customizations)
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** onboard ("quy trình deploy team mấy bước?"); cần câu trả lời gắn với tài liệu cụ thể; muốn giảm câu hỏi lặp trong Slack; chia sẻ ngữ cảnh cho cả team.
 - **ĐỪNG dùng khi:** tài liệu nằm ngoài GitHub và không có MCP server nào nối tới (tự nó không thấy); bạn cần Copilot **sửa** code từ space (space là context, không phải quyền sửa); repo của bạn bị content exclusion → không vào được context.
-- **Cho ai:** người mới onboard, tech lead muốn đóng "bộ tài liệu chuẩn" một lần.
+- **Cho ai:** người mới onboard, tech lead muốn đóng "bộ tài liệu chuẩn" một lần. · 📄 [GitHub Docs: Comparing customizations](https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations)
 
 ## Cách gọi (copy-paste)
 
-> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh) · 📄 [GitHub Docs: Repository indexing](https://docs.github.com/en/copilot/concepts/prompting-and-context/repository-indexing)
 
 Tạo: `github.com/copilot/spaces` → **Create space** → đặt tên → chọn sở hữu (cá nhân hay organization) → thêm Instructions + Sources.
 
@@ -39,7 +39,7 @@ Tạo: `github.com/copilot/spaces` → **Create space** → đặt tên → ch�
 
 Bạn mới vào team, cần biết quy trình xin review PR mà không muốn hỏi Slack lần thứ ba.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [GitHub Docs: Create custom agents](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents)
 
 **Kết quả mong đợi:** câu trả lời dẫn về nguồn cụ thể (file/issue trong space); nếu tài liệu không có, nó phải nói không có thay vì bịa.
 
@@ -51,7 +51,7 @@ Bạn mới vào team, cần biết quy trình xin review PR mà không muốn h
 
 **✅ ĐÚNG — bó câu hỏi vào space và bắt trích nguồn:** "Theo các tài liệu trong space 'Backend Onboarding', quy trình deploy staging gồm mấy bước? Trích nguồn; nếu không có trong tài liệu thì nói rõ không có."
 
-**Bài học:** câu trả lời chỉ đáng tin bằng nguồn mở ra kiểm được; câu hỏi nêu rõ phạm vi thì model hết chỗ để bịa.
+**Bài học:** câu trả lời chỉ đáng tin bằng nguồn mở ra kiểm được; câu hỏi nêu rõ phạm vi thì model hết chỗ để bịa. · 📄 [GitHub Docs: Troubleshoot common issues](https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues)
 
 ## Lỗi thường gặp
 
@@ -62,28 +62,29 @@ Bạn mới vào team, cần biết quy trình xin review PR mà không muốn h
 | Hỏi mãi không ra ý team | Space thiếu Instructions/nguồn | Viết Instructions rõ vai trò + thêm file nguồn cụ thể |
 | Chi phí tăng | Câu hỏi trong space tính như Chat request, **tiêu AI credits** theo model + tokens | Cân nhắc size nguồn; theo dõi usage |
 
-> **Cách đọc bảng này:** hàng 1–2 là hai hiểu lầm "space dùng được mọi nơi" — trên IDE nó đi qua MCP và bị cắt bớt nguồn; hàng 4 nhắc rằng context nhiều hơn cũng đắt hơn.
+> **Cách đọc bảng này:** hàng 1–2 là hai hiểu lầm "space dùng được mọi nơi" — trên IDE nó đi qua MCP và bị cắt bớt nguồn; hàng 4 nhắc rằng context nhiều hơn cũng đắt hơn. · 📄 [GitHub Docs: Troubleshoot common issues](https://docs.github.com/en/copilot/how-tos/troubleshoot-copilot/troubleshoot-common-issues)
 
 ## So sánh với Claude Code
+
+📄 [GitHub Docs: Comparing customizations](https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations)
 
 | Việc cần làm | Copilot in the cloud (Spaces) | Claude Code | Ghi chú |
 |---|---|---|---|
 | Gom tài liệu cho một chủ đề | Space trên GitHub.com (Instructions + Sources) | Đọc file trong repo, hoặc MCP trỏ tới docs | Space sống trên GitHub và tự đồng bộ theo nguồn |
 | Chia sẻ cho team | Org-owned space với quyền admin/editor/viewer | Commit file docs/skill vào repo | Copilot phân quyền theo mô hình GitHub sẵn có |
 | Dùng khi đang code | Agent mode + GitHub MCP (`list_copilot_spaces`) | Agent đọc file/MCP tại chỗ | IDE không thấy repo context/uploaded files của space |
-
 ## Best practices (kèm "vì sao")
 
 - **Luôn bắt câu trả lời trích nguồn + section.** *Vì sao?* Có nguồn mới verify được; không có nguồn thì đó là phỏng đoán.
 - **Attach file cho thứ cần đọc trọn, attach repo cho thứ cần tìm.** *Vì sao?* Hai cơ chế khác nhau (nạp toàn bộ vs. tìm kiếm) — chọn đúng thì câu trả lời vừa đủ vừa gọn.
 - **Ghi ngày cập nhật vào tài liệu trong space.** *Vì sao?* Nguồn GitHub tự đồng bộ, nhưng file upload/ghi chú thì không.
-- **Tài liệu ngoài GitHub thì nối bằng MCP/connector.** *Vì sao?* Space chỉ biết những gì GitHub (hoặc MCP) đưa được vào; surface khác dùng MCP — xem [connector](../../../copilot/system-knowledge/connector/README.md).
+- **Tài liệu ngoài GitHub thì nối bằng MCP/connector.** *Vì sao?* Space chỉ biết những gì GitHub (hoặc MCP) đưa được vào; surface khác dùng MCP — xem [connector](../../../copilot/system-knowledge/connector/README.md). · 📄 [GitHub Docs: Context management](https://docs.github.com/en/copilot/concepts/prompting-and-context/context-management)
 
 ## Bài tập nhỏ
 
 1. **(5 phút)** Tạo một space "Team Runbook", thêm 2 file docs + 1 issue, viết Instructions 3 dòng, rồi hỏi một câu quy trình và mở nguồn được trích.
 2. **(7 phút)** Hỏi một câu bạn biết chắc tài liệu **không** có; ghi lại cách model trả lời (nói "không có" hay bịa?).
-3. **(10 phút)** Bật GitHub MCP + toolset Spaces, gọi cùng câu hỏi từ Agent mode trong IDE và so giới hạn với trên web.
+3. **(10 phút)** Bật GitHub MCP + toolset Spaces, gọi cùng câu hỏi từ Agent mode trong IDE và so giới hạn với trên web. · 📄 [GitHub Docs: Repository indexing](https://docs.github.com/en/copilot/concepts/prompting-and-context/repository-indexing)
 
 ## Tham khảo
 

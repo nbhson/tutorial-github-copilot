@@ -42,6 +42,6 @@ Bucket này là các tính năng **không gắn máy cá nhân**: assign issue c
 ## Tham khảo
 
 - Bài học: [02 — Các bề mặt](../../02-cac-be-mat-vscode-ide-web-cli.md) (Session Target) · [07 — Policies](../../07-policies-guardrails-tu-dong-hoa.md) (hooks trên cloud) · [15 — Security stack](../../15-security-stack-5-tang.md) (exclusion + audit) · [16 — Admin](../../16-extensions-mcp-bao-mat-validate.md).
-- Docs: [About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent) · [local sandboxing](https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/understanding-local-sandboxing) · [audit logs](https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events).
+- Docs: [About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github) · [local sandboxing](https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/understanding-local-sandboxing) · [audit logs](https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events).
 
 > **Chốt:** 6 slug này là "vùng không có máy bạn" — việc gì chạy khi bạn tắt máy, hoặc cần bằng chứng cấp tổ chức, thì nằm ở đây; phần còn lại của kho lệnh thuộc [`../copilot/`](../copilot/README.md) và [`../local/`](../local/README.md).

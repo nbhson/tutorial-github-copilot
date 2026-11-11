@@ -30,7 +30,7 @@ Docs VS Code nói thẳng: index giúp *tìm* các đoạn liên quan chứ **kh
 **Vì sao quan trọng?** Mỗi thứ chữa một bệnh khác nhau: model thiếu file cần thiết → tự đưa vào qua context; tìm theo *nghĩa* bị trượt (code viết `signIn`, bạn hỏi "authentication") → cần index; tìm một chuỗi exact như `STRIPE_KEY` → grep/text search là đủ, index không cần thiết.
 **Nếu làm sai?** Tưởng "index cả repo = model thấy cả repo" → bạn hỏi mơ hồ rồi thất vọng và đổ tại Copilot dở. Ngược lại tưởng "tắt indexing là completions chết" → không, completions **không đọc cái index này** (docs: "no effect on code completions").
 
-> **Tóm gọn 1 câu:** Gọi đúng tên ba thứ thì chọn đúng thuốc; gọi sai là khám bệnh nhầm cả tháng.
+> **Tóm gọn 1 câu:** Gọi đúng tên ba thứ thì chọn đúng thuốc; gọi sai là khám bệnh nhầm cả tháng. · 📄 [VS Code Docs: Context window & compaction](https://code.visualstudio.com/docs/agents/concepts/context#context-window-and-compaction)
 
 ## 2. Indexing hoạt động thế nào: embeddings + flow
 
@@ -57,7 +57,7 @@ Bốn điều cần thuộc (mọi nguồn ở mục Reference):
 
 **Index nằm ở đâu?** Với repo GitHub, GitHub build và giữ index — build một lần nên thường có sẵn ngay, cả team dùng chung; repo Azure DevOps tương tự; thư mục ngoài GitHub dùng **external ingest** (upload file lên GitHub để search — org phải cho phép bằng policy). Đây là *nơi lưu index*, không phải phân biệt Local/Copilot harness — chuyện harness thuộc bài 02.
 
-> **Tóm gọn 1 câu:** Index = bản đồ tọa độ của code; hỏi bài = giở bản đồ tìm vài file, chỉ mấy file đó bước vào "mặt bàn" của model.
+> **Tóm gọn 1 câu:** Index = bản đồ tọa độ của code; hỏi bài = giở bản đồ tìm vài file, chỉ mấy file đó bước vào "mặt bàn" của model. · 📄 [VS Code Docs: Semantic search](https://code.visualstudio.com/docs/agents/reference/workspace-context#semantic-search)
 
 ## 3. Hỏi cả repo đúng cách: `#codebase` + đường lùi khi index chưa xong
 
@@ -79,7 +79,7 @@ Hai mẫu ăn tiền (cú pháp `#`-mentions đầy đủ: bài 04):
 
 So nhanh với đường "không index": Claude Code và Codex không dựng semantic index trước — agent của họ **dò theo yêu cầu** (grep/glob từng vòng); đổi lại mỗi vòng dò tốn thêm lượt tool, còn Copilot trả giá một lần cho cái index.
 
-> **Tóm gọn 1 câu:** Index chỉ giúp *tìm*, không đảm bảo *đúng* — một câu một flow, scope rõ, rồi đọc kỹ file bằng `#file:`. 📄 Settings để index thấy đúng thứ (files.exclude/search.exclude/.gitignore): [`./examples/13-code-intelligence-indexing-telemetry/bat-codebase-indexing-copy-paste.sh`](./examples/13-code-intelligence-indexing-telemetry/bat-codebase-indexing-copy-paste.sh).
+> **Tóm gọn 1 câu:** Index chỉ giúp *tìm*, không đảm bảo *đúng* — một câu một flow, scope rõ, rồi đọc kỹ file bằng `#file:`. 📄 Settings để index thấy đúng thứ (files.exclude/search.exclude/.gitignore): [`./examples/13-code-intelligence-indexing-telemetry/bat-codebase-indexing-copy-paste.sh`](./examples/13-code-intelligence-indexing-telemetry/bat-codebase-indexing-copy-paste.sh). · 📄 [VS Code Docs: Context items](https://code.visualstudio.com/docs/agents/reference/tools-reference#context-items)
 
 ## 4. Bật, dựng lại, giữ cho index sạch
 
@@ -107,7 +107,7 @@ So nhanh với đường "không index": Claude Code và Codex không dựng sem
 
 **Nếu làm sai?** Bật index mà chưa exclusion thì có ngày `.env` nằm trong kết quả search và lộ vào chat; index cả org cùng lúc thì không đo được repo nào hưởng lợi — pilot trước, mở rộng sau.
 
-> **Tóm gọn 1 câu:** Exclude trước — pilot index trước — mở rộng sau; hai đồ nghề bạn sờ nhiều nhất là **Build Codebase Semantic Index** và status bar.
+> **Tóm gọn 1 câu:** Exclude trước — pilot index trước — mở rộng sau; hai đồ nghề bạn sờ nhiều nhất là **Build Codebase Semantic Index** và status bar. · 📄 [GitHub Docs: Repository indexing](https://docs.github.com/en/copilot/concepts/prompting-and-context/repository-indexing)
 
 ## 5. Telemetry: 6 tham số `github.copilot.*` + số liệu admin hay hỏi
 
@@ -137,7 +137,7 @@ Export dữ liệu dùng agent sang OpenTelemetry gồm **6 tham số** trong `s
 
 **Vì sao quan trọng?** Không có số thì "credits hết nhanh" mãi là tin đồn — và dashboard đẹp mà không dẫn tới hành động là sưu tầm. **Nếu làm sai?** Bật `captureContent` khi collector chưa kiểm soát truy cập là tự đẩy nguyên prompt (kèm code) vào hệ thống log; và đừng hỏi dashboard usage metrics "ai tắt exclusion" — đó việc của audit log. Consent quyền riêng tư (telemetry ≠ train ≠ duplication): [telemetry](commands/copilot/system-knowledge/telemetry/README.md).
 
-> **Tóm gọn 1 câu:** 6 tham số OTel cho biết *ghi gì*; dashboard cho biết *chuyện gì đang xảy ra*; audit log cho biết *ai vừa thay đổi gì* — mỗi loại câu hỏi một nguồn trả lời.
+> **Tóm gọn 1 câu:** 6 tham số OTel cho biết *ghi gì*; dashboard cho biết *chuyện gì đang xảy ra*; audit log cho biết *ai vừa thay đổi gì* — mỗi loại câu hỏi một nguồn trả lời. · 📄 [VS Code Docs: Telemetry](https://code.visualstudio.com/docs/configure/telemetry)
 
 ## 6. LSP: lớp kiểm chứng sau retrieve
 
@@ -151,7 +151,7 @@ Copilot tìm theo chữ và nghĩa; Language Server (LSP) mới hiểu types/sym
 
 > 📄 Bật LSP theo stack + prompt verify 2 lớp: [`./examples/13-code-intelligence-indexing-telemetry/lsp-copilot-synergy.sh`](./examples/13-code-intelligence-indexing-telemetry/lsp-copilot-synergy.sh)
 
-> **Tóm gọn 1 câu:** Retrieve "gần đúng nghĩa" ≠ "đúng symbol" — F12 và Problems panel là bước kiểm chứng rẻ nhất bạn từng bỏ qua.
+> **Tóm gọn 1 câu:** Retrieve "gần đúng nghĩa" ≠ "đúng symbol" — F12 và Problems panel là bước kiểm chứng rẻ nhất bạn từng bỏ qua. · 📄 [VS Code Docs: IntelliSense](https://code.visualstudio.com/docs/editing/intellisense)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -162,7 +162,7 @@ Copilot tìm theo chữ và nghĩa; Language Server (LSP) mới hiểu types/sym
 | Bật `captureContent: true` "cho đầy đủ số liệu" | Toàn bộ prompt + code đổ về collector | Mặc định off; chỉ bật khi backend có kiểm soát truy cập rõ ràng |
 | Bật index cả org chưa cấu hình content exclusion | `.env`, secrets vào search index, có ngày lộ vào chat | Exclude trước (bài 07), rồi pilot 2–3 repo |
 
-**Bài học:** đúng thứ tự là *gọi đúng tên 3 khái niệm → exclusion trước index → captureContent sau khi hỏi backend* — sai một bước là mất cả tuần debug nhầm chỗ.
+**Bài học:** đúng thứ tự là *gọi đúng tên 3 khái niệm → exclusion trước index → captureContent sau khi hỏi backend* — sai một bước là mất cả tuần debug nhầm chỗ. · 📄 [VS Code Docs: Improve agent search with exclusions](https://code.visualstudio.com/docs/agents/reference/workspace-context#improve-agent-search-with-exclusion-settings)
 
 ## Best practices (kèm "Vì sao?")
 
@@ -170,7 +170,7 @@ Copilot tìm theo chữ và nghĩa; Language Server (LSP) mới hiểu types/sym
 - **Để agent tự chọn tool, đừng reflex gắn `#codebase` mọi prompt.** *Vì sao:* docs nói agent tự phối semantic search + grep + file search; `#codebase` dành cho lúc bạn *cưỡng bức* search theo nghĩa.
 - **Chạy `/usage` ngay trong session vừa làm việc nặng.** *Vì sao:* số liệu per-model, per-session — đo đúng chỗ đang "ngốn" thì kết luận không bị pha.
 - **Mỗi tuần biến số liệu thành đúng 1 hành động.** *Vì sao:* metric không hành động là sưu tầm; một fix + đo lại sau 1 tuần mới thành vòng lặp.
-- **Verify kết quả semantic search bằng F12/Problems trước khi sửa.** *Vì sao:* index tìm "gần đúng", chỉ language server xác nhận symbol/type đúng.
+- **Verify kết quả semantic search bằng F12/Problems trước khi sửa.** *Vì sao:* index tìm "gần đúng", chỉ language server xác nhận symbol/type đúng. · 📄 [VS Code Docs: Enable OTel monitoring](https://code.visualstudio.com/docs/agents/guides/monitoring-agents#enable-otel-monitoring)
 
 ## Bài tập
 

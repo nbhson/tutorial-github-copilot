@@ -51,7 +51,7 @@ Prompt tệ = kết quả tệ: "TypeError này nghĩa là gì?" (Ask, không co
 
 > **Vì sao quan trọng?** Đa số thất vọng với Copilot đến từ **chọn sai chế độ**, không phải model dở. Giao task mở cho Ask → chỉ nhận chữ, tưởng "Copilot không sửa được file"; dùng Agent cho việc 1 dòng → nó đọc 20 file, đốt credits vô ích. Như thuê cả đội thợ để đóng một cái đinh.
 > **Nếu làm sai?** Chọn lầm chế độ thì prompt hay mấy cũng bó tay — hỏi trước: "tôi phải làm bao nhiêu?" Câu trả lời càng ngắn, càng nên dùng chế độ dưới thấp của bảng.
-> **Tóm gọn 1 câu:** Chọn chế độ theo kích thước việc — gõ, hỏi, sửa vài file, giao cả task, hay chạy cloud.
+> **Tóm gọn 1 câu:** Chọn chế độ theo kích thước việc — gõ, hỏi, sửa vài file, giao cả task, hay chạy cloud. · 📄 [VS Code Docs: AI in VS Code — Overview](https://code.visualstudio.com/docs/agents/overview)
 
 ## 2. Copilot vs Claude Code — khác nhau ở đâu
 
@@ -70,7 +70,7 @@ Bài 00 là **chủ sở hữu** bảng so sánh này — các bài khác dẫn 
 
 > **Vì sao quan trọng?** Bảng này đổi cho bạn "từ điển" miễn phí: mỗi khái niệm đã học ở Claude Code đều có một ô tương ứng — không phải học lại từ đầu, chỉ phải nhớ *đường dẫn và nơi chạy khác nhau*.
 > **Nếu nhầm thì sao?** Nghĩ "Copilot = autocomplete" (kiểu 2023) là bỏ nửa sức mạnh công cụ. Ngược lại, tưởng "Copilot giống hệt Claude Code" thì sẽ lạc khi thấy Session Target, Customizations editor và các surface web/cloud — khác nhau ở *nơi chạy*, không ở khái niệm.
-> **Tóm gọn 1 câu:** Copilot hơn ở autocomplete không trừ credits + nhiều bề mặt + picker model đa nhà cung cấp; Claude Code mạnh ở agentic mặc định + terminal-first. 📄 Tạo đủ 3 loại file để thấy khác nhau: [`./examples/00-tong-quan-copilot/loai-file-phan-biet-va-at.sh`](./examples/00-tong-quan-copilot/loai-file-phan-biet-va-at.sh) · port `*.prompt.md`/`CLAUDE.md` sang `.github/`: [`./examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh`](./examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh)
+> **Tóm gọn 1 câu:** Copilot hơn ở autocomplete không trừ credits + nhiều bề mặt + picker model đa nhà cung cấp; Claude Code mạnh ở agentic mặc định + terminal-first. 📄 Tạo đủ 3 loại file để thấy khác nhau: [`./examples/00-tong-quan-copilot/loai-file-phan-biet-va-at.sh`](./examples/00-tong-quan-copilot/loai-file-phan-biet-va-at.sh) · port `*.prompt.md`/`CLAUDE.md` sang `.github/`: [`./examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh`](./examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh) · 📄 [VS Code Docs: Choose an Agent Harness](https://code.visualstudio.com/docs/agents/run/agent-harnesses)
 
 ## 3. Vòng lặp agent — và harness thật sự chạy nó
 
@@ -104,7 +104,7 @@ Docs VS Code khuyến nghị bắt đầu (hoặc chuyển sang) **Copilot harne
 
 > **Vì sao quan trọng?** Vòng lặp này giải thích cùng lúc: policy chặn lệnh nằm ở **harness** chứ không ở model ([`/sandbox policy`](./commands/copilot/model-agent/sandbox-policy/README.md)), chat dài thì agent quên đầu bài, và vì sao phải có lệnh verify.
 > **Nếu làm sai?** Hai nhầm kinh điển: "model chạy trên máy tôi nên Local là offline" — docs FAQ ghi rõ *the Local harness is not Copilot CLI*, model vẫn chạy remote; và "chọn Cloud là chọn một động cơ khác" — Cloud vẫn chạy Copilot harness, chỉ đổi *nơi thợ đứng làm việc*.
-> **Tóm gọn 1 câu:** Agent = vòng lặp "nghĩ → làm → thấy" do harness chạy hộ; agent quay nhiều turn vô vọng thì dừng, mở chat mới, chia nhỏ task.
+> **Tóm gọn 1 câu:** Agent = vòng lặp "nghĩ → làm → thấy" do harness chạy hộ; agent quay nhiều turn vô vọng thì dừng, mở chat mới, chia nhỏ task. · 📄 [VS Code Docs: Agent loop](https://code.visualstudio.com/docs/agents/concepts/agents#agent-loop)
 
 ## 4. Bốn họ tool Copilot
 
@@ -117,7 +117,7 @@ Khi agent "nghĩ", nó có 4 họ công cụ trong tay — biết trước để
 
 > **Vì sao quan trọng?** Nhóm 1 vô hại; nhóm 2 thay đổi code của bạn; nhóm 4 chạy code của *người khác* — rủi ro tăng dần từ trái sang phải, mức độ rà soát cũng phải tăng vậy.
 > **Nếu làm sai?** Cài 15 MCP servers "cho đủ" → model chọn nhầm tool, mỗi lệnh ngoài thêm một bề mặt tấn công.
-> **Tóm gọn 1 câu:** Bốn họ tool — đọc, sửa/chạy, gắn context, MCP — trong đó nhóm sửa/chạy và MCP cần bạn duyệt kỹ nhất.
+> **Tóm gọn 1 câu:** Bốn họ tool — đọc, sửa/chạy, gắn context, MCP — trong đó nhóm sửa/chạy và MCP cần bạn duyệt kỹ nhất. · 📄 [VS Code Docs: Types of tools](https://code.visualstudio.com/docs/agents/concepts/tools#types-of-tools)
 
 ## 5. AI credits — tiền rơi vào chỗ nào
 
@@ -159,11 +159,11 @@ Cái gì để đâu — đọc để khỏi nhét sai chỗ rồi trả tiền 
 > **Nếu nhầm thì sao?** Nhét checklist deploy 15 bước vào `copilot-instructions.md` → nạp lại *mỗi turn*, tốn credits + loãng trọng tâm. Cái gì "chỉ đúng lúc cần" thì để skill, đừng để trong instructions.
 > **Tóm gọn 1 câu:** Mỗi loại tùy biến có một "nhà" riêng — dữ kiện để instructions, việc lặp để skill, gói chia sẻ để plugin.
 
-> 📄 **File mẫu từng loại:** [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`templates/.github/instructions/`](../templates/.github/instructions/) · [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`templates/.github/agents/`](../templates/.github/agents/) · [`templates/.mcp.json`](../templates/.mcp.json) — copy bằng [`templates/examples/01-cach-copy-vao-project-3-buoc.sh`](../templates/examples/01-cach-copy-vao-project-3-buoc.sh).
+> 📄 **File mẫu từng loại:** [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`templates/.github/instructions/`](../templates/.github/instructions/) · [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`templates/.github/agents/`](../templates/.github/agents/) · [`templates/.mcp.json`](../templates/.mcp.json) — copy bằng [`templates/examples/01-cach-copy-vao-project-3-buoc.sh`](../templates/examples/01-cach-copy-vao-project-3-buoc.sh). · 📄 [VS Code Docs: Customization building blocks](https://code.visualstudio.com/docs/agents/concepts/customization#customization-building-blocks)
 
 ## 7. Bắt đầu ở đâu?
 
-Toàn bộ thao tác cài đặt, login, verify và **walkthrough 5 bước cho session đầu** (mở Chat trong repo thật → kiểm tra agent đọc đúng repo → viết instructions tối thiểu → giao task nhỏ có lệnh check → đóng session sạch) thuộc **bài 01 §6**: [01 — Cài đặt & xác thực](./01-cai-dat-va-xac-thuc.md). Bài này dừng ở bản đồ; tay nghề bắt đầu từ bài 01.
+Toàn bộ thao tác cài đặt, login, verify và **walkthrough 5 bước cho session đầu** (mở Chat trong repo thật → kiểm tra agent đọc đúng repo → viết instructions tối thiểu → giao task nhỏ có lệnh check → đóng session sạch) thuộc **bài 01 §6**: [01 — Cài đặt & xác thực](./01-cai-dat-va-xac-thuc.md). Bài này dừng ở bản đồ; tay nghề bắt đầu từ bài 01. · 📄 [VS Code Docs: Find a Guide](https://code.visualstudio.com/docs/agents/guides/overview)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -175,7 +175,7 @@ Toàn bộ thao tác cài đặt, login, verify và **walkthrough 5 bước cho 
 | "Chọn Session Target Local để chạy offline, khỏi tốn tiền cloud" | vẫn gọi model remote, vẫn trừ credits như nhau | Local là **harness** (nơi thợ đứng), không phải nơi tính model chạy; model luôn chạy remote trên mọi target |
 | "Cài MCP server vào là chạy mãi" | server rớt, sai key, agent gọi nhầm tool | kiểm tra MCP trong Customizations editor trước khi giao việc (bài 08) |
 
-**Bài học:** mọi hiểu nhầm ở bảng này có chung gốc — tin lời nói thay vì verify, và nhét mọi thứ vào một chỗ.
+**Bài học:** mọi hiểu nhầm ở bảng này có chung gốc — tin lời nói thay vì verify, và nhét mọi thứ vào một chỗ. · 📄 [VS Code Docs: Chat features aren't working](https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#chat-features-arent-working-for-me)
 
 ## Best practices
 
@@ -183,7 +183,7 @@ Toàn bộ thao tác cài đặt, login, verify và **walkthrough 5 bước cho 
 - **Task mới = chat mới (`Ctrl+N`); chat dài thì `/compact`.** *Vì sao:* context đầy khiến agent "quên đầu bài", sửa càng lâu càng nát.
 - **Model rẻ cho việc dễ, model mạnh cho refactor khó.** *Vì sao:* chi phí là giá-token × số-token; model mạnh đắt hơn trên cùng một việc.
 - **Giữ 3–6 MCP servers.** *Vì sao:* càng nhiều tool, model càng dễ chọn nhầm và mỗi tool là một bề mặt tấn công.
-- **Mọi task code phải có lệnh verify chạy thật trong prompt.** *Vì sao:* model chỉ đọc kết quả chứ không tự biết đúng/sai — lời "xong" không có giá trị bằng log.
+- **Mọi task code phải có lệnh verify chạy thật trong prompt.** *Vì sao:* model chỉ đọc kết quả chứ không tự biết đúng/sai — lời "xong" không có giá trị bằng log. · 📄 [VS Code Docs: Pick the right tool for the task](https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task)
 
 ## Bài tập
 

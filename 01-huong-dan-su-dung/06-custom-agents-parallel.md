@@ -33,7 +33,7 @@ CÓ agent:    "dùng Explorer khảo sát auth flow, trả summary ≤15 dòng" 
 
 > **Vì sao quan trọng?** Đây là đơn vị duy nhất khóa được *ai được dùng tool gì*: "agent chỉ đọc" không phải lời hứa, mà là allowlist `tools` mà model không vượt được.
 > **Nếu làm sai?** Spawn cho task 1 file → overhead ăn hết phần lời. "Cho full tools cho mạnh" → agent read-only sửa lung tung ngoài scope.
-> **Tóm gọn 1 câu:** Việc đọc nhiều files thì thuê agent riêng để chat chính sạch; việc lẻ tẻ thì hỏi thẳng, đừng thuê.
+> **Tóm gọn 1 câu:** Việc đọc nhiều files thì thuê agent riêng để chat chính sạch; việc lẻ tẻ thì hỏi thẳng, đừng thuê. · 📄 [VS Code Docs: When to use a custom agent](https://code.visualstudio.com/docs/agent-customization/custom-agents#when-to-use-a-custom-agent)
 
 ## 2. Chọn công cụ trong 30 giây
 
@@ -46,7 +46,7 @@ CÓ agent:    "dùng Explorer khảo sát auth flow, trả summary ≤15 dòng" 
 
 Cú pháp nhanh: [custom-agent](commands/copilot/model-agent/custom-agent/README.md).
 
-> **Tóm gọn 1 câu:** Hỏi nhanh → chat thẳng; quy trình → skill; "con người chuyên trách" → custom agent.
+> **Tóm gọn 1 câu:** Hỏi nhanh → chat thẳng; quy trình → skill; "con người chuyên trách" → custom agent. · 📄 [VS Code Docs: Customization building blocks](https://code.visualstudio.com/docs/agents/concepts/customization#customization-building-blocks)
 
 ## 3. Giải phẫu file `.agent.md`
 
@@ -83,7 +83,7 @@ Cú pháp nhanh: [custom-agent](commands/copilot/model-agent/custom-agent/README
 
 **Verify sau khi lưu:** file hiện trong tab Agents của Customizations editor, không lỗi frontmatter → mở session **đúng harness** → chọn agent ở **Agent dropdown** (không phải gõ `@`) → giao việc nhỏ, soi tool activity: agent read-only phải KHÔNG sửa được file.
 
-> **Tóm gọn 1 câu:** Frontmatter nói agent *được phép gì*, body nói nó *làm thế nào* — thiếu một trong hai là recruit người không có hợp đồng.
+> **Tóm gọn 1 câu:** Frontmatter nói agent *được phép gì*, body nói nó *làm thế nào* — thiếu một trong hai là recruit người không có hợp đồng. · 📄 [VS Code Docs: Custom agent header fields](https://code.visualstudio.com/docs/agents/reference/custom-agent-file-reference#header-fields)
 
 ## 4. Mẫu đầy đủ: `explorer` — trinh sát chỉ nhìn
 
@@ -121,7 +121,7 @@ Ba mẫu còn lại nằm trong `examples/`; ở đây chỉ cần khung:
 - **Security reviewer** — [`./examples/06-custom-agents-parallel/agent-security-reviewer.agent.md`](./examples/06-custom-agents-parallel/agent-security-reviewer.agent.md): `tools: ['read', 'search', 'execute']`; `git diff` → soi injection / authZ / secrets / crypto yếu / SSRF; output ≤10 findings `[CRITICAL|HIGH|MED|LOW] file:line — fix`; không sửa hộ.
 - **Tester** — [`./examples/06-custom-agents-parallel/agent-tester.agent.md`](./examples/06-custom-agents-parallel/agent-tester.agent.md): `tools: ['execute', 'read']`; lấy lệnh test từ instructions; focused trước, full suite chỉ khi được xin; output `PASS (n/n)` / `FAIL (x/y)` + 1 dòng root-cause guess.
 
-> **Tóm gọn 1 câu:** Một mẫu hoàn chỉnh để bắt chước, ba khung để mở rộng — tất cả đều khóa `tools` đúng việc, không ai "cho mạnh" bằng full tools.
+> **Tóm gọn 1 câu:** Một mẫu hoàn chỉnh để bắt chước, ba khung để mở rộng — tất cả đều khóa `tools` đúng việc, không ai "cho mạnh" bằng full tools. · 📄 [VS Code Docs: Create a custom agent](https://code.visualstudio.com/docs/agent-customization/custom-agents#create-a-custom-agent)
 
 ## 5. Subagents: giao việc nặng, giữ chat chính sạch
 
@@ -135,7 +135,7 @@ Subagent = agent chạy trong context riêng, trả về kết quả gọn cho a
 - Subagent KHÔNG kế history chat chính → lệnh giao phải tự chứa: goal, context, actions được phép, kết quả mong.
 ```
 
-> **Nếu làm sai?** Giao việc mở ("sửa chỗ nào thấy ổn") → subagent dùng tool ngoài phạm vi và bạn không biết nó đã làm gì. Luôn kèm "không đổi file" + output format, rồi xem subagent chat (Agents window hiện nó dạng read-only trong session).
+> **Nếu làm sai?** Giao việc mở ("sửa chỗ nào thấy ổn") → subagent dùng tool ngoài phạm vi và bạn không biết nó đã làm gì. Luôn kèm "không đổi file" + output format, rồi xem subagent chat (Agents window hiện nó dạng read-only trong session). · 📄 [VS Code Docs: Invoke a subagent](https://code.visualstudio.com/docs/agents/run/subagents#invoke-a-subagent)
 
 ## 6. Chạy song song + orchestration patterns
 
@@ -155,7 +155,7 @@ Pattern C — Adversarial review (PR chạm auth/payment): implementer viết co
 
 Muốn nhẩm cost trước khi fan-out? AI Credits tính per-token theo model — bảng giá + công thức là việc của bài 00/14, ở đây chỉ cần nhớ: **model rẻ cho việc đọc, model mạnh cho việc quyết**.
 
-> **Tóm gọn 1 câu:** Chọn pattern theo độ khó của task; ≤3 sessions vì bottleneck cuối cùng luôn là tốc độ review của bạn.
+> **Tóm gọn 1 câu:** Chọn pattern theo độ khó của task; ≤3 sessions vì bottleneck cuối cùng luôn là tốc độ review của bạn. · 📄 [VS Code Docs: Orchestration patterns](https://code.visualstudio.com/docs/agents/run/subagents#orchestration-patterns)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -167,14 +167,14 @@ Muốn nhẩm cost trước khi fan-out? AI Credits tính per-token theo model �
 | `model: claude-sonnet-5` hard-code | ID model đổi theo quý → agent âm thầm không chạy được | ID lấy từ **picker**, hoặc mảng ưu tiên, hoặc bỏ trống; `infer` deprecated → dùng 2 field invocation |
 | `description` dài 500 ký tự "cho kỹ" | auto-trigger kém, người đọc chán | 1–2 câu: làm gì + khi nào dùng, chi tiết dồn body |
 
-**Bài học:** mọi field lạ với harness đều fail *âm thầm* — editor gạch được thì sửa, editor không báo mà agent không hiện lên dropdown là bạn tự phải soi Customizations editor.
+**Bài học:** mọi field lạ với harness đều fail *âm thầm* — editor gạch được thì sửa, editor không báo mà agent không hiện lên dropdown là bạn tự phải soi Customizations editor. · 📄 [VS Code Docs: Troubleshoot custom agents](https://code.visualstudio.com/docs/agent-customization/custom-agents#troubleshoot-custom-agents)
 
 ## Best practices
 
 - **Một agent = một vai, tools tối thiểu.** *Vì sao?* Instructions càng hẹp model càng ít lang thang; allowlist nhỏ là guard thật sự duy nhất (docs: instruction "do not edit" không chặn được).
 - **Commit agent vào `.github/agents/`, đừng chỉ để `~/.copilot/agents/`.** *Vì sao?* User agent chỉ mình bạn thấy — chuẩn team chết khi bạn nghỉ.
 - **Đổi `target` khi cần edit đúng schema, không nhầm với chỗ chạy.** *Vì sao?* `target` chỉ quyết định editor validate file theo schema nào; harness chạy session do **Session Target** quyết định.
-- **Test bằng "câu dụ" trước khi tin agent read-only.** *Vì sao?* Đây là cách nhanh nhất chứng minh allowlist có hiệu lực thật, không chỉ nằm trên frontmatter.
+- **Test bằng "câu dụ" trước khi tin agent read-only.** *Vì sao?* Đây là cách nhanh nhất chứng minh allowlist có hiệu lực thật, không chỉ nằm trên frontmatter. · 📄 [VS Code Docs: When to use subagents](https://code.visualstudio.com/docs/agents/run/subagents#when-to-use-subagents)
 
 ## Bài tập
 
@@ -191,7 +191,7 @@ Muốn nhẩm cost trước khi fan-out? AI Credits tính per-token theo model �
 ## Reference
 
 - VS Code — [Custom agents](https://code.visualstudio.com/docs/agent-customization/custom-agents) · [Custom agent file reference](https://code.visualstudio.com/docs/agents/reference/custom-agent-file-reference) (frontmatter, harness compatibility) · [Subagents](https://code.visualstudio.com/docs/agents/run/subagents)
-- GitHub — [About custom agents (Copilot CLI)](https://docs.github.com/en/copilot/concepts/agents/copilot-cli/about-custom-agents) · [Custom agents configuration (cloud agent)](https://docs.github.com/en/copilot/reference/custom-agents-configuration)
+- GitHub — [About custom agents (Copilot CLI)](https://docs.github.com/en/copilot/concepts/customizations/custom-agents) · [Custom agents configuration (cloud agent)](https://docs.github.com/en/copilot/reference/custom-agents-configuration)
 - Cộng đồng — [Awesome Copilot agents](https://github.com/github/awesome-copilot/blob/main/docs/README.agents.md)
 
 **Chốt:** Custom agent đáng tạo khi một vai trò lặp lại cần đúng ba thứ: instructions riêng, tools khóa chặt, model chọn tay. Còn lại — hỏi thẳng, hoặc spawn subagent đúng lúc — chat chính sạch là win, không phải có nhiều agent trong dropdown.

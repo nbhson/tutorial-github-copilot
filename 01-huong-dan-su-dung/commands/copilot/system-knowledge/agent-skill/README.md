@@ -5,7 +5,7 @@
 
 ## 1 câu nôm na
 
-Skill là "sổ tay nghề" cất trong repo: khi bạn nói đúng việc, model tự rút đúng trang ra dùng thay vì bạn phải gọi tên. Phân biệt nhanh cho khỏi lẫn: **Prompt = bạn gọi tay; Skill = model tự gọi; Agent = một người làm việc riêng.**
+Skill là "sổ tay nghề" cất trong repo: khi bạn nói đúng việc, model tự rút đúng trang ra dùng thay vì bạn phải gọi tên. Phân biệt nhanh cho khỏi lẫn: **Prompt = bạn gọi tay; Skill = model tự gọi; Agent = một người làm việc riêng.** · 📄 [VS Code Docs: Customize AI agents (overview)](https://code.visualstudio.com/docs/agent-customization/overview)
 
 ## Vì sao dùng skill?
 
@@ -17,12 +17,12 @@ Skill nằm trong `.github/skills/<ten>/SKILL.md`, có `description` liệt kê 
 | Skill (`SKILL.md`) | Model tự kích hoạt theo `description`, hoặc bạn gọi tay `/<ten-skill>` | Muốn model tự chọn cách làm chuẩn, không cần nhớ tên |
 | Agent | Bạn chạy như một "đồng nghiệp" riêng ([custom-agent](../../model-agent/custom-agent/README.md)) | Việc dài, cần persona/permission riêng |
 
-**Nếu làm sai thì sao?** Đóng quy trình vào skill nhưng `description` viết chung chung ("hỗ trợ deploy") thì skill **không bao giờ tự kích hoạt** — bạn tưởng model đã biết, thực ra nó chưa từng thấy skill.
+**Nếu làm sai thì sao?** Đóng quy trình vào skill nhưng `description` viết chung chung ("hỗ trợ deploy") thì skill **không bao giờ tự kích hoạt** — bạn tưởng model đã biết, thực ra nó chưa từng thấy skill. · 📄 [VS Code Docs: Customize AI agents (overview)](https://code.visualstudio.com/docs/agent-customization/overview)
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** muốn model tự biết "review PR thì làm gì"; chuẩn hóa kỹ năng team; cân nhắc skill vs prompt/agent để chọn đúng cách đóng gói.
-- **ĐỪNG dùng khi:** cần **persona/quyền riêng** cho một vai (đó là custom agent); cần luật áp **mọi chat** (đó là [instructions](../instructions/README.md)); cần nối hệ thống ngoài (đó là [mcp](../mcp/README.md)).
+- **ĐỪNG dùng khi:** cần **persona/quyền riêng** cho một vai (đó là custom agent); cần luật áp **mọi chat** (đó là [instructions](../instructions/README.md)); cần nối hệ thống ngoài (đó là [mcp](../mcp/README.md)). · 📄 [VS Code Docs: Choose a customization scope](https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope)
 
 ## Cách gọi (copy-paste)
 
@@ -34,13 +34,13 @@ Skill nằm trong `.github/skills/<ten>/SKILL.md`, có `description` liệt kê 
 | Cài skill mới | Customizations editor → Browse (kể cả GitHub Feed, experimental) | `/skills add [--project] <FILE\|URL\|DIR>` |
 | Gọi tay một skill | gõ `/<ten-skill>` trong ô chat | như nhau |
 
-> Skill không hiện trong menu? Kiểm `name` có **trùng tên thư mục cha** và chỉ dùng `a-z 0-9 -` (VS Code: sai là *silently fail to load*), và file phải đặt ở đường dẫn harness đó đọc: `.github/skills/` (project) hoặc `~/.copilot/skills/` (user).
+> Skill không hiện trong menu? Kiểm `name` có **trùng tên thư mục cha** và chỉ dùng `a-z 0-9 -` (VS Code: sai là *silently fail to load*), và file phải đặt ở đường dẫn harness đó đọc: `.github/skills/` (project) hoặc `~/.copilot/skills/` (user). · 📄 [VS Code Docs: SKILL.md file format](https://code.visualstudio.com/docs/agent-customization/agent-skills#skillmd-file-format)
 
 ## Ví dụ thật
 
 Nghiệp vụ: team đã có skill `review-pr` (chỉ đọc diff, nêu bug + test thiếu, không sửa code). Bạn muốn nó tự chạy khi chỉ nói như người thường.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Create project instructions](https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions)
 
 **Kết quả mong đợi:** model tự kích hoạt đúng skill, output đúng form; bạn không cần nhớ tên.
 
@@ -54,33 +54,35 @@ Nghiệp vụ: team đã có skill `review-pr` (chỉ đọc diff, nêu bug + te
 #         Dùng khi user nói deploy, release, ship, xuất bản.'
 ```
 
-**Bài học:** `description` là **trigger**, không phải khẩu hiệu — câu đầu phải chứa đúng những từ bạn sẽ nói thật.
+**Bài học:** `description` là **trigger**, không phải khẩu hiệu — câu đầu phải chứa đúng những từ bạn sẽ nói thật. · 📄 [VS Code Docs: Troubleshoot customization issues](https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues)
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: Skill common issues](https://code.visualstudio.com/docs/agent-customization/agent-skills#common-issues)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Skill không kích hoạt | `description` mờ / trigger sai | Viết rõ "dùng khi …" + test 3 câu khác nhau |
 | Gõ `${workspaceFolder}` trong SKILL.md | Skill **không** có nội suy biến | Viết đường dẫn tương đối tới `SKILL.md`, hoặc truyền thêm chữ sau `/<skill>` |
 | Skill quá to, hay bỏ bước | Ôm cả quy trình dài | Mỗi skill 1 kỹ năng; body ngắn, chi tiết đẩy sang file reference được nhắc tới |
-
 ## So sánh với Claude Code
+
+📄 [VS Code Docs: Skills vs custom instructions](https://code.visualstudio.com/docs/agent-customization/agent-skills#agent-skills-vs-custom-instructions)
 
 | Việc | Copilot (Agent Skills) | Claude Code | Ghi chú |
 |---|---|---|---|
 | Chuẩn skill | `SKILL.md` + frontmatter (`name`, `description`, …) | `SKILL.md` (Anthropic khởi xướng chuẩn mở) | Cùng chuẩn mở — viết 1 lần chạy nhiều agent |
 | Đường dò thêm | `.agents/skills`, `.claude/skills` (Local đọc cả hai) | `.claude/skills` | Portable, nhưng **user-level `~/.claude/skills` không có trong load-order của docs GitHub** |
-
 ## Best practices (kèm "vì sao")
 
 - **Câu đầu `description` = từ khóa user sẽ nói.** *Vì sao?* Đây là cơ chế trigger; thiếu từ khóa thì skill hay cỡ nào cũng không bao giờ load.
 - **Giữ body `SKILL.md` gọn, chi tiết dài đẩy sang file reference.** *Vì sao?* Mức 3 (resources) chỉ nạp khi body nhắc tới file — nhắc sai thì tài liệu chết.
-- **Không để secret trong skill.** *Vì sao?* Skill nằm trong git và được agent host đọc; secret trong đó là lộ. Ghi "lấy từ 1Password <tên>".
+- **Không để secret trong skill.** *Vì sao?* Skill nằm trong git và được agent host đọc; secret trong đó là lộ. Ghi "lấy từ 1Password <tên>". · 📄 [VS Code Docs: Skill best practices](https://code.visualstudio.com/docs/agent-customization/agent-skills#best-practices)
 
 ## Bài tập nhỏ
 
 1. **(15 phút)** Tạo `.github/skills/tom-tat-pr/SKILL.md` với `description` chứa từ "tóm tắt PR", rồi nói tự nhiên xem model có tự dùng không.
-2. **(10 phút)** Xóa 1 từ khóa trigger trong `description`, chạy lại, ghi khác biệt; sau đó đổi lại cho đúng.
+2. **(10 phút)** Xóa 1 từ khóa trigger trong `description`, chạy lại, ghi khác biệt; sau đó đổi lại cho đúng. · 📄 [VS Code Docs: SKILL.md file format](https://code.visualstudio.com/docs/agent-customization/agent-skills#skillmd-file-format)
 
 ## Tham khảo
 

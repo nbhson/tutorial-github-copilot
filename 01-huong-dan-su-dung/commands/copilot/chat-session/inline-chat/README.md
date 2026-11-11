@@ -7,7 +7,7 @@
 
 Thì thầm hỏi ngay bên cạnh dòng code, khỏi mở cửa sổ chat riêng. Bạn bôi đen code → `Ctrl+I` (macOS `⌘I`) → nhập yêu cầu → diff hiện ngay tại chỗ để Keep/Undo. Cùng tổ hợp phím đó trong terminal mở **terminal inline chat** — hỏi về shell command, rồi Run (`Ctrl+Enter`) hoặc Insert (`Alt+Enter`).
 
-Khác với mở Chat view: inline chat giữ bạn **trong editor**, không nhảy tab, nên mạch đọc code không bị cắt.
+Khác với mở Chat view: inline chat giữ bạn **trong editor**, không nhảy tab, nên mạch đọc code không bị cắt. · 📄 [VS Code Docs: Sessions (concept)](https://code.visualstudio.com/docs/agents/concepts/sessions)
 
 ## Vì sao dùng Ctrl+I?
 
@@ -19,25 +19,25 @@ Phần lớn thao tác sửa code hằng ngày rất nhỏ: thêm một null che
 
 **Nếu làm sai thì sao?** Hai lỗi hay gặp: (1) chưa bôi đen đã bấm nên không thấy gì; (2) yêu cầu quá to trong một lần khiến diff khó đọc. Cũng có trường hợp scope inline vẫn "ăn" ra ngoài vùng chọn nếu bạn không nói rõ. Xem ❌/✅.
 
-> **Tóm gọn 1 câu:** `Ctrl+I` là thì thầm ngay bên dòng code — bôi hẹp, một việc một lần, diff nhỏ thì review chắc tay.
+> **Tóm gọn 1 câu:** `Ctrl+I` là thì thầm ngay bên dòng code — bôi hẹp, một việc một lần, diff nhỏ thì review chắc tay. · 📄 [VS Code Docs: Sessions (concept)](https://code.visualstudio.com/docs/agents/concepts/sessions)
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** sửa một đoạn nhỏ 5–20 dòng ngay tại chỗ; đang đọc code và muốn hỏi nhanh về đoạn đó; muốn giữ dòng suy nghĩ, không chuyển tab.
 - **ĐỪNG dùng khi:** việc cần context nhiều file hoặc tool ngoài — mở Chat view (Agent mode) sẽ phù hợp hơn.
-- **Cho ai:** dev đang đọc/sửa code lẻ, muốn giữ mạch suy nghĩ không chuyển tab.
+- **Cho ai:** dev đang đọc/sửa code lẻ, muốn giữ mạch suy nghĩ không chuyển tab. · 📄 [VS Code Docs: Pick the right tool](https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task)
 
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
-> Hai cài đặt đáng biết (docs): `inlineChat.askInChat` — file thuộc phiên chat đang mở thì `Ctrl+I` sẽ dẫn vào "Ask in Chat" của Chat view thay vì inline thường; set `false` nếu muốn luôn inline. `inlineChat.defaultModel` — model mặc định cho editor inline chat.
+> Hai cài đặt đáng biết (docs): `inlineChat.askInChat` — file thuộc phiên chat đang mở thì `Ctrl+I` sẽ dẫn vào "Ask in Chat" của Chat view thay vì inline thường; set `false` nếu muốn luôn inline. `inlineChat.defaultModel` — model mặc định cho editor inline chat. · 📄 [VS Code Docs: Editor inline chat](https://code.visualstudio.com/docs/chat/inline-chat#use-editor-inline-chat)
 
 ## Ví dụ thật
 
 Nghiệp vụ: trong `src/utils/parse.ts`, hàm `parseConfig()` đọc `process.env.CONFIG` có thể `undefined` và ném lỗi khó hiểu. Bạn muốn chặn sớm ngay tại chỗ.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Prompt examples](https://code.visualstudio.com/docs/agents/guides/prompt-examples)
 
 **Kết quả mong đợi:** Diff hiện ngay tại chỗ; Keep/Undo từng hunk; code chạy tiếp không gián đoạn.
 
@@ -51,38 +51,40 @@ Nghiệp vụ: trong `src/utils/parse.ts`, hàm `parseConfig()` đọc `process.
 
 **✅ ĐÚNG — bôi hẹp đúng đoạn, nói rõ "chỉ sửa đoạn đã chọn":**
 
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh) · 📄 [VS Code Docs: Choose a troubleshooting path](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path)
 
 **Bài học:** Mỗi lần `Ctrl+I` một việc, bôi hẹp. Diff nhỏ thì review dễ và chính xác.
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: Inline chat settings](https://code.visualstudio.com/docs/agents/reference/ai-settings#inline-chat-settings)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Bấm `Ctrl+I` không hiện gì | Chưa bôi đen / extension chưa active | Bôi đen code trước; check Copilot status bar |
 | Bấm `Ctrl+I` lại nhảy sang Chat view | File thuộc phiên chat đang mở (`inlineChat.askInChat=true`) | Gõ tiếp trong "Ask in Chat", hoặc set `false` để luôn inline |
 | Diff khó đọc | Change quá to một lần | Chia nhỏ: mỗi `Ctrl+I` một việc |
-
 ## So sánh với Claude Code
+
+📄 [VS Code Docs: Agent Harnesses](https://code.visualstudio.com/docs/agents/concepts/agent-harnesses)
 
 | Việc | Copilot (`Ctrl+I`) | Claude Code | Ghi chú |
 |---|---|---|---|
 | Sửa tại chỗ trong editor | Inline chat ngay dòng code | Không có tương đương trực tiếp (terminal-first) | Copilot mạnh ở lớp editor |
 | Hỏi trong terminal | Terminal inline chat, cùng `Ctrl+I` | Chính Claude Code sống trong terminal | Hai hướng ngược nhau của cùng một phím |
 | Duyệt diff tại chỗ | Keep/Undo từng hunk | Duyệt diff trong terminal/IDE | Đều bắt bạn review trước khi nhận |
-
 ## Best practices (kèm "vì sao")
 
 - **Bôi đen trước, luôn luôn.** *Vì sao?* Selection là scope — không bôi thì hoặc không có gì, hoặc model tự đoán rộng.
 - **Một việc mỗi lần `Ctrl+I`.** *Vì sao?* Diff nhỏ dễ review; gom nhiều việc làm diff rối và dễ Keep nhầm.
 - **Terminal: luôn đọc command trước khi bấm Run.** *Vì sao?* Run là thực thi thật; Alt+Enter chèn để sửa tay thì an toàn hơn.
-- **Sửa xong chạy test focused.** *Vì sao?* Inline chỉ sinh diff; tính đúng do test quyết định.
+- **Sửa xong chạy test focused.** *Vì sao?* Inline chỉ sinh diff; tính đúng do test quyết định. · 📄 [VS Code Docs: Inline chat in editing sessions](https://code.visualstudio.com/docs/chat/inline-chat#inline-chat-in-active-editing-sessions)
 
 ## Bài tập nhỏ
 
 1. **(3 phút)** Bôi đen một hàm nhỏ, `Ctrl+I` sửa một chỗ (ví dụ thêm guard), Keep và quan sát diff nhỏ cỡ nào.
 2. **(5 phút)** Mở terminal inline chat bằng `Ctrl+I`, hỏi "lệnh nào liệt kê 5 file lớn nhất thư mục src" — so kết quả Run với Insert rồi sửa tay.
-3. **(5 phút)** Gọi `Ctrl+I` mà không bôi đen, xem phản ứng; rút ra thói quen bôi trước.
+3. **(5 phút)** Gọi `Ctrl+I` mà không bôi đen, xem phản ứng; rút ra thói quen bôi trước. · 📄 [VS Code Docs: Editor inline chat](https://code.visualstudio.com/docs/chat/inline-chat#use-editor-inline-chat)
 
 ## Tham khảo
 

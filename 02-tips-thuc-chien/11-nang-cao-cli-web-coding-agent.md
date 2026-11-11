@@ -12,7 +12,7 @@
 - Sống trong terminal (ssh, server) → muốn CLI gợi ý lệnh + giải thích lỗi ngay.
 - Họp, tay bận → muốn voice ra lệnh, Copilot tóm tắt + tạo issue.
 
-> Rule: **nặng thì VS Code Agent, nhanh thì CLI/web, xa máy thì mobile + Copilot cloud agent.**
+> Rule: **nặng thì VS Code Agent, nhanh thì CLI/web, xa máy thì mobile + Copilot cloud agent.** · 📄 [GitHub Docs: Where to use GitHub Copilot](https://docs.github.com/en/copilot/get-started/where-to-use-github-copilot)
 
 Cố code nặng (refactor, debug sâu) trên điện thoại là vừa chậm vừa dễ sai — việc đó thuộc về nơi có đủ công cụ verify.
 
@@ -35,14 +35,14 @@ Mục này vẽ bản đồ 5 "mặt nạ" Copilot tùy nơi bạn đứng. Đ�
 → [VS Code/CLI: fix nhỏ + verify local] → [Mobile: duyệt merge]
 ```
 
-> **Tóm gọn 1 câu:** Copilot như bộ đồ many mặt: xa máy thì giao việc + duyệt nhẹ, ngồi máy mới là chỗ code sâu và verify nặng.
+> **Tóm gọn 1 câu:** Copilot như bộ đồ many mặt: xa máy thì giao việc + duyệt nhẹ, ngồi máy mới là chỗ code sâu và verify nặng. · 📄 [VS Code Docs: Sessions across surfaces](https://code.visualstudio.com/docs/agents/concepts/sessions#sessions-across-surfaces)
 
 ## 3. CLI trong terminal: 2 CLI khác nhau, đừng nhầm
 
 Mục này dẹp ngay khúc mắc phổ biến nhất: có **hai** công cụ tên gần giống nhau trong terminal — một cái chỉ đường, một cái lái xe. Đọc để biết cái nào làm gì.
 
 > - **`gh copilot`** (gh extension) — trợ lý lệnh shell: `suggest`/`explain`, không sửa code.
-> - **`copilot`** (Copilot CLI, binary riêng) — agent chạy cả task trong terminal, xoay 3 chế độ **standard → plan → autopilot** bằng `Shift+Tab`.
+> - **`copilot`** (Copilot CLI, binary riêng) — agent chạy cả task trong terminal, xoay 3 chế độ **standard → plan → autopilot** bằng `Shift+Tab`. · 📄 [GitHub Docs: Copilot CLI](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-cli)
 
 ### 3.1. `gh copilot` — hỏi lệnh, giải thích lỗi
 
@@ -112,7 +112,7 @@ GIAO:         spec rõ + scope 1 module + done checklist + việc 1–2h độc 
 KHÔNG GIAO:   spec mờ, đụng nhiều team, task 15 phút Edit xong.
 ```
 
-Giao issue một dòng "fix refund" là agent tự đoán mọi thứ — PR về sai hướng, mất thêm thời gian gỡ. 📄 Luồng issue → chat → PR + mẫu issue: [`../01-huong-dan-su-dung/examples/02-cac-be-mat-vscode-ide-web-cli/assign-issue-chat-luong-pr-chat.sh`](../01-huong-dan-su-dung/examples/02-cac-be-mat-vscode-ide-web-cli/assign-issue-chat-luong-pr-chat.sh). Plan-first xem [Tips 03](./03-plan-first-workflow.md), gates xem [Tips 06](./06-policies-guardrails-recipes.md).
+Giao issue một dòng "fix refund" là agent tự đoán mọi thứ — PR về sai hướng, mất thêm thời gian gỡ. 📄 Luồng issue → chat → PR + mẫu issue: [`../01-huong-dan-su-dung/examples/02-cac-be-mat-vscode-ide-web-cli/assign-issue-chat-luong-pr-chat.sh`](../01-huong-dan-su-dung/examples/02-cac-be-mat-vscode-ide-web-cli/assign-issue-chat-luong-pr-chat.sh). Plan-first xem [Tips 03](./03-plan-first-workflow.md), gates xem [Tips 06](./06-policies-guardrails-recipes.md). · 📄 [GitHub Docs: Copilot on GitHub](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github)
 
 ## 5. Mobile, github.dev & voice
 
@@ -128,7 +128,7 @@ Chỉ sửa src/payments/. Mở PR draft, dán log test xanh vào mô tả.
 
 **Voice:** nói → thành prompt text (mobile / VS Code). Hợp khi họp, tay bận, accessibility: `"Tạo issue fix bug refund quá 30 ngày bị 500, scope payments, done là test xanh."` Mẹo: nói ngắn, 1 việc 1 lệnh, kiểm tra text trước khi gửi (voice hay nghe nhầm tên file).
 
-Hai bẫy khi rời máy chính: voice nghe nhầm tên file → sửa nhầm chỗ; github.dev trên máy mượn mà mở `.env` → rò secret.
+Hai bẫy khi rời máy chính: voice nghe nhầm tên file → sửa nhầm chỗ; github.dev trên máy mượn mà mở `.env` → rò secret. · 📄 [GitHub Docs: GitHub Copilot app](https://docs.github.com/en/copilot/concepts/copilot-surfaces/github-copilot-app)
 
 ## 6. Recipes leo thang đa mặt trận
 
@@ -153,7 +153,7 @@ Hai bẫy khi rời máy chính: voice nghe nhầm tên file → sửa nhầm ch
 
 **C — Terminal-first cho devops:**
 
-> 📄 **Code ví dụ:** [`./examples/11-nang-cao-cli-web-coding-agent/recipes-leo-thang-a-mat-tran.sh`](./examples/11-nang-cao-cli-web-coding-agent/recipes-leo-thang-a-mat-tran.sh)
+> 📄 **Code ví dụ:** [`./examples/11-nang-cao-cli-web-coding-agent/recipes-leo-thang-a-mat-tran.sh`](./examples/11-nang-cao-cli-web-coding-agent/recipes-leo-thang-a-mat-tran.sh) · 📄 [GitHub Docs: Use Copilot CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/overview)
 
 ## 7. Walkthrough: từ issue tới PR khi đang đi đường
 
@@ -168,7 +168,7 @@ Bối cảnh: 8h sáng trên xe, issue #123 bug refund, 10h tới công ty.
 | 50–70 | VS Code | Pull branch, chạy `npm test -- payments` + lint + build local, Reviewer fresh `/team-review` |
 | 70–75 | Web | Merge khi V4 đủ (CI xanh + 2 reviews), đóng issue |
 
-Tổng bạn thao tác ~25 phút rải rác; agent làm 30 phút cloud; merge có đủ V4.
+Tổng bạn thao tác ~25 phút rải rác; agent làm 30 phút cloud; merge có đủ V4. · 📄 [GitHub Docs: Start Copilot sessions](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/start-copilot-sessions)
 
 ## 8. Bảng tra nhanh: ở đâu làm gì?
 
@@ -185,7 +185,7 @@ Tổng bạn thao tác ~25 phút rải rác; agent làm 30 phút cloud; merge c�
 
 > **Cách đọc bảng này:** tìm dòng khớp "bạn đang ở đâu" trong cột đầu, cột **Dùng** là công cụ nên cầm lên, cột **Không nên** là việc đừng mơ làm ở đó.
 
-> Quy tắc ngón tay: **xa máy thì giao + duyệt, ngồi máy thì code + verify. Không cố code nặng trên điện thoại.**
+> Quy tắc ngón tay: **xa máy thì giao + duyệt, ngồi máy thì code + verify. Không cố code nặng trên điện thoại.** · 📄 [GitHub Docs: Copilot CLI best practices](https://docs.github.com/en/copilot/how-tos/copilot-cli/cli-best-practices)
 
 ### Before / After
 
@@ -209,7 +209,7 @@ Bảng này gom các "vết xe cũ" khi làm việc ngoài máy chính — mỗi
 | Quên bật protection | Agent merge bừa | Require PR + checks + review (Tips 06) |
 | Không theo dõi agent | Agent kẹt 2h không biết | Bật notification issue, check ~30p/lần, dừng khi blocker |
 
-> **Cách đọc bảng này:** dọc cột **Pitfall** để tìm thói quen của bạn, **Triệu chứng** xác nhận đúng bệnh, **Fix** trỏ về mục/kỹ thuật đã trình ở trên.
+> **Cách đọc bảng này:** dọc cột **Pitfall** để tìm thói quen của bạn, **Triệu chứng** xác nhận đúng bệnh, **Fix** trỏ về mục/kỹ thuật đã trình ở trên. · 📄 [GitHub Docs: Copilot CLI best practices](https://docs.github.com/en/copilot/how-tos/copilot-cli/cli-best-practices)
 
 ## 10. Bài tập cuối bài
 

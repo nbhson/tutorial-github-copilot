@@ -167,12 +167,12 @@ Seven habits that keep the extension ecosystem useful instead of dangerous — e
 
 - Copilot Extensions GA (2025-02-19): https://github.blog/changelog/2025-02-19-announcing-the-general-availability-of-github-copilot-extensions/
 - Extensions on GitHub Mobile (public preview): https://github.com/orgs/community/discussions/142240
-- Third-party coding agents: https://docs.github.com/copilot/concepts/agents/about-third-party-coding-agents
+- Third-party coding agents: https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents
 - Copilot cloud agent GA (nguồn ghi theo tên cũ "coding agent"): https://github.com/orgs/community/discussions/159068
 - Copilot CLI GA (2026-02-25): https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/
-- Copilot CLI docs: https://docs.github.com/copilot/how-tos/copilot-cli/use-copilot-cli/overview
+- Copilot CLI docs: https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/overview
 - Agents overview (Copilot, third-party, custom): https://github.com/features/copilot/agents
-- Copilot docs hub: https://docs.github.com/copilot · VS Code: https://code.visualstudio.com/docs/setup/copilot
+- Copilot docs hub: https://docs.github.com/en/copilot · VS Code: https://code.visualstudio.com/docs/setup/copilot
 - Internal cross-references: [lesson 09 — Extensions & Marketplaces](../01-huong-dan-su-dung/09-extensions-marketplaces.md) · [lesson 12 — SDK/CI](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md) · [lesson 17 — Agent Customizations editor](../01-huong-dan-su-dung/17-agent-customizations-hub.md)
 
 ---

@@ -5,20 +5,20 @@
 
 ## 1 câu nôm na
 
-Participants là kiểu "gọi đúng chuyên viên trong chat": `@workspace` phụ trách ngữ cảnh repo, `@terminal` phụ trách lỗi shell, `@vscode` chạy lệnh của editor. Kiến trúc mới gộp tất cả vào **một harness với tools**: model tự quét repo, tool activity tự hiện — không cần ai để gọi nữa. Docs VS Code đánh dấu **chat participants deprecated** và nguyên văn: **không được hỗ trợ ở Copilot harness**. Vì Local harness vẫn còn chạy chúng, các file prompt cũ "còn sống" trong một cửa sổ — đó là nguồn cơn mọi hiểu lầm.
+Participants là kiểu "gọi đúng chuyên viên trong chat": `@workspace` phụ trách ngữ cảnh repo, `@terminal` phụ trách lỗi shell, `@vscode` chạy lệnh của editor. Kiến trúc mới gộp tất cả vào **một harness với tools**: model tự quét repo, tool activity tự hiện — không cần ai để gọi nữa. Docs VS Code đánh dấu **chat participants deprecated** và nguyên văn: **không được hỗ trợ ở Copilot harness**. Vì Local harness vẫn còn chạy chúng, các file prompt cũ "còn sống" trong một cửa sổ — đó là nguồn cơn mọi hiểu lầm. · 📄 [VS Code Docs: Agent Harnesses (concept)](https://code.visualstudio.com/docs/agents/concepts/agent-harnesses)
 
 ## Vì sao bài này tồn tại?
 
-Vì một nửa internet vẫn dạy `@workspace` là "cách gắn ngữ cảnh repo". Không hiểu bài này, bạn sẽ: (1) tưởng công cụ hỏng khi prompt bị bỏ qua ở phiên mới; (2) sửa sai hướng — đi cài đặt lung tung thay vì đổi cú pháp; (3) tiếp tục dạy lại cái đã chết cho người mới. Đây là trang "vì sao không còn chạy", không phải trang hướng dẫn dùng.
+Vì một nửa internet vẫn dạy `@workspace` là "cách gắn ngữ cảnh repo". Không hiểu bài này, bạn sẽ: (1) tưởng công cụ hỏng khi prompt bị bỏ qua ở phiên mới; (2) sửa sai hướng — đi cài đặt lung tung thay vì đổi cú pháp; (3) tiếp tục dạy lại cái đã chết cho người mới. Đây là trang "vì sao không còn chạy", không phải trang hướng dẫn dùng. · 📄 [VS Code Docs: Agent Harnesses (concept)](https://code.visualstudio.com/docs/agents/concepts/agent-harnesses)
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** prompt cũ của bạn/team chứa `@…`; migrate kho prompt sang Copilot harness; người mới hỏi "mạng bảo gõ `@workspace`".
-- **ĐỪNG dùng khi:** bạn chỉ dùng Copilot harness từ đầu — đường đúng là `#`-mentions, nút **Add Context**, instructions và skills (các link cuối bài); bài này không phải lệnh để gọi mà là trang giải thích "vì sao không còn chạy".
+- **ĐỪNG dùng khi:** bạn chỉ dùng Copilot harness từ đầu — đường đúng là `#`-mentions, nút **Add Context**, instructions và skills (các link cuối bài); bài này không phải lệnh để gọi mà là trang giải thích "vì sao không còn chạy". · 📄 [VS Code Docs: Pick the right tool](https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task)
 
 ## Cách gọi (copy-paste)
 
-> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
+> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh) · 📄 [VS Code Docs: Replace chat participants](https://code.visualstudio.com/docs/agent-customization/migrate-customizations#replace-chat-participants)
 
 KHÔNG có đường nào để gọi participants ở Copilot harness. Ba dạng cũ và số phận của chúng:
 
@@ -34,7 +34,7 @@ Ngữ pháp sống của chat hiện tại: `/` để chạy lệnh, `#` để g
 
 Nghiệp vụ: file prompt của team từ 2024 có dòng "`@workspace liệt kê các endpoint API`"; sau khi team chuyển sang Copilot harness, kết quả chỉ liệt kê file đang mở.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Work with the agent](https://code.visualstudio.com/docs/agents/run/chat-view#work-with-the-agent)
 
 **Kết quả mong đợi:** bản bỏ `@workspace` (hoặc đổi sang gắn `#`/thêm folder qua Add Context) cho Agent tự chạy tool quét repo — thấy tool activity tìm file, không còn cảnh trả lời theo mỗi file đang mở.
 
@@ -45,9 +45,11 @@ Nghiệp vụ: file prompt của team từ 2024 có dòng "`@workspace liệt k�
 **❌ SAI — gõ `@workspace tổng hợp repo` trong session Copilot harness và tưởng nó hiểu.** Không có participant nào chạy; model thấy đúng câu chữ, phần "chuyên viên repo" im lặng — có khi vẫn trả lời được, nhưng là ăn may từ file đang mở.
 **✅ ĐÚNG — bỏ `@…`, hỏi thẳng mong muốn:** "tổng hợp cấu trúc repo, liệt kê package và vai trò" — Agent với tools sẽ tự quét; gắn `#file` khi cần hẹp và chính xác.
 
-**Bài học:** dấu `@` mất đi không khiến prompt báo lỗi — nó khiến prompt **mất người thực hiện** mà bạn không hay; vì thế phải soát kho prompt cũ bằng grep, không bằng mắt.
+**Bài học:** dấu `@` mất đi không khiến prompt báo lỗi — nó khiến prompt **mất người thực hiện** mà bạn không hay; vì thế phải soát kho prompt cũ bằng grep, không bằng mắt. · 📄 [VS Code Docs: Start with basic checks](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#start-with-basic-checks)
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: If you maintain a participant](https://code.visualstudio.com/docs/agent-customization/migrate-customizations#if-you-maintain-a-participant)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
@@ -55,27 +57,27 @@ Nghiệp vụ: file prompt của team từ 2024 có dòng "`@workspace liệt k�
 | Không tìm lại được phiên Local nữa | Local là harness legacy, không có trong Agents window | Đọc [../edit-mode/README.md](../edit-mode/README.md) để hiểu phạm vi Local; đường dài hạn là migrate |
 | Người mới hỏi "script cũ bảo gõ @ mà không chạy" | Tài liệu/bài blog cũ chưa cập nhật sau deprecated | Dẫn họ đúng trang này + bảng cú pháp `/` `#` ở trên |
 | Xóa cả `@` rồi quên gắn context | Thay sai một cú pháp bằng cách bỏ trống | Thay `@workspace` bằng Add Context/`#file`/instructions, không bỏ trắng |
-
 ## So sánh với Claude Code
+
+📄 [GitHub Docs: Third-party coding agents](https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents)
 
 | Việc | Copilot (hôm nay) | Claude Code | Ghi chú |
 |---|---|---|---|
 | Gắn ngữ cảnh repo | `#`-mentions, Add Context, Agent tự quét | File mentions + `CLAUDE.md`, tự quét | Claude Code chưa từng qua tầng "gọi @chuyên viên" |
 | Nhờ xử lý terminal | Inline chat trong terminal | Tool chạy shell built-in trong session | Cả hai đều bỏ lớp "nhân vật trung gian" |
 | Lệnh của editor/UI | Nói mong muốn để Agent dùng tools | Không có kênh gọi lệnh editor tương đương | Hướng hội tụ: 1 agent + tools, không nhiều persona |
-
 ## Best practices (kèm "vì sao")
 
 - **grep kho prompt/docs nội bộ lấy `@workspace`, `@terminal`, `@vscode` rồi viết lại.** *Vì sao?* Prompt không báo lỗi khi participant chết — hỏng êm, chỉ có soát mới thấy.
 - **Đổi `@workspace` thành `#file`/Add Context, đừng thành "bỏ trống".** *Vì sao?* Bỏ cú pháp mà không bỏ luôn giả định "sẽ có người lo ngữ cảnh" thì chất lượng câu trả lời giảm âm thầm.
 - **Việc lặp lại thành quy tắc repo → instructions/`AGENTS.md`.** *Vì sao?* Câu từng nhét vào `@workspace` hằng ngày nên nằm ở file nạp tự động, không phải gõ lại.
-- **Đừng dạy `@…` cho người mới.** *Vì sao?* Họ sẽ mất nửa ngày debug một cú pháp đã chết.
+- **Đừng dạy `@…` cho người mới.** *Vì sao?* Họ sẽ mất nửa ngày debug một cú pháp đã chết. · 📄 [VS Code Docs: Subagents by harness](https://code.visualstudio.com/docs/agents/run/subagents#subagents-by-harness)
 
 ## Bài tập nhỏ
 
 1. **(5 phút)** Grep repo tài liệu của bạn ba chuỗi trên; ghi số kết quả — đó là số "bệnh nhân" của bài này.
 2. **(4 phút)** Chạy phép so sánh Local vs Copilot harness như mục Verify ở trên, chụp lại tool activity difference.
-3. **(3 phút)** Viết lại 1 prompt `@workspace` cũ thành 1 phiên bản `#file` + 1 phiên bản để Agent tự quét; so độ dài câu trả lời.
+3. **(3 phút)** Viết lại 1 prompt `@workspace` cũ thành 1 phiên bản `#file` + 1 phiên bản để Agent tự quét; so độ dài câu trả lời. · 📄 [VS Code Docs: Replace chat participants](https://code.visualstudio.com/docs/agent-customization/migrate-customizations#replace-chat-participants)
 
 ## Tham khảo
 

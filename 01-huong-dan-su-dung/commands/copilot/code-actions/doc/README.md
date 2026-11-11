@@ -5,7 +5,7 @@
 
 ## 1 câu nôm na
 
-Nhờ viết "nhãn mác cho lọ thuốc" — tên, công dụng, cách dùng, ví dụ. Bạn bôi đen hàm, mở inline chat bằng `Ctrl+I` (macOS `⌘I`) rồi gõ `/doc` — nó viết docstring theo chuẩn repo ngay tại chỗ; việc bạn phải nhớ là **chạy lại mỗi khi đổi signature**, không thì docs sẽ dần nói sai params.
+Nhờ viết "nhãn mác cho lọ thuốc" — tên, công dụng, cách dùng, ví dụ. Bạn bôi đen hàm, mở inline chat bằng `Ctrl+I` (macOS `⌘I`) rồi gõ `/doc` — nó viết docstring theo chuẩn repo ngay tại chỗ; việc bạn phải nhớ là **chạy lại mỗi khi đổi signature**, không thì docs sẽ dần nói sai params. · 📄 [VS Code Docs: Copilot smart actions](https://code.visualstudio.com/docs/editing/copilot-smart-actions)
 
 ## Vì sao dùng /doc?
 
@@ -13,7 +13,7 @@ Docs viết tay hay bị bỏ qua, mà khi có thì thường thiếu đúng ph�
 
 **Nếu làm sai thì sao?** Mặt trái nguy hiểm là **docs cũ nhưng nghe rất chắc**: bạn đổi tham số, docs vẫn mô tả tham số cũ, người sau làm theo rồi dính bug. Một example trong docs mà chạy không được còn tệ hơn không có example, vì nó tạo niềm tin sai. Vì vậy sau mỗi lần đổi signature phải regen `/doc` (xem mục ❌/✅).
 
-> **Tóm gọn 1 câu:** `/doc` viết hộ nhãn mác cho lọ thuốc — nhưng công thức đổi thì nhớ in lại nhãn, kẻo người sau uống theo liều cũ.
+> **Tóm gọn 1 câu:** `/doc` viết hộ nhãn mác cho lọ thuốc — nhưng công thức đổi thì nhớ in lại nhãn, kẻo người sau uống theo liều cũ. · 📄 [VS Code Docs: Copilot smart actions](https://code.visualstudio.com/docs/editing/copilot-smart-actions)
 
 ## Khi nào dùng / khi nào đừng
 
@@ -21,19 +21,19 @@ Docs viết tay hay bị bỏ qua, mà khi có thì thường thiếu đúng ph�
 - **ĐỪNG dùng khi:** hàm private/đơn giản mà tên đã nói hết (`getUserId()` thì khỏi), hoặc bạn cần *hiểu* code chứ không phải *viết docs* (đó là `/explain`).
 - **Cho ai:** người giữ API/hàm public, team đang chuẩn hóa docs cho module cũ.
 
-> **Tóm gọn 1 câu:** Cửa ra vào có người qua lại thì đáng gắn bảng chỉ dẫn — hàm tên đã tự kể hết công việc thì khỏi mất công dán biển.
+> **Tóm gọn 1 câu:** Cửa ra vào có người qua lại thì đáng gắn bảng chỉ dẫn — hàm tên đã tự kể hết công việc thì khỏi mất công dán biển. · 📄 [VS Code Docs: Choose a feature](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#choose-a-feature)
 
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
-> Gõ `/` trong Chat view không thấy `/doc`? Docs ghi nhận `/doc` cho **editor inline chat** — bôi đen code, `Ctrl+I`, rồi gõ `/doc`. Muốn dùng Code Action: chuột phải → Generate Code → Generate Docs.
+> Gõ `/` trong Chat view không thấy `/doc`? Docs ghi nhận `/doc` cho **editor inline chat** — bôi đen code, `Ctrl+I`, rồi gõ `/doc`. Muốn dùng Code Action: chuột phải → Generate Code → Generate Docs. · 📄 [VS Code Docs: Generate documentation](https://code.visualstudio.com/docs/editing/copilot-smart-actions#generate-documentation)
 
 ## Ví dụ thật
 
 Nghiệp vụ: `parseInvoiceNumber()` trong `src/billing/` vừa được refactor, người khác muốn dùng lại nhưng docs cũ đã lệch.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Code generation & editing](https://code.visualstudio.com/docs/agents/guides/prompt-examples#code-generation-and-editing)
 
 **Kết quả mong đợi:** docstring đúng chuẩn repo (params/returns/example), và example trong docs copy ra chạy được.
 
@@ -47,21 +47,22 @@ Nghiệp vụ: `parseInvoiceNumber()` trong `src/billing/` vừa được refact
 
 **✅ ĐÚNG — nêu chuẩn rõ + regen sau mỗi lần đổi signature:**
 
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh) · 📄 [VS Code Docs: Choose a troubleshooting path](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path)
 
 **Bài học:** docs sai params nguy hiểm hơn không có docs — regen `/doc` ngay sau khi hàm thay đổi.
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: Record what you verified](https://code.visualstudio.com/docs/agents/guides/explore-a-codebase#5-record-what-you-verified)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
 | Docs chung chung, thiếu example | Prompt thiếu yêu cầu example | Thêm "gồm 1 example chạy được" |
 | Docs sai params | Hàm đổi mà docs cũ | Regen `/doc` sau mỗi lần đổi signature |
 | Docs dài hơn code | Cố docs mọi thứ | Chỉ docs cho hàm public/phức tạp |
-
 ## So sánh với Claude Code
 
-Bạn cũng dùng Claude Code thì bảng này cho biết `/doc` ánh xạ sang công cụ kia ở đâu — đọc để khỏi đi tìm một lệnh không tồn tại.
+Bạn cũng dùng Claude Code thì bảng này cho biết `/doc` ánh xạ sang công cụ kia ở đâu — đọc để khỏi đi tìm một lệnh không tồn tại. · 📄 [GitHub Docs: Third-party coding agents](https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents)
 
 | Việc | Copilot (`/doc`) | Claude Code | Ghi chú |
 |---|---|---|---|
@@ -76,13 +77,13 @@ Bốn mẹo dưới đây là tập quán của người giữ API — mỗi m�
 - **Yêu cầu 1 example chạy được, không chỉ mô tả suông.** *Vì sao?* Example là thứ người dùng thật copy ra chạy — nó buộc docs phải khớp code.
 - **Regen `/doc` ngay sau khi đổi signature.** *Vì sao?* Docs cũ nói sai params sẽ dẫn người sau vào bug, mà họ lại tin vì "đã có docs".
 - **Ghi rõ `@throws` / lỗi có thể xảy ra.** *Vì sao?* Người gọi cần biết khi nào hàm ném lỗi để xử lý, thay vì tự đoán từ code.
-- **Chỉ docs hàm public/phức tạp.** *Vì sao?* Docs dài hơn code làm loãng; hàm tự-giải-thích bằng tên thì không cần.
+- **Chỉ docs hàm public/phức tạp.** *Vì sao?* Docs dài hơn code làm loãng; hàm tự-giải-thích bằng tên thì không cần. · 📄 [VS Code Docs: Crafting effective prompts](https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts)
 
 ## Bài tập nhỏ
 
 1. **(5 phút)** Chạy `/doc` không yêu cầu example, rồi chạy lại có yêu cầu. So xem lần nào docs dùng được ngay.
 2. **(10 phút)** Chọn 1 hàm public: `/doc` rồi copy example trong docs ra chạy thật. Example sai thì sửa lại docs.
-3. **(10 phút)** Đổi tên 1 tham số của hàm rồi *không* regen docs — chạy thử example cũ để thấy nó lệch thế nào.
+3. **(10 phút)** Đổi tên 1 tham số của hàm rồi *không* regen docs — chạy thử example cũ để thấy nó lệch thế nào. · 📄 [VS Code Docs: Generate documentation](https://code.visualstudio.com/docs/editing/copilot-smart-actions#generate-documentation)
 
 ## Tham khảo
 

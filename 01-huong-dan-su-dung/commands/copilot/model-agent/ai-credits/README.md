@@ -7,7 +7,7 @@
 
 Xem công-tơ điện để biết mình đã xài bao nhiêu, khỏi bị "cúp" giữa tháng. Trang **Plan & usage** trên GitHub.com cho bạn con số đã dùng, còn lại và ngày reset; Copilot CLI thì báo mức tiêu theo từng model trong phiên.
 
-Một fact cần nhớ: từ 01/06/2026 Copilot tính theo mô hình **AI Credits** — **1 credit = $0.01**, tính **per-token** theo bảng giá từng model. Code completion và next edit suggestions **không** trừ credit, không giới hạn trên các plan trả phí.
+Một fact cần nhớ: từ 01/06/2026 Copilot tính theo mô hình **AI Credits** — **1 credit = $0.01**, tính **per-token** theo bảng giá từng model. Code completion và next edit suggestions **không** trừ credit, không giới hạn trên các plan trả phí. · 📄 [VS Code Docs: Agents (concept)](https://code.visualstudio.com/docs/agents/concepts/agents)
 
 ## Vì sao phải theo dõi AI Credits?
 
@@ -19,26 +19,26 @@ Hết credit giữa tháng thường không phải "xui" — nó là hệ quả 
 | Bảng tổng kết phiên theo model | Copilot CLI | model nào đang ngốn credit trong phiên này |
 | `--max-ai-credits` · `/limits` | Copilot CLI | soft cap cho **lượt trả lời tiếp theo** (cap cả phiên: `--max-session-credits`) |
 
-> **Cấu trúc plan:** cá nhân có Free / Pro / Pro+ / **Max**; enterprise dùng **Bundled AI credits budget** kèm tuỳ chọn *"Stop usage when budget limit is reached"*. Code review tính theo **review effort** (Lite / Balanced / Max) chứ không còn hệ số trừ theo đơn vị gọi hàng như tài liệu cũ — đây là lý do mọi bảng "1 request = 1 đơn vị" trong các khoá cũ đều đã lỗi thời.
+> **Cấu trúc plan:** cá nhân có Free / Pro / Pro+ / **Max**; enterprise dùng **Bundled AI credits budget** kèm tuỳ chọn *"Stop usage when budget limit is reached"*. Code review tính theo **review effort** (Lite / Balanced / Max) chứ không còn hệ số trừ theo đơn vị gọi hàng như tài liệu cũ — đây là lý do mọi bảng "1 request = 1 đơn vị" trong các khoá cũ đều đã lỗi thời. · 📄 [VS Code Docs: Agents (concept)](https://code.visualstudio.com/docs/agents/concepts/agents)
 
 **Nếu làm sai thì sao?** Coi mọi báo lỗi là bug và mở issue thì bạn tốn thời gian cho một việc chỉ cần đổi model hoặc chờ reset. Ngược lại, coi "hết credit" là chuyện nhỏ rồi cứ đẩy task khó lên model mạnh thì hết tháng là tay trắng.
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** đầu tuần muốn biết còn bao nhiêu; gặp báo quota exhausted; cuối tháng rút kinh nghiệm phân bổ; trước khi fan-out nhiều session agent.
-- **ĐỪNG dùng như chẩn đoán lỗi:** thấy error mà chưa đọc kỹ message thì đừng kết luận là quota.
+- **ĐỪNG dùng như chẩn đoán lỗi:** thấy error mà chưa đọc kỹ message thì đừng kết luận là quota. · 📄 [VS Code Docs: Pick the right tool](https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task)
 
 ## Cách gọi (copy-paste)
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
-> Không thấy số liệu? Đăng nhập đúng account GitHub đang dùng Copilot, rồi mở `github.com/settings/copilot` → Usage làm chuẩn; dashboard có độ trễ so với phiên vừa chạy.
+> Không thấy số liệu? Đăng nhập đúng account GitHub đang dùng Copilot, rồi mở `github.com/settings/copilot` → Usage làm chuẩn; dashboard có độ trễ so với phiên vừa chạy. · 📄 [GitHub Docs: Models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)
 
 ## Ví dụ thật
 
 Nghiệp vụ: bạn đang giữa sprint, tự trả tiền theo usage, và sắp giao một loạt task agent. Trước khi fan-out, kiểm tra công-tơ.
 
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Crafting effective prompts](https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts)
 
 **Kết quả mong đợi:** biết con số đã dùng/còn lại + ngày reset, từ đó quyết được "tiết kiệm hay xả" cho phần còn lại của tháng.
 
@@ -52,11 +52,13 @@ Nghiệp vụ: bạn đang giữa sprint, tự trả tiền theo usage, và sắ
 
 **✅ ĐÚNG — đọc kỹ message rồi tra công-tơ trước:**
 
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
+> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh) · 📄 [VS Code Docs: Choose a troubleshooting path](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path)
 
 **Bài học:** "Hết credit" và "model lỗi" là hai ca khác nhau. Tra công-tơ trước khi kết luận, khỏi mở ticket sai.
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: Reached the AI credits limit](https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#i-reached-my-inline-suggestions-or-ai-credits-limit)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
@@ -64,26 +66,26 @@ Nghiệp vụ: bạn đang giữa sprint, tự trả tiền theo usage, và sắ
 | Không biết ai xài nhiều (team) | Thiếu theo dõi org | Admin xem budget/seats + audit log trên GitHub.com |
 | Nhầm credit với bug | Báo error là tưởng hỏng | Đọc message: quota exhausted vs model unavailable khác nhau |
 | Nghĩ completion tốn tiền | Tin tài liệu cũ "mọi request trừ quota" | Docs: completion & next edit suggestions không billed by credits |
-
 ## So sánh với Claude Code
+
+📄 [GitHub Docs: Usage limits](https://docs.github.com/en/copilot/concepts/billing-and-usage/individuals/usage-limits)
 
 | Việc | Copilot (AI Credits) | Claude Code | Ghi chú |
 |---|---|---|---|
 | Xem đã tiêu | Dashboard `github.com/settings/copilot`; CLI `/limits` theo model trong phiên | Tiện ích báo chi phí theo phiên | Copilot dùng đơn vị credit dùng chung cho mọi surface |
 | Đơn vị tính | AI Credits (1 credit = $0.01), per-token | Token / chi phí phiên | Cơ chế khác, cùng phải đo mới kiểm soát được |
 | Completions miễn phí | Code completion không trừ credit (plan trả phí) | Không có autocomplete truyền thống như Copilot | Điểm Copilot lợi thế ở gõ code từng dòng |
-
 ## Best practices (kèm "vì sao")
 
 - **Xem công-tơ đầu tuần và cuối tháng.** *Vì sao?* Thấy xu hướng sớm thì kịp chỉnh thói quen, thay vì cháy túi rồi mới tiếc.
 - **Đặt mặc định là model rẻ.** *Vì sao?* Phần lớn lượt chat là việc nhẹ; chỉ một số ít cần model mạnh, mà giá chênh rất nhiều.
 - **Giao task lớn thì đặt cap bằng `--max-ai-credits`/`/limits`.** *Vì sao?* Cap mềm theo lượt giúp một session chạy sai hướng không kéo hết credit của tháng.
-- **Phân biệt quota vs model lỗi trước khi báo admin.** *Vì sao?* Đọc message mất 10 giây; mở ticket sai mất cả buổi của bạn và admin.
+- **Phân biệt quota vs model lỗi trước khi báo admin.** *Vì sao?* Đọc message mất 10 giây; mở ticket sai mất cả buổi của bạn và admin. · 📄 [VS Code Docs: Monitor your usage](https://code.visualstudio.com/docs/agents/guides/optimize-usage#monitor-your-usage)
 
 ## Bài tập nhỏ
 
 1. **(3 phút)** Mở `github.com/settings/copilot`, ghi lại con số hiện tại trước khi làm một task dài.
-2. **(5 phút)** Làm một task agent dài rồi quay lại dashboard, xem nó tiêu tốn bao nhiêu và bằng model nào.
+2. **(5 phút)** Làm một task agent dài rồi quay lại dashboard, xem nó tiêu tốn bao nhiêu và bằng model nào. · 📄 [GitHub Docs: Models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)
 
 ## Tham khảo
 

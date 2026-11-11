@@ -35,7 +35,7 @@ Vấn đề 2 — Đi sai đường: agent sửa 15 turn vẫn sai, càng sửa 
 > **Vì sao quan trọng?** Chọn sai lớp là hỏng kép: tin checkpoint thay commit thì mất mốc khi cache IDE bị dọn; tin worktree thay sandbox thì tưởng an toàn — docs VS Code ghi nguyên văn *"A Git worktree separates code changes, but is not a security boundary"* (chặn tool nguy hiểm là việc của sandbox + permissions, bài 10/16). Sai đường mà còn argue: 10 turn tốn 10+ lượt gọi model, `git restore` + chat mới gần như không mất thêm AI Credits.
 > **Nếu làm sai?** Ba nhầm kinh điển: checkpoint = commit, restore = hoàn tác được deploy, worktree = clone tốn disk — bảng ❌/✅ cuối bài sửa hết.
 
-> **Tóm gọn 1 câu:** Git là sổ cái, checkpoint là Ctrl+Z của phiên, worktree là phòng làm việc riêng — mỗi thứ một việc, đừng bắt nó đóng vai thứ khác.
+> **Tóm gọn 1 câu:** Git là sổ cái, checkpoint là Ctrl+Z của phiên, worktree là phòng làm việc riêng — mỗi thứ một việc, đừng bắt nó đóng vai thứ khác. · 📄 [VS Code Docs: Source Control Overview](https://code.visualstudio.com/docs/sourcecontrol/overview)
 
 ## 2. Checkpoints: 4 cơ chế trong VS Code
 
@@ -59,7 +59,7 @@ Docs VS Code (Review & Revert Changes · Get an agent back on track) mô tả h�
 
 > 📄 **Code ví dụ (4 cơ chế, copy-paste):** [`./examples/11-git-worktrees-checkpoints/checkpoints-4-co-che.sh`](./examples/11-git-worktrees-checkpoints/checkpoints-4-co-che.sh) · Tra nhanh: [commands/copilot/chat-session/checkpoints](commands/copilot/chat-session/checkpoints/README.md)
 
-> **Tóm gọn 1 câu:** Mốc tự động có sẵn cho mọi request — việc của bạn là biết mốc nào đáng về, và commit trước những việc mà mất là đau.
+> **Tóm gọn 1 câu:** Mốc tự động có sẵn cho mọi request — việc của bạn là biết mốc nào đáng về, và commit trước những việc mà mất là đau. · 📄 [VS Code Docs: Undo changes at the right scope](https://code.visualstudio.com/docs/agents/run/review-code-edits#undo-changes-at-the-right-scope)
 
 ## 3. Worktrees: 3 lệnh thuộc lòng
 
@@ -80,7 +80,7 @@ Dọn sau merge              → worktree tồn = branch tồn = nợ.
 - **Rẻ hơn clone:** worktree share `.git` objects, chỉ thêm working files; `git clone` copy cả `.git` nên tốn gấp 5–10 lần (verify: `du -sh ../myrepo-worktrees/feat-x`). Xong việc phải dọn — worktree tồn là nợ.
 - **Worktree đặt ngoài repo đang mở:** VS Code hỏi Workspace Trust lần đầu, session có thể báo permission error với folder lạ — approve đúng folder là xong, không phải hỏng.
 
-> 📄 **Code ví dụ (add/list/remove + dọn dẹp):** [`./examples/11-git-worktrees-checkpoints/worktrees-deep-dive-lenh-thuoc-long.sh`](./examples/11-git-worktrees-checkpoints/worktrees-deep-dive-lenh-thuoc-long.sh)
+> 📄 **Code ví dụ (add/list/remove + dọn dẹp):** [`./examples/11-git-worktrees-checkpoints/worktrees-deep-dive-lenh-thuoc-long.sh`](./examples/11-git-worktrees-checkpoints/worktrees-deep-dive-lenh-thuoc-long.sh) · 📄 [VS Code Docs: Create a worktree](https://code.visualstudio.com/docs/sourcecontrol/branches-worktrees#create-a-worktree)
 
 ## 4. Ba cách chạy song song
 
@@ -106,7 +106,7 @@ Fan-out chi tiết (nhiều agent/subagent một máy, chia scope, gộp kết q
 - Muốn 2 agent cùng bàn 1 vấn đề (thăm dò): shared session + `/fork` — không cần worktree.
 - Tình huống "1 người + N robot qua đêm" (assign cloud): xem mục 5 và bài 12 §6.
 
-> 📄 **Code ví dụ (A + B copy-paste):** [`./examples/11-git-worktrees-checkpoints/worktree-workflows-copy-paste.sh`](./examples/11-git-worktrees-checkpoints/worktree-workflows-copy-paste.sh)
+> 📄 **Code ví dụ (A + B copy-paste):** [`./examples/11-git-worktrees-checkpoints/worktree-workflows-copy-paste.sh`](./examples/11-git-worktrees-checkpoints/worktree-workflows-copy-paste.sh) · 📄 [VS Code Docs: Arrange sessions in a grid](https://code.visualstudio.com/docs/agents/run/agents-window#arrange-sessions-in-a-grid)
 
 ## 5. Branch strategy: `copilot/*` + branch protection + auth check
 
@@ -120,7 +120,7 @@ Trước khi giao việc hoặc merge, check 2 thứ — **branch protection + a
 - Review PR như PR của người: diff + Copilot code review + CI + 1 approve → merge → branch tự xoá (auto-delete ON).
 - Modes / permissions / environment của session cloud, giới hạn phút, chỗ đọc instructions/skills → [commands/cloud/model-agent/cloud-agent-session](commands/cloud/model-agent/cloud-agent-session/README.md) và bài 12 §6.
 
-> 📄 **Code ví dụ (theo dõi + checkout PR của agent về local test):** [`./examples/11-git-worktrees-checkpoints/branch-strategy-cua-coding-agent-copilot.sh`](./examples/11-git-worktrees-checkpoints/branch-strategy-cua-coding-agent-copilot.sh)
+> 📄 **Code ví dụ (theo dõi + checkout PR của agent về local test):** [`./examples/11-git-worktrees-checkpoints/branch-strategy-cua-coding-agent-copilot.sh`](./examples/11-git-worktrees-checkpoints/branch-strategy-cua-coding-agent-copilot.sh) · 📄 [VS Code Docs: Merge & publish branches](https://code.visualstudio.com/docs/sourcecontrol/branches-worktrees#merge-and-publish-branches)
 
 ## 6. Rewind: bảng quyết định 30 giây
 
@@ -134,7 +134,7 @@ Trước khi giao việc hoặc merge, check 2 thứ — **branch protection + a
 | Task đã commit/PR | PR #45 đã 2 người review | Không | `git revert` / PR mới — checkpoint là local only |
 | Agent cloud sai trên `copilot/*` | làm trái spec | Không | Comment redirect trên PR / close + delete branch |
 
-Cột "Rewind?" là chốt hạ: chưa commit thì rewind càng sớm càng rẻ; đã commit/push thì mọi "undo" đi đường git (`git revert` / PR mới) — checkpoint không với tới.
+Cột "Rewind?" là chốt hạ: chưa commit thì rewind càng sớm càng rẻ; đã commit/push thì mọi "undo" đi đường git (`git revert` / PR mới) — checkpoint không với tới. · 📄 [VS Code Docs: Recover unwanted changes](https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#recover-unwanted-changes)
 
 ## 7. 6 gotchas vận hành (ai cũng vấp ít nhất 1 lần)
 
@@ -147,7 +147,7 @@ Cột "Rewind?" là chốt hạ: chưa commit thì rewind càng sớm càng rẻ
 | Mở 2 worktrees trong 1 cửa sổ editor | Mỗi worktree 1 window riêng; window title theo `${rootName}` khỏi nhầm phòng |
 | Agent đi sai mà vẫn argue 10 turn | Sai 2 lần → restore + chat mới, rẻ hơn argue cả bằng AI Credits lẫn buổi làm việc |
 
-> 📄 **Code ví dụ:** [`./examples/11-git-worktrees-checkpoints/gotchas-pitfalls.sh`](./examples/11-git-worktrees-checkpoints/gotchas-pitfalls.sh)
+> 📄 **Code ví dụ:** [`./examples/11-git-worktrees-checkpoints/gotchas-pitfalls.sh`](./examples/11-git-worktrees-checkpoints/gotchas-pitfalls.sh) · 📄 [VS Code Docs: Git troubleshooting](https://code.visualstudio.com/docs/sourcecontrol/troubleshooting)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -158,14 +158,14 @@ Cột "Rewind?" là chốt hạ: chưa commit thì rewind càng sớm càng rẻ
 | Tin "worktree = clone tốn disk gấp đôi" rồi né worktree | 2 session đè file nhau, conflict mỗi chiều | Worktree share `.git`, nhẹ hơn clone 5–10× — cứ ở phòng riêng |
 | Push tay vào `copilot/*` của agent | Xung đột không truy vết được, agent ghi đè lại | Muốn sửa: comment trên PR, hoặc checkout branch mở PR riêng |
 
-**Bài học:** công cụ nào đúng lớp công cụ đó — checkpoint cứu phiên, git cứu code, worktree cứu không gian, PR cứu quyền.
+**Bài học:** công cụ nào đúng lớp công cụ đó — checkpoint cứu phiên, git cứu code, worktree cứu không gian, PR cứu quyền. · 📄 [VS Code Docs: Undo changes at the right scope](https://code.visualstudio.com/docs/agents/run/review-code-edits#undo-changes-at-the-right-scope)
 
 ## Best practices
 
 - **Commit trước mỗi request mạo hiểm.** *Vì sao:* checkpoint là session state trên máy bạn; commit là code state bền — mắc lưới kép rẻ hơn mất trắng.
 - **Task song song = worktree riêng, không ngoại lệ.** *Vì sao:* tách hội thoại không tách file — hai chat cùng folder vẫn sửa đè nhau (docs nhấn mạnh).
 - **Sai 2 lần → restore + chat mới.** *Vì sao:* prompt sạch + context ngắn rẻ hơn 10 turn argue cả về AI Credits lẫn độ chính xác.
-- **Gắn tên / khoanh phạm vi mốc trước khi fork.** *Vì sao:* session dài có nhiều mốc gần nhau, restore nhầm là xóa oan phần tốt (mục 2 — name a checkpoint).
+- **Gắn tên / khoanh phạm vi mốc trước khi fork.** *Vì sao:* session dài có nhiều mốc gần nhau, restore nhầm là xóa oan phần tốt (mục 2 — name a checkpoint). · 📄 [VS Code Docs: Clean up session worktrees](https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#clean-up-session-worktrees)
 
 ## Bài tập
 

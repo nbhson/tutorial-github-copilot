@@ -40,7 +40,7 @@ CÓ skill:    "deploy staging giúp" -> agent tự nạp .github/skills/deploy-c
 
 > **Vì sao quan trọng?** Nó biến "prompt dài" thành "tên gọi ngắn": viết một lần, cả team dùng chung một chuẩn, và cùng file đó chạy ở Copilot harness, CLI, Copilot app, cloud agent (và cả Claude Code/Codex — chỉ khác thư mục đặt).
 > **Nếu làm sai?** `description` chung chung → skill **không bao giờ được tự nạp**, bạn tưởng nó hỏng; sai `name` → skill **âm thầm không load**, không báo lỗi.
-> **Tóm gọn 1 câu:** Skill = sổ tay nghề có nhãn "dùng khi nào"; nhãn sai thì sách hay mấy cũng nằm im trên kệ.
+> **Tóm gọn 1 câu:** Skill = sổ tay nghề có nhãn "dùng khi nào"; nhãn sai thì sách hay mấy cũng nằm im trên kệ. · 📄 [VS Code Docs: Skills vs instructions](https://code.visualstudio.com/docs/agent-customization/agent-skills#agent-skills-vs-custom-instructions)
 
 ## 2. Skill khác instructions, khác agent, khác plugin ở đâu
 
@@ -55,7 +55,7 @@ Bạn nói/gõ → Việc gì?
 
 Docs GitHub chốt: **instructions** cho chỉ dẫn đơn giản áp cho mọi task; **skills** cho chỉ dẫn chi tiết mà Copilot chỉ nên đọc khi thật sự relevant. ⚠️ **Chỗ hay vấp:** ở **Copilot harness**, skill quản lý bằng **Agent Customizations editor** (mục 4); slash `/skills` và `/create-skill` **chỉ tồn tại ở Local harness** — gõ trong session Copilot sẽ không thấy.
 
-> **Tóm gọn 1 câu:** Luật nền → instructions; quy trình lặp → skill; chân dung người làm → agent; gói để chia sẻ → plugin. 📄 File thật của từng loại: [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`templates/.github/agents/tester.agent.md`](../templates/.github/agents/tester.agent.md) · [`./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh`](./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh)
+> **Tóm gọn 1 câu:** Luật nền → instructions; quy trình lặp → skill; chân dung người làm → agent; gói để chia sẻ → plugin. 📄 File thật của từng loại: [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`templates/.github/agents/tester.agent.md`](../templates/.github/agents/tester.agent.md) · [`./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh`](./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh) · 📄 [VS Code Docs: Customization building blocks](https://code.visualstudio.com/docs/agents/concepts/customization#customization-building-blocks)
 
 ## 3. Giải phẫu `SKILL.md`
 
@@ -90,7 +90,7 @@ description: >                  # bat buoc: "lam gi" + "khi nao dung"
 
 **Thân file:** markdown tự do, docs gợi ý đúng 4 khối: *làm gì · khi nào dùng · các bước · output mẫu*. Reference file bằng **link markdown hoặc `#file:`** với đường dẫn **tương đối tới `SKILL.md`**, dùng `/` cho port. Kèm **script đã verify** (`scripts/migrate.sh`, `chmod +x`) thì chắc tay hơn để agent "tự nhớ" lệnh dài — mẫu: [`./examples/05-agent-skills-reusable-workflows/mau-b-skill-add-table-script.sh`](./examples/05-agent-skills-reusable-workflows/mau-b-skill-add-table-script.sh). **Docs của skill không khai báo biến nội suy nào** — `${input:...}`/`${selection}` là cú pháp của **prompt files** (Local harness), `${workspaceFolder}` là của tasks; `SKILL.md` chỉ nhận phần bạn viết sau lệnh: `/deploy-checklist staging, bỏ qua smoke test`.
 
-> **Tóm gọn 1 câu:** `name` để hệ thống tìm, `description` để agent quyết định, thân file để làm đúng — thiếu một trong ba là skill vô dụng.
+> **Tóm gọn 1 câu:** `name` để hệ thống tìm, `description` để agent quyết định, thân file để làm đúng — thiếu một trong ba là skill vô dụng. · 📄 [VS Code Docs: SKILL.md file format](https://code.visualstudio.com/docs/agent-customization/agent-skills#skillmd-file-format)
 
 ## 4. Tạo skill: Copilot harness làm qua editor
 
@@ -107,7 +107,7 @@ description: >                  # bat buoc: "lam gi" + "khi nao dung"
 | **Copilot** (VS Code session mặc định, CLI, Copilot app, cloud agent) | `.github/skills/` (docs GitHub đọc thêm `.claude/skills/`, `.agents/skills/`) | `~/.copilot/skills/` hoặc `~/.agents/skills/` — muốn cloud sandbox thấy thì đưa vào **dotfiles repo** ở `.copilot/skills/` (**không áp dụng** session GitHub Actions) |
 | **Local** (VS Code) | `.github/skills/` — docs VS Code ghi thêm `.claude/skills/`, `.agents/skills/` | `~/.copilot/skills/` — docs VS Code ghi thêm `~/.claude/skills/`, `~/.agents/skills/` |
 
-> Docs VS Code: trùng `name` giữa các workspace root thì **root chính thắng**; **Local harness không có trong Agents window** (ở Chat view phải bật `chat.editor.localAgent.enabled`, Copilot là mặc định), và Session Target **chỉ liệt kê harness nào đủ điều kiện** — không thấy lựa chọn là chưa đủ điều kiện, không phải tính năng bị bỏ.
+> Docs VS Code: trùng `name` giữa các workspace root thì **root chính thắng**; **Local harness không có trong Agents window** (ở Chat view phải bật `chat.editor.localAgent.enabled`, Copilot là mặc định), và Session Target **chỉ liệt kê harness nào đủ điều kiện** — không thấy lựa chọn là chưa đủ điều kiện, không phải tính năng bị bỏ. · 📄 [VS Code Docs: Generate a skill with AI](https://code.visualstudio.com/docs/agent-customization/agent-skills#generate-a-skill-with-ai)
 
 ## 5. Gọi skill: bằng tay hay để agent tự giác
 
@@ -122,7 +122,7 @@ Type `/` trong ô chat → skill hiện cùng danh sách lệnh, và phần bạ
 
 Skill đóng gói trong **Agent Plugin** bị đặt tiền tố tự động: `/my-plugin:test-runner`. Đừng tự nhét `myorg/` hay `myorg:` vào `name` — docs ghi rõ **skill sẽ âm thầm không load**. Muốn **Copilot code review** chắc chắn đọc skill: đặt tên thư mục `code-review` (docs GitHub).
 
-> **Tóm gọn 1 câu:** Mặc định để cả hai cửa cùng mở; skill nào chạm production thì `disable-model-invocation: true`.
+> **Tóm gọn 1 câu:** Mặc định để cả hai cửa cùng mở; skill nào chạm production thì `disable-model-invocation: true`. · 📄 [VS Code Docs: How Copilot uses skills](https://code.visualstudio.com/docs/agent-customization/agent-skills#how-copilot-uses-skills)
 
 ## 6. Verify skill (đừng bỏ qua bước này)
 
@@ -130,7 +130,7 @@ Ba kiểm tra của docs VS Code, làm theo thứ tự trong session **mới**, 
 
 1. Gõ `/` → skill có trong menu? Không → sai `name`/tên thư mục, hoặc skill đặt ở đường dẫn harness đó không đọc (mục 4).
 2. Có trong menu → **gõ tay** `/ten-skill <việc nhỏ>`, xem tool activity + kết quả có đi đúng steps không.
-3. Muốn agent **tự nạp** → test **tách riêng** bằng câu nói khớp description. Menu liệt kê ≠ agent sẽ chọn — docs nói rõ discovery không đảm bảo selection. Không tự nạp gần như luôn do `description` thiếu từ khoá bạn thật sự nói.
+3. Muốn agent **tự nạp** → test **tách riêng** bằng câu nói khớp description. Menu liệt kê ≠ agent sẽ chọn — docs nói rõ discovery không đảm bảo selection. Không tự nạp gần như luôn do `description` thiếu từ khoá bạn thật sự nói. · 📄 [VS Code Docs: Verify a skill](https://code.visualstudio.com/docs/agent-customization/agent-skills#verify-a-skill)
 
 ## 7. Lấy skill có sẵn: `gh skill`
 
@@ -147,7 +147,7 @@ gh skill publish --dry-run                        # validate theo agentskills.io
 
 `gh skill install` tự để vào đúng thư mục cho harness (mặc định Copilot, project scope) và ghi **provenance metadata** (repo, ref, tree SHA) vào frontmatter để `update` sau này.
 
-> ⚠️ Docs cảnh báo nguyên văn: *"Skills are not verified by GitHub and may contain prompt injections, hidden instructions, or malicious scripts"* — luôn `gh skill preview` trước khi cài, và chỉ đặt `allowed-tools: shell` khi bạn **đã đọc hết script** trong skill đó.
+> ⚠️ Docs cảnh báo nguyên văn: *"Skills are not verified by GitHub and may contain prompt injections, hidden instructions, or malicious scripts"* — luôn `gh skill preview` trước khi cài, và chỉ đặt `allowed-tools: shell` khi bạn **đã đọc hết script** trong skill đó. · 📄 [VS Code Docs: Use an existing skill](https://code.visualstudio.com/docs/agent-customization/agent-skills#use-an-existing-skill)
 
 Trong VS Code: **Customizations editor → Browse → GitHub Feed** (experimental, tìm theo `@type:skill`), và plugin marketplace (`gh copilot plugin marketplace add`) chứa skill đóng gói — chi tiết ở bài 17. 📄 Mẫu cây skill + SKILL.md: [`templates/.github/skills/review-pr/`](../templates/.github/skills/review-pr/) · script tạo skill đầu tay: [`./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh`](./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh).
 
@@ -160,7 +160,7 @@ Prompt file vẫn hợp lệ ở Local harness, nhưng chỉ chạy ở đó —
 3. Mất gì khi port: docs migrate ghi rõ 3 field của prompt file **không** map sang → `agent`, `model`, `tools` (muốn buộc persona → custom agent bài 06; muốn siết tool → permissions bài 10).
 4. Test xong (mục 6) mới xoá file cũ.
 
-> 📄 Các bước copy-paste: [`./examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh`](./examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh)
+> 📄 Các bước copy-paste: [`./examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh`](./examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh) · 📄 [VS Code Docs: Convert prompt files to skills](https://code.visualstudio.com/docs/agent-customization/migrate-customizations#convert-prompt-files-to-skills)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -176,7 +176,7 @@ Prompt file vẫn hợp lệ ở Local harness, nhưng chỉ chạy ở đó —
 - **Một skill = một việc.** *Vì sao:* description càng hẹp, xác suất agent chọn đúng càng cao, và mức 3 (resources) không bị nạp oan.
 - **Câu đầu `description` liệt kê từ khoá user thật nói.** *Vì sao:* đó là tín hiệu duy nhất ở mức discovery.
 - **Commit skill vào `.github/skills/`, đừng chỉ để `~/.copilot/`.** *Vì sao:* personal skill chỉ mình bạn thấy — chuẩn team chết ngay khi bạn nghỉ.
-- **Đừng bắt đầu bằng plugin.** *Vì sao:* skill lẻ copy được sang repo thứ 2; plugin chỉ đáng khi bạn chép tay sang repo thứ 3 (bài 17).
+- **Đừng bắt đầu bằng plugin.** *Vì sao:* skill lẻ copy được sang repo thứ 2; plugin chỉ đáng khi bạn chép tay sang repo thứ 3 (bài 17). · 📄 [VS Code Docs: Agent Skills common issues](https://code.visualstudio.com/docs/agent-customization/agent-skills#common-issues)
 
 ## Bài tập
 

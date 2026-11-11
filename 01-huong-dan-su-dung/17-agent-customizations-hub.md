@@ -27,7 +27,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 
 > **Vì sao quan trọng?** Lỗi phổ biến nhất của customizations không phải viết sai mà là **đặt chỗ harness không đọc**: file tồn tại, agent không thấy, không báo lỗi. Editor giải một màn hình câu "agent đang đọc gì", kèm syntax highlighting + validation — tạo file trong editor thay vì viết tay ngoài.
 > **Nếu làm sai?** Chọn nhầm harness trước khi tạo → format + vị trí sai (như gửi thư sai bưu cục); cài plugin lạ mà không đọc "hộp" → âm thầm mang theo hooks + MCP chạy code trên máy bạn.
-> **Tóm gọn 1 câu:** Editor = bảng điện tổng: thấy gì là thấy theo harness đang chọn — chọn sai harness là thấy sai hết.
+> **Tóm gọn 1 câu:** Editor = bảng điện tổng: thấy gì là thấy theo harness đang chọn — chọn sai harness là thấy sai hết. · 📄 [VS Code Docs: Choose how to customize](https://code.visualstudio.com/docs/agent-customization/overview#choose-how-to-customize)
 
 ## 2. Mở editor & đọc theo harness
 
@@ -48,7 +48,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 > - Agent Plugins và Connectors: không có ở Local harness.
 > - Customizations user-level sống trong VS Code profile storage → phải migrate sang `~/.copilot/` (§7).
 
-> 📄 Các bước mở + kiểm editor theo harness: [`./examples/17-agent-customizations-hub/open-customizations-editor.sh`](./examples/17-agent-customizations-hub/open-customizations-editor.sh)
+> 📄 Các bước mở + kiểm editor theo harness: [`./examples/17-agent-customizations-hub/open-customizations-editor.sh`](./examples/17-agent-customizations-hub/open-customizations-editor.sh) · 📄 [VS Code Docs: Agent Customizations editor](https://code.visualstudio.com/docs/agent-customization/overview#agent-customizations-editor)
 
 ## 3. Customize Your Agent: mô tả → draft
 
@@ -62,7 +62,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
   theo version -> mở editor validate, xem References, rồi mới commit qua PR.
   (📄 [`./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh`](./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh) — tạo skill/agent khớp cấu trúc [`templates/.github/`](../templates/.github/))
 ```
-
+📄 [VS Code Docs: Create a custom agent](https://code.visualstudio.com/docs/agent-customization/custom-agents#create-a-custom-agent)
 ## 4. Các card trong editor — mỗi card đúng 4 dòng
 
 ### 4.1. Plugins — hộp cơm đóng sẵn (bài này là chủ)
@@ -72,49 +72,49 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 - **Marketplace = một Git repo** có mô tả ở `.github/plugin/marketplace.json`; `awesome-copilot` là built-in không remove được, `copilot-plugins` phải thêm manual: `copilot plugin marketplace add github/copilot-plugins`.
 - **`/plugin list|install|update|enable|disable|uninstall|marketplace add|browse|update|remove` chỉ chạy trong Copilot harness session**; plugin cài vào `~/.copilot/installed-plugins/<MARKETPLACE>/<PLUGIN>`, bật/tắt bằng `chat.plugins.enabled`.
 - Skill từ plugin khi gọi bị đặt namespace: `/plugin:skill` (bài 05); tắt plugin = sạch bộ skill/agent/MCP nó mang theo.
-- Đọc "hộp" trước khi tin: duyệt repo chứa plugin, kiểm phần mang code thực thi (hooks/MCP) — chợ nổi tiếng ≠ từng plugin an toàn; walkthrough ở [`./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh`](./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh).
+- Đọc "hộp" trước khi tin: duyệt repo chứa plugin, kiểm phần mang code thực thi (hooks/MCP) — chợ nổi tiếng ≠ từng plugin an toàn; walkthrough ở [`./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh`](./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh). · 📄 [VS Code Docs: Plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins)
 
 ### 4.2. MCP Servers — cổng giao hàng
 
 - **Là gì:** server phơi tool nối agent với hệ ngoài (DB, API, issue tracker).
 - **File:** Copilot harness: `.mcp.json` ở gốc repo + `~/.copilot/mcp-config.json`; Local: `.vscode/mcp.json` (key `servers`; `${input:}` xác thực **không port** sang Copilot).
 - **Harness:** cả hai; **Connectors** (MCP do GitHub quản lý) chỉ cung cấp tool cho Copilot harness.
-- **Bài chủ:** **08** · [mcp](commands/copilot/system-knowledge/mcp/README.md) · [connector](commands/copilot/system-knowledge/connector/README.md) · [.vscode/mcp.json](commands/local/system-knowledge/vscode-mcp-json/README.md) · 📄 [`templates/.mcp.json`](../templates/.mcp.json) + [`01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (Local).
+- **Bài chủ:** **08** · [mcp](commands/copilot/system-knowledge/mcp/README.md) · [connector](commands/copilot/system-knowledge/connector/README.md) · [.vscode/mcp.json](commands/local/system-knowledge/vscode-mcp-json/README.md) · 📄 [`templates/.mcp.json`](../templates/.mcp.json) + [`01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (Local). · 📄 [VS Code Docs: Add and Use MCP Servers](https://code.visualstudio.com/docs/agent-customization/mcp-servers)
 
 ### 4.3. Skills — công thức món khó
 
 - **Là gì:** quy trình nhiều bước theo từng việc, chuẩn mở agentskills.io; prompt khớp `description` thì agent tự nạp.
 - **File:** project `.github/skills/<ten>/SKILL.md` (`name` = tên thư mục); cá nhân `~/.copilot/skills/`; Local đọc thêm `.claude/skills/`, `.agents/skills/`.
 - **Harness:** chạy ở mọi harness: Copilot · Local · CLI · cloud agent; prompt files `.prompt.md` — chỉ Local.
-- **Bài chủ:** **05** · [agent-skill](commands/copilot/system-knowledge/agent-skill/README.md) · 📄 [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh`](./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh).
+- **Bài chủ:** **05** · [agent-skill](commands/copilot/system-knowledge/agent-skill/README.md) · 📄 [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh`](./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh). · 📄 [VS Code Docs: Agent Skills](https://code.visualstudio.com/docs/agent-customization/agent-skills)
 
 ### 4.4. Instructions — nội quy bếp
 
 - **Là gì:** quy tắc nên tuân ở mọi chat; model **có thể quên** — việc bắt buộc chạy thì đưa xuống hook.
 - **File:** `.github/copilot-instructions.md` hoặc `AGENTS.md`; nhắm đường dẫn: `.github/instructions/*.instructions.md` + `applyTo`; cá nhân `~/.copilot/instructions/`.
 - **Harness:** cả hai; thứ tự nạp **khác nhau theo harness** — không có luật "file cao nhất thắng" toàn vũ trụ.
-- **Bài chủ:** **03** · [instructions](commands/copilot/system-knowledge/instructions/README.md) · 📄 [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) + [`backend-api.instructions.md`](../templates/.github/instructions/backend-api.instructions.md).
+- **Bài chủ:** **03** · [instructions](commands/copilot/system-knowledge/instructions/README.md) · 📄 [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) + [`backend-api.instructions.md`](../templates/.github/instructions/backend-api.instructions.md). · 📄 [VS Code Docs: Instructions](https://code.visualstudio.com/docs/agent-customization/custom-instructions)
 
 ### 4.5. Agents — đầu bếp chuyên món
 
 - **Là gì:** persona gói instructions + tool (+ model) thành vai trò gọi lặp lại.
 - **File:** `.github/agents/<TEN>.agent.md` (hoặc `.md`); cá nhân `~/.copilot/agents/`; user agent của Local nằm trong VS Code profile storage → phải migrate.
 - **Harness:** cả hai; built-in Ask/Plan/Agent là chuyện khác (bài 02 §3).
-- **Bài chủ:** **06** · [custom-agent](commands/copilot/model-agent/custom-agent/README.md) — 📄 3 agent mẫu: [`templates/.github/agents/`](../templates/.github/agents/).
+- **Bài chủ:** **06** · [custom-agent](commands/copilot/model-agent/custom-agent/README.md) — 📄 3 agent mẫu: [`templates/.github/agents/`](../templates/.github/agents/). · 📄 [VS Code Docs: Custom Agents](https://code.visualstudio.com/docs/agent-customization/custom-agents)
 
 ### 4.6. Hooks — chuông báo cháy tự động
 
 - **Là gì:** code chạy **tất định** tại sự kiện vòng đời (`PreToolUse` chặn trước khi chạy lệnh, `PostToolUse` format sau khi sửa…) — không phụ thuộc model có nhớ không.
 - **File:** `.github/hooks/*.json` + `~/.copilot/hooks/`; schema `{"version":1,"hooks":{"<Event>":[{type, command, matcher, timeoutSec}]}}`, lọc bằng `matcher` (regex).
 - **Harness:** chạy ở **Copilot CLI + Copilot in the cloud** (một subset event; docs GitHub còn chấp nhận PascalCase alias); trong editor VS Code là Preview; không auto-convert sang harness khác.
-- **Bài chủ:** **07** (event, payload, ví dụ chặn lệnh nguy hiểm).
+- **Bài chủ:** **07** (event, payload, ví dụ chặn lệnh nguy hiểm). · 📄 [VS Code Docs: Hooks](https://code.visualstudio.com/docs/agent-customization/hooks)
 
 ### 4.7. Tools — dao thớt được phép cầm
 
 - **Là gì:** từng tool agent được cầm: built-in (đọc/sửa/terminal/search) · từ MCP server · từ extension.
 - **Ở đâu:** tab **Tools** trong editor; selection **lưu theo harness** — chọn ở harness này, harness kia không chạy theo.
 - **Harness:** tool names **phụ thuộc harness**; `#` trong ô chat để browse tools/context; tool do extension cung cấp cần editor window đang kết nối.
-- **Bật ≠ auto-approve:** bật là cho agent *thấy*; chạy được hay không do permission level quyết — **bài 10** · [policy-approval](commands/copilot/model-agent/policy-approval/README.md).
+- **Bật ≠ auto-approve:** bật là cho agent *thấy*; chạy được hay không do permission level quyết — **bài 10** · [policy-approval](commands/copilot/model-agent/policy-approval/README.md). · 📄 [VS Code Docs: Manage available tools](https://code.visualstudio.com/docs/agents/run/tools#manage-available-tools)
 
 ## 5. Cần gì → dùng gì (bảng quyết định)
 
@@ -130,14 +130,14 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 | Muốn bộ tuỳ biến đóng gói cho nhiều repo | Cài/tạo **Plugin** | bài này §4.1 |
 | Tool quá nhiều / không đúng | Rà tab **Tools** | §4.7 · 10 |
 
-> **Cách đọc bảng này:** cột trái là triệu chứng bạn đang gặp, cột phải là thay đổi nhỏ nhất nên thử trước khi thêm bất cứ gì. **Luật tầng:** instructions/skills *dẫn dắt* (model có thể quên); hooks chạy *tất định*; agents gói persona; MCP/tools thêm khả năng; plugins để phân phối. Việc bắt buộc → hook; gợi ý → instructions.
+> **Cách đọc bảng này:** cột trái là triệu chứng bạn đang gặp, cột phải là thay đổi nhỏ nhất nên thử trước khi thêm bất cứ gì. **Luật tầng:** instructions/skills *dẫn dắt* (model có thể quên); hooks chạy *tất định*; agents gói persona; MCP/tools thêm khả năng; plugins để phân phối. Việc bắt buộc → hook; gợi ý → instructions. · 📄 [VS Code Docs: Cheat Sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet)
 
 ## 6. Voice + Dictation
 
 - **Voice Mode:** hội thoại hai chiều bằng giọng nói với agent — **experimental**, `feature(voice-mode)`; bật ở card Voice của editor; cần mic.
 - **Dictation:** nói → chèn text vào ô prompt — **built-in** ở ô chat; bản cleanup bằng LLM (experimental) rất hợp prompt tiếng Việt dài kèm tên biến tiếng Anh.
 - File kiểu nói riêng: cá nhân `~/.copilot/voice.md`, `~/.copilot/dictation.md`; repo `.github/voice.md`, `.github/dictation.md`.
-- Voice/Dictation là **kênh giao tiếp**, không phải tuỳ biến hành vi agent — muốn đổi "cách nó trả lời" thì về Instructions (03). Tính năng experimental có thể không có trên harness/plan của bạn: không thấy card thì đừng đi mò setting của bản cũ. 📄 Mở editor để bật card Voice: [`./examples/17-agent-customizations-hub/open-customizations-editor.sh`](./examples/17-agent-customizations-hub/open-customizations-editor.sh).
+- Voice/Dictation là **kênh giao tiếp**, không phải tuỳ biến hành vi agent — muốn đổi "cách nó trả lời" thì về Instructions (03). Tính năng experimental có thể không có trên harness/plan của bạn: không thấy card thì đừng đi mò setting của bản cũ. 📄 Mở editor để bật card Voice: [`./examples/17-agent-customizations-hub/open-customizations-editor.sh`](./examples/17-agent-customizations-hub/open-customizations-editor.sh). · 📄 [VS Code Docs: Built-in dictation](https://code.visualstudio.com/docs/configure/accessibility/voice#use-built-in-dictation)
 
 ## 7. Migrate & verify "đã ngấm chưa"
 
@@ -155,7 +155,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 5. Governance — ai được cài gì, managed settings, plugin allowlist — bài 16 sở hữu; ở đây
    chỉ thuộc lòng: cài personal -> thử -> rồi mới đưa vào .github/ qua PR.
 ```
-
+📄 [VS Code Docs: Choose a migration path](https://code.visualstudio.com/docs/agent-customization/migrate-customizations#choose-a-migration-path)
 ## 8. So với Claude Code & Codex
 
 ```text
@@ -169,7 +169,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
   enterprise-managed settings là hai harness này bị chặn.
 ```
 
-> 📄 [`./examples/17-agent-customizations-hub/open-customizations-editor.sh`](./examples/17-agent-customizations-hub/open-customizations-editor.sh) (mở editor, đổi harness, kiểm file) · [`./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh`](./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh) (marketplace + cài plugin + đọc "hộp")
+> 📄 [`./examples/17-agent-customizations-hub/open-customizations-editor.sh`](./examples/17-agent-customizations-hub/open-customizations-editor.sh) (mở editor, đổi harness, kiểm file) · [`./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh`](./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh) (marketplace + cài plugin + đọc "hộp") · 📄 [VS Code Docs: Which customizations reach a session](https://code.visualstudio.com/docs/agents/concepts/customization#which-customizations-reach-a-session)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -181,14 +181,14 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 | Cài plugin lạ thẳng vào `.github/` cho cả team | Hook/MCP chạy code trên máy thành default của mọi người | Cài personal → đọc "hộp" plugin → đề xuất qua PR |
 | Bật tool là nghĩ agent được phép chạy | Hành động chạm production xảy ra ngoài ý | enabling ≠ auto-approve — permission level (bài 10) mới quyết |
 | Một file hook mong chạy giống nhau ở mọi harness | Event/payload khác nhau → hook âm thầm không chạy | Theo schema bài 07, verify trên harness sẽ chạy thật |
-
+📄 [VS Code Docs: Troubleshoot customization issues](https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues)
 ## Best practices
 
 - **Tạo file trong editor, đừng viết tay ngoài.** *Vì sao:* editor có highlighting + validation — bắt lỗi format trước khi nó thành "âm thầm không load".
 - **Đọc cấu trúc plugin trước khi cài: `skills/`, `mcp.json` gốc, `com.github.copilot/`.** *Vì sao:* plugin mang code thực thi; uy tín chợ ≠ an toàn từng plugin.
 - **Personal trước, team qua PR.** *Vì sao:* mọi thứ vào `.github/` thành hành vi của cả team — một customizations sai nhân bản lỗi đi khắp các phiên.
 - **Việc bắt buộc đưa xuống hook, gợi ý để instructions.** *Vì sao:* model có thể "quên" nội quy; hook chạy tất định theo event.
-- **Verify bằng References + diagnostics, không bằng "agent bảo đã hiểu".** *Vì sao:* tự báo cáo ≠ đã nạp thật; silent failure là bệnh đặc trưng của customizations.
+- **Verify bằng References + diagnostics, không bằng "agent bảo đã hiểu".** *Vì sao:* tự báo cáo ≠ đã nạp thật; silent failure là bệnh đặc trưng của customizations. · 📄 [VS Code Docs: Verify the improvement](https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-3-verify-the-improvement)
 
 ## Bài tập
 
@@ -204,7 +204,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 
 ## Reference
 
-- VS Code — [Customizing your agent (overview)](https://code.visualstudio.com/docs/agent-customization/overview) · [Agent Plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins) · [Tools](https://code.visualstudio.com/docs/agent-customization/tools) · [Hooks](https://code.visualstudio.com/docs/agent-customization/hooks) · [MCP servers](https://code.visualstudio.com/docs/agent-customization/mcp-servers) · [Migrate customizations](https://code.visualstudio.com/docs/agent-customization/migrate-customizations)
-- GitHub — [Agent skills (concept)](https://docs.github.com/en/copilot/concepts/customizations/agent-skills) · [About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent) (surfaces + hooks) · [Hooks reference](https://docs.github.com/en/copilot/reference/hooks-reference) · [Copilot docs](https://docs.github.com/en/copilot)
+- VS Code — [Customizing your agent (overview)](https://code.visualstudio.com/docs/agent-customization/overview) · [Agent Plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins) · [Tools](https://code.visualstudio.com/docs/agents/run/tools) · [Hooks](https://code.visualstudio.com/docs/agent-customization/hooks) · [MCP servers](https://code.visualstudio.com/docs/agent-customization/mcp-servers) · [Migrate customizations](https://code.visualstudio.com/docs/agent-customization/migrate-customizations)
+- GitHub — [Agent skills (concept)](https://docs.github.com/en/copilot/concepts/customizations/agent-skills) · [About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github) (surfaces + hooks) · [Hooks reference](https://docs.github.com/en/copilot/reference/hooks-reference) · [Copilot docs](https://docs.github.com/en/copilot)
 
 **Chốt:** editor là nơi "thấy đúng cái harness đang thấy" — chọn đúng harness trước khi tạo, đọc hộp plugin trước khi cài, verify bằng References trước khi commit; và thuộc bảng routing: luật → 03, quy trình → 05, vai trò → 06, sự kiện → 07, kết nối → 08, plugin và quản lý một màn hình → bài này.

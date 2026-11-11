@@ -1,0 +1,347 @@
+{
+  "_doc": "Map cac section tong ket (Lỗi thường gặp / Best practices / Pitfalls / So sánh / checklist) cua series 01, 02 va 2 section con sot cua README lenh -> dung trang docs theo chu de cua chinh section. Ap dung boi apply_doclinks.py.",
+  "m": [
+    [
+      "00-tong-quan-copilot",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#chat-features-arent-working-for-me",
+      "Chat features aren't working"
+    ],
+    [
+      "00-tong-quan-copilot",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task",
+      "Pick the right tool for the task"
+    ],
+    [
+      "01-cai-dat-va-xac-thuc",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#start-with-basic-checks",
+      "Start with basic checks"
+    ],
+    [
+      "01-cai-dat-va-xac-thuc",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/best-practices#apply-the-workflow-to-your-project",
+      "Apply the workflow to your project"
+    ],
+    [
+      "02-cac-be-mat-vscode-ide-web-cli",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#why-cant-i-see-a-copilot-session-i-already-started",
+      "Session not visible"
+    ],
+    [
+      "02-cac-be-mat-vscode-ide-web-cli",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/best-practices#choose-the-right-agent-harness",
+      "Choose the right agent harness"
+    ],
+    [
+      "03-instructions-memory-rules",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/custom-instructions#troubleshoot-instructions",
+      "Troubleshoot instructions"
+    ],
+    [
+      "03-instructions-memory-rules",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/best-practices#provide-the-right-context",
+      "Provide the right context"
+    ],
+    [
+      "04-chat-commands-toan-tap",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#debug-and-fix-problems",
+      "Debug and fix problems"
+    ],
+    [
+      "04-chat-commands-toan-tap",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/best-practices#write-effective-prompts",
+      "Write effective prompts"
+    ],
+    [
+      "05-agent-skills-reusable-workflows",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/agent-skills#common-issues",
+      "Agent Skills common issues"
+    ],
+    [
+      "06-custom-agents-parallel",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/custom-agents#troubleshoot-custom-agents",
+      "Troubleshoot custom agents"
+    ],
+    [
+      "06-custom-agents-parallel",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/run/subagents#when-to-use-subagents",
+      "When to use subagents"
+    ],
+    [
+      "07-policies-guardrails-tu-dong-hoa",
+      "## Lỗi thường gặp",
+      "https://docs.github.com/en/copilot/reference/enterprise-administrators/policy-conflicts",
+      "Policy conflicts"
+    ],
+    [
+      "07-policies-guardrails-tu-dong-hoa",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/run/security#recommended-security-baseline",
+      "Recommended security baseline"
+    ],
+    [
+      "08-mcp-ket-noi-cong-cu-ngoai",
+      "## 7. Copilot connectors",
+      "https://code.visualstudio.com/docs/agent-customization/copilot-connectors#connect-a-service",
+      "Connect a service"
+    ],
+    [
+      "08-mcp-ket-noi-cong-cu-ngoai",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#troubleshoot-mcp-servers",
+      "Troubleshoot MCP servers"
+    ],
+    [
+      "08-mcp-ket-noi-cong-cu-ngoai",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#review-trust-and-isolation",
+      "Review trust & isolation"
+    ],
+    [
+      "09-extensions-marketplaces",
+      "## 2. ⚠️ \"Copilot Extensions\"",
+      "https://docs.github.com/en/copilot/concepts/customizations/extensions",
+      "Copilot Extensions (concept)"
+    ],
+    [
+      "09-extensions-marketplaces",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/overview#repair-marketplace-installations",
+      "Repair marketplace installations"
+    ],
+    [
+      "09-extensions-marketplaces",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agent-customization/overview#discover-and-install-existing-customizations-preview",
+      "Discover and install existing customizations"
+    ],
+    [
+      "10-modes-permissions-availability",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#agents-are-not-available-in-chat",
+      "Agents are not available in Chat"
+    ],
+    [
+      "10-modes-permissions-availability",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/run/approvals#permission-levels",
+      "Permission levels"
+    ],
+    [
+      "11-git-worktrees-checkpoints",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/run/review-code-edits#undo-changes-at-the-right-scope",
+      "Undo changes at the right scope"
+    ],
+    [
+      "11-git-worktrees-checkpoints",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions#clean-up-session-worktrees",
+      "Clean up session worktrees"
+    ],
+    [
+      "12-copilot-sdk-ci-cd-automation",
+      "## Lỗi thường gặp",
+      "https://docs.github.com/en/copilot/how-tos/use-copilot-agents/cloud-agent/troubleshoot-cloud-agent",
+      "Troubleshoot cloud agent"
+    ],
+    [
+      "12-copilot-sdk-ci-cd-automation",
+      "## Best practices",
+      "https://docs.github.com/en/copilot/how-tos/copilot-cli/automate-copilot-cli",
+      "Automate Copilot CLI"
+    ],
+    [
+      "13-code-intelligence-indexing-telemetry",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/reference/workspace-context#improve-agent-search-with-exclusion-settings",
+      "Improve agent search with exclusions"
+    ],
+    [
+      "13-code-intelligence-indexing-telemetry",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/guides/monitoring-agents#enable-otel-monitoring",
+      "Enable OTel monitoring"
+    ],
+    [
+      "14-models-chon-model-dung",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#not-all-models-are-available-in-the-language-model-picker",
+      "Models missing in picker"
+    ],
+    [
+      "14-models-chon-model-dung",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/best-practices#choose-the-right-model",
+      "Choose the right model"
+    ],
+    [
+      "15-security-stack-5-tang",
+      "## 2. Tầng 1 — Content exclusion",
+      "https://docs.github.com/en/copilot/how-tos/configure-content-exclusion/exclude-content-from-copilot",
+      "Exclude content from Copilot"
+    ],
+    [
+      "15-security-stack-5-tang",
+      "## 7. Audit 30 phút",
+      "https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events",
+      "Agentic audit log events"
+    ],
+    [
+      "15-security-stack-5-tang",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/run/security#security-risks-to-be-aware-of",
+      "Security risks to be aware of"
+    ],
+    [
+      "15-security-stack-5-tang",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/run/security#trust-boundaries",
+      "Trust boundaries"
+    ],
+    [
+      "16-extensions-mcp-bao-mat-validate",
+      "## 3. `plugin.json`",
+      "https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference",
+      "Agent Plugins reference"
+    ],
+    [
+      "16-extensions-mcp-bao-mat-validate",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#check-customization-diagnostics",
+      "Check customization diagnostics"
+    ],
+    [
+      "16-extensions-mcp-bao-mat-validate",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/run/security#mcp-server-sandboxing",
+      "MCP server sandboxing"
+    ],
+    [
+      "17-agent-customizations-hub",
+      "## Lỗi thường gặp",
+      "https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues",
+      "Troubleshoot customization issues"
+    ],
+    [
+      "17-agent-customizations-hub",
+      "## Best practices",
+      "https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-3-verify-the-improvement",
+      "Verify the improvement"
+    ],
+    [
+      "01-context-hygiene",
+      "## 9. Pitfalls",
+      "https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#prevent-the-agent-from-drifting",
+      "Prevent the agent from drifting"
+    ],
+    [
+      "02-prompt-engineering",
+      "## 8. Checklist trước khi Enter",
+      "https://code.visualstudio.com/docs/agents/best-practices#write-effective-prompts",
+      "Write effective prompts"
+    ],
+    [
+      "03-plan-first-workflow",
+      "## 9. Pitfalls",
+      "https://code.visualstudio.com/docs/agents/run/planning#review-and-refine-the-plan",
+      "Review and refine the plan"
+    ],
+    [
+      "04-verification-done-that",
+      "## 8. So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/about-agents/about-third-party-coding-agents",
+      "Third-party coding agents"
+    ],
+    [
+      "04-verification-done-that",
+      "## 9. Pitfalls",
+      "https://code.visualstudio.com/docs/agents/guides/test-code-with-ai#run-tests-and-investigate-failures",
+      "Run tests & investigate failures"
+    ],
+    [
+      "05-parallel-agents",
+      "## 9. Pitfalls",
+      "https://code.visualstudio.com/docs/agents/run/subagents#orchestration-patterns",
+      "Orchestration patterns"
+    ],
+    [
+      "05-parallel-agents",
+      "## 10. So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work/delegating-and-parallelizing-work-with-agents",
+      "Delegating & parallelizing work"
+    ],
+    [
+      "06-policies-guardrails-recipes",
+      "## 8. Pitfalls",
+      "https://code.visualstudio.com/docs/agent-customization/hooks#decisions-and-failures",
+      "Hook decisions & failures"
+    ],
+    [
+      "07-thiet-ke-prompts-skills",
+      "## 9. Pitfalls",
+      "https://code.visualstudio.com/docs/agent-customization/agent-skills#common-issues",
+      "Agent Skills common issues"
+    ],
+    [
+      "08-tiet-kiem-ai-credits",
+      "## 9. Pitfalls",
+      "https://code.visualstudio.com/docs/agents/guides/optimize-usage#monitor-your-usage",
+      "Monitor your usage"
+    ],
+    [
+      "08-tiet-kiem-ai-credits",
+      "## 10. So sánh với Claude Code",
+      "https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing",
+      "Models and pricing"
+    ],
+    [
+      "09-teamwork-chuan-hoa",
+      "## 8. Pitfalls",
+      "https://docs.github.com/en/copilot/how-tos/copilot-on-github/use-copilot-agents/review-copilot-output",
+      "Review Copilot output"
+    ],
+    [
+      "10-debugging-power-moves",
+      "## 9. Pitfalls",
+      "https://code.visualstudio.com/docs/agents/agent-troubleshooting/chat-debug-view",
+      "Debug Chat Interactions"
+    ],
+    [
+      "11-nang-cao-cli-web-coding-agent",
+      "## 9. Pitfalls",
+      "https://docs.github.com/en/copilot/how-tos/copilot-cli/cli-best-practices",
+      "Copilot CLI best practices"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/quick-chat",
+      "## Học tiếp",
+      "https://code.visualstudio.com/docs/chat/inline-chat",
+      "Inline Chat"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/chat-session/quick-chat",
+      "## Tham khảo",
+      "https://code.visualstudio.com/docs/configure/keybindings#keyboard-shortcuts-editor",
+      "Keyboard shortcuts"
+    ],
+    [
+      "01-huong-dan-su-dung/commands/copilot/system-knowledge/telemetry",
+      "## Tham khảo",
+      "https://code.visualstudio.com/docs/configure/telemetry",
+      "Telemetry in VS Code"
+    ]
+  ]
+}

@@ -11,7 +11,7 @@
 | Debug khó, kiến trúc, multi-file | Model mạnh nhất (Claude Opus / GPT-5-class) | Chi phí cao nhưng đáng |
 | Tiết kiệm cuối chu kỳ | Về model mặc định, tắt Agent mode | Giữ AI Credits cho việc khó |
 
-> **Cách đọc bảng này:** cột **Việc** là loại việc bạn đang định làm, cột **Model nên chọn** là đáp án để chốt ngay trong picker; đọc cả cột **Vì sao** vài lần là thuộc lòng logic "việc dễ → model nhẹ".
+> **Cách đọc bảng này:** cột **Việc** là loại việc bạn đang định làm, cột **Model nên chọn** là đáp án để chốt ngay trong picker; đọc cả cột **Vì sao** vài lần là thuộc lòng logic "việc dễ → model nhẹ". · 📄 [GitHub Docs: Model comparison](https://docs.github.com/en/copilot/reference/ai-models/model-comparison)
 
 ---
 
@@ -24,7 +24,7 @@
 
 > 📄 **Code ví dụ:** [`./examples/02-model-context-premium/model-picker-o-au-oi-model-the.sh`](./examples/02-model-context-premium/model-picker-o-au-oi-model-the.sh)
 
-> **Nếu picker thiếu model:** check org policy allowlist (admin ẩn), reload IDE, hỏi admin mở thêm.
+> **Nếu picker thiếu model:** check org policy allowlist (admin ẩn), reload IDE, hỏi admin mở thêm. · 📄 [VS Code Docs: Change the model for chat](https://code.visualstudio.com/docs/agent-customization/language-models#change-the-model-for-chat)
 
 ## 2. AI Credits tính tiền thế nào?
 
@@ -50,7 +50,7 @@ Thứ tự tốn Credits tăng dần → **gõ tay được thì đừng chat; c
 
 **Ví dụ cụ thể:** Pro 1.500 credits/tháng (1.000 base + 500 flex) — số liệu as of 11/2026, verify tại github.com/features/copilot. Dùng model đắt cho mọi chat linh tinh → cạn nhanh; model rẻ cho việc dễ + model mạnh cho việc khó → đủ cả tháng.
 
-> **Khi chat báo "AI Credits limit reached":** xem usage page, đối chiếu model đắt nào dùng nhiều, có agent chạy vòng lặp không, instructions dài có bị nạp mỗi turn không.
+> **Khi chat báo "AI Credits limit reached":** xem usage page, đối chiếu model đắt nào dùng nhiều, có agent chạy vòng lặp không, instructions dài có bị nạp mỗi turn không. · 📄 [GitHub Docs: Models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing)
 
 ## 3. Context window là gì, Copilot nhét gì vào context?
 
@@ -62,7 +62,7 @@ Gồm: file đang mở (vùng quanh con trỏ), file liên quan (imports, file m
 
 > 📄 **Code ví dụ:** [`./examples/02-model-context-premium/context-window-la-gi-copilot-nhet-gi.sh`](./examples/02-model-context-premium/context-window-la-gi-copilot-nhet-gi.sh)
 
-> **Trả lời lạc đề:** 80% là context nhiễu, không phải model dốt.
+> **Trả lời lạc đề:** 80% là context nhiễu, không phải model dốt. · 📄 [VS Code Docs: Context window & compaction](https://code.visualstudio.com/docs/agents/concepts/context#context-window-and-compaction)
 
 ## 4. Tràn context thì làm gì?
 
@@ -73,13 +73,13 @@ Gồm: file đang mở (vùng quanh con trỏ), file liên quan (imports, file m
 3. **Tóm tắt tay:** copy kết luận sang chat mới ("tiếp tục từ: ...").
 4. **Chia task:** 1 task lớn → 3 task nhỏ (xem [bài 07](07-custom-agents-coding-agent-workflows.md)).
 
-**Ví dụ:** agent refactor 20 file chạy 30 phút chưa xong → dừng, chia 3 đợt (models → api → tests), mỗi đợt 1 chat mới. Ngay khi agent lặp lần 3 cùng 1 lỗi — đừng để nó đốt Credits vô ích.
+**Ví dụ:** agent refactor 20 file chạy 30 phút chưa xong → dừng, chia 3 đợt (models → api → tests), mỗi đợt 1 chat mới. Ngay khi agent lặp lần 3 cùng 1 lỗi — đừng để nó đốt Credits vô ích. · 📄 [VS Code Docs: Compact the conversation](https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#compact-the-current-conversation)
 
 ## 5. BYOK (Bring Your Own Key) có được không?
 
 **Trả lời 1 câu:** Copilot mặc định **KHÔNG BYOK** cho completions/chat — model đi qua hạ tầng GitHub; chỉ **Enterprise + Azure OpenAI** route được qua Azure tenant của bạn (admin cấu hình).
 
-Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xem [bài 10](10-ci-sdk-review-web.md)). Compliance hỏi "data đi đâu" → xem [bài 09](09-bao-mat-quyen-rieng-tu.md). 📄 Cách BYOK/usage qua API key riêng + billing: [`../01-huong-dan-su-dung/examples/14-models-chon-model-dung/byok-additional-usage.json`](../01-huong-dan-su-dung/examples/14-models-chon-model-dung/byok-additional-usage.json).
+Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xem [bài 10](10-ci-sdk-review-web.md)). Compliance hỏi "data đi đâu" → xem [bài 09](09-bao-mat-quyen-rieng-tu.md). 📄 Cách BYOK/usage qua API key riêng + billing: [`../01-huong-dan-su-dung/examples/14-models-chon-model-dung/byok-additional-usage.json`](../01-huong-dan-su-dung/examples/14-models-chon-model-dung/byok-additional-usage.json). · 📄 [GitHub Docs: Bring your own key](https://docs.github.com/en/copilot/concepts/models/bring-your-own-key)
 
 ## 6. Nên dùng model nào cho việc nào?
 
@@ -90,7 +90,7 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 - Refactor multi-file, debug race condition, thiết kế: model mạnh nhất.
 - Agent tự chạy lâu: model mạnh + instructions chặt (không thì nó chạy loạn bằng model đắt).
 
-> 📄 **Code ví dụ:** [`./examples/02-model-context-premium/nen-dung-model-nao-cho-viec-nao.sh`](./examples/02-model-context-premium/nen-dung-model-nao-cho-viec-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/02-model-context-premium/nen-dung-model-nao-cho-viec-nao.sh`](./examples/02-model-context-premium/nen-dung-model-nao-cho-viec-nao.sh) · 📄 [VS Code Docs: Choose the right model](https://code.visualstudio.com/docs/agents/concepts/language-models#choose-the-right-model)
 
 ## 7. Sao cùng 1 prompt mà hôm nay dở hơn hôm qua?
 
@@ -101,7 +101,7 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 3. **Instructions mới thêm** làm nhiễu → thử tắt instructions custom (đối chiếu file đang nạp: [`./examples/02-model-context-premium/file-nao-copilot-tu-load-file-nao.sh`](./examples/02-model-context-premium/file-nao-copilot-tu-load-file-nao.sh)).
 4. **Hết Credits → rớt model yếu** → check usage page.
 
-**Ví dụ:** team thêm `frontend-react.instructions.md` với `applyTo: **` → mọi chat backend cũng bị nhồi React context → chất lượng tụt. Fix: sửa `applyTo` cho hẹp (xem [bài 06](06-prompts-agents-instructions.md)).
+**Ví dụ:** team thêm `frontend-react.instructions.md` với `applyTo: **` → mọi chat backend cũng bị nhồi React context → chất lượng tụt. Fix: sửa `applyTo` cho hẹp (xem [bài 06](06-prompts-agents-instructions.md)). · 📄 [VS Code Docs: Auto model selection](https://code.visualstudio.com/docs/agents/concepts/language-models#auto-model-selection)
 
 ## 8. Có khóa model cố định cho cả team được không?
 
@@ -119,7 +119,7 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 - Review PR / refactor auth: model mạnh nhất hiện có.
 ```
 
-> **Khi bill team tăng đột biến:** admin allowlist chỉ 2 model (1 rẻ + 1 mạnh) + training 10 phút về chọn model.
+> **Khi bill team tăng đột biến:** admin allowlist chỉ 2 model (1 rẻ + 1 mạnh) + training 10 phút về chọn model. · 📄 [GitHub Docs: Manage default models](https://docs.github.com/en/copilot/how-tos/administer-copilot/manage-for-organization/manage-default-models)
 
 ## 9. Hết AI Credits giữa tháng thì chữa cháy sao?
 
@@ -129,7 +129,7 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 
 **Ví dụ:** còn 100 Credits mà 10 ngày nữa mới reset → 10/ngày: chỉ bật model mạnh cho task blocker, còn lại model nhẹ. Đừng đợi cạn mới tiết kiệm — nhận cảnh báo 80% là bắt đầu.
 
-> **Tóm gọn 1 câu:** Credits là ví có hạn: đổi sang tiền lẻ khi lương sắp vơi, ưu tiên chi cho việc chặn dòng tiền (task blocker) — và bật đèn cảnh báo lúc 80% chứ đừng đợi 0%.
+> **Tóm gọn 1 câu:** Credits là ví có hạn: đổi sang tiền lẻ khi lương sắp vơi, ưu tiên chi cho việc chặn dòng tiền (task blocker) — và bật đèn cảnh báo lúc 80% chứ đừng đợi 0%. · 📄 [VS Code Docs: Reached the AI credits limit](https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#i-reached-my-inline-suggestions-or-ai-credits-limit)
 
 ---
 
@@ -143,4 +143,4 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 
 📄 Checklist debug 6 bước khi instructions/model gây nhiễu: [`./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh`](./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh).
 
-Tham khảo chéo: [bài 01](01-tai-khoan-pricing-cai-dat.md) (cài đặt + seat) · 📄 checklist debug: [./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh](./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 07](07-custom-agents-coding-agent-workflows.md) (agent tốn Credits) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (bảo mật data).
+Tham khảo chéo: [bài 01](01-tai-khoan-pricing-cai-dat.md) (cài đặt + seat) · 📄 checklist debug: [./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh](./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 07](07-custom-agents-coding-agent-workflows.md) (agent tốn Credits) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (bảo mật data). · 📄 [GitHub Docs: Monitor AI usage](https://docs.github.com/en/copilot/how-tos/manage-and-track-spending/monitor-ai-usage)

@@ -34,7 +34,7 @@ CÓ MCP:    "tóm tắt PR #123 repo acme/api" → agent tự gọi github serve
 
 > **Vì sao quan trọng?** Đây là câu hỏi tiết kiệm mọi thứ còn lại của bài: mỗi server thừa là một process nền + một mồi làm model chọn nhầm tool + một nơi token có thể lộ.
 > **Nếu làm sai?** Cài MCP cho việc trong repo → hai tuần sau không ai nhớ server đó để làm gì, và nó là thứ đầu tiên chết khi công ty đổi network policy.
-> **Tóm gọn 1 câu:** MCP chỉ đáng cài khi dữ liệu nằm *ngoài* repo.
+> **Tóm gọn 1 câu:** MCP chỉ đáng cài khi dữ liệu nằm *ngoài* repo. · 📄 [VS Code Docs: Connect external services](https://code.visualstudio.com/docs/agents/concepts/tools#connect-external-services)
 
 ## 2. Một lời gọi MCP đi qua 4 nhân vật
 
@@ -54,7 +54,7 @@ Vòng đời câu "liệt kê 5 PRs mở gần nhất":
 | MCP server | Process riêng (`npx ...`) hoặc endpoint HTTP, khai trong file config | giữ token, gọi API thật |
 | Hệ ngoài | github.com, Postgres, Chrome, Linear... | chỉ server chạm vào; **token nằm ở server process (env)**, model không bao giờ cầm token |
 
-Lỗi "không gọi được tool" thường ở trạm 3–4, không phải ở model.
+Lỗi "không gọi được tool" thường ở trạm 3–4, không phải ở model. · 📄 [VS Code Docs: How agents choose tools](https://code.visualstudio.com/docs/agents/concepts/tools#how-agents-choose-tools)
 
 ## 3. Nơi khai server: `.mcp.json` + transports
 
@@ -96,7 +96,7 @@ Thứ tự nạp của docs CLI (cao → thấp): `--additional-mcp-config` → 
 
 **Verify (bắt buộc):** thêm config chưa phải là bằng chứng agent dùng được server. Mở session mới **đúng harness** → prompt gọi tên server + một hành động ít tác dụng phụ ("Use the Playwright MCP server to open `<URL>` and report the page title. Use its tools, not the built-in browser tools. Do not change files.") → **expand tool call**: đúng server, đúng output, câu trả lời phản ánh output. Trả lời "nghe hợp lý" không phải là verify — docs ghi rõ vậy. (Việc browser thường ngày đã có **built-in browser tools**, khỏi cần server.)
 
-> **Tóm gọn 1 câu:** `.mcp.json` root cho team, `~/.copilot/mcp-config.json` cho riêng mình; `.vscode/mcp.json` là chuyện của Local harness.
+> **Tóm gọn 1 câu:** `.mcp.json` root cho team, `~/.copilot/mcp-config.json` cho riêng mình; `.vscode/mcp.json` là chuyện của Local harness. · 📄 [VS Code Docs: MCP configuration file](https://code.visualstudio.com/docs/agents/reference/mcp-configuration#configuration-file)
 
 ## 4. 3 thành phần của một MCP server
 
@@ -106,13 +106,13 @@ Thứ tự nạp của docs CLI (cao → thấp): `--additional-mcp-config` → 
 - **Resources** — dữ liệu đọc qua URI, không side effects; attach từ **Add Context → MCP Resources** hoặc lệnh **MCP: Browse Resources**.
 - **Prompts** — template của tác giả server, gõ `/<server>.<prompt>` trong chat. Muốn chuẩn *team bạn* thay vì chuẩn tác giả thì copy ý về skill trong repo (bài 05). Lưu ý: Copilot cloud agent + code review chỉ nhận **tools**, không nhận resources/prompts (bài 12).
 
-> **Nếu làm sai?** Tự viết server mà `description` lôm côm → tool "biến mất" dù server connected, vì model không biết khi nào gọi nó.
+> **Nếu làm sai?** Tự viết server mà `description` lôm côm → tool "biến mất" dù server connected, vì model không biết khi nào gọi nó. · 📄 [VS Code Docs: MCP configuration structure](https://code.visualstudio.com/docs/agents/reference/mcp-configuration#configuration-structure)
 
 ## 5. Approval — 3 dòng
 
 - **`deny > ask > allow`**: deny thắng mọi thứ; rule chưa khớp → mặc định **hỏi**; `[]` = lockdown; allowlist hiệu lực = **giao (intersection)** của mọi nguồn. **Trust server** (được chạy chưa) và **duyệt từng tool call** là hai lớp riêng — đọc publisher trước khi trust, đừng approve máy móc. Ma trận permission levels (Manual / Assisted / Allow all) + sandbox là việc của **bài 10**; org policy "MCP servers in Copilot" (Business/Enterprise, mặc định **tắt**) → bài 07/16.
 
-> 📄 **Code ví dụ (settings.json — allow/ask/deny):** [`./examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc`](./examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc) — `chat.tools.terminal.autoApprove` · `chat.tools.urls.autoApprove` · `chat.tools.eligibleForAutoApproval` · sandbox; tra cứu: [policy-approval](commands/copilot/model-agent/policy-approval/README.md)
+> 📄 **Code ví dụ (settings.json — allow/ask/deny):** [`./examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc`](./examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc) — `chat.tools.terminal.autoApprove` · `chat.tools.urls.autoApprove` · `chat.tools.eligibleForAutoApproval` · sandbox; tra cứu: [policy-approval](commands/copilot/model-agent/policy-approval/README.md) · 📄 [VS Code Docs: Manage tool approvals](https://code.visualstudio.com/docs/agents/run/approvals#manage-tool-approvals)
 
 ## 6. 5 servers day-one
 
@@ -126,7 +126,7 @@ Thứ tự nạp của docs CLI (cao → thấp): `--additional-mcp-config` → 
 | **Context7 / Fetch** | tra tài liệu framework bản mới nhất | `http` / `stdio` |
 | **Linear / Notion** | tickets, docs team sống trong đó — token cá nhân nên để user file | `http` + env |
 
-GitHub MCP server có 2 dạng: **remote hosted** `https://api.githubcopilot.com/mcp/` (chỉ cần URL + auth, có thêm toolset riêng cho remote) hoặc **self-host** `ghcr.io/github/github-mcp-server` (cần Docker); trong Copilot CLI nó đã **built-in**, khỏi khai. Quy tắc DB đi kèm (SELECT/limit khi hỏi prod) là instructions với `applyTo` — xem **bài 03**.
+GitHub MCP server có 2 dạng: **remote hosted** `https://api.githubcopilot.com/mcp/` (chỉ cần URL + auth, có thêm toolset riêng cho remote) hoặc **self-host** `ghcr.io/github/github-mcp-server` (cần Docker); trong Copilot CLI nó đã **built-in**, khỏi khai. Quy tắc DB đi kèm (SELECT/limit khi hỏi prod) là instructions với `applyTo` — xem **bài 03**. · 📄 [VS Code Docs: Find and install an MCP server](https://code.visualstudio.com/docs/agent-customization/mcp-servers#find-and-install-a-server)
 
 ## 7. Copilot connectors + tìm server có sẵn
 
@@ -145,7 +145,7 @@ Ket noi mot dich vu (Slack, Notion, Microsoft Learn...) KHONG phai tu lap server
 
 **Tìm server tự cài:** Customizations editor → **Browse** → **GitHub Feed** (search `@type:mcp`; chỉ Copilot harness — Local không có nguồn này); lệnh **`MCP: Add Server`** trong Command Palette cho luồng guided; catalog chuẩn là **[GitHub MCP Registry](https://github.com/mcp)**. Ranh giới đáng nhớ: tool do **VS Code extension** cung cấp chỉ chạy khi cửa sổ editor còn kết nối — muốn chạy nền độc lập thì đi MCP server hoặc connector.
 
-> **Tóm gọn 1 câu:** Service có connector thì connect một lần xài mọi surface; hết connector mới tới MCP server tự nuôi.
+> **Tóm gọn 1 câu:** Service có connector thì connect một lần xài mọi surface; hết connector mới tới MCP server tự nuôi. · 📄 [VS Code Docs: Connect a service](https://code.visualstudio.com/docs/agent-customization/copilot-connectors#connect-a-service)
 
 ## 8. Secrets — chỉ đi qua env
 
@@ -160,11 +160,11 @@ Audit truoc moi PR:
 # exit=1 = sach. exit=0 = CO LO: token van trong git history - xoa dong khong du, rotate ngay.
 ```
 
-Docs chốt: **file cấu hình cá nhân không phải secret store**. Secret thật nằm trong env của máy chạy harness; trên github.com (settings MCP cho cloud agent), secret cá nhân mang prefix `COPILOT_MCP_` — chi tiết ở bài 12/16. Kịch bản "đã lỡ commit token" (❌→✅): 📄 [`05-neu-lam-sai…jsonc`](commands/copilot/system-knowledge/mcp-add/examples/05-neu-lam-sai-thi-sao-sai-ung.jsonc) · [`06-neu-lam-sai…jsonc`](commands/copilot/system-knowledge/mcp-add/examples/06-neu-lam-sai-thi-sao-sai-ung.jsonc).
+Docs chốt: **file cấu hình cá nhân không phải secret store**. Secret thật nằm trong env của máy chạy harness; trên github.com (settings MCP cho cloud agent), secret cá nhân mang prefix `COPILOT_MCP_` — chi tiết ở bài 12/16. Kịch bản "đã lỡ commit token" (❌→✅): 📄 [`05-neu-lam-sai…jsonc`](commands/copilot/system-knowledge/mcp-add/examples/05-neu-lam-sai-thi-sao-sai-ung.jsonc) · [`06-neu-lam-sai…jsonc`](commands/copilot/system-knowledge/mcp-add/examples/06-neu-lam-sai-thi-sao-sai-ung.jsonc). · 📄 [VS Code Docs: Input variables for sensitive data](https://code.visualstudio.com/docs/agents/reference/mcp-configuration#input-variables-for-sensitive-data)
 
 ## 9. Prune — giữ MCP khỏe
 
-**Sweet spot 3–6 servers** — menu 100 món thì bồi bàn loạn: quá nhiều tools → model chọn sai/bỏ sót, context nặng, bề mặt lộ secret to.
+**Sweet spot 3–6 servers** — menu 100 món thì bồi bàn loạn: quá nhiều tools → model chọn sai/bỏ sót, context nặng, bề mặt lộ secret to. · 📄 [VS Code Docs: Control or remove a server](https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#control-or-remove-a-server)
 
 ```text
 Prune flow (2 tuan/lan, 10 phut):
@@ -183,13 +183,13 @@ Prune flow (2 tuan/lan, 10 phut):
 | Copy nguyên file `.vscode/mcp.json` sang `.mcp.json` | sai key (`servers` vs `mcpServers`), mất luôn tính năng `sse`/`envFile` | đối chiếu [format reference](https://code.visualstudio.com/docs/agents/reference/mcp-configuration) trước khi copy |
 | Approval `allow` hết cho tiện | write/delete ngoài prod chạy không ai giữ | đọc → `true` trong `autoApprove`, side-effect → `false`/mặc định hỏi, prod → `eligibleForAutoApproval: false` + sandbox (mục 5) |
 
-**Bài học:** đa số sự cố MCP không phải "server hỏng" mà là **khai sai file / sai key** — docs tách hai format và chúng không tương thích nhau. 📄 Hai format đúng, copy được: [`./examples/08-mcp-ket-noi-cong-cu-ngoai/mcp-servers-day-one.jsonc`](./examples/08-mcp-ket-noi-cong-cu-ngoai/mcp-servers-day-one.jsonc) (`.mcp.json`) vs [`commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (`.vscode/mcp.json`).
+**Bài học:** đa số sự cố MCP không phải "server hỏng" mà là **khai sai file / sai key** — docs tách hai format và chúng không tương thích nhau. 📄 Hai format đúng, copy được: [`./examples/08-mcp-ket-noi-cong-cu-ngoai/mcp-servers-day-one.jsonc`](./examples/08-mcp-ket-noi-cong-cu-ngoai/mcp-servers-day-one.jsonc) (`.mcp.json`) vs [`commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (`.vscode/mcp.json`). · 📄 [VS Code Docs: Troubleshoot MCP servers](https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#troubleshoot-mcp-servers)
 
 ## Best practices
 
 - **Khai team server trong `.mcp.json` root — 📄 [`templates/.mcp.json`](../templates/.mcp.json); secret để trong env của máy/dev box; siết `tools` khi khai (CLI mặc định `*`).** *Vì sao?* File này Copilot harness + CLI cùng đọc — một khai báo chạy trên mọi surface của team; docs GitHub ghi fewer tools → chọn đúng hơn, ít lỗi, đỡ tốn context.
 - **Server cá nhân để `~/.copilot/mcp-config.json`, đừng commit.** *Vì sao?* Token personal commit vào repo biến repo thành nơi lộ credentials của riêng bạn.
-- **Có connector thì dùng connector, tự nuôi server là phương án cuối.** *Vì sao?* Connector được GitHub maintain + auth một lần; self-host là bạn nhận phần upgrade vào mình.
+- **Có connector thì dùng connector, tự nuôi server là phương án cuối.** *Vì sao?* Connector được GitHub maintain + auth một lần; self-host là bạn nhận phần upgrade vào mình. · 📄 [VS Code Docs: Review trust & isolation](https://code.visualstudio.com/docs/agents/run/manage-mcp-servers#review-trust-and-isolation)
 
 ## Bài tập
 
@@ -205,6 +205,6 @@ Prune flow (2 tuan/lan, 10 phut):
 ## Reference
 
 - VS Code — [Add MCP servers](https://code.visualstudio.com/docs/agent-customization/mcp-servers) · [MCP configuration reference](https://code.visualstudio.com/docs/agents/reference/mcp-configuration) (hai format, env vars, `${input}`) · [Manage MCP servers](https://code.visualstudio.com/docs/agents/run/manage-mcp-servers) · [Copilot connectors](https://code.visualstudio.com/docs/agent-customization/copilot-connectors)
-- GitHub — [MCP concept](https://docs.github.com/en/copilot/concepts/context/mcp) · [Add MCP servers cho CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) · [Connectors](https://docs.github.com/en/copilot/concepts/customizations/copilot-connectors) · [GitHub MCP Registry](https://github.com/mcp) · Chuẩn mở: [modelcontextprotocol.io](https://modelcontextprotocol.io)
+- GitHub — [MCP concept](https://docs.github.com/en/copilot/concepts/customizations/mcp) · [Add MCP servers cho CLI](https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-mcp-servers) · [Connectors](https://docs.github.com/en/copilot/concepts/customizations/copilot-connectors) · [GitHub MCP Registry](https://github.com/mcp) · Chuẩn mở: [modelcontextprotocol.io](https://modelcontextprotocol.io)
 
 **Chốt:** đáng cài MCP khi dữ liệu nằm *ngoài* repo — và khi đã cài thì giữ ba kỷ luật: khai đúng file của harness mình chạy, secrets chỉ đi env, mỗi server phải tự chứng minh nó mở ra thứ mà 3–6 cái kia không với tới.

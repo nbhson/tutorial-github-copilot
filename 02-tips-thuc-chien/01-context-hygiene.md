@@ -26,7 +26,7 @@ Ba quy tắc vàng, nhớ ba câu này là đủ:
 
 > **Cách đọc bảng này:** mỗi dòng là một con số cần nhớ. Cột giữa giải thích số đó đếm cái gì, cột phải là việc cụ thể cần làm khi chạm ngưỡng.
 
-> **Tóm gọn 1 câu:** context là bộ nhớ làm việc của Copilot — càng bẩn càng dở, nên cứ một việc một chat sạch và mọi thứ quan trọng đều đưa ra file. 📄 File luật mẫu: [`../templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md).
+> **Tóm gọn 1 câu:** context là bộ nhớ làm việc của Copilot — càng bẩn càng dở, nên cứ một việc một chat sạch và mọi thứ quan trọng đều đưa ra file. 📄 File luật mẫu: [`../templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md). · 📄 [VS Code Docs: Why context matters](https://code.visualstudio.com/docs/agents/concepts/context#why-context-matters)
 
 ## 2. Copilot nhét gì vào context?
 
@@ -54,7 +54,7 @@ Vì sao chat dài tự dở — 3 cơ chế:
 
 > Lưu ý: thấy model quên rule mà viết instructions dài hơn là thêm rác — mọi vấn đề "chat dài" xử bằng new chat + ghi quyết định ra file.
 
-> **Tóm gọn 1 câu:** mọi thứ trong chat đều bị tính tiền và làm model "điếc" dần — chat dài tự dở vì rác dồn lại, không phải vì model yếu.
+> **Tóm gọn 1 câu:** mọi thứ trong chat đều bị tính tiền và làm model "điếc" dần — chat dài tự dở vì rác dồn lại, không phải vì model yếu. · 📄 [VS Code Docs: How VS Code assembles context](https://code.visualstudio.com/docs/agents/concepts/context#how-vs-code-assembles-context)
 
 ## 3. Thói quen 1: new chat mỗi task
 
@@ -86,7 +86,7 @@ Rồi paste summary sang chat mới kèm: `"Tiếp tục từ summary chat trư�
 
 > Sai lầm kinh điển: 1 chat đi từ bugfix → feature → refactor. Việc sau thừa hưởng toàn bộ rác của việc trước — như người làm chung nhà bạn vừa nhớ nhầm việc của khách trước.
 
-> **Tóm gọn 1 câu:** new chat là nút reset rẻ nhất — xong việc là đóng, trước khi đóng thì tóm tắt quyết định ra file để không mất gì. 📄 4 loại context nạp tự động + cách cắt gọn: [`../01-huong-dan-su-dung/examples/00-tong-quan-copilot/bon-ho-tool-copilot.md`](../01-huong-dan-su-dung/examples/00-tong-quan-copilot/bon-ho-tool-copilot.md).
+> **Tóm gọn 1 câu:** new chat là nút reset rẻ nhất — xong việc là đóng, trước khi đóng thì tóm tắt quyết định ra file để không mất gì. 📄 4 loại context nạp tự động + cách cắt gọn: [`../01-huong-dan-su-dung/examples/00-tong-quan-copilot/bon-ho-tool-copilot.md`](../01-huong-dan-su-dung/examples/00-tong-quan-copilot/bon-ho-tool-copilot.md). · 📄 [VS Code Docs: Start new chats for new tasks](https://code.visualstudio.com/docs/agents/guides/optimize-usage#start-new-chats-for-new-tasks)
 
 ## 4. Thói quen 2: attachments gọn + #codebase scope hẹp
 
@@ -133,7 +133,7 @@ Chọn công cụ theo tình huống:
 
 > Mẹo: explore bằng `#codebase` xong → **ghi findings ra file → new chat** chỉ đọc file đó. Đừng mang chat explore nặng đi implement tiếp.
 
-> **Tóm gọn 1 câu:** gắn context hẹp như đưa đúng tờ giấy cần — `#file`/`#selection` là mặc định, `#codebase` chỉ dành cho khám phá một lần rồi ghi ra file. 📄 4 họ tool + cái nào nạp lúc nào: [`00-4-bon-ho-tool-copilot.md`](../01-huong-dan-su-dung/examples/00-tong-quan-copilot/bon-ho-tool-copilot.md).
+> **Tóm gọn 1 câu:** gắn context hẹp như đưa đúng tờ giấy cần — `#file`/`#selection` là mặc định, `#codebase` chỉ dành cho khám phá một lần rồi ghi ra file. 📄 4 họ tool + cái nào nạp lúc nào: [`00-4-bon-ho-tool-copilot.md`](../01-huong-dan-su-dung/examples/00-tong-quan-copilot/bon-ho-tool-copilot.md). · 📄 [VS Code Docs: Add files as context](https://code.visualstudio.com/docs/chat/copilot-chat-context#add-files-as-context)
 
 ## 5. Thói quen 3: knowledge base + instructions thay vì paste
 
@@ -168,7 +168,7 @@ Mục này giải quyết một thói quen tốn kém: cứ gặp việc là pas
 
 > Lưu ý 2026: prompt files (`.prompt.md`) **chỉ chạy ở Local harness** (VS Code docs) — Copilot harness không nạp. Việc lặp nên chuyển sang **Agent Skills** (`SKILL.md`). Xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 
-> **Tóm gọn 1 câu:** cái gì lặp lại thì cất vào file một lần — instructions cho luật cần nhớ mọi turn, knowledge base cho tài liệu cần tra khi hỏi. 📄 Script tạo KB + verify: [`../01-huong-dan-su-dung/examples/13-code-intelligence-indexing-telemetry/knowledge-bases-ky-uc-team-dung-chung.sh`](../01-huong-dan-su-dung/examples/13-code-intelligence-indexing-telemetry/knowledge-bases-ky-uc-team-dung-chung.sh).
+> **Tóm gọn 1 câu:** cái gì lặp lại thì cất vào file một lần — instructions cho luật cần nhớ mọi turn, knowledge base cho tài liệu cần tra khi hỏi. 📄 Script tạo KB + verify: [`../01-huong-dan-su-dung/examples/13-code-intelligence-indexing-telemetry/knowledge-bases-ky-uc-team-dung-chung.sh`](../01-huong-dan-su-dung/examples/13-code-intelligence-indexing-telemetry/knowledge-bases-ky-uc-team-dung-chung.sh). · 📄 [VS Code Docs: Write effective instructions](https://code.visualstudio.com/docs/agent-customization/custom-instructions#write-effective-instructions)
 
 ## 6. Thói quen 4: custom agent cô lập + checkpoints
 
@@ -211,7 +211,7 @@ Trước khi sửa, đọc src/auth/__tests__/login.test.ts và liệt kê 3 cas
 
 Rule: **correct 2 lần vẫn sai → dừng cãi, restore checkpoint.** Checkpoint giống nút save trong game: đi sai là quay về điểm đã lưu, khỏi chơi lại từ đầu. Leo thang Ask → Edit → Agent xem [Tips 03](./03-plan-first-workflow.md).
 
-> **Tóm gọn 1 câu:** tách vai (planner/reviewer/tester) để model không tự chấm bài mình, và sai 2 lần là quay về checkpoint chứ không cãi tiếp. 📄 3 agent mẫu: [`../templates/.github/agents/`](../templates/.github/agents/) · 4 cơ chế undo: [`../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/checkpoints-4-co-che.sh`](../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/checkpoints-4-co-che.sh).
+> **Tóm gọn 1 câu:** tách vai (planner/reviewer/tester) để model không tự chấm bài mình, và sai 2 lần là quay về checkpoint chứ không cãi tiếp. 📄 3 agent mẫu: [`../templates/.github/agents/`](../templates/.github/agents/) · 4 cơ chế undo: [`../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/checkpoints-4-co-che.sh`](../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/checkpoints-4-co-che.sh). · 📄 [VS Code Docs: Context isolation with subagents](https://code.visualstudio.com/docs/agents/concepts/context#context-isolation-with-subagents)
 
 ## 7. Chẩn đoán chat bẩn — cứu ngay
 
@@ -226,7 +226,7 @@ Mục này là bảng "bác sĩ chẩn đoán": chat đang có vấn đề gì v
 | Paste log 1000 dòng vào chat chính | Rác kéo dài 20 turns | Paste vào file → chat phụ tóm tắt, chat chính chỉ nhận summary |
 | Model hỏi lại file vừa đọc | Mất references sau new chat | Gắn lại #file + dặn đọc — chi phí bình thường |
 
-> **Cách đọc bảng này:** cột 1 là triệu chứng bạn đang thấy, cột 2 là tên bệnh, cột 3 là liều thuốc — làm đúng cột 3 là hết.
+> **Cách đọc bảng này:** cột 1 là triệu chứng bạn đang thấy, cột 2 là tên bệnh, cột 3 là liều thuốc — làm đúng cột 3 là hết. · 📄 [VS Code Docs: Reset conversation context](https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#reset-conversation-context)
 
 ## 8. Bảng tra nhanh: công cụ dọn context
 
@@ -243,7 +243,7 @@ Mục này là bảng "bác sĩ chẩn đoán": chat đang có vấn đề gì v
 
 > Quy tắc ngón tay: **khác task → new chat; fix 1 chỗ → #selection; explore rộng → #codebase 1 lần rồi ghi file; hỏi spec → knowledge base; sai hướng → restore checkpoint.**
 
-> **Tóm gọn 1 câu:** mỗi việc dọn context có một công cụ riêng — tra bảng này khi chưa biết chọn cái nào.
+> **Tóm gọn 1 câu:** mỗi việc dọn context có một công cụ riêng — tra bảng này khi chưa biết chọn cái nào. · 📄 [VS Code Docs: Anti-patterns to avoid](https://code.visualstudio.com/docs/agents/guides/context-engineering-guide#anti-patterns-to-avoid)
 
 ## 9. Pitfalls + cách fix
 
@@ -257,7 +257,7 @@ Mục này là bảng "bác sĩ chẩn đoán": chat đang có vấn đề gì v
 | New chat xong tiếc decisions | Tóm tắt ra docs/decisions.md trước khi reset |
 | Gắn ảnh chụp code thay vì file | Gắn #file để Copilot đọc text thật |
 
-> **Cách đọc bảng này:** cột trái là lỗi hay mắc, cột phải là cách sửa tương ứng — dò cột trái xem bạn đang mắc cái nào.
+> **Cách đọc bảng này:** cột trái là lỗi hay mắc, cột phải là cách sửa tương ứng — dò cột trái xem bạn đang mắc cái nào. · 📄 [VS Code Docs: Prevent the agent from drifting](https://code.visualstudio.com/docs/agents/guides/get-agent-back-on-track#prevent-the-agent-from-drifting)
 
 ## 10. Bài tập cuối bài
 

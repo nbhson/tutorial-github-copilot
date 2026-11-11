@@ -22,7 +22,7 @@ Sau:  viết 1 file 30 dòng, gọi lại 20 lần, output đồng nhất
 
 Bản chất nợ prompt không nằm ở việc gõ 10 dòng. Nó nằm ở chỗ mỗi lần gõ, bạn *sót một dòng khác nhau*. Đóng gói giống như viết công thức nấu ăn ra giấy thay vì nhớ trong đầu: lần nào cũng đủ nguyên liệu, không bỗng dưng thiếu muối.
 
-> **Tóm gọn 1 câu:** Prompt mà phải gõ lại từ đầu nhiều lần là nợ — đóng gói thành file để lần nào cũng ra cùng một kết quả.
+> **Tóm gọn 1 câu:** Prompt mà phải gõ lại từ đầu nhiều lần là nợ — đóng gói thành file để lần nào cũng ra cùng một kết quả. · 📄 [VS Code Docs: Reuse customizations across harnesses](https://code.visualstudio.com/docs/agent-customization/overview#reuse-customizations-across-harnesses)
 
 ## 2. Cơ chế: 3 loại tài sản tái dùng
 
@@ -59,7 +59,7 @@ Nơi đặt chuẩn:
 
 Chọn nhanh, tránh nhét sai chỗ: nhét luật 1 dòng vào prompt file thì mỗi lần phải nhớ gọi — mệt. Nhét quy trình 10 bước vào prompt file thì nó phình ra, quên nửa sau. Nhét task lặp vào instructions thì nó nạp lại mỗi turn — tốn credit vô ích.
 
-> **Tóm gọn 1 câu:** Ba loại khác nhau ở cách kích hoạt — prompt file bạn tự gọi, instructions tự chạy ngầm, skill là quy trình dài Copilot tự nhận diện. 📄 File thật từng loại: [`../templates/.github/prompts/review-pr.prompt.md`](../templates/.github/prompts/review-pr.prompt.md) · [`../templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`../templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md).
+> **Tóm gọn 1 câu:** Ba loại khác nhau ở cách kích hoạt — prompt file bạn tự gọi, instructions tự chạy ngầm, skill là quy trình dài Copilot tự nhận diện. 📄 File thật từng loại: [`../templates/.github/prompts/review-pr.prompt.md`](../templates/.github/prompts/review-pr.prompt.md) · [`../templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`../templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md). · 📄 [GitHub Docs: Comparing customizations](https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations)
 
 ## 3. Prompt files (.prompt.md) — legacy, chỉ Local
 
@@ -102,7 +102,7 @@ Cú pháp `${input:tên}` là chỗ trống để điền — giống mẫu đơ
 
 > Repo cũ đã có prompt file → giữ chạy Local, port dần sang skill.
 
-> **Tóm gọn 1 câu:** Prompt file = 1 file markdown có frontmatter + variables, gọi bằng `/tên-file`; chỉ chạy Local nên việc mới nên chuyển sang skill.
+> **Tóm gọn 1 câu:** Prompt file = 1 file markdown có frontmatter + variables, gọi bằng `/tên-file`; chỉ chạy Local nên việc mới nên chuyển sang skill. · 📄 [VS Code Docs: Prompt file reference](https://code.visualstudio.com/docs/agent-customization/prompt-files#prompt-file-reference)
 
 ## 4. Instructions: luật tự áp theo scope
 
@@ -142,7 +142,7 @@ applyTo: "src/payments/**"
 
 Ba điểm kiểm tra chất lượng. Một: glob càng hẹp càng tốt (`src/payments/**` tốt hơn `src/**`) — hẹp thì ít gây tác dụng phụ ngoài ý muốn. Hai: mỗi file scoped giữ dưới 50 dòng, chỉ chứa luật riêng scope đó. Ba: luật chung để ở root một chỗ, đừng lặp lại ở các file con — lặp là khi sửa sẽ sót.
 
-> **Tóm gọn 1 câu:** Instructions là luật tự áp không cần gọi — luật chung để root, luật riêng từng module tách file với `applyTo` glob hẹp.
+> **Tóm gọn 1 câu:** Instructions là luật tự áp không cần gọi — luật chung để root, luật riêng từng module tách file với `applyTo` glob hẹp. · 📄 [VS Code Docs: Instruction formats & settings](https://code.visualstudio.com/docs/agent-customization/custom-instructions#instruction-formats-and-settings)
 
 ## 5. Skills (SKILL.md): procedure nhiều bước
 
@@ -183,7 +183,7 @@ Gọi tự nhiên: `"Dùng skill release để release patch tuần này."` — 
 
 > **Tóm gọn 1 câu:** Skill là file SKILL.md mô tả quy trình nhiều bước, Copilot đọc description tự kích hoạt — quy trình nào dài và dùng nhiều thì nên tách thành skill.
 
-> Bảo mật: skill tải từ repo ngoài có thể chứa prompt injection / script độc hại — luôn đọc kỹ SKILL.md và script tham chiếu trước khi cài, chỉ pre-approve `shell`/`bash` cho skill bạn hoàn toàn tin.
+> Bảo mật: skill tải từ repo ngoài có thể chứa prompt injection / script độc hại — luôn đọc kỹ SKILL.md và script tham chiếu trước khi cài, chỉ pre-approve `shell`/`bash` cho skill bạn hoàn toàn tin. · 📄 [VS Code Docs: SKILL.md file format](https://code.visualstudio.com/docs/agent-customization/agent-skills#skillmd-file-format)
 
 ## 6. Few-shot + variables chuẩn
 
@@ -216,7 +216,7 @@ Output đúng:
 
 Lợi ích: output đồng nhất, dễ review, Copilot ít sáng tạo bừa. Người mới đọc ví dụ là hiểu cách dùng ngay — tiết kiệm cả buổi bàn luận. 📄 Prompt few-shot thành file: [`../templates/.github/prompts/add-table.prompt.md`](../templates/.github/prompts/add-table.prompt.md).
 
-> **Tóm gọn 1 câu:** Variables biến chỗ hay đổi thành ô điền, few-shot cho 1 ví dụ đúng để Copilot bắt chước — cả hai giúp output đồng nhất mỗi lần gọi.
+> **Tóm gọn 1 câu:** Variables biến chỗ hay đổi thành ô điền, few-shot cho 1 ví dụ đúng để Copilot bắt chước — cả hai giúp output đồng nhất mỗi lần gọi. · 📄 [VS Code Docs: Tips for effective prompts](https://code.visualstudio.com/docs/agent-customization/prompt-files#tips-for-writing-effective-prompts)
 
 ## 7. Walkthrough: đóng gói 1 prompt team — 35 phút
 
@@ -233,7 +233,7 @@ Mục này là bài thực hành tổng hợp: biến một prompt bạn đang g
 
 > **Tóm gọn 1 câu:** Chọn 1 prompt dùng nhiều → viết thành skill có variables + few-shot → test trên task thật → tách luật chung → commit cho cả team. 📄 2 script tạo nhanh: [`../01-huong-dan-su-dung/examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh`](../01-huong-dan-su-dung/examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh) · [`../01-huong-dan-su-dung/examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh`](../01-huong-dan-su-dung/examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh).
 
-> **Cách đọc bảng này:** mỗi dòng là 1 mốc thời gian trong 35 phút. Cột **Phút** là khung giờ, cột **Việc** là tên bước, cột **Làm gì** là hành động cụ thể cần xong trong mốc đó.
+> **Cách đọc bảng này:** mỗi dòng là 1 mốc thời gian trong 35 phút. Cột **Phút** là khung giờ, cột **Việc** là tên bước, cột **Làm gì** là hành động cụ thể cần xong trong mốc đó. · 📄 [VS Code Docs: Create a customization](https://code.visualstudio.com/docs/agent-customization/overview#create-a-customization)
 
 ## 8. Bảng tra nhanh: dùng loại nào?
 
@@ -252,7 +252,7 @@ Mục này là "bảng cử nhân" để lôi ra tra khi phân vân — đối c
 
 > Quy tắc ngón tay: **1 dòng → instructions, 1 task lặp → skill (2026) / prompt file (legacy Local), 1 quy trình dài → skill.**
 
-> **Tóm gọn 1 câu:** Phân vân thì tra bảng: task lặp → skill/prompt file, luật chung → instructions, hỏi 1 lần rồi thôi → gõ tay trong chat.
+> **Tóm gọn 1 câu:** Phân vân thì tra bảng: task lặp → skill/prompt file, luật chung → instructions, hỏi 1 lần rồi thôi → gõ tay trong chat. · 📄 [VS Code Docs: Customization building blocks](https://code.visualstudio.com/docs/agents/concepts/customization#customization-building-blocks)
 
 ## 9. Pitfalls + cách fix
 
@@ -281,7 +281,7 @@ Ba lỗi khó chịu nhất:
 ✅ ĐÚNG: luật chung ở copilot-instructions.md, file con chỉ giữ luật riêng scope
 ```
 
-> **Tóm gọn 1 câu:** File quá dài, thiếu variables, thiếu ví dụ và glob quá rộng là 4 cái bẫy phổ biến nhất — kiểm tra 4 điểm này trước khi share cho team. 📄 Frontmatter `applyTo` mẫu: [`03-4-mau-python-rules.instructions.md`](../01-huong-dan-su-dung/examples/03-instructions-memory-rules/mau-python-rules.instructions.md).
+> **Tóm gọn 1 câu:** File quá dài, thiếu variables, thiếu ví dụ và glob quá rộng là 4 cái bẫy phổ biến nhất — kiểm tra 4 điểm này trước khi share cho team. 📄 Frontmatter `applyTo` mẫu: [`03-4-mau-python-rules.instructions.md`](../01-huong-dan-su-dung/examples/03-instructions-memory-rules/mau-python-rules.instructions.md). · 📄 [VS Code Docs: Agent Skills common issues](https://code.visualstudio.com/docs/agent-customization/agent-skills#common-issues)
 
 ## 10. Bài tập cuối bài
 

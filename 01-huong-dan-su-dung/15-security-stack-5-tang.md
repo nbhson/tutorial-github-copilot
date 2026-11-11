@@ -28,7 +28,7 @@ Mục này cho bạn biết sau ~35 phút sẽ mang được gì về — như d
 - **Tầng 4 — Review effort + auto-trigger.** *Bật gì:* mức Lite/Balanced/Max theo độ nhạy PR + auto-review cấu hình trong ruleset. *Vì sao:* đây là chỗ tiền AI credits chảy nhiều nhất và đều nhất. *Tắt thì sao:* hoặc đốt tiền review file rác, hoặc PR nhạy cảm không ai ngó (§5).
 - **Tầng 5 — Branch protection + audit trail.** *Bật gì:* Rulesets required checks + audit log org. *Vì sao:* 4 tầng trên do người bật thì cũng do người tắt — tầng này ghi tên ai đã tắt. *Tắt thì sao:* stack "tự nhiên" trôi mất lúc nào không hay (§6–§7).
 
----
+--- · 📄 [VS Code Docs: Trust boundaries](https://code.visualstudio.com/docs/agents/run/security#trust-boundaries)
 
 ## 2. Tầng 1 — Content exclusion
 
@@ -49,7 +49,7 @@ Những điều docs nói xảy ra với file bị exclude:
 - `.githubignore` là quy ước team "nhắc agent đừng đọc": nó là ghi chú trong repo, **không phải enforcement** — và đừng ghi key nội bộ vào file đó, người ngoài đọc được repo là đọc được luôn danh sách key.
 - Công tắc cùng màn hình: "Suggestions matching public code" (duplication detection) Block/Allow — policy chi tiết thuộc **bài 07**.
 
-> **Tóm gọn 1 câu:** Tầng 1 là "làm Copilot không thấy" — không thay được "đừng để key nằm trong repo"; hiểu sai hai chuyện này là gốc của mọi vụ "em đã exclude rồi mà".
+> **Tóm gọn 1 câu:** Tầng 1 là "làm Copilot không thấy" — không thay được "đừng để key nằm trong repo"; hiểu sai hai chuyện này là gốc của mọi vụ "em đã exclude rồi mà". · 📄 [GitHub Docs: Exclude content from Copilot](https://docs.github.com/en/copilot/how-tos/configure-content-exclusion/exclude-content-from-copilot)
 
 ---
 
@@ -76,7 +76,7 @@ Những điều docs nói xảy ra với file bị exclude:
 - Instructions + skills đọc từ **head branch** — sửa `.github/copilot-instructions.md` ngay trong PR là test được luôn; skill tên thư mục `code-review` được code review ưu tiên nạp ([agent-skill](commands/copilot/system-knowledge/agent-skill/README.md) · bài 05) — 📄 Mẫu: [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`templates/.github/prompts/review-pr.prompt.md`](../templates/.github/prompts/review-pr.prompt.md).
 - Hai toggle nên biết ở cùng màn hình: "Use custom instructions when reviewing pull requests" (bật cho PR nhạy cảm) và "Allow Copilot to use MCP tools when reviewing pull requests" — **mặc định đã bật**, tắt nếu team không muốn tool chạy lúc review.
 
-> **Tóm gọn 1 câu:** Copilot review là một junior không biết mệt — đọc trước được mọi diff, nhưng không phải con dấu đóng lên merge.
+> **Tóm gọn 1 câu:** Copilot review là một junior không biết mệt — đọc trước được mọi diff, nhưng không phải con dấu đóng lên merge. · 📄 [GitHub Docs: Copilot code review](https://docs.github.com/en/copilot/concepts/agent-capabilities/agent-powered-workflows-and-operations/code-review)
 
 ---
 
@@ -96,7 +96,7 @@ Ba mức effort = ba mức "đốt token": **Lite** targeted (bug/security hiể
 > **Tham số chi phí cloud (blog GitHub 25/09/2025 — chỉ áp dụng **Copilot cloud agent chạy qua GitHub Actions**):**
 > - Trung bình **59 phút/task** — con số của session chạy bằng Actions minutes; **session chat web/mobile không hạn chế này**.
 > - Cùng blog: chi phí AI **~75% thấp hơn 2024** — số của blog, không phải cam kết docs.
-> - Cloud sandbox bill theo usage, tách đường AI credits — tổng bill = credits + Actions + sandbox.
+> - Cloud sandbox bill theo usage, tách đường AI credits — tổng bill = credits + Actions + sandbox. · 📄 [VS Code Docs: Code review settings](https://code.visualstudio.com/docs/agents/reference/ai-settings#code-review-settings)
 
 ```text
 # Mau prompt giao task cho cloud agent (mo issue tren github.com):
@@ -115,7 +115,7 @@ Ba mức effort = ba mức "đốt token": **Lite** targeted (bug/security hiể
 
 - **Branch protection** (Repo Settings → Branches): require review (≥1 approve; team payments/auth đặt ≥2 — khuyến nghị thực hành), require status checks (CodeQL + tests + secret scanning xanh mới được merge), dismiss stale approvals khi push mới. Mẫu gh CLI: [`./examples/07-policies-guardrails-tu-dong-hoa/lop-5-branch-protection-required-checks.sh`](./examples/07-policies-guardrails-tu-dong-hoa/lop-5-branch-protection-required-checks.sh).
 - **Rulesets** thay quản lý từng repo bằng một luật áp cho cả org — đọc hai khối cạnh nhau: `pull_request_checks` (PR phải qua gì) vs `bypass_list` (ai được đi tắt — càng ngắn càng tốt): [About rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets).
-- **Audit trail** — Org Settings → Logs → Audit log, lọc `operation:read/copilot`: docs có bảng event riêng cho hoạt động agent (`session_created`, `review_requested`, `review_completed`, ...): [Agentic audit log events](https://docs.github.com/en/copilot/reference/agentic-audit-log-events). Audit log **không chứa prompt text** — cần forensic prompt thì tự hook/telemetry (bài 07 + 13).
+- **Audit trail** — Org Settings → Logs → Audit log, lọc `operation:read/copilot`: docs có bảng event riêng cho hoạt động agent (`session_created`, `review_requested`, `review_completed`, ...): [Agentic audit log events](https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events). Audit log **không chứa prompt text** — cần forensic prompt thì tự hook/telemetry (bài 07 + 13).
 - managed-settings.json, network allowlist, MCP allow/deny — **bài 07 chủ sở hữu**; ở đây chỉ ghi: policy as code là chân của tầng 5, thiếu nó 4 tầng trên trôi theo từng admin mới.
 - **BYOK (bring your own key)** — 3 gạch: (1) request đi thẳng provider bằng key của bạn → **không nằm cùng đường** audit + billing Copilot của org; (2) model allowlist org không khóa BYOK như khóa catalog dựng sẵn — phải đo ở phía gateway/proxy; (3) bảng BYOK theo surface: **bài 14** (nhiều model, xem bảng 14).
 
@@ -142,7 +142,7 @@ Buổi rà định kỳ (mỗi quý, calendar block) — 6 gạch × 5 phút, c�
 - Gắn 1 Ruleset cho main: ≥1 reviewer + required checks, bypass_list tối thiểu → **tầng 5**.
 - Đặt calendar rà quý + ghi owner từng tầng vào tài liệu team → **toàn stack**.
 
----
+--- · 📄 [GitHub Docs: Agentic audit log events](https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -155,7 +155,7 @@ Buổi rà định kỳ (mỗi quý, calendar block) — 6 gạch × 5 phút, c�
 | Hứa "Lite = N credit cố định mỗi review" | Bill thật lệch, mất niềm tin cả vào dashboard | Chi phí per-token theo cỡ PR — dẫn rough guide của docs rồi **đo** bằng AI credits dashboard |
 | Áp "59 phút" cho mọi session trên mọi thiết bị | Tưởng mobile chat bị giới hạn y hệ thống | 59 phút là trung bình của **cloud agent chạy qua GitHub Actions** (§5) — web/mobile không hạn đó |
 
----
+--- · 📄 [VS Code Docs: Security risks to be aware of](https://code.visualstudio.com/docs/agents/run/security#security-risks-to-be-aware-of)
 
 ## Best practices
 
@@ -163,7 +163,7 @@ Buổi rà định kỳ (mỗi quý, calendar block) — 6 gạch × 5 phút, c�
 - **Đối xử exclusion như "đóng vai mù", không phải khóa két.** *Vì sao:* docs ghi nguyên văn "not a filesystem security boundary" — symlink, MCP bên thứ ba, access gián tiếp đều lọt; key thật phải ở env/secret manager.
 - **PR nhạy cảm → Balanced/Max; PR dependency lặt vặt → Lite.** *Vì sao:* effort tăng là AI credits + Actions minutes cùng tăng — trả tiền cho chỗ cần chiều sâu.
 - **Required checks + dismiss stale approvals thay vì "tin nhau cả".** *Vì sao:* approve bản cũ rồi push bản mới merge là cửa lách kinh điển của tầng 3–5.
-- **Đưa audit log vào calendar quý, đừng đợi incident.** *Vì sao:* stack không ai rà chết bằng những cú toggle nhỏ không ai nhớ.
+- **Đưa audit log vào calendar quý, đừng đợi incident.** *Vì sao:* stack không ai rà chết bằng những cú toggle nhỏ không ai nhớ. · 📄 [VS Code Docs: Trust boundaries](https://code.visualstudio.com/docs/agents/run/security#trust-boundaries)
 
 ## Bài tập
 
@@ -184,11 +184,11 @@ Buổi rà định kỳ (mỗi quý, calendar block) — 6 gạch × 5 phút, c�
 
 ## Reference
 
-- GitHub — [Content exclusion](https://docs.github.com/en/copilot/concepts/content-exclusion): 4 tác dụng, bảng availability theo surface, nguyên văn giới hạn "not a filesystem security boundary".
+- GitHub — [Content exclusion](https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/content-exclusion): 4 tác dụng, bảng availability theo surface, nguyên văn giới hạn "not a filesystem security boundary".
 - GitHub — [Push protection](https://docs.github.com/en/code-security/concepts/secret-security/push-protection) · [Secret scanning](https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning).
-- GitHub — [Using GitHub Copilot code review](https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review): effort Lite/Balanced/Max + rough guide, mặc định Comment, ruleset "Review new pushes", toggle MCP tools, đọc instructions từ head branch.
+- GitHub — [Using GitHub Copilot code review](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/use-code-review): effort Lite/Balanced/Max + rough guide, mặc định Comment, ruleset "Review new pushes", toggle MCP tools, đọc instructions từ head branch.
 - GitHub — [Models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing): AI credits per-token, 1 credit = $0.01 — review cost không phải số cố định.
-- GitHub — [Agentic audit log events](https://docs.github.com/en/copilot/reference/agentic-audit-log-events) · [About rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets).
+- GitHub — [Agentic audit log events](https://docs.github.com/en/copilot/reference/enterprise-administrators/agentic-audit-log-events) · [About rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets).
 - VS Code — [Review agent code edits](https://code.visualstudio.com/docs/agents/run/review-code-edits): checkpoints ở editor (mà không thấy docs nói chạy ở cloud — vì vậy §5 bảo commit sớm).
 - GitHub blog (25/09/2025) — hai số "59 phút/task" và "chi phí AI ~75% thấp hơn 2024" trích ở box §5; các mốc $ của effort và `audit_retention_days` là **kinh nghiệm thực hành**, không phải bảng giá docs công bố cố định.
 

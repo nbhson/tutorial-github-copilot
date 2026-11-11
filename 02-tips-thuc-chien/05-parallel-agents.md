@@ -17,7 +17,7 @@ Việc phụ thuộc (B cần kết quả A) -> tuần tự.
 Việc cùng files -> không song song (sẽ conflict).
 ```
 
-> Rule: **song song theo module/files, không song song trên cùng 1 file.**
+> Rule: **song song theo module/files, không song song trên cùng 1 file.** · 📄 [VS Code Docs: Separate the work](https://code.visualstudio.com/docs/agents/guides/delegate-two-tasks#1-separate-the-work)
 
 ## 2. Cơ chế: 4 kiểu song song
 
@@ -43,7 +43,7 @@ Sơ đồ fan-out chuẩn:
              --gộp-->     [Chat chính: gộp + verify + review]
 ```
 
-> **Tóm gọn 1 câu:** Song song như bếp nhà hàng: nhiều nồi đun cùng lúc để tiết kiệm thời gian — nhưng mỗi nồi một bếp riêng, và luôn có đầu bếp chính đứng gộp món. 📄 3 cách chạy song song: [`../01-huong-dan-su-dung/examples/06-custom-agents-parallel/chay-song-song-3-cach.sh`](../01-huong-dan-su-dung/examples/06-custom-agents-parallel/chay-song-song-3-cach.sh) · [`../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/branch-strategy-cua-coding-agent-copilot.sh`](../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/branch-strategy-cua-coding-agent-copilot.sh).
+> **Tóm gọn 1 câu:** Song song như bếp nhà hàng: nhiều nồi đun cùng lúc để tiết kiệm thời gian — nhưng mỗi nồi một bếp riêng, và luôn có đầu bếp chính đứng gộp món. 📄 3 cách chạy song song: [`../01-huong-dan-su-dung/examples/06-custom-agents-parallel/chay-song-song-3-cach.sh`](../01-huong-dan-su-dung/examples/06-custom-agents-parallel/chay-song-song-3-cach.sh) · [`../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/branch-strategy-cua-coding-agent-copilot.sh`](../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/branch-strategy-cua-coding-agent-copilot.sh). · 📄 [VS Code Docs: Work with multiple sessions](https://code.visualstudio.com/docs/agents/run/agents-window#work-with-multiple-sessions)
 
 ## 3. Kiểu 1: multi-chat song song (nhanh nhất)
 
@@ -72,7 +72,7 @@ Chat B (refactor): "Đề xuất tách voucher thành module riêng, 5 steps, gi
 Chat chính: "So 2 phương án trong 2 files, chọn 1 theo tiêu chí: ít rủi ro + test dễ xanh nhất."
 ```
 
-**Ví dụ 3 — Hỏi phụ không block mạch chính:** đang implement mà thắc mắc → mở chat phụ Ask: `"Giải thích hàm retryWithBackoff trong #file:src/payments/retry.ts, 3 bullet. Không sửa."` Chat chính không bị bẩn.
+**Ví dụ 3 — Hỏi phụ không block mạch chính:** đang implement mà thắc mắc → mở chat phụ Ask: `"Giải thích hàm retryWithBackoff trong #file:src/payments/retry.ts, 3 bullet. Không sửa."` Chat chính không bị bẩn. · 📄 [VS Code Docs: Manage Sessions](https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions)
 
 ## 4. Kiểu 2: multi cloud agent sessions
 
@@ -105,7 +105,7 @@ Mở PR draft, dán log test xanh vào mô tả.
 - [ ] Merge tuần tự, chạy full test sau mỗi merge?
 ```
 
-> Lưu ý 2026: chạy được 2–3 sessions trong terminal bằng Copilot CLI (binary `copilot`, xoay standard → plan → autopilot bằng `Shift+Tab`, giới hạn credits bằng `/limits`). Xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
+> Lưu ý 2026: chạy được 2–3 sessions trong terminal bằng Copilot CLI (binary `copilot`, xoay standard → plan → autopilot bằng `Shift+Tab`, giới hạn credits bằng `/limits`). Xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md). · 📄 [VS Code Docs: Cloud Sessions](https://code.visualstudio.com/docs/agents/run/cloud-sandbox-sessions)
 
 ## 5. Kiểu 3: worktrees cô lập
 
@@ -119,7 +119,7 @@ Chạy song song: mỗi VS Code gắn prompt riêng — `"Đọc plan.md Phase a
 
 **Gộp sau khi cả 2 xanh (copy-paste lệnh):**
 
-> 📄 **Code ví dụ:** [`./examples/05-parallel-agents/2-kieu-3-worktrees-co-lap.sh`](./examples/05-parallel-agents/2-kieu-3-worktrees-co-lap.sh)
+> 📄 **Code ví dụ:** [`./examples/05-parallel-agents/2-kieu-3-worktrees-co-lap.sh`](./examples/05-parallel-agents/2-kieu-3-worktrees-co-lap.sh) · 📄 [VS Code Docs: Working with Git worktrees](https://code.visualstudio.com/docs/sourcecontrol/branches-worktrees#working-with-git-worktrees)
 
 **Khi nào KHÔNG cần worktrees:** chỉ research/hỏi (multi-chat là đủ); task <30 phút (1 Agent nhanh hơn setup); máy yếu (dùng Copilot cloud agent thay).
 
@@ -147,7 +147,7 @@ Mỗi agent nhánh chỉ trả về:
 Không dump log dài, không paste code nguyên file.
 ```
 
-> Cấm: 2 Implementers cùng sửa 1 file. Luôn chia files không giao nhau.
+> Cấm: 2 Implementers cùng sửa 1 file. Luôn chia files không giao nhau. · 📄 [VS Code Docs: When to use subagents](https://code.visualstudio.com/docs/agents/run/subagents#when-to-use-subagents)
 
 ## 7. Walkthrough: research 3 modules trong 30 phút
 
@@ -158,7 +158,7 @@ Không dump log dài, không paste code nguyên file.
 | 20–25 | Chat chính thứ 4 | `"Đọc 3 files research-*.md, gộp thành table Module / Flow / Risks."` |
 | 25–30 | Lập plan | `"Từ table trên, trình plan 3 phases + verify từng phase, chờ duyệt."` |
 
-Tuần tự mất 60 phút, song song mất 30 phút với chất lượng tương đương (modules độc lập). Nếu có 2 issues độc lập: phút 30 assign 2 cloud agent sessions, quay lại review 2 PR drafts.
+Tuần tự mất 60 phút, song song mất 30 phút với chất lượng tương đương (modules độc lập). Nếu có 2 issues độc lập: phút 30 assign 2 cloud agent sessions, quay lại review 2 PR drafts. · 📄 [VS Code Docs: Monitor both tasks](https://code.visualstudio.com/docs/agents/guides/delegate-two-tasks#4-monitor-both-tasks)
 
 ## 8. Bảng tra nhanh: chọn kiểu nào?
 
@@ -176,7 +176,7 @@ Bảng này là bản đồ quyết định của cả bài. Đọc để trả 
 
 > **Cách đọc bảng này:** đọc cột **Tình huống** để tìm đúng dòng của bạn, cột **Kiểu đúng** là đáp án, cột **Giới hạn gợi ý** là mức an toàn nên tuân theo.
 
-> Quy tắc ngón tay: **độc lập + khác files → song song. Phụ thuộc hoặc cùng file → tuần tự.**
+> Quy tắc ngón tay: **độc lập + khác files → song song. Phụ thuộc hoặc cùng file → tuần tự.** · 📄 [VS Code Docs: Find the relevant code](https://code.visualstudio.com/docs/agents/guides/explore-a-codebase#2-find-the-relevant-code)
 
 ### Before / After
 
@@ -200,7 +200,7 @@ Bảng này là danh sách "vết thương" của người đi trước — mỗ
 | Quá nhiều sessions | Tốn credits, review không xuể | Tối đa 2–3 song song, review xong mới fan-out tiếp |
 | Không save findings ra file | Chat gộp quên hết | Mỗi nhánh ghi ra docs/research-*.md |
 
-> **Cách đọc bảng này:** bảng dài nhất bài — quét cột **Pitfall** từ trên xuống, thấy cái nào sắp mắc thì dừng ở đó đọc Triệu chứng + Fix; coi như danh mục bệnh đã ai ghi sẵn tên.
+> **Cách đọc bảng này:** bảng dài nhất bài — quét cột **Pitfall** từ trên xuống, thấy cái nào sắp mắc thì dừng ở đó đọc Triệu chứng + Fix; coi như danh mục bệnh đã ai ghi sẵn tên. · 📄 [VS Code Docs: Orchestration patterns](https://code.visualstudio.com/docs/agents/run/subagents#orchestration-patterns)
 
 ## 10. So sánh với Claude Code
 
@@ -211,6 +211,8 @@ Bảng này là danh sách "vết thương" của người đi trước — mỗ
 | Giao việc async cloud | cloud agent assign issue → PR draft | Async qua GitHub Actions/cloud | Mô hình async khác nhau |
 | Chia vai | Custom agents (`.github/agents/*.md`) | Subagents `.claude/agents/` | Cùng ý tưởng chia vai |
 | Workflow đa-agent bằng code | Copilot SDK (public preview) | Agent SDK / orchestration ngoài | Cả hai cho lập trình hoá fan-out |
+
+📄 [GitHub Docs: Delegating & parallelizing work](https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work/delegating-and-parallelizing-work-with-agents)
 
 ## 11. Bài tập cuối bài
 

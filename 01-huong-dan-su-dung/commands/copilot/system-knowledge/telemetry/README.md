@@ -5,18 +5,18 @@
 
 ## 1 câu nôm na
 
-"Telemetry" ở Copilot có hai tầng đừng lẫn: **consent** (máy này có được gửi dữ liệu giúp cải thiện sản phẩm không — một mục trong Settings) và **OTel export** (bạn tự bật để phiên agent đổ trace/metric về backend giám sát của *chính mình*). Consent là công tắc GitHub hỏi bạn; OTel là cái camera bạn tự lắp cho team.
+"Telemetry" ở Copilot có hai tầng đừng lẫn: **consent** (máy này có được gửi dữ liệu giúp cải thiện sản phẩm không — một mục trong Settings) và **OTel export** (bạn tự bật để phiên agent đổ trace/metric về backend giám sát của *chính mình*). Consent là công tắc GitHub hỏi bạn; OTel là cái camera bạn tự lắp cho team. · 📄 [VS Code Docs: Customize AI agents (overview)](https://code.visualstudio.com/docs/agent-customization/overview)
 
 ## Vì sao phải quan tâm Telemetry?
 
-Tầng consent là câu hỏi đầu tiên khi onboard máy công ty và khi làm audit quyền riêng tư; nhầm nó với train (code có bị dùng huấn luyện model không) hay duplication (lọc trùng code public) là trả lời sai audit. Tầng OTel là câu hỏi của admin: "model nào đang ngốn token, tool nào chạy lúc nào?" — không có export thì chỉ thấy dashboard chung, không truy được từng phiên.
+Tầng consent là câu hỏi đầu tiên khi onboard máy công ty và khi làm audit quyền riêng tư; nhầm nó với train (code có bị dùng huấn luyện model không) hay duplication (lọc trùng code public) là trả lời sai audit. Tầng OTel là câu hỏi của admin: "model nào đang ngốn token, tool nào chạy lúc nào?" — không có export thì chỉ thấy dashboard chung, không truy được từng phiên. · 📄 [VS Code Docs: Customize AI agents (overview)](https://code.visualstudio.com/docs/agent-customization/overview)
 
 ## Khi nào dùng / khi nào đừng
 
 - **Dùng khi:** onboard máy mới/máy công ty; audit quyền riêng tư; team muốn tự giám sát phiên agent bằng backend riêng.
 - **ĐỪNG nhầm với:** câu "code có bị train không" (đó là setting **train/opt-out**, xem [FAQ bảo mật – quyền riêng tư](../../../../../03-cau-hoi-thuong-gap/09-bao-mat-quyen-rieng-tu.md)); câu trùng code public (đó là **duplication filter**); câu máy đang ở plan/model nào (đó là **Copilot status dashboard**, xem [status](../status/README.md)).
 
-> Phân biệt nhanh bốn khái niệm hay bị lẫn:
+> Phân biệt nhanh bốn khái niệm hay bị lẫn: · 📄 [VS Code Docs: Choose a customization scope](https://code.visualstudio.com/docs/agent-customization/overview#choose-a-customization-scope)
 
 | Khái niệm | Là gì | Khi nào dùng |
 |---|---|---|
@@ -37,13 +37,13 @@ Telemetry không phải slash command trong Chat — consent nằm trong Setting
 | `settings.json` | 6 tham số `github.copilot.chat.otel.*`: `enabled`, `exporterType` (`otlp-http`/`otlp-grpc`/`console`/`file`), `otlpEndpoint`, `captureContent`, `captureIdentity`, `maxAttributeSizeChars` |
 | Copilot CLI | env `COPILOT_OTEL_ENABLED=true` + `COPILOT_OTEL_FILE_EXPORTER_PATH=<đường-dẫn-file>` — export không cần collector |
 
-> OTel chạy cho **cả** Local lẫn Copilot harness. Chưa có collector thì dùng `console`/`file` trước — đừng cất prompt vào backend công cộng chỉ để "thử cho nhanh".
+> OTel chạy cho **cả** Local lẫn Copilot harness. Chưa có collector thì dùng `console`/`file` trước — đừng cất prompt vào backend công cộng chỉ để "thử cho nhanh". · 📄 [VS Code Docs: Telemetry in VS Code](https://code.visualstudio.com/docs/configure/telemetry)
 
 ## Ví dụ thật
 
 Nghiệp vụ: team chưa dựng OTel collector nhưng muốn xem phiên agent đã gọi tool gì — export ra file local để tự đọc, kèm chụp trạng thái consent nộp audit.
 
-> 📄 **Code ví dụ:** [`examples/03-vi-du-that.sh`](examples/03-vi-du-that.sh)
+> 📄 **Code ví dụ:** [`examples/03-vi-du-that.sh`](examples/03-vi-du-that.sh) · 📄 [VS Code Docs: Create project instructions](https://code.visualstudio.com/docs/agents/guides/customize-copilot-guide#step-1-create-project-instructions)
 
 **Kết quả mong đợi:** file export có dữ liệu sau một phiên agent; trạng thái consent được chụp lại kèm ngày.
 
@@ -54,9 +54,11 @@ Nghiệp vụ: team chưa dựng OTel collector nhưng muốn xem phiên agent �
 ❌ **Sai:** "Tôi tắt telemetry rồi, thế là code không bị train." — Sai hoàn toàn: đó là hai setting khác nhau. Và bật `captureContent: true` đổ cả prompt/response về collector công cộng là tự mở thêm đường rò rỉ.
 ✅ **Đúng:** Kiểm riêng từng công tắc (telemetry / train / duplication) và ghi lại từng trạng thái; chỉ bật `captureContent` khi backend nằm trong công ty, có retention policy rõ.
 
-**Bài học:** consent là công tắc của GitHub, OTel là camera của bạn — trả lời audit phải nói rõ đang nói về công tắc nào, và camera chiếu về đâu còn quan trọng hơn việc nó bật hay tắt.
+**Bài học:** consent là công tắc của GitHub, OTel là camera của bạn — trả lời audit phải nói rõ đang nói về công tắc nào, và camera chiếu về đâu còn quan trọng hơn việc nó bật hay tắt. · 📄 [VS Code Docs: Troubleshoot customization issues](https://code.visualstudio.com/docs/agent-customization/overview#troubleshoot-customization-issues)
 
 ## Lỗi thường gặp
+
+📄 [VS Code Docs: What gets collected](https://code.visualstudio.com/docs/agents/guides/monitoring-agents#what-gets-collected)
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
@@ -64,26 +66,26 @@ Nghiệp vụ: team chưa dựng OTel collector nhưng muốn xem phiên agent �
 | Bật OTel mà backend không nhận | `enabled` chưa bật, hoặc `exporterType`/`otlpEndpoint` sai | Thử `exporterType: "console"` trước khi trỏ collector |
 | Backend nhận nguyên prompt nhạy cảm | `captureContent: true` | Tắt, hoặc đặt `maxAttributeSizeChars` để cắt độ dài attribute |
 | Đổi setting local không ăn | Org đè setting cá nhân | Hỏi admin org policy trước khi kết luận |
-
 ## So sánh với Claude Code
+
+📄 [GitHub Docs: Comparing customizations](https://docs.github.com/en/copilot/concepts/customizations/comparing-customizations)
 
 | Việc | Copilot (Telemetry) | Claude Code | Ghi chú |
 |---|---|---|---|
 | Tự xuất số liệu | `github.copilot.chat.otel.*` (settings) + env CLI | OpenTelemetry qua env riêng | Cả hai đều "tự lắp camera"; tên biến khác nhau — đối chiếu docs từng bên |
 | Công tắc consent cấp org | Có (policy org đè local) | Không có tương đương trực tiếp kiểu policy org | Đừng giả định hai bên bật/tắt giống nhau |
 | Train trên code | Tùy plan — xem data controls | Dữ liệu API mặc định không dùng train (*tự verify*) | Luôn đối chiếu data controls thay vì đoán |
-
 ## Best practices (kèm "vì sao")
 
 - **Ghi lại trạng thái consent kèm ngày chụp vào docs onboard.** *Vì sao?* Audit hỏi bất chợt; bằng chứng có ngày trả lời được ngay.
 - **Thử OTel bằng `exporterType: "console"` trước khi trỏ collector.** *Vì sao?* Bạn thấy dữ liệu gì sẽ đi, trước khi nó chảy vào hệ thống chung.
 - **Mặc định giữ `captureContent: false`.** *Vì sao?* Bật lên là toàn bộ prompt/response về backend của bạn — nhân đôi rủi ro rò rỉ.
-- **Máy công ty: kiểm policy org trước khi đổi local.** *Vì sao?* Policy org thường đè setting cá nhân — đổi xong tưởng xong, thực tế không ăn.
+- **Máy công ty: kiểm policy org trước khi đổi local.** *Vì sao?* Policy org thường đè setting cá nhân — đổi xong tưởng xong, thực tế không ăn. · 📄 [VS Code Docs: Enable OTel monitoring](https://code.visualstudio.com/docs/agents/guides/monitoring-agents#enable-otel-monitoring)
 
 ## Bài tập nhỏ
 
 1. **(5 phút)** Mở Settings, ghi lại 3 trạng thái: telemetry, train/opt-out, duplication — cái nào do cá nhân, cái nào do org quản.
-2. **(10 phút)** Bật OTel với `exporterType: "file"`, chạy một phiên agent, mở file export xem có span/tool call; sau đó tắt `enabled` và chạy lại để thấy file đứng yên.
+2. **(10 phút)** Bật OTel với `exporterType: "file"`, chạy một phiên agent, mở file export xem có span/tool call; sau đó tắt `enabled` và chạy lại để thấy file đứng yên. · 📄 [VS Code Docs: Telemetry in VS Code](https://code.visualstudio.com/docs/configure/telemetry)
 
 ## Tham khảo
 
@@ -91,4 +93,4 @@ Nghiệp vụ: team chưa dựng OTel collector nhưng muốn xem phiên agent �
 - Bài chủ: [13-code-intelligence-indexing-telemetry.md](../../../../13-code-intelligence-indexing-telemetry.md) · Cheatsheet: [CHEATSHEET.md](../../../../../CHEATSHEET.md).
 - FAQ: [troubleshooting](../../../../../03-cau-hoi-thuong-gap/08-loi-thuong-gap-troubleshooting.md) · [bảo mật – quyền riêng tư](../../../../../03-cau-hoi-thuong-gap/09-bao-mat-quyen-rieng-tu.md).
 
-> Chốt: consent là công tắc GitHub hỏi bạn, OTel là camera bạn tự lắp — gọi đúng tên từng công tắc khi trả lời audit, và luôn biết camera đang chiếu về đâu trước khi bật.
+> Chốt: consent là công tắc GitHub hỏi bạn, OTel là camera bạn tự lắp — gọi đúng tên từng công tắc khi trả lời audit, và luôn biết camera đang chiếu về đâu trước khi bật. · 📄 [VS Code Docs: Telemetry in VS Code](https://code.visualstudio.com/docs/configure/telemetry)

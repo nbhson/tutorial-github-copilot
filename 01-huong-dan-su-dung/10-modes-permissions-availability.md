@@ -44,7 +44,7 @@ Cùng chữ "mode" nhưng mỗi harness nghĩa khác nhau — đây là bảng c
 
 > ⚠️ **Khác biệt Local harness** (legacy, chỉ để so sánh): countdown auto-accept `chat.editing.autoAcceptDelay` chỉ có ở Local; `*.prompt.md`, participants ([README](commands/local/model-agent/participants/README.md)) và tool sets cũng chỉ sống ở Local; sandbox của Local chỉ bọc lệnh terminal, không enforce rule managed.
 
-> **Tóm gọn 1 câu:** Ask là người chỉ nói, Plan vẽ bản đồ không đụng code, Agent làm hết — còn Autopilot nằm ở mode picker, không phải permission level.
+> **Tóm gọn 1 câu:** Ask là người chỉ nói, Plan vẽ bản đồ không đụng code, Agent làm hết — còn Autopilot nằm ở mode picker, không phải permission level. · 📄 [VS Code Docs: Choose an Agent Harness](https://code.visualstudio.com/docs/agents/run/agent-harnesses)
 
 ## 2. Session Target: phiên chạy ở đâu, tay chân của ai
 
@@ -62,7 +62,7 @@ Model là "não"; **agent harness** là "tay chân + nhà xưởng" — điều 
 
 > **Vì sao quan trọng?** Cùng prompt cho kết quả khác nhau giữa hai phiên thường là do bảng này, không phải do model.
 > **Nếu làm sai thì sao?** Giao việc cần file local cho Cloud → agent chịu, không có context; gộp "harness = VS Code" → tưởng đang chạy Copilot trong khi phiên vẫn là Local legacy.
-> **Tóm gọn 1 câu:** Não là model, nhà xưởng là harness, cloud chỉ là nhà xưởng thuê của GitHub — đổi target không phải đổi model. 📄 Picker 2 trạng thái: [`./examples/00-tong-quan-copilot/session-target-picker.md`](./examples/00-tong-quan-copilot/session-target-picker.md) · file `.vscode/mcp.json` dạng thật: [`01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh).
+> **Tóm gọn 1 câu:** Não là model, nhà xưởng là harness, cloud chỉ là nhà xưởng thuê của GitHub — đổi target không phải đổi model. 📄 Picker 2 trạng thái: [`./examples/00-tong-quan-copilot/session-target-picker.md`](./examples/00-tong-quan-copilot/session-target-picker.md) · file `.vscode/mcp.json` dạng thật: [`01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh). · 📄 [VS Code Docs: Harnesses & execution environments](https://code.visualstudio.com/docs/agents/concepts/agents#agent-harnesses-and-execution-environments)
 
 ## 3. Approval per tool: người gác cổng allow / ask / deny
 
@@ -94,7 +94,7 @@ Baseline team — commit vào `.vscode/settings.json`:
 > **Nếu làm sai thì sao?** Allow write/delete cho "nhanh" → một injection là dọn hậu quả cả buổi; deny cả lệnh đọc lặp lại → mỏi tay rồi bấm mù, tự vô hiệu hóa cổng mình dựng.
 > **Tóm gọn 1 câu:** Nới việc đọc, siết việc ghi/chạy — và nhớ chính sách hiệu lực là giao nhau của mọi nguồn, không phải của riêng file nào.
 
-> 📄 **Code ví dụ (allow/ask/deny trong settings.json):** [`./examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc`](./examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc) · mẫu sandbox + managed: [`./examples/10-modes-permissions-availability/mau-sandbox-va-verify.jsonc`](./examples/10-modes-permissions-availability/mau-sandbox-va-verify.jsonc) · tra nhanh: [policy-approval](commands/copilot/model-agent/policy-approval/README.md)
+> 📄 **Code ví dụ (allow/ask/deny trong settings.json):** [`./examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc`](./examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc) · mẫu sandbox + managed: [`./examples/10-modes-permissions-availability/mau-sandbox-va-verify.jsonc`](./examples/10-modes-permissions-availability/mau-sandbox-va-verify.jsonc) · tra nhanh: [policy-approval](commands/copilot/model-agent/policy-approval/README.md) · 📄 [VS Code Docs: Tool approval](https://code.visualstudio.com/docs/agents/run/approvals#tool-approval)
 
 ## 4. Permission levels & auto-approve: Manual / Assisted / Allow all
 
@@ -114,7 +114,7 @@ Núm vặn này tự duyệt cho **cả phiên**, đặt TRƯỚC bộ rule per-
 
 > **Vì sao quan trọng?** Đây là matrix permission levels mà bài 06/08/16 trỏ về — vặn sai một núm là cả hệ thống approval đổi hành vi.
 > **Nếu làm sai thì sao?** Tin LLM judge của Assisted tuyệt đối → quên mất nó chỉ là lưới; hàng rào thật là sandbox (mục 5).
-> **Tóm gọn 1 câu:** Manual cho hàng ngày, Assisted khi mỏi tay nhưng vẫn muốn có lưới, Allow all gần như đừng bật — thứ thay nó là sandbox, không phải niềm tin.
+> **Tóm gọn 1 câu:** Manual cho hàng ngày, Assisted khi mỏi tay nhưng vẫn muốn có lưới, Allow all gần như đừng bật — thứ thay nó là sandbox, không phải niềm tin. · 📄 [VS Code Docs: Permission levels](https://code.visualstudio.com/docs/agents/run/approvals#permission-levels)
 
 ## 5. Sandbox — hàng rào vẫn chặn khi bạn Allow all
 
@@ -127,7 +127,7 @@ Núm vặn này tự duyệt cho **cả phiên**, đặt TRƯỚC bộ rule per-
 
 > **Vì sao quan trọng?** Approval là "ai bấm nút", sandbox là "nút đó đi tới đâu" — khi bạn bấm nhầm (hay Allow all), chỉ hàng rào còn tác dụng.
 > **Nếu làm sai thì sao?** Bật sandbox rồi tưởng mạng đã kín — hàng rào phụ thuộc danh sách; quên `failIfUnavailable` thì máy không hỗ trợ âm thầm chạy trần.
-> **Tóm gọn 1 câu:** Cổng do người gác, rào do máy dựng — cổng càng mở thì càng cần rào, và rào chỉ chắc khi bạn đọc được bản vẽ của nó.
+> **Tóm gọn 1 câu:** Cổng do người gác, rào do máy dựng — cổng càng mở thì càng cần rào, và rào chỉ chắc khi bạn đọc được bản vẽ của nó. · 📄 [VS Code Docs: Understand the sandbox boundary](https://code.visualstudio.com/docs/agents/run/agent-sandboxing#understand-the-sandbox-boundary)
 
 ## 6. Copilot in the cloud: 3 núm trên một màn hình
 
@@ -143,7 +143,7 @@ Tên theo docs GitHub 11/2026: **Copilot cloud agent** (con agent) và **Copilot
 
 > **Vì sao quan trọng?** Người giao việc trên cloud hay gộp "tự lái" thành một quyết định, trong khi docs tách thành ba câu hỏi rời.
 > **Nếu làm sai thì sao?** Chọn GitHub Actions cho việc dài → phiên bị cắt giữa đường vì chạm trần minutes, không phải vì agent làm sai.
-> **Tóm gọn 1 câu:** Trên cloud, *ai lái · ai duyệt · chạy ở đâu* là ba ô phải chọn riêng — đừng để chữ "Autopilot" tự trả lời cả ba.
+> **Tóm gọn 1 câu:** Trên cloud, *ai lái · ai duyệt · chạy ở đâu* là ba ô phải chọn riêng — đừng để chữ "Autopilot" tự trả lời cả ba. · 📄 [VS Code Docs: Three management solutions](https://code.visualstudio.com/docs/enterprise/manage-ai-settings#understand-the-three-management-solutions)
 
 ## 7. Availability: plan nào mở gì & tiền trừ thế nào
 
@@ -170,7 +170,7 @@ Tên theo docs GitHub 11/2026: **Copilot cloud agent** (con agent) và **Copilot
 
 > **Vì sao quan trọng?** Phân nửa báo cáo "Copilot lỗi" trong kênh team là do vặn núm mà plan hoặc harness không có.
 > **Nếu làm sai thì sao?** Đem personal setting ra "phá" org deny → intersection và deny thắng mọi nơi, chỉ mất buổi chiều.
-> **Tóm gọn 1 câu:** Tính năng hiện hay không đi theo plan + harness — kiểm cả hai trước khi kêu bug; và tiền đi theo token chứ không theo số request.
+> **Tóm gọn 1 câu:** Tính năng hiện hay không đi theo plan + harness — kiểm cả hai trước khi kêu bug; và tiền đi theo token chứ không theo số request. · 📄 [GitHub Docs: Default availability](https://docs.github.com/en/copilot/concepts/enterprise/default-availability)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -182,14 +182,14 @@ Tên theo docs GitHub 11/2026: **Copilot cloud agent** (con agent) và **Copilot
 | Coi rule `false` trong settings là chặn lệnh | lệnh destructive lọt qua vì bạn bấm Allow tiện tay | `false` = bắt buộc duyệt; chặn thật = sandbox (mục 5) / `--deny-*` (bài 12) / org policy |
 | "Setting không thấy = bug" | báo bug vô hiệu, admin mất thời gian | chạy cây 4 câu hỏi mục 7 trước |
 
-**Bài học:** ba tầng mode · approval · sandbox cùng trỏ một nguyên tắc — agent *làm được nhiều*, nhưng *được làm* phải ít hơn, và hàng rào do người vẽ.
+**Bài học:** ba tầng mode · approval · sandbox cùng trỏ một nguyên tắc — agent *làm được nhiều*, nhưng *được làm* phải ít hơn, và hàng rào do người vẽ. · 📄 [VS Code Docs: Agents are not available in Chat](https://code.visualstudio.com/docs/agents/agent-troubleshooting/faq#agents-are-not-available-in-chat)
 
 ## Best practices
 
 - **Chọn mode thấp nhất làm được việc; nới đọc, siết ghi/chạy, rồi mới tới hàng rào.** *Vì sao?* Agent cho task một dòng vừa đốt AI Credits vì loop dài, vừa mở scope ngoài ý; đọc không có side effect, ghi/xoá/gửi đi mới là chỗ gây hại — mà approval chỉ là best-effort, chỉ sandbox là enforce thật.
 - **Đặt deny ở org/repo thay vì personal.** *Vì sao?* allowlist hiệu lực = intersection và deny thắng mọi nơi; personal setting không cứu được baseline tệ.
 - **Autopilot / Allow all chỉ trong worktree sạch + sandbox + repo có test.** *Vì sao?* không có lệnh verify thì bạn không biết agent làm đúng chưa; worktree không phải security boundary (bài 11).
-- **Sau migrate Local→Copilot: chạy `Developer: Policy Diagnostics` + `/sandbox policy`.** *Vì sao?* docs ghi file gốc và file migrate **không sync nhau** — rule quên migrate là cổng mở âm thầm.
+- **Sau migrate Local→Copilot: chạy `Developer: Policy Diagnostics` + `/sandbox policy`.** *Vì sao?* docs ghi file gốc và file migrate **không sync nhau** — rule quên migrate là cổng mở âm thầm. · 📄 [VS Code Docs: Permission levels](https://code.visualstudio.com/docs/agents/run/approvals#permission-levels)
 
 ## Bài tập
 
@@ -205,6 +205,6 @@ Tên theo docs GitHub 11/2026: **Copilot cloud agent** (con agent) và **Copilot
 ## Reference
 
 - VS Code — [Approvals & permissions](https://code.visualstudio.com/docs/agents/run/approvals) (permission levels, Autopilot, Claude/Codex, tool/URL/terminal approval) · [Agent sandboxing](https://code.visualstudio.com/docs/agents/run/agent-sandboxing) · [Agent harnesses](https://code.visualstudio.com/docs/agents/concepts/agent-harnesses) · [Move from Local to Copilot](https://code.visualstudio.com/docs/agents/run/move-to-copilot) · [AI features cheat sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet)
-- GitHub — [Models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) (AI Credits per-token, review effort) · [Supported surfaces for policies](https://docs.github.com/en/copilot/reference/supported-surfaces-for-policies) · [About local sandboxing](https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/understanding-local-sandboxing) · [Copilot CLI reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference) · [About Copilot in the cloud](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent)
+- GitHub — [Models and pricing](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) (AI Credits per-token, review effort) · [Supported surfaces for policies](https://docs.github.com/en/copilot/reference/supported-surfaces-for-policies) · [About local sandboxing](https://docs.github.com/en/copilot/concepts/security-governance-and-network-settings/understanding-local-sandboxing) · [Copilot CLI reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference) · [About Copilot in the cloud](https://docs.github.com/en/copilot/concepts/copilot-surfaces/copilot-on-github)
 
 **Chốt:** mode cho biết agent đi tới đâu, permission cho biết ai được gật, sandbox cho biết hàng rào dừng ở đâu, và plan cho biết bạn có quyền thấy cả ba núm đó không. Nới đọc — siết ghi, nhớ `deny > ask > allow` cùng intersection, rồi hãy giao bàn phím cho Autopilot.
