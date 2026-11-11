@@ -127,6 +127,8 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 4. Check token: env có, chưa hết hạn, đủ scope.
 5. Reload IDE → đọc Output panel log server đó.
 
+📄 Debug sâu khi tools biến mất giữa chừng: [`examples/04-5-mcp-tools-ot-nhien-mat-thu-tu.sh`](examples/04-5-mcp-tools-ot-nhien-mat-thu-tu.sh).
+
 Tham khảo chéo: [bài 03](03-modes-permissions.md) (tool approval) · [bài 08](08-loi-thuong-gap-troubleshooting.md) (lỗi tổng hợp) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (secrets + audit) · [../templates/.mcp.json](../templates/.mcp.json) (mẫu Copilot harness) · [../templates/.vscode/mcp.json](../templates/.vscode/mcp.json) (mẫu Local harness, copy ngay).
 
 > **Tóm gọn 1 câu:** MCP là hệ dây điện nối Copilot với thế giới ngoài — `mcp.json` là bản vẽ, token là thẻ từ, log Output là đồng hồ đo điện; hỏng chỗ nào tra đúng chỗ đó theo thứ tự 5 bước.

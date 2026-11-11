@@ -117,6 +117,8 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 - File cấm đọc: **/*.pem, secrets/**, .env*.
 ```
 
+📄 File settings `.vscode/settings.json` đầy đủ + kịch bản allow/ask/deny: [`../01-huong-dan-su-dung/templates/.vscode/settings.json`](../templates/.vscode/settings.json) · [`08-5-approval-allow-ask-deny.jsonc`](../01-huong-dan-su-dung/examples/08-5-approval-allow-ask-deny.jsonc).
+
 ## 10. Khi nào KHÔNG nên dùng Agent mode?
 
 **Trả lời 1 câu:** 5 lúc: hotfix prod gấp, migration DB/infra, code legal/compliance, repo chưa có test, quota đỏ cuối tháng — dùng Ask/Edit hoặc làm tay.
@@ -151,6 +153,8 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 3. Check org policy có đè setting không (hỏi admin).
 4. Check content exclusion có chặn file bạn cần không.
 5. Vẫn kẹt → chat mới + prompt ghi rõ phạm vi file + lệnh được chạy.
+
+📄 Đối chiếu kịch bản allow/ask/deny đang chạy: [`../01-huong-dan-su-dung/examples/08-5-approval-allow-ask-deny.jsonc`](../01-huong-dan-su-dung/examples/08-5-approval-allow-ask-deny.jsonc) · [policy-approval](../01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval/README.md).
 
 Tham khảo chéo: [bài 04](04-mcp-faq.md) (MCP approval) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 07](07-custom-agents-coding-agent-workflows.md) (agent workflows) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (exclusion).
 

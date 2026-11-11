@@ -81,7 +81,7 @@ Hỏi từng câu một, khi đủ thì mới trình plan.
 
 Pattern này cực hợp cho non-coder / BA: bạn chỉ trả lời, Copilot lo cấu trúc.
 
-> **Tóm gọn 1 câu:** hai nấc đầu chỉ nói không làm — Ask để hiểu, Plan để chốt phương án kèm câu "chờ tôi duyệt, không code trong message này".
+> **Tóm gọn 1 câu:** hai nấc đầu chỉ nói không làm — Ask để hiểu, Plan để chốt phương án kèm câu "chờ tôi duyệt, không code trong message này". 📄 Slug: [`/plan`](../01-huong-dan-su-dung/commands/copilot/code-actions/plan/README.md) · [`/ask`](../01-huong-dan-su-dung/commands/copilot/model-agent/ask-mode/README.md).
 
 ## 4. Nấc 3–4: Edit + Agent (code có kiểm soát)
 
@@ -115,7 +115,7 @@ Ràng buộc: đừng đụng src/generated/, đừng commit.
 
 Quy tắc an toàn cho Agent: luôn gắn `plan.md` đã duyệt; 1 phase / 1 chat; luôn dặn dừng sau N lần đỏ. Gate verify xem [Tips 04](./04-verification-done-that.md).
 
-> **Tóm gọn 1 câu:** Edit là dao mổ cho một vùng nhỏ, Agent là thợ phụ tay cho việc nhiều file — cả hai đều phải đeo "đề bài" là plan.md đã duyệt.
+> **Tóm gọn 1 câu:** Edit là dao mổ cho một vùng nhỏ, Agent là thợ phụ tay cho việc nhiều file — cả hai đều phải đeo "đề bài" là plan.md đã duyệt. 📄 Worktree "1 phase / 1 chat": [`03-5-chay-song-song-3-cach.sh`](../01-huong-dan-su-dung/examples/03-5-chay-song-song-3-cach.sh).
 
 ## 5. Nấc 5: cloud agent giao issue (bất đồng bộ)
 
@@ -228,7 +228,7 @@ Mục này ghép mọi thứ trên thành một kịch bản có đồng hồ �
 
 Tổng: 5 chats gọn, 1 plan duyệt, 0 lần revert lớn. Nếu giao cloud agent: phút 30 assign issue kèm plan.md link, 2 giờ sau kiểm tra PR draft.
 
-> **Tóm gọn 1 câu:** feature đủ lớn trong 60 phút gồm 5 chat ngắn theo đúng thứ tự Ask → Plan → Duyệt → Implement → Review, không một lần revert lớn.
+> **Tóm gọn 1 câu:** feature đủ lớn trong 60 phút gồm 5 chat ngắn theo đúng thứ tự Ask → Plan → Duyệt → Implement → Review, không một lần revert lớn. 📄 Giấy tờ cần sẵn: [`04-3-mau-instructions-backend.md`](../01-huong-dan-su-dung/examples/04-3-mau-instructions-backend.md) · checkpoints: [`11-2-checkpoints-4-co-che.sh`](../01-huong-dan-su-dung/examples/11-2-checkpoints-4-co-che.sh).
 
 ## 8. Bảng tra nhanh: chọn nấc nào?
 

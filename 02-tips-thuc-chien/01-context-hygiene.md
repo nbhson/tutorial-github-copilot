@@ -26,7 +26,7 @@ Ba quy tắc vàng, nhớ ba câu này là đủ:
 
 > **Cách đọc bảng này:** mỗi dòng là một con số cần nhớ. Cột giữa giải thích số đó đếm cái gì, cột phải là việc cụ thể cần làm khi chạm ngưỡng.
 
-> **Tóm gọn 1 câu:** context là bộ nhớ làm việc của Copilot — càng bẩn càng dở, nên cứ một việc một chat sạch và mọi thứ quan trọng đều đưa ra file.
+> **Tóm gọn 1 câu:** context là bộ nhớ làm việc của Copilot — càng bẩn càng dở, nên cứ một việc một chat sạch và mọi thứ quan trọng đều đưa ra file. 📄 File luật mẫu: [`../templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md).
 
 ## 2. Copilot nhét gì vào context?
 
@@ -86,7 +86,7 @@ Rồi paste summary sang chat mới kèm: `"Tiếp tục từ summary chat trư�
 
 > Sai lầm kinh điển: 1 chat đi từ bugfix → feature → refactor. Việc sau thừa hưởng toàn bộ rác của việc trước — như người làm chung nhà bạn vừa nhớ nhầm việc của khách trước.
 
-> **Tóm gọn 1 câu:** new chat là nút reset rẻ nhất — xong việc là đóng, trước khi đóng thì tóm tắt quyết định ra file để không mất gì.
+> **Tóm gọn 1 câu:** new chat là nút reset rẻ nhất — xong việc là đóng, trước khi đóng thì tóm tắt quyết định ra file để không mất gì. 📄 4 loại context nạp tự động + cách cắt gọn: [`../01-huong-dan-su-dung/examples/00-4-bon-ho-tool-copilot.md`](../01-huong-dan-su-dung/examples/00-4-bon-ho-tool-copilot.md).
 
 ## 4. Thói quen 2: attachments gọn + #codebase scope hẹp
 
@@ -133,7 +133,7 @@ Chọn công cụ theo tình huống:
 
 > Mẹo: explore bằng `#codebase` xong → **ghi findings ra file → new chat** chỉ đọc file đó. Đừng mang chat explore nặng đi implement tiếp.
 
-> **Tóm gọn 1 câu:** gắn context hẹp như đưa đúng tờ giấy cần — `#file`/`#selection` là mặc định, `#codebase` chỉ dành cho khám phá một lần rồi ghi ra file.
+> **Tóm gọn 1 câu:** gắn context hẹp như đưa đúng tờ giấy cần — `#file`/`#selection` là mặc định, `#codebase` chỉ dành cho khám phá một lần rồi ghi ra file. 📄 4 họ tool + cái nào nạp lúc nào: [`00-4-bon-ho-tool-copilot.md`](../01-huong-dan-su-dung/examples/00-4-bon-ho-tool-copilot.md).
 
 ## 5. Thói quen 3: knowledge base + instructions thay vì paste
 
@@ -154,6 +154,8 @@ Mục này giải quyết một thói quen tốn kém: cứ gặp việc là pas
 - test: `npm test -- <scope>` · lint: `npm run lint` · build: `npm run build`
 ```
 
+📄 Script tạo knowledge base + verify: [`../01-huong-dan-su-dung/examples/02-5-knowledge-bases-ky-uc-team-dung-chung.sh`](../01-huong-dan-su-dung/examples/02-5-knowledge-bases-ky-uc-team-dung-chung.sh).
+
 - **Knowledge base trên GitHub** (Repo → Settings → Copilot → Knowledge bases → New; nguồn: docs/, wiki, ADRs). Hỏi: `@payments-docs Chính sách refund quá 30 ngày là gì? Kèm link file nguồn, 3 bullet, không suy đoán ngoài docs.`
 
 | Tiêu chí | Knowledge base | Custom instructions |
@@ -166,7 +168,7 @@ Mục này giải quyết một thói quen tốn kém: cứ gặp việc là pas
 
 > Lưu ý 2026: prompt files (`.prompt.md`) **chỉ chạy ở Local harness** (VS Code docs) — Copilot harness không nạp. Việc lặp nên chuyển sang **Agent Skills** (`SKILL.md`). Xem [Tips 07](./07-thiet-ke-prompts-skills.md).
 
-> **Tóm gọn 1 câu:** cái gì lặp lại thì cất vào file một lần — instructions cho luật cần nhớ mọi turn, knowledge base cho tài liệu cần tra khi hỏi.
+> **Tóm gọn 1 câu:** cái gì lặp lại thì cất vào file một lần — instructions cho luật cần nhớ mọi turn, knowledge base cho tài liệu cần tra khi hỏi. 📄 Script tạo KB + verify: [`02-5-knowledge-bases-ky-uc-team-dung-chung.sh`](../01-huong-dan-su-dung/examples/02-5-knowledge-bases-ky-uc-team-dung-chung.sh).
 
 ## 6. Thói quen 4: custom agent cô lập + checkpoints
 
@@ -209,7 +211,7 @@ Trước khi sửa, đọc src/auth/__tests__/login.test.ts và liệt kê 3 cas
 
 Rule: **correct 2 lần vẫn sai → dừng cãi, restore checkpoint.** Checkpoint giống nút save trong game: đi sai là quay về điểm đã lưu, khỏi chơi lại từ đầu. Leo thang Ask → Edit → Agent xem [Tips 03](./03-plan-first-workflow.md).
 
-> **Tóm gọn 1 câu:** tách vai (planner/reviewer/tester) để model không tự chấm bài mình, và sai 2 lần là quay về checkpoint chứ không cãi tiếp.
+> **Tóm gọn 1 câu:** tách vai (planner/reviewer/tester) để model không tự chấm bài mình, và sai 2 lần là quay về checkpoint chứ không cãi tiếp. 📄 3 agent mẫu: [`../templates/.github/agents/`](../templates/.github/agents/) · 4 cơ chế undo: [`11-2-checkpoints-4-co-che.sh`](../01-huong-dan-su-dung/examples/11-2-checkpoints-4-co-che.sh).
 
 ## 7. Chẩn đoán chat bẩn — cứu ngay
 

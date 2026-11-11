@@ -110,8 +110,9 @@ Thứ tự nạp của docs CLI (cao → thấp): `--additional-mcp-config` → 
 
 ## 5. Approval — 3 dòng
 
-- **`deny > ask > allow`**: deny thắng mọi thứ; rule chưa khớp → mặc định **hỏi**; `[]` = lockdown; allowlist hiệu lực = **giao (intersection)** của mọi nguồn. **Trust server** (được chạy chưa) và **duyệt từng tool call** là hai lớp riêng — đọc publisher trước khi trust, đừng approve máy móc.
-- Ma trận permission levels (Manual / Assisted / Allow all) + sandbox là việc của **bài 10**; org policy "MCP servers in Copilot" (Business/Enterprise, mặc định **tắt**) → bài 07/16.
+- **`deny > ask > allow`**: deny thắng mọi thứ; rule chưa khớp → mặc định **hỏi**; `[]` = lockdown; allowlist hiệu lực = **giao (intersection)** của mọi nguồn. **Trust server** (được chạy chưa) và **duyệt từng tool call** là hai lớp riêng — đọc publisher trước khi trust, đừng approve máy móc. Ma trận permission levels (Manual / Assisted / Allow all) + sandbox là việc của **bài 10**; org policy "MCP servers in Copilot" (Business/Enterprise, mặc định **tắt**) → bài 07/16.
+
+> 📄 **Code ví dụ (settings.json — allow/ask/deny):** [`examples/08-5-approval-allow-ask-deny.jsonc`](examples/08-5-approval-allow-ask-deny.jsonc) — `chat.tools.terminal.autoApprove` · `chat.tools.urls.autoApprove` · `chat.tools.eligibleForAutoApproval` · sandbox; tra cứu: [policy-approval](commands/copilot/model-agent/policy-approval/README.md)
 
 ## 6. 5 servers day-one
 
@@ -159,7 +160,7 @@ Audit truoc moi PR:
 # exit=1 = sach. exit=0 = CO LO: token van trong git history - xoa dong khong du, rotate ngay.
 ```
 
-Docs chốt: **file cấu hình cá nhân không phải secret store**. Secret thật nằm trong env của máy chạy harness; trên github.com (settings MCP cho cloud agent), secret cá nhân mang prefix `COPILOT_MCP_` — chi tiết ở bài 12/16.
+Docs chốt: **file cấu hình cá nhân không phải secret store**. Secret thật nằm trong env của máy chạy harness; trên github.com (settings MCP cho cloud agent), secret cá nhân mang prefix `COPILOT_MCP_` — chi tiết ở bài 12/16. Kịch bản "đã lỡ commit token" (❌→✅): 📄 [`05-neu-lam-sai…jsonc`](commands/copilot/system-knowledge/mcp-add/examples/05-neu-lam-sai-thi-sao-sai-ung.jsonc) · [`06-neu-lam-sai…jsonc`](commands/copilot/system-knowledge/mcp-add/examples/06-neu-lam-sai-thi-sao-sai-ung.jsonc).
 
 ## 9. Prune — giữ MCP khỏe
 
@@ -180,15 +181,14 @@ Prune flow (2 tuan/lan, 10 phut):
 | Tin "server connected = Copilot dùng được" | model chưa từng gọi nó mà bạn không biết | expand tool call — đủ check ở cuối mục 3 |
 | Dùng `${input:…}` trong `.mcp.json` | portable format không nhận; server không được forward sang Copilot | env vars; `${input:…}` chỉ dành cho `.vscode/mcp.json` |
 | Copy nguyên file `.vscode/mcp.json` sang `.mcp.json` | sai key (`servers` vs `mcpServers`), mất luôn tính năng `sse`/`envFile` | đối chiếu [format reference](https://code.visualstudio.com/docs/agents/reference/mcp-configuration) trước khi copy |
-| Approval `allow` hết cho tiện | write/delete ngoài prod chạy không ai giữ | đọc → `allow`, side-effect → `ask`, prod → `deny` (bài 10) |
+| Approval `allow` hết cho tiện | write/delete ngoài prod chạy không ai giữ | đọc → `true` trong `autoApprove`, side-effect → `false`/mặc định hỏi, prod → `eligibleForAutoApproval: false` + sandbox (mục 5) |
 
-**Bài học:** đa số sự cố MCP không phải "server hỏng" mà là **khai sai file / sai key** — docs tách hai format và chúng không tương thích nhau.
+**Bài học:** đa số sự cố MCP không phải "server hỏng" mà là **khai sai file / sai key** — docs tách hai format và chúng không tương thích nhau. 📄 Hai format đúng, copy được: [`examples/08-6-mcp-servers-day-one.jsonc`](examples/08-6-mcp-servers-day-one.jsonc) (`.mcp.json`) vs [`commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (`.vscode/mcp.json`).
 
 ## Best practices
 
-- **Khai team server trong `.mcp.json` root; secret để trong env của máy/dev box.** *Vì sao?* File này Copilot harness + CLI cùng đọc — một khai báo chạy trên mọi surface của team.
+- **Khai team server trong `.mcp.json` root — 📄 [`templates/.mcp.json`](../templates/.mcp.json); secret để trong env của máy/dev box; siết `tools` khi khai (CLI mặc định `*`).** *Vì sao?* File này Copilot harness + CLI cùng đọc — một khai báo chạy trên mọi surface của team; docs GitHub ghi fewer tools → chọn đúng hơn, ít lỗi, đỡ tốn context.
 - **Server cá nhân để `~/.copilot/mcp-config.json`, đừng commit.** *Vì sao?* Token personal commit vào repo biến repo thành nơi lộ credentials của riêng bạn.
-- **Siết `tools` khi khai server (CLI mặc định `*`).** *Vì sao?* Docs GitHub: fewer tools → chọn đúng hơn, ít lỗi, đỡ tốn context.
 - **Có connector thì dùng connector, tự nuôi server là phương án cuối.** *Vì sao?* Connector được GitHub maintain + auth một lần; self-host là bạn nhận phần upgrade vào mình.
 
 ## Bài tập

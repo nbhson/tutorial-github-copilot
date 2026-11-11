@@ -12,7 +12,7 @@
 | Gọi Copilot từ code | Copilot SDK / API | App của bạn |
 | Dùng ngoài IDE | github.com/copilot, Mobile | Browser/app |
 
-> **Cách đọc bảng này:** dọc cột **Muốn** tìm việc bạn đang định tự động hóa, cột **Công cụ** là tên gọi để kiếm trên GitHub Actions marketplace, cột **Trigger** là sự kiện khởi động công cụ đó — đọc đủ ba cột là có kịch bản workflow hoàn chỉnh.
+> **Cách đọc bảng này:** dọc cột **Muốn** tìm việc bạn đang định tự động hóa, cột **Công cụ** là tên gọi để kiếm trên GitHub Actions marketplace, cột **Trigger** là sự kiện khởi động công cụ đó — đọc đủ ba cột là có kịch bản workflow hoàn chỉnh — 📄 2 workflow mẫu sẵn trong repo: [`../templates/.github/workflows/`](../templates/.github/workflows/).
 
 ---
 
@@ -121,6 +121,6 @@ SDK bọc Copilot CLI + cung cấp sessions, permissions, custom tools, events. 
 4. PR agent fail → `gh pr checks` + comment `@copilot` hướng fix.
 5. SDK lỗi → check token env + docs mới nhất.
 
-Tham khảo chéo: [bài 07](07-custom-agents-coding-agent-workflows.md) (viết issue cho agent) · [bài 05](05-policies-guardrails-faq.md) (guardrails CI) · [bài 02](02-model-context-premium.md) (quota) · [../templates/.github/workflows/](../templates/.github/workflows/) (mẫu workflows).
+Tham khảo chéo: [bài 07](07-custom-agents-coding-agent-workflows.md) (viết issue cho agent) · [bài 05](05-policies-guardrails-faq.md) (guardrails CI) · [bài 02](02-model-context-premium.md) (quota) · [../templates/.github/workflows/](../templates/.github/workflows/) (mẫu workflows) · 📄 script debug conflict/PR agent fail: [`examples/04-5-coding-agent-conflict-pr-fail-xu-ly.sh`](examples/04-5-coding-agent-conflict-pr-fail-xu-ly.sh).
 
 > **Tóm gọn 1 câu:** Automation (CI + agent + review) là băng chuyền tự động trong nhà máy — workflow là bản vẽ máy móc, agent là robot chạy trên băng chuyền đó, và CI là cảm biến báo đỏ khi sản phẩm lỗi.

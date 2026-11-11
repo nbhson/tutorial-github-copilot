@@ -28,7 +28,7 @@ Cùng chữ "mode" nhưng mỗi harness nghĩa khác nhau — đây là bảng c
 | **Copilot in the cloud** (GitHub.com) | modes **Interactive / Autopilot** | bảng 3 núm: mục 6 |
 | **Claude / Codex** (provider harness) | Claude: **permission modes** · Codex: **approval presets** — tên theo docs ở mục 4 | cùng ý tưởng, khác tên |
 
-- **Ask** = chỉ đọc + trả lời. **Plan** = nghiên cứu, đề xuất kế hoạch, **không sửa file** dù bạn bảo "cứ code đi" (trong editor: [`/plan`](commands/copilot/code-actions/plan/README.md)). **Agent** = tự lập kế hoạch + sửa nhiều file + chạy test + lặp.
+- **Ask** = chỉ đọc + trả lời. **Plan** = nghiên cứu, đề xuất kế hoạch, **không sửa file** dù bạn bảo "cứ code đi" (trong editor: [`/plan`](commands/copilot/code-actions/plan/README.md)). **Agent** = tự lập kế hoạch + sửa nhiều file + chạy test + lặp. Slug chi tiết từng núm: [`/ask`](commands/copilot/model-agent/ask-mode/README.md) · [`/agent`](commands/copilot/model-agent/agent-mode/README.md) · Autopilot ở CLI: bài 12 — 📄 ảnh 2 trạng thái picker: [`examples/02-1-session-target-picker.md`](examples/02-1-session-target-picker.md).
 - **Autopilot**: tự duyệt mọi tool như Allow all, retry khi lỗi, tự trả lời câu hỏi chặn tiến trình — và **vẫn tiêu AI Credits như chat thường**; tiết kiệm công trông, không tiết kiệm tiền. Advanced Autopilot (Experimental) để model nhỏ riêng quyết "xong chưa", bật bằng `chat.autopilot.advanced.enabled`. Ở CLI, Shift+Tab xoay standard → plan → autopilot → bài 12.
 
 ```text
@@ -62,7 +62,7 @@ Model là "não"; **agent harness** là "tay chân + nhà xưởng" — điều 
 
 > **Vì sao quan trọng?** Cùng prompt cho kết quả khác nhau giữa hai phiên thường là do bảng này, không phải do model.
 > **Nếu làm sai thì sao?** Giao việc cần file local cho Cloud → agent chịu, không có context; gộp "harness = VS Code" → tưởng đang chạy Copilot trong khi phiên vẫn là Local legacy.
-> **Tóm gọn 1 câu:** Não là model, nhà xưởng là harness, cloud chỉ là nhà xưởng thuê của GitHub — đổi target không phải đổi model.
+> **Tóm gọn 1 câu:** Não là model, nhà xưởng là harness, cloud chỉ là nhà xưởng thuê của GitHub — đổi target không phải đổi model. 📄 Picker 2 trạng thái: [`examples/02-1-session-target-picker.md`](examples/02-1-session-target-picker.md) · file `.vscode/mcp.json` dạng thật: [`01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh).
 
 ## 3. Approval per tool: người gác cổng allow / ask / deny
 
@@ -93,6 +93,8 @@ Baseline team — commit vào `.vscode/settings.json`:
 > **Vì sao quan trọng?** Đây là ma trận mà bài 06/08/16 dẫn về — nắm nó thì không cần đọc từng lệnh vẫn biết lệnh nào đáng sợ.
 > **Nếu làm sai thì sao?** Allow write/delete cho "nhanh" → một injection là dọn hậu quả cả buổi; deny cả lệnh đọc lặp lại → mỏi tay rồi bấm mù, tự vô hiệu hóa cổng mình dựng.
 > **Tóm gọn 1 câu:** Nới việc đọc, siết việc ghi/chạy — và nhớ chính sách hiệu lực là giao nhau của mọi nguồn, không phải của riêng file nào.
+
+> 📄 **Code ví dụ (allow/ask/deny trong settings.json):** [`examples/08-5-approval-allow-ask-deny.jsonc`](examples/08-5-approval-allow-ask-deny.jsonc) · mẫu sandbox + managed: [`examples/10-5-mau-sandbox-va-verify.jsonc`](examples/10-5-mau-sandbox-va-verify.jsonc) · tra nhanh: [policy-approval](commands/copilot/model-agent/policy-approval/README.md)
 
 ## 4. Permission levels & auto-approve: Manual / Assisted / Allow all
 
@@ -184,8 +186,7 @@ Tên theo docs GitHub 11/2026: **Copilot cloud agent** (con agent) và **Copilot
 
 ## Best practices
 
-- **Chọn mode thấp nhất làm được việc.** *Vì sao?* Agent cho task một dòng vừa đốt AI Credits vì loop dài, vừa mở scope ngoài ý.
-- **Nới đọc, siết ghi/chạy, rồi mới tới hàng rào.** *Vì sao?* Đọc không có side effect; ghi/xoá/gửi đi mới là chỗ gây hại — mà approval chỉ là best-effort, chỉ sandbox là enforce thật.
+- **Chọn mode thấp nhất làm được việc; nới đọc, siết ghi/chạy, rồi mới tới hàng rào.** *Vì sao?* Agent cho task một dòng vừa đốt AI Credits vì loop dài, vừa mở scope ngoài ý; đọc không có side effect, ghi/xoá/gửi đi mới là chỗ gây hại — mà approval chỉ là best-effort, chỉ sandbox là enforce thật.
 - **Đặt deny ở org/repo thay vì personal.** *Vì sao?* allowlist hiệu lực = intersection và deny thắng mọi nơi; personal setting không cứu được baseline tệ.
 - **Autopilot / Allow all chỉ trong worktree sạch + sandbox + repo có test.** *Vì sao?* không có lệnh verify thì bạn không biết agent làm đúng chưa; worktree không phải security boundary (bài 11).
 - **Sau migrate Local→Copilot: chạy `Developer: Policy Diagnostics` + `/sandbox policy`.** *Vì sao?* docs ghi file gốc và file migrate **không sync nhau** — rule quên migrate là cổng mở âm thầm.

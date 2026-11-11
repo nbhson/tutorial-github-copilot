@@ -112,7 +112,7 @@ GIAO:         spec rõ + scope 1 module + done checklist + việc 1–2h độc 
 KHÔNG GIAO:   spec mờ, đụng nhiều team, task 15 phút Edit xong.
 ```
 
-Giao issue một dòng "fix refund" là agent tự đoán mọi thứ — PR về sai hướng, mất thêm thời gian gỡ. Plan-first xem [Tips 03](./03-plan-first-workflow.md), gates xem [Tips 06](./06-policies-guardrails-recipes.md).
+Giao issue một dòng "fix refund" là agent tự đoán mọi thứ — PR về sai hướng, mất thêm thời gian gỡ. 📄 Luồng issue → chat → PR + mẫu issue: [`06-5-1-assign-issue-chat-luong-pr-chat.sh`](../01-huong-dan-su-dung/examples/06-5-1-assign-issue-chat-luong-pr-chat.sh). Plan-first xem [Tips 03](./03-plan-first-workflow.md), gates xem [Tips 06](./06-policies-guardrails-recipes.md).
 
 ## 5. Mobile, github.dev & voice
 

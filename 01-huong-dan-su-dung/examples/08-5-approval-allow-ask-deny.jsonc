@@ -1,0 +1,66 @@
+// 08-5 — allow / ask / deny trong settings.json, cho tool MCP + terminal + URL.
+// Đặt ở .vscode/settings.json (commit cho team) hoặc user settings (riêng máy bạn).
+// Keys theo docs 11/2026: code.visualstudio.com/docs/agents/run/approvals
+// Lưu ý: không có key ba giá trị "allow/ask/deny" — mỗi cơ chế một loại rule:
+//   allow = true trong autoApprove · ask = false (bắt buộc hỏi) hoặc mặc định chưa khớp rule
+//   deny  = chat.tools.eligibleForAutoApproval (chặn pre-approve) · sandbox (bài 10) ·
+//           CLI --deny-tool/--deny-url (bài 12) · hook preToolUse exit 2 (bài 07) · org policy (bài 16)
+
+{
+  // ---------- MẶC ĐỊNH CẢ SESSION ----------
+  // Mức của session mới: "manual" (hỏi) | "assisted" (LLM chấm rủi ro) | "allowAll"
+  // Picker trong chat input luôn đổi được; org có managed default đè lên (bài 16).
+  // Nới toàn bộ bằng chat.tools.global.autoApprove = true → chỉ ở repo mồi, không phải team baseline.
+  "chat.permissions.default": "manual",
+
+  // ---------- TERMINAL: rule cho từng LỆNH (thang true/false) ----------
+  // true = allow (chạy luôn) · false = ask (bắt buộc hỏi — KHÔNG phải chặn hẳn)
+  // Chưa khớp rule nào = mặc định hỏi. Thứ tự thắng trong cùng scope: false > true.
+  // Lệnh ghép (a && b) chỉ tự chạy khi MỌI subcommand khớp true và không cái nào khớp false.
+  "chat.tools.terminal.autoApprove": {
+    "git status": true,                       // allow: đọc, không side effect
+    "/^git (diff|show\\b.*)$/": true,         // allow theo regex (bọc trong /.../)
+    "/^npm (test|lint)\\b/": true,            // allow: lệnh lặp lại nhiều lần trong ngày
+    "rm": false,                              // ask: bắt buộc duyệt tay
+    "sudo": false,                            // ask
+    "/docker push/": false,                   // ask — muốn CHẶN thật: sandbox hoặc --deny-tool
+    "matchCommandLine": false                 // true = xét cả dòng lệnh, không xét từng subcommand
+  },
+
+  // ---------- URL / FETCH: request (đi ra) khác response (đi vào context) ----------
+  // request = false → không gửi dữ liệu ra site lạ · response = false → content vào context phải duyệt
+  // (docs: tool result cũng có thể chứa prompt injection — kiểm cả hai chiều)
+  "chat.tools.urls.autoApprove": {
+    "https://docs.npmjs.com": true,                       // allow cả hai chiều
+    "https://*.internal.example/*": {
+      "approveRequest": true,                             // allow gọi API nội bộ
+      "approveResponse": false                            // ask trước khi đưa output vào context
+    },
+    "http://localhost:3000": false                        // ask (khac scheme https — allow https khong tu bao trum http/subdomain)
+  },
+
+  // ---------- MCP TOOL: chặn pre-approve theo từng tool ----------
+  // false = tool này KHÔNG BAO GIỜ được auto-approve, popup luôn hiện,
+  //         "Chat: Manage Tool Approval" cũng không bật được → gần nhất với "deny" ở settings.
+  // Đặt trong USER settings thì cá nhân không tự nới được; org device policy làm điều tương tự cho mọi người.
+  "chat.tools.eligibleForAutoApproval": {
+    "mcp_postgres-dev_query": false,                     // DB dev: chạy được nhưng phải duyệt từng câu
+    "mcp_playwright_browser_click": false                // browser click có side effects
+  },
+
+  // ---------- SANDBOX: hàng rào thật (deny cấp file system + network) ----------
+  // Khác autoApprove: autoApprove quyết "ai bấm nút", sandbox quyết "lệnh chạm được gì".
+  // Preview macOS/Linux/WSL2; sandbox vẫn chặn khi đã chọn Allow all / Autopilot → bài 10 + 10-5.
+  "chat.agent.sandbox.enabled": "on"
+
+  // Muốn "deny" theo server MCP cho team (Business/Enterprise, mặc định TẮT): org policy
+  // "MCP servers in Copilot" + managed allowlist — bài 16, không nằm trong file này.
+}
+
+// ===== VERIFY 3 PHÚT (mỗi mức một lệnh, xem đúng hành vi) =====
+// 1. allow: "chạy git status giup toi"               -> chay luon, khong popup
+// 2. ask:   "xoa thu muc node_modules va cai lai"    -> popup; bam Deny -> agent dung, khong lach
+// 3. deny:  mo "Chat: Manage Tool Approval" -> tool gan false khong con nut "without approval";
+//           chay lenh ghi ngoai workspace khi sandbox "on" -> bi chan du session dang Allow all
+// > neu (2) van chay luon -> rule sai ten lenh hoac subcommand khong khop; neu (3) van cho
+//   pre-approve -> sai key: kiem tra lai ten tool trong danh sach (docs: "ai-settings").

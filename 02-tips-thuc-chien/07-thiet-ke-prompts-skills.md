@@ -59,7 +59,7 @@ Nơi đặt chuẩn:
 
 Chọn nhanh, tránh nhét sai chỗ: nhét luật 1 dòng vào prompt file thì mỗi lần phải nhớ gọi — mệt. Nhét quy trình 10 bước vào prompt file thì nó phình ra, quên nửa sau. Nhét task lặp vào instructions thì nó nạp lại mỗi turn — tốn credit vô ích.
 
-> **Tóm gọn 1 câu:** Ba loại khác nhau ở cách kích hoạt — prompt file bạn tự gọi, instructions tự chạy ngầm, skill là quy trình dài Copilot tự nhận diện.
+> **Tóm gọn 1 câu:** Ba loại khác nhau ở cách kích hoạt — prompt file bạn tự gọi, instructions tự chạy ngầm, skill là quy trình dài Copilot tự nhận diện. 📄 File thật từng loại: [`../templates/.github/prompts/review-pr.prompt.md`](../templates/.github/prompts/review-pr.prompt.md) · [`../templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`../templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md).
 
 ## 3. Prompt files (.prompt.md) — legacy, chỉ Local
 
@@ -214,7 +214,7 @@ Output đúng:
 - Evidence: log + diff --stat chỉ chạm src/payments/**
 ```
 
-Lợi ích: output đồng nhất, dễ review, Copilot ít sáng tạo bừa. Người mới đọc ví dụ là hiểu cách dùng ngay — tiết kiệm cả buổi bàn luận.
+Lợi ích: output đồng nhất, dễ review, Copilot ít sáng tạo bừa. Người mới đọc ví dụ là hiểu cách dùng ngay — tiết kiệm cả buổi bàn luận. 📄 Prompt few-shot thành file: [`../templates/.github/prompts/add-table.prompt.md`](../templates/.github/prompts/add-table.prompt.md).
 
 > **Tóm gọn 1 câu:** Variables biến chỗ hay đổi thành ô điền, few-shot cho 1 ví dụ đúng để Copilot bắt chước — cả hai giúp output đồng nhất mỗi lần gọi.
 
@@ -231,7 +231,7 @@ Mục này là bài thực hành tổng hợp: biến một prompt bạn đang g
 | 25–30 | Share | Commit + PR, nhờ 1 đồng nghiệp trigger thử, ghi feedback 3 dòng |
 | 30–35 | Version | Thêm vào README team: khi nào dùng skill, khi nào review |
 
-> **Tóm gọn 1 câu:** Chọn 1 prompt dùng nhiều → viết thành skill có variables + few-shot → test trên task thật → tách luật chung → commit cho cả team.
+> **Tóm gọn 1 câu:** Chọn 1 prompt dùng nhiều → viết thành skill có variables + few-shot → test trên task thật → tách luật chung → commit cho cả team. 📄 2 script tạo nhanh: [`03-7-walkthrough-5-phut-skill-au-tien-cua.sh`](../01-huong-dan-su-dung/examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh) · [`02-4-3-port-prompt-file-cu-sang-skill.sh`](../01-huong-dan-su-dung/examples/02-4-3-port-prompt-file-cu-sang-skill.sh).
 
 > **Cách đọc bảng này:** mỗi dòng là 1 mốc thời gian trong 35 phút. Cột **Phút** là khung giờ, cột **Việc** là tên bước, cột **Làm gì** là hành động cụ thể cần xong trong mốc đó.
 
@@ -281,7 +281,7 @@ Ba lỗi khó chịu nhất:
 ✅ ĐÚNG: luật chung ở copilot-instructions.md, file con chỉ giữ luật riêng scope
 ```
 
-> **Tóm gọn 1 câu:** File quá dài, thiếu variables, thiếu ví dụ và glob quá rộng là 4 cái bẫy phổ biến nhất — kiểm tra 4 điểm này trước khi share cho team.
+> **Tóm gọn 1 câu:** File quá dài, thiếu variables, thiếu ví dụ và glob quá rộng là 4 cái bẫy phổ biến nhất — kiểm tra 4 điểm này trước khi share cho team. 📄 Frontmatter `applyTo` mẫu: [`03-4-mau-python-rules.instructions.md`](../01-huong-dan-su-dung/examples/03-4-mau-python-rules.instructions.md).
 
 ## 10. Bài tập cuối bài
 
@@ -295,7 +295,7 @@ Mục này là phần về nhà. Làm đủ 3 bài thì bạn mới thực sự 
 
 > Đạt: sau 1 tháng, team bạn có ≥3 skills/prompts + instructions gọn + 1 skill dài, mọi output đồng format.
 
-> **Tóm gọn 1 câu:** Làm hết 3 bài tập để biến kiến thức thành tài sản thật: 1 prompt file, bộ instructions gọn, và 1 skill cho quy trình dài.
+> **Tóm gọn 1 câu:** Làm hết 3 bài tập để biến kiến thức thành tài sản thật: 1 prompt file, bộ instructions gọn, và 1 skill cho quy trình dài — giấy làm bài + file đối chiếu: [`02-1-session-target-picker.md`](../01-huong-dan-su-dung/examples/02-1-session-target-picker.md) · [`../templates/.github/`](../templates/.github/).
 
 ## Tham khảo chéo
 

@@ -47,7 +47,7 @@
 | **github.com chat** | Cloud (chỉ đọc/hỏi) | Chỉ repo | Hỏi/review khi không có máy dev |
 | **Copilot cloud agent** | Hạ tầng cloud GitHub | Chỉ repo + cloud env/CI | Task độc lập, chạy qua đêm → PR |
 | **github.dev** | Browser | Chỉ repo | Sửa nhanh không clone |
-| **Copilot CLI** | Terminal bạn | `.mcp.json` / repo config | Agentic trong terminal + gợi ý lệnh shell |
+| **Copilot CLI** | Terminal bạn | `.mcp.json` / repo config (📄 [`01-2-copilot-sdk-build-agent-rieng.ts`](examples/01-2-copilot-sdk-build-agent-rieng.ts) + [`02-2-…rieng.sh`](examples/02-2-copilot-sdk-build-agent-rieng.sh) — SDK/CLI dựng agent riêng) | Agentic trong terminal + gợi ý lệnh shell |
 
 > **Cách đọc bảng này:** hàng nào "Nơi code chạy" là "Máy bạn" thì được dùng tài nguyên máy bạn; hàng cloud chỉ giới hạn trong repo. Cây hỏi 10 giây đã có ở **bài 00 §1.1** — khỏi dựng lại cây trùng nhau.
 
@@ -67,7 +67,7 @@ Task 4: "Quên flag docker/git"                    -> gh copilot suggest/explain
 Task 5: "Review PR của cloud agent lúc đang cafe" -> github.com chat / Mobile
 ```
 
-> **Tóm gọn 1 câu:** Bảng trên là tầng lọc thứ nhất: hỏi "cần môi trường máy bạn không", hỏi "cần chạy tiếp khi tắt máy không", cuối cùng mới tính tới terminal.
+> **Tóm gọn 1 câu:** Bảng trên là tầng lọc thứ nhất: hỏi "cần môi trường máy bạn không", hỏi "cần chạy tiếp khi tắt máy không", cuối cùng mới tính tới terminal. Tài liệu cài theo IDE khác: 📄 [`examples/01-4-jetbrains-visual-studio-neovim.sh`](examples/01-4-jetbrains-visual-studio-neovim.sh).
 
 ## 3. Session Target: 2 câu hỏi trong 1 picker
 
@@ -92,7 +92,7 @@ Trích nguyên văn docs: *"the Claude and Codex experience is focused on the co
 | Cloud là một harness | Cloud là execution target chạy Copilot harness (feature `cloud-sessions`) |
 | Agent cloud "nhìn máy em" | Cloud không thấy file `.env` hay setting local của bạn |
 
-> **Tip:** harness và nơi chạy độc lập nhau — cùng Copilot harness nhưng mỗi lần có thể chọn máy bạn hoặc cloud; cloud agent chat chỉ tồn tại khi target đang là cloud. Lệnh đổi harness giữa session: `/model` — chi tiết [`/model`](commands/copilot/model-agent/session-target/README.md).
+> **Tip:** harness và nơi chạy độc lập nhau — cùng Copilot harness nhưng mỗi lần có thể chọn máy bạn hoặc cloud; cloud agent chat chỉ tồn tại khi target đang là cloud. Lệnh đổi harness giữa session: `/model` — chi tiết [`/model`](commands/copilot/model-agent/session-target/README.md) · 📄 [`examples/02-1-session-target-picker.md`](examples/02-1-session-target-picker.md).
 
 **Lỗi thường gặp:** chọn bừa harness bên thứ ba cho task cần DB local → agent chỉ thấy repo, fail. ✅ Đổi về Copilot + máy bạn trước khi chạy lệnh verify.
 
@@ -118,7 +118,7 @@ Verify:  `npm test -- auth`, chay demo tren `localhost:3000`
 Definition of done: PR co test moi + screenshot truong hop sai
 ```
 
-**Lỗi thường gặp:** issue mơ hồ ("làm lại auth cho sạch") → agent hỏi lại hoặc sửa tràn lan. ✅ Scope 1 mục tiêu + file được đụng + lệnh verify.
+**Lỗi thường gặp:** issue mơ hồ ("làm lại auth cho sạch") → agent hỏi lại hoặc sửa tràn lan. ✅ Scope 1 mục tiêu + file được đụng + lệnh verify. 📄 Mẫu issue + luồng chat: [`examples/06-5-1-assign-issue-chat-luong-pr-chat.sh`](examples/06-5-1-assign-issue-chat-luong-pr-chat.sh).
 
 > **Billing:** cloud agent **và** chat trên github.com đều tiêu **AI credits** (1 credit = $0.01, per-token) — còn lại bao nhiêu xem ở Settings → Copilot.
 
@@ -186,7 +186,7 @@ Definition of done: PR co test moi + screenshot truong hop sai
 
 ## Bài tập
 
-- [ ] Mở picker Session Target, chụp 2 trạng thái (Copilot + Local) rồi giải thích khác biệt bằng **3 câu trở xuống** — file: `examples/02-1-session-target-picker.md`.
+- [ ] Mở picker Session Target, chụp 2 trạng thái (Copilot + Local) rồi giải thích khác biệt bằng **3 câu trở xuống** — giấy làm bài: 📄 [`examples/02-1-session-target-picker.md`](examples/02-1-session-target-picker.md).
 - [ ] Viết 1 issue theo mẫu §4 vào repo test rồi assign `copilot`, nhận về 1 PR.
 - [ ] Chạy `gh copilot explain "git reflog"`, sau đó nói rõ vì sao nó chưa phải agent.
 

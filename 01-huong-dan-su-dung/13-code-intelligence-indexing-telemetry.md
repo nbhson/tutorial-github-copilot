@@ -79,7 +79,7 @@ Hai mẫu ăn tiền (cú pháp `#`-mentions đầy đủ: bài 04):
 
 So nhanh với đường "không index": Claude Code và Codex không dựng semantic index trước — agent của họ **dò theo yêu cầu** (grep/glob từng vòng); đổi lại mỗi vòng dò tốn thêm lượt tool, còn Copilot trả giá một lần cho cái index.
 
-> **Tóm gọn 1 câu:** Index chỉ giúp *tìm*, không đảm bảo *đúng* — một câu một flow, scope rõ, rồi đọc kỹ file bằng `#file:`.
+> **Tóm gọn 1 câu:** Index chỉ giúp *tìm*, không đảm bảo *đúng* — một câu một flow, scope rõ, rồi đọc kỹ file bằng `#file:`. 📄 Settings để index thấy đúng thứ (files.exclude/search.exclude/.gitignore): [`examples/01-3-bat-codebase-indexing-copy-paste.sh`](examples/01-3-bat-codebase-indexing-copy-paste.sh).
 
 ## 4. Bật, dựng lại, giữ cho index sạch
 

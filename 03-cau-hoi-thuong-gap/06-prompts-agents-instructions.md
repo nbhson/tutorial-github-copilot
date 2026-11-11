@@ -12,7 +12,7 @@
 | Custom agent | `.github/agents/*.agent.md` | Chọn trong agent picker | Chính thức |
 | Prompt tái dùng | `.github/prompts/*.prompt.md` | Gọi tay `/tên-prompt` | **Chỉ chạy ở Local harness (VS Code)** — Copilot harness không nạp |
 
-> **Cách đọc bảng này:** đây là "địa chỉ nhà" của từng loại file — cột **Đường dẫn chuẩn** phải khớp từng ký tự, cột **Kích hoạt** cho biết tự chạy hay phải gọi tay, cột **Trạng thái 2026** cảnh báo cái nào đang cũ.
+> **Cách đọc bảng này:** đây là "địa chỉ nhà" của từng loại file — cột **Đường dẫn chuẩn** phải khớp từng ký tự, cột **Kích hoạt** cho biết tự chạy hay phải gọi tay, cột **Trạng thái 2026** cảnh báo cái nào đang cũ — 📄 file thật cho từng dòng: [`../templates/.github/`](../templates/.github/).
 
 ---
 
@@ -154,6 +154,8 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 3. Glob `applyTo` đối chiếu `ls` thật.
 4. Reload IDE + mở chat mới.
 5. Hỏi admin: org có tắt custom instructions không.
+
+📄 Script debug 6 bước: [`examples/06-5-instructions-khong-load-checklist-6-buoc.sh`](examples/06-5-instructions-khong-load-checklist-6-buoc.sh).
 
 Tham khảo chéo: [bài 05](05-policies-guardrails-faq.md) (quy tắc ALWAYS/NEVER) · [bài 02](02-model-context-premium.md) (context + nhiễu) · [bài 07](07-custom-agents-coding-agent-workflows.md) (custom agent workflows) · [../templates/README.md](../templates/README.md).
 

@@ -113,7 +113,7 @@ Output: [SEVERITY] file:line + verdict + 3 gaps ưu tiên.
 
 Versioning: mọi thay đổi qua PR (mô tả lý do + ví dụ trước/sau); tag `skills-v1.2` khi release để rollback nhanh. Sửa trực tiếp không qua PR → mỗi máy một bản, không có mốc rollback.
 
-> **Tóm gọn 1 câu:** commit instructions + skills + agents qua PR, tag version khi release — thay đổi nào cũng có mốc quay lui.
+> **Tóm gọn 1 câu:** commit instructions + skills + agents qua PR, tag version khi release — thay đổi nào cũng có mốc quay lui. 📄 Bộ tài sản commit mẫu: [`../templates/.github/`](../templates/.github/) · script cài pack VS Code: [`09-3-1-vs-code-pack-install.sh`](../01-huong-dan-su-dung/examples/09-3-1-vs-code-pack-install.sh).
 
 ## 4. Org policy + branch protection
 
@@ -129,6 +129,8 @@ GitHub Org → Settings → Copilot → Policies:
 - [ ] Mọi thay đổi instructions/skills/prompts phải qua PR + lead review
 - [ ] Monthly audit: usage + MCP + incidents từ Copilot
 ```
+
+📄 File khoá org + script audit: [`16-4-managed-settings-org-lock.json`](../01-huong-dan-su-dung/examples/16-4-managed-settings-org-lock.json) · [`16-5-audit-dinh-ky-quy.sh`](../01-huong-dan-su-dung/examples/16-5-audit-dinh-ky-quy.sh) · [`02-3-worktrees-deep-dive-lenh-thuoc-long.sh`](../01-huong-dan-su-dung/examples/02-3-worktrees-deep-dive-lenh-thuoc-long.sh).
 
 **Branch protection team:**
 
@@ -244,7 +246,7 @@ Mục này gom toàn bộ bài thành một kế hoạch 60 phút chia theo từ
 
 > **Cách đọc bảng này:** đọc theo dòng thời gian từ 0 đến 60 phút — mỗi khối một việc, cột cuối chỉ rõ làm gì trong khối đó.
 
-> **Tóm gọn 1 câu:** chuẩn hóa một repo chỉ tốn 60 phút theo đúng 6 khối — làm xong mở PR chia sẻ cho cả team.
+> **Tóm gọn 1 câu:** chuẩn hóa một repo chỉ tốn 60 phút theo đúng 6 khối — làm xong mở PR chia sẻ cho cả team. 📄 Script dựng đủ nền trong 1 lần: [`09-6-repo-template.sh`](../01-huong-dan-su-dung/examples/09-6-repo-template.sh) · copy pack vào project: [`../templates/examples/01-cach-copy-vao-project-3-buoc.sh`](../templates/examples/01-cach-copy-vao-project-3-buoc.sh).
 
 ## 8. Pitfalls + cách fix
 
@@ -268,7 +270,7 @@ Ba bài dưới đây đưa chuẩn hóa từ lý thuyết vào repo thật củ
 
 **Bài 1 (20 phút):** Hỏi 3 đồng nghiệp: prompt/skill hay dùng nhất? Luật nào hay quên nhất? Ghi top 3 prompt + top 3 luật → 6 files đầu tiên cần đóng gói. So với cấu trúc mục 2: repo thiếu gì nhất?
 
-**Bài 2 (30 phút):** Tạo PR với: copilot-instructions.md gọn + 1 skill + verify.yml. Nhờ 1 đồng nghiệp dùng thử + review. Merge xong thông báo team.
+**Bài 2 (30 phút):** Tạo PR với: copilot-instructions.md gọn (đối chiếu [`04-3-mau-instructions-backend.md`](../01-huong-dan-su-dung/examples/04-3-mau-instructions-backend.md)) + 1 skill + verify.yml. Nhờ 1 đồng nghiệp dùng thử + review. Merge xong thông báo team.
 
 **Bài 3 (30 phút):** Nhờ 1 người chạy docs/copilot-onboarding.md 30 phút. Quan sát bước nào kẹt, sửa docs + skills theo feedback, ghi thời gian tới PR đầu tiên.
 

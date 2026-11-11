@@ -142,6 +142,6 @@ Ví von: đây là quy trình kiểm tra xe không nổ máy — xăng (auth) �
 3. Hỏi admin (org) hoặc Discussions `github.com/community` (cá nhân).
 4. Business/Enterprise → Support ticket kèm đủ 3 thứ ở bước 2.
 
-Tham khảo chéo: [bài 01](01-tai-khoan-pricing-cai-dat.md) (auth/seat) · [bài 02](02-model-context-premium.md) (quota/model) · [bài 04](04-mcp-faq.md) (MCP) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 05](05-policies-guardrails-faq.md) (policy).
+Tham khảo chéo: [bài 01](01-tai-khoan-pricing-cai-dat.md) (auth/seat) · [bài 02](02-model-context-premium.md) (quota/model) · [bài 04](04-mcp-faq.md) (MCP) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 05](05-policies-guardrails-faq.md) (policy) · 📄 ma trận triệu chứng→nguyên nhân: [`examples/05-8-troubleshooting-ca-3-ma-tran-trieu-chung.sh`](examples/05-8-troubleshooting-ca-3-ma-tran-trieu-chung.sh).
 
 > **Tóm gọn 1 câu:** Troubleshooting Copilot là trò loại trừ có kỷ luật: auth → mạng → version → phiên sạch → config → policy — đi đúng trật tự thì ~90% ca tự gãy lộ ra nguyên nhân.

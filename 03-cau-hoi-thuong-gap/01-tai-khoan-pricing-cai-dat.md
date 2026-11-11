@@ -124,10 +124,10 @@ Kể cả khi đã làm đúng mọi mục trên, vẫn có ca kẹt — mục n
 
 1. `gh auth status` — đúng account chưa, seat còn không.
 2. `code --list-extensions | grep -i copilot` — chỉ còn bản chính chủ.
-3. Update IDE + extension lên bản mới nhất.
+3. Update IDE + extension lên bản mới nhất — 📄 script dọn cài đặt sạch: [`examples/03-4-cai-at-the-nao-cho-sach-vs.sh`](examples/03-4-cai-at-the-nao-cho-sach-vs.sh).
 4. Sign-out → sign-in lại GitHub trong IDE.
 5. Check `github.com/settings/copilot` — hạn mức/seat/policy có đỏ gì không.
 
-Tham khảo chéo: [bài 02](02-model-context-premium.md) (model + chi phí) · [bài 05](05-policies-guardrails-faq.md) (policy) · [bài 08](08-loi-thuong-gap-troubleshooting.md) (bảng lỗi full) · [../templates/README.md](../templates/README.md) (templates copy ngay).
+Tham khảo chéo: [bài 02](02-model-context-premium.md) (model + chi phí) · [bài 05](05-policies-guardrails-faq.md) (policy) · [bài 08](08-loi-thuong-gap-troubleshooting.md) (bảng lỗi full) · [../templates/README.md](../templates/README.md) (templates copy ngay) · 📄 script verify tổng hợp: [`01-6-verify-tong-va-bang-loi.sh`](../01-huong-dan-su-dung/examples/01-6-verify-tong-va-bang-loi.sh).
 
 > **Tóm gọn 1 câu:** Cài Copilot giống lắp ổ khóa: đúng chìa (account), đúng cửa (extension chính chủ), đúng nhà (seat/policy org) — kiểm tra theo thứ tự đó là giải quyết được phần lớn sự cố.

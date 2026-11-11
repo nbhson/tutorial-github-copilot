@@ -125,7 +125,7 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 
 1. Instruction sai chỗ/sai glob? (`ls .github/`, xem [bài 06](06-prompts-agents-instructions.md)).
 2. Quy tắc viết mơ hồ? → viết lại ALWAYS/NEVER + path cụ thể.
-3. Hook local đã `pre-commit install` chưa.
+3. Hook local đã `pre-commit install` chưa — 📄 script dựng hook + policy org: [`07-4-guard-allow-deny.sh`](../01-huong-dan-su-dung/examples/07-4-guard-allow-deny.sh) · [`16-4-managed-settings-org-lock.json`](../01-huong-dan-su-dung/examples/16-4-managed-settings-org-lock.json).
 4. Ruleset/push protection chặn? → đọc thông báo chặn (nó nói rõ lý do).
 5. Vẫn lọt → nâng từ "khuyến nghị" lên "ép buộc server-side" (ruleset + required checks).
 

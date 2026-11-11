@@ -153,6 +153,6 @@ Ví von: giao việc cho agent cũng như giao việc cho thợ mới hoàn toà
 4. Conflict → rebase lên base mới nhất.
 5. Lặp 3 lần không xong → người checkout làm tiếp, đừng đốt AI Credits.
 
-Tham khảo chéo: [bài 06](06-prompts-agents-instructions.md) (viết agent đúng) · [bài 10](10-ci-sdk-review-web.md) (CI + review PR agent) · [bài 03](03-modes-permissions.md) (permissions) · [bài 05](05-policies-guardrails-faq.md) (guardrails repo).
+Tham khảo chéo: [bài 06](06-prompts-agents-instructions.md) (viết agent đúng) · [bài 10](10-ci-sdk-review-web.md) (CI + review PR agent) · [bài 03](03-modes-permissions.md) (permissions) · [bài 05](05-policies-guardrails-faq.md) (guardrails repo) · 📄 3 agent mẫu: [`../templates/.github/agents/`](../templates/.github/agents/).
 
 > **Tóm gọn 1 câu:** Custom agent là nhân viên cần bản mô tả công việc rõ (tools + ranh giới + issue đủ 5 phần) — làm khó nó thì lỗi là do bản giao việc, còn lặp 3 lần không xong thì đổi người (bạn) vào làm.

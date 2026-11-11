@@ -55,7 +55,7 @@ Bạn nói/gõ → Việc gì?
 
 Docs GitHub chốt: **instructions** cho chỉ dẫn đơn giản áp cho mọi task; **skills** cho chỉ dẫn chi tiết mà Copilot chỉ nên đọc khi thật sự relevant. ⚠️ **Chỗ hay vấp:** ở **Copilot harness**, skill quản lý bằng **Agent Customizations editor** (mục 4); slash `/skills` và `/create-skill` **chỉ tồn tại ở Local harness** — gõ trong session Copilot sẽ không thấy.
 
-> **Tóm gọn 1 câu:** Luật nền → instructions; quy trình lặp → skill; chân dung người làm → agent; gói để chia sẻ → plugin.
+> **Tóm gọn 1 câu:** Luật nền → instructions; quy trình lặp → skill; chân dung người làm → agent; gói để chia sẻ → plugin. 📄 File thật của từng loại: [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`templates/.github/agents/tester.agent.md`](../templates/.github/agents/tester.agent.md) · [`examples/17-2-plugin-marketplace.sh`](examples/17-2-plugin-marketplace.sh)
 
 ## 3. Giải phẫu `SKILL.md`
 
@@ -149,7 +149,7 @@ gh skill publish --dry-run                        # validate theo agentskills.io
 
 > ⚠️ Docs cảnh báo nguyên văn: *"Skills are not verified by GitHub and may contain prompt injections, hidden instructions, or malicious scripts"* — luôn `gh skill preview` trước khi cài, và chỉ đặt `allowed-tools: shell` khi bạn **đã đọc hết script** trong skill đó.
 
-Trong VS Code: **Customizations editor → Browse → GitHub Feed** (experimental, tìm theo `@type:skill`), và plugin marketplace (`gh copilot plugin marketplace add`) chứa skill đóng gói — chi tiết ở bài 17.
+Trong VS Code: **Customizations editor → Browse → GitHub Feed** (experimental, tìm theo `@type:skill`), và plugin marketplace (`gh copilot plugin marketplace add`) chứa skill đóng gói — chi tiết ở bài 17. 📄 Mẫu cây skill + SKILL.md: [`templates/.github/skills/review-pr/`](../templates/.github/skills/review-pr/) · script tạo skill đầu tay: [`examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh`](examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh).
 
 ## 8. Port prompt file `.prompt.md` sang skill (5 phút)
 

@@ -123,6 +123,6 @@ Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.g
 4. Báo admin/security team nếu liên quan prod/customer data.
 5. Postmortem: thêm gate (push protection/CI check) để không lặp.
 
-Tham khảo chéo: [bài 03](03-modes-permissions.md) (exclusion cấu hình) · [bài 04](04-mcp-faq.md) (MCP secrets) · [bài 05](05-policies-guardrails-faq.md) (scanning + guardrails) · [bài 10](10-ci-sdk-review-web.md) (CI/review).
+Tham khảo chéo: [bài 03](03-modes-permissions.md) (exclusion cấu hình) · [bài 04](04-mcp-faq.md) (MCP secrets) · [bài 05](05-policies-guardrails-faq.md) (scanning + guardrails) · [bài 10](10-ci-sdk-review-web.md) (CI/review) · 📄 script quét key: [`16-6-scan-key-trong-manifest.sh`](../01-huong-dan-su-dung/examples/16-6-scan-key-trong-manifest.sh).
 
 > **Tóm gọn 1 câu:** Bảo mật Copilot là một chuỗi xích: quyền riêng tư → content exclusion → secret hygiene → push protection — mỗi mắt xích là một lớp phòng thủ, thiếu mắt nào thì tải trọng dồn sang mắt khác.

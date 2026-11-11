@@ -128,7 +128,7 @@ SAU KHI CAI (docs VS Code "Verify a plugin after installation"):
 DINH KY (quy): chay examples/16-5-audit-dinh-ky-quy.sh -> diff extensions + `copilot plugin list` voi quy truoc.
 ```
 
-Sổ allowlist dán wiki team (admin sở hữu, mỗi quý review): `| Tool | Publisher | Version/SHA pin | Quyền | Owner | Review date |` — thêm khi đủ bằng chứng 4 tầng + 1 reviewer approve; **gỡ trong 24h** khi: không dùng 1 quý / CVE chưa patch / publisher đổi chủ. Bằng chứng tool nào chạy lúc nào: audit log github.com (không chứa prompt — bài 15 mục 7.2); chi tiết hơn → `telemetry` OTEL về endpoint công ty.
+Sổ allowlist dán wiki team (admin sở hữu, mỗi quý review): `| Tool | Publisher | Version/SHA pin | Quyền | Owner | Review date |` — thêm khi đủ bằng chứng 4 tầng + 1 reviewer approve; **gỡ trong 24h** khi: không dùng 1 quý / CVE chưa patch / publisher đổi chủ. Bằng chứng tool nào chạy lúc nào: audit log github.com (không chứa prompt — bài 15 mục 7.2); chi tiết hơn → `telemetry` OTEL về endpoint công ty. Script audit quý (dùng ở fence trên): 📄 [`examples/16-5-audit-dinh-ky-quy.sh`](examples/16-5-audit-dinh-ky-quy.sh).
 
 > **Tóm gọn 1 câu:** Cài là quan hệ dài hạn — checklist quý chính là "đăng kiểm": pin còn hạn? tool có leo quyền? publisher còn là chủ cũ?
 
@@ -157,12 +157,14 @@ Bạn sắp **publish** plugin? docs VS Code ("Test and distribute a plugin") c�
 | Phân quyền tool | `permissions` deny>ask>allow + managed settings (mục 4) | allow/ask/deny trong `.claude/settings.json` — không enterprise override |
 | Cách ly khi thử | VS Code profile + worktree + token tối thiểu (bài 11) → **sandbox + policy** mới là ranh giới thật | Worktree + container/VM tự dựng |
 
+📄 Các file mà bảng này nhắc: [`examples/16-3-plugin-json-legacy-manifest.json`](examples/16-3-plugin-json-legacy-manifest.json)+[`-schema-dong.json`](examples/16-3-plugin-json-schema-dong.json) (`plugin.json`) · [`examples/16-4-marketplace-json-pin-sha.json`](examples/16-4-marketplace-json-pin-sha.json) (`marketplace.json`) · [`examples/16-4-managed-settings-org-lock.json`](examples/16-4-managed-settings-org-lock.json) (managed settings).
+
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
 | ❌ SAI | ✅ ĐÚNG |
 |---|---|
 | Thấy plugin "install thành công" là xong, không đọc README/hooks | docs cảnh báo plugin **chạy code trên máy bạn** — mở README + components trong editor trước, rồi verify theo mục 5 |
-| `plugin.json` khai `"agents": "agents/"` (legacy field) trong manifest 1.0 | đưa agent vào `com.github.copilot/agents/` — field ngang hàng bị *reported and ignored*, agent không load mà không báo lỗi |
+| `plugin.json` khai `"agents": "agents/"` (legacy field) trong manifest 1.0 | đưa agent vào `com.github.copilot/agents/` — field ngang hàng bị *reported and ignored*, agent không load mà không báo lỗi; 📄 đối chiếu 2 manifest: [`examples/16-3-plugin-json-legacy-manifest.json`](examples/16-3-plugin-json-legacy-manifest.json) vs [`examples/16-3-plugin-json-schema-dong.json`](examples/16-3-plugin-json-schema-dong.json) |
 | Để API key trong `mcp.json`/`hooks.json` rồi push repo marketplace | key chỉ sống trong env/service account; `${PLUGIN_ROOT}`/`${PLUGIN_DATA}` cho paths; scan bằng script mục 6 |
 | Thêm MCP vào allowlist rồi quên; 2 quý sau tool leo quyền, pin vẫn `latest` | mỗi quý chạy `examples/16-5-audit-dinh-ky-quy.sh`: diff tool list, siết version/SHA, đổi token |
 | "Tạm bật all tools cho tiện, mai siết sau" | deny-first từ ngày 1: 🟢 allow · 🟡 ask · 🔴 deny; mở 🔴 phải kèm lý do + sandbox |

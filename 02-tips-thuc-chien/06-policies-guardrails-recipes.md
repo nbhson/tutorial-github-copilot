@@ -20,8 +20,8 @@ Mục này dựng thành phòng thủ nhiều tầng cho repo. Đọc bảng đ�
 | Lớp | Chặn ở đâu | Ví dụ | Ai giữ |
 |---|---|---|---|
 | 1 | Instructions (tự áp mọi turn) | copilot-instructions.md, *.instructions.md | Dev / team |
-| 2 | Local gates (máy bạn) | pre-commit, lint-staged, tool approval | Dev |
-| 3 | Remote gates (GitHub) | Branch protection, required checks, CODEOWNERS | Org / maintainer |
+| 2 | Local gates (máy bạn) — 📄 script dựng hook: [`../01-huong-dan-su-dung/examples/07-4-recipe-b-precommit-gitleaks.sh`](../01-huong-dan-su-dung/examples/07-4-recipe-b-precommit-gitleaks.sh) | pre-commit, lint-staged, tool approval | Dev |
+| 3 | Remote gates (GitHub) — 📄 [`../01-huong-dan-su-dung/examples/15-5-auto-review-rulesets.sh`](../01-huong-dan-su-dung/examples/15-5-auto-review-rulesets.sh) | Branch protection, required checks, CODEOWNERS | Org / maintainer |
 | 4 | Tool/MCP approval | Hỏi trước khi chạy lệnh/MCP | Dev / org policy |
 
 > **Cách đọc bảng này:** đọc từ lớp 1 lên lớp 4 theo độ "cứng" tăng dần — càng xuống dưới càng chặn thật chứ không chỉ dặn miệng; cột **Ai giữ** cho biết ai phải có tay dựng lớp đó.
@@ -117,7 +117,7 @@ Repo → Settings → Branches → Add rule (main):
 
 **Recipe 8 — CI workflow gate (copy-paste):**
 
-> 📄 **Code ví dụ:** [`examples/05-5-lop-3-branch-protection-ci-gates.yaml`](examples/05-5-lop-3-branch-protection-ci-gates.yaml)
+> 📄 **Code ví dụ:** [`examples/05-5-lop-3-branch-protection-ci-gates.yaml`](examples/05-5-lop-3-branch-protection-ci-gates.yaml) — bài tập walkthrough dùng lại bộ file §3–4 + [`07-4-guard-allow-deny.sh`](../01-huong-dan-su-dung/examples/07-4-guard-allow-deny.sh) (hook deny lệnh nguy hiểm).
 
 **Recipe 9 — CODEOWNERS + org policy:**
 
@@ -140,7 +140,7 @@ GitHub Org → Copilot → Policies:
 
 Mục này nói về cánh cửa cuối cùng trước thế giới ngoài: MCP và lệnh terminal. MCP mở đường ra DB, deploy, web — cũng là nơi dễ rò secret nhất. Nguyên tắc: **mặc định từ chối, chỉ mở đúng cái cần.**
 
-> **Tóm gọn 1 câu:** MCP là cửa sau của ngôi nhà: chốt cửa mặc định, chỉ mở đúng người quen cần vào — cả nhà không cần chìa khóa mọi cánh cửa.
+> **Tóm gọn 1 câu:** MCP là cửa sau của ngôi nhà: chốt cửa mặc định, chỉ mở đúng người quen cần vào — cả nhà không cần chìa khóa mọi cánh cửa. 📄 Walkthrough dùng lại đúng 5 file ở §3–4 + [kịch bản allow/ask/deny](../01-huong-dan-su-dung/examples/08-5-approval-allow-ask-deny.jsonc).
 
 **Recipe 10 — Prune MCP + approval hỏi trước (mỗi tháng 1 lần):**
 
@@ -175,7 +175,7 @@ Instructions thêm:
 | 20–25 | 2 | Bật tool approval: confirm ON, allowlist test/lint/build (recipe 6) |
 | 25–35 | 3 | Thêm verify.yml (recipe 8) + branch protection (recipe 7) |
 | 35–40 | 3 | CODEOWNERS (recipe 9), tạo PR mẫu kiểm tra CI + review |
-| 40–45 | 4 | Audit MCP/extensions, tắt server thừa, auto-approve OFF. Kiểm chứng: thử cố ý sai 3 kiểu (sửa `generated/`, commit main, chạy lệnh lạ) → phải bị chặn ≥1 lớp với log BLOCKED |
+| 40–45 | 4 | Audit MCP/extensions, tắt server thừa, auto-approve OFF (📄 kịch bản allow/ask/deny: [`08-5-approval-allow-ask-deny.jsonc`](../01-huong-dan-su-dung/examples/08-5-approval-allow-ask-deny.jsonc)). Kiểm chứng: thử cố ý sai 3 kiểu (sửa `generated/`, commit main, chạy lệnh lạ) → phải bị chặn ≥1 lớp với log BLOCKED |
 
 ## 8. Pitfalls + cách fix
 

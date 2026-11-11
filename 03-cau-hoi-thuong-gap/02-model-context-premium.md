@@ -79,7 +79,7 @@ Gồm: file đang mở (vùng quanh con trỏ), file liên quan (imports, file m
 
 **Trả lời 1 câu:** Copilot mặc định **KHÔNG BYOK** cho completions/chat — model đi qua hạ tầng GitHub; chỉ **Enterprise + Azure OpenAI** route được qua Azure tenant của bạn (admin cấu hình).
 
-Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xem [bài 10](10-ci-sdk-review-web.md)). Compliance hỏi "data đi đâu" → xem [bài 09](09-bao-mat-quyen-rieng-tu.md).
+Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xem [bài 10](10-ci-sdk-review-web.md)). Compliance hỏi "data đi đâu" → xem [bài 09](09-bao-mat-quyen-rieng-tu.md). 📄 Cách BYOK/usage qua API key riêng + billing: [`14-3-byok-additional-usage.json`](../01-huong-dan-su-dung/examples/14-3-byok-additional-usage.json).
 
 ## 6. Nên dùng model nào cho việc nào?
 
@@ -98,7 +98,7 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 
 1. **Model sau lưng bị đổi** (GitHub âm thầm update default) → check model picker.
 2. **Context khác** (mở file khác, instructions khác) → check referenced files.
-3. **Instructions mới thêm** làm nhiễu → thử tắt instructions custom.
+3. **Instructions mới thêm** làm nhiễu → thử tắt instructions custom (đối chiếu file đang nạp: [`01-1-file-nao-copilot-tu-load-file-nao.sh`](examples/01-1-file-nao-copilot-tu-load-file-nao.sh)).
 4. **Hết Credits → rớt model yếu** → check usage page.
 
 **Ví dụ:** team thêm `frontend-react.instructions.md` với `applyTo: **` → mọi chat backend cũng bị nhồi React context → chất lượng tụt. Fix: sửa `applyTo` cho hẹp (xem [bài 06](06-prompts-agents-instructions.md)).
@@ -141,4 +141,6 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 4. Check hạn mức: `github.com/settings/copilot` → "AI Credits usage".
 5. Vẫn tệ → đổi model mạnh hơn 1 nấc, hoặc chia nhỏ prompt.
 
-Tham khảo chéo: [bài 01](01-tai-khoan-pricing-cai-dat.md) (cài đặt + seat) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 07](07-custom-agents-coding-agent-workflows.md) (agent tốn Credits) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (bảo mật data).
+📄 Checklist debug 6 bước khi instructions/model gây nhiễu: [`examples/06-5-instructions-khong-load-checklist-6-buoc.sh`](examples/06-5-instructions-khong-load-checklist-6-buoc.sh).
+
+Tham khảo chéo: [bài 01](01-tai-khoan-pricing-cai-dat.md) (cài đặt + seat) · 📄 checklist debug: [examples/06-5-instructions-khong-load-checklist-6-buoc.sh](examples/06-5-instructions-khong-load-checklist-6-buoc.sh) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 07](07-custom-agents-coding-agent-workflows.md) (agent tốn Credits) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (bảo mật data).

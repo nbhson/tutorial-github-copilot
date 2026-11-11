@@ -132,6 +132,8 @@ Buoc 5 (2 phut): "Chat: Open Customizations" -> tab Instructions -> file phai du
 **Nếu làm sai?** Bỏ bước 5 — instructions lưu rồi nhưng chưa session nào đọc qua, bạn chỉ phát hiện khi một người khác chạy repo này.
 > **Tóm gọn 1 câu:** Session đầu chuẩn = mở Chat → Agent → prompt "tóm tắt repo" → lưu instructions → **verify bằng Customizations editor + References**, rồi hỏi lại trong chat mới.
 
+> 📄 **Code ví dụ (chạy tuần tự là xong walkthrough):** [`examples/01-3-cai-vs-code-va-dang-nhap.sh`](examples/01-3-cai-vs-code-va-dang-nhap.sh) · [`examples/01-2-dang-ky-plan-va-verify-tai-khoan.sh`](examples/01-2-dang-ky-plan-va-verify-tai-khoan.sh) · [`examples/01-3-verify-vs-code-30-giay.sh`](examples/01-3-verify-vs-code-30-giay.sh)
+
 ## 7. Checklist sau cài đặt (30 giây bằng mắt + 3 lệnh)
 
 - [ ] Status bar: icon Copilot không còn báo "Sign in"; hỏi "Repo này làm gì?" gọi được tên file **thật** trong repo (index chạy).
@@ -140,7 +142,7 @@ Buoc 5 (2 phut): "Chat: Open Customizations" -> tab Instructions -> file phai du
 - [ ] `AGENTS.md` / `.github/copilot-instructions.md` hiện trong **Chat: Open Customizations**.
 - [ ] `gh auth status` đúng account (cá nhân vs công ty).
 - [ ] `copilot --version` chạy được; `gh extension list` thấy `gh-copilot` **nếu** bạn dùng `suggest/explain`.
-- [ ] Đã chạy walkthrough §6.3 trên 1 repo thật.
+- [ ] Đã chạy walkthrough §6.3 trên 1 repo thật — 📄 lệnh verify từng thứ: [`examples/01-6-verify-tong-va-bang-loi.sh`](examples/01-6-verify-tong-va-bang-loi.sh) · settings nền: [`examples/01-3-settings-nen-bat.jsonc`](examples/01-3-settings-nen-bat.jsonc).
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 

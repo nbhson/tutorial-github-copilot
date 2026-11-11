@@ -43,11 +43,11 @@ Sơ đồ fan-out chuẩn:
              --gộp-->     [Chat chính: gộp + verify + review]
 ```
 
-> **Tóm gọn 1 câu:** Song song như bếp nhà hàng: nhiều nồi đun cùng lúc để tiết kiệm thời gian — nhưng mỗi nồi một bếp riêng, và luôn có đầu bếp chính đứng gộp món.
+> **Tóm gọn 1 câu:** Song song như bếp nhà hàng: nhiều nồi đun cùng lúc để tiết kiệm thời gian — nhưng mỗi nồi một bếp riêng, và luôn có đầu bếp chính đứng gộp món. 📄 3 cách chạy song song: [`03-5-chay-song-song-3-cach.sh`](../01-huong-dan-su-dung/examples/03-5-chay-song-song-3-cach.sh) · [`03-4-branch-strategy-cua-coding-agent-copilot.sh`](../01-huong-dan-su-dung/examples/03-4-branch-strategy-cua-coding-agent-copilot.sh).
 
 ## 3. Kiểu 1: multi-chat song song (nhanh nhất)
 
-Không cần setup. Mở 2–3 chats VS Code (hoặc github.com + VS Code) cùng lúc — như mở ba cửa sổ từ điển trên bàn, tra song song đỡ lật đi lật lại một cuốn.
+Không cần setup. Mở 2–3 chats VS Code (hoặc github.com + VS Code) cùng lúc — như mở ba cửa sổ từ điển trên bàn, tra song song đỡ lật đi lật lại một cuốn — 📄 3 cách chạy song song: [`03-5-chay-song-song-3-cach.sh`](../01-huong-dan-su-dung/examples/03-5-chay-song-song-3-cach.sh).
 
 **Ví dụ 1 — Research 3 modules (copy-paste):**
 
@@ -133,6 +133,8 @@ Chia 1 task thành vai: Planner lập plan, Tester viết test, Reviewer soi (t�
 @Tester Viết regression tests cho Phase 2 theo plan.md, chạy npm test -- payments, dán log.
 # Code xong:
 @Reviewer Review diff vs plan.md, [SEVERITY] file:line, verdict PASS/NEEDS-FIX.
+
+📄 3 file `.agent.md` tương ứng: [`../templates/.github/agents/`](../templates/.github/agents/) · [`06-2-agent-planner.agent.md`](../01-huong-dan-su-dung/examples/06-2-agent-planner.agent.md).
 ```
 
 **Output contract để gộp rẻ (quy định trước khi chạy):**

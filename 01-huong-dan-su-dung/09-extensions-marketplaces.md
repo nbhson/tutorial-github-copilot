@@ -33,6 +33,8 @@ Ba cái bẫy tên đã làm hỏng bài này bản cũ:
 - **Agent Plugins ≠ plugin kiểu khác**: docs gốc của VS Code ghi nguyên văn Agent Plugins *"are distinct from VS Code extensions"* — còn chữ "plugin" nằm trong tên một số extension (mở rộng của extension) là khái niệm của *editor*, không phải tầng này.
 - **"Marketplace"** ở tầng 2 không phải chợ: nó chỉ là **một Git repo** có file `.github/plugin/marketplace.json` — repo nội bộ công ty bạn cũng là một marketplace.
 
+📄 Ba file thật của ba tầng: [`examples/09-3-1-vs-code-pack-settings.jsonc`](examples/09-3-1-vs-code-pack-settings.jsonc) (`.vscode/extensions.json`) · [`examples/16-3-plugin-json-schema-dong.json`](examples/16-3-plugin-json-schema-dong.json) (`plugin.json`) · [`templates/.mcp.json`](../templates/.mcp.json) (`mcpServers`).
+
 > **Vì sao quan trọng?** Đúng tầng = đúng file = đúng harness. Cấu hình để sai tầng không báo lỗi to — nó chỉ **im lặng không chạy** (vd: MCP khai trong `.vscode/mcp.json` thì session Copilot harness không thấy).
 > **Nếu làm sai?** Team "cài plugin" bằng cách install extension editor → skills không vào agent; hoặc đi tìm "Copilot Extension" theo tutorial 2024 → không tồn tại nữa.
 > **Tóm gọn 1 câu:** Trước khi cài, hỏi ba câu: *editor hay agent? file nào đọc config này? harness nào đang chạy?*
@@ -125,6 +127,8 @@ Nguyên tắc chung: settings do dev giữ thì dev đổi được; **muốn "c
 | Để auto-update mặc định chạy giữa sprint | extension/plugin đổi hành vi lúc nào không hay | pin version (`@TAG`/sha, `COPILOT_AUTO_UPDATE=false`), nâng cuối sprint sau test |
 | Tưởng `copilot-plugins` built-in như `awesome-copilot` | lệnh cài fail vì chưa add nguồn | `copilot plugin marketplace add github/copilot-plugins` trước khi cài |
 
+📄 Ba file mà bảng này nhắc tới: [`examples/09-3-1-vs-code-pack-settings.jsonc`](examples/09-3-1-vs-code-pack-settings.jsonc) (pack) · [`examples/16-4-marketplace-json-pin-sha.json`](examples/16-4-marketplace-json-pin-sha.json) (marketplace) · [`examples/01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (`.vscode/mcp.json` của Local).
+
 ## Best practices (kèm vì sao)
 
 - **Pack ≤10 extension, mỗi cái có lý do ghi cạnh ID.** *Vì sao:* mỗi extension là code chạy trên máy người cài (extension host); pack "cho đủ" làm chậm mọi người mà không ai giải trình được.
@@ -134,8 +138,8 @@ Nguyên tắc chung: settings do dev giữ thì dev đổi được; **muốn "c
 
 ## Bài tập
 
-1. **(10 phút)** Tạo `.vscode/extensions.json` cho repo hiện tại (≤8 ID), commit; nhờ một người mở folder và báo có prompt "Install recommended" — xác nhận bằng `code --list-extensions | grep -i copilot` (theo `examples/09-3-1-vs-code-pack-install.sh`).
-2. **(10 phút)** Pin `github.copilot-chat` về một version cụ thể, đặt `extensions.autoUpdate: false`; chạy audit `--show-versions`, ghi kết quả vào notes team.
+1. **(10 phút)** Tạo `.vscode/extensions.json` cho repo hiện tại (≤8 ID), commit; nhờ một người mở folder và báo có prompt "Install recommended" — xác nhận bằng `code --list-extensions | grep -i copilot` (theo 📄 [`examples/09-3-1-vs-code-pack-install.sh`](examples/09-3-1-vs-code-pack-install.sh)).
+2. **(10 phút)** Pin `github.copilot-chat` về một version cụ thể, đặt `extensions.autoUpdate: false`; chạy audit `--show-versions`, ghi kết quả vào notes team (📄 [`examples/09-3-2-pin-version.sh`](examples/09-3-2-pin-version.sh)).
 3. **(15 phút)** Thêm marketplace `github/copilot-plugins`, cài một plugin pin theo `@TAG`, verify thư mục `~/.copilot/installed-plugins/`, rồi `/plugin uninstall` — tất cả trong `examples/17-2-plugin-marketplace.sh`.
 
 ## Link qua

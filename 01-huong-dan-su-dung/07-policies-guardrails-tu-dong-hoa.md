@@ -95,7 +95,7 @@ Ba chi tiết sống còn khi viết hook: **runaway guard** — 8 lần `block`
 - **Thứ tự load:** policy → user → project → plugins; mọi nguồn được **kết hợp** — cùng một event thì hook của cả máy lẫn repo đều chạy, không nguồn nào thay thế nguồn nào.
 - **Verify:** khởi động CLI in `! Invalid hook configuration in FILE: REASON` cho file/entry lỗi; `jq . .github/hooks/*.json`; `chmod +x` script; pipe test payload vào script và soi exit code + stdout JSON; nếu session bật sandbox, chạy `/sandbox policy <lệnh-hook>` (→ `commands/copilot/model-agent/sandbox-policy/README.md`) để thấy hook cần quyền gì.
 
-> **Tóm gọn 1 câu:** File trong `.github/hooks/` là của chung (team + cloud), file trong `~/.copilot/hooks/` là của riêng bạn, còn `policy.d` là của admin — dev không gỡ được.
+> **Tóm gọn 1 câu:** File trong `.github/hooks/` là của chung (team + cloud), file trong `~/.copilot/hooks/` là của riêng bạn, còn `policy.d` là của admin — dev không gỡ được. 📄 File `.github/hooks/guard.json` hoàn chỉnh do script sinh ra: [`examples/07-4-guard-allow-deny.sh`](examples/07-4-guard-allow-deny.sh).
 
 ## 4. Guardrail stack: advisory → hook → law
 

@@ -73,7 +73,7 @@ Những điều docs nói xảy ra với file bị exclude:
 
 - Mặc định Copilot để review kiểu **Comment** — **không tính** vào required approvals; org có thể bật cho Copilot "Approve" nhưng quyết định merge vẫn là mắt người.
 - Mỗi comment gắn severity High/Medium/Low — đọc để xếp hàng sửa, không phải để tin mù: đối chiếu từng comment, sai thì ghi lý do bác (thumb-down giúp cải thiện sản phẩm; và reply của bạn trên comment Copilot **không** được Copilot đọc lại).
-- Instructions + skills đọc từ **head branch** — sửa `.github/copilot-instructions.md` ngay trong PR là test được luôn; skill tên thư mục `code-review` được code review ưu tiên nạp ([agent-skill](commands/copilot/system-knowledge/agent-skill/README.md) · bài 05).
+- Instructions + skills đọc từ **head branch** — sửa `.github/copilot-instructions.md` ngay trong PR là test được luôn; skill tên thư mục `code-review` được code review ưu tiên nạp ([agent-skill](commands/copilot/system-knowledge/agent-skill/README.md) · bài 05) — 📄 Mẫu: [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`templates/.github/prompts/review-pr.prompt.md`](../templates/.github/prompts/review-pr.prompt.md).
 - Hai toggle nên biết ở cùng màn hình: "Use custom instructions when reviewing pull requests" (bật cho PR nhạy cảm) và "Allow Copilot to use MCP tools when reviewing pull requests" — **mặc định đã bật**, tắt nếu team không muốn tool chạy lúc review.
 
 > **Tóm gọn 1 câu:** Copilot review là một junior không biết mệt — đọc trước được mọi diff, nhưng không phải con dấu đóng lên merge.

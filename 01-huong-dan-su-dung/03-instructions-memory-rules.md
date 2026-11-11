@@ -65,7 +65,7 @@ Bản hoàn chỉnh cho hai loại project phổ biến (lệnh đã verify — 
 
 | Tầng | Nằm ở đâu | Ai quản lý |
 |---|---|---|
-| **Personal** | `~/.copilot/copilot-instructions.md` (chung) + `~/.copilot/instructions/**/*.instructions.md` (module) | chính bạn, mọi repo trên máy |
+| **Personal** | `~/.copilot/copilot-instructions.md` (chung) + `~/.copilot/instructions/**/*.instructions.md` (module) — 📄 tạo đủ 3 loại file 1 phút: [`examples/01-2-3-loai-file-phan-biet-va-at.sh`](examples/01-2-3-loai-file-phan-biet-va-at.sh) | chính bạn, mọi repo trên máy |
 | **Repository** | `.github/copilot-instructions.md`, `.github/instructions/`, `AGENTS.md` | team, qua git |
 | **Organization** | **settings UI trên GitHub** (Business/Enterprise) — không có file org trong repo | org owner/admin |
 
@@ -105,7 +105,7 @@ Ba sự thật docs GitHub: (1) trên **GitHub.com**, path-specific hiện **ch�
 
 Giới hạn thực hành: ≤8 file, mỗi file <50 dòng. Verify: sửa file trong subtree rồi hỏi "rules nào đang áp cho folder này?" → phải kể đúng nội dung; sửa file ngoài subtree mà rule vẫn đọc = glob quá rộng.
 
-> **Tóm gọn 1 câu:** Glob hẹp nhất có thể — rule chỉ nạp đúng lúc cần thì vừa đỡ tốn credits vừa đỡ áp sai chỗ.
+> **Tóm gọn 1 câu:** Glob hẹp nhất có thể — rule chỉ nạp đúng lúc cần thì vừa đỡ tốn credits vừa đỡ áp sai chỗ. Bản hoàn chỉnh để copy (kèm 2 bước verify): 📄 [`examples/03-4-mau-python-rules.instructions.md`](examples/03-4-mau-python-rules.instructions.md).
 
 ## 5. `AGENTS.md` — viết một lần, nhiều agent đọc
 
@@ -177,7 +177,7 @@ Instructions là **luật bạn chủ động viết và review**; **Copilot Mem
 
 ## Bài tập
 
-1. **(20 phút) Viết từ 0:** mở Customizations editor → tạo `.github/copilot-instructions.md`: thu thập sự thật từ README + package.json, **chạy tay từng lệnh** chỉ giữ lệnh PASS, xếp theo thứ tự mục 6, verify 3 bước mục 3.
+1. **(20 phút) Viết từ 0:** mở Customizations editor → tạo `.github/copilot-instructions.md`: thu thập sự thật từ README + package.json, **chạy tay từng lệnh** chỉ giữ lệnh PASS, xếp theo thứ tự mục 6, verify 3 bước mục 3 — 📄 file mẫu: [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · verify bằng lệnh: [`examples/01-6-verify-tong-va-bang-loi.sh`](examples/01-6-verify-tong-va-bang-loi.sh).
 2. **(15 phút) Tách `applyTo`:** đưa 2 rules chỉ đúng một subtree vào `.github/instructions/` với glob hẹp; test sửa file trong/ngoài subtree; thêm `excludeAgent: "code-review"` vào một file rồi giải thích sự khác biệt.
 3. **(10 phút) Dedupe `AGENTS.md`:** chạy `diff` mục 5, gom trùng lặp về một nơi, đo lại `wc -l` cả hai file.
 4. **(10 phút) Kiểm memory:** chạy **`Chat: Show Memory Files`**, mở settings Copilot Memory trên GitHub; xoá fact nào đã lỗi thời rồi test lại bằng chat mới.

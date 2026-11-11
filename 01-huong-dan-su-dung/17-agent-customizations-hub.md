@@ -60,6 +60,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
   (.github/copilot-instructions.md hoặc AGENTS.md).
 - Luật sắt: draft là bản nháp, không phải bản chốt — schema model biết có thể đã cũ
   theo version -> mở editor validate, xem References, rồi mới commit qua PR.
+  (📄 [`examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh`](examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh) — tạo skill/agent khớp cấu trúc [`templates/.github/`](../templates/.github/))
 ```
 
 ## 4. Các card trong editor — mỗi card đúng 4 dòng
@@ -78,28 +79,28 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 - **Là gì:** server phơi tool nối agent với hệ ngoài (DB, API, issue tracker).
 - **File:** Copilot harness: `.mcp.json` ở gốc repo + `~/.copilot/mcp-config.json`; Local: `.vscode/mcp.json` (key `servers`; `${input:}` xác thực **không port** sang Copilot).
 - **Harness:** cả hai; **Connectors** (MCP do GitHub quản lý) chỉ cung cấp tool cho Copilot harness.
-- **Bài chủ:** **08** · [mcp](commands/copilot/system-knowledge/mcp/README.md) · [connector](commands/copilot/system-knowledge/connector/README.md) · [.vscode/mcp.json](commands/local/system-knowledge/vscode-mcp-json/README.md).
+- **Bài chủ:** **08** · [mcp](commands/copilot/system-knowledge/mcp/README.md) · [connector](commands/copilot/system-knowledge/connector/README.md) · [.vscode/mcp.json](commands/local/system-knowledge/vscode-mcp-json/README.md) · 📄 [`templates/.mcp.json`](../templates/.mcp.json) + [`01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (Local).
 
 ### 4.3. Skills — công thức món khó
 
 - **Là gì:** quy trình nhiều bước theo từng việc, chuẩn mở agentskills.io; prompt khớp `description` thì agent tự nạp.
 - **File:** project `.github/skills/<ten>/SKILL.md` (`name` = tên thư mục); cá nhân `~/.copilot/skills/`; Local đọc thêm `.claude/skills/`, `.agents/skills/`.
 - **Harness:** chạy ở mọi harness: Copilot · Local · CLI · cloud agent; prompt files `.prompt.md` — chỉ Local.
-- **Bài chủ:** **05** · [agent-skill](commands/copilot/system-knowledge/agent-skill/README.md).
+- **Bài chủ:** **05** · [agent-skill](commands/copilot/system-knowledge/agent-skill/README.md) · 📄 [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh`](examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh).
 
 ### 4.4. Instructions — nội quy bếp
 
 - **Là gì:** quy tắc nên tuân ở mọi chat; model **có thể quên** — việc bắt buộc chạy thì đưa xuống hook.
 - **File:** `.github/copilot-instructions.md` hoặc `AGENTS.md`; nhắm đường dẫn: `.github/instructions/*.instructions.md` + `applyTo`; cá nhân `~/.copilot/instructions/`.
 - **Harness:** cả hai; thứ tự nạp **khác nhau theo harness** — không có luật "file cao nhất thắng" toàn vũ trụ.
-- **Bài chủ:** **03** · [instructions](commands/copilot/system-knowledge/instructions/README.md).
+- **Bài chủ:** **03** · [instructions](commands/copilot/system-knowledge/instructions/README.md) · 📄 [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) + [`backend-api.instructions.md`](../templates/.github/instructions/backend-api.instructions.md).
 
 ### 4.5. Agents — đầu bếp chuyên món
 
 - **Là gì:** persona gói instructions + tool (+ model) thành vai trò gọi lặp lại.
 - **File:** `.github/agents/<TEN>.agent.md` (hoặc `.md`); cá nhân `~/.copilot/agents/`; user agent của Local nằm trong VS Code profile storage → phải migrate.
 - **Harness:** cả hai; built-in Ask/Plan/Agent là chuyện khác (bài 02 §3).
-- **Bài chủ:** **06** · [custom-agent](commands/copilot/model-agent/custom-agent/README.md).
+- **Bài chủ:** **06** · [custom-agent](commands/copilot/model-agent/custom-agent/README.md) — 📄 3 agent mẫu: [`templates/.github/agents/`](../templates/.github/agents/).
 
 ### 4.6. Hooks — chuông báo cháy tự động
 
@@ -136,7 +137,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 - **Voice Mode:** hội thoại hai chiều bằng giọng nói với agent — **experimental**, `feature(voice-mode)`; bật ở card Voice của editor; cần mic.
 - **Dictation:** nói → chèn text vào ô prompt — **built-in** ở ô chat; bản cleanup bằng LLM (experimental) rất hợp prompt tiếng Việt dài kèm tên biến tiếng Anh.
 - File kiểu nói riêng: cá nhân `~/.copilot/voice.md`, `~/.copilot/dictation.md`; repo `.github/voice.md`, `.github/dictation.md`.
-- Voice/Dictation là **kênh giao tiếp**, không phải tuỳ biến hành vi agent — muốn đổi "cách nó trả lời" thì về Instructions (03). Tính năng experimental có thể không có trên harness/plan của bạn: không thấy card thì đừng đi mò setting của bản cũ.
+- Voice/Dictation là **kênh giao tiếp**, không phải tuỳ biến hành vi agent — muốn đổi "cách nó trả lời" thì về Instructions (03). Tính năng experimental có thể không có trên harness/plan của bạn: không thấy card thì đừng đi mò setting của bản cũ. 📄 Mở editor để bật card Voice: [`examples/17-1-open-customizations-editor.sh`](examples/17-1-open-customizations-editor.sh).
 
 ## 7. Migrate & verify "đã ngấm chưa"
 

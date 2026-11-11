@@ -68,13 +68,13 @@ Xong đối chiếu totals ở summary vs raw, lệch thì fix trước khi show
 Không tạo file mới, chỉ trả lời trong chat.
 ```
 
-> **Tóm gọn 1 câu:** Prompt tốt gồm 4 mảnh: scope files, mục tiêu end-state, độ phân giải, format output — đủ cả 4 thì model làm đúng ngay lần đầu.
+> **Tóm gọn 1 câu:** Prompt tốt gồm 4 mảnh: scope files, mục tiêu end-state, độ phân giải, format output — đủ cả 4 thì model làm đúng ngay lần đầu. 📄 Prompt thành file tái dùng: [`../templates/.github/prompts/add-table.prompt.md`](../templates/.github/prompts/add-table.prompt.md) · [`../templates/.github/prompts/review-pr.prompt.md`](../templates/.github/prompts/review-pr.prompt.md).
 
 ## 3. Ba gia vị nâng chất lượng
 
 Mục này thêm 3 "gia vị" làm prompt đậm đà hơn: tiêu chí xong, cách tự kiểm, và cấm địa.
 
-1. **Success criteria** — done phải check được bằng lệnh: `Done = npm test -- payments xanh + npm run lint 0 error` (xem [Tips 04](./04-verification-done-that.md)).
+1. **Success criteria** — done phải check được bằng lệnh (dán `applyTo` vào file luật: [`03-4-mau-python-rules.instructions.md`](../01-huong-dan-su-dung/examples/03-4-mau-python-rules.instructions.md)): `Done = npm test -- payments xanh + npm run lint 0 error` (xem [Tips 04](./04-verification-done-that.md)).
 2. **Cách verify** — bắt Copilot tự iterate:
 
 ```text
@@ -191,7 +191,7 @@ Gọi: `/bug-fix scope=src/payments bugDescription="refund quá 30 ngày bị 50
 
 Mục này đi qua từng vòng sửa prompt trên một tình huống thật — xem mỗi vòng "đúc thêm 1 mảnh" được gì.
 
-Tình huống: refactor file `auth.ts` 800 dòng.
+Tình huống: refactor file `auth.ts` 800 dòng — đối chiếu prompt "đạt chuẩn" với prompt file mẫu: [`../templates/.github/prompts/review-pr.prompt.md`](../templates/.github/prompts/review-pr.prompt.md).
 
 | Round | Prompt | Kết quả |
 |---|---|---|
