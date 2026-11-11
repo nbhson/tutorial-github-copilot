@@ -29,7 +29,7 @@ Giống điện thoại mất sóng: có thể do bạn ở trong hầm (proxy/f
 
 > 📄 **Code ví dụ:** [`examples/01-1-copilot-bao-offline-vi-sao-fix-sao.sh`](examples/01-1-copilot-bao-offline-vi-sao-fix-sao.sh)
 
-**Ví dụ:** máy công ty qua proxy → `api.github.com` timeout dù web vẫn mở → xin IT whitelist `*.github.com` + `*.githubcopilot.com`. Khi status bar Offline, cả 2 CLI + coding agent cloud vẫn hoạt động nếu có mạng — chỉ IDE bị ảnh hưởng.
+**Ví dụ:** máy công ty qua proxy → `api.github.com` timeout dù web vẫn mở → xin IT whitelist `*.github.com` + `*.githubcopilot.com`. Khi status bar Offline, cả 2 CLI + Copilot cloud agent vẫn hoạt động nếu có mạng — chỉ IDE bị ảnh hưởng.
 
 ## 2. No suggestions (gõ không ra gợi ý)?
 
@@ -75,7 +75,7 @@ Giống điện thoại mất sóng: có thể do bạn ở trong hầm (proxy/f
 
 **Ví dụ:** sau restart máy tools mất → `echo $TOKEN` rỗng (env mất cùng session) → export lại + mở IDE từ terminal.
 
-> **Lưu ý 2026:** Copilot CLI **không đọc** `.vscode/mcp.json` — CLI dùng `~/.mcp-config.json` + `.mcp.json`.
+> **Lưu ý 2026:** Copilot CLI **không đọc** `.vscode/mcp.json` — CLI dùng `~/.copilot/mcp-config.json` + `.mcp.json` (root repo).
 
 ## 6. Completions gợi ý sai chuẩn team dù đã có instructions?
 
@@ -111,9 +111,9 @@ return res.status(400).json({ code: "BAD_INPUT", message, requestId });
 
 ## 9. Nghi org policy chặn nhưng không chắc?
 
-**Trả lời 1 câu:** Dấu hiệu: setting tự revert, model picker thiếu, chat báo "disabled by administrator", coding agent "not enabled" → 99% là org policy; dev không xem được policy, phải hỏi admin chụp `Org Settings → Copilot → Policies` (gồm cả model allowlist, agent on/off, exclusions, Agent Skills/MCP/hooks).
+**Trả lời 1 câu:** Dấu hiệu: setting tự revert, model picker thiếu, chat báo "disabled by administrator", cloud agent "not enabled" → 99% là org policy; dev không xem được policy, phải hỏi admin chụp `Org Settings → Copilot → Policies` (gồm cả model allowlist, agent on/off, exclusions, Agent Skills/MCP/hooks).
 
-**Ví dụ:** coding agent báo not enabled ở repo A nhưng repo B chạy → policy chỉ bật 5 repo pilot. Mọi fix local vô hiệu thì chuyển sang kênh admin, đừng vọc tiếp.
+**Ví dụ:** cloud agent báo not enabled ở repo A nhưng repo B chạy → policy chỉ bật 5 repo pilot. Mọi fix local vô hiệu thì chuyển sang kênh admin, đừng vọc tiếp.
 
 ## 10. Thứ tự debug tổng (không rõ nguyên nhân)?
 

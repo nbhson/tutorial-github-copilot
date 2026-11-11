@@ -1,14 +1,14 @@
-# Chuẩn bị issue NGON (agent chỉ giỏi bằng issue bạn viết):
-gh issue create --repo acme/api --title "feat: thêm rate-limit POST /login" --body "
-## Mục tiêu + Acceptance criteria
-Thêm rate-limit 5 req/phút/IP cho POST /login.
-- [ ] Quá 5 req/phút → 429 + header Retry-After.
+# Chuan bi issue NGON (agent chi gioi bang issue ban viet):
+gh issue create --repo acme/api --title "feat: them rate-limit POST /login" --body "
+## Muc tieu + Acceptance criteria
+Them rate-limit 5 req/phut/IP cho POST /login.
+- [ ] Qua 5 req/phut -> 429 + header Retry-After.
 - [ ] Focused test pass: pnpm --filter @acme/api test rate-limit.
 
 ## Non-goals
-- Không đổi cơ chế auth, không refactor module khác.
+- Khong doi co che auth, khong refactor module khac.
 " --label "ready"
 
-# Giao cho agent (CLI hoặc web "Assign to Copilot"):
-gh copilot assign 123 --repo acme/api
-# Theo dõi: gh pr list --repo acme/api --author "app/copilot" --state open (PR draft copilot/issue-123-*)
+# Giao cho agent: mo issue -> sidebar Assign -> chon "Copilot" (hoac REST API assignees).
+# KHONG co "gh copilot assign" - namespace "gh copilot" la extension cong dong, khong phai Copilot CLI.
+# Theo doi: gh pr list --repo acme/api --author "app/copilot" --state open (PR draft copilot/issue-123-*)

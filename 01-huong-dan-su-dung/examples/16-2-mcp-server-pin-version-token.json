@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "github-readonly": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@vendor/github-mcp@1.2.3"],
+      "env": { "GITHUB_TOKEN": "${GH_READ_TOKEN}" },
+      "tools": ["search_issues", "get_pr"]
+    }
+  }
+}

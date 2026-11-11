@@ -1,0 +1,12 @@
+// .mcp.json — thêm postgres-dev: trỏ read-replica, user chỉ có quyền đọc.
+// Connection string KHÔNG nằm trong file: env tham chiếu biến môi trường,
+// có thể kèm giá trị default an toàn cho máy dev.
+{
+  "mcpServers": {
+    "postgres-dev": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      "env": { "DATABASE_URL": "${PG_READONLY_URL}" }
+    }
+  }
+}

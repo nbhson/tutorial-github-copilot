@@ -87,7 +87,7 @@ Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.g
 
 | Tiêu chí | PAT fine-grained (MCP local) | `GITHUB_TOKEN` ephemeral |
 |---|---|---|
-| Dùng cho | MCP local, CLI cá nhân | CI (Actions), coding agent cloud |
+| Dùng cho | MCP local, CLI cá nhân | CI (Actions), Copilot cloud agent |
 | Quyền | Tối thiểu, chỉ repo cần | Cấp tự động theo job |
 | Hạn | 30-90 ngày, tự xoay | Hết khi job xong |
 
@@ -97,7 +97,7 @@ Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.g
 
 > Đặt lịch 90 ngày rotate PAT MCP; offboard = revoke. Đặt tên token ghi rõ mục đích: `mcp-github-laptop-2026-10`.
 
-## 9. Review PR của coding agent về mặt bảo mật?
+## 9. Review PR của cloud agent về mặt bảo mật?
 
 **Trả lời 1 câu:** PR agent qua cùng gate bảo mật như PR người — secret scan, required review, security-reviewer khi chạm auth/payment — cộng 2 check riêng: **scope lố không** (file ngoài issue?) và **dependency lạ không** (`package.json` thêm lib không rõ nguồn?).
 
@@ -111,7 +111,7 @@ Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.g
 
 > 📄 **Code ví dụ:** [`examples/08-10-checklist-bao-mat-truoc-khi-public-mo.sh`](examples/08-10-checklist-bao-mat-truoc-khi-public-mo.sh)
 
-> Thêm item (tùy repo): Agent Skills + hooks preview (nếu có) phải được review trước khi public — chúng là code chạy trên máy dev.
+> Thêm item (tùy repo): Agent Skills + hooks (VS Code: Preview) phải được review trước khi public — chúng là code chạy trên máy dev.
 
 ---
 

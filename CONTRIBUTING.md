@@ -12,9 +12,10 @@ Mục này là bản đồ cho việc "thêm bài": trước hết xác định 
 ### Bài trong `01-huong-dan-su-dung/` (deep-dive `NN-ten-bai.md`)
 
 - Đặt tên: số tiếp theo + slug tiếng Việt không dấu, vd `13-copilot-cli-tu-a-den-z.md`.
-- Độ dài: 300–450 dòng. Bắt buộc có: mục lục, `##` theo mạch why → how → ví dụ copy-paste →
-  walkthrough → pitfalls (bảng 3 cột) → bài tập (có thời gian từng bài) → link chéo.
-- Code block phải chạy được (đã thử tay ít nhất 1 lần). Secrets luôn qua env, không hardcode.
+- Độ dài: **150–200 dòng, hard cap 220** (vượt cap = bài lẫn chủ đề — cắt hoặc dời về bài chủ sở hữu theo `plan-update/03`). Bắt buộc có: `## Mục tiêu bài học` (2–4 gạch kiểm chứng được), `##` theo mạch why → how → ví dụ copy-paste →
+  walkthrough → pitfalls (bảng 3 cột) → bài tập (có thời gian từng bài) → link chéo. **Không dùng `## Mục lục`** — 18/18 bài hiện tại không có.
+- Code block phải chạy được (đã thử tay ít nhất 1 lần) và **mặc định chạy trong Copilot harness**; ví dụ Local harness chỉ được xuất hiện trong block "⚠️ khác biệt Local harness" ≤6 dòng, ở các bài overview (00/02/10/17). Secrets luôn qua env, không hardcode.
+- Nguồn: mọi khẳng định về hành vi Copilot phải dẫn được URL `code.visualstudio.com/docs` hoặc `docs.github.com` (bảng đối chiếu ở `plan-update/02`); không có nguồn thì cắt hoặc ghi rõ "kinh nghiệm thực hành".
 - Link chéo: ít nhất 3 links tới bài/commands liên quan (đường dẫn tương đối).
 
 ### Bài trong `03-cau-hoi-thuong-gap/` (FAQ `NN-ten-faq.md`)
@@ -24,16 +25,17 @@ Mục này là bản đồ cho việc "thêm bài": trước hết xác định 
 
 ### Bài trong `02-tips-thuc-chien/` (tips `NN-ten-tips.md`)
 
-- Đặt tên: số tiếp theo, vd `11-toi-uu-premium-requests.md`. Độ dài 300–450 dòng.
+- Đặt tên: số tiếp theo, vd `11-toi-uu-ai-credits.md`. Độ dài 150–250 dòng.
 - Bắt buộc: lý thuyết gọn + ≥3 ví dụ copy-paste + walkthrough theo phút + 1 bảng tra nhanh +
   pitfalls + bài tập + tham khảo chéo.
 - Mỗi tính năng phải ghi: cần plan gì, bật ở đâu, rủi ro & giới hạn (1 dòng bảng).
 
-### Lệnh mới trong `01-huong-dan-su-dung/commands/<nhóm>/<slug>/README.md`
+### Lệnh mới trong `01-huong-dan-su-dung/commands/<harness>/<nhóm>/<slug>/README.md`
 
-- 1 folder = 1 lệnh, chỉ 1 file `README.md`. Độ dài 60–200 dòng.
-- Format chuẩn theo [`STYLE.md`](./STYLE.md) mục 4 (khuôn "dễ hiểu"), gồm: tiêu đề 1 dòng + `> Dành cho/Đọc xong` → 1 câu nôm na → **Vì sao dùng lệnh này** → Khi nào dùng / đừng → Cách gọi (copy-paste) → Ví dụ thật + kết quả + verify → Nếu làm sai (❌ SAI / ✅ ĐÚNG) → Lỗi thường gặp → **So sánh Claude Code** → Best practices (kèm "vì sao") → Bài tập nhỏ → Tham khảo.
-- File vàng để nhìn mẫu: `commands/code-actions/fix/README.md`.
+- `<harness>` = `copilot` (lệnh chạy được trong Copilot harness session — mặc định của khoá), `local` (cần Local harness), `cloud` (đặt lệnh trên GitHub.com). Xem tiêu chí ở `plan-update/04` §1.
+- 1 folder = 1 lệnh, chỉ 1 file `README.md`. Độ dài 60–200 dòng, **đích ≤95**.
+- Format chuẩn theo [`STYLE.md`](./STYLE.md) mục 4 (khuôn "dễ hiểu"), gồm: tiêu đề 1 dòng + `> Dành cho/Đọc xong` → 1 câu nôm na → **Vì sao dùng lệnh này** → Khi nào dùng / đừng → Cách gọi (copy-paste) → Ví dụ thật + kết quả + verify → Nếu làm sai (❌ SAI / ✅ ĐÚNG) → Lỗi thường gặp → **So sánh Claude Code** → Best practices (kèm "vì sao") → Bài tập nhỏ → Tham khảo. Đầu bài phải có dòng `Harness:` hoặc `Surface:`.
+- File vàng để nhìn mẫu: `commands/copilot/chat-session/clear/README.md`.
 - Ví dụ phải riêng cho từng lệnh (cấm copy-paste ví dụ chung cho mọi lệnh). Ghi rõ mode nào dùng được (Ask/Edit/Agent) và cách kiểm tra bằng `/` trong Chat.
 
 > **Tóm gọn 1 câu:** Thêm bài giống nấu theo công thức có sẵn — chọn đúng khuôn cho đúng món, việc còn lại là đổ nội dung riêng của bạn vào.
@@ -50,7 +52,7 @@ Mục này chốt cách đặt tên file và giọng viết — giữ đúng quy
 ## PR checklist (tick hết mới merge)
 
 - [ ] Tên file/số thứ tự đúng (không trùng, không nhảy số).
-- [ ] Đủ số dòng: bài 300–450, lệnh 30–200 (`wc -l`).
+- [ ] Đủ số dòng: bài 150–200 (cap 220), lệnh 60–200 (đích ≤95) (`wc -l`).
 - [ ] Code block đã chạy thử (ghi rõ đã verify ở đâu trong PR mô tả).
 - [ ] Có pitfalls (bảng) + bài tập (có thời gian) + link chéo (≥3, không 404).
 - [ ] Lệnh mới: đủ 6 phần + ví dụ riêng từng lệnh + mode hỗ trợ + cách kiểm tra `/`.

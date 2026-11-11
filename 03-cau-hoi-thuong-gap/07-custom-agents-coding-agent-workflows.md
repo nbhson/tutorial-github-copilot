@@ -1,6 +1,6 @@
-# FAQ 07 — Custom Agents & Coding Agent Workflows
+# FAQ 07 — Custom Agents & Cloud Agent Workflows
 
-> **Vấn đề:** custom agent sửa lố scope, coding agent mở PR xong để lại conflict, CI đỏ không biết bắt đầu từ đâu — 10 câu dưới đây trị bằng `tools` + ranh giới + issue đủ spec, không phải bằng niềm tin.
+> **Vấn đề:** custom agent sửa lố scope, cloud agent mở PR xong để lại conflict, CI đỏ không biết bắt đầu từ đâu — 10 câu dưới đây trị bằng `tools` + ranh giới + issue đủ spec, không phải bằng niềm tin.
 
 ## Bảng tổng hợp: agent nào việc nào
 
@@ -9,7 +9,7 @@
 | explorer | Trinh sát chỉ-đọc, vẽ bản đồ file | search (đọc) |
 | tester | Chạy test focused, báo PASS/FAIL | terminal test + đọc log |
 | security-reviewer | Soi auth/input/crypto/secrets | search + đọc diff |
-| coding agent (GitHub) | Làm task từ issue, mở PR | full trong sandbox + ruleset |
+| cloud agent (GitHub) | Làm task từ issue, mở PR | full trong sandbox + ruleset |
 
 > **Cách đọc bảng này:** mỗi dòng là một "nhân viên" trong đội — cột **Việc** là chuyên môn, cột **Tools cho phép** là chùm chìa khóa bạn trao; trao càng ít chìa, nhân viên càng khó gây hoang phế.
 
@@ -32,7 +32,7 @@ tools: [search]
 - Quá 10 file liên quan -> dừng, hỏi user chọn tiếp.
 ```
 
-> `tools` + ranh giới là gate thật; hooks (preview, chỉ Local) chưa phải security boundary. **Vẫn loạn:** rút `tools` còn 1 tool, thêm "quá 10 file thì dừng", chia task nhỏ hơn.
+> `tools` + ranh giới là gate thật; hooks (chạy ở Copilot CLI + Copilot in the cloud, VS Code còn Preview) chưa phải security boundary. **Vẫn loạn:** rút `tools` còn 1 tool, thêm "quá 10 file thì dừng", chia task nhỏ hơn.
 
 ## 2. Workflow 3 pha explorer → làm → tester?
 
@@ -52,14 +52,14 @@ Checklist: injection (SQL/command), XSS, auth bypass, IDOR, secret lộ, crypto 
 
 > Quy ước team: diff chạm `auth|payment|crypto|admin` → bắt buộc qua security-reviewer. Mẫu: `templates/.github/agents/security-reviewer.agent.md`.
 
-## 4. Coding agent trên GitHub là gì, giao việc thế nào?
+## 4. Cloud agent trên GitHub là gì, giao việc thế nào?
 
-**Trả lời 1 câu:** Coding agent là bot chạy trên cloud GitHub nhận việc từ issue (assign cho `copilot`), tự code + chạy test + mở PR, bạn review như review người thật — khởi động nhanh hơn 50% từ changelog 03/2026.
+**Trả lời 1 câu:** Cloud agent là bot chạy trên cloud GitHub nhận việc từ issue (assign cho `copilot`), tự code + chạy test + mở PR, bạn review như review người thật.
 
 Giao việc chuẩn: issue mô tả **mục tiêu + phạm vi file + acceptance criteria + lệnh test**. Task to tốn nhiều AI Credits hơn → luôn ghi lệnh verify trong issue.
 
 ```markdown
-<!-- Mau issue giao cho coding agent -->
+<!-- Mau issue giao cho cloud agent -->
 ## Mục tiêu
 Thêm rate-limit 100 req/phút cho /api/login.
 
@@ -77,7 +77,7 @@ Thêm rate-limit 100 req/phút cho /api/login.
 
 > Task rõ ràng, có test, scope hẹp → agent làm tốt. Task mơ hồ thì làm rõ issue trước, đừng assign đi assign lại.
 
-## 5. Coding agent conflict / PR fail — xử lý sao?
+## 5. Cloud agent conflict / PR fail — xử lý sao?
 
 **Trả lời 1 câu:** 3 ca: conflict → rebase lên base mới; CI đỏ → đọc log job đỏ đầu tiên rồi comment `@copilot` bảo fix; PR sai scope → request changes hoặc checkout về sửa tay.
 

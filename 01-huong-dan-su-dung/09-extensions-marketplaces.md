@@ -1,238 +1,153 @@
-# 09 — Extensions & Marketplaces (Đóng Gói Cho Team)
+# 09 — Extensions & Marketplaces: Ba Tầng Mở Rộng Copilot (Chuẩn 2026)
 
-> **Dành cho:** tech lead / admin đóng gói chuẩn tooling cho team, kèm dev mới cài extension lần đầu (bài 09 của series).
-> **Vấn đề:** mỗi dev cài lẻ, mỗi repo một kiểu setup prompts / MCP / extension → teammate mới mất cả buổi. Extension lạ thì chạy với quyền của bạn.
-> **Đọc xong:** phân biệt Copilot Extensions vs VS Code extensions, cài + pin version copy-paste, set org policy allow/block + review extension lạ cho team.
+> **Dành cho:** dev muốn setup "một lần cả team dùng chung", và tech lead cần biết ai đang cài gì vào editor/agent.
+> **Vấn đề:** từ "extension" và "plugin" bị dùng lẫn cho **ba tầng khác nhau** — cài nhầm tầng là config không chạy; và cái tên "Copilot Extensions" (sản phẩm GitHub App cho chat) đã **retired từ 10/11/2025** nhưng tài liệu cũ vẫn còn đầy.
+> **Đọc xong:** phân tầng đúng — pack VS Code, Agent Plugins + marketplace, MCP/connectors — và dựng được pack commit vào repo cho cả team. **Thời gian:** ~30 phút đọc + 20 phút thực hành.
 
 ## Mục tiêu bài học
 
-- Phân biệt **2 loại extension**: Copilot Extensions (GitHub Apps gọi qua `@`) và VS Code extensions (đồ nghề editor).
-- Biết **ngưỡng đóng gói**: khi nào commit `.github/` thẳng, khi nào dựng extension pack / repo template.
-- Cài được extension pack, **pin version** và cập nhật có kiểm soát.
-- Đặt **org policy allow/block** + checklist review extension lạ trước khi cho vào org.
+Mục này cho bạn biết 50 phút nữa sẽ mang được gì về — như kiểm sơ đồ tầng trước khi cắm đồ nghề.
+
+- Phân được **ba tầng mở rộng**: extension của *editor* (`.vscode/extensions.json`), **Agent Plugins** + marketplace (`.github/plugin/marketplace.json`), và MCP/connectors — mỗi tầng file nào, harness nào đọc.
+- Commit được pack VS Code chuẩn team + **pin version** để auto-update không đổi hành vi giữa sprint.
+- Biết "Copilot Extensions" là sản phẩm đã retired — gặp trong tài liệu cũ thì nhận ra ngay, không đi tìm chỗ cài.
+- Nói được marketplace không cần "chợ chính thức": **một Git repo nội bộ** có manifest là đủ; và enterprise khoá được bằng managed settings.
+
+> **Tóm gọn 1 câu:** Mở rộng Copilot là ba tầng ba file — editor thì extension pack, agent thì plugin/marketplace, tool thì MCP/connector; nhầm tên là nhầm luôn chỗ cài, và "Copilot Extensions" chỉ còn là quá khứ.
 
 ---
 
-## 1. Vì sao extensions? + ngưỡng đóng gói
+## 1. Ba tầng mở rộng — đừng lẫn tên
 
-**Định nghĩa 1 câu:** File `.github/` lẻ chỉ giải quyết 1 repo; extension/pack là **thùng combo đóng sẵn** — nhiều repos và người mới dùng chung 1 chuẩn, update 1 nơi là cả team sync.
+**Nôm na 1 câu:** Mỗi tầng là một "ổ cắm" khác nhau: tầng 1 cắm vào **editor** (UI cho người), tầng 2 cắm vào **agent** (đồ nghề model dùng), tầng 3 cắm vào **tool server** (kết nối hệ thống ngoài).
 
-```text
- Không extensions: teammate mới → clone 5 repos → mỗi repo setup MCP tay +
-   hỏi "prompt review ở đâu?" + cài lẻ từng VS Code extension.
- Có extensions:   teammate mới → cài 1 extension pack org → 5 repos đều có
-   @-mention participants, prompt files, MCP servers kèm.
- Update:          bump extension version 1 nơi → cả team sync.
- # Verify: đếm repos team bạn. ≥3 repos cùng checklist → đáng đóng extension (mục 5).
-```
-
-**Ngưỡng đóng gói:** cùng 1 bundle dùng ở **≥3 repos HOẶC** onboarding **≥1 người/tháng**. Dưới ngưỡng → commit `.github/` thẳng rẻ hơn (bài 05/06). Đóng gói quá sớm = tự tạo thêm artifact phải version + publish + sync; không đóng gói khi đã 10 repos = teammate cài tay 10 nơi, mỗi repo trôi một kiểu.
-
-> **Tóm gọn 1 câu:** `.github/` lẻ là nấu cơm từng bữa cho một người; extension/pack là dựng bếp chuẩn cho cả team — vượt ngưỡng ≥3 repos thì nấu một nồi đỡ tốn hơn.
-
----
-
-## 2. 2 loại extensions — đừng nhầm
-
-Mục này nói về việc phân biệt hai "chợ" extension — đọc để biết loại nào giải quyết việc nào, khỏi cài nhầm chợ rồi than lệnh không chạy. Có 2 chợ khác nhau: **chợ GitHub** bán "người phục vụ biết gọi SaaS" (`@linear`, `@sentry`), **chợ VS Code** bán "đồ nghề cho editor" (lint, format, MCP local).
-
-| Loại | Nôm na | Cài ở đâu | Ví dụ | Khi nào dùng |
-|---|---|---|---|---|
-| **Copilot Extensions** | GitHub App đăng ký quầy riêng trong Chat | github.com Marketplace → Installed Apps + Chat `@` | `@linear tạo task Y`, `@sentry list issues` | Cần gọi Linear/Jira/Sentry từ Chat |
-| **VS Code extensions** | Đồ nghề gắn vào editor | VS Code Marketplace / `.vscode/extensions.json` | Copilot pack, ESLint, Prettier, GitLens | Cần lint/format/snippets/MCP local |
-
-```text
- Quan hệ giữa 2 loại:
- - Copilot Extension (@linear) → gọi từ Chat bằng @-mention, chạy trên GitHub infra.
- - VS Code extension (pack) → cài local, có thể TỰ THÊM MCP servers + participants.
- - 1 VS Code extension có thể wrap 1 Copilot Extension (cài 1 được 2).
-
- Cây quyết định:
- Cần gọi SaaS (Linear/Jira/Sentry) từ Chat? → Copilot Extension @-mention.
- Cần tooling editor (lint, format, snippets, MCP local)? → VS Code extension.
- Share chuẩn team cross-repo? → cả 2 + org policy (mục 6).
- # Verify: gõ @ trong Chat → thấy @-mentions nào? Thiếu → chưa cài Copilot Extension.
-```
-
-> Copilot Extensions đã **GA từ 19/02/2025**, dùng auth native third-party tokens, có trên VS Code, github.com, Visual Studio, JetBrains và GitHub Mobile. Chi tiết đầy đủ: [`../../copilot-extensions-ai-powered/README.md`](../../copilot-extensions-ai-powered/README.md) (EN).
-
-> **Tóm gọn 1 câu:** Gọi SaaS từ Chat thì đi chợ GitHub (`@-mention`), đồ nghề editor thì đi chợ VS Code — hai chợ hai loại hàng, đừng đi nhầm.
-
----
-
-## 3. Copilot Extensions: cài + dùng
-
-**Nôm na:** Copilot Extension là GitHub App đăng ký quầy riêng trong Chat — gõ `@tên-quầy` là gọi đúng nhân viên quầy đó.
-
-```text
- Bước 1: github.com → Marketplace → tìm extension (vd "Sentry", "Linear").
- Bước 2: Install → chọn Org/Repos được phép (đừng chọn All repos nếu chưa tin).
- Bước 3: VS Code Chat → gõ "@" → phải thấy @sentry/@linear mới.
- Bước 4: Test: "@sentry list unresolved issues của project X" / "@linear tạo task Y".
- Bước 5: Không hợp → github.com → Settings → Applications → Uninstall/Restrict.
- # Verify: bước 3 phải thấy @-mention mới. Không thấy → reload window + check repo được phép.
-```
-
-> 📄 **Code ví dụ:** [`examples/01-3-copilot-extensions-cai-dung.sh`](examples/01-3-copilot-extensions-cai-dung.sh)
-
-**5 extensions team hay dùng (2026):**
-
-| Extension | `@-mention` | Để làm gì | Khi prune |
+| Tầng | Bạn cài gì | File/surface nào quản lý | Chạy ở đâu |
 |---|---|---|---|
-| GitHub (built-in) | `@workspace` | Hỏi code, PR, issues trong repo | Không bao giờ |
-| Linear/Jira | `@linear` | Tạo/xem tasks từ Chat | Team không dùng tracker đó |
-| Sentry/Datadog | `@sentry` | Tra lỗi prod + stack trace | Không có observability SaaS |
-| LaunchDarkly/PostHog | `@flags` | Check feature flags | Không dùng flags |
-| Notion/Confluence | `@docs` | Tra docs team | Docs đã local hết |
+| **1. VS Code extensions** | công cụ editor: Copilot Chat, ESLint, Prettier | Marketplace VS Code + `.vscode/extensions.json` (pack team) | chỉ trong VS Code / VS Code-compatible editor |
+| **2. Agent Plugins** | gói **skills + cấu hình MCP** cho Copilot | `/plugin` (session Copilot) · `copilot plugin …` (CLI) · marketplace = Git repo | Copilot harness (VS Code + CLI) — Local harness không chạy |
+| **3. MCP & connectors** | server cung cấp tool ngoài | `.mcp.json` (root repo, key `mcpServers`) · `~/.copilot/mcp-config.json` · `.vscode/mcp.json` (**Local**, key `servers`) | Copilot harness hoặc Local — tuỳ file |
 
-> **Cách đọc bảng này:** đọc cột `@-mention` để biết gọi tên quầy nào; cột "Khi prune" chính là hướng dẫn dọn dẹp — mỗi quý ngó qua xem extension nào rơi vào đó thì gỡ.
+Ba cái bẫy tên đã làm hỏng bài này bản cũ:
 
-```text
- Quy tắc: ≤5 Copilot Extensions. Quá → "@" list dài, Copilot chọn sai participant.
- Mỗi extension sâu nên có 1 prompt file kèm (vd .github/prompts/triage-sentry.prompt.md
- dạy format "lỗi → root cause → fix" để output đồng đều — bài 05).
- # Verify: đếm @-mentions team đang có. >5 → prune 1 cái ít dùng nhất.
+- **"Copilot Extensions"** (sản phẩm GitHub App mở rộng chat) — **đã retired**, xem mục 2. Không còn chỗ nào để cài.
+- **Agent Plugins ≠ plugin kiểu khác**: docs gốc của VS Code ghi nguyên văn Agent Plugins *"are distinct from VS Code extensions"* — còn chữ "plugin" nằm trong tên một số extension (mở rộng của extension) là khái niệm của *editor*, không phải tầng này.
+- **"Marketplace"** ở tầng 2 không phải chợ: nó chỉ là **một Git repo** có file `.github/plugin/marketplace.json` — repo nội bộ công ty bạn cũng là một marketplace.
+
+> **Vì sao quan trọng?** Đúng tầng = đúng file = đúng harness. Cấu hình để sai tầng không báo lỗi to — nó chỉ **im lặng không chạy** (vd: MCP khai trong `.vscode/mcp.json` thì session Copilot harness không thấy).
+> **Nếu làm sai?** Team "cài plugin" bằng cách install extension editor → skills không vào agent; hoặc đi tìm "Copilot Extension" theo tutorial 2024 → không tồn tại nữa.
+> **Tóm gọn 1 câu:** Trước khi cài, hỏi ba câu: *editor hay agent? file nào đọc config này? harness nào đang chạy?*
+
+## 2. ⚠️ "Copilot Extensions" — cái tên chỉ còn trong tài liệu cũ
+
+**Copilot Extensions** (GitHub App do bên thứ ba viết, thêm capability vào chat) bị khai tử theo lộ trình: deprecated 24/09/2025, **retired 10/11/2025** ([thông báo gốc](https://github.blog/changelog/2025-09-24-deprecate-github-copilot-extensions-github-apps/)). Product GA 19/02/2025 chỉ là mốc lịch sử; không còn marketplace để cài. Người dùng được chuyển sang đường tương đương: **Agent Plugins (bài 17), MCP (bài 08), connectors** — còn prompt/chat kiểu cũ đang deprecated ở Local xem [`commands/local/model-agent/participants/README.md`](commands/local/model-agent/participants/README.md).
+
+**Một ngoại lệ để không loạn:** menu `/extensions` trong *Copilot CLI* là thứ khác — CLI extensions dạng module JavaScript (experimental), không phải "Copilot Extensions" đã retired.
+
+## 3. Tầng 1 — extension pack cho VS Code: commit "cả team dùng đồ này"
+
+### 3.1 `.vscode/extensions.json` — danh sách khuyến nghị
+
+Pack nằm trong repo, ai mở folder đều được VS Code gợi ý cài ("Recommended"). Một sample chuẩn — dòng đầu là bắt buộc, còn lại tuỳ stack:
+
+```jsonc
+// .vscode/extensions.json
+{
+  "recommendations": [
+    "github.copilot",            // Chat + completions — cai truoc
+    "github.copilot-chat",       // Copilot Features (agent mode, tools)
+    "dbaeumer.vscode-eslint",    // LSP: mo file la chay, agent khong phai cai lenh
+    "esbenp.prettier-vscode",    // Format theo thong le team
+    "editorconfig.editorconfig"  // Dong bo thong le giua cac editor
+  ],
+  "unwanted": []                 // extension conflict hoac da bo
+}
 ```
 
-**Khi nào tự viết Copilot Extension riêng:** chỉ khi nhà bạn có món độc quyền (internal API/runbook) mà chợ chưa bán, và ≥3 teams dùng. Dưới ngưỡng → prompt file + MCP http server là đủ (bài 05/08) — viết extension là GitHub App (manifest, OAuth, hosting), overhead lớn. Khung high-level: tạo GitHub App → enable Copilot permission → định nghĩa skills → host endpoint → install org test → publish private marketplace. Secrets (APP_PRIVATE_KEY, WEBHOOK_SECRET) qua hosting env, KHÔNG commit.
+Cài + verify bằng CLI (`code --install-extension <publisher.name>` → `code --list-extensions`), walkthrough từng lệnh ở [`examples/09-3-1-vs-code-pack-install.sh`](examples/09-3-1-vs-code-pack-install.sh), file mẫu [`examples/09-3-1-vs-code-pack-settings.jsonc`](examples/09-3-1-vs-code-pack-settings.jsonc). Docs: *"VS Code prompts a user to install the recommended extensions when a workspace is opened for the first time"* — prompt chỉ bật lần đầu mở folder; ai bỏ lỡ thì tự thấy danh sách qua filter `@recommended` trong Extensions view.
 
-> **Tóm gọn 1 câu:** Tối đa 5 cái `@` thôi — mỗi extension một quầy, chợ đông quá thì Copilot dẫn khách nhầm quầy.
+**Extension host là gì:** docs định nghĩa *"the server that runs your UI, extensions, and other pieces"* — process chạy extensions; host chết thì debug/terminal/extensions liệt, không phải "Copilot lỗi". Đây cũng là lý do pack nên **ít mà chất**: mở rộng là thêm process vào máy mỗi dev.
 
----
+> **Vì sao quan trọng?** Đây là cách rẻ nhất để một người setup hộ cả team: file 10 dòng commit một lần, không còn cảnh "sao máy anh chạy được mà máy em không".
+> **Nếu làm sai?** Pack 30 extension "cho đủ" → mỗi dev tải thêm 30 extension về máy và trả giá tốc độ mà không ai giải trình được từng cái để làm gì.
 
-## 4. VS Code extensions: pack chuẩn team
+### 3.2 Pin version — mặc định auto-update, và hệ quả
 
-Mục này nói về việc đóng gói tooling editor thành pack cho cả team — đọc để biết ranh giới giữa "commit `.github/` thẳng" và "đóng pack".
+Mặc định VS Code **tự cập nhật mọi extension**. Với extension ảnh hưởng hành vi agent (Copilot Chat, công cụ MCP trong editor), "tự update" = luật chơi đổi giữa sprint. Chốt 4 dòng:
 
-> 📄 **Code ví dụ:** [`examples/02-4-vs-code-extensions-pack-chuan-team.json`](examples/02-4-vs-code-extensions-pack-chuan-team.json)
+- Tắt auto-update: setting `"extensions.autoUpdate": false` (hoặc update từng cái bằng tay: Extensions → bánh răng → *Update* / *Install Another Version*).
+- Cài đúng version: `code --install-extension github.copilot-chat@<version>`.
+- Audit: `code --list-extensions --show-versions` — so với allowlist của team mỗi tháng.
+- Nâng version: cuối sprint, test 1 ngày trên repo thử rồi mới announce. Lệnh đầy đủ: [`examples/09-3-2-pin-version.sh`](examples/09-3-2-pin-version.sh).
 
-> 📄 **Code ví dụ:** [`examples/03-4-vs-code-extensions-pack-chuan-team.jsonc`](examples/03-4-vs-code-extensions-pack-chuan-team.jsonc)
+## 4. Tầng 2 — Agent Plugins và marketplace
 
-> 📄 **Code ví dụ:** [`examples/04-4-vs-code-extensions-pack-chuan-team.sh`](examples/04-4-vs-code-extensions-pack-chuan-team.sh)
+### 4.1 Plugin là gì (6 dòng, phần sâu ở bài 17)
 
-**Khi nào extension vs dotfiles:** 1–2 prompt files, 1 repo → commit `.github/` thẳng. Tooling editor (lint/format/git) → VS Code pack. Gọi SaaS từ Chat → `@-mention`. Chuẩn cross-repo → org template repo + pack (mục 5.2). Preferences cá nhân (theme, keymap) → không commit.
+Plugin = **một gói chia sẻ đồ nghề của agent**: chứa skills (và cấu hình MCP), cài một lần có cả bộ thay vì copy từng file. Docs VS Code: *"Agent plugins are portable packages of expertise… distinct from VS Code extensions"*. Bật/tắt phía editor: setting `chat.plugins.enabled`; trong session Copilot dùng `/plugin`, ngoài terminal dùng `copilot plugin install|list|validate|recommendations`. Manifest schema **1.0 là schema đóng**: phần port dùng chung nằm ở `skills/` và `mcp.json` root; mục Copilot-specific (agents/hooks/commands…) phải nằm trong namespace `com.github.copilot/`. Quản lý từng lệnh + kiểm manifest: [`commands/copilot/system-knowledge/plugins/README.md`](commands/copilot/system-knowledge/plugins/README.md) · walkthrough đầy đủ: bài 17 + [`examples/17-2-plugin-marketplace.sh`](examples/17-2-plugin-marketplace.sh).
 
-> **Tóm gọn 1 câu:** Prompt file một repo thì commit thẳng, tooling editor thì pack, gọi SaaS thì `@` — đúng việc thì mới đúng cách đóng gói.
+### 4.2 Marketplace — "chợ" chỉ là một Git repo
 
----
+Chỉ một lệnh: `copilot plugin marketplace add OWNER/REPO` — repo đó phải có `.github/plugin/marketplace.json` liệt kê plugin. Vài sự thật hay bị hiểu sai:
 
-## 5. Cài + pin version + repo template
+- `awesome-copilot` là marketplace **built-in, không remove được**; `github/copilot-plugins` thì **phải add thủ công** (nhiều người tưởng nó có sẵn).
+- Plugin cài vào `~/.copilot/installed-plugins/<MARKETPLACE>/<PLUGIN>` — kiểm thư mục này là cách verify nhanh nhất.
+- Auto-update plugin chạy **mỗi session**: muốn đóng băng như mục 3.2 thì đặt `COPILOT_AUTO_UPDATE=false`; và cài thì pin bằng `@TAG` hoặc sha (`OWNER/REPO@v1.2.0`) — không có `--ref`.
+- Slash `/plugin …` chỉ tồn tại trong session Copilot harness; Local harness không chạy Agent Plugins.
 
-Mục này nói về khâu vận hành sau khi đã chọn cách đóng gói — đọc để cập nhật có kiểm soát thay vì "bump latest" giữa sprint.
+> **Vì sao quan trọng?** Marketplace nội bộ = cách phát đồ nghề cho cả org không cần "xin chợ": một Git repo thường + code review + pin sha là đủ nguồn tin cậy.
+> **Nếu làm sai?** Cài plugin từ repo lạ không đọc manifest — plugin chứa hooks/MCP nghĩa là **code chạy trên máy bạn**; đọc "hộp" trước khi lắp (best practice bài 16–17).
 
-### 5.1. Pin version (tránh breaking giữa sprint)
+## 5. Tầng 3 — MCP và connectors: agent chạm hệ thống ngoài
 
-> 📄 **Code ví dụ:** [`examples/05-5-1-pin-version-tranh-breaking-giua-sprint.sh`](examples/05-5-1-pin-version-tranh-breaking-giua-sprint.sh)
+Bài này không dạy MCP (đồ của **bài 08**); chỉ chốt vị trí trong bản đồ: **MCP server** bạn tự nuôi và khai (`.mcp.json` root repo key `mcpServers` · `~/.copilot/mcp-config.json` · `.vscode/mcp.json` là của **Local harness**, key `servers` — Copilot harness không đọc nó: [`commands/local/system-knowledge/vscode-mcp-json/README.md`](commands/local/system-knowledge/vscode-mcp-json/README.md)); **connector** là MCP do GitHub host — bạn chỉ bấm Connect, không có file cấu hình, và nó chỉ phục vụ **Copilot harness**: dấu hiệu nhận là nhãn `Connector: <name>` trong MCP Servers ([`commands/copilot/system-knowledge/connector/README.md`](commands/copilot/system-knowledge/connector/README.md)).
 
-```text
- Quy ước team (wiki — ai giữ: tech lead):
- - Pin versions trong wiki table (extension → version → ngày verify).
- - Update cuối sprint. Breaking change → giữ version cũ cho repos production, note lý do.
- - Teammate mới: cài theo table, không cài latest mù.
- # Verify: version local khớp table?
-```
+## 6. Repo template — sinh repo mới là mang theo cả pack
 
-### 5.2. Repo template (thực tế hơn viết extension mới)
+Tech lead dựng một repo chuẩn (pack §3 + instructions + skills + hooks + workflows), bật **Settings → General → Template repository**; mỗi repo mới `gh repo create <tên> --template <org>/<template-repo>` là mang nguyên bộ. Điểm hay: pack đi theo tự nhiên, không ai phải nhớ cài gì. Demo + verify: [`examples/09-6-repo-template.sh`](examples/09-6-repo-template.sh).
 
-```text
- acme-copilot-template/           # repo template org (Template repository: ON)
-   .github/copilot-instructions.md
-   .github/instructions/*.instructions.md
-   .github/agents/*.agent.md
-   .github/prompts/*.prompt.md
-   .vscode/{mcp.json,settings.json,extensions.json}
-   .husky/pre-commit
-   README.md (onboarding 10 phút)
+Lưu ý portability khi template chứa đồ nghề agent: skill nằm trong `.github/skills/` (dạng `*.prompt.md` là format cũ — port trước khi đưa vào template, công thức ở bài 05); workflow/`extensions.json` thì mang sang y nguyên.
 
- Teammate: New repo → "Use template" → có ngay chuẩn team.
- Update chuẩn: PR vào template → announce → các repos cherry-pick (hoặc script sync).
-```
+## 7. Org gate — admin khoá tầng nào bằng gì (chi tiết: bài 16)
 
-> 📄 **Code ví dụ:** [`examples/06-5-2-repo-template-thuc-te-hon-viet.sh`](examples/06-5-2-repo-template-thuc-te-hon-viet.sh)
+- **Tầng 1 (VS Code):** enterprise policy cho phép/cấm extension nào được cài — cấu hình qua doc [Extensions and your enterprise](https://code.visualstudio.com/docs/enterprise/extensions), không phải nhắc miệng.
+- **Tầng 2 (plugins):** managed settings `enabledPlugins` (allowlist), `strictKnownMarketplaces` + `extraKnownMarketplaces` (chợ nào được dùng); plugin admin đẩy xuống có badge **"Managed"**, dev không tắt được.
+- **Tầng 3 (MCP/connectors):** allowlist + tool approval — ma trận ở bài 10, cách khoá ở bài 16.
 
-> **Tóm gọn 1 câu:** Pin version là khoá bếp trước khi ai đó tự ý đổi món giữa sprint — còn template repo thì biến onboarding thành một cái bấm "Use template".
+Nguyên tắc chung: settings do dev giữ thì dev đổi được; **muốn "cấm thật" phải xuống managed settings** — vì sao: enforcement là việc của server, không của lời dặn (logic như stack 3 tầng bài 07).
 
----
+## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
-## 6. Org policy allow/block + checklist review
-
-Mục này nói về tầng quyền của admin — đọc để biết dev thường chỉ xem + request, còn ai giữ chìa khóa org thì checklist gì.
-
-Dành cho admin/org owner (Business/Enterprise); dev thường chỉ xem + request.
-
-```text
- Admin (github.com → Org Settings → Copilot → Policies → Extensions):
- - Allowed extensions: github, linear, sentry (list rõ, còn lại block).
- - VS Code marketplace: restrict (chỉ extensions đã review) — Enterprise.
- - Audit log: ai cài extension nào, khi nào (review hàng tháng).
-
- Admin (VS Code marketplace org):
- - Private marketplace/allowlist: chỉ pack org + extensions đã vet.
- - Block categories: themes lạ không sao; block extensions chạy shell/network chưa vet.
-```
-
-> 📄 **Code ví dụ:** [`examples/07-6-org-policy-allow-block-checklist-review.sh`](examples/07-6-org-policy-allow-block-checklist-review.sh)
-
-**Checklist review extension lạ (trước khi cho vào org):**
-
-| Kiểm tra gì | Vì sao |
-|---|---|
-| Đọc permissions (chạy shell? đọc files? gọi mạng?) | Extension chạy với quyền bạn — đọc `.env` được nếu bạn cho |
-| Nguồn: official / org / cá nhân lạ? | Lạ → test repo thử trước |
-| MCP servers kèm: URL lạ? secrets qua env? | Tránh exfiltrate (bài 08) |
-| Version pinned? CHANGELOG có breaking? | Tránh gãy giữa sprint |
-| 2 extensions cùng chức năng? | Chọn 1, gỡ kia (đỡ conflict) |
-
-> **Cách đọc bảng này:** cột "Kiểm tra gì" là danh mục soát lần lượt từ trên xuống trước khi cho extension vào org; cột "Vì sao" nhắc bạn rằng từng dòng đều đụng tới quyền của chính bạn (đọc files, chạy shell, gọi mạng).
-
----
-
-## 7. Hiểu nhầm + pitfalls
-
-Mục này nói về những niềm tin sai phổ biến quanh extension — đọc để nhận ra mình đang mắc câu nào trong bảng.
-
-| Hiểu nhầm / pitfall | Sự thật / fix |
-|---|---|
-| "Copilot Extension và VS Code extension là 1" | Sai. Một cái là GitHub App gọi qua `@`; một cái là plugin editor (có thể bundle MCP) |
-| "Cài càng nhiều càng mạnh" | Sai. >5 `@-mentions` → Copilot chọn sai; pack 30 extensions → VS Code chậm. Giữ pack core 7–10 + optional theo role |
-| "Extension lạ cài thử, sao đâu" | Sai. Nó chạy với quyền bạn (đọc files, chạy shell, gọi mạng). Review permissions + test repo thử |
-| "Update latest luôn cho mới" | Sai. Update giữa sprint dễ gãy. Pin version, update cuối sprint + test 1 ngày |
-| "Repo template dựng 1 lần là xong" | Sai. 6 tháng không sync → lỗi thời. Cuối sprint sync PR template → repos |
-| Cài extension lạ, nó đọc `.env` | Không review permissions → checklist mục 6; content exclusion vẫn làm lưng (bài 07) |
-| 2 formatters conflict | `unwantedRecommendations` + `defaultFormatter` rõ ràng |
-
-> **Cách đọc bảng này:** bên trái là câu nói bạn sẽ nghe trong team (hoặc trong đầu), bên phải là sự thật/fix — cài gì lạ thì tìm dòng gần nhất mà đối chiếu trước khi bấm Install.
-
----
-
-## 8. So sánh với Claude Code + bài tập + link chéo
-
-Mục này nói về chỗ hai công cụ khác nhau khi đóng gói chuẩn team, kèm bài tập thực hành — đọc để chọn hướng đúng với stack của team.
-
-| Việc | Copilot | Claude Code |
+| ❌ SAI | Hệ quả | ✅ ĐÚNG |
 |---|---|---|
-| Đóng gói chuẩn team | Copilot Extensions (GitHub App) + VS Code pack | Plugins (`.claude-plugin/`, marketplace) gói command/agent/skill/MCP |
-| Gọi SaaS trong Chat | `@-mention` (`@linear`, `@sentry`) | MCP server + slash command |
-| Tooling editor | VS Code extension pack | Không có tương đương (terminal-first) |
-| Pin version | `code --install-extension name@version` | Pin qua commit/revision của plugin |
-| Org policy allow/block | Org Settings → Copilot → Policies | Managed settings org-wide |
+| Còn đi cài "Copilot Extension" theo tutorial 2024 | sản phẩm retired 10/11/2025, không tồn tại để cài | dùng Agent Plugins (bài 17) / MCP (bài 08) / connector |
+| Khai MCP vào `.vscode/mcp.json` rồi hỏi "sao session Copilot không thấy tool" | file đó là của **Local harness** (key `servers`) | Copilot harness: `.mcp.json` root repo (key `mcpServers`) hoặc `~/.copilot/mcp-config.json` |
+| Nghĩ marketplace phải là "chợ chính thức" | bỏ lỡ cách tổ chức đồ nghề nội bộ | marketplace = Git repo có `.github/plugin/marketplace.json` |
+| Để auto-update mặc định chạy giữa sprint | extension/plugin đổi hành vi lúc nào không hay | pin version (`@TAG`/sha, `COPILOT_AUTO_UPDATE=false`), nâng cuối sprint sau test |
+| Tưởng `copilot-plugins` built-in như `awesome-copilot` | lệnh cài fail vì chưa add nguồn | `copilot plugin marketplace add github/copilot-plugins` trước khi cài |
 
-> **Cách đọc bảng này:** so từng "Việc" mà team bạn cần giữa hai cột — nếu chỉ làm việc riêng trong editor thì VS Code pack là khác biệt lớn nhất; nếu chuẩn team cross-repo thì cả hai đều có đường riêng.
+## Best practices (kèm vì sao)
 
-**Bài tập nhỏ:**
+- **Pack ≤10 extension, mỗi cái có lý do ghi cạnh ID.** *Vì sao:* mỗi extension là code chạy trên máy người cài (extension host); pack "cho đủ" làm chậm mọi người mà không ai giải trình được.
+- **Chung từ 3 repo trở lên → đưa vào pack/template, đừng dạy miệng.** *Ngưỡng 3 repo:* lần thứ 3 giải thích "cài gì" là lúc file `.vscode/extensions.json` đáng được commit hơn một tin nhắn.
+- **Đọc manifest trước khi cài plugin từ nguồn lạ.** *Vì sao:* plugin có thể mang hooks/MCP = lệnh chạy trên máy bạn; publisher + repo source là hai thứ kiểm được bằng 5 phút.
+- **Khoá tầng ở đúng tầng:** auto-update tắt bằng setting, nguồn plugin chặn bằng `strictKnownMarketplaces`, không "nhắc nhau". *Vì sao:* cái gì dev đổi được thì không phải chính sách.
 
-1. Commit `.vscode/extensions.json` vào 1 repo → clone fresh trên profile mới → verify VS Code gợi ý cài.
-2. Cài 1 Copilot Extension (`@linear`/`@sentry`). Test 3 prompts + viết 1 prompt file kèm để output đúng format team.
-3. Pin versions + lập table wiki. Update 1 extension lên latest trên repo thử → có breaking không?
-4. Audit extensions team (`code --list-extensions`) so với allowlist — gỡ 1 cái thừa.
-5. Tạo repo từ template (hoặc dựng template tối thiểu) → onboard 1 teammate thử.
+## Bài tập
 
-**Link chéo:** Bài 03 (instructions format output `@sentry`) · Bài 05 (prompt files kèm extension) · Bài 07 (allowlist + content exclusion) · Bài 08 (extension bundle MCP — review URL/secrets) · Bài 10 (tool approval cho extension tools) · Bài 12 (extensions trong Actions runners) · Bài 16 (validate extension/MCP 5 bước).
+1. **(10 phút)** Tạo `.vscode/extensions.json` cho repo hiện tại (≤8 ID), commit; nhờ một người mở folder và báo có prompt "Install recommended" — xác nhận bằng `code --list-extensions | grep -i copilot` (theo `examples/09-3-1-vs-code-pack-install.sh`).
+2. **(10 phút)** Pin `github.copilot-chat` về một version cụ thể, đặt `extensions.autoUpdate: false`; chạy audit `--show-versions`, ghi kết quả vào notes team.
+3. **(15 phút)** Thêm marketplace `github/copilot-plugins`, cài một plugin pin theo `@TAG`, verify thư mục `~/.copilot/installed-plugins/`, rồi `/plugin uninstall` — tất cả trong `examples/17-2-plugin-marketplace.sh`.
+
+## Link qua
+
+- Skills/`SKILL.md` trong plugin → bài 05. · MCP chi tiết + tool approval → bài 08. · Ma trận allow/ask/deny → bài 10.
+- Stack guardrail (logic "khoá ở server") → bài 07. · Kinh tế + audit org → bài 16. · Plugin từng lệnh, quản lý "hộp" → bài 17.
+- Thực hành: [`commands/copilot/system-knowledge/plugins/README.md`](commands/copilot/system-knowledge/plugins/README.md) · [`commands/copilot/system-knowledge/connector/README.md`](commands/copilot/system-knowledge/connector/README.md) · [`commands/local/system-knowledge/vscode-mcp-json/README.md`](commands/local/system-knowledge/vscode-mcp-json/README.md)
 
 ## Reference
 
-- GitHub Copilot docs: https://docs.github.com/copilot
-- VS Code Copilot docs: https://code.visualstudio.com/docs/copilot
-- VS Code Marketplace: https://marketplace.visualstudio.com/vscode
+- VS Code — [Extension Marketplace](https://code.visualstudio.com/docs/configure/extensions/extension-marketplace) (recommendations, auto-update, Install Pending) · [Extensions and your enterprise](https://code.visualstudio.com/docs/enterprise/extensions) (org allow/block)
+- VS Code — [Agent Plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins) (manifest schema 1.0, marketplace, managed settings, `chat.plugins.enabled`) · [Copilot Connectors](https://code.visualstudio.com/docs/agent-customization/copilot-connectors)
+- GitHub Changelog — [Deprecate GitHub Copilot Extensions](https://github.blog/changelog/2025-09-24-deprecate-github-copilot-extensions-github-apps/) (deprecated 24/09/2025 → retired 10/11/2025)
 
-> **Chốt bài 09:** extension chỉ đáng đóng gói khi bạn đã vượt ngưỡng — và khi đã đóng gói, hãy pin version, giữ pack gọn, review quyền từng extension lạ, vì tất cả chúng chạy bằng quyền của bạn.
+**Chốt:** Ba tầng — editor (extension pack), agent (plugin + marketplace), tool (MCP/connector) — mỗi tầng một file, một harness; "Copilot Extensions" đã retired và chỉ còn là cái tên dễ gây lẫn. Đồ nghề dùng từ 3 repo thì đóng gói vào pack/template, và nhớ: auto-update mặc định là bật — pin trước khi sprint chạy.

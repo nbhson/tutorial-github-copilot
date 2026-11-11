@@ -1,0 +1,32 @@
+// 10-5 — Mẫu settings sandbox cho terminal + khóa managed của admin + cách verify hàng rào.
+
+// ==== Ca nhan / team: .vscode/settings.json ====
+{
+  // Bat sandbox cho lenh cua agent: tat | bat (VS Code tu phat hien platform support)
+  "chat.agent.sandbox.enabled": "on"
+}
+
+// ==== Enterprise managed settings (admin day xuong, user khong ghi de duoc) ====
+// {
+//   "sandbox.enabled": true,            // bat sandbox buoc
+//   "sandbox.failIfUnavailable": true,  // may khong ho tro -> TU CHOI chay, khong im lang chay tran ngoai hang rào
+//   "sandbox.allowBypass": false        // khong cho nut tay trong session
+// }
+
+// ==== Thanh phan hang rào theo OS (Microsoft Management Extensions) ====
+// macOS 15+            -> Seatbelt (loc file system + network)
+// Linux / WSL2         -> bubblewrap (file system) + slirp4netns (network) + iptables (loc ten mien)
+// Windows 11           -> BaseContainer (feature thi nghiem)
+// Linux agent sessions -> devcontainer cua repo la mot kieu sandbox
+
+// ==== Verify 2 phut: do hang rào that, dung doan ====
+// 1. Tat sandbox ("off") -> goi agent chay lenh thu doc/ghi ra ngoai workspace: lenh tho.
+//    ("off" = chua enforce, khong phai "khong co chinh sach"; duong dan org + user + session
+//     giao nhau theo intersection, danh sach "[]" = LOCKDOWN, khong le khua duoc.)
+// 2. Bat "on" -> chay lai lenh nhu step 1: bi chan, copilot bao lenh dang trong sandbox.
+// 3. Len Allow all / chon Autopilot -> chay lai step 1: VAN bi chan. Permission quyet "ai
+//    bam nut" (bo popup), sandbox quyet "lenh cham duoc gi" (file system + mang cua lenh
+//    terminal). Hai lop doc lap - do la khac biệt Local harness so với Copilot harness.
+// 4. May khong ho tro (du Linux distro khong danh sach): neu failIfUnavailable = true,
+//    agent lenh TU CHOI chay thay vi lang le chay tran; nguoi dung co the tam thut tat
+//    sandbox de van chay (co popup xac nhan), team la khi do doi may/WSL2.

@@ -1,0 +1,57 @@
+// examples/08-6-mcp-servers-day-one.jsonc
+// Khuon 5 server day-one, dinh dang `.mcp.json`. De dung: luu thanh file `.mcp.json` o ROOT
+// repo, thay env cho dung may ban. Comment khong dau de port duoc sang moi may / moi congrong.
+//
+// Dinh dang — Copilot harness (VS Code session mac dinh, Agents window) va Copilot CLI doc truc tiep:
+//   - Key goc "mcpServers" (KHONG phai "servers" cua `.vscode/mcp.json`).
+//   - Transport trong `.mcp.json`: chi `stdio` va `http` (khong co `sse`).
+//   - Env vars: `${TEN}` hoac `${TEN:-gia-tri-mac-dinh}`. KHONG dung `${input:...}` (chi format VS Code).
+//   - Secrets: khong paste token that vao file — git history giu mai.
+//   - GitHub MCP server da built-in trong Copilot CLI; khai ben duoi la cho VS Code / Copilot app.
+//   - Moi server phai tra loi duoc: "no mo ra du lieu NGOAI repo nao?" — khong thi go.
+{
+  "mcpServers": {
+    // 1. GitHub — PR/issue/code search, remote hosted: chi can URL + header lay tu env.
+    //    Muon tu host bang Docker: doi thanh command "docker",
+    //    args ["run","-i","--rm","-e","GITHUB_PERSONAL_ACCESS_TOKEN","ghcr.io/github/github-mcp-server"].
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": { "Authorization": "Bearer ${GITHUB_TOKEN}" }
+    },
+
+    // 2. Playwright — Copilot NHIN UI qua browser that. Can Node >= 18 tren may chay harness.
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+
+    // 3. Postgres — CHI tro dev DB. DATABASE_URL nam trong env cua may, khong commit.
+    //    Quy tac SELECT/LIMIT khi hoi prod la cua instructions (applyTo) — xem bai 03.
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "${DATABASE_URL}"]
+    },
+
+    // 4. Context7 — tai lieu framework ban moi nhat (thay Fetch/Brave neu chi can docs).
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp"
+    },
+
+    // 5. Linear — tickets; token ca nhan nen de server nay trong user file
+    //    `~/.copilot/mcp-config.json` thay vi commit vao repo.
+    //    Notion tuong tu: "type":"http", "url":"https://mcp.notion.com/mcp".
+    "linear": {
+      "type": "http",
+      "url": "${LINEAR_MCP_URL}",
+      "headers": { "Authorization": "Bearer ${LINEAR_API_KEY}" }
+    }
+  }
+}
+
+// Verify sau khi dat file — lam trong session MOI, dung harness du kien dung:
+// 1. "liet ke 5 PRs mo gan nhat" → tool call tu github xuat hien + ket qua that.
+// 2. "Use the Playwright MCP server to open https://example.com and report the page title"
+//    → expand tool call: dung server, dung output.
+// 3. `copilot mcp list` (CLI) → du 5 servers; server nao 0 calls sau 2 tuan → disable roi xoa (bai 08 muc 9).

@@ -12,13 +12,13 @@ Nhóm 01 dạy bạn *Copilot có những gì*. Nhóm 02 này dạy *dùng nó s
 | 02 | Prompt engineering | Viết prompt rõ, cụ thể, kiểm chứng được | [02-prompt-engineering.md](./02-prompt-engineering.md) |
 | 03 | Plan-first workflow | Ask → Edit → Agent leo thang, duyệt plan trước khi code | [03-plan-first-workflow.md](./03-plan-first-workflow.md) |
 | 04 | Verification ("done that") | Định nghĩa xong-việc và kiểm chứng sau mỗi bước | [04-verification-done-that.md](./04-verification-done-that.md) |
-| 05 | Parallel agents | Multi-chat, Coding Agent sessions, worktrees song song | [05-parallel-agents.md](./05-parallel-agents.md) |
+| 05 | Parallel agents | Multi-chat, cloud agent sessions, worktrees song song | [05-parallel-agents.md](./05-parallel-agents.md) |
 | 06 | Policies & guardrails recipes | Recipes instructions, pre-commit, branch protection, MCP approval | [06-policies-guardrails-recipes.md](./06-policies-guardrails-recipes.md) |
 | 07 | Thiết kế prompts & skills | Prompt files, instructions, skills tái dùng | [07-thiet-ke-prompts-skills.md](./07-thiet-ke-prompts-skills.md) |
-| 08 | Tiết kiệm AI Credits (AI Credits) | Model routing, completions vs agent, prune MCP | [08-tiet-kiem-premium-requests.md](./08-tiet-kiem-premium-requests.md) |
+| 08 | Tiết kiệm AI Credits (AI Credits) | Model routing, completions vs agent, prune MCP | [08-tiet-kiem-ai-credits.md](./08-tiet-kiem-ai-credits.md) |
 | 09 | Teamwork chuẩn hóa | Chuẩn hóa cách cả team dùng Copilot | [09-teamwork-chuan-hoa.md](./09-teamwork-chuan-hoa.md) |
-| 10 | Debugging power moves | /fix, test loop, bisect, log→prompt, @terminal | [10-debugging-power-moves.md](./10-debugging-power-moves.md) |
-| 11 | Nâng cao: CLI, Web & Coding Agent | CLI, github.com chat, coding agent, mobile/voice | [11-nang-cao-cli-web-coding-agent.md](./11-nang-cao-cli-web-coding-agent.md) |
+| 10 | Debugging power moves | /fix, test loop, bisect, log→prompt, inline chat terminal | [10-debugging-power-moves.md](./10-debugging-power-moves.md) |
+| 11 | Nâng cao: CLI, Web & cloud agent | CLI, github.com chat, cloud agent, mobile/voice | [11-nang-cao-cli-web-coding-agent.md](./11-nang-cao-cli-web-coding-agent.md) |
 
 ## Thứ tự đọc đề xuất
 
@@ -42,10 +42,10 @@ Quen Claude Code thì bạn đã có nền cho gần hết nhóm này — dướ
 | Giữ context sạch | New Chat mỗi task + `#file`/`#selection` hẹp | `/clear` + `/compact` | Cùng mục tiêu "đừng nuôi 1 chat dài" — [bài 01](./01-context-hygiene.md) |
 | Viết luật cho repo | `.github/copilot-instructions.md` + `skills/` | `CLAUDE.md` + `.claude/` | File trong repo là luật — [bài 06](./06-policies-guardrails-recipes.md), [bài 07](./07-thiet-ke-prompts-skills.md) |
 | Làm việc theo plan | Plan mode + prompt files | Plan mode | Cùng tư tưởng duyệt trước khi code — [bài 03](./03-plan-first-workflow.md) |
-| Chạy song song | Git worktrees + Coding Agent cloud | Git worktrees + nhiều session | Cùng ý tưởng, khác cách mở phiên — [bài 05](./05-parallel-agents.md) |
+| Chạy song song | Git worktrees + Copilot cloud agent | Git worktrees + nhiều session | Cùng ý tưởng, khác cách mở phiên — [bài 05](./05-parallel-agents.md) |
 | Sửa lỗi nhanh | `/fix` dựng sẵn | Không có `/fix` dựng sẵn — tự tạo slash command | Copilot bấm-là-chạy — [bài 10](./10-debugging-power-moves.md) |
-| Tính chi phí | AI Credits (1 credit = 0,01 USD) | Gói subscription theo cửa sổ usage | Cơ chế khác nhau, cùng phải đo — [bài 08](./08-tiet-kiem-premium-requests.md) |
-| Code trên cloud | Coding Agent (assign issue) | Session cloud + tích hợp GitHub | Copilot gắn thẳng vào issue/PR — [bài 11](./11-nang-cao-cli-web-coding-agent.md) |
+| Tính chi phí | AI Credits (1 credit = 0,01 USD) | Gói subscription theo cửa sổ usage | Cơ chế khác nhau, cùng phải đo — [bài 08](./08-tiet-kiem-ai-credits.md) |
+| Code trên cloud | cloud agent (assign issue) | Session cloud + tích hợp GitHub | Copilot gắn thẳng vào issue/PR — [bài 11](./11-nang-cao-cli-web-coding-agent.md) |
 
 > **Cách đọc bảng này:** dọc cột **Việc** tìm cái bạn hay làm với Claude Code, cột **Copilot** là tên gọi tương ứng ở bên này — phần lớn là đổi "tên gọi", không đổi tư duy.
 

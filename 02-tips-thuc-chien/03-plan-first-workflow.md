@@ -2,7 +2,7 @@
 
 > **Dành cho:** dev đã quen gõ prompt nhưng hay giao task lớn cho Copilot mà chưa có plan.
 > **Vấn đề:** task >2 steps mà nhảy thẳng vào Agent → code sai spec, test đỏ, mất cả buổi revert.
-> **Đọc xong:** leo thang đúng 5 nấc Ask → Plan → Edit → Agent → Coding Agent, có `plan.md` để chat nào cũng tiếp tục được.
+> **Đọc xong:** leo thang đúng 5 nấc Ask → Plan → Edit → Agent → cloud agent, có `plan.md` để chat nào cũng tiếp tục được.
 > **Thời gian:** ~20 phút đọc + ~60 phút làm bài tập.
 
 ## 1. Vì sao phải plan-first?
@@ -15,7 +15,7 @@ Copilot code rất nhanh — nhanh tới mức nếu bạn đưa sai hướng, n
 - Không biết nó sẽ sửa files nào → review diff như mò kim. Diff là danh sách thay đổi giữa bản cũ và bản mới.
 - Hỏi 3 lần, mỗi lần đi một hướng khác nhau.
 
-Lợi ích đo được: 1 turn plan (vài AI Credits) tránh 10 turns code sai; plan lưu `plan.md` → chat nào, người nào, Coding Agent nào cũng tiếp tục được; bạn vẫn là người quyết định kiến trúc.
+Lợi ích đo được: 1 turn plan (vài AI Credits) tránh 10 turns code sai; plan lưu `plan.md` → chat nào, người nào, cloud agent nào cũng tiếp tục được; bạn vẫn là người quyết định kiến trúc.
 
 > Rule: **task >2 steps hoặc >1 file → bắt buộc plan trước.**
 
@@ -31,15 +31,15 @@ Mục này mô tả toàn bộ các "mức quyền" bạn có thể giao cho Cop
 | 2 | Plan (Ask + plan file) | Trình plan, chờ duyệt | Task >2 steps |
 | 3 | Edit | Sửa files bạn chỉ định | Fix 1 chỗ, task nhỏ rõ ràng |
 | 4 | Agent | Tự đọc/sửa/chạy lệnh | Task vừa, multi-files |
-| 5 | Coding Agent | Làm bất đồng bộ trên GitHub issue | Task độc lập, có spec rõ |
+| 5 | cloud agent | Làm bất đồng bộ trên GitHub issue | Task độc lập, có spec rõ |
 
 > **Cách đọc bảng này:** xếp theo nấc từ 1 tới 5 — mỗi nấc là một mức quyền bạn cấp cho Copilot (cột Quyền) và tình huống phù hợp (cột Khi dùng). Bắt đầu nấc thấp rồi leo lên.
 
-Leo thang đúng: **luôn bắt đầu thấp nhất có thể** — Ask không xong → Plan → Edit → Agent → Coding Agent. Nấc thang chính là "mức độ tin tưởng" bạn cấp: nhảy thẳng Agent cho task mơ hồ là vừa tốn credits vừa mất kiểm soát; mãi kẹt ở Ask cho việc đáng giao Agent là tự làm chậm mình.
+Leo thang đúng: **luôn bắt đầu thấp nhất có thể** — Ask không xong → Plan → Edit → Agent → cloud agent. Nấc thang chính là "mức độ tin tưởng" bạn cấp: nhảy thẳng Agent cho task mơ hồ là vừa tốn credits vừa mất kiểm soát; mãi kẹt ở Ask cho việc đáng giao Agent là tự làm chậm mình.
 
-> Lưu ý 2026: ngoài 5 nấc trên, VS Code/CLI còn có persona **Plan** và **Autopilot** (xoay bằng `Shift+Tab` trong CLI, dropdown trong Chat) — Autopilot tự chạy tới xong, vẫn tốn AI Credits.
+> Lưu ý 2026: ngoài 5 nấc trên, trong Chat có built-in agents **Ask / Plan / Agent**; **Autopilot là một agent mode** chọn ở mode picker (còn ở CLI là chế độ `plan`/`autopilot`, xoay bằng `Shift+Tab`) — Autopilot tự chạy tới xong, vẫn tiêu tốn AI Credits như chat thường.
 
-> **Tóm gọn 1 câu:** 5 nấc Ask → Plan → Edit → Agent → Coding Agent là 5 mức tin tưởng — cứ đứng nấc thấp nhất đủ dùng, việc mơ hồ thì chưa leo lên cao.
+> **Tóm gọn 1 câu:** 5 nấc Ask → Plan → Edit → Agent → cloud agent là 5 mức tin tưởng — cứ đứng nấc thấp nhất đủ dùng, việc mơ hồ thì chưa leo lên cao.
 
 ## 3. Nấc 1–2: Ask + Plan (không code)
 
@@ -48,7 +48,7 @@ Mục này nói về hai nấc thấp nhất — nơi chưa có dòng code nào 
 **Ví dụ 1 — Ask hiểu module (copy-paste):**
 
 ```text
-@workspace Chế độ Ask, chỉ đọc không sửa.
+#codebase Chế độ Ask, chỉ đọc không sửa.
 Trong src/payments/*.ts, giải thích flow refund hiện tại:
 5 bullet + file:line cho mỗi bước.
 Cuối cùng liệt kê 2 rủi ro nếu đổi logic quá 30 ngày.
@@ -117,11 +117,11 @@ Quy tắc an toàn cho Agent: luôn gắn `plan.md` đã duyệt; 1 phase / 1 ch
 
 > **Tóm gọn 1 câu:** Edit là dao mổ cho một vùng nhỏ, Agent là thợ phụ tay cho việc nhiều file — cả hai đều phải đeo "đề bài" là plan.md đã duyệt.
 
-## 5. Nấc 5: Coding Agent giao issue (bất đồng bộ)
+## 5. Nấc 5: cloud agent giao issue (bất đồng bộ)
 
 Mục này về nấc cao nhất: giao việc cho Copilot chạy trên GitHub, không cần bạn ngồi canh chat. Bất đồng bộ nghĩa là nó làm nền trong lúc bạn làm việc khác — như gửi giặt đồ ở tiệm rồi đi làm, quay lại lấy là xong.
 
-Khi plan đã rõ và việc độc lập, assign cho Copilot Coding Agent trên GitHub.
+Khi plan đã rõ và việc độc lập, assign cho Copilot cloud agent trên GitHub.
 
 **Ví dụ 1 — Viết issue để giao (copy-paste):**
 
@@ -152,11 +152,11 @@ Chỉ sửa trong src/payments/. Mở PR draft, dán log test xanh vào mô tả
 Nếu test đỏ sau 3 lần, dừng và comment blocker vào issue.
 ```
 
-**Khi nào KHÔNG giao Coding Agent:** spec còn mờ / chưa có plan duyệt; task đụng nhiều team cần họp; task <15 phút tự làm nhanh hơn (Edit là xong).
+**Khi nào KHÔNG giao cloud agent:** spec còn mờ / chưa có plan duyệt; task đụng nhiều team cần họp; task <15 phút tự làm nhanh hơn (Edit là xong).
 
-> Lưu ý 2026: ngoài github.com, chạy được agent trong terminal bằng Copilot CLI (binary `copilot`, 3 chế độ Interactive/Plan/Autopilot, xoay `Shift+Tab`, `/permissions`, `/limits` giới hạn credits). Xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
+> Lưu ý 2026: ngoài github.com, chạy được agent trong terminal bằng Copilot CLI (binary `copilot`, xoay chế độ **standard → plan → autopilot** bằng `Shift+Tab`, `/permissions` quyền, `/limits` giới hạn credits). Xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
 
-> **Tóm gọn 1 câu:** Coding Agent là giao việc qua issue rồi quay lại nhận PR — chỉ giao khi spec rõ, có plan duyệt và checklist done.
+> **Tóm gọn 1 câu:** cloud agent là giao việc qua issue rồi quay lại nhận PR — chỉ giao khi spec rõ, có plan duyệt và checklist done.
 
 ## 6. Mẫu plan.md chuẩn + prompt duyệt
 
@@ -217,7 +217,7 @@ Mục này ghép mọi thứ trên thành một kịch bản có đồng hồ �
 
 | Phút | Nấc | Việc |
 |---|---|---|
-| 0–10 | Ask | `"@workspace Chỉ trong src/payments/*.ts: flow refund 5 bullet + file:line. Không sửa."` → ghi findings ra plan.md |
+| 0–10 | Ask | `"#codebase Chỉ trong src/payments/*.ts: flow refund 5 bullet + file:line. Không sửa."` → ghi findings ra plan.md |
 | 10–25 | Plan | `"Đọc docs/payment-spec.md + refund.ts. Trình plan files sửa/steps/risks/KHÔNG đụng/verify. Chờ duyệt, không code."` |
 | 25–30 | Duyệt | Bạn đọc plan, hỏi 2 câu rủi ro, sửa scope, commit plan.md |
 | 30–45 | Edit/Agent | Chat mới: `"Đọc plan.md, chỉ làm Phase 1. Chạy npm test -- payments, dán log, dừng."` |
@@ -226,7 +226,7 @@ Mục này ghép mọi thứ trên thành một kịch bản có đồng hồ �
 
 > **Cách đọc bảng này:** đọc theo cột Phút là một dòng thời gian 60 phút; cột Nấc cho biết đang ở mức quyền nào, cột Việc là prompt copy-paste được cho từng đoạn.
 
-Tổng: 5 chats gọn, 1 plan duyệt, 0 lần revert lớn. Nếu giao Coding Agent: phút 30 assign issue kèm plan.md link, 2 giờ sau kiểm tra PR draft.
+Tổng: 5 chats gọn, 1 plan duyệt, 0 lần revert lớn. Nếu giao cloud agent: phút 30 assign issue kèm plan.md link, 2 giờ sau kiểm tra PR draft.
 
 > **Tóm gọn 1 câu:** feature đủ lớn trong 60 phút gồm 5 chat ngắn theo đúng thứ tự Ask → Plan → Duyệt → Implement → Review, không một lần revert lớn.
 
@@ -236,12 +236,12 @@ Mục này là bảng tra cứu để trả lời một câu hỏi duy nhất: v
 
 | Dấu hiệu task | Nấc đúng | Prompt mẫu 1 dòng |
 |---|---|---|
-| Hỏi, giải thích, research | Ask | `@workspace giải thích flow X, 5 bullet, không sửa` |
+| Hỏi, giải thích, research | Ask | `#codebase giải thích flow X, 5 bullet, không sửa` |
 | Task >2 steps / >1 file | Plan trước | `Trình plan + chờ duyệt, không code` |
 | Spec mờ | Ask phỏng vấn | `Hỏi tôi tối đa 5 câu rồi mới plan` |
 | Fix 1 hàm rõ ràng | Edit | `Bôi đen -> fix trong selection, giữ signature` |
 | Multi-files + chạy test | Agent + plan duyệt | `Đọc plan.md, làm Phase N, dán log` |
-| Việc độc lập, spec rõ, 1–2 giờ | Coding Agent | `Assign issue #X, mở PR draft + log xanh` |
+| Việc độc lập, spec rõ, 1–2 giờ | cloud agent | `Assign issue #X, mở PR draft + log xanh` |
 | Muốn thử 2 hướng | 2 chats Plan song song | Mỗi chat 1 phương án, so pros/cons |
 
 > **Cách đọc bảng này:** tìm dòng khớp "dấu hiệu" việc bạn đang có ở cột 1 — cột 2 là nấc nên đứng, cột 3 là prompt mẫu gõ ngay được.
@@ -261,7 +261,7 @@ Mục này liệt kê những lỗi hay mắc khi áp plan-first và cách sửa
 | Plan không ghi KHÔNG đụng | Sửa lan sang file cấm | Mọi plan đều có mục KHÔNG đụng |
 | 1 chat làm cả 3 phases | Phase sau hỏng phase trước | 1 phase 1 chat fresh, đều đọc plan.md |
 | Duyệt plan qua loa | Agent đi sai vẫn xanh test | Dùng prompt duyệt reviewer khó tính mục 6 |
-| Giao Coding Agent khi spec mờ | PR draft sai hướng | Chỉ giao khi có plan duyệt + done checklist |
+| Giao cloud agent khi spec mờ | PR draft sai hướng | Chỉ giao khi có plan duyệt + done checklist |
 | Không save plan.md | Chat mới quên hết | Save + commit plan.md ngay sau duyệt |
 | Edit cho task multi-files | Sửa chỗ này quên chỗ kia | Edit chỉ cho 1 vùng; multi-files dùng Agent |
 | Quên dặn dừng khi đỏ | Agent vá 10 lần càng hỏng | Luôn dặn đỏ sau 3 lần → dừng + báo blocker |
@@ -272,7 +272,7 @@ Mục này liệt kê những lỗi hay mắc khi áp plan-first và cách sửa
 
 Ba bài dưới đây luyện việc chọn nấc và chạy quy trình trên việc thật của bạn.
 
-**Bài 1 (15 phút):** Liệt kê 5 tasks tuần này, gắn mỗi task 1 nấc (Ask/Plan/Edit/Agent/Coding Agent) + lý do 1 dòng. Task nào từng làm sai nấc → viết lại prompt đúng nấc.
+**Bài 1 (15 phút):** Liệt kê 5 tasks tuần này, gắn mỗi task 1 nấc (Ask/Plan/Edit/Agent/cloud agent) + lý do 1 dòng. Task nào từng làm sai nấc → viết lại prompt đúng nấc.
 
 **Bài 2 (30 phút):** Lấy 1 feature thật >2 steps, chạy đúng flow: Ask 10p → Plan 15p → duyệt 5p. Save plan.md theo mẫu mục 6, commit. Implement Phase 1 bằng chat Edit fresh, dán log xanh.
 
@@ -290,6 +290,6 @@ Mục này dẫn tới các bài liên quan trong chuỗi tips.
 - [Tips 02](./02-prompt-engineering.md) — 6 mẫu prompt + prompt files
 - [Tips 04](./04-verification-done-that.md) — định nghĩa done + review gate
 - [Tips 05](./05-parallel-agents.md) — song song hóa sau khi có plan
-- [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — Coding Agent + Copilot CLI + web
+- [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — cloud agent + Copilot CLI + web
 
 > **Chốt Tips 03:** vẽ bản đồ trước khi đổ bê tông — chưa có plan duyệt thì chưa cho Copilot viết dòng code nào.

@@ -1,6 +1,6 @@
 # FAQ 10 — CI, SDK, Review & Web
 
-> **Vấn đề:** làm sao Copilot chạy khi bạn không ngồi trước máy — nối Actions với coding agent, viết workflow review/triage, gọi Copilot từ code qua SDK, bật auto review, xài bản Web/Mobile. 10 câu dưới đây trả lời đủ.
+> **Vấn đề:** làm sao Copilot chạy khi bạn không ngồi trước máy — nối Actions với cloud agent, viết workflow review/triage, gọi Copilot từ code qua SDK, bật auto review, xài bản Web/Mobile. 10 câu dưới đây trả lời đủ.
 
 ## Bảng tổng hợp: automation nào dùng gì
 
@@ -8,7 +8,7 @@
 |---|---|---|
 | Review PR tự động | Copilot code review / workflow `copilot-review.yml` | PR opened/synchronize |
 | Triage issue tự động | Workflow `copilot-ci-triage.yml` + label | Issue opened |
-| Agent làm task từ issue | Coding agent (assign `copilot`) | Tay hoặc workflow |
+| Agent làm task từ issue | Cloud agent (assign `copilot`) | Tay hoặc workflow |
 | Gọi Copilot từ code | Copilot SDK / API | App của bạn |
 | Dùng ngoài IDE | github.com/copilot, Mobile | Browser/app |
 
@@ -16,7 +16,7 @@
 
 ---
 
-## 1. Actions + coding agent nối với nhau thế nào?
+## 1. Actions + cloud agent nối với nhau thế nào?
 
 **Trả lời 1 câu:** Luồng chuẩn: **Issue (mô tả + acceptance criteria) → assign `copilot` → agent code + mở PR → Actions CI (lint/test) gate → review → merge** — workflow không gọi agent trực tiếp; agent tự lắng nghe assignment, workflow chỉ cần đảm bảo CI xanh/đỏ đúng.
 
@@ -85,7 +85,7 @@ SDK bọc Copilot CLI + cung cấp sessions, permissions, custom tools, events. 
 
 > 📄 **Code ví dụ:** [`examples/09-7-github-com-copilot-ban-web-dung-khi.sh`](examples/09-7-github-com-copilot-ban-web-dung-khi.sh)
 
-> Web còn assign coding agent + xem coding agent status (xem [bài 07](07-custom-agents-coding-agent-workflows.md)).
+> Web còn assign cloud agent + xem cloud agent status (xem [bài 07](07-custom-agents-coding-agent-workflows.md)).
 
 ## 8. Copilot trên Mobile dùng được gì?
 

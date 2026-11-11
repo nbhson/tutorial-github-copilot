@@ -1,0 +1,21 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "team-standards",
+  "version": "1.2.0",
+  "description": "Checklist review + MCP bao cao chat luong cua team",
+  "author": {
+    "name": "Platform Team",
+    "email": "platform@acme.example"
+  },
+  "homepage": "https://github.com/acme/team-standards",
+  "repository": "https://github.com/acme/team-standards",
+  "license": "MIT",
+  "keywords": ["review", "standards"],
+  "extensions": {
+    "com.github.copilot": {
+      "automations": {
+        "paths": ["./team-automations/"]
+      }
+    }
+  }
+}

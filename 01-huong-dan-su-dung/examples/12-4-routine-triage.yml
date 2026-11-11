@@ -1,0 +1,59 @@
+# Routine triage CI qua dem - noi dung day du bai 12 muc 4 (ban cu: 05-4-2-*.yaml)
+# Cam ket toi quan trong: routine chi BAO CAO / MO ISSUE, KHONG tu fix, KHONG tu merge.
+name: copilot-ci-triage
+on:
+  schedule: [{ cron: "0 22 * * *" }]   # nightly 22:00 UTC
+  workflow_dispatch: {}                # nut chay tay de test tung buoc
+permissions:
+  contents: read
+  actions: read
+  issues: write                        # mo issue khi phat sinh fail
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20                # job treo tu chet - khong dot runner ca dem
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Copilot CLI (binary "copilot")
+        run: npm install -g "@github/copilot"   # theo docs "Install Copilot in the CLI"
+      - name: Collect latest failures (read-only, secrets qua env)
+        run: |
+          gh run list --branch main --limit 5 --json conclusion,name,headSha,url > runs.json
+          FAILED_ID="$(jq -r '[.[] | select(.conclusion=="failure")][0].databaseId // empty' runs.json || true)"
+          if [ -n "$FAILED_ID" ]; then
+            gh run view "$FAILED_ID" --log-failed > failed-log.txt 2>&1 || true
+          else
+            echo "All green." > failed-log.txt
+          fi
+          head -c 40000 failed-log.txt > failed-truncated.txt   # cat prompt to, tranh phinh token
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Summarize with Copilot CLI (non-interactive: -p, KHONG dung slash "copilot /explain")
+        # Output chi la GOI Y - ghi file cho nguoi doc, tuyen doi eval(.)
+        # Co the xoa step nay neu runner chua auth Copilot CLI (copilot login hoac token theo docs install).
+        continue-on-error: true
+        run: |
+          copilot -p "Tong hop 5 dong nguyen nhan goc co the tu log CI duoi day. Chi dan bao, khong chay lenh sua." \
+            "$(cat failed-truncated.txt)" > triage-summary.md
+      - name: Open issue with the report (bao cao - khong tu merge)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const log = fs.readFileSync('failed-truncated.txt', 'utf8');
+            if (/all green/i.test(log)) { console.log('All green.'); return; }
+            const runs = JSON.parse(fs.readFileSync('runs.json', 'utf8'));
+            let summary = '';
+            if (fs.existsSync('triage-summary.md')) {
+              // Gom y cua Copilot CLI - nguoi doc kiem lai bang chung truoc khi tin
+              summary = '## Copilot CLI summary (goi y, can nguoi kiem)\n' +
+                fs.readFileSync('triage-summary.md', 'utf8').slice(0, 4000) + '\n\n';
+            }
+            const body = `## CI triage ${new Date().toISOString().slice(0,10)}\n\n` +
+              summary +
+              `Runs:\n${runs.map(r => `- ${r.name}: ${r.conclusion} (${r.url})`).join('\n')}\n\n` +
+              `Failed log (truncated):\n\`\`\`\n${log.slice(0, 8000)}\n\`\`\`\n\n` +
+              `Gui Copilot cloud agent hoac on-call: xac nhan root cause + mo PR fix.`;
+            await github.rest.issues.create({ ...context.repo,
+              title: `CI triage ${new Date().toISOString().slice(0,10)}`,
+              body, labels: ['ci'] });

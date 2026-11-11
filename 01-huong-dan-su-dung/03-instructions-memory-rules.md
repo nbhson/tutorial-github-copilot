@@ -1,350 +1,197 @@
-# 03 — Instructions, Memory & Rules (File Quan Trọng Nhất Copilot)
+# 03 — Instructions, Memory & Rules: Bộ Luật Của Repo
 
-> **Dành cho:** dev đã dùng Copilot Chat nhưng chưa có file instructions chuẩn cho repo.
-> **Vấn đề:** agent đoán lệnh sai, chạy sai style, đụng vào file generated — vì repo không có file hướng dẫn.
-> **Đọc xong:** viết được `.github/copilot-instructions.md` <200 dòng, tách rules theo `applyTo` globs, tương thích `AGENTS.md`, hiểu instruction hierarchy. **Thời gian:** ~30 phút.
+> **Dành cho:** dev đã dùng Copilot Chat nhưng repo chưa có file luật chuẩn — mọi quy ước vẫn phải nhắc lại bằng prompt.
+> **Vấn đề:** agent đoán sai lệnh test, viết sai style, đụng vào file generated — và khi bạn tự viết luật thì không biết luật nào thật sự được nạp.
+> **Đọc xong:** viết được `.github/copilot-instructions.md` <200 dòng lệnh đã verify, tách rules theo `applyTo`, dùng được `AGENTS.md`, hiểu cách Personal/Repo/Org nạp chung và Copilot Memory là gì. **Thời gian:** ~30 phút.
 
 ## Mục tiêu bài học
 
 Mục này cho bạn biết sau 30 phút sẽ mang được gì về — như danh sách đồ cần mua trước khi vào chợ.
 
-- Viết được `copilot-instructions.md` gọn **<200 dòng**, mọi lệnh đã verify.
-- Phân biệt rõ **3 loại file**: `copilot-instructions.md` / `*.instructions.md` / `AGENTS.md`.
-- Tách rules theo **`applyTo` glob** hẹp nhất, hiểu **token economics** — vì sao 1 dòng thừa bị tính tiền N lần.
+- Viết được `copilot-instructions.md` **<200 dòng**: chỉ chứa lệnh đã chạy tay PASS + rule kiểm chứng được.
+- Phân biệt **3 loại file**: `copilot-instructions.md` / `*.instructions.md` (`applyTo`) / `AGENTS.md` — và hai đường dẫn cá nhân `~/.copilot/copilot-instructions.md`, `~/.copilot/instructions/`.
+- Hiểu **cơ chế nạp**: Personal, Repo, Org **đều được đưa vào context** — không có luật "file cao nhất thắng"; thứ tự chỉ phân xử khi mâu thuẫn, và mỗi harness một quy tắc kết hợp.
+- **Verify** được file có thật sự nạp (`Chat: Open Customizations`, References, chat mới) và phân biệt instructions với **Copilot Memory**.
 
-> **Tóm gọn 1 câu:** Xong bài này bạn có một file luật ngắn, đúng lệnh, và biết rule nào đặt vào file nào.
+> **Tóm gọn 1 câu:** Xong bài này bạn có file luật ngắn, đúng lệnh, và cách *chứng minh* agent đang đọc nó thay vì đoán.
 
 ---
 
-## 1. Vì sao instructions là file quan trọng nhất?
+## 1. Vì sao instructions là file đáng viết nhất?
 
-Mục này trả lời câu hỏi "có đáng công viết file instructions không". Đáng — vì bạn viết một lần, mọi task sau đều được lợi.
+Instructions là nơi bạn dạy Copilot về repo của mình — viết một lần, mọi task sau đều được lợi.
 
-Instructions là nơi bạn dạy Copilot biết repo của bạn — một lần viết, mọi task sau đều được lợi.
-
-- **Là gì (1 câu):** file markdown do bạn viết, Copilot đọc ở đầu mỗi chat và nhớ suốt phiên.
-- **Nôm na:** tờ dặn dò dán trên tủ lạnh cho người giúp việc: "chó ăn 2 bữa, đừng mở cửa sau".
-- **Ví dụ:** dòng `Test focused: npm test -- --filter api` giúp agent không chạy nhầm `pnpm test` full 20 phút.
+- **Định nghĩa 1 câu:** file markdown do bạn viết, được nạp vào context ở đầu mỗi chat.
+- **Nôm na:** tờ dặn dò dán trên tủ lạnh cho người vào nhà: "chó ăn 2 bữa, đừng mở cửa sau".
+- **Ví dụ:** dòng `Test focused: pnpm vitest run apps/api` giúp agent không chạy nhầm `pnpm test` full 20 phút.
 
 ```text
-Cơ chế: instructions được inject vào system prompt ở đầu chat.
+Cơ chế: instructions được đưa vào đầu system prompt.
 Mỗi turn, agent nạp lại toàn bộ context: instructions + history + tool results.
-=> 1 dòng thừa trong instructions = trả AI Credits N lần (N = số turns).
-
-Vì sao quan trọng: luật đúng thì mọi task sau tự đúng mà không phải nhắc lại;
-luật sai thì mọi task sau đều sai theo.
-Nếu làm sai: không có instructions, agent tự đoán lệnh test + style (và đoán sai);
-nhét 500 dòng wiki vào thì trả tiền cho rác mỗi turn + loãng trọng tâm.
+=> 1 dòng thừa trong instructions = trả AI credits N lần (N = số turns).
 ```
 
-> **Kỳ vọng / Verify:** mở chat mới, hỏi "Liệt kê 3 lệnh dev/test/lint + 2 thứ NEVER". Trả lời khớp file = instructions đã load. Sai = check setting `useInstructionFiles` (bài 01).
+Hai giới hạn docs VS Code ghi rõ: instructions **không đảm bảo model tuân** (không thay được test, review, security control) và **không áp dụng cho inline suggestions** khi bạn gõ code.
 
-> **Tóm gọn 1 câu:** Instructions là "luật nhà" của repo — viết ngắn, đúng lệnh, một lần đầu tư dùng mãi.
+> **Vì sao quan trọng?** Luật đúng thì mọi task sau tự đúng không phải nhắc lại; luật sai thì mọi task sau sai theo — cả hai trường hợp bạn đều trả tiền ở mỗi turn.
+> **Nếu làm sai?** Không có instructions: agent tự đoán lệnh test + style (và đoán sai). Nhét 500 dòng wiki: trả credits cho rác mỗi turn, luật thật chìm mất.
+> **Tóm gọn 1 câu:** File rẻ nhất và lãi nhất bạn từng viết — một lần dọn, mọi task sau đỡ phải giải thích lại.
 
----
+## 2. Ba loại file — và một mẫu tối thiểu
 
-## 2. 3 loại file — phân biệt và đặt ở đâu
+| Loại file | Đặt ở đâu | Nôm na | Khi nào dùng |
+|---|---|---|---|
+| **`copilot-instructions.md`** | `.github/` — 1 file duy nhất, commit | nội quy cả nhà, đọc mọi chat | quy ước mọi task cần (<200 dòng) |
+| **`*.instructions.md`** | `.github/instructions/` (được tạo thư mục con) | nội quy từng phòng, vào phòng mới đọc | rule chỉ đúng cho path khớp `applyTo` (mỗi file <50 dòng) |
+| **`AGENTS.md`** | root **hoặc bất kỳ đâu** trong repo | chuẩn chung, đội thợ nào cũng hiểu | 1 file cho Copilot + Claude Code + Codex (mục 5) |
 
-Mục này phân biệt 3 loại file rules. Nhầm lẫn chỗ này là nguyên nhân số một khiến rules không có tác dụng.
-
-Bảng này là xương sống của cả bài:
-
-| Loại file | Nằm ở đâu | Là gì (nôm na) | Ví dụ | Khi nào dùng |
-|---|---|---|---|---|
-| **1. `copilot-instructions.md`** | `.github/` (1 file duy nhất, commit git) | Nội quy cả nhà, đọc mọi lần vào nhà | "Dùng pnpm. Test: `pnpm vitest run...`. NEVER commit thẳng main." | Quy ước mọi task đều cần (<200 dòng) |
-| **2. `*.instructions.md`** | `.github/instructions/` (mỗi file có `applyTo`) | Nội quy từng phòng, chỉ đọc khi vào phòng đó | `applyTo: "apps/api/**"` → "Route không query DB trực tiếp" | Quy tắc chỉ đúng 1 subtree (mỗi file <50 dòng, tối đa ~8 files) |
-| **3. `AGENTS.md`** | Repo root (chuẩn mở) | Nội quy khu phố, đội thợ nào cũng hiểu | "Dev: `npm run dev`. Test: `npm test`." | Viết 1 lần để Copilot + Claude Code + Codex đều dùng được |
-
-> **Cách đọc bảng này:** mỗi dòng là 1 loại file. Cột "Nằm ở đâu" cho biết đặt file ở path nào, cột "Là gì (nôm na)" giải thích phạm vi tác dụng, cột cuối trả lời "dùng khi nào".
-
-> 📄 **Code ví dụ:** [`examples/01-2-3-loai-file-phan-biet-va-at.sh`](examples/01-2-3-loai-file-phan-biet-va-at.sh)
-
-> **Tóm gọn 1 câu:** Luật chung để `copilot-instructions.md`, luật theo thư mục để `*.instructions.md`, luật dùng chung nhiều agent để `AGENTS.md`.
-
-### 2.1. Instruction hierarchy (thứ tự thắng khi xung đột)
-
-Mục này cho biết khi 2 rules mâu thuẫn thì ai thắng. Cần nó để không ngạc nhiên khi rule của bạn bị "lấn phe".
-
-```text
-user settings < org policy < repo copilot-instructions.md < *.instructions.md (applyTo cụ thể)
-```
-
-- File **cụ thể hơn thắng**: rule trong `api.instructions.md` thắng rule chung khi sửa file trong `apps/api/`. Giống luật chung toà nhà thua luật riêng của phòng gym.
-- **Org policy (Business/Enterprise) thắng mọi thứ** — admin cấm thì repo không mở được.
-- Quy tắc team: personal preferences (ngôn ngữ trả lời) để ở user settings; mọi thứ team dùng chung phải vào repo files + commit.
-
-> 📄 **Code ví dụ:** [`examples/02-2-1-instruction-hierarchy-thu-tu-thang-khi.json`](examples/02-2-1-instruction-hierarchy-thu-tu-thang-khi.json)
-
-> **Tóm gọn 1 câu:** Càng cụ thể càng thắng, org policy thắng tất cả — đừng đặt rule chung ở nơi cụ thể hoá được.
-
----
-
-## 3. 2 instructions mẫu hoàn chỉnh (copy-paste)
-
-Mục này cho 2 mẫu instructions dùng được ngay. Bạn chỉ cần thay `<...>` bằng thông tin project mình.
-
-> Mỗi mẫu <100 dòng, lệnh đã verify, rules check được. Thay `<...>` bằng project bạn.
-
-> **Tóm gọn 1 câu:** Copy 1 trong 2 mẫu dưới đây, thay `<...>` — đó là cách nhanh nhất có file instructions đầu tiên.
-
-### 3.1. Mẫu A — Web app (Next.js + Postgres + pnpm)
+Docs VS Code khuyên bắt đầu từ **một quy ước mà agent hay bỏ quên nhất**; file project-wide không cần frontmatter:
 
 ```markdown
-# Project: Acme Shop Web — Next.js 15 storefront + API routes
-
-## Tech Stack
-- Next.js 15 (App Router), TypeScript strict, Tailwind, Prisma + Postgres 16
-- Auth: NextAuth v5. Tests: Vitest + Playwright
-
-## Commands (VERIFIED 2026-10 — chay lai neu doi toolchain)
-- Dev: `pnpm dev` (web :3000, can `.env.local` tu 1Password "Acme dev")
-- DB migrate: `pnpm prisma migrate dev`
-- Test focused: `pnpm vitest run apps/web/src/app/login/`
-- Test full: `pnpm test` (khong chay khi chi sua 1 file — dung focused)
-- Lint: `pnpm eslint apps/web/src --max-warnings 0`
-- Full check truoc PR: `pnpm lint && pnpm test && pnpm build`
-
-## Architecture
-- `apps/web/src/app/` routes (server components mac dinh)
-- `apps/web/src/server/` owns DB access; client KHONG import prisma truc tiep
-- `packages/ui/` design system; `packages/contracts/` zod schemas dung chung
-
-## Code Style
-- API errors shape `{ code, message, requestId }`, status dung (400/401/403/404/422/500)
-- File >300 dong thi tach; component >150 dong thi tach; khong `any`
-
-## Rules
-- ALWAYS chay focused test sau khi sua; paste output vao bao cao
-- ALWAYS `pnpm prisma migrate dev --name <ten>` khi doi schema, KHONG sua SQL tay
-- NEVER commit truc tiep main, NEVER sua `src/generated/` va migration da merge
-```
-
-> **Tóm gọn 1 câu:** Mẫu A gồm 4 phần đúng thứ tự: Tech Stack → Commands đã verify → Architecture → Rules ALWAYS/NEVER.
-
-### 3.2. Mẫu B — API (Node Express + Postgres + npm)
-
-```markdown
-# Project: Acme API — Express + Postgres 16 + TypeScript
-
-## Commands (VERIFIED 2026-10)
-- Dev: `npm run dev` (api :4000, can `.env` tu 1Password "Acme dev")
+# Project: Acme API
+## Commands (VERIFIED 2026-11)
+- Dev: `npm run dev` (can `.env` tu 1Password "Acme dev")
 - Test focused: `npm test -- --filter api --testPathPattern=orders`
-- Lint: `npm run lint`
-
-## Architecture
-- `src/routes/` HTTP layer mong; `src/services/` business logic; `src/db/` query only
-- Route KHONG query DB truc tiep — goi qua service
-- Zod schemas o `src/contracts/`, dung chung validator + test fixtures
-
 ## Rules
-- ALWAYS tra loi loi dang `{ code, message }`, KHONG leak stack trace ra client
-- ALWAYS them regression test khi fix bug
-- NEVER doi schema DB trong cung PR voi logic (tach 2 PRs)
-- Migration chi tien (forward-only), KHONG viet down migration pha du lieu
+- Route KHONG query DB truc tiep; goi qua `src/services/`.
+- ALWAYS chay focused test sau khi sua; NEVER commit truc tiep main.
 ```
 
-> Mẫu Python (FastAPI + `uv` + pytest + ruff) cùng cấu trúc: thêm rule "ALWAYS chay `ruff` truoc `pytest`", "dung timezone-aware datetime", "DB session per-request qua dependency".
+Bản hoàn chỉnh cho hai loại project phổ biến (lệnh đã verify — thay project của bạn vào): 📄 [`examples/04-3-mau-instructions-backend.md`](examples/04-3-mau-instructions-backend.md) (Node + Express, kèm biến thể Python) · 📄 [`examples/05-3-mau-instructions-frontend.md`](examples/05-3-mau-instructions-frontend.md) (Next.js + Prisma) · 📄 tạo đủ 3 loại file trong 1 phút: [`examples/01-2-3-loai-file-phan-biet-va-at.sh`](examples/01-2-3-loai-file-phan-biet-va-at.sh)
 
-> **Tóm gọn 1 câu:** Mẫu B gọn hơn nhưng giữ đúng công thức: lệnh verify trước, kiến trúc sau, rules ALWAYS/NEVER cuối.
+> **Tóm gọn 1 câu:** Luật chung để `copilot-instructions.md`, luật theo thư mục để `*.instructions.md`, luật đa-tool để `AGENTS.md`.
 
----
+## 3. Personal, Repo, Org — nạp thế nào, ai phân xử
 
-## 4. Rules patterns + applyTo globs
-
-Mục này dạy cách tách rules theo đường dẫn. Bạn cần nó khi phát hiện rule chỉ đúng cho 1 phần của repo.
-
-> `*.instructions.md` là file rules theo đường dẫn: đầu file có `applyTo: "glob"`, chỉ load khi task chạm vào path đó. Nôm na: biển báo trong phòng thí nghiệm — ai vào phòng đó mới cần đọc.
-
-```markdown
----
-applyTo: "apps/api/**"
----
-
-# API rules — chi ap dung khi sua file trong apps/api/
-
-- Route KHONG query DB truc tiep, goi qua `src/services/`.
-- Moi endpoint POST phai co zod schema o `src/contracts/` + test 400-case.
-- Verify: `npm test -- --filter api --testPathPattern=<ten-file>`.
-```
-
-| Pattern | `applyTo` | Khi dùng |
+| Tầng | Nằm ở đâu | Ai quản lý |
 |---|---|---|
-| `apps/api/**` | Backend only | Rules DB/service/validation |
-| `apps/web/src/app/**` | Routes only | Rules server/client component |
-| `tests/**/*.test.ts` | Tests only | Rules fixtures, không mock quá tay |
-| `db/migrations/**` | Migrations | Forward-only, idempotent, KHÔNG sửa migration đã merge — tạo migration mới |
-| `*.md` | Docs | Rules giọng văn, heading style |
+| **Personal** | `~/.copilot/copilot-instructions.md` (chung) + `~/.copilot/instructions/**/*.instructions.md` (module) | chính bạn, mọi repo trên máy |
+| **Repository** | `.github/copilot-instructions.md`, `.github/instructions/`, `AGENTS.md` | team, qua git |
+| **Organization** | **settings UI trên GitHub** (Business/Enterprise) — không có file org trong repo | org owner/admin |
 
-> **Cách đọc bảng này:** mỗi dòng là 1 ví dụ "pattern file → glob nên dùng → loại rule hợp". Copy dòng phù hợp rồi đổi path theo repo bạn.
+Khác với luật cũ "file cao nhất thắng" hay dạy trước đây:
 
-> Giới hạn: đừng tạo >8 files `*.instructions.md` — nhiều quá model khó chọn. Mỗi file <50 dòng.
-> **Kỳ vọng / Verify:** sửa 1 file trong `apps/api/` rồi hỏi agent "rules nào đang áp cho folder này?" — phải kể ra nội dung file. Sửa file ngoài subtree mà rule vẫn áp = glob quá rộng.
+- GitHub: *"all sets of relevant instructions are provided to Copilot"* — **cả ba tầng đều vào context**, không tầng nào "lấn phe" tầng nào.
+- Thứ tự **Personal > Repository > Org chỉ phân xử khi mâu thuẫn**; *"combination rules differ by harness"* — **không có universal precedence**. Khi Personal xung đột Repo: **xoá/thu hẹp bên mâu thuẫn**, đừng viết rule "bù đắp". Harness quyết định đọc file nào — chọn đúng harness ở Session Target (bài 02) rồi mới tạo file.
 
-> **Tóm gọn 1 câu:** Dùng glob hẹp nhất có thể để rule chỉ nạp đúng lúc cần — đỡ tốn token và đỡ áp sai chỗ.
+Verify file đã nạp (docs VS Code, đúng thứ tự): **1) `Chat: Open Customizations` → tab Instructions** phải liệt kê file (kiểm *discovery*) → **2) chat mới** xin một việc nhỏ, không nhắc lại rule trong prompt → **3) giãn phần References**: thấy `.github/copilot-instructions.md` = đã được *đưa vào*. Vẫn làm sai = rule mơ hồ/mâu thuẫn, không phải "chưa nạp".
 
----
+> **Tóm gọn 1 câu:** Đừng tin "rule đã có" chỉ vì bạn đã viết ra — tin danh sách trong Customizations editor và References của câu trả lời.
 
-## 5. AGENTS.md portability — viết 1 lần, chạy mọi agent
+## 4. Rules theo đường dẫn: `applyTo` và `excludeAgent`
 
-Mục này chỉ ra cách viết rules dùng chung cho mọi AI tool. Bạn cần nó để khỏi bảo trì 2 bản luật giống nhau.
-
-`AGENTS.md` là file chuẩn mở ở root repo, Copilot + Claude Code + Codex + Gemini đều đọc. Hãy để thứ **chung** (commands, architecture, style) vào `AGENTS.md`; thứ **riêng Copilot** (`@workspace` hints, MCP usage) vào `copilot-instructions.md`. Đừng copy-paste nguyên văn — trùng lặp nghĩa là trả tiền 2 lần mỗi turn.
-
-```text
-Thứ tự load khi có cả 2: AGENTS.md (chung) -> .github/copilot-instructions.md (riêng Copilot, thắng khi xung đột)
-```
+File `NAME.instructions.md` chỉ nạp khi file agent đang chạm khớp glob trong `applyTo` — và chạy **song song** với repo-wide: docs GitHub, khi cả hai cùng áp thì *"the instructions from both files are used"*. Nôm na: biển báo phòng thí nghiệm, ai vào phòng đó mới cần đọc.
 
 ```markdown
-<!-- AGENTS.md — mau toi thieu (copy-paste) -->
-# AGENTS.md — Acme API
-
-## Commands (VERIFIED 2026-10)
-- Dev: `npm run dev` (can `.env`)
-- Test: `npm test -- --filter api`
-- Lint: `npm run lint`
-
-## Rules
-- ALWAYS chay focused test sau khi sua.
-- NEVER commit truc tiep main.
-```
-
-> 📄 **Code ví dụ:** [`examples/03-5-agents-md-portability-viet-1-lan-chay.sh`](examples/03-5-agents-md-portability-viet-1-lan-chay.sh)
-
-> **Tóm gọn 1 câu:** Thứ chung để `AGENTS.md`, thứ riêng để file riêng của từng tool — mỗi sự thật chỉ viết một nơi.
-
 ---
-
-## 6. Front-load và tách nhỏ (đừng phình file)
-
-Mục này chỉ cách xếp thứ tự nội dung và khi nào phải tách file. Bạn cần nó để instructions luôn hiệu quả thay vì thành "wiki chết".
-
-Model đọc instructions từ trên xuống, chú ý đầu file hơn cuối. Hãy tưởng tượng người đọc chỉ nhớ 5 dòng đầu — vậy hãy đặt thứ quan trọng nhất lên đấy. Thứ tự gợi ý:
-
-```text
-1. Commands verify (dau tien — agent can chay dung lenh truoc khi nghi gi khac)
-2. NEVER list (ranh gioi cung)
-3. ALWAYS list (gate verify)
-4. Architecture + style (sau cung)
+applyTo: "src/**/*.py"
+excludeAgent: "code-review"   # tuy chon: rule cho moi agent TRU code review
+---
+# Python rules
+- Reuse fixtures tu `tests/conftest.py`; test toi da: `python -m pytest <file>`.
 ```
 
-| Dấu hiệu file phình | Tách thành |
+- Nhiều pattern ngăn bằng dấu phẩy (`applyTo: "**/*.ts,**/*.tsx"`); path tính **từ gốc repo**, không tính từ `.github/instructions`. `src/*.py` khớp `src/foo.py` nhưng **không** khớp `src/foo/bar.py` — dùng `src/**/*.py` để khớp đệ quy.
+
+| Pattern | Phủ | Rule hợp |
+|---|---|---|
+| `apps/api/**` | một subtree backend | DB/validation, "route không query DB trực tiếp" |
+| `apps/web/src/app/**` | routes frontend | server/client component, không import thẳng DB |
+| `tests/**/*.test.ts` | chỉ test | fixtures, không mock quá tay |
+| `db/migrations/**` | migrations | forward-only, không sửa migration đã merge |
+| `*.md` | docs | giọng văn, heading style |
+
+Ba sự thật docs GitHub: (1) trên **GitHub.com**, path-specific hiện **chỉ hỗ trợ Copilot cloud agent + Copilot code review** (trong editor VS Code thì cả Copilot lẫn Local harness đọc `.github/instructions/` bình thường); (2) khi review PR, **code review đọc instructions từ head branch**, không phải base — thử sửa chính file luật ngay trong PR đang làm được; (3) `excludeAgent` là field chính thức, nhận `"code-review"` hoặc `"cloud-agent"`, **bỏ trống = cả hai đều đọc**.
+
+Giới hạn thực hành: ≤8 file, mỗi file <50 dòng. Verify: sửa file trong subtree rồi hỏi "rules nào đang áp cho folder này?" → phải kể đúng nội dung; sửa file ngoài subtree mà rule vẫn đọc = glob quá rộng.
+
+> **Tóm gọn 1 câu:** Glob hẹp nhất có thể — rule chỉ nạp đúng lúc cần thì vừa đỡ tốn credits vừa đỡ áp sai chỗ.
+
+## 5. `AGENTS.md` — viết một lần, nhiều agent đọc
+
+`AGENTS.md` là chuẩn mở ([agents.md](https://agents.md/)) mà Copilot, Claude Code, Codex, Gemini cùng đọc. Thứ **chung** (lệnh build/test, architecture, style) để đây; thứ **riêng Copilot** để `copilot-instructions.md` — đừng copy nguyên văn qua lại, trùng lặp là trả tiền hai lần mỗi turn.
+
+- **Đặt bất kỳ đâu trong repo**, không chỉ root: docs GitHub — file `AGENTS.md` **gần nhất trong cây thư mục có ưu tiên**; docs VS Code bổ sung — Copilot harness tìm dọc đường dẫn tới file đang làm việc và **kết hợp** các phần áp dụng.
+- Ở **root**, `CLAUDE.md` **hoặc** `GEMINI.md` là **thay thế hợp lệ** cho `AGENTS.md` (docs GitHub) — repo đã có thì dùng tiếp, đừng tạo bản sao cạnh tranh.
+- `AGENTS.md` hướng dẫn agent đang tồn tại, **không định nghĩa custom agent** (cái đó là `.github/agents/` — bài 06).
+
+Mỗi lần đổi toolchain: `diff <(sort AGENTS.md) <(sort .github/copilot-instructions.md) | head -30` — trùng >50% thì gộp về một nơi (script đầy đủ: 📄 [`examples/03-5-agents-md-portability-viet-1-lan-chay.sh`](examples/03-5-agents-md-portability-viet-1-lan-chay.sh)).
+
+> **Tóm gọn 1 câu:** Thứ chung để `AGENTS.md`, thứ riêng để file riêng từng tool — mỗi sự thật chỉ viết một nơi.
+
+## 6. Front-load & chống phình
+
+Model đọc instructions từ trên xuống và chú ý phần đầu hơn phần cuối — hãy tưởng tượng người đọc chỉ nhớ 5 dòng đầu. Thứ tự xếp: **1) lệnh đã verify** (agent cần chạy đúng lệnh trước khi nghĩ chuyện khác) → **2) NEVER list** (ranh giới cứng) → **3) ALWAYS list** (cửa verify) → **4) architecture + style**.
+
+| Dấu hiệu file phình | Chuyển đi đâu |
 |---|---|
-| Checklist deploy 40 dòng trong instructions | `.github/skills/<ten>/SKILL.md` (bài 05) |
-| Rules chỉ đúng cho `apps/api/**` | `.github/instructions/api.instructions.md` |
-| Persona review riêng (chỉ đọc, không sửa) | `.github/agents/reviewer.agent.md` (bài 06) |
-| Schema/format dài (endpoints, error codes) | File `docs/` + 1 dòng link trong instructions |
-| Quy ước team chung nhiều repo | Org-level instructions (Business/Enterprise) |
+| Checklist deploy 40 dòng | skill `.github/skills/<ten>/SKILL.md` (bài 05) |
+| Rule chỉ đúng một subtree | `.github/instructions/…` + `applyTo` (mục 4) |
+| Persona review chỉ-đọc-không-sửa | custom agent `.github/agents/` (bài 06) |
+| Schema/format dài (endpoints, error codes) | file `docs/` + 1 dòng link — link **không đảm bảo** nội dung tới được model, agent mở khi cần |
+| Quy ước chung nhiều repo trong org | organization instructions qua settings UI (mục 3) |
 
-> **Cách đọc bảng này:** cột trái là triệu chứng thấy trong file, cột phải là nơi chuyển tới. Đối chiếu từng dòng với instructions của bạn.
+> **Tóm gọn 1 câu:** Instructions chỉ giữ phần dùng mỗi ngày; phần nặng đẩy sang skill, docs, agent.
 
-```markdown
-## Tham khao (khong paste noi dung vao day)
-- Error codes: xem `docs/error-codes.md` (agent tu doc khi can).
-- Deploy checklist: nói "deploy" để skill tự load (không chay tay tung buoc).
-```
+## 7. Copilot Memory — phần bạn không phải viết vào file nữa
 
-> **Tóm gọn 1 câu:** Đặt lệnh và NEVER lên đầu file, phần dài đẩy sang file khác — instructions chỉ giữ phần dùng mỗi ngày.
+Instructions là **luật bạn chủ động viết và review**; **Copilot Memory** là bộ nhớ **cloud-backed**: docs 11/2026 ghi nó khả dụng trên mọi plan Copilot trả phí và được dùng bởi nhiều surface — GitHub Copilot app, CLI, code review, **cloud agent**, Mobile, Slack, Teams (docs VS Code ghi bật mặc định cho session Copilot) — nên không còn là tính thử nghiệm phải tự bật. Agent tự học **repository facts** và **user preferences**, nhớ xuyên session, khỏi paste vào instructions. Docs GitHub chốt vai: muốn rule áp **nhất quán** thì phải là instructions, không trông chờ memory.
 
----
+- **Bật/tắt:** plan cá nhân (Pro/Pro+/Max) mặc định cho user preferences; Business/Enterprise **tắt cho tới khi org/enterprise bật policy** (`github.com/settings/copilot/features`). VS Code có setting cục bộ `chat.copilot.memory.enabled`; CLI interactive mặc định bật, session programmatic phải truyền `--enable-memory`, kiểm bằng `/memory show`. Repo cần write access mới sinh repository facts.
+- **Xem lại / xoá:** user preferences ở settings cá nhân (`github.com/settings/copilot/memory`), repository facts ở repo **Settings → Copilot → Memory** (cần write access). Nói "quên cái này đi" chỉ khiến Copilot **downvote** — xoá vĩnh viễn vẫn phải làm trên GitHub. Memory file của **Local harness** là hệ tách biệt (lệnh `Chat: Show Memory Files` thuộc Local, **không tự convert** sang cloud).
+- **Hai chi phí phải biết:** memory nạp vào context **tính vào token → AI credits**; fact để đó mà không dùng sẽ **hết hạn** (docs GitHub: mặc định 90 ngày, org/enterprise chỉnh 7–180; docs VS Code ghi 28 ngày — xem `plan-update/07`). Fork **không** copy memory, fact không gộp toàn org.
+- **Bản experimental cho team thích file hơn cloud:** `chat.copilot.memory.local.enabled` lưu repository facts vào `.github/copilot-memories.jsonl` trong working tree — **không** có user scope, **không** bị policy GitHub che chở, và **dễ bị commit kèm secret** → review file này như review instructions.
 
-## 7. Walkthrough viết instructions từ 0
+> **Vì sao quan trọng?** Memory tiết kiệm đúng phần tốn kém nhất của instructions: sự thật về repo và về bạn, nạp tự động, không chiếm dòng nào trong file luật. **Nếu làm sai?** Quên kiểm memory: agent "nhớ" quy ước lỗi thời và làm theo, trong khi file luật của bạn nói ngược lại — triệu chứng trông hệt "instructions không ăn". Đừng để secret vào memory cũng như vào instructions: cả hai đều là chỗ người khác đọc được.
 
-Mục này là các bước cụ thể để viết file instructions lần đầu. Làm theo đúng thứ tự sẽ mất ~30 phút và ra file dùng được ngay.
-
-> 30 phút, làm 1 lần/repo. Chuẩn bị: repo thật + Copilot Chat (Agent mode).
-
-```text
-Bước 1 — Thu thập sự thật (10 phút): Chat (Ask mode):
-"Doc README + package.json, tra loi: (1) project la gi, (2) dev/test/lint bang lenh nao,
-(3) cay thu muc 2 tang dau, (4) file nao la generated (khong duoc sua tay)."
-
-Bước 2 — Verify lệnh (10 phút, quan trọng nhất): chay TAY tung lenh,
-giu lenh PASS, xoa lenh FAIL. Chi ghi lenh PASS + ngay verify.
-
-Bước 3 — Viết file <200 dòng (7 phút): theo mẫu A/B mục 3.
-wc -l .github/copilot-instructions.md  # >200 -> cat bot cau chung chung, giu lenh + NEVER/ALWAYS.
-
-Bước 4 — Test (3 phút): mo chat MOI, go:
-"Liet ke 3 lenh dev/test/lint cua repo + 2 thu NEVER duoc lam."
-# Ky vong: tra loi khop file vua viet. Sai -> sua file, lap lai.
-```
-
-Checklist xong khi: `wc -l` <200 · mọi lệnh PASS tay (có ngày VERIFIED) · chat mới trả lời đúng · không trùng >50% với `AGENTS.md`.
-
-> **Tóm gọn 1 câu:** Thu thập → verify tay từng lệnh → viết <200 dòng → test bằng chat mới; không bước nào được bỏ qua verify.
-
----
-
-## 8. Hiểu nhầm thường gặp + pitfalls
-
-Mục này liệt kê các sai lầm hay gặp khi viết instructions. Đọc để tránh mất tiền và thời gian sửa lại từ đầu.
+## 8. Hiểu nhầm thường gặp
 
 | Hiểu nhầm | Sự thật |
 |---|---|
-| "3 loại file là 1, viết vào đâu cũng được" | 3 phạm vi khác nhau: cả nhà / từng phòng / cả khu phố |
-| "`applyTo: **` cho chắc ăn" | Glob rộng = load mọi lúc = tốn credits + dễ áp sai chỗ. Glob hẹp nhất (`apps/api/**`) |
+| "3 loại file là một, viết vào đâu cũng được" | 3 phạm vi khác nhau: cả nhà / từng phòng / cả khu phố đa-tool |
+| "File tầng cao nhất thắng, lấn các file khác" | Mọi set instructions liên quan **đều vào context**; Personal > Repo > Org chỉ phân xử khi mâu thuẫn; mỗi harness một quy tắc kết hợp |
+| "`applyTo: **` cho chắc ăn" | Glob rộng = nạp mọi lúc = tốn credits + áp sai chỗ. Chọn glob hẹp nhất |
 | "Copy nguyên `AGENTS.md` sang instructions" | Trùng lặp = trả tiền 2 lần mỗi turn. Chung → AGENTS, riêng → instructions |
-| "Ghi lệnh đoán, agent tự sửa khi fail" | Agent chạy sai lệnh 3 lần là cháy credits + loạn context. Mọi lệnh phải PASS tay + ghi ngày VERIFIED |
-| "Viết 1 lần là xong mãi mãi" | Toolchain đổi là instructions thành rác — verify lại + ghi ngày mới |
-| "Rules chung chung ('viết code sạch')" | Không check được. Viết lại dạng check được ("file >300 dòng thì tách") |
-| "Để secret trong instructions" | File này commit vào git — chỉ ghi "lấy từ 1Password <tên>", KHÔNG paste giá trị |
+| "Ghi lệnh đoán, agent tự sửa khi fail" | Lệnh sai làm cháy credits + loạn context. Mọi lệnh phải PASS tay + ngày VERIFIED |
+| "Viết 1 lần là xong mãi mãi" | Toolchain đổi là instructions thành rác — verify lại, ghi ngày mới |
+| "Rules chung chung ('viết code sạch')" | Không kiểm chứng được. Viết lại dạng check được: "file >300 dòng thì tách" |
+| "Để secret trong instructions" | File này commit vào git — chỉ ghi "lấy từ 1Password `<tên>`", không paste giá trị |
 
-> **Cách đọc bảng này:** cột trái là lời nói sai hay nghe, cột phải là lý do sai và cách làm đúng. Tra nhanh trước khi viết file.
+## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
-```text
-❌ SAI: copilot-instructions.md 500 dòng, copy cả trang "Getting Started" của framework
-✅ ĐÚNG: giữ <200 dòng, chỉ lệnh hay dùng + NEVER/ALWAYS; phần dài đẩy sang docs/ hoặc skill
+| ❌ SAI | Hệ quả | ✅ ĐÚNG |
+|---|---|---|
+| Sửa rule rồi test ngay trong chat đang mở | model vẫn làm theo rule cũ → kết luận oan "instructions vô dụng" | mở **chat mới**, kiểm phần **References** |
+| Đi tìm một folder trong `~/.copilot/` để đặt "luật org" | docs không có đường dẫn kiểu đó | org instructions quản qua **settings UI trên GitHub**, không phải file |
+| Chép lệnh test từ README cũ, agent chạy fail 3 lần | cháy credits, context loạn | chạy tay từng lệnh, chỉ ghi lệnh PASS + ngày VERIFIED |
+| `copilot-instructions.md` 500 dòng, copy cả wiki framework | trả tiền cho rác mỗi turn, luật thật chìm | <200 dòng; phần dài đẩy sang `docs/` hoặc skill (bài 05) |
 
-❌ SAI: chép lệnh test từ README cũ, agent chạy 3 lần đều fail
-✅ ĐÚNG: chạy tay từng lệnh, chỉ ghi lệnh PASS + ngày VERIFIED
+**Bài học:** mọi ca "rule không ăn" giải bằng 3 câu hỏi theo thứ tự: file có được *discovery* không (Customizations editor) → có được *đưa vào* không (References) → có *được tuân* không (rule mơ hồ hay mâu thuẫn).
 
-❌ SAI: applyTo: "**" để rule nào cũng áp — file load mọi lúc
-✅ ĐÚNG: applyTo: "apps/api/**" — load đúng lúc chạm subtree đó
-```
+## Best practices
 
-**Best practices:** giữ <200 dòng (nạp mỗi turn) · mọi lệnh PASS tay + ngày VERIFIED · rule check được, không chung chung · 1 sự thật 1 nơi · front-load commands + NEVER lên đầu · KHÔNG bao giờ commit secret.
+- **Một sự thật, một nơi ở.** *Vì sao:* hai bản sao sẽ lệch nhau, và không có universal precedence để biết bên nào thắng.
+- **Lệnh luôn kèm ngày VERIFIED.** *Vì sao:* instructions cũ hơn toolchain là loại rác đắt nhất — bạn trả credits cho nó mỗi turn.
+- **Luật cá nhân để `~/.copilot/`, luật team commit vào repo.** *Vì sao:* chuẩn chỉ mình bạn thấy sẽ chết ngay khi bạn nghỉ phép.
+- **Sửa rule là verify lại bằng chat mới + References.** *Vì sao:* chat cũ ôm context cũ — không có cách nào chắc rule được nạp lại.
 
-> **Tóm gọn 1 câu:** Đừng tin lệnh chưa chạy tay, đừng glob rộng, đừng viết rule chung chung, đừng commit secret.
+## Bài tập
 
----
+1. **(20 phút) Viết từ 0:** mở Customizations editor → tạo `.github/copilot-instructions.md`: thu thập sự thật từ README + package.json, **chạy tay từng lệnh** chỉ giữ lệnh PASS, xếp theo thứ tự mục 6, verify 3 bước mục 3.
+2. **(15 phút) Tách `applyTo`:** đưa 2 rules chỉ đúng một subtree vào `.github/instructions/` với glob hẹp; test sửa file trong/ngoài subtree; thêm `excludeAgent: "code-review"` vào một file rồi giải thích sự khác biệt.
+3. **(10 phút) Dedupe `AGENTS.md`:** chạy `diff` mục 5, gom trùng lặp về một nơi, đo lại `wc -l` cả hai file.
+4. **(10 phút) Kiểm memory:** chạy **`Chat: Show Memory Files`**, mở settings Copilot Memory trên GitHub; xoá fact nào đã lỗi thời rồi test lại bằng chat mới.
 
-## 9. So sánh với Claude Code
+## Link qua
 
-Mục này đối chiếu cách Copilot và Claude Code quản lý rules. Bạn cần nó khi làm việc với cả hai tool trong cùng team.
+- Luật thành quy trình nhiều bước → **bài 05** (Agent Skills) · persona đọc instructions → **bài 06** (custom agents) · mọi loại customization trong **Agent Customizations editor** + migrate memory → **bài 17**.
+- Tra lệnh: `/instructions` — xem luật đang nạp ([commands/copilot/system-knowledge/instructions/README.md](commands/copilot/system-knowledge/instructions/README.md)) · prompt files kiểu cũ, chỉ chạy ở Local ([commands/local/system-knowledge/prompt-file/README.md](commands/local/system-knowledge/prompt-file/README.md)) · rule cứ không nạp, debug sâu → [commands/copilot/chat-session/troubleshoot/README.md](commands/copilot/chat-session/troubleshoot/README.md).
+- Từ Claude Code sang? `CLAUDE.md` ở root là thay thế hợp lệ (mục 5) — bảng so sánh Copilot × Claude Code + token economics: **bài 00** là chủ sở hữu.
 
-| Việc | Copilot | Claude Code | Ghi chú |
-|---|---|---|---|
-| File luật repo | `.github/copilot-instructions.md` | `CLAUDE.md` ở repo root | Cùng ý tưởng: file trong repo là "luật" |
-| Rules theo thư mục | `*.instructions.md` + `applyTo` glob | `CLAUDE.md` đặt trong thư mục con | Cơ chế khác (glob vs cây thư mục), cùng mục đích |
-| File chung nhiều agent | `AGENTS.md` | `AGENTS.md` | Chuẩn chung thật — cả hai đều đọc |
-| Tách file / import | Tách `*.instructions.md` | `@path` import trong `CLAUDE.md` | Cùng ý tưởng "chia nhỏ, chỉ nạp khi cần" |
-| Tầng cá nhân vs repo | User settings + repo files | Memory user-level + project `CLAUDE.md` | Cùng phân tầng "cá nhân vs team" |
+## Reference
 
-> **Cách đọc bảng này:** mỗi dòng là 1 việc cần làm, so sánh cách làm bằng Copilot (cột 2) và Claude Code (cột 3); cột cuối rút ra ý nghĩa chung.
+- VS Code — [Use custom instructions](https://code.visualstudio.com/docs/agent-customization/custom-instructions) (nạp + verify, "don't rely on a universal precedence order") · [Custom instructions reference](https://code.visualstudio.com/docs/agents/reference/custom-instructions-reference) (đường dẫn `~/.copilot/`, cách mỗi harness tìm `AGENTS.md`) · [Memory](https://code.visualstudio.com/docs/agents/run/memory) (`Chat: Show Memory Files`)
+- GitHub — [Adding repository custom instructions](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions) (glob `applyTo`, `excludeAgent`, head branch, nearest `AGENTS.md`) · [Adding personal instructions](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-personal-instructions) · [Custom instructions support](https://docs.github.com/en/copilot/reference/custom-instructions-support) (ma trận surface) · [Managing Copilot Memory](https://docs.github.com/en/copilot/how-tos/use-copilot-agents/copilot-memory/manage-for-yourself) và [Copilot Memory](https://docs.github.com/en/copilot/concepts/prompting-and-context/copilot-memory) (mặc định, danh sách surface dùng được memory)
+- Chuẩn mở & mẫu: [agents.md](https://agents.md/) · [Customization library — instructions](https://docs.github.com/en/copilot/tutorials/customization-library/custom-instructions)
 
-> Nếu bạn quen Claude Code: chuyển sang Copilot gần như 1-1 — `CLAUDE.md` → `copilot-instructions.md`, `.claude/commands/` → prompt files/skills. Khác biệt chính là cơ chế **glob `applyTo`** so với **file theo cây thư mục**; `AGENTS.md` là chuẩn dùng chung cho cả hai.
-
-> **Tóm gọn 1 câu:** Hai tool khác cơ chế nhưng cùng tư duy "file trong repo là luật" — và `AGENTS.md` là mảnh đất chung.
-
----
-
-## Bài tập nhỏ
-
-Phần này biến kiến thức trên thành việc làm cụ thể. Làm xong là file instructions của bạn thực sự sống.
-
-1. **(20 phút) Cắt file phình:** lấy `copilot-instructions.md` hiện tại, cắt xuống <200. Mỗi dòng xóa ghi lý do 5 chữ ("agent tự suy ra được", "chuyển sang skill"...).
-2. **(15 phút) Tách applyTo:** tìm 3 rules chỉ đúng 1 subtree, tách thành `*.instructions.md` glob hẹp. Test sửa file trong/ngoài subtree.
-3. **(15 phút) AGENTS.md dedupe:** nếu có cả 2 files, chạy `diff` mục 5, gộp trùng lặp. Đo lại `wc -l` cả 2.
-4. **(15 phút) Verify drill:** chạy tay lại toàn bộ lệnh trong instructions, lệnh FAIL thì sửa ngay, ghi ngày mới. Làm định kỳ mỗi khi đổi toolchain.
-
-> **Tóm gọn 1 câu:** Cắt file, tách glob, gộp trùng lặp, verify lại lệnh — 4 việc làm ngay hôm nay.
-
-## Link chéo + Reference
-
-- **Bài 00** — token economics · **Bài 01** — bật `useInstructionFiles` · **Bài 02** — config theo surface · **Bài 05** — checklist dài tách sang skill · **Bài 07** — org policy + secrets.
-- VS Code custom instructions: https://code.visualstudio.com/docs/copilot/customization/custom-instructions
-- GitHub Copilot docs: https://docs.github.com/copilot · AGENTS.md: https://agents.md
-
-> **Tóm gọn 1 câu:** Bài này cho bạn file instructions hoàn chỉnh — các bài sau chỉ đào sâu từng phần của nó.
-
-> **Chốt bài 03:** instructions là file rẻ nhất và lãi nhất bạn từng viết — một lần dọn <200 dòng, mọi task sau tự đúng lệnh và đúng style. Viết ngắn, viết thứ kiểm chứng được, giữ mỗi sự thật đúng một nơi.
+**Chốt:** instructions không phải wiki — nó là luật: ngắn, kiểm chứng được, lệnh đã chạy tay, và **luật nào cũng phải chứng minh được là agent đang đọc** bằng Customizations editor + References; phần còn lại giao cho skill, agent và memory.

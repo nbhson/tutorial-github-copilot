@@ -56,7 +56,7 @@ Coi đây như checklist "vì sao thư không tới tay người nhận": sai đ
 
 Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thuộc lời hứa của người ở trong nhà.
 
-> Copilot có hooks in-process (`.github/hooks/*.json`, `PreToolUse`/`PostToolUse`) nhưng **preview, chỉ chạy Local**, chưa phải security boundary — muốn "không thể tắt được" thì phải dựa vào git hook + server.
+> Copilot có hooks in-process (`.github/hooks/*.json`, `preToolUse`/`postToolUse`) — chạy ở **Copilot CLI + Copilot in the cloud** (subset events), VS Code còn ở **Preview**; tôn trọng allow/ask/deny nhưng chưa phải security boundary — muốn "không thể tắt được" thì phải dựa vào git hook + server.
 
 | Lớp | Công cụ | Chặn gì | Chặn ở đâu |
 |---|---|---|---|
@@ -74,7 +74,7 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 
 > 📄 **Code ví dụ:** [`examples/03-4-branch-protection-chan-push-main-ep-review.sh`](examples/03-4-branch-protection-chan-push-main-ep-review.sh)
 
-> Dựng **trước** khi onboarding Copilot coding agent — nó cũng phải tuân ruleset.
+> Dựng **trước** khi onboarding Copilot cloud agent — nó cũng phải tuân ruleset.
 
 ## 5. Secret scanning + push protection bật thế nào?
 
@@ -93,9 +93,9 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 
 **Ví dụ:** agent commit `fix stuff` → commitlint chặn → agent tự sửa thành `fix(auth): handle expired session`.
 
-## 7. Giới hạn coding agent: chỉ cho nó đụng repo/branch nào?
+## 7. Giới hạn cloud agent: chỉ cho nó đụng repo/branch nào?
 
-**Trả lời 1 câu:** Admin (Enterprise) cấu hình ở org policy (coding agent bật cho repo nào); dev ghi rõ repo + branch + phạm vi file trong issue để agent không lan ra ngoài.
+**Trả lời 1 câu:** Admin (Enterprise) cấu hình ở org policy (cloud agent bật cho repo nào); dev ghi rõ repo + branch + phạm vi file trong issue để agent không lan ra ngoài.
 
 > 📄 **Code ví dụ:** [`examples/06-7-gioi-han-coding-agent-chi-cho-no.sh`](examples/06-7-gioi-han-coding-agent-chi-cho-no.sh)
 
@@ -117,7 +117,7 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 
 > 📄 **Code ví dụ:** [`examples/09-10-checklist-guardrails-cho-repo-moi-5-phut.sh`](examples/09-10-checklist-guardrails-cho-repo-moi-5-phut.sh)
 
-> Đây là definition-of-done trước khi bật coding agent — thiếu 1 tick là mở một đường lách qua guardrail.
+> Đây là definition-of-done trước khi bật cloud agent — thiếu 1 tick là mở một đường lách qua guardrail.
 
 ---
 

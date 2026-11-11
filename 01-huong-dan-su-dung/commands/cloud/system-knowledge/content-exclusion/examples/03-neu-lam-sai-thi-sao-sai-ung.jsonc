@@ -1,0 +1,11 @@
+// SAI: glob qua rong -> "Copilot cham het / khong hieu gi ve repo"
+// Copilot in the cloud: o hop Paths tren GitHub.com
+// Claude Code: loi tuong tu neu deny-list "*.ts" trong permissions
+
+// O hop "Paths to exclude in this repository":
+- "**/*"        // chan TOAN BO repo: khong con inline suggestions, khong con context, code review cung bo qua
+- "/src/**"     // chan ca source code -> agent khong doc duoc code, bao loi "khong tim thay"
+
+// Hau qua:
+// - Ban tuong Copilot hong, cai lai extension (vo ich)
+// - Admin khong biet ai doi -> chi co audit log "copilot.content_exclusion_changed"

@@ -150,7 +150,7 @@ Tìm ít nhất 1 HIGH hoặc giải thích vì sao chắc chắn không có HIG
 
 ```text
 Repo -> Settings -> Code review -> Copilot review: bật cho mọi PR.
-Rule: PR từ Copilot Coding Agent bắt buộc có 1 review người + Copilot review PASS mới merge.
+Rule: PR từ Copilot cloud agent bắt buộc có 1 review người + Copilot review PASS mới merge.
 Branch protection: require status checks (test/lint/build) + require review.
 ```
 

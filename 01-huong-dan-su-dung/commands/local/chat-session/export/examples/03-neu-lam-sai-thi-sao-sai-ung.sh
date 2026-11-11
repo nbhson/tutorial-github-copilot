@@ -1,0 +1,3 @@
+# Chat chua attach file .env (co token that) -> export ngay khong soat
+Chat: Export Chat...
+# File JSON mang theo token da tung attach -> lo secret khi day len wiki

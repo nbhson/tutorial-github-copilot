@@ -1,0 +1,15 @@
+// settings.json — 6 tham số github.copilot.chat.otel.* (bật tắt được cho cả Local lẫn Copilot harness)
+// Lần đầu thử: dùng "console"; chưa có collector thì dùng "file"
+{
+  "github.copilot.chat.otel.enabled": true,
+  // otlp-http | otlp-grpc | console | file
+  "github.copilot.chat.otel.exporterType": "console",
+  // chỉ có nghĩa khi exporterType là otlp-* (mặc định http://localhost:4318)
+  "github.copilot.chat.otel.otlpEndpoint": "http://localhost:4318",
+  // BẬT = toàn bộ prompt/response chảy về backend của bạn — mặc định giữ false
+  "github.copilot.chat.otel.captureContent": false,
+  // Kèm tên account + hostname (chỉ session Local harness)
+  "github.copilot.chat.otel.captureIdentity": false,
+  // Chặn độ dài mỗi attribute nội dung; 0 = không cắt
+  "github.copilot.chat.otel.maxAttributeSizeChars": 0
+}

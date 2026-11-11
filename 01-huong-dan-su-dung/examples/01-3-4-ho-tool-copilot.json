@@ -1,6 +1,0 @@
-// .vscode/mcp.json — mẫu tối thiểu (copy-paste, sửa path)
-{
-  "servers": {
-    "github": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-github"] }
-  }
-}

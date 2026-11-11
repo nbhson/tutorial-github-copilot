@@ -1,0 +1,16 @@
+// .vscode/extensions.json - pack VS Code cua team (commit vao repo).
+// Ten ID lay tu trang Marketplace (publisher.name); kiem tra ID dung chu ky truc tiep
+// tren Marketplace truoc khi commit. Xem cach cai + verify:
+// examples/09-3-1-vs-code-pack-install.sh.
+{
+  "recommendations": [
+    "github.copilot",           // Chat + completions - cai truoc
+    "github.copilot-chat",      // Copilot Features
+    "dbaeumer.vscode-eslint",   // LSP: mo file la chay, agent khong cai lenh
+    "esbenp.prettier-vscode",   // Format theo thong le team
+    "editorconfig.editorconfig", // Dong bo thong le giua cac editor
+    "amodio.gitlens"            // Git history trong editor
+  ],
+  // ( tuy chon) extension khong mong muon trong project -> liet vao "unwanted":
+  "unwanted": []
+}

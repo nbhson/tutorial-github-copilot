@@ -39,8 +39,7 @@ Nôm na: nếu nội dung là gạch và vữa, thì khuôn này là cách bưng
 ## Mục tiêu bài học
 - ... (2–4 gạch: đọc xong hiểu/ làm được điều gì, mức độ kiểm chứng được)
 
-## Mục lục
-- link tới các mục (giữ anchor ổn định).
+> **Không dùng `## Mục lục`** — series này mặc định không có mục lục trong bài (18/18 bài hiện tại đều vậy); mạch bài ngắn nên người đọc cuộn là thấy.
 
 ## Khái niệm cốt lõi
 ### 1. <khái niệm>
@@ -74,12 +73,13 @@ Nôm na: nếu nội dung là gạch và vữa, thì khuôn này là cách bưng
 - link nguồn chính thức.
 ```
 
-## 4. Template — README lệnh (`01-huong-dan-su-dung/commands/<nhóm>/<slug>/README.md`)
+## 4. Template — README lệnh (`01-huong-dan-su-dung/commands/<harness>/<nhóm>/<slug>/README.md`)
 
 ```
 # /<lệnh> — <mô tả 1 dòng>
 
-> **Dành cho:** ... · **Đọc xong:** ... (~2 phút)
+> **Dành cho:** ... · **Vấn đề:** ... · **Đọc xong:** ... (~2 phút)
+> **Harness:** Copilot · Local · hoặc **Surface:** Copilot in the cloud — bắt buộc có 1 dòng này.
 
 ## 1 câu nôm na
 <nó là gì, so với thao tác tay thì hơn ở đâu>
@@ -146,7 +146,13 @@ Quay về: [README.md](README.md) · Bài tổng: [...]
 - Code block copy-paste được; secrets qua env.
 - **Đầy đủ nội dung:** mọi thông tin/số liệu/bảng của bản cũ phải còn (không cần giữ đúng câu chữ, nhưng không được mất ý).
 
-## 7. Checklist "hết robot" trước khi lưu
+## 7. Nguồn docs & gắn nhãn surface (bắt buộc từ 11/2026)
+
+- Mọi khẳng định về hành vi Copilot phải có URL `code.visualstudio.com/docs` **hoặc** `docs.github.com/en/copilot/*` trong mục Reference; cái không có nguồn thì cắt hoặc ghi rõ "kinh nghiệm thực hành".
+- **Gán đúng chủ tài liệu:** harness / Agent Host / AHP / Chat view / Agents window / Customizations editor / slash trong Chat / permission levels VS Code / sandbox VS Code / checkpoints / memory → **VS Code docs**. Copilot CLI flags & slash, cloud agent / Copilot in the cloud, code review, content exclusion, AI credits/giá, skills trên GitHub.com → **docs GitHub**. `gh copilot suggest/explain` không thuộc docs nào — dạy như extension cộng đồng.
+- **Nhãn surface** khi nói một tính năng: `VS Code Chat (Copilot harness)` / `VS Code Chat (Local harness)` / `Copilot CLI` / `Copilot in the cloud` / `GitHub.com` — không nói chung "trong Copilot" khi hành vi khác nhau giữa surface.
+
+## 8. Checklist "hết robot" trước khi lưu
 
 - [ ] Có "Vì sao quan trọng?" và "Nếu làm sai thì sao?" cho khái niệm chính.
 - [ ] Có ít nhất 1 pitfall ❌/✅ + "Bài học:".

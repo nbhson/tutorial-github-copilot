@@ -1,0 +1,13 @@
+// DUNG: chi tieu qua bien moi truong, file trong repo khong chua chu nay.
+{
+  "mcpServers": {
+    "postgres-dev": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres"],
+      // ${NAME} = bat buoc co env; ${NAME:-default} = co gia tri boi khi thieu.
+      "env": { "DATABASE_URL": "${PG_READONLY_URL:-postgres://readonly@localhost:5432/dev}" }
+    }
+  }
+}
+// ${input:...} chi dung duoc trong .vscode/mcp.json (Local harness) va server do
+// se KHONG duoc forward sang Copilot harness.

@@ -1,0 +1,51 @@
+{
+  "_muc_dich": "Bai 13 muc 5 - day du 45 dong ma ban khong can nam trong bai: settings.json telemetry (6 tham so github.copilot.chat.otel.*) + mau truy van audit log cho admin.",
+  "_nguon_docs": [
+    "https://code.visualstudio.com/docs/agents/guides/monitoring-agents (bang 6 tham so OTel, mac dinh, gia tri hop le)",
+    "https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference (lenh /usage trong session copilot)",
+    "https://docs.github.com/en/copilot/concepts/billing-and-usage/copilot-usage-metrics (dashboard adoption + engagement)"
+  ],
+
+  "settings_json_cot_loi": {
+    "_ghi_chu": "Dat trong settings.json (User hoac Workspace). Chi co 6 tham so OTel nay la cua docs; dung tu che them ten khac.",
+    "github.copilot.chat.otel.enabled": true,
+    "github.copilot.chat.otel.exporterType": "otlp-http",
+    "github.copilot.chat.otel.otlpEndpoint": "http://localhost:4318",
+    "github.copilot.chat.otel.captureContent": false,
+    "github.copilot.chat.otel.captureIdentity": false,
+    "github.copilot.chat.otel.maxAttributeSizeChars": 0
+  },
+
+  "settings_json_nang_cao_tuy_chon": {
+    "_ghi_chu": "Chi bat khi backend cua ban da co kiem soat truy cap; captureContent = toan bo prompt/response chay ve collector.",
+    "github.copilot.chat.otel.captureContent": true,
+    "github.copilot.chat.otel.outfile": "",
+    "github.copilot.chat.otel.dbSpanExporter.enabled": false
+  },
+
+  "ten_hieu_nhan_dung_dashboard": {
+    "_ghi_chu": "Namespace cua OTel export; gen_ai.* la chuan GenAI Semantic Conventions, github.copilot.* la namespace chinh thuc cua Copilot, copilot_chat.* la legacy.",
+    "vi_du": ["gen_ai.client.operation.duration", "github.copilot.agent.type", "github.copilot.git.repository", "github.copilot.hook.decision"]
+  },
+
+  "audit_log_admin": {
+    "_ghi_chu": "Audit log ghi ai doi policy/seat, KHONG chua prompt/session data cua client. Muon log prompt thi bat captureContent va ty do luu.",
+    "xem_tren_web": "github.com -> Org/Enterprise Settings -> Security -> Audit log -> loc action:copilot",
+    "lenh_gh_api": "gh api /orgs/<ORG>/audit-log --paginate -f per_page=100 -f phrase=\"action:copilot\" --jq '.[] | [.actor, .action, .created_at] | @tsv' > /tmp/copilot-audit.tsv",
+    "filter_hay_dung": ["action:copilot (moi su kien Copilot)", "action:copilot_policy (doi policy/exclusion)", "action:copilot_seat (them/bot seat)"],
+    "luu_y_luu_tru": "Thoi gian luu khac nhau theo plan/goi SIEM - docs khong cong bo con so co dinh; can luu lau hon thi export sang SIEM cua ban."
+  },
+
+  "lenh_cli_kiem_sanh": {
+    "_ghi_chu": "Truoc day khoaa day hay ghi sai la 'copilot telemetry status' - docs CLI khong co lenh do; dung la /usage TRONG session copilot.",
+    "copilot": "mo session tuong tac",
+    "/usage": "hien so lieu dung cua session, tong token theo model, va AI credits cho model tinh phi"
+  },
+
+  "quy_trinh_du_lieu_hang_tuan": [
+    "1. Chay /usage trong session nang nhat + nhin dashboard usage metrics (5 phut)",
+    "2. Hoi 'ngon co chinh dang khong?' (agent refactor lon = ok; hoi typo bang model dat = coaching)",
+    "3. Fix DUNG 1 cai: gate model, hep scope, training; dat metric do lai sau 1 tuan",
+    "4. Neu bat ky thu gi trong settings_json_nang_cao_tuy_chon -> ghi vao changelog cua team truoc khi commit"
+  ]
+}

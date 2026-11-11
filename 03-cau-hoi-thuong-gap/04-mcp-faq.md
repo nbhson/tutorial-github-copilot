@@ -18,9 +18,9 @@ Mỗi MCP server expose 3 loại thành phần (không phải 3 loại server): 
 
 ## 1. `mcp.json` nằm ở đâu, format chuẩn là gì?
 
-**Trả lời 1 câu:** VS Code đọc ở repo-level `.vscode/mcp.json` (commit share cả team) và user-level User Settings (đè lên repo); key chuẩn là `servers` — nhầm `mcpServers` (của tool khác) thì im lặng không chạy.
+**Trả lời 1 câu:** Hai format cho hai harness: Local harness (VS Code) đọc `.vscode/mcp.json` trong repo (commit share cả team) + User Settings (đè lên repo), key chuẩn là `servers`; Copilot harness (Copilot CLI, Copilot in the cloud) đọc `.mcp.json` ở **root repo** + `~/.copilot/mcp-config.json`, key là `mcpServers`.
 
-Ví von: sai tên key giống gửi thư ghi sai địa chỉ — bưu tá (VS Code) không trả lại thư, không báo lỗi, chỉ lặng lẽ không giao hàng.
+Ví von: sai tên file hoặc sai key giống gửi thư ghi sai địa chỉ — bưu tá không trả lại thư, không báo lỗi, chỉ lặng lẽ không giao hàng.
 
 > 📄 **Code ví dụ:** [`examples/01-1-mcp-json-nam-o-au-format-chuan.json`](examples/01-1-mcp-json-nam-o-au-format-chuan.json)
 
@@ -38,13 +38,13 @@ Ví von: sai tên key giống gửi thư ghi sai địa chỉ — bưu tá (VS C
 
 ## 3. Auth cho MCP server thế nào?
 
-**Trả lời 1 câu:** 3 cách: `${input:...}` (khuyên dùng, không lưu git), `${env:...}` (env var máy bạn), hardcode — **CẤM**: token vào git là lộ vĩnh viễn.
+**Trả lời 1 câu:** 2 cách theo harness: `${env:...}` (Copilot harness khuyên dùng — export trong shell profile), `${input:...}` (chỉ Local harness/VS Code, IDE hỏi lúc start, không lưu git); hardcode — **CẤM**: token vào git là lộ vĩnh viễn.
 
 | Cách | An toàn | Khi nào dùng |
 |---|---|---|
-| `${input:...}` | Cao | Repo share cho team |
-| `${env:...}` | Trung bình–cao | Token riêng mỗi dev |
-| Hardcode trong `mcp.json` | CẤM | Không bao giờ |
+| `${env:...}` | Cao | `.mcp.json` (Copilot harness), mọi môi trường |
+| `${input:...}` | Cao | `.vscode/mcp.json` (Local harness), repo share cho team |
+| Hardcode trong file MCP | CẤM | Không bao giờ |
 
 > **Cách đọc bảng này:** cột **An toàn** xếp từ chỗ được phép (cao) tới chỗ tuyệt đối không được (CẤM) — nguyên tắc chung: token không bao giờ nằm trong file được commit lên git.
 
@@ -52,7 +52,7 @@ Ví von: sai tên key giống gửi thư ghi sai địa chỉ — bưu tá (VS C
 
 ## 4. Tools không hiện trong Copilot — debug theo thứ tự nào?
 
-**Trả lời 1 câu:** 5 bước đừng nhảy cóc: validate JSON → check key `servers` → test process → reload IDE → đọc log MCP panel.
+**Trả lời 1 câu:** 5 bước đừng nhảy cóc: validate JSON → check key (`servers` cho `.vscode/mcp.json`, `mcpServers` cho `.mcp.json`) → test process → reload IDE → đọc log MCP panel.
 
 > 📄 **Code ví dụ:** [`examples/05-4-tools-khong-hien-trong-copilot-debug-theo.sh`](examples/05-4-tools-khong-hien-trong-copilot-debug-theo.sh)
 
@@ -60,7 +60,7 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 
 ## 5. Secrets trong MCP: placeholders viết sao?
 
-**Trả lời 1 câu:** Quy tắc vàng: **`mcp.json` commit được = không chứa secret thật** — mọi secret đi qua `${input:...}` (IDE hỏi lúc start) hoặc `${env:...}` (shell profile).
+**Trả lời 1 câu:** Quy tắc vàng: **file MCP commit được = không chứa secret thật** — Copilot harness dùng `${env:...}` (biến đã export), Local harness (VS Code) dùng `${input:...}` (IDE hỏi lúc start).
 
 > 📄 **Code ví dụ:** [`examples/06-5-secrets-trong-mcp-placeholders-viet-sao.json`](examples/06-5-secrets-trong-mcp-placeholders-viet-sao.json)
 
@@ -127,6 +127,6 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 4. Check token: env có, chưa hết hạn, đủ scope.
 5. Reload IDE → đọc Output panel log server đó.
 
-Tham khảo chéo: [bài 03](03-modes-permissions.md) (tool approval) · [bài 08](08-loi-thuong-gap-troubleshooting.md) (lỗi tổng hợp) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (secrets + audit) · [../templates/.vscode/mcp.json](../templates/.vscode/mcp.json) (mẫu copy ngay).
+Tham khảo chéo: [bài 03](03-modes-permissions.md) (tool approval) · [bài 08](08-loi-thuong-gap-troubleshooting.md) (lỗi tổng hợp) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (secrets + audit) · [../templates/.mcp.json](../templates/.mcp.json) (mẫu Copilot harness) · [../templates/.vscode/mcp.json](../templates/.vscode/mcp.json) (mẫu Local harness, copy ngay).
 
 > **Tóm gọn 1 câu:** MCP là hệ dây điện nối Copilot với thế giới ngoài — `mcp.json` là bản vẽ, token là thẻ từ, log Output là đồng hồ đo điện; hỏng chỗ nào tra đúng chỗ đó theo thứ tự 5 bước.

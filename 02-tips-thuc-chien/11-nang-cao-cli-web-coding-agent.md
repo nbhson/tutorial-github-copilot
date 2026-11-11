@@ -1,18 +1,18 @@
-# Tips 11 — Nâng Cao: Copilot CLI, Web, Coding Agent, Mobile & Voice
+# Tips 11 — Nâng Cao: Copilot CLI, Web, cloud agent, Mobile & Voice
 
 > **Dành cho:** dev muốn làm việc ngoài VS Code — terminal, web, điện thoại, khi đang đi đường.
 > **Vấn đề:** chỉ biết mỗi VS Code nên rời máy là "tê liệt", hoặc nhầm `gh copilot` với `copilot`.
-> **Đọc xong:** dùng được 5 mặt của Copilot, giao việc cho Coding Agent qua cloud, review/duyệt trên web + mobile.
+> **Đọc xong:** dùng được 5 mặt của Copilot, giao việc cho cloud agent qua cloud, review/duyệt trên web + mobile.
 > **Thời gian:** ~20 phút đọc + ~50 phút làm bài tập.
 
 ## 1. Vì sao phải ra khỏi VS Code?
 
-- Đang đi đường, prod đỏ → cần xem issue + giao Coding Agent từ điện thoại.
+- Đang đi đường, prod đỏ → cần xem issue + giao cloud agent từ điện thoại.
 - Review PR trên github.com → muốn hỏi `@copilot` ngay trong PR, không cần pull về.
 - Sống trong terminal (ssh, server) → muốn CLI gợi ý lệnh + giải thích lỗi ngay.
 - Họp, tay bận → muốn voice ra lệnh, Copilot tóm tắt + tạo issue.
 
-> Rule: **nặng thì VS Code Agent, nhanh thì CLI/web, xa máy thì mobile + Coding Agent cloud.**
+> Rule: **nặng thì VS Code Agent, nhanh thì CLI/web, xa máy thì mobile + Copilot cloud agent.**
 
 Cố code nặng (refactor, debug sâu) trên điện thoại là vừa chậm vừa dễ sai — việc đó thuộc về nơi có đủ công cụ verify.
 
@@ -25,7 +25,7 @@ Mục này vẽ bản đồ 5 "mặt nạ" Copilot tùy nơi bạn đứng. Đ�
 | VS Code | Desktop IDE | Edit/Agent multi-files, debug sâu | Phải ngồi máy |
 | CLI | Terminal (`gh copilot` + `copilot`) | `gh copilot`: suggest/explain lệnh shell; `copilot`: agent 3 chế độ | Không thay VS Code debug sâu |
 | Web (github.com) | Repo/issues/PRs | Hỏi code, review PR, assign agent | Không chạy local |
-| Coding Agent | Cloud sessions | Làm 1–2h bất đồng bộ, mở PR | Đắt, cần spec rõ |
+| cloud agent | Cloud sessions | Làm 1–2h bất đồng bộ, mở PR | Đắt, cần spec rõ |
 | Mobile/dev/voice | App, github.dev, voice | Xem, giao việc, duyệt nhanh | Không code nặng |
 
 > **Cách đọc bảng này:** dọc cột **Mặt** theo nơi bạn đang ở (máy bàn, terminal, web, điện thoại...), cột **Mạnh nhất/Yếu nhất** là hai mép của từng mặt — đọc cả hai để tránh gánh việc nặng sang nơi yếu.
@@ -68,13 +68,13 @@ Trong phiên: `Shift+Tab` xoay standard → plan → autopilot; `/permissions` c
 |---|---|
 | Quên lệnh shell, explain lỗi tức thì | `gh copilot suggest/explain` |
 | Task 1–2h, agent tự chạy cả đoạn | `copilot --plan` / autopilot |
-| Chỉ Edit 1–2 files, muốn duyệt từng tool | `copilot` (Interactive) |
+| Chỉ Edit 1–2 files, muốn duyệt từng tool | `copilot` (mode standard) |
 
 Nhầm 2 CLI là lỗi phổ biến nhất: muốn agent làm cả task lại gõ `gh copilot` (chỉ suggest/explain), muốn hỏi lệnh nhanh lại mở `copilot` (khởi động agent cả đoạn) — vừa chậm vừa tốn.
 
-## 4. github.com chat + Coding Agent
+## 4. github.com chat + cloud agent
 
-Mục này nói về cách giao việc "từ xa tổng hành dinh": hỏi `@copilot` ngay trên web, hoặc assign cả một issue cho Coding Agent để nó tự code + mở PR trên cloud.
+Mục này nói về cách giao việc "từ xa tổng hành dinh": hỏi `@copilot` ngay trên web, hoặc assign cả một issue cho cloud agent để nó tự code + mở PR trên cloud.
 
 **Hỏi ngay trên web** — bấm Copilot chat hoặc gõ `@copilot` trong comment trên repo/issue/PR:
 
@@ -89,7 +89,7 @@ Finding = bug/correctness/security/test-gap, bỏ qua style.
 [SEVERITY] file:line — mô tả — gợi ý fix. Verdict PASS/NEEDS-FIX.
 ```
 
-**Assign Coding Agent cho issue (copy-paste):**
+**Assign cloud agent cho issue (copy-paste):**
 
 ```markdown
 ## Mục tiêu
@@ -137,7 +137,7 @@ Hai bẫy khi rời máy chính: voice nghe nhầm tên file → sửa nhầm ch
 ```text
 1. Mobile: đọc issue prod + CI log đỏ (5 phút).
 2. Mobile: comment @copilot tóm tắt giả thuyết root cause 3 bullet (không fix vội nếu chưa rõ).
-3. Rõ + scope nhỏ: assign Coding Agent, nó mở PR draft.
+3. Rõ + scope nhỏ: assign cloud agent, nó mở PR draft.
 4. Về máy: VS Code pull branch agent, full test local, review fresh.
 5. Web: merge khi CI xanh + review PASS.
 ```
@@ -178,7 +178,7 @@ Tổng bạn thao tác ~25 phút rải rác; agent làm 30 phút cloud; merge c�
 | Terminal/ssh | gh copilot | Gợi ý lệnh, explain, script | Sửa multi-files phức tạp |
 | Terminal (agent) | copilot CLI | Task 1–2h, duyệt plan | Debug sâu hơn VS Code |
 | github.com | Chat/@copilot | Hỏi code, review PR, giao agent | Chạy local, test nặng |
-| Cloud | Coding Agent | Việc 1–2h độc lập, PR draft | Spec mờ, task 15 phút |
+| Cloud | cloud agent | Việc 1–2h độc lập, PR draft | Spec mờ, task 15 phút |
 | Mobile | App | Đọc, giao, duyệt nhanh | Code, review sâu |
 | Máy mượn | github.dev | Fix nhỏ, review | Setup nặng, secrets |
 | Họp/tay bận | Voice | Tóm tắt, tạo issue | Prompt dài, tên file khó |
@@ -223,8 +223,8 @@ Bảng này gom các "vết xe cũ" khi làm việc ngoài máy chính — mỗi
 
 ## Tham khảo chéo
 
-- [Tips 03](./03-plan-first-workflow.md) — plan duyệt mới giao Coding Agent
-- [Tips 05](./05-parallel-agents.md) — multi Coding Agent sessions
+- [Tips 03](./03-plan-first-workflow.md) — plan duyệt mới giao cloud agent
+- [Tips 05](./05-parallel-agents.md) — multi cloud agent sessions
 - [Tips 06](./06-policies-guardrails-recipes.md) — protection + approval cho cloud
 - [Tips 09](./09-teamwork-chuan-hoa.md) — review workflow + mobile duyệt
 - [Tips 10](./10-debugging-power-moves.md) — explain lỗi trên CLI/web

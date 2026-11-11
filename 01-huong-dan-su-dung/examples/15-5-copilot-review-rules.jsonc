@@ -1,0 +1,49 @@
+{
+  // Bai 15 - tang 4: MAU cho `.github/copilot-audit.json` (quy uoc repo, KHONG phai
+  // schema docs cong bo - docs mong o file nay, xem nhu thuc hanh cua team).
+  // Repo co file thi Copilot cloud agent doc no khi chay task; file khong de duoc
+  // policy to chuc - hai ben trai nhau thi chinh sach nen tang thang.
+  // Copy thanh `.github/copilot-audit.json`, cat bo cac block cho dung repo cua ban.
+
+  // ---------------------------------------------------------------------------
+  // 1. content_exclusion: pattern loai khoi nguyen canh agent + khoi code review.
+  //    Khop danh sach tren man hinh Content exclusion (bai 15, muc 2) - day la
+  //    ban "repo-local" de review va dev cung nhin thay. Chi dung khi path that
+  //    su nhay cam; exclude ca src/ = tu che mat doi minh.
+  // ---------------------------------------------------------------------------
+  "content_exclusion": [
+    "**/.env*",            // moi bien the: .env.local, .env.prod...
+    "**/secrets/**",
+    "**/*.pem",
+    "**/*.key",
+    "**/*credentials*",
+    "dumps/*.sql",         // data that
+    "vendor/**",           // nhieu / build sinh ra, lo cho sach index
+  ],
+
+  // ---------------------------------------------------------------------------
+  // 2. review_triggers: khi nao may review tu dong. Gia tri o day la mac de
+  //    nghia cua team (tuong ung ba moc trong ruleset/settings - bai 15, muc 5);
+  //    effort: Lite | Balanced | Max. Nho: effort khong co gia co dinh moi
+  //    review - chi tieu theo token, do bang AI credits dashboard (bai 13).
+  // ---------------------------------------------------------------------------
+  "review_triggers": {
+    "on_pull_request_opened": true,   // lan dau Copilot duoc gan vao PR
+    "on_new_push": true,              // re-review moi push ("Review new pushes")
+    "draft_pull_requests": false,     // PR draft: mac dinh bo qua den khi ready
+    "effort_by_path": {
+      "**/payments/**": "max",        // tien bac: soi ky nhat
+      "**/auth/**": "max",
+      "**/*.test.*": "lite",          // test lat vat: cho nhanh
+      "default": "balanced",
+    },
+  },
+
+  // ---------------------------------------------------------------------------
+  // 3. audit_retention_days: so ngay repo giu ban ghi audit CUA RIENG quy
+  //    trinh review/agent (xuat ra dashboard noi bo cua team). KHONG phai thoi
+  //    gian GitHub giu audit log to chuc - cai do ke hoach plan quyet, docs
+  //    khong cong bo mot con so dung chung cho moi noi.
+  // ---------------------------------------------------------------------------
+  "audit_retention_days": 180,
+}

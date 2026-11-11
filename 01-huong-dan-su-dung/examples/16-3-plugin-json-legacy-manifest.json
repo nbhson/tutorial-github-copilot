@@ -1,0 +1,9 @@
+{
+  "name": "my-dev-tools",
+  "description": "React development utilities (LEGACY format: thieu $schema Agent Plugins)",
+  "version": "1.0.0",
+  "agents": "agents/",
+  "skills": ["skills/", "extra-skills/"],
+  "hooks": "hooks.json",
+  "mcpServers": ".mcp.json"
+}

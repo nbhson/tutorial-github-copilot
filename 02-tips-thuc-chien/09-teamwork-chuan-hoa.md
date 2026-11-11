@@ -43,7 +43,7 @@ Cấu trúc repo chuẩn:
   instructions/
     payments.instructions.md
   skills/
-    team-bug/SKILL.md        # chuẩn 2026, chạy Local + Cloud
+    team-bug/SKILL.md        # chuẩn 2026, chạy cả Copilot harness lẫn Local
     team-review/SKILL.md
   prompts/                   # legacy, chỉ Local
     team-bug.prompt.md
@@ -123,7 +123,7 @@ Mục này nâng lên cấp tổ chức (org): luật không chỉ nằm trong r
 
 ```text
 GitHub Org → Settings → Copilot → Policies:
-- [ ] Coding Agent chỉ trên repo có verify.yml mẫu
+- [ ] cloud agent chỉ trên repo có verify.yml mẫu
 - [ ] Chặn suggest cho *.pem, .env, secrets/
 - [ ] Knowledge bases dùng chung: org-docs (ADRs, API specs)
 - [ ] Mọi thay đổi instructions/skills/prompts phải qua PR + lead review
@@ -188,7 +188,7 @@ Bỏ 1 lớp (vd merge luôn sau lớp 1) thì bug tốn kém nhất rơi xuốn
 - [ ] Sẵn sàng chịu trách nhiệm khi merge? (người merge là người chịu)
 ```
 
-**Mô tả PR mẫu từ Coding Agent (copy-paste khung):** `## Issue` (Closes #101 + mô tả 1 dòng) → `## Scope` (files đụng + diff --stat) → `## Evidence` (10 dòng cuối log test/lint/build + link CI run) → `## Reviews` (Copilot review PASS + /team-review PASS, 0 HIGH).
+**Mô tả PR mẫu từ cloud agent (copy-paste khung):** `## Issue` (Closes #101 + mô tả 1 dòng) → `## Scope` (files đụng + diff --stat) → `## Evidence` (10 dòng cuối log test/lint/build + link CI run) → `## Reviews` (Copilot review PASS + /team-review PASS, 0 HIGH).
 
 > **Tóm gọn 1 câu:** ba lớp review — máy quét, reviewer fresh, người chốt — cắt lớp nào thì bug đó bay thẳng xuống prod, nơi sửa đắt nhất.
 
@@ -206,7 +206,7 @@ Tạo `docs/copilot-onboarding.md`:
 - Đọc .github/copilot-instructions.md (5 phút).
 
 ## 5–15p: Hỏi (Ask)
-- Prompt: `@workspace Chỉ trong src/payments/*.ts: flow refund 5 bullet + file:line. Không sửa.`
+- Prompt: `#codebase Chỉ trong src/payments/*.ts: flow refund 5 bullet + file:line. Không sửa.`
 - Mục tiêu: biết gắn scope hẹp, đọc output file:line.
 
 ## 15–25p: Fix (Edit + verify)
@@ -221,7 +221,7 @@ Tạo `docs/copilot-onboarding.md`:
 
 ## Xong: checklist
 - [ ] Biết gọi 4 skills/prompts team
-- [ ] Biết new chat mỗi task, #selection vs @workspace
+- [ ] Biết new chat mỗi task, #selection vs #codebase
 - [ ] Biết Evidence + review 3 lớp trước khi nhờ merge
 ```
 
@@ -283,9 +283,9 @@ Mục này dẫn tới các bài liên quan khi cần đi sâu từng phần.
 - [Tips 06](./06-policies-guardrails-recipes.md) — guardrails recipes
 - [Tips 07](./07-thiet-ke-prompts-skills.md) — thiết kế skills chuẩn 2026
 - [Tips 04](./04-verification-done-that.md) — review gate + Evidence
-- [Tips 08](./08-tiet-kiem-premium-requests.md) — usage + routing cho team
+- [Tips 08](./08-tiet-kiem-ai-credits.md) — usage + routing cho team
 - [Tips 03](./03-plan-first-workflow.md) — plan-first cho mọi task lớn
 - [03 — Instructions + memory + rules](../01-huong-dan-su-dung/03-instructions-memory-rules.md) — viết instructions
-- [17 — Agent Customizations Hub](../01-huong-dan-su-dung/17-agent-customizations-hub.md) — hub skill/agent/MCP 2026
+- [17 — Agent Customizations editor](../01-huong-dan-su-dung/17-agent-customizations-hub.md) — editor quản lý skill/agent/MCP 2026
 
 > **Chốt Tips 09:** team mạnh không phải vì mỗi người giỏi, mà vì luật nằm trong repo chứ không nằm trong đầu ai. Commit 4 tài sản, bắt đầu gates nhẹ, để onboarding 30 phút chứng minh hệ thống tự chạy.

@@ -1,0 +1,14 @@
+// DUNG: hep, dung thu can chan; code trong src van cho Copilot doc
+// Copilot in the cloud: dat tren GitHub.com -> Settings -> Copilot -> Content exclusion
+// Claude Code: tuong duong la allowlist Edit/Read trong settings may ban
+
+// O hop "Paths to exclude in this repository":
+- "/.env"                // file cu the o goc repo
+- "/secrets/**"          // ca thu muc + file ben duoi
+- "*.pem"                // chi key material, khong phai ca src
+- "config/prod.json"     // dung ten duoc quan sat trong repo (khong doan)
+
+// Kiem tra sau khi luu:
+// 1. doi toi 30 phut (IDE da load settings) hoac reload cua so
+// 2. test 2 chieu: src/utils/format.ts VAN co goi y; secrets/prod.json KHONG
+// 3. mo audit log cua org de kiem "copilot.content_exclusion_changed" (ai doi, luc nao)

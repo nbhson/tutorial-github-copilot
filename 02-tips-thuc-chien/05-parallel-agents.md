@@ -1,4 +1,4 @@
-# Tips 05 — Parallel Agents: Chạy Song Song Multi-Chat, Coding Agent, Worktrees
+# Tips 05 — Parallel Agents: Chạy Song Song Multi-Chat, cloud agent, Worktrees
 
 > **Dành cho:** dev đã quen 1 chat 1 việc và đang chờ Copilot tuần tự từng module.
 > **Vấn đề:** research 3 modules tuần tự mất 60 phút trong khi song song chỉ tốn 30 — nhưng song song sai cách vừa conflict vừa đốt AI Credits.
@@ -7,9 +7,9 @@
 
 ## 1. Vì sao phải song song?
 
-Làm tuần tự với Copilot rất phí: research auth 20p → payments 20p → cart 20p = 60 phút; fan-out 3 chats cùng lúc → 20 phút xong cả 3. Chờ Coding Agent xong issue A mới giao issue B là mất 2× thời gian chờ.
+Làm tuần tự với Copilot rất phí: research auth 20p → payments 20p → cart 20p = 60 phút; fan-out 3 chats cùng lúc → 20 phút xong cả 3. Chờ cloud agent xong issue A mới giao issue B là mất 2× thời gian chờ.
 
-Lưu ý quan trọng: Copilot song song miễn phí về *thời gian của bạn*, nhưng **không** miễn phí về AI Credits — nhiều session = nhiều lượt gọi model cùng lúc. Kiểm tra usage trước khi fan-out (xem [Tips 08](./08-tiet-kiem-premium-requests.md)).
+Lưu ý quan trọng: Copilot song song miễn phí về *thời gian của bạn*, nhưng **không** miễn phí về AI Credits — nhiều session = nhiều lượt gọi model cùng lúc. Kiểm tra usage trước khi fan-out (xem [Tips 08](./08-tiet-kiem-ai-credits.md)).
 
 ```text
 Việc độc lập -> song song.
@@ -26,7 +26,7 @@ Mục này xếp ra 4 cách chạy cùng lúc — mỗi cách "khóa chui" một
 | Kiểu | Cô lập gì | Tốn gì | Khi dùng |
 |---|---|---|---|
 | Multi-chat | Context mỗi chat | Thêm AI Credits | Research, plan 2 phương án |
-| Coding Agent sessions | Branch + CI riêng | Thêm minutes + AI Credits | 2–3 issues độc lập |
+| cloud agent sessions | Branch + CI riêng | Thêm minutes + AI Credits | 2–3 issues độc lập |
 | Worktrees | Thư mục + branch riêng | Disk + setup | Song song code local nặng |
 | Custom agents | Vai (Planner/Reviewer/Tester) | Overhead nhỏ | Chia vai trong 1 task |
 
@@ -52,9 +52,9 @@ Không cần setup. Mở 2–3 chats VS Code (hoặc github.com + VS Code) cùng
 **Ví dụ 1 — Research 3 modules (copy-paste):**
 
 ```text
-Chat A: "@workspace Chỉ trong src/auth/*.ts: flow login 5 bullet + file:line. Không sửa. Ghi ra docs/research-auth.md"
-Chat B: "@workspace Chỉ trong src/payments/*.ts: flow refund 5 bullet + file:line. Không sửa. Ghi ra docs/research-payments.md"
-Chat C: "@workspace Chỉ trong src/cart/*.ts: flow voucher 5 bullet + file:line. Không sửa. Ghi ra docs/research-cart.md"
+Chat A: "#codebase Chỉ trong src/auth/*.ts: flow login 5 bullet + file:line. Không sửa. Ghi ra docs/research-auth.md"
+Chat B: "#codebase Chỉ trong src/payments/*.ts: flow refund 5 bullet + file:line. Không sửa. Ghi ra docs/research-payments.md"
+Chat C: "#codebase Chỉ trong src/cart/*.ts: flow voucher 5 bullet + file:line. Không sửa. Ghi ra docs/research-cart.md"
 ```
 
 Rồi mở chat chính thứ 4:
@@ -74,7 +74,7 @@ Chat chính: "So 2 phương án trong 2 files, chọn 1 theo tiêu chí: ít r�
 
 **Ví dụ 3 — Hỏi phụ không block mạch chính:** đang implement mà thắc mắc → mở chat phụ Ask: `"Giải thích hàm retryWithBackoff trong #file:src/payments/retry.ts, 3 bullet. Không sửa."` Chat chính không bị bẩn.
 
-## 4. Kiểu 2: multi Coding Agent sessions
+## 4. Kiểu 2: multi cloud agent sessions
 
 Dùng khi có 2–3 issues độc lập, spec rõ, khác modules.
 
@@ -105,7 +105,7 @@ Mở PR draft, dán log test xanh vào mô tả.
 - [ ] Merge tuần tự, chạy full test sau mỗi merge?
 ```
 
-> Lưu ý 2026: chạy được 2–3 sessions trong terminal bằng Copilot CLI (binary `copilot`, xoay Interactive/Plan/Autopilot bằng `Shift+Tab`, giới hạn credits bằng `/limits`). Xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
+> Lưu ý 2026: chạy được 2–3 sessions trong terminal bằng Copilot CLI (binary `copilot`, xoay standard → plan → autopilot bằng `Shift+Tab`, giới hạn credits bằng `/limits`). Xem [Tips 11](./11-nang-cao-cli-web-coding-agent.md).
 
 ## 5. Kiểu 3: worktrees cô lập
 
@@ -121,7 +121,7 @@ Chạy song song: mỗi VS Code gắn prompt riêng — `"Đọc plan.md Phase a
 
 > 📄 **Code ví dụ:** [`examples/02-5-kieu-3-worktrees-co-lap.sh`](examples/02-5-kieu-3-worktrees-co-lap.sh)
 
-**Khi nào KHÔNG cần worktrees:** chỉ research/hỏi (multi-chat là đủ); task <30 phút (1 Agent nhanh hơn setup); máy yếu (dùng Coding Agent cloud thay).
+**Khi nào KHÔNG cần worktrees:** chỉ research/hỏi (multi-chat là đủ); task <30 phút (1 Agent nhanh hơn setup); máy yếu (dùng Copilot cloud agent thay).
 
 ## 6. Kiểu 4: custom agents fan-out
 
@@ -156,7 +156,7 @@ Không dump log dài, không paste code nguyên file.
 | 20–25 | Chat chính thứ 4 | `"Đọc 3 files research-*.md, gộp thành table Module / Flow / Risks."` |
 | 25–30 | Lập plan | `"Từ table trên, trình plan 3 phases + verify từng phase, chờ duyệt."` |
 
-Tuần tự mất 60 phút, song song mất 30 phút với chất lượng tương đương (modules độc lập). Nếu có 2 issues độc lập: phút 30 assign 2 Coding Agent sessions, quay lại review 2 PR drafts.
+Tuần tự mất 60 phút, song song mất 30 phút với chất lượng tương đương (modules độc lập). Nếu có 2 issues độc lập: phút 30 assign 2 cloud agent sessions, quay lại review 2 PR drafts.
 
 ## 8. Bảng tra nhanh: chọn kiểu nào?
 
@@ -166,7 +166,7 @@ Bảng này là bản đồ quyết định của cả bài. Đọc để trả 
 |---|---|---|
 | Research 2–4 modules độc lập | Multi-chat | 3 chats + 1 chat gộp |
 | Thử 2 hướng fix | 2 chats plan | Chat chính chọn 1 |
-| 2–3 issues độc lập, khác scope | Multi Coding Agent | 2–3 sessions, scope không giao |
+| 2–3 issues độc lập, khác scope | Multi cloud agent | 2–3 sessions, scope không giao |
 | Code local nặng, sợ conflict | Worktrees | 2 worktrees, merge tuần tự |
 | 1 task cần plan/test/review | Custom agents | 3 vai: Planner/Tester/Reviewer |
 | Hỏi phụ khi đang implement | Chat phụ Ask | 1 chat phụ, không block chính |
@@ -191,7 +191,7 @@ Bảng này là danh sách "vết thương" của người đi trước — mỗ
 | 2 agents cùng sửa 1 file | Conflict, mất code | Chia scope không giao nhau ngay trong prompt |
 | Fan-out 5 chats không gộp | 5 findings rời rạc | Luôn có chat chính gộp + plan duyệt |
 | Nhánh dump log 200 dòng | Chat chính phình | Output contract: 3 bullet + evidence |
-| Giao 2 Coding Agents cùng scope | 2 PRs conflict nhau | Mỗi issue 1 scope, dặn KHÔNG đụng scope kia |
+| Giao 2 cloud agents cùng scope | 2 PRs conflict nhau | Mỗi issue 1 scope, dặn KHÔNG đụng scope kia |
 | Merge 2 nhánh cùng lúc | Main đỏ không biết do ai | Merge tuần tự, full test sau mỗi merge |
 | Worktrees quên cleanup | Disk đầy, branch rác | Remove worktree + xóa branch sau merge |
 | Song song task phụ thuộc | B làm sai vì A chưa xong | Vẽ dependency trước: B cần A → tuần tự |
@@ -206,7 +206,7 @@ Bảng này là danh sách "vết thương" của người đi trước — mỗ
 |---|---|---|---|
 | Nhiều phiên song song | Nhiều chat VS Code / github.com | Nhiều terminal/phiên | Cùng tư tưởng: mỗi phiên 1 việc |
 | Cô lập nhánh local | Worktrees | `git worktree` tương tự | Đều là thủ thuật git chung |
-| Giao việc async cloud | Coding Agent assign issue → PR draft | Async qua GitHub Actions/cloud | Mô hình async khác nhau |
+| Giao việc async cloud | cloud agent assign issue → PR draft | Async qua GitHub Actions/cloud | Mô hình async khác nhau |
 | Chia vai | Custom agents (`.github/agents/*.md`) | Subagents `.claude/agents/` | Cùng ý tưởng chia vai |
 | Workflow đa-agent bằng code | Copilot SDK (public preview) | Agent SDK / orchestration ngoài | Cả hai cho lập trình hoá fan-out |
 
@@ -225,7 +225,7 @@ Bảng này là danh sách "vết thương" của người đi trước — mỗ
 - [Tips 01](./01-context-hygiene.md) — chat chính gọn, nhánh chỉ trả summary
 - [Tips 03](./03-plan-first-workflow.md) — có plan duyệt mới fan-out implement
 - [Tips 04](./04-verification-done-that.md) — mỗi nhánh đều phải dán log xanh
-- [Tips 08](./08-tiet-kiem-premium-requests.md) — fan-out tốn AI Credits, khi nào đáng?
-- [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — Coding Agent sessions + Copilot CLI
+- [Tips 08](./08-tiet-kiem-ai-credits.md) — fan-out tốn AI Credits, khi nào đáng?
+- [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — cloud agent sessions + Copilot CLI
 
 > **Chốt Tips 05:** fan-out chỉ đáng khi có fan-in — chia việc theo files tách rời, rồi luôn có một chat chính gộp lại.

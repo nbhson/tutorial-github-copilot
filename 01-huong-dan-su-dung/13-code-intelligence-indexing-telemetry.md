@@ -1,306 +1,194 @@
-# 13 — Code Intelligence, Indexing & Telemetry: `@workspace` Hiểu Cả Repo Bạn
+# 13 — Code Intelligence: Codebase Indexing & Telemetry
 
-> **Dành cho:** dev đã dùng Copilot Chat nhưng `@workspace` hay trả lời chung chung, và admin/tech lead muốn đọc được index + usage của team (bài 13 series 01).
-> **Vấn đề:** repo lớn mà không index thì chat chỉ đoán từ vài file đang mở; AI Credits hết mà không nhìn dashboard thì chỉ đoán ai ngốn cái gì.
-> **Đọc xong:** bật được codebase indexing (Business/Enterprise), dùng `@workspace` + semantic search đúng cách, nối knowledge base, hiểu synergy LSP + Copilot, và đọc được audit log + usage dashboard.
+> **Dành cho:** dev dùng Copilot Chat trên repo lớn, và admin/tech lead muốn đọc được số liệu usage của team (bài 13 series 01).
+> **Vấn đề:** repo lớn mà chưa index thì chat trả lời "đoán mò" từ vài file đang mở; AI Credits bị tiêu hết mà không ai biết vì sao; và ba thứ — context window, indexing, code search — bị gọi nhầm là một.
+> **Đọc xong:** phân biệt được 3 khái niệm hay nhầm; dùng `#codebase` đúng cách và biết đường lùi khi index chưa sẵn sàng; cấu hình được 6 tham số telemetry `github.copilot.*`; trả lời câu hỏi admin bằng đúng số liệu. **Thời gian:** ~35 phút.
 
 ## Mục tiêu bài học
 
-- Dùng `@workspace` + semantic search để hỏi cả repo mà không bị trả lời chung chung.
-- Bật + cấu hình codebase indexing (Business/Enterprise), gồm content exclusion TRƯỚC khi bật.
-- Biết khi nào cần knowledge base và vì sao LSP là lớp kiểm chứng bắt buộc cho retrieve.
-- Đọc được audit log + usage dashboard và biến số liệu thành đúng 1 hành động mỗi tuần.
+Mục này liệt kê những gì bạn cầm được sau ~35 phút — như danh sách đồ cần mua trước khi vào siêu thị.
 
-> **Tóm gọn 1 câu:** Bài này dạy 2 thứ: cho Copilot "cái mục lục" của repo (indexing) để trả lời chuẩn, và cho bạn "cái sao kê" (telemetry) để biết tiền credits đi đâu.
+- Phân biệt 3 thứ hay nhầm: **context window** (bao nhiêu token được đưa vào model trong một request) ≠ **codebase indexing** (lập chỉ mục semantic để tìm code nhanh) ≠ **code search** (tìm text/regex trong repo, không cần index).
+- Dùng `#codebase` cho câu hỏi xuyên repo; biết indexing **chỉ cải thiện search/semantic retrieval**, không ảnh hưởng code completions, và khi index chưa chạy được thì có **local search fallback**.
+- Đọc và cấu hình được 6 tham số `github.copilot.chat.otel.*` trong `settings.json` để xuất dữ liệu phiên agent sang OpenTelemetry; biết telemetry VS Code tách biệt với xử lý dữ liệu của AI provider.
+- Trả lời được 5 câu hỏi admin bằng đúng nguồn số: dashboard usage metrics (phía GitHub), `/usage` trong Copilot CLI, OTel export, audit log.
+
+> **Tóm gọn 1 câu:** Indexing là *mục lục* để Copilot tìm code nhanh, context window là *trang sách* thực sự đưa vào model, telemetry là *bảng kê* để bạn biết tiền AI credits và công sức của team đi đâu — ba vật khác nhau, đừng nhầm một.
 
 ---
 
-## 1. Vì sao index + telemetry?
+## 1. Ba thứ hay nhầm: context window ≠ codebase indexing ≠ code search
 
-Mục này trả lời câu hỏi "tại sao phải bận tâm tới index và telemetry" — vì chúng chữa hai cơn đau khác nhau.
+Docs VS Code nói thẳng: index giúp *tìm* các đoạn liên quan chứ **không đưa toàn bộ workspace vào mỗi model request**. Vậy "cho Copilot biết cả repo" và "repo nằm trong đầu model" là hai chuyện khác nhau.
 
-Hai lớp giải quyết 2 vấn đề khác nhau:
-
-| Vấn đề | Công cụ | Nôm na |
+| Khái niệm | Trả lời cho câu hỏi | Quy mô thực tế |
 |---|---|---|
-| `@workspace` trả lời chung chung | **Codebase indexing** (Business/Enterprise): vector index cả repo → retrieve đúng 5–10 chunks | Thư viện có mục lục thay vì đọc bừa cả kho |
-| AI Credits hết nhanh mà không biết vì sao | **Telemetry** (audit logs + usage dashboards): ai dùng gì, model nào ngốn | Sao kê thay vì đoán mò |
+| **Context window** | Bao nhiêu token của hội thoại này được đưa vào model trong một request | Theo model; thêm gì có nấy (`#file:`, selection, kết quả tool) |
+| **Codebase indexing** | Lập chỉ mục semantic (embedding) cho cả repo để **tìm** nhanh theo nghĩa | Cả repo; dựng một lần, cập nhật liên tục — không "nằm trong" model |
+| **Code search** | Tìm text/regex trong repo (`grep`, file search theo tên) | Chạy **không cần index**, chính xác từng ký tự |
 
-> **Cách đọc bảng này:** Mỗi dòng là một cơn đau — cột giữa chỉ "thuốc" tương ứng, cột phải là hình ảnh đời thường để nhớ.
+**Vì sao quan trọng?** Mỗi thứ chữa một bệnh khác nhau: model thiếu file cần thiết → tự đưa vào qua context; tìm theo *nghĩa* bị trượt (code viết `signIn`, bạn hỏi "authentication") → cần index; tìm một chuỗi exact như `STRIPE_KEY` → grep/text search là đủ, index không cần thiết.
+**Nếu làm sai?** Tưởng "index cả repo = model thấy cả repo" → bạn hỏi mơ hồ rồi thất vọng và đổ tại Copilot dở. Ngược lại tưởng "tắt indexing là completions chết" → không, completions **không đọc cái index này** (docs: "no effect on code completions").
 
-```text
-Không index:     mở 3 files → hỏi @workspace → trả lời chung chung, thiếu db layer
-Có index:        hỏi 1 câu → retrieve auth.ts + session.ts + migration → trả lời đúng graph
-Không telemetry: "sao credits hết nhanh?" → đoán
-Có telemetry:    dashboard: agent mode × model mạnh = 70% AI Credits → biết kẻ ngốn
-# Quy tắc: repo > 50 files mà chưa bật indexing là tự handicap.
-#          AI Credits hết mà chưa nhìn dashboard là đoán mò.
-```
+> **Tóm gọn 1 câu:** Gọi đúng tên ba thứ thì chọn đúng thuốc; gọi sai là khám bệnh nhầm cả tháng.
 
-> **Tóm gọn 1 câu:** Index là mục lục cho `@workspace`, telemetry là sao kê cho AI Credits — repo lớn mà thiếu một trong hai là chạy mù.
+## 2. Indexing hoạt động thế nào: embeddings + flow
 
----
-
-## 2. `@workspace` hoạt động thế nào
-
-Mục này "mổ xẻ" `@workspace` — hiểu nó lấy thông tin ở đâu thì bạn biết khi nào tin, khi nào phải nghi ngờ.
-
-`@workspace` là chat participant đại diện cho cả repo — Copilot KHÔNG đọc toàn bộ repo. Nó lôi ra đúng vài đoạn (chunks) liên quan nhất từ index (kết hợp embeddings + keyword), rồi đưa vào context để trả lời. Giống thủ thư tìm đúng 5 cuốn sách bạn cần, thay vì đưa cả thư viện.
+**Nôm na 1 câu:** embedding là biến đoạn code thành "tọa độ nghĩa" — hai đoạn làm cùng việc đứng gần nhau trên bản đồ dù không trùng từ nào; index là bản đồ tọa độ của cả repo.
 
 ```text
-@workspace trong apps/api, flow POST /login chạy qua những files nào?
-# Kỳ vọng: trả ≤10 files, mỗi file 1 dòng lý do, kèm file:dòng.
+hoi "xu ly authentication o dau?" -> model KHONG doc ca repo:
+
+  1. luc lap chi muc (index, chay nem):
+     moi file/ham -> embedding = chuoi so hoa "y nghia" (vector)
+     toan bo vector -> thanh index; phia GitHub rebuild khi co push
+  2. luc hoi:
+     cau hoi -> embedding -> so khop vector (semantic search)
+     -> chon vai chuc doan lien quan nhat -> agent doc file that
+  3. ket qua:
+     chi doan file duoc doc moi di vao context window cua request
 ```
 
-**Index ở đâu?**
+Bốn điều cần thuộc (mọi nguồn ở mục Reference):
+- **VS Code 1.96 trở lên** mới có semantic index trong Chat; bản cũ hơn chỉ dùng được các search tool không cần index.
+- Indexing **chỉ cải thiện search/semantic retrieval** — **không ảnh hưởng code completions** (completions do model gợi ý riêng đảm nhiệm, unlimited trên mọi paid plan — bài 14).
+- Index đang build, bị policy chặn, hoặc workspace không có index → **local search fallback**: text search, grep, file search và language intelligence vẫn chạy tốt mà không cần index.
+- Index không "chiếm" context window: nó chỉ quyết định Copilot *tìm thấy đoạn nào*, còn *đoạn nào vào model* là chuyện của context.
 
-| Tiêu chí | Local (Individual) | GitHub-hosted (Business/Enterprise) |
-|---|---|---|
-| Index ở đâu | Trên máy bạn | Phía GitHub |
-| Cập nhật | Khi mở VS Code / build local | Khi push lên repo |
-| Ai dùng chung | Một mình bạn | Cả org/team |
-| Thêm docs ngoài code | Không | Có (knowledge bases — mục 5) |
+**Index nằm ở đâu?** Với repo GitHub, GitHub build và giữ index — build một lần nên thường có sẵn ngay, cả team dùng chung; repo Azure DevOps tương tự; thư mục ngoài GitHub dùng **external ingest** (upload file lên GitHub để search — org phải cho phép bằng policy). Đây là *nơi lưu index*, không phải phân biệt Local/Copilot harness — chuyện harness thuộc bài 02.
 
-> **Cách đọc bảng này:** Mỗi dòng là một tiêu chí so — cột giữa cho bản chạy trên máy bạn, cột phải cho bản GitHub-hosted của team.
+> **Tóm gọn 1 câu:** Index = bản đồ tọa độ của code; hỏi bài = giở bản đồ tìm vài file, chỉ mấy file đó bước vào "mặt bàn" của model.
 
-**Khi nào `@workspace` thắng `#file`:**
+## 3. Hỏi cả repo đúng cách: `#codebase` + đường lùi khi index chưa xong
 
-| Nhu cầu | `#file` / mở tay | `@workspace` |
-|---|---|---|
-| Hỏi 1 file cụ thể | ✓ nhanh, chính xác | Thừa (retrieve nhiễu) |
-| Flow xuyên mấy lớp | Mở tay 10 files | ✓ retrieve theo graph thật |
-| Tìm pattern lặp (error handling) | Grep tay từng chỗ | ✓ semantic search cả repo |
-| Repo JS thuần nhỏ (<20 files) | ✓ đủ | Không cần index |
-| Monorepo 500+ files | Mở tay là chết | ✓ bắt buộc index |
+Chỗ hay vấp: các hướng dẫn cũ dạy `@workspace` — đó là **chat participant đã deprecated**, chỉ còn chạy ở Local harness ([participants](commands/local/model-agent/participants/README.md)); ở Copilot harness hôm nay đường chuẩn là `#codebase` và các search tool mà agent **tự chọn** — docs ghi rõ bạn không cần gắn `#codebase` vào mọi prompt, chỉ dùng khi muốn cưỡng bức search theo nghĩa.
 
-> **Cách đọc bảng này:** Mỗi dòng là một nhu cầu — dấu ✓ cho biết cách nào hợp hơn; chỉ dòng đầu và dòng cuối là `#file` đủ dùng, giữa chừng là đất của `@workspace`.
-
-**Giới hạn:** index trễ ~5 phút sau push; files trong content exclusion không được index; binary + lockfiles bị bỏ qua. Verify: `git log --oneline -3` xem giờ push — file mới chưa kịp index thì hỏi bằng `#file`.
-
-> **Tóm gọn 1 câu:** `@workspace` retrieve theo index chứ không đọc nguyên repo — nhớ độ trễ ~5 phút sau push và dùng `#file` khi cần chính xác ngay.
-
----
-
-## 3. Bật codebase indexing (copy-paste)
+Hai mẫu ăn tiền (cú pháp `#`-mentions đầy đủ: bài 04):
 
 ```text
-# Checklist admin (github.com → Org Settings → Copilot → Policies):
-[ ] Codebase indexing: ON (chọn repos thí điểm — đừng index cả org ngày đầu)
-[ ] Content exclusion: cấu hình TRƯỚC khi bật index (không index .env, secrets/)
-[ ] Repos thí điểm: 2–3 repos core trước, đo hit rate rồi mở rộng
-[ ] Thông báo team: "push xong chờ ~5 phút index mới có code mới"
+# mau 1 — flow xuyen lop (thay grep mu):
+#codebase POST /login di qua nhung file nao (handler -> domain -> db)?
+# Tra ve toi da 10 file, moi file 1 dong ly do, kem duong dan file:dong.
 
-# Paths nên exclude khỏi index (admin cấu hình trên github.com):
-**/.env*  **/secrets/**  **/*.pem  **/*.key  vendor/  dist/  *.min.js
-# Verify exclusion (máy dev): chat "@workspace tìm chuỗi STRIPE_KEY trong .env?"
-# → kỳ vọng: "không thấy / excluded". Đọc được key thật → exclusion hỏng, sửa paths.
+# mau 2 — audit pattern (grep khong lam duoc):
+#codebase tim cho nao catch error roi chi log roi nu (swallowed errors)
+# trong apps/api; liet ke file:dong, xep theo rui ro refactor.
 ```
 
-> 📄 **Code ví dụ:** [`examples/01-3-bat-codebase-indexing-copy-paste.sh`](examples/01-3-bat-codebase-indexing-copy-paste.sh)
+**Thu hẹp scope** khi kết quả nhiễu: kèm đường dẫn ("trong apps/api, bỏ apps/web"); chia 2 bước — search định vị rồi `#file:` đọc sâu; loại `**/*.test.ts`. **Trả lời sai?** Kiểm theo thứ tự: trạng thái index (Copilot status bar → Codebase Semantic Index), file có bị exclude nhầm không, câu hỏi có đang ôm >1 flow không; bí nữa thì `/troubleshoot` ([README](commands/copilot/chat-session/troubleshoot/README.md)).
 
----
+So nhanh với đường "không index": Claude Code và Codex không dựng semantic index trước — agent của họ **dò theo yêu cầu** (grep/glob từng vòng); đổi lại mỗi vòng dò tốn thêm lượt tool, còn Copilot trả giá một lần cho cái index.
 
-## 4. Semantic search: hỏi cả repo đúng cách
+> **Tóm gọn 1 câu:** Index chỉ giúp *tìm*, không đảm bảo *đúng* — một câu một flow, scope rõ, rồi đọc kỹ file bằng `#file:`.
 
-### 4.1. Công thức hỏi (4 mẫu copy-paste)
+## 4. Bật, dựng lại, giữ cho index sạch
 
-```text
-# Mẫu 1 — flow xuyên lớp (thay grep mù):
-@workspace flow POST /login chạy qua những files nào (handler → domain → db)?
-Trả về ≤10 files + 1 dòng/file vì sao liên quan.
+**Plan → số file index được mỗi repo** (theo docs codebase indexing, mục Reference):
 
-# Mẫu 2 — find references ngữ nghĩa (thay grep 200 kết quả):
-@workspace liệt kê mọi call sites thật của refreshToken trong src/,
-bỏ test snapshot, comment và log. Chỉ code chạy thật.
-
-# Mẫu 3 — pattern audit (việc grep không làm được):
-@workspace tìm mọi chỗ catch error mà chỉ console.log rồi nuốt (swallowed errors)
-trong apps/api. Liệt kê file:dòng.
-
-# Mẫu 4 — impact analysis trước refactor:
-@workspace nếu tôi đổi signature loginWithSSO, những files nào vỡ?
-Xếp theo rủi ro (trực tiếp → gián tiếp qua re-export).
-```
-
-> Mỗi câu ≤1 flow. "Giải thích cả repo" là câu hỏi không có đáp án đúng.
-
-### 4.2. Thu hẹp scope + debug khi trả lời sai
-
-```text
-3 kỹ thuật thu hẹp:
-1. Kèm đường dẫn: "@workspace trong apps/api (bỏ apps/web) auth flow dùng session hay JWT?"
-2. 2 bước: @workspace định vị → #file đọc sâu ("#file src/lib/retry.ts giải thích backoff").
-3. Loại test: "@workspace (bỏ qua **/*.test.ts) middleware nào chạy trước mọi route /admin?"
-
-Debug checklist khi @workspace trả lời sai:
-1. Index cũ? (push < 5 phút → hỏi lại sau hoặc #file)
-2. File bị excluded? (hỏi "@workspace có thấy file X không?")
-3. Câu hỏi quá rộng? (chia nhỏ, mỗi câu ≤1 flow)
-4. Monorepo mở cả root? (đóng bớt folder, chỉ mở package liên quan)
-```
-
----
-
-## 5. Knowledge bases: ký ức team dùng chung (Enterprise)
-
-Knowledge base là tập docs ngoài code (markdown, wiki, ADRs, runbooks) được index riêng — Copilot sẽ retrieve khi bạn hỏi. Nói dễ hiểu: code trả lời "làm gì", knowledge base trả lời "vì sao làm thế".
-
-**Khi nào cần?** Team > 5 người, có ADRs/conventions, onboarding tốn 2 tuần vì "quy ước nằm trong đầu senior". Không có docs thì knowledge base rỗng ruột — viết docs trước (ít nhất `copilot-instructions.md`, bài 03).
-
-> 📄 **Code ví dụ:** [`examples/02-5-knowledge-bases-ky-uc-team-dung-chung.sh`](examples/02-5-knowledge-bases-ky-uc-team-dung-chung.sh)
-
-```text
-# Dùng trong chat:
-@workspace theo knowledge base backend-conventions, viết API mới phải tuân thủ
-những quy ước nào (error format, logging, auth)? → trích docs team, không bịa.
-# Quy tắc docs: mỗi ADR ≤1 trang; runbook incident: symptom → fix → verify.
-```
-
-> **Tóm gọn 1 câu:** Knowledge base là "trí nhớ chung" của team dạng docs — code nói "làm gì", docs nói "vì sao", và không có docs thì đừng đòi nó trả lời.
-
----
-
-## 6. LSP + Copilot synergy
-
-Mục này giải thích vì sao cần cả hai: Copilot giỏi đoán theo văn bản, còn LSP mới là người "hiểu đúng ngữ pháp" của code.
-
-Copilot completions + chat đọc text; Language Server (LSP) hiểu types/symbols. Bật cả hai = gợi ý khớp type, jump chính xác, verify retrieve trước khi sửa. Giống như có một người biết đường (Copilot) và một người cầm GPS (LSP) — đi cùng nhau thì không lạc.
-
-| Nhu cầu | Chỉ Copilot | Copilot + LSP (VS Code) |
-|---|---|---|
-| Jump to definition | Đoán theo text | ✓ chính xác (F12 qua server) |
-| Rename hàm an toàn | Sửa tay từng chỗ | ✓ F2 rename symbol cả repo |
-| Diagnostics sau sửa | Chờ chạy test | ✓ gạch đỏ live (Problems panel) |
-| Copilot hỏi "còn lỗi type?" | Không biết | ✓ đọc Problems panel |
-
-> **Cách đọc bảng này:** Mỗi dòng là một việc hằng ngày — cột giữa là nếu chỉ có Copilot, cột phải là khi bật thêm LSP; cột phải thắng ở cả 4 dòng.
-
-> 📄 **Code ví dụ:** [`examples/03-6-lsp-copilot-synergy.sh`](examples/03-6-lsp-copilot-synergy.sh)
-
-```text
-# Workflow chuẩn task typed: @workspace định vị → F12 jump (def thật) →
-# Edit (Copilot inline) → Problems panel xanh → focused test file đổi.
-# Prompt kết hợp: "@workspace find references của refreshToken, với mỗi ref cho biết
-# type signature tại đó. Chỗ nào truyền sai type?" → retrieve + verify 2 lớp chéo nhau.
-```
-
-> **Tóm gọn 1 câu:** Copilot đoán theo chữ, LSP xác nhận theo type — retrieve xong hãy F12/Problems panel kiểm chứng trước khi sửa.
-
-## 7. Audit logs + usage dashboards
-
-### 7.1. Audit logs: ai làm gì (admin)
-
-```text
-Xem: github.com → Org/Enterprise Settings → Audit log. Filters hay dùng:
-  action:copilot          → mọi sự kiện Copilot
-  action:copilot_policy   → ai đổi policy/exclusion
-  action:copilot_seat     → ai được thêm/bớt seat
-Ví dụ: "ai tắt content exclusion tuần trước?" → filter action:copilot_policy
-+ time range 7 ngày → ra actor + trước/sau của policy.
-
-gh api /orgs/<ORG>/audit-log --paginate -f per_page=100 \
-  -f phrase="action:copilot" --jq '.[] | [.actor, .action, .created_at] | @tsv' \
-  > /tmp/copilot-audit.tsv    # pivot count by actor/action/tuần
-```
-
-Giới hạn phải thuộc lòng: **giữ 180 ngày** (cần lâu hơn → stream sang SIEM); **không chứa prompt/session data của client** (muốn log prompt → tự gắn hook, vd CLI events → logging riêng).
-
-> **Tóm gọn 1 câu:** Audit log là camera an ninh của org — thấy ai đổi policy/seat nhưng chỉ giữ 180 ngày và không ghi prompt của client.
-
-### 7.2. Usage dashboards: tiền đi đâu
-
-| Metric | Câu hỏi | Ngưỡng action |
-|---|---|---|
-| AI credits / user (tên cũ legacy: premium requests) | Ai ngốn nhiều nhất? | Top 5 user > 3x median → coaching |
-| Requests by model | Model nào ngốn? | Model đắt > 50% requests → gate lại (bài 14) |
-| Agent mode % | Agent có bị lạm dụng? | Agent cho task 1 dòng → training lại modes (bài 10) |
-| Exclusion blocks | Chặn nhầm? | Tăng đột biến → paths sai (bài 15) |
-| Seats vs active | Thừa seats? | Active < 50% seats 2 tháng → thu hồi |
-
-> **Cách đọc bảng này:** Mỗi dòng là một số liệu cần theo dõi — cột giữa là câu hỏi nó trả lời, cột phải là ngưỡng vượt quá thì phải hành động.
-
-### 7.3. Vòng lặp tối ưu hàng tuần (15 phút)
-
-```text
-# Thứ 2 hàng tuần:
-# 1. Dashboard: top model + top user ngốn (5 phút)
-# 2. "Ngốn có chính đáng không?" (agent refactor lớn: ok; ask typo bằng model đắt: coaching)
-# 3. Fix 1 cái: gate model / hẹp scope / training (bài 14 + 15)
-# Quy tắc: metrics không action là sưu tầm. Mỗi tuần fix đúng 1 cái.
-```
-
-### 7.4. OpenTelemetry export + budget controls (admin)
-
-> 📄 **Code ví dụ:** [`examples/04-7-4-opentelemetry-export-budget-controls-admin.jsonc`](examples/04-7-4-opentelemetry-export-budget-controls-admin.jsonc)
-
-```text
-Budget controls — chặn AI Credits chạy vượt (checklist admin):
-[ ] Paid usage policy (cho phép chi vượt credit kèm theo) = BẬT MẶC ĐỊNH
-    → muốn cap chi phí phải TẮT đi.
-[ ] Hết credit kèm theo → "additional usage budget" áp dụng (spend cap cấu hình được).
-[ ] User hết limit → xin tăng budget; admin approve/adjust/deny trong settings
-    (GA Business/Enterprise 09/2026, không gồm enterprise managed users).
-[ ] Tiết kiệm hợp pháp: auto model selection giảm 10% cho plan trả phí
-    (Chat, CLI, Copilot app, cloud agent).
-```
-
----
-
-## 8. Pitfalls + bài tập
-
-| Pitfall | Fix |
+| Plan | File được index / repo |
 |---|---|
-| Hỏi `@workspace` ngay sau push | Chờ ~5 phút hoặc `#file` file mới trực tiếp |
-| Exclusion chặn file cần (exclude cả `src/` nhầm) | Verify bằng câu hỏi `.env`, sửa paths |
-| Mở cả monorepo root | Chỉ mở package đang làm |
-| Câu hỏi cả repo 1 lúc | Chia nhỏ theo flow, mỗi câu ≤1 flow |
-| Không docs mà đòi knowledge base | Viết `copilot-instructions.md` + ADRs trước (bài 03) |
-| Tin `@workspace` thay LSP verify | F12 + Problems panel trước khi sửa |
-| Dashboard đẹp không action | Mỗi tuần fix top 1 ngốn (mục 7.3) |
+| Free | 10.000 |
+| Pro | 50.000 |
+| Pro+ | 190.000 |
 
-> **Cách đọc bảng này:** Mỗi dòng là một thói quen xấu — cột phải là cách sửa tương ứng, ứng viên nào đang mắc dòng nào thì sửa dòng đó.
-
-**❌ SAI / ✅ ĐÚNG nhìn là nhớ:**
-
-(Đoạn sau là 3 cặp sai/đúng hay gặp — đọc nhanh là nhớ luôn.)
+- File binary (ảnh, PDF) không được index; `.gitignore` và `files.exclude` loại file khỏi **cả index lẫn text search**.
+- Dựng lại index on-demand: **Command Palette → Build Codebase Semantic Index**; thanh trạng thái Copilot hiện tiến trình và lý do bị chặn ("External ingest is disabled…").
 
 ```text
-❌ SAI: vừa push xong hỏi "@workspace hàm mới nằm đâu?" → "không thấy" → kết luận Copilot dở
-✅ ĐÚNG: chờ index ~5 phút hoặc #file; index là ảnh chụp có độ trễ
-
-❌ SAI: retrieve ra 1 file → sửa luôn theo lời Copilot
-✅ ĐÚNG: F12 jump tới định nghĩa thật + Problems panel — retrieve có thể "gần đúng",
-        chỉ LSP mới xác nhận đúng symbol/type
-
-❌ SAI: mở dashboard gật gù rồi đóng tab
-✅ ĐÚNG: mỗi tuần fix đúng 1 cái (gate model / hẹp scope / training) + đo lại sau 1 tuần
+# Checklist admin (github.com -> Settings -> Copilot -> Policies):
+[ ] Bat index 2-3 repo "core" truoc, do ket qua roi mo rong (dung index ca org ngay tuan 1)
+[ ] Content exclusion cau hinh TRUOC khi bat index: .env, secrets/, *.pem, *.key
+    -> chi day du o bai 07 + [commands/cloud/system-knowledge/content-exclusion]
+[ ] Repo ngoai GitHub: policy "Semantic indexing for non-GitHub repositories" = Enabled
+    (Business/Enterprise mac dinh chua bat la tinh nang chua dung duoc)
 ```
 
-**Bài tập nhỏ:** (1) Chạy mẫu 1 + mẫu 3 (mục 4.1) kèm scope hẹp; so số files đọc với grep tay (kỳ vọng giảm 5–10x); 1 hit sai → debug checklist. (2) F12 jump 3 hàm @workspace tìm được; F2 rename thử + `git diff --stat`; chèn lỗi type → Problems bắt trong bao lâu. (3) Mở usage dashboard: top model + top 3 user ngốn; audit log `action:copilot_policy`: ai đổi lần cuối; đề xuất 1 fix + metric verify sau 1 tuần.
+> 📄 Settings team + lệnh verify exclusion: [`examples/01-3-bat-codebase-indexing-copy-paste.sh`](examples/01-3-bat-codebase-indexing-copy-paste.sh). Organization còn index được cả **docs ngoài code** (ADRs, runbooks) qua knowledge base — code trả lời "làm gì", docs trả lời "vì sao": [`examples/02-5-knowledge-bases-ky-uc-team-dung-chung.sh`](examples/02-5-knowledge-bases-ky-uc-team-dung-chung.sh) · [knowledge-base](commands/cloud/system-knowledge/knowledge-base/README.md). Dựng index **không phát sinh thêm chi phí** — đồng tiền nằm ở lượt chat/agent, xem bài 14.
 
-> **Tóm gọn 1 câu:** Bài tập bám đúng 3 năng lực của bài: hỏi `@workspace` scope hẹp, verify bằng LSP, và đọc dashboard rồi đề xuất đúng 1 fix.
+**Nếu làm sai?** Bật index mà chưa exclusion thì có ngày `.env` nằm trong kết quả search và lộ vào chat; index cả org cùng lúc thì không đo được repo nào hưởng lợi — pilot trước, mở rộng sau.
 
----
+> **Tóm gọn 1 câu:** Exclude trước — pilot index trước — mở rộng sau; hai đồ nghề bạn sờ nhiều nhất là **Build Codebase Semantic Index** và status bar.
 
-## 9. So sánh với Claude Code + link chéo
+## 5. Telemetry: 6 tham số `github.copilot.*` + số liệu admin hay hỏi
 
-Bảng cuối giúp bạn định vị Copilot so với Claude Code — cùng giải bài toán "hiểu repo" nhưng theo hai đường khác nhau:
+Export dữ liệu dùng agent sang OpenTelemetry gồm **6 tham số** trong `settings.json` (docs monitoring-agents):
 
-| Việc | Copilot | Claude Code |
+| Tham số | Mặc định | Ý nghĩa |
 |---|---|---|
-| Hiểu cả repo | Codebase indexing + `@workspace` | Agentic search (grep/glob khi cần), không cần index trước |
-| Docs ngoài code | Enterprise knowledge bases | Không tương đương — docs trong repo (`CLAUDE.md`) |
-| Content exclusion cấp org | Cấu hình server-side, chặn trước khi index | Không có cấp org; chặn ở phía truy cập |
-| Semantic search | Index vector + keyword hybrid | Tìm agentic theo ngữ cảnh |
-| Audit / usage | Org/enterprise audit log + usage dashboard | Anthropic Console usage/analytics |
-| OpenTelemetry | `managed-settings.json` → `telemetry.endpoint` | Có hỗ trợ OTel |
+| `github.copilot.chat.otel.enabled` | `false` | Bật xuất trace/metric/events cho các phiên agent |
+| `github.copilot.chat.otel.exporterType` | `otlp-http` | Chọn `otlp-http` · `otlp-grpc` · `console` · `file` |
+| `github.copilot.chat.otel.otlpEndpoint` | `http://localhost:4318` | Địa chỉ OTel collector nhận dữ liệu |
+| `github.copilot.chat.otel.captureContent` | `false` | Bật lên = **toàn bộ prompt/response** chảy về backend của bạn |
+| `github.copilot.chat.otel.captureIdentity` | `false` | Kèm tên account + username OS + hostname (chỉ session Local harness) |
+| `github.copilot.chat.otel.maxAttributeSizeChars` | `0` | Chặn độ dài mỗi attribute nội dung; `0` = không cắt |
 
-> **Cách đọc bảng này:** Mỗi dòng là một việc — cột Copilot dựa vào cấu hình quản trị sẵn có, cột Claude Code dựa vào agentic dò theo yêu cầu; chọn theo team của bạn.
+- Telemetry **của VS Code** (thống kê dùng sản phẩm, crash) là chuyện tách biệt với việc GitHub/AI provider **xử lý dữ liệu request** của bạn — tắt cái này không đổi cái kia; còn OTel export ở bảng trên chạy cho **cả Local lẫn Copilot harness**.
+- Bản `settings.json` đầy đủ + câu truy vấn audit log cho admin: [`examples/13-5-telemetry-6-tham-so-audit.json`](examples/13-5-telemetry-6-tham-so-audit.json).
 
-> Copilot (Business/Enterprise) có cấu hình quản trị rõ ràng hơn cho index + knowledge base + exclusion; Claude Code mạnh ở việc dò file theo yêu cầu không cần dựng index. LSP và telemetry là lớp kiểm chứng/quan sát ở cả hai — không phải nguồn chân lý.
+**Câu hỏi admin → số nào trả lời:**
 
-**Link chéo:** Bài 03 (copilot-instructions.md — docs tối thiểu cho knowledge base) · Bài 04 (`@workspace`, `#file`, `#selection` đầy đủ) · Bài 07 (content exclusion cấu hình chi tiết) · Bài 08 (nối tools ngoài khi `@workspace` không đủ) · Bài 10 (approval gate trước khi agent chạy retrieve) · Bài 14 (model nào ngốn credits → gate) · Bài 15 (exclusion là tầng 1, secret scanning là tầng 2) · Bài 16 (tools retrieve thêm có đáng tin không).
+| Câu hỏi | Số liệu trả lời | Đọc ở đâu |
+|---|---|---|
+| Team có thật sự dùng không? | Active users / seats assigned (adoption) | Cloud/API: dashboard usage metrics + API |
+| Tính năng nào được dùng (chat, agent, completions)? | Engagement theo feature | Cloud/API: cùng dashboard (nhóm engagement) |
+| Model nào đang ngốn AI credits? | Token per model + credits mỗi lượt | Local: `/usage` trong session `copilot` · metric `gen_ai.*` (OTel) |
+| Ai vừa đổi policy/exclusion? | Sự kiện audit `action:copilot*` | `gh api /orgs/<ORG>/audit-log` (có trong examples/13-5) |
+| Copilot trả lời sai do index cũ? | Trạng thái index của repo | Local: status bar Copilot → Codebase Semantic Index |
 
-> **Tóm gọn 1 câu:** Copilot đi đường "index trước — hỏi sau" với quản trị rõ ràng; Claude Code đi đường "dò luôn không cần index" — còn verify thì cả hai đều cần LSP + telemetry.
+**Vì sao quan trọng?** Không có số thì "credits hết nhanh" mãi là tin đồn — và dashboard đẹp mà không dẫn tới hành động là sưu tầm. **Nếu làm sai?** Bật `captureContent` khi collector chưa kiểm soát truy cập là tự đẩy nguyên prompt (kèm code) vào hệ thống log; và đừng hỏi dashboard usage metrics "ai tắt exclusion" — đó việc của audit log. Consent quyền riêng tư (telemetry ≠ train ≠ duplication): [telemetry](commands/copilot/system-knowledge/telemetry/README.md).
 
-> **Chốt bài 13:** index cho Copilot cái mục lục của repo, telemetry cho bạn cái hóa đơn của team — và cả hai đều vô dụng nếu bạn không verify bằng LSP rồi biến số liệu thành đúng một hành động mỗi tuần.
+> **Tóm gọn 1 câu:** 6 tham số OTel cho biết *ghi gì*; dashboard cho biết *chuyện gì đang xảy ra*; audit log cho biết *ai vừa thay đổi gì* — mỗi loại câu hỏi một nguồn trả lời.
+
+## 6. LSP: lớp kiểm chứng sau retrieve
+
+Copilot tìm theo chữ và nghĩa; Language Server (LSP) mới hiểu types/symbols. Quy trình đáng tin: `#codebase` định vị file → **F12** nhảy về definition thật → sửa → **Problems panel** xanh rồi mới chạy test. Index chỉ quyết định "nên tìm ở đâu", không khẳng định "đây là symbol đúng".
+
+| Việc | Chỉ Copilot | Copilot + LSP (VS Code) |
+|---|---|---|
+| Jump to definition | Đoán theo text | ✓ chính xác qua language server |
+| Rename symbol | Sửa tay từng chỗ | ✓ F2 theo symbol, quét cả repo |
+| Bắt lỗi sau sửa | Chờ chạy test | ✓ gạch đỏ live ở Problems panel |
+
+> 📄 Bật LSP theo stack + prompt verify 2 lớp: [`examples/03-6-lsp-copilot-synergy.sh`](examples/03-6-lsp-copilot-synergy.sh)
+
+> **Tóm gọn 1 câu:** Retrieve "gần đúng nghĩa" ≠ "đúng symbol" — F12 và Problems panel là bước kiểm chứng rẻ nhất bạn từng bỏ qua.
+
+## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
+
+| ❌ SAI | Hệ quả | ✅ ĐÚNG |
+|---|---|---|
+| Vừa push xong hỏi `#codebase`, không thấy code mới → kết luận Copilot dở | Index có độ trễ cập nhật | Chờ index cập nhật hoặc rebuild tay; grep/text search không cần index vẫn chạy ngay; file cụ thể thì `#file:` |
+| "Index cả repo nghĩa là model thấy cả repo" | Hỏi mơ hồ, nhận câu trả lời mơ hồ rồi mất tin | Index chỉ dùng để *tìm*; muốn model thấy gì, chủ động thêm vào context |
+| Bật `captureContent: true` "cho đầy đủ số liệu" | Toàn bộ prompt + code đổ về collector | Mặc định off; chỉ bật khi backend có kiểm soát truy cập rõ ràng |
+| Bật index cả org chưa cấu hình content exclusion | `.env`, secrets vào search index, có ngày lộ vào chat | Exclude trước (bài 07), rồi pilot 2–3 repo |
+
+**Bài học:** đúng thứ tự là *gọi đúng tên 3 khái niệm → exclusion trước index → captureContent sau khi hỏi backend* — sai một bước là mất cả tuần debug nhầm chỗ.
+
+## Best practices (kèm "Vì sao?")
+
+- **Giữ `.gitignore` và `files.exclude` gọn theo team.** *Vì sao:* chúng loại file khỏi cả index lẫn text search — giảm nhiễu kết quả và giảm token của kết quả search khi vào context.
+- **Để agent tự chọn tool, đừng reflex gắn `#codebase` mọi prompt.** *Vì sao:* docs nói agent tự phối semantic search + grep + file search; `#codebase` dành cho lúc bạn *cưỡng bức* search theo nghĩa.
+- **Chạy `/usage` ngay trong session vừa làm việc nặng.** *Vì sao:* số liệu per-model, per-session — đo đúng chỗ đang "ngốn" thì kết luận không bị pha.
+- **Mỗi tuần biến số liệu thành đúng 1 hành động.** *Vì sao:* metric không hành động là sưu tầm; một fix + đo lại sau 1 tuần mới thành vòng lặp.
+- **Verify kết quả semantic search bằng F12/Problems trước khi sửa.** *Vì sao:* index tìm "gần đúng", chỉ language server xác nhận symbol/type đúng.
+
+## Bài tập
+
+1. **(5 phút)** Mở Command Palette → chạy **Build Codebase Semantic Index** trên một repo thật; quan sát status bar Copilot và đọc trạng thái index của repo.
+2. **(10 phút)** Chạy cả 2 mẫu prompt mục 3; so với `git grep -l refreshToken` — cách nào tìm được "chỗ gọi nhưng đổi tên khác"? Câu trả lời sai thì chạy 3 bước debug (index / exclude / scope).
+3. **(5 phút)** Gõ `copilot` để mở session CLI → chạy `/usage` ngay sau một lượt việc nặng; ghi lại model ngốn token nhiều nhất.
+4. **(10 phút)** (admin/tech lead) Chạy lệnh `gh api /orgs/<ORG>/audit-log` với filter `action:copilot_policy` (trong examples/13-5); mở dashboard usage metrics, trả lời 1 câu bất kỳ ở bảng mục 5, và đề xuất đúng **1** fix kèm metric đo lại sau 1 tuần.
+
+## Link qua
+
+- Context mỗi request gồm gì, `#`-mentions, `#file:` → bài 04. · Content exclusion chi tiết → bài 07.
+- Harness Local/Copilot/Claude/Codex chạy ở đâu → bài 02. · Copilot CLI và `/usage` → bài 12.
+- AI credits, model nào đắt → bài 14. · Tool retrieve có đáng tin không → bài 16.
+- Session bí tắc → [troubleshoot](commands/copilot/chat-session/troubleshoot/README.md). · `@workspace` ngày xưa giờ là participant deprecated → [participants](commands/local/model-agent/participants/README.md). · Docs team ngoài code → [knowledge-base](commands/cloud/system-knowledge/knowledge-base/README.md).
+
+## Reference
+
+- VS Code — [Codebase indexing](https://code.visualstudio.com/docs/agents/reference/workspace-context) · [Codebase context](https://code.visualstudio.com/docs/chat/copilot-chat-context) · [Use GitHub repository search](https://code.visualstudio.com/docs/agents/guides/explore-a-codebase) · [Copilot telemetry](https://code.visualstudio.com/docs/agents/guides/monitoring-agents) · bản đang chạy thật: [How Copilot understands your workspace](https://code.visualstudio.com/docs/agents/reference/workspace-context) · [Monitor agent usage with OpenTelemetry](https://code.visualstudio.com/docs/agents/guides/monitoring-agents)
+- GitHub — [Private & hybrid indices](https://docs.github.com/en/copilot/concepts/prompting-and-context/repository-indexing) · [Repository indexing](https://docs.github.com/en/copilot/concepts/prompting-and-context/repository-indexing) · [Copilot usage metrics](https://docs.github.com/en/copilot/concepts/billing-and-usage/copilot-usage-metrics) · [Copilot CLI command reference (`/usage`)](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference)
+
+**Chốt:** indexing là nơi agent *tìm*, context window là những gì model *thấy*, telemetry là con số bạn *đo được* — gọi đúng ba cái tên ấy thì "repo to quá" và "tiền đi đâu" hết là chuyện bí ẩn, và mỗi tuần bạn lại đổi được một số liệu thành đúng một hành động.

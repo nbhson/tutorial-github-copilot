@@ -8,7 +8,7 @@
 |---|---|---|
 | **Copilot Spaces** | ✅ **GA** (24/09/2025) + Spaces API GA (18/05/2026) | github.com → Copilot → Spaces |
 | **Copilot Spark** | ⚰️ **Đã gỡ** (đóng cửa 31/08/2026) | Không còn — app đã deploy vẫn chạy |
-| **Copilot Workspace** | ⚰️ **Sunset 2025** — hấp thụ vào coding agent | Không còn — dùng coding agent |
+| **Copilot Workspace** | ⚰️ **Sunset 2025** — hấp thụ vào cloud agent | Không còn — dùng cloud agent |
 
 > **Cách đọc bảng này:** bảng này là "bản tin an ninh" — cột **Trạng thái** cho biết tính năng đang sống hay đã chết; dòng có ✅ còn xài được, dòng có ⚰️ là di tích lịch sử.
 
@@ -51,9 +51,9 @@ App **đã deploy** vẫn tiếp tục chạy — chỉ việc chỉnh sửa tro
 
 ## 3. Copilot Workspace đâu rồi?
 
-**Trả lời 1 câu:** Workspace (preview "issue → PR" của 2024) đã **sunset 2025** và kiến trúc bị **hấp thụ vào Copilot coding agent** — hôm nay làm workflow đó bằng cách assign issue cho Copilot, không còn sản phẩm riêng.
+**Trả lời 1 câu:** Workspace (preview "issue → PR" của 2024) đã **sunset 2025** và kiến trúc bị **hấp thụ vào Copilot cloud agent** — hôm nay làm workflow đó bằng cách assign issue cho Copilot, không còn sản phẩm riêng.
 
-| Workspace cũ (đã chết) | Coding agent hôm nay |
+| Workspace cũ (đã chết) | Cloud agent hôm nay |
 |---|---|
 | Màn hình riêng, preview | GA cho mọi subscriber trả phí |
 | Issue → spec → plan → PR trong một UI | Assign issue → chạy trên GitHub Actions → draft PR |
@@ -61,7 +61,7 @@ App **đã deploy** vẫn tiếp tục chạy — chỉ việc chỉnh sửa tro
 
 > 📄 **Code ví dụ:** [`examples/01-3-copilot-workspace-au-roi.sh`](examples/01-3-copilot-workspace-au-roi.sh)
 
-> **Không thấy nút assign Copilot:** repo private của org Free plan (coding agent cần plan trả phí); hoặc org policy tắt coding agent — hỏi admin bật.
+> **Không thấy nút assign Copilot:** repo private của org Free plan (cloud agent cần plan trả phí); hoặc org policy tắt cloud agent — hỏi admin bật.
 
 ## 4. Truy cập Spaces ở đâu, ai dùng được?
 
@@ -73,11 +73,11 @@ Phân quyền: Space cá nhân = private / share user / public link (view-only);
 
 ## 5. Muốn "vibe coding" tạo app như Spark, giờ dùng gì?
 
-**Trả lời 1 câu:** Dùng **Copilot coding agent** (assign issue → nhận PR) hoặc **Copilot CLI** (agent trực tiếp trong terminal) trên một repo mới — cùng trải nghiệm "mô tả → có code", nhưng code nằm trong repo của bạn, không bị khóa trong nền tảng.
+**Trả lời 1 câu:** Dùng **Copilot cloud agent** (assign issue → nhận PR) hoặc **Copilot CLI** (agent trực tiếp trong terminal) trên một repo mới — cùng trải nghiệm "mô tả → có code", nhưng code nằm trong repo của bạn, không bị khóa trong nền tảng.
 
 | Nhu cầu | Đường đi hôm nay |
 |---|---|
-| Prototype UI nhỏ | Coding agent tạo repo + PR, xem trước qua preview deployment |
+| Prototype UI nhỏ | Cloud agent tạo repo + PR, xem trước qua preview deployment |
 | App full-stack | Repo trống + issue mô tả spec → agent dựng khung + code |
 | Học/AI trong app | Tự nối provider AI trực tiếp (`llm()` của Spark đã chết cùng GitHub Models) |
 | Không muốn rời terminal | Copilot CLI: `copilot` rồi mô tả việc, duyệt từng bước |
@@ -88,7 +88,7 @@ Phân quyền: Space cá nhân = private / share user / public link (view-only);
 
 ## 6. Muốn workflow "issue → PR" như Workspace cũ?
 
-**Trả lời 1 câu:** Gán issue cho **Copilot coding agent** — đọc issue, lập kế hoạch, sửa code, tự mở draft PR; bạn review và comment để nó sửa tiếp (dùng Copilot CLI khi cần chạy local).
+**Trả lời 1 câu:** Gán issue cho **Copilot cloud agent** — đọc issue, lập kế hoạch, sửa code, tự mở draft PR; bạn review và comment để nó sửa tiếp (dùng Copilot CLI khi cần chạy local).
 
 | Bạn từng làm ở Workspace | Bây giờ làm ở đâu |
 |---|---|
@@ -113,8 +113,8 @@ Phân quyền: Space cá nhân = private / share user / public link (view-only);
 | Copilot trả lời như không đọc context | Nguồn chưa đồng bộ / quá rộng | Chờ đồng bộ; thu hẹp nguồn; thêm instructions |
 | Spaces API 401/403/404 | Token scope / schema preview cũ | Cấp lại PAT đúng quyền; xem docs API GA |
 | App Spark hỏng tính năng AI | `llm()` chết (GitHub Models retired 30/07/2026) | Thay bằng gọi provider AI riêng |
-| Không edit được app Spark | Spark đóng 31/08/2026 | Dựng lại từ repo (nếu đã export) bằng coding agent |
-| Không tìm thấy Copilot Workspace | Sunset 2025 → coding agent | Assign issue cho Copilot / dùng Copilot CLI |
+| Không edit được app Spark | Spark đóng 31/08/2026 | Dựng lại từ repo (nếu đã export) bằng cloud agent |
+| Không tìm thấy Copilot Workspace | Sunset 2025 → cloud agent | Assign issue cho Copilot / dùng Copilot CLI |
 
 > **Cách đọc bảng này:** đây là ma trận chẩn đoán cả 3 tính năng — dọc cột **Triệu chứng** tìm đúng hiện tượng, cột **Nguyên nhân khả dĩ** thường đã kèm mốc thời gian, cột **Xử lý** là hướng đi thay thế.
 
@@ -122,4 +122,4 @@ Phân quyền: Space cá nhân = private / share user / public link (view-only);
 
 ---
 
-> **Chốt:** nhớ 1 dòng — "Spaces cho Copilot biết **đọc gì**, coding agent **làm** việc thay bạn, Spark/Workspace là **di tích** lịch sử." Trạng thái các tính năng này có thể đổi tiếp sau 10/2026 — nguồn verify: github.blog changelog (24/09/2025, 18/05/2026, 04/08/2026) + docs.github.com/copilot. Quay về: [../README.md](../README.md) · Lỗi chung: [bài 08](08-loi-thuong-gap-troubleshooting.md).
+> **Chốt:** nhớ 1 dòng — "Spaces cho Copilot biết **đọc gì**, cloud agent **làm** việc thay bạn, Spark/Workspace là **di tích** lịch sử." Trạng thái các tính năng này có thể đổi tiếp sau 10/2026 — nguồn verify: github.blog changelog (24/09/2025, 18/05/2026, 04/08/2026) + docs.github.com/copilot. Quay về: [../README.md](../README.md) · Lỗi chung: [bài 08](08-loi-thuong-gap-troubleshooting.md).

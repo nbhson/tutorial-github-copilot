@@ -14,7 +14,7 @@ Coi nhóm này như một tủ thuốc, không phải cuốn sách để đọc 
 | 04 | MCP FAQ | [04-mcp-faq.md](./04-mcp-faq.md) |
 | 05 | Policies & guardrails FAQ | [05-policies-guardrails-faq.md](./05-policies-guardrails-faq.md) |
 | 06 | Prompts, agents, instructions | [06-prompts-agents-instructions.md](./06-prompts-agents-instructions.md) |
-| 07 | Custom agents, coding agent workflows | [07-custom-agents-coding-agent-workflows.md](./07-custom-agents-coding-agent-workflows.md) |
+| 07 | Custom agents, cloud agent workflows | [07-custom-agents-coding-agent-workflows.md](./07-custom-agents-coding-agent-workflows.md) |
 | 08 | Lỗi thường gặp & troubleshooting | [08-loi-thuong-gap-troubleshooting.md](./08-loi-thuong-gap-troubleshooting.md) |
 | 09 | Bảo mật, quyền, riêng tư | [09-bao-mat-quyen-rieng-tu.md](./09-bao-mat-quyen-rieng-tu.md) |
 | 10 | CI, SDK, review, Web | [10-ci-sdk-review-web.md](./10-ci-sdk-review-web.md) |
@@ -34,10 +34,10 @@ Không cần đọc từ đầu: bắt đúng triệu chứng bạn đang gặp,
 - MCP tools không hiện, auth fail, secrets → **bài 04**
 - Instruction không ăn, muốn pre-commit / branch protection → **bài 05**
 - Prompt/agent/instructions không load, applyTo sai, frontmatter lỗi → **bài 06**
-- Custom agent chạy loạn, coding agent conflict / PR fail → **bài 07**
+- Custom agent chạy loạn, cloud agent conflict / PR fail → **bài 07**
 - Copilot offline, mất gợi ý, chat error, CLI fail → **bài 08** trước
 - Sợ lộ code, training, secret scanning, audit logs, ZDR → **bài 09**
-- Actions + coding agent, SDK, auto review, bản Web/Mobile → **bài 10**
+- Actions + cloud agent, SDK, auto review, bản Web/Mobile → **bài 10**
 - Spaces / Spark / Workspace là gì, còn sống không, truy cập ở đâu → **bài 11**
 
 ## So sánh với Claude Code
@@ -45,10 +45,10 @@ Không cần đọc từ đầu: bắt đúng triệu chứng bạn đang gặp,
 | Việc | GitHub Copilot | Claude Code | Ghi chú |
 |---|---|---|---|
 | Tra cứu theo triệu chứng | 11 bài FAQ + bảng "lỗi nào đọc câu nào" | Docs Anthropic theo chủ đề + `/help` trong phiên | Cùng cách tra: tìm đúng chỗ, đừng đọc tuần tự |
-| Hỏi ngay trong công cụ | Copilot Chat, `/help`, `/status` | `/help`, hỏi trực tiếp trong phiên terminal | Cả hai đều có trợ giúp tại chỗ |
+| Hỏi ngay trong công cụ | Copilot Chat (`/help`, `/status` ở CLI) | `/help`, hỏi trực tiếp trong phiên terminal | Cả hai đều có trợ giúp tại chỗ |
 | Luật repo | `.github/copilot-instructions.md` + `AGENTS.md` | `CLAUDE.md` | Cùng tư tưởng: file trong repo là "luật" |
-| Cấu hình MCP | `.vscode/mcp.json` (CLI 2026: `~/.mcp-config.json` + `.mcp.json`) | `.mcp.json` + cấu hình user | Cùng chuẩn giao thức, khác đường dẫn |
-| Tài khoản & quota | Gói cá nhân/team + AI Credits (1 credit = $0.01) | Theo gói Claude/subscription hoặc API key | Đơn vị đo khác nhau — đọc bài 01/02 để tính |
+| Cấu hình MCP | Copilot harness: [`.mcp.json`](../templates/.mcp.json) ở root + `~/.copilot/mcp-config.json` (key `mcpServers`) · Local harness (VS Code): [`.vscode/mcp.json`](../templates/.vscode/mcp.json) (key `servers`) | `.mcp.json` + cấu hình user | Cùng chuẩn giao thức, khác đường dẫn |
+| Tài khoản & quota | Gói cá nhân/team + AI Credits (1 credit = $0,01) | Theo gói Claude/subscription hoặc API key | Đơn vị đo khác nhau — đọc bài 01/02 để tính |
 | Debug lỗi | Bảng lỗi + thứ tự debug 7 bước (bài 08) | Log phiên terminal + docs troubleshooting Anthropic | Thứ tự "auth → mạng → version → phiên mới" gần giống nhau |
 
 > **Tóm gọn 1 câu:** Nhóm FAQ là tủ thuốc gia đình: triệu chứng gì tra đúng ngăn đó, uống đúng liều ("Trả lời 1 câu" trước, steps sau) — tự khỏi thì khỏi mất công đi khám.

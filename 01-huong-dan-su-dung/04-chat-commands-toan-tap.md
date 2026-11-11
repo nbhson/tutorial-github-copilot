@@ -1,310 +1,188 @@
-# 04 — Chat Commands Toàn Tập (Slash, Participants, Variables)
+# 04 — Chat Commands Toàn Tập (Bảng Tra Cứu Slash Của Cả Series)
 
-> **Dành cho:** người mới lẫn dev đã dùng Copilot — dùng làm index tra cứu chat commands Copilot 2026.
-> **Vấn đề:** gõ prompt tự nhiên dài dòng, tốn turns làm rõ, không biết lệnh nào đang có sẵn.
-> **Đọc xong:** biết chọn đúng nhóm lệnh, chạy được công thức 5 lệnh session đầu, và tự debug khi lệnh "bị mất".
-> **Cách dùng:** tìm nhóm → đọc mô tả 1 dòng → click link sang folder chi tiết. Mỗi lệnh có 1 folder riêng trong `commands/` (vd `commands/chat-session/new-chat/`) chứa README chi tiết. **Thời gian:** ~20 phút đọc + tra cứu dần.
+> **Dành cho:** người mới lẫn dev đã dùng Copilot — bài này là index slash commands dùng chung cho cả series.
+> **Vấn đề:** gõ prompt tự nhiên dài dòng, tốn turns để làm rõ, và không biết lệnh nào *tồn tại trên surface nào*.
+> **Đọc xong:** tra đúng nhóm lệnh + cột availability theo docs, chạy được công thức 5 lệnh mở repo, tự giải thích khi một lệnh "biến mất".
+> **Cách dùng:** tìm nhóm → đọc 1 dòng mô tả → click link sang `commands/<bucket>/<nhóm>/<lệnh>/README.md` (vd `commands/copilot/chat-session/clear/`). **Thời gian:** ~20 phút đọc + tra cứu dần.
 
 ## Mục tiêu bài học
 
-Mục này cho bạn biết đọc xong bài bạn có được gì, để đo xem có đạt hay không.
+Bài này để **tra**, không phải để thuộc — đọc xong bạn cần làm được bốn việc.
 
-- Tra đúng nhóm ký hiệu: `/` (chạy workflow), `@` (chọn nguồn tri thức), `#` (gắn file/vùng chọn).
-- Chạy được **công thức 5 lệnh session đầu** trên 1 repo thật.
-- Tự debug khi một lệnh "biến mất" — phân biệt plan/model gating với extension cũ.
+- Phân đúng ký hiệu: `/` chạy lệnh, `#` gắn file/vùng chọn, `Chat: …` là lệnh palette — và vì sao `@` participants đã deprecated.
+- Tra được **4 bảng nhóm + bảng slash chính thức hay bị bỏ sót (mục 6)**, availability chép nguyên văn docs VS Code.
+- Chạy được **công thức 5 lệnh session đầu** và walkthrough Ask → Plan → Agent trên repo thật.
+- Tự debug khi một lệnh vắng mặt: đúng availability, bị plan/org khoá, hay lệnh chưa từng tồn tại.
+
+> **Tóm gọn 1 câu:** đây là từ điển slash — tìm nhóm, đọc cột availability, rồi hãy gõ; đừng nhớ lệnh bằng trí giác.
 
 ---
 
 ## 1. Cách đọc index này
 
-Mục này giải thích bài được tổ chức thế nào, để bạn tra cứu nhanh thay vì đọc lướt hết.
+**Là gì (1 câu):** commands là đường tắt đã kiểm chứng — `/` gọi lệnh như đọc số món, `#` đưa đúng hóa đơn cho người phục vụ xem, còn `Chat: …` là những việc docs không cho một slash tương ứng.
 
-- **Là gì (1 câu):** chat commands là 3 ký hiệu — `/` (lệnh), `@` (gọi đúng người), `#` (đưa đúng tài liệu) — giúp gắn scope ngay từ turn 1.
-- **Nôm na:** `/` như gọi món theo số (nhanh, chuẩn), `@` như gọi đúng nhân viên (thu ngân / bếp), `#` như đưa đúng hóa đơn cho họ xem.
-- **Ví dụ:** gõ `/fix #selection thêm null check` nhanh và rẻ hơn gõ "bạn ơi sửa giúp mình đoạn code này với..." 3 turns làm rõ.
+> **⚠️ Đọc trước khi tra nhóm lệnh "tùy biến" (nguyên văn docs VS Code):** ở **Copilot harness**, `/agents` `/instructions` `/skills` **KHÔNG có trong Chat view** — quản lý bằng **Agent Customizations editor** (lệnh `Chat: Open Customizations`); chỉ `/prompts` và `/hooks` là có ở Copilot. `/skills` và `/create-skill` chỉ là shortcut của **Local harness**.
+> `@` participants (`@workspace`, `@terminal`) đã **deprecated, không được Copilot harness hỗ trợ** — thay bằng `#`-mentions, nút **Add Context**, hoặc để agent tự gather ngữ cảnh repo → [participants](commands/local/model-agent/participants/README.md).
 
-```text
-Công thức gắn scope đủ 3 ký hiệu (dán thẳng vào Chat):
-"@workspace tìm mọi nơi gọi POST /orders. #file:src/routes/orders.ts fix crash khi
-thiếu customerId, thêm regression test, chạy npm test xác nhận."
-# Kỳ vọng: turn 1 agent đã đọc đúng file, không hỏi lại "file nào?".
-```
-
-> **Kỳ vọng / Verify:** gõ `/` trong Chat input phải thấy list lệnh; gõ `@` thấy participants; gõ `#` thấy variables. Không thấy = extension cũ hoặc plan gating (mục 5).
-
-> **Tóm gọn 1 câu:** index này là bảng tra cứu 3 ký hiệu `/` `@` `#` — nhớ "gọi món, gọi người, đưa giấy" là dùng đúng ngay lần đầu.
-
-**Vì sao học commands?** Mục này trả lời câu hỏi "học cho uổng không". Prompt tự nhiên linh hoạt nhưng tốn tokens + thiếu determinism (nghĩa là cùng một yêu cầu, mỗi lần model hiểu một kiểu). Commands là "đường tắt có kiểm chứng": gắn đúng scope, đúng model, đúng tools ngay từ turn 1 — rẻ hơn 3–5 turns làm rõ. Prompt code nên có `#file`/`#selection` hoặc `@workspace` ngay turn 1.
-
----
-
-## 2. Nhóm 1 — Chat session (12)
-
-Mục này liệt kê các lệnh quản lý vòng đời một phiên chat — mở, xóa, lưu, quay lui. Quản lý phiên chat giống quản lý giấy tờ trên bàn: biết mở tờ mới, cất tờ cũ, tìm lại tờ đã cất.
-
-Quản lý vòng đời 1 phiên chat: mở mới, xóa, lưu, quay checkpoint. Ví dụ `/new` → chat trắng, history cũ biến mất, instructions vẫn load.
-
-| Lệnh | Là gì (nôm na) | Chi tiết |
-|---|---|---|
-| `/new` | Mở chat mới, xóa history (thói quen #1 mỗi task) | [new-chat](./commands/chat-session/new-chat/README.md) |
-| `/clear` | Xóa context trong chat hiện tại, giữ instructions | [clear](./commands/chat-session/clear/README.md) |
-| `/history` | Xem lại lịch sử chats, quay lại chat cũ | [history](./commands/chat-session/history/README.md) |
-| `/export` | Export conversation ra file để lưu/share | [export](./commands/chat-session/export/README.md) |
-| `/resume` | Mở lại phiên chat đã lưu | [resume](./commands/chat-session/resume/README.md) |
-| `Ctrl+I` inline | Chat inline ngay trong editor, sửa tại chỗ | [inline-chat](./commands/chat-session/inline-chat/README.md) |
-| `Quick Chat` | Hỏi nhanh không rời editor | [quick-chat](./commands/chat-session/quick-chat/README.md) |
-| `Checkpoint` | Quay về checkpoint trước khi agent sửa sai | [checkpoints](./commands/chat-session/checkpoints/README.md) |
-| `Attach` | Đính kèm file/folder/ảnh vào prompt | [attachments](./commands/chat-session/attachments/README.md) |
-| `/help` | Xem help + nhóm lệnh khả dụng | [help](./commands/chat-session/help/README.md) |
-| `Shortcuts` | Liệt kê phím tắt Chat trong IDE này | [shortcuts](./commands/chat-session/shortcuts/README.md) |
-| `/summarize` | Tóm tắt hội thoại dài thành bản gọn giữ đà task | [summarize](./commands/chat-session/summarize/README.md) |
-
-> **Cách đọc bảng này:** cột 1 là lệnh để gõ, cột 2 giải thích lệnh đó làm gì bằng lời đời thường, cột 3 là link sang trang chi tiết nếu cần đọc sâu.
-
-> **Tóm gọn 1 câu:** nhóm lệnh session giúp bạn mở/xóa/lưu/quay-lui phiên chat — việc dọn dẹp cơ bản của một cuộc trò chuyện với Copilot.
-
-## 3. Nhóm 2 — Model & Agent (10)
-
-Mục này về việc chọn "động cơ" và "chế độ lái" — tương tự chọn xe và chọn ai cầm lái.
-
-Đổi "động cơ" (model), "chế độ lái" (Ask/Edit/Agent) và "nơi chạy" (Session Target: Local/Copilot/Cloud). Model là bộ não trả lời — mạnh thì nhanh thông minh nhưng đắt; mode là mức quyền bạn giao — chỉ hỏi, được sửa, hay tự lo toàn bộ.
-
-| Lệnh | Là gì (nôm na) | Chi tiết |
-|---|---|---|
-| `/model` | Đổi model giữa chat (mạnh/rẻ tùy task) | [model-picker](./commands/model-agent/model-picker/README.md) |
-| `Ask mode` | Về Ask read-only: chỉ hỏi, không sửa | [ask-mode](./commands/model-agent/ask-mode/README.md) |
-| `Edit mode` | Vào Edit với files bạn chọn | [edit-mode](./commands/model-agent/edit-mode/README.md) |
-| `Agent mode` | Tự tìm file, sửa, chạy terminal | [agent-mode](./commands/model-agent/agent-mode/README.md) |
-| `Custom agent` | Gọi custom agent trong `.github/agents/` | [custom-agent](./commands/model-agent/custom-agent/README.md) |
-| `/usage` | Xem **AI Credits** đã dùng (link dashboard) | [premium-requests](./commands/model-agent/premium-requests/README.md) |
-| `Coding agent` | Giao issue cho Copilot coding agent xử lý async | [coding-agent-assign](./commands/model-agent/coding-agent-assign/README.md) |
-| `Coding agent PR` | Tóm tắt diff thành PR, review flow issue→PR | [coding-agent-pr](./commands/model-agent/coding-agent-pr/README.md) |
-| `Policy approval` | Xem/duyệt policy, approve lệnh nhạy cảm | [policy-approval](./commands/model-agent/policy-approval/README.md) |
-| `Session Target` | Chọn harness + nơi agent chạy: Local/Copilot/Cloud | [session-target](./commands/model-agent/session-target/README.md) |
-
-> **Cách đọc bảng này:** cột 1 là lệnh để gõ/click, cột 2 nói nôm na lệnh đó làm gì, cột 3 dẫn tới trang chi tiết. Đọc cột 2 trước để chọn đúng lệnh.
-
-> **Tóm gọn 1 câu:** nhóm này cho bạn đổi model (bộ não), đổi mode (mức quyền) và chọn nơi chạy — ba cái cần chốt trước khi giao việc lớn.
-
-## 4. Nhóm 3 — Code actions (10)
-
-Mục này là bộ lệnh làm việc nhanh trên một đoạn code đang chọn — như dao rọc giấy cho từng vết cắt nhỏ.
-
-Các việc code ngắn gọn trên đoạn đang chọn: giải thích, sửa, sinh test, viết docs. Bôi đen code rồi gọi lệnh là xong, khỏi mô tả dài dòng.
-
-| Lệnh | Là gì (nôm na) | Chi tiết |
-|---|---|---|
-| `/explain` | Giải thích code đang chọn | [explain](./commands/code-actions/explain/README.md) |
-| `/fix` | Fix lỗi/selection đang chọn | [fix](./commands/code-actions/fix/README.md) |
-| `/tests` | Sinh unit tests theo mẫu repo | [tests](./commands/code-actions/tests/README.md) |
-| `/doc` | Sinh docstring/JSDoc cho hàm | [doc](./commands/code-actions/doc/README.md) |
-| `/new` | Sinh code mới từ mô tả | [new](./commands/code-actions/new/README.md) |
-| `/optimize` | Đề xuất tối ưu perf | [optimize](./commands/code-actions/optimize/README.md) |
-| `/commit` | Gợi ý commit message từ staged diff | [commit-message](./commands/code-actions/commit-message/README.md) |
-| `/pr` | Tóm tắt diff thành PR title + body | [pr-desc](./commands/code-actions/pr-desc/README.md) |
-| `/refactor` | Refactor giữ nguyên behavior | [refactor](./commands/code-actions/refactor/README.md) |
-| `@terminal` | Biến lỗi terminal thành task fix cho agent | [debug-terminal](./commands/code-actions/debug-terminal/README.md) |
-
-> **Cách đọc bảng này:** mỗi dòng là một lệnh một việc — cột 1 để gõ, cột 2 là việc nó làm trên code đang chọn. Chọn đúng lệnh theo việc, đừng dùng `/agent` cho việc 1 dòng.
-
-> **Tóm gọn 1 câu:** nhóm code actions là các lệnh nhỏ một việc trên code đang chọn — giải thích, fix, sinh test, viết docs, gợi ý commit.
-
-## 5. Nhóm 4 — System & Knowledge (15)
-
-Mục này về các lệnh xem/sửa "hậu trường" — thứ bạn ít dùng mỗi ngày nhưng cần khi Debug.
-
-Lệnh xem/sửa "hậu trường": instructions đang load gì, MCP nào bật, account nào login. MCP nôm na là "ổ cắm" cho phép Copilot nối thêm công cụ bên ngoài — như cắm sạc vào ổ điện. Đi từ trên xuống: cấu hình tài khoản, cấu hình lệnh, đến nơi chặn truy cập.
-
-| Lệnh | Là gì (nôm na) | Chi tiết |
-|---|---|---|
-| `/instructions` | Xem/sửa instructions đang load cho repo này | [instructions](./commands/system-knowledge/instructions/README.md) |
-| `/prompts` | Liệt kê prompt files `.github/prompts/` (**legacy** — deprecated cho Agent Host; ưu tiên `/skills`, bài 05) | [prompt-file](./commands/system-knowledge/prompt-file/README.md) |
-| `/skills` | Liệt kê Agent Skills `.github/skills/` khả dụng | [agent-skill](./commands/system-knowledge/agent-skill/README.md) |
-| `/mcp` | Xem MCP servers/tools đang bật, reconnect khi rớt | [mcp](./commands/system-knowledge/mcp/README.md) |
-| `MCP add` | Thêm MCP server mới vào cấu hình | [mcp-add](./commands/system-knowledge/mcp-add/README.md) |
-| `/extensions` | Quản lý Copilot Extensions đã cài | [extensions](./commands/system-knowledge/extensions/README.md) |
-| `Content exclusion` | Xem files Copilot không được đọc | [content-exclusion](./commands/system-knowledge/content-exclusion/README.md) |
-| `Telemetry` | Xem/sửa code-telemetry consent | [telemetry](./commands/system-knowledge/telemetry/README.md) |
-| `/status` | Xem trạng thái Copilot: active, account, model | [status](./commands/system-knowledge/status/README.md) |
-| `/login` / `/logout` | Đăng nhập / đăng xuất GitHub account | [login](./commands/system-knowledge/login/README.md) |
-| `/feedback` | Gửi feedback/bug về câu trả lời cho GitHub | [bug-feedback](./commands/system-knowledge/bug-feedback/README.md) |
-| `Knowledge base` | Hỏi tri thức team (docs nội bộ, wiki, RAG) | [knowledge-base](./commands/system-knowledge/knowledge-base/README.md) |
-| `gh suggest` / `gh explain` | Gợi ý / giải thích lệnh shell (`gh copilot suggest/explain`) | [cli-suggest](./commands/system-knowledge/cli-suggest/README.md) |
-
-> **Cách đọc bảng này:** cột 1 là lệnh, cột 2 là việc nó làm. Nhóm này để kiểm tra "sao Copilot không như mình nghĩ" — xem account, cấu hình, hay chặn truy cập.
-
-> **Tóm gọn 1 câu:** nhóm System & Knowledge là tủ điện của Copilot — xem cấu hình đang nạp gì, cắm thêm công cụ gì, và chặn gì không cho đọc.
-
----
-
-## 6. Công thức 5 lệnh session đầu (làm 1 lần/repo)
-
-Mục này là "nghi thức khai trương" cho mỗi repo mới — làm một lần để mọi buổi làm việc sau suôn sẻ. Giống kiểm tra máy trước khi lái xe đường dài.
+Docs ghi nguyên văn: *"Type `/` to see commands available in the current session. Availability depends on the chat surface, harness, role, and enabled features."* — mọi cột **Availability** bên dưới theo câu đó. **Vì sao phải học?** Prompt tự nhiên linh hoạt nhưng tốn token và thiếu determinism (cùng một yêu cầu, mỗi lần model hiểu một kiểu); lệnh gắn đúng scope ngay turn 1, rẻ hơn 3–5 turns hỏi lại — mẫu dán thẳng vào Chat:
 
 ```text
- /status → /instructions → /mcp → /customAgent → /policy
+#file:src/routes/orders.ts #selection fix crash khi thieu customerId,
+them regression test, chay npm test xac nhan.
 ```
 
-- `/status` — Copilot active? đúng account? đúng model? Sai account = sai quota/policy cả buổi. Như bật nhầm SIM roam thì cả cuộc gọi đều tốn tiền nhầm.
-- `/instructions` — xem instructions đang load, bật `useInstructionFiles` nếu chưa, cắt file <200 dòng (bài 03).
-- `/mcp` — thêm GitHub (+ DB nếu có), test "liệt kê 5 PRs mở gần nhất".
-- `/customAgent` — tạo 2 agents: `explorer` (read-only) và `reviewer` (chỉ comment), bài 06.
-- `/policy` — xem org policy + `content-exclusion` (files Copilot không được đọc), test 1 task nhỏ end-to-end.
+Phím chính thức (bảng đầy đủ ở [shortcuts](commands/copilot/chat-session/shortcuts/README.md)): mở Chat view `Ctrl+Alt+I` (macOS `⌃⌘I`) · chat mới `Ctrl+N` (`⌘N`) · inline chat trong editor **và** terminal `Ctrl+I` (`⌘I`) · **Quick Chat `Ctrl+Shift+Alt+L`** (`⇧⌥⌘L`).
 
-> **Tóm gọn 1 câu:** mở repo mới thì chạy đủ 5 lệnh `/status → /instructions → /mcp → /customAgent → /policy` một lần để mọi buổi sau khỏi bắt lỗi từ đầu.
+> **Tóm gọn 1 câu:** gõ `/` để xem, `#` để gắn — và đọc availability trước khi đổ lỗi cho công cụ.
 
----
+## 2. Nhóm 1 — Chat session (7)
 
-## 7. Lưu ý plan/model gating (AI Credits)
+Vòng đời một phiên chat: mở, tìm lại, lưu, quay lui — như giấy tờ trên bàn làm việc.
 
-Mục này giúp bạn tự xử lý khi lệnh hay model "biến mất" — thay vì kết luận vội Copilot hỏng. Gating nghĩa là một số lệnh bị "khoá theo gói" — giống gói cước điện thoại: tính năng này gói cao mới có.
-
-Lệnh hoặc model không hiện trong list thì kiểm tra dưới đây trước khi kết luận "Copilot hỏng":
-
-- Billing hiện tại là **AI Credits** (usage-based từ 01/06/2026, 1 credit = $0.01, trừ theo model × số token). Thuật ngữ cũ "premium requests" là **legacy** — tài liệu nào còn dạy theo premium requests là tài liệu cũ. Code completions không trừ credits.
-- Không thấy lệnh nào → check `/status` + plan trước khi kết luận lệnh không tồn tại.
-- Model mạnh (GPT-5.2-Codex, Claude) tốn nhiều credits hơn model rẻ. Hết credits → `/model` đổi sang model rẻ thay vì dừng việc.
-- BYOK (Enterprise): org dùng key/model riêng → list model trong `/model` khác Individual.
-- Model availability theo plan: Individual < Business < Enterprise (mở dần). Coding agent + một số participants (`@github` full) có thể vắng mặt ở plan thấp.
-
-```text
-# Flow debug 30 giay khi lenh vang mat:
-# 1. /status -> account + model hien tai la gi?
-# 2. github.com/settings/copilot -> plan + quota con khong?
-# 3. Go / trong input -> list thuc te o may ban co lenh do khong?
-# 4. Khong co -> plan gating hoac extension cu -> /update.
-```
-
----
-
-## 8. Walkthrough + ví dụ copy-paste
-
-Mục này là bài thực hành có sẵn kịch bản — đọc theo đúng thứ tự bước là chạy được luôn, khỏi tự nghĩ prompt.
-
-### 8.1. Flow Ask → Edit → Agent bằng commands (10 phút)
-
-```text
-# Buoc 1 — Ask (hieu truoc, khong sua):
-@workspace @file:package.json repo nay chay dev/test/lint bang lenh nao?
-
-# Buoc 2 — /explain + /fix tren selection (sua nho):
-# Chon 1 ham -> /explain -> doc -> /fix "them null check cho params".
-
-# Buoc 3 — /tests (viec nha):
-# Chon file source -> /tests "viet theo mau login.test.ts" -> chay test verify.
-
-# Buoc 4 — /agent (task mo):
-/agent Trong apps/api, POST /orders crash khi thieu customerId.
-Tim root cause, fix, them regression test, chay npm test xac nhan.
-```
-
-### 8.2. Git flow bằng commands
-
-```text
-/diff       # xem diff, duyet tung hunk
-/review     # "tim bug + security, chi bao loi that, khong nitpick style"
-/commit     # stage files -> duyet message truoc khi commit
-/pr         # push branch -> tao title + body + checklist test da chay
-```
-
-```text
-# Ket hop @terminal — bien loi terminal thanh task cho agent:
-# Buoc 1: chay test trong VS Code terminal, copy loi.
-# Buoc 2: trong Chat:
-@terminal Giai thich 3 loi dau bang tieng Viet, moi loi 2 cau.
-/agent Fix 3 loi tren, chay lai test xac nhan, khong sua gi ngoai scope.
-
-# Ket hop /fetch — dua docs moi nhat vao context (chong hallucinate API):
-/fetch https://docs.github.com/en/copilot/reference
-# Sau do hoi: "Theo docs vua doc, lenh nao thay the /X cu?"
-```
-
-> Tương đương terminal khi không mở IDE: `gh copilot suggest "viet commit message conventional commits cho diff hien tai"`.
-
-> Tương đương terminal khi không mở IDE: `gh copilot suggest "viet commit message conventional commits cho diff hien tai"`.
-
-> **Tóm gọn 1 câu:** phần walkthrough là kịch bản copy-paste chạy được — làm đúng thứ tự Ask → Edit → Agent và cả flow git là nắm hết các lệnh chính.
-
----
-
-## 9. Hiểu nhầm thường gặp + pitfalls
-
-Mục này "tiêm phòng trước" — liệt kê những cách hiểu sai phổ biến để bạn đỡ mất tiền học qua lần sai của mình.
-
-| Hiểu nhầm | Sự thật | Ví dụ |
-|---|---|---|
-| "`/` `@` `#` là 1, dùng cái nào cũng được" | `/` chạy workflow, `@` chọn nguồn tri thức, `#` gắn file cụ thể | `/fix` + `#selection` + `@workspace` là 3 việc khác nhau, hay đi cùng nhau |
-| "Gõ tự nhiên dài là tốt nhất" | Prompt dài không scope tốn 3–5 turns làm rõ | Thêm `#file`/`@workspace` ngay turn 1 rẻ hơn nhiều |
-| "Ask không sửa được là bug" | Ask cố tình read-only để hỏi an toàn | Muốn sửa → `/edit` hoặc Agent mode |
-| "Lệnh vắng mặt là Copilot hỏng" | Thường do plan gating hoặc extension cũ | Check `/status` + plan + gõ `/` xem list thực tế |
-| "Dùng `/agent` cho việc 1 dòng" | Agent đi đọc cả chục file — đốt credits vô ích | Việc nhỏ → `/fix`/`/explain` rẻ hơn |
-| "Tin `/commit`/`/pr` 100% không đọc" | Nó chỉ sinh nháp | Luôn đọc + sửa message trước khi commit/push |
-
-> **Cách đọc bảng này:** cột 1 là điều nhiều người tin (nhưng sai), cột 2 là sự thật, cột 3 là ví dụ cụ thể. Dò cột 1 xem bạn đang tin nhầm điều nào.
-
-```text
-❌ SAI: "sua loi login dum tao" → agent tự đoán file, tốn 3–5 turns hỏi lại
-✅ ĐÚNG: #file:src/routes/login.ts #selection Them null check cho customerId, giu nguyen API shape
-
-❌ SAI: (Ask mode) "Sửa bug login giúp" → chỉ trả lời chữ, không đụng file
-✅ ĐÚNG: chuyển /edit (hoặc /agent) rồi mới giao việc sửa
-
-❌ SAI: chạy /commit rồi commit luôn message nó gợi ý
-✅ ĐÚNG: đọc + sửa message trước khi commit/push — bạn vẫn là người duyệt cuối
-```
-
-**Best practices:** gắn scope ngay turn 1 · chọn lệnh theo cỡ việc (1 dòng → `/fix`, việc mở → `/agent`) · `/new` mỗi task · model rẻ cho `/explain`/`/review`, model mạnh cho `/agent` khó · session đầu chạy `/status → /instructions → /mcp` (corp thêm `/policy` → `/exclusion`).
-
-> **Tóm gọn 1 câu:** hầu hết "Copilot dở" thực ra là hiểu nhầm về ký hiệu, mode và gói dịch vụ — tra bảng này trước khi đổ lỗi cho công cụ.
-
----
-
-## 10. So sánh với Claude Code
-
-Mục này cho ai dùng cả hai công cụ: biết lệnh bên này tương ứng bên kia cái nào, khỏi học lại từ đầu.
-
-| Việc | Copilot | Claude Code | Ghi chú |
+| Lệnh / thao tác | Là gì (nôm na) | Availability | Chi tiết |
 |---|---|---|---|
-| Gọi lệnh có sẵn | Slash command built-in (`/fix`, `/tests`, `/explain`...) | Slash command built-in + tự tạo trong `.claude/commands/` | Cùng ý tưởng `/`; tên và số lệnh khác nhau |
-| Chọn nguồn tri thức | `@workspace`, `@terminal`, `@github` | Không có `@participant` — agent tự quét repo | Copilot có kênh `@` tường minh |
-| Gắn file/vùng chọn | `#file`, `#selection`, `#editor` | `@file` mention; không có `#selection` | Copilot gắn được vùng đang bôi đen |
-| Quản lý phiên | `/new`, `/clear`, `/history`, `/export`, `/resume` | `/clear` + `--resume`/`--continue` | Cả hai đều có mở/xóa/resume phiên |
-| Đổi model giữa phiên | `/model` (GPT/Claude/Gemini) | `/model` (gói Anthropic) | Cùng tên lệnh, khác tập model |
-| Kiểm tra hệ thống | `/status`, `/mcp`, `/instructions` | `/status`, `/mcp`, `/doctor` | Cùng mục đích debug |
+| `Ctrl+N` / nút `+` | Chat mới sạch cho task kế tiếp (`/new` **không phải** việc này — `/new` ở nhóm 3) | mọi surface | [new-chat](commands/copilot/chat-session/new-chat/README.md) |
+| `/clear` | Mở chat mới + archive/mark chat hiện tại là done | chat reference | [clear](commands/copilot/chat-session/clear/README.md) |
+| **Panel Session History** · **Resume in Terminal** | Mở lại chat cũ và tiếp nối phiên trước — chưa từng có slash cho hai việc này (CLI: `copilot --continue`) | Chat view / Agents window · terminal | [history](commands/copilot/chat-session/history/README.md) · [resume](commands/copilot/chat-session/resume/README.md) |
+| **`Chat: Export Chat…`** | Lưu hội thoại ra file để share | Command Palette | [export](commands/local/chat-session/export/README.md) |
+| `Ctrl+I` · Quick Chat `Ctrl+Shift+Alt+L` | Inline chat ngay tại dòng code đang chọn · hỏi nhanh không rời editor | editor + terminal · Chat view | [inline-chat](commands/copilot/chat-session/inline-chat/README.md) · [quick-chat](commands/copilot/chat-session/quick-chat/README.md) |
+| **Restore Checkpoint** | Khôi phục file + history tại một request; **không** hoàn tác terminal/deploy | `chat.checkpoints.enabled` default on | [checkpoints](commands/copilot/chat-session/checkpoints/README.md) |
+| **Add Context** · `#file` `#selection` · kéo-thả | Gắn file, vùng chọn, ảnh, output lỗi, issue | mọi surface | [attachments](commands/copilot/chat-session/attachments/README.md) |
 
-> **Cách đọc bảng này:** mỗi hàng là một việc cần làm; đọc cột Copilot và Claude Code để thấy lệnh tương ứng, cột Ghi chú nêu điểm khác tinh tế đừng bỏ sót.
+## 3. Nhóm 2 — Model & Agent (8)
 
----
+Đổi "động cơ" (model), "người làm" (agent), "nơi chạy" (Session Target) — bản chất harness ở bài 02 §3.1.
 
-## Bài tập nhỏ
+| Lệnh / thao tác | Là gì (nôm na) | Availability | Chi tiết |
+|---|---|---|---|
+| **Model picker** | Đổi model giữa chat (mạnh/rẻ tùy task) | menu trên ô chat; `/models` = "a local chat", CLI là `/model` | [model-picker](commands/copilot/model-agent/model-picker/README.md) |
+| **Ask · Plan · Agent** | built-in agents: chỉ hỏi · research rồi đề xuất plan · tự sửa và chạy lệnh | built-in của Copilot harness | [Ask](commands/copilot/model-agent/ask-mode/README.md) · [Plan](commands/copilot/code-actions/plan/README.md) · [Agent](commands/copilot/model-agent/agent-mode/README.md) |
+| **Edit** | Sửa các file bạn tự chọn | mode riêng của **Local harness**; Copilot thay bằng Plan/Agent | [edit-mode](commands/local/model-agent/edit-mode/README.md) |
+| **Custom agent** | Agent riêng trong `.github/agents/` (bài 06) | Local: `/agents`; Copilot: Customizations editor + picker | [custom-agent](commands/copilot/model-agent/custom-agent/README.md) |
+| **Session Target — Choose a harness** | Chọn harness + nơi session chạy | picker trong Chat view / Agents window | [session-target](commands/copilot/model-agent/session-target/README.md) |
+| **Permission level** | Duyệt/cho phép lệnh nhạy cảm: Manual · Assisted · Allow all (bài 10) | Copilot harness | [policy-approval](commands/copilot/model-agent/policy-approval/README.md) |
+| **AI Credits** | Xem tiêu phí của account/plan | dashboard `github.com/settings/copilot` · CLI `/limits` | [ai-credits](commands/copilot/model-agent/ai-credits/README.md) |
+| **Copilot cloud agent** · cloud session | Giao issue trên GitHub.com → agent làm async, mở PR; hoặc chạy phiên trên hạ tầng GitHub (`feature(cloud-sessions)`) | GitHub.com — **không phải slash trong editor**; cloud là execution target, không phải harness | [assign](commands/cloud/model-agent/coding-agent-assign/README.md) · [PR](commands/cloud/model-agent/coding-agent-pr/README.md) · [cloud-agent-session](commands/cloud/model-agent/cloud-agent-session/README.md) |
 
-Bốn bài dưới đây dùng repo thật — làm tay một lần thì nhớ lâu hơn đọc mười lần.
+## 4. Nhóm 3 — Code actions (6)
 
-1. **(15 phút) Scope drill:** cùng 1 task, chạy 2 lần: không `@`/`#` vs có `@workspace` + `#file`. So sánh số turns + độ đúng, ghi vào team wiki.
-2. **(15 phút) Commands tour:** chạy tuần tự `/status → /instructions → /mcp → /agents → /policy → /usage` trên repo thật. Chụp (che secrets) + giải thích mỗi output 1 câu.
-3. **(20 phút) Git flow:** trên branch test, chạy `/diff → /review → /commit → /pr`. Liệt kê lệnh nào đúng ngay, lệnh nào phải sửa tay.
-4. **(15 phút) Gating check:** mở `/model` liệt kê models khả dụng ở plan bạn. Ghi bảng: model nào tốn AI Credits cao nhất (ước lượng từ dashboard `github.com/settings/copilot`).
+Việc nhỏ một bước trên code đang chọn: bôi đen rồi gọi lệnh, khỏi mô tả dài dòng.
 
-> **Tóm gọn 1 câu:** làm đủ 4 bài trên repo thật để scope, lệnh hệ thống, git flow và kiểm tra gói dịch vụ thành tay nghề.
+| Lệnh / thao tác | Là gì (nôm na) | Availability | Chi tiết |
+|---|---|---|---|
+| `/explain` `/fix` `/tests` | Giải thích / sửa / sinh test cho selection (`/setupTests` = Experimental) | chat reference — nhóm "editor" | [explain](commands/copilot/code-actions/explain/README.md) · [fix](commands/copilot/code-actions/fix/README.md) · [tests](commands/copilot/code-actions/tests/README.md) |
+| `/doc` | Sinh docstring cho hàm | **từ editor inline chat** | [doc](commands/copilot/code-actions/doc/README.md) |
+| `/new` · `/newNotebook` | **Scaffold** workspace, file hoặc notebook (KHÔNG phải "mở chat mới") | chat reference | [new](commands/copilot/code-actions/new/README.md) |
+| **Optimize · Refactor** | Tối ưu perf / cấu trúc lại mà giữ behavior | inline chat `Ctrl+I` và lightbulb — docs **không có** slash `/optimize` `/refactor` | [optimize](commands/copilot/code-actions/optimize/README.md) · [refactor](commands/copilot/code-actions/refactor/README.md) |
+| **✨ cạnh ô commit message** · **✨ cạnh ô title trong Create Pull Request view** | Sinh commit message từ diff đã stage · sinh PR title + body từ diff (docs 11/2026 dạy nút ✨, utility model `chat.utilitySmallModel`; PR template tự điền) | Source Control · Pull Requests view | [commit-message](commands/copilot/code-actions/commit-message/README.md) · [pr-desc](commands/copilot/code-actions/pr-desc/README.md) |
+| **Lỗi terminal → `Ctrl+I`** | Biến log đỏ thành task cho agent (thao tác, **không phải** `@terminal`) | inline chat trong terminal | [debug-terminal](commands/copilot/code-actions/debug-terminal/README.md) |
 
----
+## 5. Nhóm 4 — System & Knowledge (8)
 
-## Link chéo
+"Hậu trường": cái gì đang được nạp, cắm thêm công cụ gì, chặn gì. docs VS Code: *"In the Chat view, all are available with **Local**. Only `/prompts` and `/hooks` are available with **Copilot**."*
 
-Mục này nối sang các bài cùng chuỗi — đọc theo nhu cầu, không cần theo thứ tự.
+| Lệnh / thao tác | Là gì (nôm na) | Availability | Chi tiết |
+|---|---|---|---|
+| `/instructions` · `/skills` · `/agents` · `/prompts` · `/hooks` (+ `/create-agent` `/create-instructions` `/create-skill` `/create-prompt` `/create-hook`) | Cấu hình / sinh customization type tương ứng; riêng file `.prompt.md` mà `/prompts` liệt kê **chỉ chạy ở Local harness** | Chat view: **Local có tất cả; Copilot chỉ `/prompts` và `/hooks`**; `/create-*` = "in a local agent session" → Copilot dùng **`Chat: Open Customizations`** | [instructions](commands/copilot/system-knowledge/instructions/README.md) · [agent-skill](commands/copilot/system-knowledge/agent-skill/README.md) · [prompt-file](commands/local/system-knowledge/prompt-file/README.md) · [custom-agent](commands/copilot/model-agent/custom-agent/README.md) |
+| **MCP servers** | Xem/thêm server và tool | Copilot đọc `.mcp.json` (root) + `~/.copilot/mcp-config.json`; docs **không có** slash `/mcp` | [mcp](commands/copilot/system-knowledge/mcp/README.md) · [add](commands/copilot/system-knowledge/mcp-add/README.md) · [`.vscode/mcp.json` = Local](commands/local/system-knowledge/vscode-mcp-json/README.md) |
+| **Copilot connectors** | MCP do GitHub quản lý, cấp tool cho harness | **chỉ Copilot harness** — editor → Connect | [connector](commands/copilot/system-knowledge/connector/README.md) |
+| **Content exclusion** | File Copilot không được đọc | github.com → Settings; áp dụng cả Copilot in the cloud + code review + CLI | [content-exclusion](commands/cloud/system-knowledge/content-exclusion/README.md) |
+| **Copilot status dashboard** · CLI `/status` · Telemetry | Account, plan, usage + consent gửi code telemetry | github.com/settings/copilot · Copilot CLI; OTel chạy cho **cả** Local & Copilot (bài 13) | [status](commands/copilot/system-knowledge/status/README.md) · [login](commands/copilot/system-knowledge/login/README.md) · [logout](commands/copilot/system-knowledge/logout/README.md) · [telemetry](commands/copilot/system-knowledge/telemetry/README.md) |
+| **`Chat: Provide Feedback…`** | Gửi feedback về một câu trả lời | Command Palette | [bug-feedback](commands/copilot/system-knowledge/bug-feedback/README.md) |
+| **Enterprise knowledge base** | Hỏi tri thức team (docs, wiki) ngay trên GitHub.com | GitHub.com (Enterprise) | [knowledge-base](commands/cloud/system-knowledge/knowledge-base/README.md) |
+| `gh copilot suggest` / `explain` | Gợi ý / giải thích lệnh shell | terminal — **extension cộng đồng của GitHub CLI**, không thuộc docs nào | [suggest](commands/local/system-knowledge/cli-suggest/README.md) · [explain](commands/local/system-knowledge/cli-explain/README.md) |
 
-- **Bài 00 — Tổng quan**: 4 họ tools đằng sau mỗi command.
-- **Bài 01 — Cài đặt**: `/login`, `/status` khi setup báo đỏ.
-- **Bài 03 — Instructions**: `/instructions` + `applyTo` — file đằng sau commands.
-- **Bài 05 — Agent Skills**: `SKILL.md` (chuẩn 2026) + port prompt files legacy.
-- **Bài 07 — Policies**: `policy-approval`, `content-exclusion`, model gating chi tiết.
+> Copilot Extensions (GitHub App, gọi bằng `@`) đã **retired 10/11/2025** — đường mở rộng hiện hành là Agent Plugins (mục 6) + MCP + connectors → [bài 09](./09-extensions-marketplaces.md).
+
+## 6. Slash chính thức hay bị bỏ sót (availability chép nguyên văn docs VS Code)
+
+| Lệnh | Mục đích (docs) | Availability | Chi tiết |
+|---|---|---|---|
+| `/plan` | research + đề xuất plan | Copilot & Claude (Local có **Plan agent**) | [plan](commands/copilot/code-actions/plan/README.md) |
+| `/compact` | nén ngữ cảnh hội thoại | Local, Copilot, Claude | [compact](commands/copilot/chat-session/compact/README.md) |
+| `/fork` · `/fork <title>` · `/fork prompt <…>` | fork hội thoại kèm history | cần **Agent Host session** được hỗ trợ | [fork](commands/copilot/chat-session/fork/README.md) |
+| `/btw <câu hỏi>` | side chat ngoài lề | **không có ở Local** & Codex-extension | — |
+| `/models` · `/tools` | mở model picker / cấu hình tools | "a local chat" | [model-picker](commands/copilot/model-agent/model-picker/README.md) |
+| `/init` | sinh/cập nhật workspace instructions | "a local agent session" | [instructions](commands/copilot/system-knowledge/instructions/README.md) |
+| `/troubleshoot` · `/debug` | phân tích debug logs · mở Chat Debug view | local **hoặc Copilot CLI session** · `/debug` ở Chat view, **không phải Agents window** | [troubleshoot](commands/copilot/chat-session/troubleshoot/README.md) |
+| `/sandbox policy` | xem effective sandbox policy | **Copilot session** | [sandbox-policy](commands/copilot/model-agent/sandbox-policy/README.md) |
+| `/yolo` · `/autoApprove` (+ `/disableYolo` `/disableAutoApprove`) | permission / Autopilot (bài 10) | "supported local or Copilot CLI session" | [policy-approval](commands/copilot/model-agent/policy-approval/README.md) |
+| `/rename <name>` · `/help` | đổi tên / liệt kê lệnh + agent | "a local chat" · "a local **Ask** chat" | [help](commands/local/chat-session/help/README.md) |
+| `/plugin list\|install\|update\|enable\|disable\|uninstall\|marketplace add\|browse\|remove` | quản lý Agent Plugins (bài 17) | **chỉ Copilot harness session** | [plugins](commands/copilot/system-knowledge/plugins/README.md) |
+| `/<skill-name>` (vd `/webapp-testing`) | gọi agent skill / reusable prompt theo tên | mọi harness (skill) — bài 05 | [agent-skill](commands/copilot/system-knowledge/agent-skill/README.md) |
+
+> **Tóm gọn 1 câu:** lệnh có trong docs mà không thấy trong list của bạn thì gần như luôn là **đúng availability rồi**, không phải bug.
+
+## 7. Công thức 5 lệnh session đầu — chỉ dùng lệnh có trong index (làm 1 lần/repo)
+
+Nghi thức "khai trương" repo, giống kiểm tra máy trước khi lái đường dài:
+
+1. `Ctrl+Alt+I` mở Chat → chốt **model** + **Session Target** (nhóm 2) — biết mình đang chạy harness nào.
+2. **`Chat: Open Customizations`** → xem repo đang nạp gì: instructions, skills, MCP, hooks (bài 03/05/08).
+3. **`/sandbox policy`** trong một Copilot session → đọc effective policy; phía org xem **settings → policies** (bài 10/16).
+4. **`/plan`** với task thật đầu tiên → để agent research + đề xuất plan, duyệt rồi mới cho sửa.
+5. **`/clear`** khi đổi task; session dài mà còn liên quan thì **`/compact`** — conversation "đuối" là tín hiệu cần nén.
+
+## 8. Walkthrough: sửa một bug bằng lệnh (10 phút)
+
+```text
+# Buoc 1 - Ask (hieu truoc, dung sua): chon built-in agent "Ask" tren picker
+Repo nay POST /orders nam o dau, lenh dev/test/lint la gi? #file:package.json
+
+# Buoc 2 - task mo, sua nhieu file: /plan research + de xuat plan, duyet xong moi sang Agent
+/plan Trong apps/api, POST /orders crash khi thieu customerId. Tim root cause,
+fix, them regression test, chay npm test xac nhan.
+
+# Buoc 3 - viec nho tren selection: boi den ham -> Ctrl+I -> /explain roi /fix
+# (dung mo Agent cho viec mot dong); doi task: /clear, dan dai ma con lien quan: /compact
+/fix them null check cho params, giu nguyen API shape
+```
+
+Git flow (✨ ở ô commit message, ✨ ở Create Pull Request view — bản palette `Chat: Commit Staged…`/`Pull: Create PR…` có thể vẫn còn trong một số build), lỗi terminal bằng Terminal Inline Chat và bản tương đương khi đứng ở shell (`copilot -p "…"`, `copilot --continue`) — `gh copilot` là extension cộng đồng đã archived, không phải đường hiện hành (xem `commands/local/system-knowledge/cli-suggest/`) xem ở 📄 [`examples/04-8-git-flow-va-lenh-terminal.sh`](examples/04-8-git-flow-va-lenh-terminal.sh).
+
+## 9. Khi lệnh hoặc model "biến mất"
+
+- **Đọc availability trước, nghi gating sau:** `/plugin` chỉ Copilot harness session; `/help` `/rename` `/models` `/tools` chỉ local chat; trong nhóm customization, Copilot chỉ có `/prompts` và `/hooks`.
+- **Model & AI Credits:** model mạnh tiêu phí nhiều hơn. Billing hiện hành là **AI Credits** (1 credit = $0.01, trừ theo token; code completions **không** bị trừ) — hết thì đổi model rẻ ở picker, xem dashboard, CLI `/limits` (bài 14).
+- **Org policy & BYOK:** managed settings có thể khoá model/harness/customization — kiểm chứng bằng `Developer: Policy Diagnostics` (bài 10/16).
+- **Flow 30 giây:** gõ `/` xem list thật → `Chat: Open Customizations` xem gì đang nạp → so cột availability mục 6 → vẫn mờ thì `/troubleshoot` (local hoặc Copilot CLI).
+
+## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
+
+| ❌ SAI | Hệ quả | ✅ ĐÚNG |
+|---|---|---|
+| "`/` `@` `#` là một nhà, dùng cái nào cũng được" | `@` không chạy ở Copilot harness → prompt im lặng mất ngữ cảnh | `/` chạy lệnh, `#` gắn file/selection; participants đã deprecated → Add Context hoặc để agent tự gather |
+| "Gõ `/new` để mở chat mới" | nhận về một workspace/file/notebook scaffold, không phải chat trắng | chat mới: `Ctrl+N` hoặc `/clear`; `/new` = scaffold (nhóm 3) |
+| "Kênh customization nào cũng có slash" | gõ `/instructions` `/skills` ở Copilot session → không thấy, tưởng hỏng | Copilot: **Agent Customizations editor** (`Chat: Open Customizations`); các slash đó là của Local |
+| "`/history` `/export` `/resume` bị gỡ khỏi Copilot" | đi tìm slash chưa từng tồn tại | dùng panel **Session History**, `Chat: Export Chat…`, **Resume in Terminal** / `copilot --continue` |
+| "Lệnh vắng mặt là Copilot hỏng" | mất nửa ngày debug công cụ | availability theo surface/harness/role/enabled features — tra mục 6 trước |
+| "Việc một dòng cũng mở Agent" | Agent đọc chục file, đốt credits oan | `/explain` `/fix` trên selection; việc mở → `/plan` rồi mới Agent |
+
+**Bài học:** bảng slash nào cũng có cột availability — đọc nó rẻ hơn đọc debug log.
+
+## Best practices
+
+- **Gắn `#file:`/`#selection` ngay turn 1.** *Vì sao?* tiết kiệm nguyên một turn agent quét repo đoán file — loại token rẻ nhất là token không phải trả.
+- **`/clear` mỗi task; dài mà còn liên quan → `/compact`; muốn thử hướng khác từ conversation cũ → `/fork` (cần Agent Host session).** *Vì sao?* context sạch giảm "hallucination thừa kế", compact giữ đà mà rẻ, fork giữ history cho cả hai nhánh.
+- **Tra cột availability trước khi kết luận lệnh mất; việc chạm nhiều file luôn bắt đầu bằng `/plan`; repo mới thì chạy công thức mục 7 một lần.** *Vì sao?* quá nửa "bug reported" là tra nhầm chỗ, một plan sai sửa 10 file khó hoàn tác hơn chạy lại lần hai, và lỗi gating phát hiện trong 5 phút rẻ hơn 5 ngày (org đông người: thêm `Developer: Policy Diagnostics`).
+
+## Bài tập
+
+1. **(10 phút) Phím:** mở Chat view, chat mới, inline chat (editor và terminal), Quick Chat bằng đúng 4 phím mục 1 — ghi lại mỗi phím mở surface nào (Quick Chat là `Ctrl+Shift+Alt+L`, **không phải** `Ctrl+Alt+I`).
+2. **(20 phút) Inventory + break-in repo:** gõ `/` liệt kê lệnh máy bạn **thật sự có**, so với mục 2–6 và ghi lý do cho lệnh thiếu theo cột availability; sau đó chạy công thức 5 lệnh mục 7 trên repo thật, mỗi bước ghi 1 câu output, đọc effective policy của `/sandbox policy`.
+3. **(10 phút) Git flow:** làm theo 📄 [`examples/04-8-git-flow-va-lenh-terminal.sh`](examples/04-8-git-flow-va-lenh-terminal.sh) — liệt kê thao tác nào đúng ngay, thao tác nào phải sửa tay.
+
+## Link qua
+
+- **Bảng mapping Copilot ↔ Claude Code** → bài 00 (chủ sở hữu so sánh). · Harness & bề mặt, Session Target → bài 02. · File đứng sau `/instructions` → bài 03.
+- Agent Skills và gọi `/<skill-name>` → bài 05. · Custom agents (`/agents` + picker) → bài 06. · Hooks → bài 07. · MCP & connectors → bài 08.
+- Permission levels, Autopilot → bài 10. · Checkpoint & `/fork` → bài 11. · CLI `/usage` `/limits`, `copilot --continue` → bài 12. · Agent Plugins → bài 17. · Copilot Extensions **đã retired 10/11/2025** → [bài 09](./09-extensions-marketplaces.md).
 
 ## Reference
 
-Tài liệu gốc chính thống — tra tại đây khi bài viết và bản mới nhất của GitHub lệch nhau.
+- VS Code — [AI features cheat sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet) (nguồn duy nhất cho bảng slash + phím) · [Add context](https://code.visualstudio.com/docs/chat/copilot-chat-context) · [Tools reference](https://code.visualstudio.com/docs/agents/reference/tools-reference) · [Manage sessions](https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions) (`/compact`, `/fork`) · [Inline chat](https://code.visualstudio.com/docs/chat/inline-chat) · [Agent Customizations editor](https://code.visualstudio.com/docs/agent-customization/overview)
+- VS Code — [Prompt files](https://code.visualstudio.com/docs/agent-customization/prompt-files) · [Agent plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins) · [Approvals & permission levels](https://code.visualstudio.com/docs/agents/run/approvals) (kèm lệnh permission/Autopilot) · [Agent sandboxing](https://code.visualstudio.com/docs/agents/run/agent-sandboxing) (`/sandbox policy`) · [Migrate customizations](https://code.visualstudio.com/docs/agent-customization/migrate-customizations) (participants deprecated) · [Move to Copilot harness](https://code.visualstudio.com/docs/agents/run/move-to-copilot)
+- GitHub — [Copilot CLI command reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference) (`/status`, `/cost`) · [Models and pricing — AI Credits](https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing) · [About Copilot cloud agent](https://docs.github.com/en/copilot/concepts/agents/cloud-agent/about-cloud-agent)
 
-- GitHub Copilot docs: https://docs.github.com/copilot
-- VS Code Copilot docs: https://code.visualstudio.com/docs/copilot
-- Billing / AI Credits: https://github.com/settings/copilot
-
-> **Chốt bài 04:** ba ký hiệu `/`, `@`, `#` là ngữ pháp của Copilot Chat — nắm ngữ pháp này thì prompt đầu tiên đã đúng scope, và bạn thôi trả tiền cho những turn "file nào nhỉ?".
+**Chốt:** bài 04 để **mở ra tra**, không để đọc hết — tìm nhóm → đọc availability → gõ lệnh; và bạn thôi trả tiền cho những turn "file nào nhỉ?".

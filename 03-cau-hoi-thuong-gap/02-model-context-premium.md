@@ -35,7 +35,6 @@ Hãy hình dung Credits như tiền điện: mỗi thiết bị (model) có côn
 - **Cách cũ (trước 06/2026):** quota "premium requests"/tháng + multiplier ×3/×5/×10 theo request — **LEGACY**, chỉ còn thấy trong tài liệu cũ.
 - **Cách mới:** không còn multiplier theo request; model đắt có giá token cao → cùng 1 prompt tốn nhiều credits hơn.
 - **Code completions KHÔNG trừ Credits** — không giới hạn trên plan trả phí.
-- Plan trả phí dùng **auto model selection được giảm 10%**.
 - Hết credits base + flex → tính vào **additional usage budget** (spend cap cấu hình được).
 
 | Cách dùng | Tốn AI Credits? | Mức độ |
@@ -49,7 +48,7 @@ Thứ tự tốn Credits tăng dần → **gõ tay được thì đừng chat; c
 
 > 📄 **Code ví dụ:** [`examples/02-2-ai-credits-tinh-tien-the-nao.sh`](examples/02-2-ai-credits-tinh-tien-the-nao.sh)
 
-**Ví dụ cụ thể:** Pro 1.500 credits/tháng (1.000 base + 500 flex). Dùng model đắt cho mọi chat linh tinh → cạn nhanh; model rẻ cho việc dễ + model mạnh cho việc khó → đủ cả tháng.
+**Ví dụ cụ thể:** Pro 1.500 credits/tháng (1.000 base + 500 flex) — số liệu as of 11/2026, verify tại github.com/features/copilot. Dùng model đắt cho mọi chat linh tinh → cạn nhanh; model rẻ cho việc dễ + model mạnh cho việc khó → đủ cả tháng.
 
 > **Khi chat báo "AI Credits limit reached":** xem usage page, đối chiếu model đắt nào dùng nhiều, có agent chạy vòng lặp không, instructions dài có bị nạp mỗi turn không.
 

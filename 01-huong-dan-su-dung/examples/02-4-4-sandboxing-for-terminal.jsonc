@@ -1,9 +1,0 @@
-// .vscode/settings.json (một số setting có thể bị org quản lý):
-{
-  "chat.agent.sandbox.enabled": "on",                    // off | on
-  "chat.agent.sandbox.network.allowNetwork": false,      // chặn mạng khi bật
-  "chat.agent.sandbox.allowUnsandboxedCommands": false,  // không cho chạy ngoài chuồng
-  "chat.assistedPermissions.enabled": true,
-  "chat.editing.autoAcceptDelay": 0                      // 0 = tắt auto-accept edit
-}
-// Verify sâu (Agent Host): /sandbox policy → xem file system + network policy hiệu lực.

@@ -1,6 +1,0 @@
-// .vscode/mcp.json — thêm một khối dưới key "servers"
-{
-  "servers": {
-    "github": { "command": "npx", "args": ["-y", "@modelcontextprotocol/server-github"] }
-  }
-}

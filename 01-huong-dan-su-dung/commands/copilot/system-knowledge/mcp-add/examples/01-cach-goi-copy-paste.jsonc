@@ -1,0 +1,13 @@
+// .mcp.json ở THƯ MỤC GỐC repo — Copilot harness đọc trực tiếp file này.
+// Key gốc phải là "mcpServers" (KHÔNG phải "servers" như .vscode/mcp.json).
+{
+  "mcpServers": {
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      // env trỏ biến, giá trị nằm trong môi trường máy bạn:
+      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}" }
+    }
+  }
+}

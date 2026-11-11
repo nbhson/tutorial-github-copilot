@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "deny": ["Shell(rm -rf *)", "Read(~/.ssh/**)", "Domain(*.unapproved.example)"],
+    "ask": ["Shell(git push *)", "Edit(/src/**)", "Domain(api.github.com)"],
+    "allow": ["Shell(npm test *)", "Read(/src/**)", "Domain(registry.npmjs.org)"]
+  },
+  "enabledPlugins": {
+    "team-standards@acme-tools": true,
+    "random-blog-tools@community": false
+  },
+  "extraKnownMarketplaces": {
+    "acme-tools": {
+      "source": {
+        "source": "github",
+        "repo": "acme/plugin-marketplace"
+      },
+      "autoUpdate": false
+    }
+  },
+  "strictKnownMarketplaces": [
+    { "source": "github", "repo": "acme/plugin-marketplace" }
+  ],
+  "allowedMcpServers": [
+    { "serverUrl": "https://api.githubcopilot.com/*" },
+    { "serverCommand": ["npx", "-y", "@playwright/mcp@0.0.36"] }
+  ],
+  "deniedMcpServers": [
+    { "serverCommand": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "/"] }
+  ],
+  "sandbox": {
+    "enabled": true,
+    "failIfUnavailable": true,
+    "allowBypass": false,
+    "sandboxMcpServers": true,
+    "sandboxLspServers": true
+  },
+  "telemetry": {
+    "enabled": true,
+    "endpoint": "https://otel-collector.acme.example",
+    "protocol": "http/protobuf",
+    "captureContent": false
+  }
+}

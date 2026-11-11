@@ -1,0 +1,21 @@
+// 01-3 (muc 3.2): .vscode/settings.json — mau khoi diem, commit duoc cho ca team.
+// Chi giu nhung setting co nguon trong docs VS Code; cai "khong can bat" ghi ro o duoi.
+{
+  // true = tat sach AI trong VS Code va an luon icon Copilot.
+  // Nhieu ca "mat Copilot" chet o day, khong phai do tai khoan.
+  "chat.disableAIFeatures": false,
+
+  // Ghost text (inline suggestions). Tat thi khong hien du da login dung account.
+  "editor.inlineSuggest.enabled": true,
+
+  // Bat/tat theo ngon ngu: "*" = mac dinh cho moi file; tat rieng cho loai file can.
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false
+  }
+
+  // KHONG can bat: "github.copilot.chat.codeGeneration.useInstructionFiles".
+  // Do la setting cua LOCAL harness (docs VS Code: custom-instructions-reference,
+  // muc "Local harness settings"). Copilot harness tu doc
+  // .github/copilot-instructions.md hoac AGENTS.md -> xem bai 03.
+}

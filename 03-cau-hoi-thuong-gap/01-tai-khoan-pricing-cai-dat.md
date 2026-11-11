@@ -34,7 +34,6 @@ Giá tham khảo 10/2026 (check `github.com/features/copilot` trước khi chố
 Quy tắc tính tiền cần nhớ:
 
 - **Code completions + next edit suggestions KHÔNG trừ AI Credits** — không giới hạn trên plan trả phí.
-- Plan trả phí dùng **auto model selection được giảm 10%**.
 - Hết credits → dùng tiếp tính vào **additional usage budget** (spend cap cấu hình được). **Paid usage policy bật mặc định** — admin phải chủ động tắt để cắt chi tiêu.
 - Code review tốn thêm **GitHub Actions minutes** (ngoài AI Credits).
 
@@ -50,7 +49,7 @@ Mấu chốt: **Free/Pro/Pro+/Max = tự trả, tự quản; Business/Enterprise
 
 **Trả lời 1 câu:** Plan Free dùng thử không cần thẻ với giới hạn rõ ràng (2.000 completions/tháng); Business trial 30 ngày là full tính năng cho cả org và hết hạn tự chuyển sang trả phí nếu không hủy.
 
-Hết trial: Free → suggestions dừng, chat báo hạn mức; Business trial → org bị downgrade, seat mất, coding agent PR dở dang vẫn giữ nhưng không tạo mới được. Không có lệnh CLI xem trial — check web `github.com/settings/copilot` → "Trial ends on..." và đặt reminder trước 3 ngày.
+Hết trial: Free → suggestions dừng, chat báo hạn mức; Business trial → org bị downgrade, seat mất, cloud agent PR dở dang vẫn giữ nhưng không tạo mới được. Không có lệnh CLI xem trial — check web `github.com/settings/copilot` → "Trial ends on..." và đặt reminder trước 3 ngày.
 
 > **Khi nào áp dụng:** trước khi onboarding team >5 người — luôn trial Business trước, đừng mua blind.
 
@@ -79,7 +78,7 @@ Hai chế độ: allow all members (tốn seat theo headcount) hoặc selected t
 
 > 📄 **Code ví dụ:** [`examples/03-4-cai-at-the-nao-cho-sach-vs.sh`](examples/03-4-cai-at-the-nao-cho-sach-vs.sh)
 
-Bản CLI độc lập 2026 là binary `copilot` (có `copilot init`, slash command `/mcp`, `/usage`) — xem [bài 10](10-ci-sdk-review-web.md).
+Bản CLI độc lập 2026 là binary `copilot` (slash `/limits` + `/usage` cho chi phí, `copilot mcp list` cho MCP) — xem [bài 10](10-ci-sdk-review-web.md).
 
 ## 5. Sign-in / đổi account (cá nhân ↔ công ty) thế nào?
 

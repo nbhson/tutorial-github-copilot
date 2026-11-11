@@ -5,7 +5,7 @@
 > **Đọc xong:** đóng gói được Agent Skills, prompt files và instructions để cả team gọi ra cùng một format.
 > **Thời gian:** ~20 phút đọc + ~35 phút làm walkthrough cuối bài.
 
-> **Lưu ý 2026:** prompt files `.prompt.md` **deprecated cho Agent Host** (Cloud) — vẫn chạy Local/VS Code. Việc mới nên ưu tiên **Agent Skills** (`SKILL.md`, chuẩn mở, chạy cả Local + Cloud + CLI). Bài này dạy cả 2, khuyến nghị skill.
+> **Lưu ý 2026:** prompt files `.prompt.md` **chỉ chạy ở Local harness** (VS Code docs — docs GitHub không gọi chúng là "deprecated"); Copilot harness không nạp chúng. Việc mới nên ưu tiên **Agent Skills** (`SKILL.md`, chuẩn mở, chạy ở cả Copilot harness lẫn Local). Bài này dạy cả 2, khuyến nghị skill.
 
 ## 1. Vì sao phải tái dùng?
 
@@ -54,7 +54,7 @@ Nơi đặt chuẩn:
   prompts/                         # legacy, chỉ Local
     team-bug.prompt.md
   skills/
-    team-bug/SKILL.md              # chuẩn 2026, chạy Local + Cloud
+    team-bug/SKILL.md              # chuẩn 2026, chạy cả Copilot harness lẫn Local
 ```
 
 Chọn nhanh, tránh nhét sai chỗ: nhét luật 1 dòng vào prompt file thì mỗi lần phải nhớ gọi — mệt. Nhét quy trình 10 bước vào prompt file thì nó phình ra, quên nửa sau. Nhét task lặp vào instructions thì nó nạp lại mỗi turn — tốn credit vô ích.
@@ -166,7 +166,7 @@ allowed-tools: [shell, edit]
 - `npm test` + `npm run build` xanh mới tiếp tục.
 
 ## 2. Bump + changelog
-- Bump version trong package.json (patch/minor/major theo ${input:type}).
+- Bump version trong package.json (patch/minor/major theo yêu cầu).
 - Thêm mục CHANGELOG.md: ngày + 3 bullet thay đổi từ git log.
 
 ## 3. Tag + push
@@ -179,7 +179,7 @@ allowed-tools: [shell, edit]
 
 Gọi tự nhiên: `"Dùng skill release để release patch tuần này."` — Copilot tự nhận diện description khớp → load procedure.
 
-**Khi nào tách skill:** procedure >5 bước và dùng >1 lần/tháng; cần variables + checks + rollback; muốn Copilot tự trigger. Không tách khi chỉ 2–3 bước (prompt file đủ) hoặc luật 1 dòng (instructions đủ). Cứ nghĩ như chia đồ trong nhà: đồ dùng hàng ngày để ngăn gần tay, đồ ít dùng cất kho — skill là "kho" cho quy trình dài.
+**Khi nào tách skill:** procedure >5 bước và dùng >1 lần/tháng; cần nhận tham số lúc gọi (viết tự do sau `/skill`) + checks + rollback; muốn Copilot tự trigger. Không tách khi chỉ 2–3 bước (prompt file đủ) hoặc luật 1 dòng (instructions đủ). Cứ nghĩ như chia đồ trong nhà: đồ dùng hàng ngày để ngăn gần tay, đồ ít dùng cất kho — skill là "kho" cho quy trình dài.
 
 > **Tóm gọn 1 câu:** Skill là file SKILL.md mô tả quy trình nhiều bước, Copilot đọc description tự kích hoạt — quy trình nào dài và dùng nhiều thì nên tách thành skill.
 
@@ -199,6 +199,8 @@ Few-shot nghĩa là "cho xem vài ví dụ mẫu" — như dạy thợ phụ b�
 | `${file}` | File đang mở | Dùng cho review |
 
 > **Cách đọc bảng này:** cột **Cú pháp** là cách viết trong prompt file, cột **Ý nghĩa** cho biết Copilot xử lý nó thế nào khi chạy, cột **Ví dụ** là tình huống hay dùng nhất.
+
+> ⚠️ Các biến `${input:...}`, `${selection}`, `${file}` là của **prompt file (Local harness)** — docs **không** khai báo biến nội suy nào cho `SKILL.md`. Truyền thêm dữ liệu cho skill: viết tự do sau lệnh gọi, vd `/team-bug scope=src/auth bug="refund 500"` — và tham chiếu file bằng link markdown hoặc `#file:` đường dẫn tương đối tới `SKILL.md`.
 
 Mọi prompt file/skill nên có **1 ví dụ input → output đúng** ở cuối để Copilot bắt chước:
 
@@ -223,7 +225,7 @@ Mục này là bài thực hành tổng hợp: biến một prompt bạn đang g
 | Phút | Việc | Làm gì |
 |---|---|---|
 | 0–5 | Chọn mẫu | Lấy prompt bug bạn ưng nhất (Tips 02 Mẫu 1) |
-| 5–15 | Viết file | Tạo `.github/skills/team-bug/SKILL.md` + variables + few-shot (Local-only: `.github/prompts/team-bug.prompt.md` legacy) |
+| 5–15 | Viết file | Tạo `.github/skills/team-bug/SKILL.md` + few-shot (Local-only: `.github/prompts/team-bug.prompt.md` legacy có `${input}`) |
 | 15–20 | Test | Nói "fix bug scope=src/auth" trên bug thật (skill tự load), sửa output chưa chuẩn |
 | 20–25 | Tách luật | Chuyển dòng NEVER chung vào copilot-instructions.md, chỉ giữ luật riêng bug trong skill |
 | 25–30 | Share | Commit + PR, nhờ 1 đồng nghiệp trigger thử, ghi feedback 3 dòng |
@@ -239,7 +241,7 @@ Mục này là "bảng cử nhân" để lôi ra tra khi phân vân — đối c
 
 | Nhu cầu | Dùng gì | Gọi thế nào |
 |---|---|---|
-| Task lặp (bug/review/research) | **Skill** (chuẩn 2026) | Tự trigger khi khớp description (Local + Cloud) |
+| Task lặp (bug/review/research) | **Skill** (chuẩn 2026) | Tự trigger khi khớp description (mọi harness) |
 | Task lặp trong repo cũ chạy Local | Prompt file (legacy) | `/tên-file var=...` |
 | Luật áp mọi turn | Root instructions | Tự áp, không cần gọi |
 | Luật riêng 1 module | Scoped instructions + applyTo | Tự áp khi chạm glob |
@@ -273,7 +275,7 @@ Ba lỗi khó chịu nhất:
 
 ```text
 ❌ SAI: tạo .github/prompts/release.prompt.md cho quy trình 8 bước (chỉ chạy Local)
-✅ ĐÚNG: tạo .github/skills/release/SKILL.md (chuẩn chung, chạy cả Cloud)
+✅ ĐÚNG: tạo .github/skills/release/SKILL.md (chuẩn mở, chạy ở cả Copilot harness lẫn Local)
 
 ❌ SAI: lặp "không commit main" trong cả 5 file *.instructions.md
 ✅ ĐÚNG: luật chung ở copilot-instructions.md, file con chỉ giữ luật riêng scope
@@ -285,7 +287,7 @@ Ba lỗi khó chịu nhất:
 
 Mục này là phần về nhà. Làm đủ 3 bài thì bạn mới thực sự "biết" chứ không chỉ "đọc hiểu" — mỗi bài ra một tài sản dùng được thật.
 
-**Bài 1 (15 phút):** Lấy prompt dùng >2 lần/tuần, lưu thành `.github/prompts/my-first.prompt.md` (frontmatter + variables + few-shot). Gọi lại `/my-first` trên task thật, so output trước/sau.
+**Bài 1 (15 phút):** Lấy prompt dùng >2 lần/tuần, lưu thành `.github/prompts/my-first.prompt.md` (frontmatter + variables + few-shot) — file này chỉ chạy ở Local harness. Gọi lại `/my-first` trên task thật, so output trước/sau.
 
 **Bài 2 (20 phút):** Rút gọn copilot-instructions.md <200 dòng, tách 2 files applyTo cho 2 modules hay sai nhất. Test: nhờ Copilot sửa file trong scope, xem luật riêng có áp không?
 

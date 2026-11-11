@@ -1,0 +1,30 @@
+{
+  "name": "acme-tools",
+  "owner": {
+    "name": "Acme Platform",
+    "email": "platform@acme.example"
+  },
+  "metadata": {
+    "description": "Plugin da qua 4 tang validate cua team an toan",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "team-standards",
+      "description": "Checklist review + MCP bao cao chat luong",
+      "version": "1.2.0",
+      "source": {
+        "source": "github",
+        "repo": "acme/team-standards",
+        "sha": "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3",
+        "path": "plugins/team-standards"
+      }
+    },
+    {
+      "name": "security-checks",
+      "description": "Kiem tra nguy co trong PR",
+      "version": "1.3.0",
+      "source": "./plugins/security-checks"
+    }
+  ]
+}

@@ -88,22 +88,22 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 
 ## 8. UI 2026: Interactive/Plan/Autopilot + Manual/Assisted/Allow all khác gì cũ?
 
-**Trả lời 1 câu:** UI mới chỉ đặt tên lại 2 nhóm — persona (agent tự chủ tới đâu) và permission level (tự duyệt tool tới đâu) — không đổi hành vi thực tế.
+**Trả lời 1 câu:** UI mới chỉ đặt tên lại 2 nhóm — agent mode (agent tự chủ tới đâu) và permission level (tự duyệt tool tới đâu) — không đổi hành vi thực tế.
 
 | Nhóm | Lựa chọn | Tương đương | Hành vi | Khi nào dùng |
 |---|---|---|---|---|
-| Persona | Interactive | Agent + `ask` | Dừng hỏi mỗi thay đổi | Mặc định an toàn |
-| Persona | Plan | Plan-first | Chỉ lập kế hoạch, không sửa code | Task lớn cần duyệt trước |
-| Persona | Autopilot | Agent + `Allow all` | Tự chạy tới xong | Chỉ khi sandbox bật + git sạch |
+| Agent mode | Interactive | Agent + `ask` | Dừng hỏi mỗi thay đổi | Mặc định an toàn |
+| Agent mode | Plan | Plan-first | Chỉ lập kế hoạch, không sửa code | Task lớn cần duyệt trước |
+| Agent mode | Autopilot | Agent + `Allow all` | Tự chạy tới xong | Chỉ khi sandbox bật + git sạch |
 | Permission | Manual | Bộ `allow/ask/deny` | Hỏi theo cấu hình | Mặc định |
-| Permission | Assisted (Experimental) | — | LLM judge chấm rủi ro từng tool call | Muốn tự duyệt nhưng chấm rủi ro |
+| Permission | Assisted | — | LLM judge chấm rủi ro từng tool call | Muốn tự duyệt nhưng chấm rủi ro |
 | Permission | Allow all | — | Tự duyệt hết | Sandbox bật + git sạch |
 
 > 📄 **Code ví dụ:** [`examples/09-8-ui-2026-interactive-plan-autopilot-manual-assisted.sh`](examples/09-8-ui-2026-interactive-plan-autopilot-manual-assisted.sh)
 
 > 📄 **Code ví dụ:** [`examples/10-8-ui-2026-interactive-plan-autopilot-manual-assisted.jsonc`](examples/10-8-ui-2026-interactive-plan-autopilot-manual-assisted.jsonc)
 
-**Ví dụ:** task refactor 8 file → **Plan** duyệt kế hoạch → **Interactive** code có kiểm soát. **Autopilot** chỉ trong worktree riêng + sandbox bật. Chi tiết [bài 10 mục 3.2, 5.3, 5.4](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
+**Ví dụ:** task refactor 8 file → **Plan** duyệt kế hoạch → **Interactive** code có kiểm soát. **Autopilot** chỉ trong worktree riêng + sandbox bật. Chi tiết [bài 10 — Modes, permissions, availability](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
 
 ## 9. Team thống nhất permissions baseline thế nào?
 
@@ -138,7 +138,7 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 
 > 📄 **Code ví dụ:** [`examples/12-11-session-target-copilot-local-cloud-la-gi.sh`](examples/12-11-session-target-copilot-local-cloud-la-gi.sh)
 
-> **Lỗi hay gặp:** Cloud không thấy tool/context local — đừng giao việc cần file local cho Cloud. Chi tiết [bài 10 mục 3.3](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
+> **Lỗi hay gặp:** Cloud không thấy tool/context local — đừng giao việc cần file local cho Cloud. Chi tiết [bài 10 — Modes, permissions, availability](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
 
 ---
 

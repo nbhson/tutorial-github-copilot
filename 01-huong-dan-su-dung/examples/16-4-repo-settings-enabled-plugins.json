@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "acme-tools": {
+      "source": {
+        "source": "github",
+        "repo": "acme/plugin-marketplace"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "team-standards@acme-tools": true
+  }
+}

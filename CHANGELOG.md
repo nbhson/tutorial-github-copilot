@@ -4,6 +4,19 @@ File này là nhật ký sửa chữa của repo: mỗi đợt thay đổi một
 
 > **Tóm gọn 1 câu:** Changelog giống sổ sửa nhà — dòng trên cùng là đợt thợ gần nhất, đọc xuống là đi ngược về ngày móng được đóng.
 
+## [Unreleased] — TÁI CẤU TRÚC BÀI 05 (rewrite skill-first + rename) — 2026-11-11 (verify code.visualstudio.com/docs/agent-customization + docs.github.com/en/copilot)
+
+- **Viết lại bài 05** (`01-huong-dan-su-dung/05-prompt-files-custom-instructions.md` → **`01-huong-dan-su-dung/05-agent-skills-reusable-workflows.md`**, `git mv`): **320 → 200 dòng**, 8 mục đánh số (Agent Skill là gì · phân ranh giới instructions/skill/agent/plugin · giải phẫu `SKILL.md` · tạo qua Customizations editor · gọi skill · verify · `gh skill` · port `.prompt.md`). Giữ đúng khuôn series: blockquote meta → `## Mục tiêu bài học` → `> Tóm gọn 1 câu` → các §.
+- **Sửa sự thật theo docs (bài cũ dạy sai):**
+  - **Bỏ `${input}`/`${workspaceFolder}` khỏi skill** — docs VS Code chỉ khai báo biến này cho **prompt files** (`${input:variableName}`, `${selection}`); tài liệu `SKILL.md` không có biến nội suy nào → muốn truyền dữ liệu thì viết sau lệnh (`/deploy-checklist staging, bỏ qua smoke test`).
+  - **"deprecated cho Agent Host" → "chỉ chạy ở Local harness"**: docs GitHub **không có trang concept riêng** cho prompt files và không dùng từ deprecated; nguồn đúng là VS Code docs ("Prompt files run only in Local harness sessions in the Chat view") + cheat sheet GitHub ("available in VS Code, Visual Studio, JetBrains, Xcode" — **không có** GitHub.com/CLI).
+  - **`/skills` và `/create-skill` gắn nhãn "Local harness shortcuts"**; đường chính cho Copilot harness là **Agent Customizations editor** (`Chat: Open Customizations` → Skills → **New Skill** → Workspace/User).
+  - Thêm **3 mức progressive loading** (docs VS Code "How Copilot uses skills"), **matrix `user-invocable` × `disable-model-invocation`**, **`context: fork` kèm điều kiện** (`feature(forked-skill-context)` + `github.copilot.chat.skillTool.enabled`), **tiền tố plugin `/my-plugin:test-runner`**, **cấm namespace prefix trong `name`** (*"silently fail to load"*), **`#file:` + đường dẫn tương đối**, **3 bước verify** (docs nói rõ *menu liệt kê ≠ agent sẽ chọn*).
+  - Bảng đường dẫn skill tách theo **từng docs**: GitHub (`name`/`description`/`license`/`allowed-tools`) vs VS Code (`argument-hint`/`user-invocable`/`disable-model-invocation`/`context`); `description ≤1024` là **VS Code docs**, không phải luật GitHub; personal skill cho cloud sandbox nằm ở **`.copilot/skills` trong dotfiles repo** (*"This does not apply to GitHub Actions-based sessions"*).
+- **Cắt/dời (theo `plan-update/03` §05):** §5 instructions (31 dòng) → 2 dòng + trỏ bài 03; §6 Agent Plugin (19 dòng) → 1 dòng + trỏ bài 17; bảng so sánh Claude/Codex (17 dòng) → 4 gạch ở `## Link qua`; **mẫu `review-pr` 23 dòng bỏ hẳn** — thay bằng `SKILL.md` mẫu `gen-test` nằm trong `examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh` (file này viết lại thành heredoc tự tạo skill + 3 bước verify, 31 dòng).
+- **Link chạm khi rename (11 chỗ, 0 gãy sau khi sửa):** `README.md` gốc, `templates/README.md`, `01-huong-dan-su-dung/README.md` (2), `00-tong-quan-copilot.md`, `commands/system-knowledge/{agent-skill,instructions,prompt-file}/README.md` (5). Sửa thêm 4 *label chữ* ("Bài 05 — Prompt files" → "Bài 05 — Agent Skills") và 3 anchor `bài 05 mục 3.3` → `mục 8`. `CHEATSHEET.md`/bài 02–04 không chứa tên file.
+- **Sửa link gãy có sẵn:** `01-huong-dan-su-dung/09-extensions-marketplaces.md:57` → `../copilot-extensions-ai-powered/README.md` (bài học ở cấp 1 nên chỉ cần 1 `../`; ghi chú cũ trong plan chép `../../` là sai). Toàn bộ repo: **0 link tương đối gãy**.
+
 ## [Unreleased] — CẬP NHẬT SỰ KIỆN 2026-10-28 (verify github.blog/changelog + docs.github.com/copilot)
 
 - **Sửa bug version Grok (verify changelog 2026-10-28):** mọi chỗ ghi "Grok 4.5 → Grok **4.6**" đã đổi thành "Grok 4.5 → Grok **4.7**" — khớp changelog chính thức: Grok 4.7 GA trong Copilot **21/09/2026** (github.blog/changelog/2026-09-21) và bảng deprecation **19/10/2026** (github.blog/changelog/2026-10-19) chỉ định alternative của Grok 4.5 là **Grok 4.7**. Files chạm: `README.md`, `CHEATSHEET.md`, `CHANGELOG.md`, `01-huong-dan-su-dung/10-modes-permissions-availability.md`, `01-huong-dan-su-dung/14-models-chon-model-dung.md`. Ghi chú "(4.7 — verify)" cũ đã gỡ (đã verify).
@@ -62,9 +75,9 @@ File này là nhật ký sửa chữa của repo: mỗi đợt thay đổi một
 ## [Unreleased] — CẬP NHẬT SỰ KIỆN 2026-10-09 (rename `muse-instructions.md` → `copilot-instructions.md`, hooks in-process, prompt files deprecated)
 
 - **Sửa naming (toàn repo):** đổi tên file template `templates/.github/muse-instructions.md` → `templates/.github/copilot-instructions.md`; thay toàn bộ ~100 tham chiếu `muse-instructions.md` bằng `copilot-instructions.md` (khớp filename `.github/copilot-instructions.md` chính thức trong docs GitHub 2026).
-- **Hooks in-process (sự thật mới):** Copilot 2026 **có** hooks in-process (`.github/hooks/*.json`, events `PreToolUse`/`PostToolUse`/`SessionStart`/`SubagentStart`/`PreCompact`/`Stop`/`UserPromptSubmit`) — chế độ **preview, chỉ Local, tôn trọng allow/ask/deny, không phải security boundary**. Sửa lại claim "Copilot không có hooks" trong:
+- **Hooks in-process (sự thật mới):** Copilot 2026 **có** hooks in-process (`.github/hooks/*.json`, events `preToolUse`/`postToolUse`/`sessionStart`/`subagentStart`/`preCompact`/`stop`/`userPromptSubmit`) — chạy ở **Copilot CLI + Copilot in the cloud** (subset events), VS Code còn **Preview**; tôn trọng allow/ask/deny, không phải security boundary. Sửa lại claim "Copilot không có hooks" trong:
   - `01-huong-dan-su-dung/07-policies-guardrails-tu-dong-hoa.md` (tiêu đề + mục 1 + bảng hiểu nhầm + lớp 4).
-  - `01-huong-dan-su-dung/10-modes-permissions-availability.md` (hàng "Copilot có PreToolUse hooks như Claude" + so sánh Claude Code).
+  - `01-huong-dan-su-dung/10-modes-permissions-availability.md` (hàng "Copilot có preToolUse hooks như Claude" + so sánh Claude Code).
   - `03-cau-hoi-thuong-gap/05-policies-guardrails-faq.md` (intro + câu pre-commit).
   - Chi tiết hooks chính thức: `01-huong-dan-su-dung/17-agent-customizations-hub.md` (mục Hooks + `/create-hook`).
 - **Prompt files deprecated (ghi chú mới):** `.prompt.md` **deprecated cho Agent Host sessions** (Copilot/Cloud) — vẫn chạy được trên Local/VS Code. Khuyến nghị mới: **Agent Skills** (`SKILL.md`, chuẩn mở, port mọi nơi). Ghi chú bổ sung vào:
@@ -73,7 +86,7 @@ File này là nhật ký sửa chữa của repo: mỗi đợt thay đổi một
   - `01-huong-dan-su-dung/06-custom-agents-parallel.md` (bảng + link chéo bài 05).
   - `03-cau-hoi-thuong-gap/06-prompts-agents-instructions.md` (bảng tổng hợp + câu 4/6/8 ghi deprecated/legacy, skill = khuyến nghị).
   - `02-tips-thuc-chien/07-thiet-ke-prompts-skills.md` (banner lưu ý, bảng thuật ngữ, mục 3 legacy, walkthrough + bảng tra nhanh hướng skill).
-  - `02-tips-thuc-chien/08-tiet-kiem-premium-requests.md` (ví dụ team-bug → skill 2026).
+  - `02-tips-thuc-chien/08-tiet-kiem-ai-credits.md` (ví dụ team-bug → skill 2026).
   - `02-tips-thuc-chien/09-teamwork-chuan-hoa.md` (bảng + ví dụ 2 ghi Agent Skills 2026 + prompt legacy).
   - `CHEATSHEET.md` (dòng `*.prompt.md` deprecated), `templates/README.md` (3 prompt files đánh dấu Legacy + skill khuyến nghị).
 - **AI Credits + pricing (verify 2026-10-09 với docs.github.com/copilot/billing):**
@@ -95,11 +108,11 @@ File này là nhật ký sửa chữa của repo: mỗi đợt thay đổi một
   - Ghi chú bổ sung vào: `02-tips-thuc-chien/11-nang-cao-cli-web-coding-agent.md` (mục 3), `01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md` (mục 5.1).
 - **CHEATSHEET.md:** thêm bảng "AI Credits (tính tiền)", "Model roster (10/2026)", "Hooks in-process (preview, Local)".
 
-## [Unreleased] — Bài 17 Agent Customizations Hub (2026-10-09)
+## [Unreleased] — Bài 17 Agent Customizations editor (2026-10-09)
 
 - `01-huong-dan-su-dung/17-agent-customizations-hub.md` (**mới**, bài 17): hub cho màn hình Agent Customizations — `Customize Your Agent` (draft qua `/init`, `/create-*`), bảng quyết định cần-gì→dùng-gì, 7 cards Explore chi tiết (Plugins Agent Plugins 1.0 + governance / MCP Servers / Skills SKILL.md / Instructions theo harness / Agents `.agent.md` / Hooks Local-vs-Copilot / Tools + tool sets + 128-limit), 2 cards Other (`voice.md`, `dictation.md`), Discover/Marketplace, migrations (prompt→skills), evaluations/Waza, walkthrough 20 phút + troubleshooting matrix.
 - `01-huong-dan-su-dung/README.md`: 17 → **18 bài**, thêm dòng bài 17, sửa tiêu đề 00 → 17. `README.md` gốc: 17 → 18 bài.
-- `CHEATSHEET.md`: thêm dòng Agent Customizations hub vào bảng instructions/prompts/skills/MCP.
+- `CHEATSHEET.md`: thêm dòng Agent Customizations editor (tên cũ: hub) vào bảng instructions/prompts/skills/MCP.
 
 ## [Unreleased] — UI agent persona, permission levels + Session Target/harness (2026-10-09)
 

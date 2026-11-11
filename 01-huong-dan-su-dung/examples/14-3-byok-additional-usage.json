@@ -1,0 +1,29 @@
+{
+  "$comment": "Dong hanh bai 14 §6. Hai khoa lien quan den tien dat canh nhau de kho nham: optional_calls.budget va additional_usage.limit deu tinh bang USD — don vi tren hoa don — KHONG phai credits (1 credit = 0,01 USD). Gia model trong bang thi tinh bang credits. Muon gioi han '12 USD tien model moi thang' -> limit: 12, khong phai 1200 credits.",
+
+  "byok": {
+    "$comment": "BYOK = tu dan API key cua nha cung cap (OpenAI, Anthropic, Groq...). Request di thang toi provider, khong qua Copilot API, nen KHONG tieu ton AI credits cua goi. Provider thu tien ban theo bang gia cua ho. Azure OpenAI Foundry hien khong nam trong danh sach BYOK ho tro — kiem tra lai trang Reference truoc khi len ke hoach.",
+    "providers": [
+      { "id": "openai", "apiKeyEnvVar": "OPENAI_API_KEY" },
+      { "id": "anthropic", "apiKeyEnvVar": "ANTHROPIC_API_KEY" }
+    ]
+  },
+
+  "optional_calls": {
+    "$comment": "Cac loi goi ngoai luong chinh (sub-agent, background job...). Budget o day la tran chi tieu tuy chon, don vi USD.",
+    "budget": 20,
+    "over_limit_behavior": "pause"
+  },
+
+  "additional_usage": {
+    "$comment": "Chi co tac dung SAU khi da tieu het credits di kem goi. Cung don vi USD voi optional_calls.budget; cung over_limit_behavior: pause de khong phat sinh ngoai du kien.",
+    "limit": 12,
+    "over_limit_behavior": "pause"
+  },
+
+  "model_defaults": {
+    "$comment": "auto la gia tri mac dinh cho moi request; chi dinh model cu the khi that su can (xem bai 14 §8). Theo docs, request auto duoc giam gia (~10%) so voi dinh ten cung model do trong danh sach.",
+    "auto": true,
+    "effort": "medium"
+  }
+}

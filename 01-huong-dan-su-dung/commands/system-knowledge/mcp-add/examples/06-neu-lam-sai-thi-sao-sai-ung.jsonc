@@ -1,1 +1,0 @@
-"env": { "DATABASE_URL": "${input:pg_readonly_url}" }   // nhập lúc chạy, không nằm trong file

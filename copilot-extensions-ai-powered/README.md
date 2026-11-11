@@ -1,5 +1,7 @@
 # GitHub Copilot Extensions & AI-Powered Platform (2025 → 2026)
 
+> ⚠️ **Status notice (11/2026): GitHub Copilot Extensions were retired on 2025-10-11.** Third-party participants (`@sentry`, `@linear`, …) no longer work in Copilot Chat; MCP servers are the supported way to plug external tools in. Sections below describe the 2025 ecosystem for historical reference — read [lesson 08 — MCP](../01-huong-dan-su-dung/08-mcp-ket-noi-cong-cu-ngoai.md) and [lesson 09 — Extensions & Marketplaces](../01-huong-dan-su-dung/09-extensions-marketplaces.md) for what to use today.
+
 > **Audience:** Developers and org admins who already use Copilot Chat and want the extension ecosystem, custom agents, Copilot in GitHub Actions, Enterprise capabilities, and the Copilot CLI.
 > **Last verified:** 2026-10-27 · Sources: github.blog changelog, docs.github.com/copilot, code.visualstudio.com/docs/copilot
 
@@ -58,9 +60,9 @@ Beyond marketplace extensions, you can build your own agents on three levels:
 
 Notes for 2025/2026:
 
-- **Agent Skills** (`SKILL.md`) are the preferred packaging over legacy `.prompt.md` files for agent-facing behavior (prompt files are deprecated for the Agent Host path).
+- **Agent Skills** (`SKILL.md`) are the preferred packaging over `.prompt.md` files for agent-facing behavior (prompt files only run on the Local harness — VS Code chat; the Copilot harness does not load them).
 - **Third-party coding agents** — Claude Code and Codex — can run **alongside Copilot's cloud agent** on github.com, working asynchronously on issues/PRs ("Agent HQ" direction announced at GitHub Universe 2025).
-- **Copilot coding agent** (assign an issue to Copilot) is GA for paid subscribers and works from github.com, VS Code, and GitHub Mobile.
+- **Copilot cloud agent** (formerly "coding agent"; assign an issue to Copilot) is GA for paid subscribers and works from github.com, VS Code, and GitHub Mobile.
 
 > **One-line summary:** Start at the lightest level that works — prompt file for one repeatable task, custom agent for a persona with tools, extension only when you need your own server.
 
@@ -133,7 +135,7 @@ Copilot Chat ships inside the GitHub Mobile app and mirrors the github.com chat 
 
 - **Ask about a repo/PR/issue** you have access to; read agent-produced PRs and **approve workflow runs** on the go.
 - **Copilot Extensions work on Mobile** (public preview since 2025): `@sentry`, `@linear` etc. are available from the chat input.
-- **Copilot coding agent + Mobile** = "delegate while working, approve while commuting": assign an issue from your IDE, review/merge from your phone when CI is green.
+- **Copilot cloud agent + Mobile** = "delegate while working, approve while commuting": assign an issue from your IDE, review/merge from your phone when CI is green.
 - Limitations: it is a review/decision surface, not a coding surface — no IDE, no local files.
 
 > **One-line summary:** Mobile turns dead commute time into review time — approve, merge, and unblock agents from your pocket, but always write code where the code lives.
@@ -149,9 +151,9 @@ Verify: mobile app → Copilot tab → pick repo → ask "summarize open PRs ass
 
 Seven habits that keep the extension ecosystem useful instead of dangerous — each one states its own reason, so skim the bold parts first.
 
-1. **Pick the right surface:** autocomplete/Chat for inline work; extensions for SaaS reach; coding agent for async issue work; CLI for terminal-native flows.
+1. **Pick the right surface:** autocomplete/Chat for inline work; extensions for SaaS reach; cloud agent for async issue work; CLI for terminal-native flows.
 2. **Keep extensions allowlisted at org level.** Every extension runs with your permissions — vet before install, pin versions.
-3. **Prefer Agent Skills over deprecated prompt files** for new agent-facing automation.
+3. **Prefer Agent Skills over prompt files** for new agent-facing automation — `.prompt.md` only runs on the Local harness, skills run everywhere.
 4. **Gate models and cap credits:** default mid/mini tier, flagship only for hard tasks; review usage dashboards weekly (AI Credits: 1 credit = $0.01).
 5. **Use Mobile for review, not for coding.** Approve PRs and workflow runs from the phone; write code where the context is.
 6. **In CI, pin versions and scopes.** Copilot CLI in Actions should run sandboxed with least-privilege tokens.
@@ -166,12 +168,12 @@ Seven habits that keep the extension ecosystem useful instead of dangerous — e
 - Copilot Extensions GA (2025-02-19): https://github.blog/changelog/2025-02-19-announcing-the-general-availability-of-github-copilot-extensions/
 - Extensions on GitHub Mobile (public preview): https://github.com/orgs/community/discussions/142240
 - Third-party coding agents: https://docs.github.com/copilot/concepts/agents/about-third-party-coding-agents
-- Copilot coding agent GA: https://github.com/orgs/community/discussions/159068
+- Copilot cloud agent GA (nguồn ghi theo tên cũ "coding agent"): https://github.com/orgs/community/discussions/159068
 - Copilot CLI GA (2026-02-25): https://github.blog/changelog/2026-02-25-github-copilot-cli-is-now-generally-available/
 - Copilot CLI docs: https://docs.github.com/copilot/how-tos/copilot-cli/use-copilot-cli/overview
 - Agents overview (Copilot, third-party, custom): https://github.com/features/copilot/agents
-- Copilot docs hub: https://docs.github.com/copilot · VS Code: https://code.visualstudio.com/docs/copilot
-- Internal cross-references: [bài 09 — Extensions & Marketplaces](../01-huong-dan-su-dung/09-extensions-marketplaces.md) · [bài 12 — SDK/CI](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md) · [bài 17 — Agent Customizations hub](../01-huong-dan-su-dung/17-agent-customizations-hub.md)
+- Copilot docs hub: https://docs.github.com/copilot · VS Code: https://code.visualstudio.com/docs/setup/copilot
+- Internal cross-references: [lesson 09 — Extensions & Marketplaces](../01-huong-dan-su-dung/09-extensions-marketplaces.md) · [lesson 12 — SDK/CI](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md) · [lesson 17 — Agent Customizations editor](../01-huong-dan-su-dung/17-agent-customizations-hub.md)
 
 ---
 

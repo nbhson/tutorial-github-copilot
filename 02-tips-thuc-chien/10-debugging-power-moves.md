@@ -2,7 +2,7 @@
 
 > **Dành cho:** dev đang kẹt với test đỏ / bug prod và muốn debug có hệ thống.
 > **Vấn đề:** paste đống log vào chat rồi cầu nguyện, sửa 5 file càng sửa càng đỏ.
-> **Đọc xong:** dùng thành thạo /fix có scope, loop test tới xanh, bisect thu hẹp, log→prompt và @terminal.
+> **Đọc xong:** dùng thành thạo /fix có scope, loop test tới xanh, bisect thu hẹp, log→prompt và inline chat trong terminal.
 > **Thời gian:** ~20 phút đọc + ~55 phút làm bài tập.
 
 ## 1. Vì sao debug với AI hay lạc?
@@ -136,20 +136,20 @@ Không fix, chỉ tóm tắt."
 
 Chat chính chỉ nhận 10 dòng summary thay vì 1000 dòng rác (xem [Tips 01](./01-context-hygiene.md)).
 
-## 6. Move 4: @terminal + explain lỗi
+## 6. Move 4: inline chat trong terminal + explain lỗi
 
-**@terminalLastCommand — Copilot đọc lỗi trực tiếp:**
+**#terminalLastCommand — Copilot đọc lỗi trực tiếp:**
 
 ```text
 # Sau khi chạy lệnh đỏ trong terminal, trong chat gõ:
-@terminalLastCommand Giải thích lỗi này 3 bullet + gợi ý fix 1 file cụ thể.
+#terminalLastCommand Giải thích lỗi này 3 bullet + gợi ý fix 1 file cụ thể.
 Không chạy lệnh nguy hiểm (rm -rf, reset --hard) nếu chưa hỏi tôi.
 ```
 
 **Explain + fix có gate:**
 
 ```text
-@testFailure Giải thích vì sao test này đỏ (3 bullet, kèm file:line).
+#testFailure Giải thích vì sao test này đỏ (3 bullet, kèm file:line).
 Sau đó đề xuất fix tối thiểu 5 dòng, chờ tôi duyệt mới sửa.
 Không đụng file ngoài test + module này.
 ```
@@ -164,7 +164,7 @@ Bug flaky: 10 lần chạy đỏ 3 lần.
 Không fix ngay, thu thập evidence trước.
 ```
 
-@terminal cho model thấy đúng output thật thay vì bản bạn copy tay (dễ sai/sót) — copy thiếu dòng stack quan trọng là model chẩn đoán lệch, mất thêm vòng.
+`#terminalLastCommand` — hoặc mở inline chat ngay trong terminal (`⌘I`/`Ctrl+I`) — cho model thấy đúng output thật thay vì bản bạn copy tay (dễ sai/sót) — copy thiếu dòng stack quan trọng là model chẩn đoán lệch, mất thêm vòng.
 
 ## 7. Walkthrough: bug 500 trong 30 phút
 
@@ -189,7 +189,7 @@ Tổng 30 phút, 0 lần cãi nhau, có regression test + logs.
 | Test đỏ 1 module | Test loop | `Chạy focused, đỏ thì loop 3 lần` | Full scope + lint/build xanh |
 | Không biết file nào | Bisect | `Đề xuất 3 điểm bisect + verify` | Khoanh được 1 file |
 | Log 1000 dòng | Log→prompt | `Tóm tắt 3 lỗi đầu, không fix` | Có summary 10 dòng |
-| Lệnh terminal đỏ | @terminal | `@terminalLastCommand giải thích 3 bullet` | Hiểu lỗi + fix 1 file |
+| Lệnh terminal đỏ | `#terminalLastCommand` | `#terminalLastCommand giải thích 3 bullet` | Hiểu lỗi + fix 1 file |
 | Flaky 3/10 lần | Thu thập evidence | `Liệt kê 3 nguyên nhân + cách kiểm chứng` | Có log/timestamp, chưa fix vội |
 | Cãi 2 lần vẫn sai | Restore checkpoint | `Restore trước turn 1, re-prompt sạch` | Prompt mới hẹp hơn |
 | Sửa A hỏng B | Thu hẹp scope | `Chỉ sửa file X, diff --stat kiểm tra` | Diff gọn + full test xanh |

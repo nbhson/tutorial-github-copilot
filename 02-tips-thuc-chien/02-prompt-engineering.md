@@ -10,7 +10,7 @@
 Copilot không đọc được ý nghĩ. Nguyên nhân số 1 của "sửa lan man, đọc 100 files, đổi API không hỏi" không phải model lười, mà là bạn cho nó **quyền tự do quá rộng** — như giao chìa khóa cả tòa nhà cho thợ sửa cái khóa cửa:
 
 - `"fix login"` không scope → model tự đoán scope, tự đoán done, tự đoán verify.
-- `"@workspace investigate auth"` với repo 500 files → mời model đi lạc.
+- `"#codebase investigate auth"` với repo 500 files → mời model đi lạc.
 
 Mỗi prompt tốt làm 3 việc:
 
@@ -31,7 +31,7 @@ Mục này bóc prompt tốt ra làm 4 mảnh — thiếu mảnh nào là output
 ```text
 TỐT: "#file:src/auth/login.ts + #file:src/auth/__tests__/login.test.ts"
 TỐT: "Scope src/payments/*.ts, đừng đụng src/legacy/"
-TỆ:  "@workspace đọc cả repo rồi cho ý kiến"
+TỆ:  "#codebase đọc cả repo rồi cho ý kiến"
 ```
 
 Mẹo: bôi đen code dùng `#selection`; file >1000 dòng thì tóm tắt từng phần. Non-code: thay files bằng nguồn — `docs/sprint-12.md`, `data/feedback-q3.csv`.
@@ -130,7 +130,7 @@ REFACTOR: Tách file <X ~900 dòng> thành modules <login, session, types>.
 **Mẫu 4 — RESEARCH (scope hẹp + output chuẩn):**
 
 ```text
-RESEARCH: @workspace Chỉ trong <glob hẹp, vd src/payments/refund*>:
+RESEARCH: #codebase Chỉ trong <glob hẹp, vd src/payments/refund*>:
 - Không sửa code, chỉ đọc.
 - Trả về: files liên quan + flow hiện tại (5-8 bullet) + 2 phương án (pros/cons).
 - Ghi findings ra plan.md rồi dừng.

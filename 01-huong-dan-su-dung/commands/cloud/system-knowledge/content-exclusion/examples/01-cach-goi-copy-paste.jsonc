@@ -1,0 +1,19 @@
+// Content exclusion KHONG phai mot setting trong `settings.json` cua VS Code.
+// No la policy dat tren GitHub.com: Settings -> Copilot -> Content exclusion (repo/org/enterprise).
+// O hop "Paths to exclude", moi dong la mot path theo dang YAML-list nhu ben duoi.
+// Copilot in the cloud (GitHub.com): dat o day, server gui policy ve client.
+// Claude Code: khong co boundary server-side tuong duong -> chan bang permissions trong settings.
+
+// Vi tri: github.com -> Repository -> Settings -> "Copilot" -> "Content exclusion"
+//   (Organization va Enterprise cung co trang tuong tu; repo thay ke thua trong box xam, khong sua duoc)
+
+// Noi dung o hop "Paths to exclude in this repository":
+- "/secrets/**"        // ca directory + files ben duoi
+- "/.env"              // mot file cu the o goc repo
+- "credentials.json"   // khong dau "/" -> khop ten o bat ky dau nao
+- "*.pem"              // fnmatch, khong phan biet hoa/thuong
+
+// Plan ho tro: Copilot Business / Copilot Enterprise (goi ca nhan khong co org policy).
+// Ky vong: file trong danh sach bi loai khoi index/context cua Copilot (va mat inline suggestions trong chinh no)
+// Verify: policy co the toi 30 phut moi den IDE; test 2 chieu xem examples/02
+// (Trong hop nhap tren GitHub.com, dung dau # de ghi chu - do la dinh dang YAML-list cua no)

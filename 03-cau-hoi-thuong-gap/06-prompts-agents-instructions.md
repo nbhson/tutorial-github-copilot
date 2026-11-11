@@ -8,9 +8,9 @@
 |---|---|---|---|
 | Project instructions | `.github/copilot-instructions.md` | Tự động mọi chat/completion | Chính thức |
 | Path instructions | `.github/instructions/*.instructions.md` | Tự động khi file khớp `applyTo` | Chính thức |
-| Agent Skill | `.github/skills/<ten>/SKILL.md` | Model tự gọi khi khớp `description` | **Khuyến nghị (chạy Local + Cloud + CLI)** |
+| Agent Skill | `.github/skills/<ten>/SKILL.md` | Model tự gọi khi khớp `description` | **Khuyến nghị (chạy cả Copilot harness lẫn Local harness)** |
 | Custom agent | `.github/agents/*.agent.md` | Chọn trong agent picker | Chính thức |
-| Prompt tái dùng (legacy) | `.github/prompts/*.prompt.md` | Gọi tay `/tên-prompt` | **Deprecated cho Agent Host** (Local vẫn chạy) |
+| Prompt tái dùng | `.github/prompts/*.prompt.md` | Gọi tay `/tên-prompt` | **Chỉ chạy ở Local harness (VS Code)** — Copilot harness không nạp |
 
 > **Cách đọc bảng này:** đây là "địa chỉ nhà" của từng loại file — cột **Đường dẫn chuẩn** phải khớp từng ký tự, cột **Kích hoạt** cho biết tự chạy hay phải gọi tay, cột **Trạng thái 2026** cảnh báo cái nào đang cũ.
 
@@ -18,7 +18,7 @@
 
 ## 1. File nào Copilot tự load, file nào phải gọi tay?
 
-**Trả lời 1 câu:** Tự load `copilot-instructions.md` (mọi lúc) + `*.instructions.md` khớp `applyTo`; gọi tay `*.prompt.md` (slash, legacy) + custom agent (chọn trong picker); còn Skill thì model tự gọi theo `description` — chuẩn khuyến nghị 2026.
+**Trả lời 1 câu:** Tự load `copilot-instructions.md` (mọi lúc) + `*.instructions.md` khớp `applyTo`; gọi tay `*.prompt.md` (slash, chỉ Local harness) + custom agent (chọn trong picker); còn Skill thì model tự gọi theo `description` — chuẩn khuyến nghị 2026.
 
 Ví von cho dễ phân: instructions là tạp dước đeo sẵn vào việc (tự áp mỗi lần vào bếp), prompt file là công thức phải mở ra đọc, còn Skill là đầu bếp biết tự nhìn thấy món order mà vào bếp.
 
@@ -68,9 +68,9 @@ tools: [github-mcp, search, edit]
 
 > **Chat cũ giữ context cũ** — mở chat mới trước khi kết luận instructions sai.
 
-## 6. Prompt files (`*.prompt.md`) — legacy
+## 6. Prompt files (`*.prompt.md`) — chỉ Local harness
 
-**Trả lời 1 câu:** Prompt file là kịch bản đóng gói (frontmatter ép mode + tools + body từng bước) gọi bằng `/tên-file` — kết quả nhất quán, share được team, nhưng **deprecated cho Agent Host** (chỉ chạy Local). Việc mới nên dùng Agent Skill.
+**Trả lời 1 câu:** Prompt file là kịch bản đóng gói (frontmatter ép mode + tools + body từng bước) gọi bằng `/tên-file` — kết quả nhất quán, share được team, nhưng **chỉ chạy ở Local harness (VS Code)**, Copilot harness không nạp. Việc mới nên dùng Agent Skill.
 
 ```markdown
 ---
@@ -90,7 +90,7 @@ tools: [search, edit]
 
 ## 7. Custom agent (`*.agent.md`) viết sao, khi nào cần?
 
-**Trả lời 1 câu:** Custom agent = persona chuyên môn (`description` + `tools` giới hạn) — cần khi muốn tách việc (đọc ồn giao explorer) hoặc ép kỷ luật (tester chỉ báo PASS/FAIL); task 1-2 file thì chat thường + instructions đủ.
+**Trả lời 1 câu:** Custom agent = hướng dẫn + `tools` giới hạn cho một vai chuyên môn — cần khi muốn tách việc (đọc ồn giao explorer) hoặc ép kỷ luật (tester chỉ báo PASS/FAIL); task 1-2 file thì chat thường + instructions đủ.
 
 ```markdown
 <!-- .github/agents/explorer.agent.md -->
@@ -107,7 +107,7 @@ Mẫu sẵn trong `templates/.github/agents/`.
 
 ## 8. Agent Skills (`SKILL.md`) khác gì prompt/agent?
 
-**Trả lời 1 câu:** Skill là gói **mô tả + procedure + tools** mà model **tự phát hiện và gọi** khi task khớp `description` — chạy mọi harness (Local + Cloud + CLI), khác prompt (gọi tay, deprecated cho Cloud) và custom agent (phải chọn trong picker).
+**Trả lời 1 câu:** Skill là gói **mô tả + procedure + tools** mà model **tự phát hiện và gọi** khi task khớp `description` — chạy ở cả Copilot harness lẫn Local harness, khác prompt file (gọi tay, chỉ Local) và custom agent (phải chọn trong picker).
 
 ```markdown
 <!-- .github/skills/review-pr/SKILL.md -->
@@ -119,7 +119,7 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 ...procedure + checklist + lệnh git diff...
 ```
 
-| Tiêu chí | Prompt file (legacy) | Custom agent | Agent Skill (chuẩn 2026) |
+| Tiêu chí | Prompt file (chỉ Local) | Custom agent | Agent Skill (chuẩn 2026) |
 |---|---|---|---|
 | Kích hoạt | Gọi tay `/tên` | Chọn trong picker | Model tự gọi theo `description` |
 | Chạy ở đâu | Local/VS Code | Harness có picker | Mọi harness |

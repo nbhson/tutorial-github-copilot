@@ -131,7 +131,7 @@ Repo → Settings → Branches → Add rule (main):
 
 ```text
 GitHub Org → Copilot → Policies:
-- Coding Agent chỉ chạy trên repo có CI xanh mẫu.
+- cloud agent chỉ chạy trên repo có CI xanh mẫu.
 - Chặn Copilot suggest cho file *.pem, .env, secrets/.
 - Mọi thay đổi instructions/prompts phải qua PR + 1 review lead.
 ```
@@ -204,8 +204,8 @@ Bài học lớn nhất: **guardrail bị bypass còn tệ hơn không có** —
 
 - [Tips 04](./04-verification-done-that.md) — verify + review gate
 - [Tips 07](./07-thiet-ke-prompts-skills.md) — thiết kế instructions/prompts tái dùng
-- [Tips 08](./08-tiet-kiem-premium-requests.md) — prune MCP/extensions tiết kiệm
+- [Tips 08](./08-tiet-kiem-ai-credits.md) — prune MCP/extensions tiết kiệm
 - [Tips 09](./09-teamwork-chuan-hoa.md) — chuẩn hóa guardrails cho cả team
-- [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — policy cho Coding Agent cloud
+- [Tips 11](./11-nang-cao-cli-web-coding-agent.md) — policy cho Copilot cloud agent
 
 > **Chốt Tips 06:** guardrail không phải để bắt Copilot bớt thông minh, mà để bạn **không phải có mặt lúc 2h sáng** — luật nhắc 2 lần thì cài chốt, chặn trước bằng instructions, khóa sau bằng CI.

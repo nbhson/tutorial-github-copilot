@@ -1,4 +1,0 @@
-// settings.json — mức local
-{
-  "github.copilot.chat.exclusion": ["**/.env*", "**/*.pem", "secrets/**"]
-}
