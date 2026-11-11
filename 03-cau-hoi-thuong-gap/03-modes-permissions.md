@@ -20,7 +20,7 @@
 - **Edit:** sửa trực tiếp file trong working set (file bạn mở/attach). Thường không chạy lệnh build/test trừ khi bạn bảo.
 - **Agent:** tự tìm file, sửa nhiều file, chạy terminal (lint/test/build), tạo file mới. Mỗi hành động nhạy cảm hiện **approval prompt**.
 
-> 📄 **Code ví dụ:** [`examples/01-1-ask-edit-agent-khac-nhau-gi.sh`](examples/01-1-ask-edit-agent-khac-nhau-gi.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/ask-edit-agent-khac-nhau-gi.sh`](./examples/03-modes-permissions/ask-edit-agent-khac-nhau-gi.sh)
 
 **Ví dụ:** hỏi "hàm này làm gì" → Ask. Sửa 1 hàm → Edit + attach file. Refactor auth 5 file + chạy test → Agent.
 
@@ -36,7 +36,7 @@ Giống hệt bảo vệ tòa nhà xin giấy ra vào: "cho vào lần này" (Al
 | Allow for session/workspace | Nhớ cho phiên/workspace | Có | Lệnh an toàn lặp lại (`npm test`, `git diff`) |
 | Deny | Cấm chạy | Có | Lệnh nguy hiểm (`rm -rf`, `git push --force`) |
 
-> 📄 **Code ví dụ:** [`examples/02-2-tool-approval-la-gi-sao-cu-hoi.sh`](examples/02-2-tool-approval-la-gi-sao-cu-hoi.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/tool-approval-la-gi-sao-cu-hoi.sh`](./examples/03-modes-permissions/tool-approval-la-gi-sao-cu-hoi.sh)
 
 > **Hỏi hoài:** thường do task agent rộng (nhiều tool calls) hoặc chưa allow-for-workspace lệnh an toàn. Workspace mới → bộ nhớ approval reset.
 
@@ -46,9 +46,9 @@ Giống hệt bảo vệ tòa nhà xin giấy ra vào: "cho vào lần này" (Al
 
 Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến chân ranh giới là nó dừng, không nhìn thấy gì bên trong — nhưng nếu kho báu đã từng bị chụp hình đưa ra ngoài (đã commit vào git) thì rào này vô dụng.
 
-> 📄 **Code ví dụ:** [`examples/03-3-content-exclusion-la-gi-cau-hinh-o.json`](examples/03-3-content-exclusion-la-gi-cau-hinh-o.json)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/content-exclusion-la-gi-cau-hinh-o.json`](./examples/03-modes-permissions/content-exclusion-la-gi-cau-hinh-o.json)
 
-> 📄 **Code ví dụ:** [`examples/04-3-content-exclusion-la-gi-cau-hinh-o.sh`](examples/04-3-content-exclusion-la-gi-cau-hinh-o.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/content-exclusion-la-gi-cau-hinh-o.sh`](./examples/03-modes-permissions/content-exclusion-la-gi-cau-hinh-o.sh)
 
 > **Khi nào áp dụng:** ngay khi repo có secret/key/hợp đồng — exclusion trước, code sau. Chi tiết [bài 09](09-bao-mat-quyen-rieng-tu.md). Lưu ý: file đã vào git thì exclusion không cứu được — phải xử lý ở tầng secret.
 
@@ -56,7 +56,7 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 
 **Trả lời 1 câu:** 3 lớp cứu hộ: undo trong chat → git checkout/stash → checkpoint session; cứ 1 file sai thì chưa cần đến lớp cuối.
 
-> 📄 **Code ví dụ:** [`examples/05-4-agent-sua-nham-file-thi-xu-ly.sh`](examples/05-4-agent-sua-nham-file-thi-xu-ly.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/agent-sua-nham-file-thi-xu-ly.sh`](./examples/03-modes-permissions/agent-sua-nham-file-thi-xu-ly.sh)
 
 > **Thói quen bắt buộc:** `git diff --stat` trước khi commit sau mỗi task agent. Agent mode còn có timeline checkpoint — quay về checkpoint trước khi nó sửa sai.
 
@@ -68,13 +68,13 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 - Cân nhắc từng lần: `npm install`, `git commit`, `docker build`.
 - Không bao giờ auto-allow: `rm -rf`, `git push --force`, `kubectl delete`, `drop table`, `chmod 777`.
 
-> 📄 **Code ví dụ:** [`examples/06-5-cho-agent-chay-lenh-terminal-an-toan.sh`](examples/06-5-cho-agent-chay-lenh-terminal-an-toan.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/cho-agent-chay-lenh-terminal-an-toan.sh`](./examples/03-modes-permissions/cho-agent-chay-lenh-terminal-an-toan.sh)
 
 ## 6. Edit mode sửa lan sang file khác — chặn thế nào?
 
 **Trả lời 1 câu:** Edit mode chỉ sửa working set (file mở + file attach) — lan ra ngoài là do bạn attach folder hoặc prompt chung chung; fix bằng ghi rõ file được/không được đụng.
 
-> 📄 **Code ví dụ:** [`examples/07-6-edit-mode-sua-lan-sang-file-khac.sh`](examples/07-6-edit-mode-sua-lan-sang-file-khac.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/edit-mode-sua-lan-sang-file-khac.sh`](./examples/03-modes-permissions/edit-mode-sua-lan-sang-file-khac.sh)
 
 > **Đã ghi rõ mà vẫn lan:** đóng tab file không liên quan, Undo rồi thử lại với `#selection` đúng đoạn.
 
@@ -82,7 +82,7 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 
 **Trả lời 1 câu:** Ask chỉ đọc file bạn attach + instructions, không tự quét repo — nhưng `#file` secret vào chat là nội dung đó lên server model.
 
-> 📄 **Code ví dụ:** [`examples/08-7-ask-mode-co-so-lo-file-nhay.sh`](examples/08-7-ask-mode-co-so-lo-file-nhay.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/ask-mode-co-so-lo-file-nhay.sh`](./examples/03-modes-permissions/ask-mode-co-so-lo-file-nhay.sh)
 
 **Ví dụ:** debug lỗi Stripe → paste **đoạn code gọi API** (đã xóa key) thay vì `#file:secrets/stripe.ts` nguyên file. **Lỡ attach secret rồi:** coi như đã lộ, **xoay key ngay**, thêm path vào content exclusion.
 
@@ -99,9 +99,9 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 | Permission | Assisted | — | LLM judge chấm rủi ro từng tool call | Muốn tự duyệt nhưng chấm rủi ro |
 | Permission | Allow all | — | Tự duyệt hết | Sandbox bật + git sạch |
 
-> 📄 **Code ví dụ:** [`examples/09-8-ui-2026-interactive-plan-autopilot-manual-assisted.sh`](examples/09-8-ui-2026-interactive-plan-autopilot-manual-assisted.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/ui-2026-interactive-plan-autopilot-manual-assisted.sh`](./examples/03-modes-permissions/ui-2026-interactive-plan-autopilot-manual-assisted.sh)
 
-> 📄 **Code ví dụ:** [`examples/10-8-ui-2026-interactive-plan-autopilot-manual-assisted.jsonc`](examples/10-8-ui-2026-interactive-plan-autopilot-manual-assisted.jsonc)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/ui-2026-interactive-plan-autopilot-manual-assisted.jsonc`](./examples/03-modes-permissions/ui-2026-interactive-plan-autopilot-manual-assisted.jsonc)
 
 **Ví dụ:** task refactor 8 file → **Plan** duyệt kế hoạch → **Interactive** code có kiểm soát. **Autopilot** chỉ trong worktree riêng + sandbox bật. Chi tiết [bài 10 — Modes, permissions, availability](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
 
@@ -117,13 +117,13 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 - File cấm đọc: **/*.pem, secrets/**, .env*.
 ```
 
-📄 File settings `.vscode/settings.json` đầy đủ + kịch bản allow/ask/deny: [`../01-huong-dan-su-dung/templates/.vscode/settings.json`](../templates/.vscode/settings.json) · [`08-5-approval-allow-ask-deny.jsonc`](../01-huong-dan-su-dung/examples/08-5-approval-allow-ask-deny.jsonc).
+📄 File settings `.vscode/settings.json` đầy đủ + kịch bản allow/ask/deny: [`../01-huong-dan-su-dung/templates/.vscode/settings.json`](../templates/.vscode/settings.json) · [`../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc`](../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc).
 
 ## 10. Khi nào KHÔNG nên dùng Agent mode?
 
 **Trả lời 1 câu:** 5 lúc: hotfix prod gấp, migration DB/infra, code legal/compliance, repo chưa có test, quota đỏ cuối tháng — dùng Ask/Edit hoặc làm tay.
 
-> 📄 **Code ví dụ:** [`examples/11-10-khi-nao-khong-nen-dung-agent-mode.sh`](examples/11-10-khi-nao-khong-nen-dung-agent-mode.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/khi-nao-khong-nen-dung-agent-mode.sh`](./examples/03-modes-permissions/khi-nao-khong-nen-dung-agent-mode.sh)
 
 **Ví dụ:** hotfix thanh toán lỗi giữa đêm → Edit 1 file + chạy test tay, đừng bật agent quét cả repo. **Đã bật rồi mới nhận ra không nên:** Cancel ngay → `git diff --stat` → checkout hoàn tác file ngoài ý muốn.
 
@@ -138,7 +138,7 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 | Cloud | Hạ tầng remote → mở PR | Không | — | Giao hẳn task để nhận PR |
 | Claude / Codex | Harness của provider (nếu cài) | Tùy harness | Tùy | Khi cài harness provider |
 
-> 📄 **Code ví dụ:** [`examples/12-11-session-target-copilot-local-cloud-la-gi.sh`](examples/12-11-session-target-copilot-local-cloud-la-gi.sh)
+> 📄 **Code ví dụ:** [`./examples/03-modes-permissions/session-target-copilot-local-cloud-la-gi.sh`](./examples/03-modes-permissions/session-target-copilot-local-cloud-la-gi.sh)
 
 > **Lỗi hay gặp:** Cloud không thấy tool/context local — đừng giao việc cần file local cho Cloud. Chi tiết [bài 10 — Modes, permissions, availability](../01-huong-dan-su-dung/10-modes-permissions-availability.md).
 
@@ -154,7 +154,7 @@ Hãy hình dung exclusion như vùng cấm trên bản đồ của agent: đến
 4. Check content exclusion có chặn file bạn cần không.
 5. Vẫn kẹt → chat mới + prompt ghi rõ phạm vi file + lệnh được chạy.
 
-📄 Đối chiếu kịch bản allow/ask/deny đang chạy: [`../01-huong-dan-su-dung/examples/08-5-approval-allow-ask-deny.jsonc`](../01-huong-dan-su-dung/examples/08-5-approval-allow-ask-deny.jsonc) · [policy-approval](../01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval/README.md).
+📄 Đối chiếu kịch bản allow/ask/deny đang chạy: [`../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc`](../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc) · [policy-approval](../01-huong-dan-su-dung/commands/copilot/model-agent/policy-approval/README.md).
 
 Tham khảo chéo: [bài 04](04-mcp-faq.md) (MCP approval) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 07](07-custom-agents-coding-agent-workflows.md) (agent workflows) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (exclusion).
 

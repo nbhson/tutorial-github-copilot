@@ -46,21 +46,21 @@ Mục này dẹp ngay khúc mắc phổ biến nhất: có **hai** công cụ t�
 
 ### 3.1. `gh copilot` — hỏi lệnh, giải thích lỗi
 
-> 📄 **Code ví dụ:** [`examples/01-3-1-gh-copilot-hoi-lenh-giai-thich.sh`](examples/01-3-1-gh-copilot-hoi-lenh-giai-thich.sh)
+> 📄 **Code ví dụ:** [`./examples/11-nang-cao-cli-web-coding-agent/1-gh-copilot-hoi-lenh-giai-thich.sh`](./examples/11-nang-cao-cli-web-coding-agent/1-gh-copilot-hoi-lenh-giai-thich.sh)
 
 **Gợi ý lệnh:**
 
-> 📄 **Code ví dụ:** [`examples/02-3-1-gh-copilot-hoi-lenh-giai-thich.sh`](examples/02-3-1-gh-copilot-hoi-lenh-giai-thich.sh)
+> 📄 **Code ví dụ:** [`./examples/11-nang-cao-cli-web-coding-agent/2-gh-copilot-hoi-lenh-giai-thich.sh`](./examples/11-nang-cao-cli-web-coding-agent/2-gh-copilot-hoi-lenh-giai-thich.sh)
 
 **Giải thích lỗi:**
 
-> 📄 **Code ví dụ:** [`examples/03-3-1-gh-copilot-hoi-lenh-giai-thich.sh`](examples/03-3-1-gh-copilot-hoi-lenh-giai-thich.sh)
+> 📄 **Code ví dụ:** [`./examples/11-nang-cao-cli-web-coding-agent/3-gh-copilot-hoi-lenh-giai-thich.sh`](./examples/11-nang-cao-cli-web-coding-agent/3-gh-copilot-hoi-lenh-giai-thich.sh)
 
 Mẹo CLI: mọi gợi ý nguy hiểm (`rm`, `reset --hard`, `push --force`) → Revise/Cancel, không Run mù. Alias hay dùng: `alias gcs='gh copilot suggest'` + `alias gce='gh copilot explain'`.
 
 ### 3.2. `copilot` — CLI agent đầy đủ
 
-> 📄 **Code ví dụ:** [`examples/04-3-2-copilot-cli-agent-ay-u.sh`](examples/04-3-2-copilot-cli-agent-ay-u.sh)
+> 📄 **Code ví dụ:** [`./examples/11-nang-cao-cli-web-coding-agent/copilot-cli-agent-ay-u.sh`](./examples/11-nang-cao-cli-web-coding-agent/copilot-cli-agent-ay-u.sh)
 
 Trong phiên: `Shift+Tab` xoay standard → plan → autopilot; `/permissions` cấu hình quyền; `/limits` xem/đổi giới hạn AI credits; `@file` gắn file vào prompt. Autopilot tự chạy tới xong — vẫn tốn AI Credits.
 
@@ -112,7 +112,7 @@ GIAO:         spec rõ + scope 1 module + done checklist + việc 1–2h độc 
 KHÔNG GIAO:   spec mờ, đụng nhiều team, task 15 phút Edit xong.
 ```
 
-Giao issue một dòng "fix refund" là agent tự đoán mọi thứ — PR về sai hướng, mất thêm thời gian gỡ. 📄 Luồng issue → chat → PR + mẫu issue: [`06-5-1-assign-issue-chat-luong-pr-chat.sh`](../01-huong-dan-su-dung/examples/06-5-1-assign-issue-chat-luong-pr-chat.sh). Plan-first xem [Tips 03](./03-plan-first-workflow.md), gates xem [Tips 06](./06-policies-guardrails-recipes.md).
+Giao issue một dòng "fix refund" là agent tự đoán mọi thứ — PR về sai hướng, mất thêm thời gian gỡ. 📄 Luồng issue → chat → PR + mẫu issue: [`../01-huong-dan-su-dung/examples/02-cac-be-mat-vscode-ide-web-cli/assign-issue-chat-luong-pr-chat.sh`](../01-huong-dan-su-dung/examples/02-cac-be-mat-vscode-ide-web-cli/assign-issue-chat-luong-pr-chat.sh). Plan-first xem [Tips 03](./03-plan-first-workflow.md), gates xem [Tips 06](./06-policies-guardrails-recipes.md).
 
 ## 5. Mobile, github.dev & voice
 
@@ -153,7 +153,7 @@ Hai bẫy khi rời máy chính: voice nghe nhầm tên file → sửa nhầm ch
 
 **C — Terminal-first cho devops:**
 
-> 📄 **Code ví dụ:** [`examples/05-6-recipes-leo-thang-a-mat-tran.sh`](examples/05-6-recipes-leo-thang-a-mat-tran.sh)
+> 📄 **Code ví dụ:** [`./examples/11-nang-cao-cli-web-coding-agent/recipes-leo-thang-a-mat-tran.sh`](./examples/11-nang-cao-cli-web-coding-agent/recipes-leo-thang-a-mat-tran.sh)
 
 ## 7. Walkthrough: từ issue tới PR khi đang đi đường
 

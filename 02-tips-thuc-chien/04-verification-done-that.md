@@ -43,7 +43,7 @@ Mức V tỉ lệ thuận với độ gần main: merge mà chỉ có V2 là tuy
 
 ## 3. Checklist done cho 4 loại task (copy-paste)
 
-Mục này phát sẵn bốn phiếu kiểm định in sẵn — mỗi loại task một mẫu. Hãy hình dung như giấy khám sức khỏe: xe máy, ô tô, xe tải mỗi loại một biểu mẫu, đừng cầm phiếu xe máy đi khám xe tải. Tick đủ mới được ra khỏi xưởng. 📄 Script chứng minh agent tự chạy được lệnh trong phiếu: [`01-4-2-mau-b-skill-add-table-script.sh`](../01-huong-dan-su-dung/examples/01-4-2-mau-b-skill-add-table-script.sh) · [`03-6-lsp-copilot-synergy.sh`](../01-huong-dan-su-dung/examples/03-6-lsp-copilot-synergy.sh).
+Mục này phát sẵn bốn phiếu kiểm định in sẵn — mỗi loại task một mẫu. Hãy hình dung như giấy khám sức khỏe: xe máy, ô tô, xe tải mỗi loại một biểu mẫu, đừng cầm phiếu xe máy đi khám xe tải. Tick đủ mới được ra khỏi xưởng. 📄 Script chứng minh agent tự chạy được lệnh trong phiếu: [`../01-huong-dan-su-dung/examples/05-agent-skills-reusable-workflows/mau-b-skill-add-table-script.sh`](../01-huong-dan-su-dung/examples/05-agent-skills-reusable-workflows/mau-b-skill-add-table-script.sh) · [`../01-huong-dan-su-dung/examples/13-code-intelligence-indexing-telemetry/lsp-copilot-synergy.sh`](../01-huong-dan-su-dung/examples/13-code-intelligence-indexing-telemetry/lsp-copilot-synergy.sh).
 
 **A — BUG:**
 

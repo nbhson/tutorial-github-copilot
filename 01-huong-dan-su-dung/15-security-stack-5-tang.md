@@ -61,7 +61,7 @@ Những điều docs nói xảy ra với file bị exclude:
 - Agent cũng bị soi: cloud agent và code review chạy trên nền GitHub nên push của chúng đi qua push protection (docs có trang riêng cho GitHub MCP server và cho REST API).
 - Bypass tồn tại (bypass request + delegated bypass) nhưng **mỗi lần bypass là một alert** — admin rà ở §7; "bypass cho nhanh" hằng ngày là cách tầng 2 chết âm thầm.
 - Fix đúng khi bị chặn: bỏ secret khỏi diff → chuyển sang env/secret manager → commit lại; đừng đổi tên biến rồi push lại key cũ.
-- Case study copy-paste (bị chặn / đã lọt / thử lửa an toàn): [`examples/02-4-tang-2-secret-scanning-push-protection.sh`](examples/02-4-tang-2-secret-scanning-push-protection.sh).
+- Case study copy-paste (bị chặn / đã lọt / thử lửa an toàn): [`./examples/15-security-stack-5-tang/tang-2-secret-scanning-push-protection.sh`](./examples/15-security-stack-5-tang/tang-2-secret-scanning-push-protection.sh).
 
 > **Tóm gọn 1 câu:** Push protection là chốt cửa trên thảm — key chưa kịp rời máy đã bị chặn; mỗi cú bấm "bypass" là bạn tự tay nới cái chốt đó ra.
 
@@ -86,12 +86,12 @@ Ba mức effort = ba mức "đốt token": **Lite** targeted (bug/security hiể
 
 - Hóa đơn code review đi **hai đường**: AI credits (token) + **GitHub Actions minutes** tính riêng — effort tăng thì cả hai cùng tăng.
 - Org owner / repo admin đặt **default effort** cho auto-review; từng PR đổi được ngay ở khối Reviewers trước khi request.
-- **Auto-trigger cấu hình trong ruleset**: Copilot review khi PR mở, "Review new pushes" để re-review mỗi push, phạm vi repo/branch áp luật. Mẫu Rulesets hai khối `bypass_list` vs `pull_request_checks`: [`examples/15-5-auto-review-rulesets.sh`](examples/15-5-auto-review-rulesets.sh).
+- **Auto-trigger cấu hình trong ruleset**: Copilot review khi PR mở, "Review new pushes" để re-review mỗi push, phạm vi repo/branch áp luật. Mẫu Rulesets hai khối `bypass_list` vs `pull_request_checks`: [`./examples/15-security-stack-5-tang/auto-review-rulesets.sh`](./examples/15-security-stack-5-tang/auto-review-rulesets.sh).
 - Muốn vài file nằm ngoài review: thêm pattern trong settings hoặc `.github/copilot-audit.json` — **không có** lệnh `Copilot: Exclude from code review` như bản cũ từng dạy.
 - Máy bạn là tầng 4 mini: `settings.json` → `"github.copilot.chat.agent.autoApprove": false` — đừng để agent tự duyệt tool của nó rồi PR sau mới vỡ.
 - Cloud session chạy trong sandbox nhất thời — docs **không** nói checkpoints theo ra cloud; coi như **không có**: commit sớm, push thường, mất session là mất tiến độ thật.
 
-> **`.github/copilot-audit.json` (quy ước repo — docs mỏng ở file này, xem là thực hành):** repo có file thì cloud agent đọc nó khi chạy task · ba khối chính `content_exclusion` / `review_triggers` / `audit_retention_days` · không đè được policy org, hai bên trái nhau thì nền tảng thắng · schema mẫu: [`examples/15-5-copilot-review-rules.jsonc`](examples/15-5-copilot-review-rules.jsonc).
+> **`.github/copilot-audit.json` (quy ước repo — docs mỏng ở file này, xem là thực hành):** repo có file thì cloud agent đọc nó khi chạy task · ba khối chính `content_exclusion` / `review_triggers` / `audit_retention_days` · không đè được policy org, hai bên trái nhau thì nền tảng thắng · schema mẫu: [`./examples/15-security-stack-5-tang/copilot-review-rules.jsonc`](./examples/15-security-stack-5-tang/copilot-review-rules.jsonc).
 
 > **Tham số chi phí cloud (blog GitHub 25/09/2025 — chỉ áp dụng **Copilot cloud agent chạy qua GitHub Actions**):**
 > - Trung bình **59 phút/task** — con số của session chạy bằng Actions minutes; **session chat web/mobile không hạn chế này**.
@@ -113,7 +113,7 @@ Ba mức effort = ba mức "đốt token": **Lite** targeted (bug/security hiể
 
 **Định vị:** các tầng dưới chặn code, tầng này chặn *người đổi luật* — và lưu dấu vết cho ai muốn biết chuyện gì đã xảy ra.
 
-- **Branch protection** (Repo Settings → Branches): require review (≥1 approve; team payments/auth đặt ≥2 — khuyến nghị thực hành), require status checks (CodeQL + tests + secret scanning xanh mới được merge), dismiss stale approvals khi push mới. Mẫu gh CLI: [`examples/07-7-1-lop-5-branch-protection-required-checks.sh`](examples/07-7-1-lop-5-branch-protection-required-checks.sh).
+- **Branch protection** (Repo Settings → Branches): require review (≥1 approve; team payments/auth đặt ≥2 — khuyến nghị thực hành), require status checks (CodeQL + tests + secret scanning xanh mới được merge), dismiss stale approvals khi push mới. Mẫu gh CLI: [`./examples/07-policies-guardrails-tu-dong-hoa/lop-5-branch-protection-required-checks.sh`](./examples/07-policies-guardrails-tu-dong-hoa/lop-5-branch-protection-required-checks.sh).
 - **Rulesets** thay quản lý từng repo bằng một luật áp cho cả org — đọc hai khối cạnh nhau: `pull_request_checks` (PR phải qua gì) vs `bypass_list` (ai được đi tắt — càng ngắn càng tốt): [About rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets).
 - **Audit trail** — Org Settings → Logs → Audit log, lọc `operation:read/copilot`: docs có bảng event riêng cho hoạt động agent (`session_created`, `review_requested`, `review_completed`, ...): [Agentic audit log events](https://docs.github.com/en/copilot/reference/agentic-audit-log-events). Audit log **không chứa prompt text** — cần forensic prompt thì tự hook/telemetry (bài 07 + 13).
 - managed-settings.json, network allowlist, MCP allow/deny — **bài 07 chủ sở hữu**; ở đây chỉ ghi: policy as code là chân của tầng 5, thiếu nó 4 tầng trên trôi theo từng admin mới.
@@ -169,7 +169,7 @@ Buổi rà định kỳ (mỗi quý, calendar block) — 6 gạch × 5 phút, c�
 
 1. **(10′) Test tầng 1:** thêm `**/.env*` vào content exclusion (cá nhân hoặc nhờ admin), hỏi chat một chuỗi chỉ có trong `.env` — phải không biết; mở file thường — gợi ý vẫn phải còn.
 2. **(15′) Drill tầng 2 + 4:** push file chứa fake key, đọc màn hình chặn; sau đó bật auto-review cho 1 repo test với default effort Balanced, 2 tuần sau mở [github.com/settings/copilot](https://github.com/settings/copilot) đọc con số AI credits thật.
-3. **(15′) Policy as code tầng 5:** sửa [`examples/15-5-auto-review-rulesets.sh`](examples/15-5-auto-review-rulesets.sh) theo org của bạn (`bypass_list` là ai, `pull_request_checks` bắt gì); copy [`examples/15-5-copilot-review-rules.jsonc`](examples/15-5-copilot-review-rules.jsonc) thành `.github/copilot-audit.json` và cắt 3 khối cho đúng repo.
+3. **(15′) Policy as code tầng 5:** sửa [`./examples/15-security-stack-5-tang/auto-review-rulesets.sh`](./examples/15-security-stack-5-tang/auto-review-rulesets.sh) theo org của bạn (`bypass_list` là ai, `pull_request_checks` bắt gì); copy [`./examples/15-security-stack-5-tang/copilot-review-rules.jsonc`](./examples/15-security-stack-5-tang/copilot-review-rules.jsonc) thành `.github/copilot-audit.json` và cắt 3 khối cho đúng repo.
 
 > **Ô cần điền:** Tầng tôi chưa bật: ____ · Prompt mẫu cho cloud agent: ____
 

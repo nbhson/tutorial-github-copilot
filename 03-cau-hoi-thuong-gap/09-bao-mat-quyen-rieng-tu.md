@@ -25,7 +25,7 @@
 - **Business/Enterprise:** snippets KHÔNG dùng để train (cam kết trong điều khoản thương mại).
 - Dữ liệu truyền qua TLS, giữ tạm phục vụ request rồi xóa theo retention policy.
 
-> 📄 **Code ví dụ:** [`examples/01-1-code-cua-toi-co-bi-dung-e.sh`](examples/01-1-code-cua-toi-co-bi-dung-e.sh)
+> 📄 **Code ví dụ:** [`./examples/09-bao-mat-quyen-rieng-tu/code-cua-toi-co-bi-dung-e.sh`](./examples/09-bao-mat-quyen-rieng-tu/code-cua-toi-co-bi-dung-e.sh)
 
 > Setup máy mới check 1 lần; code NDA/compliance thì tắt training ngay trước khi mở file.
 
@@ -47,7 +47,7 @@
 
 Ví von cho nhớ thứ tự: chìa khóa rơi giữa đám đông thì thay ổ khóa trước, dán thông báo "chìa cũ vô dụng" sau — cúi nhặt chìa (xóa history) mà chưa thay ổ (xoay key) là kẻ cầm bản chụp vẫn mở được cửa.
 
-> 📄 **Code ví dụ:** [`examples/02-3-lo-commit-secret-thi-xu-ly-sao.sh`](examples/02-3-lo-commit-secret-thi-xu-ly-sao.sh)
+> 📄 **Code ví dụ:** [`./examples/09-bao-mat-quyen-rieng-tu/lo-commit-secret-thi-xu-ly-sao.sh`](./examples/09-bao-mat-quyen-rieng-tu/lo-commit-secret-thi-xu-ly-sao.sh)
 
 **Ví dụ:** push nhầm `sk-live_...` → Stripe dashboard roll key (2 phút) → rồi mới `git rm + commit` → key cũ vô hiệu dù ai đã thấy.
 
@@ -55,7 +55,7 @@ Ví von cho nhớ thứ tự: chìa khóa rơi giữa đám đông thì thay ổ
 
 **Trả lời 1 câu:** Push protection chặn secret lúc push (bypass có lý do, lưu audit log); xử lý alert `validity: active` trước, còn lại dọn sau.
 
-> 📄 **Code ví dụ:** [`examples/03-4-secret-scanning-push-protection-goc-bao-mat.sh`](examples/03-4-secret-scanning-push-protection-goc-bao-mat.sh)
+> 📄 **Code ví dụ:** [`./examples/09-bao-mat-quyen-rieng-tu/secret-scanning-push-protection-goc-bao-mat.sh`](./examples/09-bao-mat-quyen-rieng-tu/secret-scanning-push-protection-goc-bao-mat.sh)
 
 > Review Security tab hàng tuần; alert `active` = xử lý trong ngày. Cấu hình chi tiết: [bài 05](05-policies-guardrails-faq.md) câu 5.
 
@@ -63,7 +63,7 @@ Ví von cho nhớ thứ tự: chìa khóa rơi giữa đám đông thì thay ổ
 
 **Trả lời 1 câu:** 3 tầng log: org audit log (ai đổi policy, assign seat, bypass — giữ 180 ngày đến 7 năm tùy plan), repo events (merge/dismiss), git history (author từng commit, kể cả bot).
 
-> 📄 **Code ví dụ:** [`examples/04-5-audit-logs-xem-o-au.sh`](examples/04-5-audit-logs-xem-o-au.sh)
+> 📄 **Code ví dụ:** [`./examples/09-bao-mat-quyen-rieng-tu/audit-logs-xem-o-au.sh`](./examples/09-bao-mat-quyen-rieng-tu/audit-logs-xem-o-au.sh)
 
 **Ví dụ:** có người bypass push protection → audit log hiện `push_protection_bypass by @userX` → hỏi lý do + verify key đó đã xoay.
 
@@ -79,7 +79,7 @@ Hỏi admin 3 câu rồi ghi vào hồ sơ compliance, không hứa miệng vớ
 
 Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.gitignore` → exclusion → scanning. Cấu hình 2 mức: xem [bài 03](03-modes-permissions.md) câu 3.
 
-> 📄 **Code ví dụ:** [`examples/05-7-content-exclusion-cho-file-nhay-cam.sh`](examples/05-7-content-exclusion-cho-file-nhay-cam.sh)
+> 📄 **Code ví dụ:** [`./examples/09-bao-mat-quyen-rieng-tu/content-exclusion-cho-file-nhay-cam.sh`](./examples/09-bao-mat-quyen-rieng-tu/content-exclusion-cho-file-nhay-cam.sh)
 
 ## 8. Token/PAT quản lý sao cho an toàn?
 
@@ -93,7 +93,7 @@ Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.g
 
 > **Cách đọc bảng này:** cột đầu so hai loại token như so hai loại thẻ: thẻ khách với thẻ nhân viên — mỗi loại có giới hạn quyền và thời hạn khác nhau, đọc kỹ để không dùng nhầm.
 
-> 📄 **Code ví dụ:** [`examples/06-8-token-pat-quan-ly-sao-cho-an.sh`](examples/06-8-token-pat-quan-ly-sao-cho-an.sh)
+> 📄 **Code ví dụ:** [`./examples/09-bao-mat-quyen-rieng-tu/token-pat-quan-ly-sao-cho-an.sh`](./examples/09-bao-mat-quyen-rieng-tu/token-pat-quan-ly-sao-cho-an.sh)
 
 > Đặt lịch 90 ngày rotate PAT MCP; offboard = revoke. Đặt tên token ghi rõ mục đích: `mcp-github-laptop-2026-10`.
 
@@ -101,7 +101,7 @@ Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.g
 
 **Trả lời 1 câu:** PR agent qua cùng gate bảo mật như PR người — secret scan, required review, security-reviewer khi chạm auth/payment — cộng 2 check riêng: **scope lố không** (file ngoài issue?) và **dependency lạ không** (`package.json` thêm lib không rõ nguồn?).
 
-> 📄 **Code ví dụ:** [`examples/07-9-review-pr-cua-coding-agent-ve-mat.sh`](examples/07-9-review-pr-cua-coding-agent-ve-mat.sh)
+> 📄 **Code ví dụ:** [`./examples/09-bao-mat-quyen-rieng-tu/review-pr-cua-coding-agent-ve-mat.sh`](./examples/09-bao-mat-quyen-rieng-tu/review-pr-cua-coding-agent-ve-mat.sh)
 
 **Ví dụ:** PR agent thêm `super-helper-utils` 50 downloads/tuần → yêu cầu thay bằng lib chuẩn team.
 
@@ -109,7 +109,7 @@ Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.g
 
 **Trả lời 1 câu:** 5 item: gitleaks sạch, không file nhạy cảm bị track, exclusion + ruleset + required checks bật, token đã xoay nếu từng lộ, LICENSE + duplication filter phù hợp.
 
-> 📄 **Code ví dụ:** [`examples/08-10-checklist-bao-mat-truoc-khi-public-mo.sh`](examples/08-10-checklist-bao-mat-truoc-khi-public-mo.sh)
+> 📄 **Code ví dụ:** [`./examples/09-bao-mat-quyen-rieng-tu/checklist-bao-mat-truoc-khi-public-mo.sh`](./examples/09-bao-mat-quyen-rieng-tu/checklist-bao-mat-truoc-khi-public-mo.sh)
 
 > Thêm item (tùy repo): Agent Skills + hooks (VS Code: Preview) phải được review trước khi public — chúng là code chạy trên máy dev.
 
@@ -123,6 +123,6 @@ Thứ tự đúng: secret vào **manager (Vault/1Password/AWS Secrets)** → `.g
 4. Báo admin/security team nếu liên quan prod/customer data.
 5. Postmortem: thêm gate (push protection/CI check) để không lặp.
 
-Tham khảo chéo: [bài 03](03-modes-permissions.md) (exclusion cấu hình) · [bài 04](04-mcp-faq.md) (MCP secrets) · [bài 05](05-policies-guardrails-faq.md) (scanning + guardrails) · [bài 10](10-ci-sdk-review-web.md) (CI/review) · 📄 script quét key: [`16-6-scan-key-trong-manifest.sh`](../01-huong-dan-su-dung/examples/16-6-scan-key-trong-manifest.sh).
+Tham khảo chéo: [bài 03](03-modes-permissions.md) (exclusion cấu hình) · [bài 04](04-mcp-faq.md) (MCP secrets) · [bài 05](05-policies-guardrails-faq.md) (scanning + guardrails) · [bài 10](10-ci-sdk-review-web.md) (CI/review) · 📄 script quét key: [`../01-huong-dan-su-dung/examples/16-extensions-mcp-bao-mat-validate/scan-key-trong-manifest.sh`](../01-huong-dan-su-dung/examples/16-extensions-mcp-bao-mat-validate/scan-key-trong-manifest.sh).
 
 > **Tóm gọn 1 câu:** Bảo mật Copilot là một chuỗi xích: quyền riêng tư → content exclusion → secret hygiene → push protection — mỗi mắt xích là một lớp phòng thủ, thiếu mắt nào thì tải trọng dồn sang mắt khác.

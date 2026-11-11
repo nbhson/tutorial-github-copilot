@@ -60,7 +60,7 @@ Mọi bài giữ nguyên khối: blockquote meta (Dành cho / Vấn đề / Đ�
 
 - **GIỮ:** Mục tiêu · §1 vì sao (token economics) · §2 3 loại file · §4 `applyTo` globs · §5 `AGENTS.md` · §6 front-load · §8 hiểu nhầm.
 - **SỬA:** §1/bảng hierarchy: **bỏ luật "file cao nhất thắng"**, thay bằng "cả Personal/Repo/Org đều được nạp; Personal phân xử khi mâu thuẫn; mỗi harness một quy tắc" · thêm `excludeAgent` (chính thức) + "code review đọc từ **head branch**" · đường dẫn cá nhân: `~/.copilot/copilot-instructions.md` + `~/.copilot/instructions/` · **xoá** mọi `~/.copilot/org-customizations/` (không có trong docs — org làm qua UI).
-- **CẮT/DỜI:** §3 hai file mẫu inline (70 dòng) → **2 file mới** `examples/04-3-mau-instructions-backend.md`, `examples/05-3-mau-instructions-frontend.md`, trong bài còn 1 mẫu 12 dòng · §9 bảng Claude Code (20 dòng) → 2 dòng trỏ 00.
+- **CẮT/DỜI:** §3 hai file mẫu inline (70 dòng) → **2 file mới** `examples/03-instructions-memory-rules/mau-instructions-backend.md`, `examples/03-instructions-memory-rules/mau-instructions-frontend.md`, trong bài còn 1 mẫu 12 dòng · §9 bảng Claude Code (20 dòng) → 2 dòng trỏ 00.
 - **NỘP:** Memory: Copilot Memory **public preview** + `Chat: Show Memory Files`; Local memory files **không tự convert** sang Copilot Memory.
 
 ## 04 — Chat commands toàn tập (310 → 185) — *chủ sở hữu slash commands*
@@ -85,7 +85,7 @@ Mọi bài giữ nguyên khối: blockquote meta (Dành cho / Vấn đề / Đ�
 - Anchor cũ "bài 05 **mục 3.3**" (3 chỗ: `templates/README.md:49`, `prompt-file/README.md:5,96`) → **mục 8** (mục port prompt→skill của bản mới).
 - Kết quả: **320 → 200 dòng** (đúng đích 150–200, dưới cap 210). 8 mục đánh số 1–8 + Lỗi thường gặp + Bài tập + Link qua + Reference; **0 link tương đối gãy**, 8/8 external link HTTP 200, 0 ký tự CJK, không còn `premium`/`Customizations Hub`/"Copilot coding agent", không còn claim version "VS Code 1.127+" (không có nguồn).
 - Cấu trúc đã chốt (dùng làm khuôn): 1 Agent Skill là gì (**kèm bảng 3 mức nạp**) · 2 skill-vs-instructions-vs-agent (kèm ⚠️ `/skills` là Local shortcut) · 3 giải phẫu `SKILL.md` (**kèm bảng frontmatter ghi rõ field thuộc docs nào**) · 4 tạo skill qua Customizations editor + bảng đường dẫn theo harness · 5 gọi skill (matrix `user-invocable`/`disable-model-invocation`) · 6 verify 3 bước · 7 `gh skill` + cảnh báo injection · 8 port `.prompt.md` (mất `agent`/`model`/`tools`).
-- Khối đã cắt thật: §5 instructions 31 dòng → 2 dòng + trỏ bài 03; §6 plugin 19 dòng → 1 dòng + trỏ bài 17; bảng Claude Code 17 dòng → 4 gạch ở Link qua + 1 dòng §1; **mẫu `review-pr` 23 dòng → bỏ hẳn** (bài đã có 1 mẫu đầy đủ ở §3, mẫu thứ hai là thủ phạm phình), thay bằng `SKILL.md` mẫu `gen-test` nằm trong `examples/03-7-walkthrough-…sh` (viết lại thành heredoc tự tạo skill + 3 bước verify, 31 dòng).
+- Khối đã cắt thật: §5 instructions 31 dòng → 2 dòng + trỏ bài 03; §6 plugin 19 dòng → 1 dòng + trỏ bài 17; bảng Claude Code 17 dòng → 4 gạch ở Link qua + 1 dòng §1; **mẫu `review-pr` 23 dòng → bỏ hẳn** (bài đã có 1 mẫu đầy đủ ở §3, mẫu thứ hai là thủ phạm phình), thay bằng `SKILL.md` mẫu `gen-test` nằm trong `examples/05-agent-skills-reusable-workflows/walkthrough-…sh` (viết lại thành heredoc tự tạo skill + 3 bước verify, 31 dòng).
 - Đã sửa luôn: link gãy `09:57` → `../copilot-extensions-ai-powered/README.md` (bảng kiểm ở `05` §3 vốn ghi đúng `../`; hai ghi chú ở `00:22` và `04:165` đã cập nhật thành "đã sửa"). Toàn bộ repo giờ **0 link gãy**.
 
 ## 06 — Custom agents & song song (361 → 190) — *chủ sở hữu `.agent.md`*
@@ -109,7 +109,7 @@ Mọi bài giữ nguyên khối: blockquote meta (Dành cho / Vấn đề / Đ�
 - **SỬA (đảo mặc định):** Copilot harness = **`.mcp.json` ở root repo** + **`~/.copilot/mcp-config.json`**; `.vscode/mcp.json` (key `servers`) = **Local harness**; `${input:…}` và sandbox per-server **không port sang** → dùng env vars; xoá claim "CLI v1.0.39 BREAKING"; load order docs CLI: `~/.copilot/mcp-config.json` → plugin → `--additional-mcp-config`.
 - **SỬA §2 4 nhân vật:** "MCP client nằm trong VS Code Copilot extension" → **"harness spawn client: Copilot = Agent Host, Local = extension host"** (đây là ví dụ điển hình của bệnh 1).
 - **SỬA §4/§5:** tên tool `mcp__<server>__<tool>` giữ; approval allow/ask/deny → còn 3 dòng + trỏ **10** (chủ sở hữu matrix).
-- **CẮT/DỜI:** §6 5 server day-one (39 dòng) → bảng + **1 file examples** `08-6-mcp-servers-day-one.jsonc` · snippet `db.instructions.md` (10 dòng) → về 03 · §9 dòng 287 lặp 97.
+- **CẮT/DỜI:** §6 5 server day-one (39 dòng) → bảng + **1 file examples** `../01-huong-dan-su-dung/examples/08-mcp-ket-noi-cong-cu-ngoai/mcp-servers-day-one.jsonc` · snippet `db.instructions.md` (10 dòng) → về 03 · §9 dòng 287 lặp 97.
 - **NỘP:** **Copilot connectors** (GitHub-managed MCP): *chỉ* cung cấp tool cho Copilot harness, cài qua Customizations editor → Connect, nhãn `Connector: <name>`, Business/Enterprise cần policy **Editor preview features**; 1 dòng "extension-provided tools chỉ chạy khi cửa sổ editor còn kết nối".
 
 ## 09 — Extensions & marketplaces (238 → 150) — *bài rewrite nặng nhất vì docs đổi*
@@ -170,4 +170,4 @@ Mọi bài giữ nguyên khối: blockquote meta (Dành cho / Vấn đề / Đ�
 - **§4.6 Hooks:** vẫn là chủ sở hữu duy nhất — viết lại theo `07` (docs GitHub).
 - **§4.7 Tools:** **bỏ `128 tools/request` + `virtualTools.threshold`** (không nguồn); dạy: Tools tab trong Customizations editor, selection persist theo harness, enabling ≠ auto-approve, `#` để browse tools/context, tool names **phụ thuộc harness**, extension-provided tools cần editor window kết nối.
 - **CẮT/DỜI:** §5 Voice/Dictation (15 dòng) → 5 dòng (`feature(voice-mode)` experimental + built-in dictation) · §6 governance (18 dòng) → **về 16** · §7 migrations → 5 dòng (docs **không** có `promptMigration.enabled` mặc định true; xoá "Waza").
-- **NỘP + FIX:** bài duy nhất không có ví dụ → thêm **2 file examples** `17-1-open-customizations-editor.sh`, `17-2-plugin-marketplace.sh` + walkthrough 8 bước nén còn 14 dòng.
+- **NỘP + FIX:** bài duy nhất không có ví dụ → thêm **2 file examples** `../01-huong-dan-su-dung/examples/17-agent-customizations-hub/open-customizations-editor.sh`, `../01-huong-dan-su-dung/examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh` + walkthrough 8 bước nén còn 14 dòng.

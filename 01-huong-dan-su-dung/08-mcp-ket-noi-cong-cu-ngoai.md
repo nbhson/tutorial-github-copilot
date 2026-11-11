@@ -112,11 +112,11 @@ Thứ tự nạp của docs CLI (cao → thấp): `--additional-mcp-config` → 
 
 - **`deny > ask > allow`**: deny thắng mọi thứ; rule chưa khớp → mặc định **hỏi**; `[]` = lockdown; allowlist hiệu lực = **giao (intersection)** của mọi nguồn. **Trust server** (được chạy chưa) và **duyệt từng tool call** là hai lớp riêng — đọc publisher trước khi trust, đừng approve máy móc. Ma trận permission levels (Manual / Assisted / Allow all) + sandbox là việc của **bài 10**; org policy "MCP servers in Copilot" (Business/Enterprise, mặc định **tắt**) → bài 07/16.
 
-> 📄 **Code ví dụ (settings.json — allow/ask/deny):** [`examples/08-5-approval-allow-ask-deny.jsonc`](examples/08-5-approval-allow-ask-deny.jsonc) — `chat.tools.terminal.autoApprove` · `chat.tools.urls.autoApprove` · `chat.tools.eligibleForAutoApproval` · sandbox; tra cứu: [policy-approval](commands/copilot/model-agent/policy-approval/README.md)
+> 📄 **Code ví dụ (settings.json — allow/ask/deny):** [`./examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc`](./examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc) — `chat.tools.terminal.autoApprove` · `chat.tools.urls.autoApprove` · `chat.tools.eligibleForAutoApproval` · sandbox; tra cứu: [policy-approval](commands/copilot/model-agent/policy-approval/README.md)
 
 ## 6. 5 servers day-one
 
-**File cấu hình hoàn chỉnh: [`examples/08-6-mcp-servers-day-one.jsonc`](examples/08-6-mcp-servers-day-one.jsonc)** (dạng `.mcp.json`, chỉ thay env). Mỗi hàng là một nhu cầu khác nhau:
+**File cấu hình hoàn chỉnh: [`./examples/08-mcp-ket-noi-cong-cu-ngoai/mcp-servers-day-one.jsonc`](./examples/08-mcp-ket-noi-cong-cu-ngoai/mcp-servers-day-one.jsonc)** (dạng `.mcp.json`, chỉ thay env). Mỗi hàng là một nhu cầu khác nhau:
 
 | Server | Giải quyết việc gì | Dạng trong file |
 |---|---|---|
@@ -183,7 +183,7 @@ Prune flow (2 tuan/lan, 10 phut):
 | Copy nguyên file `.vscode/mcp.json` sang `.mcp.json` | sai key (`servers` vs `mcpServers`), mất luôn tính năng `sse`/`envFile` | đối chiếu [format reference](https://code.visualstudio.com/docs/agents/reference/mcp-configuration) trước khi copy |
 | Approval `allow` hết cho tiện | write/delete ngoài prod chạy không ai giữ | đọc → `true` trong `autoApprove`, side-effect → `false`/mặc định hỏi, prod → `eligibleForAutoApproval: false` + sandbox (mục 5) |
 
-**Bài học:** đa số sự cố MCP không phải "server hỏng" mà là **khai sai file / sai key** — docs tách hai format và chúng không tương thích nhau. 📄 Hai format đúng, copy được: [`examples/08-6-mcp-servers-day-one.jsonc`](examples/08-6-mcp-servers-day-one.jsonc) (`.mcp.json`) vs [`commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (`.vscode/mcp.json`).
+**Bài học:** đa số sự cố MCP không phải "server hỏng" mà là **khai sai file / sai key** — docs tách hai format và chúng không tương thích nhau. 📄 Hai format đúng, copy được: [`./examples/08-mcp-ket-noi-cong-cu-ngoai/mcp-servers-day-one.jsonc`](./examples/08-mcp-ket-noi-cong-cu-ngoai/mcp-servers-day-one.jsonc) (`.mcp.json`) vs [`commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (`.vscode/mcp.json`).
 
 ## Best practices
 
@@ -193,7 +193,7 @@ Prune flow (2 tuan/lan, 10 phut):
 
 ## Bài tập
 
-1. **(15 phút)** Copy [`examples/08-6-mcp-servers-day-one.jsonc`](examples/08-6-mcp-servers-day-one.jsonc) vào `.mcp.json` root một repo thật, bỏ server không cần, verify GitHub bằng câu "liệt kê 5 PRs mở" + expand tool call.
+1. **(15 phút)** Copy [`./examples/08-mcp-ket-noi-cong-cu-ngoai/mcp-servers-day-one.jsonc`](./examples/08-mcp-ket-noi-cong-cu-ngoai/mcp-servers-day-one.jsonc) vào `.mcp.json` root một repo thật, bỏ server không cần, verify GitHub bằng câu "liệt kê 5 PRs mở" + expand tool call.
 2. **(10 phút)** Connect một connector qua Customizations editor; xác nhận nó hiện nhãn `Connector: <tên>` ở tab MCP Servers.
 3. **(10 phút)** Chạy prune flow mục 9 + grep audit mục 8 trên repo đang làm — exit code phải = 1.
 

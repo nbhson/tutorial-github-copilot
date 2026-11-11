@@ -60,7 +60,7 @@ Nguồn: [docs — usage-based billing](https://docs.github.com/en/copilot/conce
 - Tại thời điểm viết, picker list ~18 model từ 2 nhà cung cấp — đó là ảnh chụp của *Copilot*, không phải của *thị trường model*; muốn vượt ảnh chụp, dùng BYOK (§6).
 - Mọi con số ở đây (kể cả §2) chỉ là snapshot theo quý — giá thật đọc từ bảng giá link ở Reference, đừng tin blog.
 
-Hạn mức theo plan: bảng đầy đủ ở [14-2](examples/14-2-plan-nen-chon-nao.md). Ba dòng cần nhớ: gói cá nhân có hạn mức credits/tháng; hết thì **`auto` vẫn chạy**, model đích danh cần budget (§6); Business/Enterprise tính per-seat.
+Hạn mức theo plan: bảng đầy đủ ở [14-2](./examples/14-models-chon-model-dung/plan-nen-chon-nao.md). Ba dòng cần nhớ: gói cá nhân có hạn mức credits/tháng; hết thì **`auto` vẫn chạy**, model đích danh cần budget (§6); Business/Enterprise tính per-seat.
 
 ---
 
@@ -80,7 +80,7 @@ Hạn mức theo plan: bảng đầy đủ ở [14-2](examples/14-2-plan-nen-cho
 - Org có thể chặn BYOK bằng policy — key hợp lệ vẫn không lên picker.
 - VS Code bật BYOK: Settings → mục models/API key — [Custom models trong VS Code](https://code.visualstudio.com/docs/agent-customization/language-models).
 
-**additional_usage** là trần tiền *nối sau* hạn mức credits, đơn vị **USD**. Đặt cạnh `optional_calls` cho khỏi nhầm (file [14-3](examples/14-3-byok-additional-usage.json)):
+**additional_usage** là trần tiền *nối sau* hạn mức credits, đơn vị **USD**. Đặt cạnh `optional_calls` cho khỏi nhầm (file [14-3](./examples/14-models-chon-model-dung/byok-additional-usage.json)):
 
 ```jsonc
 "optional_calls":   { "budget": 20, "over_limit_behavior": "pause" },
@@ -106,7 +106,7 @@ Với **Copilot CLI**, docs dùng hai khóa trong `~/.copilot/config.json`:
 
 - Schema đổi theo phiên bản CLI — đối chiếu trang CLI reference (Reference) và chạy `copilot config list` sau khi thêm; restart session nếu model chưa hiện.
 - Máy có Ollama chạy local: model thường **tự hiện diện** trong `/model`, không cần khai — gõ `/model` kiểm tra trước khi sửa config.
-- Custom provider nâng cao còn có `~/.copilot/providers.json`; thêm model trên VS Code / web / cloud agent làm khác nhau ở đâu — xem [14-5](examples/14-5-mcp-add-vscode-cli-cloud.md).
+- Custom provider nâng cao còn có `~/.copilot/providers.json`; thêm model trên VS Code / web / cloud agent làm khác nhau ở đâu — xem [14-5](./examples/14-models-chon-model-dung/mcp-add-vscode-cli-cloud.md).
 
 ---
 
@@ -155,7 +155,7 @@ Với **Copilot CLI**, docs dùng hai khóa trong `~/.copilot/config.json`:
 
 - [README model-picker](commands/copilot/model-agent/model-picker/README.md) — lệnh gọi picker trên CLI
 - [README ai-credits](commands/copilot/model-agent/ai-credits/README.md) — lệnh kiểm tra credits
-- [14-2 — Bảng plan & hạn mức](examples/14-2-plan-nen-chon-nao.md) · [14-3 — BYOK & budget](examples/14-3-byok-additional-usage.json) · [14-5 — thêm model từng surface](examples/14-5-mcp-add-vscode-cli-cloud.md) · [14-6 — mẹo kiệm credits](examples/14-6-meo-kiem-credits.md)
+- [14-2 — Bảng plan & hạn mức](./examples/14-models-chon-model-dung/plan-nen-chon-nao.md) · [14-3 — BYOK & budget](./examples/14-models-chon-model-dung/byok-additional-usage.json) · [14-5 — thêm model từng surface](./examples/14-models-chon-model-dung/mcp-add-vscode-cli-cloud.md) · [14-6 — mẹo kiệm credits](./examples/14-models-chon-model-dung/meo-kiem-credits.md)
 - [Bài 00 — chọn model 3 giây](./00-tong-quan-copilot.md) · [Bài 13 — index & telemetry](./13-code-intelligence-indexing-telemetry.md) · [Bài 02 — các bề mặt](./02-cac-be-mat-vscode-ide-web-cli.md)
 
 ## Reference

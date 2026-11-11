@@ -79,7 +79,7 @@ Hai mẫu ăn tiền (cú pháp `#`-mentions đầy đủ: bài 04):
 
 So nhanh với đường "không index": Claude Code và Codex không dựng semantic index trước — agent của họ **dò theo yêu cầu** (grep/glob từng vòng); đổi lại mỗi vòng dò tốn thêm lượt tool, còn Copilot trả giá một lần cho cái index.
 
-> **Tóm gọn 1 câu:** Index chỉ giúp *tìm*, không đảm bảo *đúng* — một câu một flow, scope rõ, rồi đọc kỹ file bằng `#file:`. 📄 Settings để index thấy đúng thứ (files.exclude/search.exclude/.gitignore): [`examples/01-3-bat-codebase-indexing-copy-paste.sh`](examples/01-3-bat-codebase-indexing-copy-paste.sh).
+> **Tóm gọn 1 câu:** Index chỉ giúp *tìm*, không đảm bảo *đúng* — một câu một flow, scope rõ, rồi đọc kỹ file bằng `#file:`. 📄 Settings để index thấy đúng thứ (files.exclude/search.exclude/.gitignore): [`./examples/13-code-intelligence-indexing-telemetry/bat-codebase-indexing-copy-paste.sh`](./examples/13-code-intelligence-indexing-telemetry/bat-codebase-indexing-copy-paste.sh).
 
 ## 4. Bật, dựng lại, giữ cho index sạch
 
@@ -103,7 +103,7 @@ So nhanh với đường "không index": Claude Code và Codex không dựng sem
     (Business/Enterprise mac dinh chua bat la tinh nang chua dung duoc)
 ```
 
-> 📄 Settings team + lệnh verify exclusion: [`examples/01-3-bat-codebase-indexing-copy-paste.sh`](examples/01-3-bat-codebase-indexing-copy-paste.sh). Organization còn index được cả **docs ngoài code** (ADRs, runbooks) qua knowledge base — code trả lời "làm gì", docs trả lời "vì sao": [`examples/02-5-knowledge-bases-ky-uc-team-dung-chung.sh`](examples/02-5-knowledge-bases-ky-uc-team-dung-chung.sh) · [knowledge-base](commands/cloud/system-knowledge/knowledge-base/README.md). Dựng index **không phát sinh thêm chi phí** — đồng tiền nằm ở lượt chat/agent, xem bài 14.
+> 📄 Settings team + lệnh verify exclusion: [`./examples/13-code-intelligence-indexing-telemetry/bat-codebase-indexing-copy-paste.sh`](./examples/13-code-intelligence-indexing-telemetry/bat-codebase-indexing-copy-paste.sh). Organization còn index được cả **docs ngoài code** (ADRs, runbooks) qua knowledge base — code trả lời "làm gì", docs trả lời "vì sao": [`./examples/13-code-intelligence-indexing-telemetry/knowledge-bases-ky-uc-team-dung-chung.sh`](./examples/13-code-intelligence-indexing-telemetry/knowledge-bases-ky-uc-team-dung-chung.sh) · [knowledge-base](commands/cloud/system-knowledge/knowledge-base/README.md). Dựng index **không phát sinh thêm chi phí** — đồng tiền nằm ở lượt chat/agent, xem bài 14.
 
 **Nếu làm sai?** Bật index mà chưa exclusion thì có ngày `.env` nằm trong kết quả search và lộ vào chat; index cả org cùng lúc thì không đo được repo nào hưởng lợi — pilot trước, mở rộng sau.
 
@@ -123,7 +123,7 @@ Export dữ liệu dùng agent sang OpenTelemetry gồm **6 tham số** trong `s
 | `github.copilot.chat.otel.maxAttributeSizeChars` | `0` | Chặn độ dài mỗi attribute nội dung; `0` = không cắt |
 
 - Telemetry **của VS Code** (thống kê dùng sản phẩm, crash) là chuyện tách biệt với việc GitHub/AI provider **xử lý dữ liệu request** của bạn — tắt cái này không đổi cái kia; còn OTel export ở bảng trên chạy cho **cả Local lẫn Copilot harness**.
-- Bản `settings.json` đầy đủ + câu truy vấn audit log cho admin: [`examples/13-5-telemetry-6-tham-so-audit.json`](examples/13-5-telemetry-6-tham-so-audit.json).
+- Bản `settings.json` đầy đủ + câu truy vấn audit log cho admin: [`./examples/13-code-intelligence-indexing-telemetry/telemetry-6-tham-so-audit.json`](./examples/13-code-intelligence-indexing-telemetry/telemetry-6-tham-so-audit.json).
 
 **Câu hỏi admin → số nào trả lời:**
 
@@ -149,7 +149,7 @@ Copilot tìm theo chữ và nghĩa; Language Server (LSP) mới hiểu types/sym
 | Rename symbol | Sửa tay từng chỗ | ✓ F2 theo symbol, quét cả repo |
 | Bắt lỗi sau sửa | Chờ chạy test | ✓ gạch đỏ live ở Problems panel |
 
-> 📄 Bật LSP theo stack + prompt verify 2 lớp: [`examples/03-6-lsp-copilot-synergy.sh`](examples/03-6-lsp-copilot-synergy.sh)
+> 📄 Bật LSP theo stack + prompt verify 2 lớp: [`./examples/13-code-intelligence-indexing-telemetry/lsp-copilot-synergy.sh`](./examples/13-code-intelligence-indexing-telemetry/lsp-copilot-synergy.sh)
 
 > **Tóm gọn 1 câu:** Retrieve "gần đúng nghĩa" ≠ "đúng symbol" — F12 và Problems panel là bước kiểm chứng rẻ nhất bạn từng bỏ qua.
 

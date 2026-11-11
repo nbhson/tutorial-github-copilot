@@ -28,7 +28,7 @@ Cùng chữ "mode" nhưng mỗi harness nghĩa khác nhau — đây là bảng c
 | **Copilot in the cloud** (GitHub.com) | modes **Interactive / Autopilot** | bảng 3 núm: mục 6 |
 | **Claude / Codex** (provider harness) | Claude: **permission modes** · Codex: **approval presets** — tên theo docs ở mục 4 | cùng ý tưởng, khác tên |
 
-- **Ask** = chỉ đọc + trả lời. **Plan** = nghiên cứu, đề xuất kế hoạch, **không sửa file** dù bạn bảo "cứ code đi" (trong editor: [`/plan`](commands/copilot/code-actions/plan/README.md)). **Agent** = tự lập kế hoạch + sửa nhiều file + chạy test + lặp. Slug chi tiết từng núm: [`/ask`](commands/copilot/model-agent/ask-mode/README.md) · [`/agent`](commands/copilot/model-agent/agent-mode/README.md) · Autopilot ở CLI: bài 12 — 📄 ảnh 2 trạng thái picker: [`examples/02-1-session-target-picker.md`](examples/02-1-session-target-picker.md).
+- **Ask** = chỉ đọc + trả lời. **Plan** = nghiên cứu, đề xuất kế hoạch, **không sửa file** dù bạn bảo "cứ code đi" (trong editor: [`/plan`](commands/copilot/code-actions/plan/README.md)). **Agent** = tự lập kế hoạch + sửa nhiều file + chạy test + lặp. Slug chi tiết từng núm: [`/ask`](commands/copilot/model-agent/ask-mode/README.md) · [`/agent`](commands/copilot/model-agent/agent-mode/README.md) · Autopilot ở CLI: bài 12 — 📄 ảnh 2 trạng thái picker: [`./examples/00-tong-quan-copilot/session-target-picker.md`](./examples/00-tong-quan-copilot/session-target-picker.md).
 - **Autopilot**: tự duyệt mọi tool như Allow all, retry khi lỗi, tự trả lời câu hỏi chặn tiến trình — và **vẫn tiêu AI Credits như chat thường**; tiết kiệm công trông, không tiết kiệm tiền. Advanced Autopilot (Experimental) để model nhỏ riêng quyết "xong chưa", bật bằng `chat.autopilot.advanced.enabled`. Ở CLI, Shift+Tab xoay standard → plan → autopilot → bài 12.
 
 ```text
@@ -62,7 +62,7 @@ Model là "não"; **agent harness** là "tay chân + nhà xưởng" — điều 
 
 > **Vì sao quan trọng?** Cùng prompt cho kết quả khác nhau giữa hai phiên thường là do bảng này, không phải do model.
 > **Nếu làm sai thì sao?** Giao việc cần file local cho Cloud → agent chịu, không có context; gộp "harness = VS Code" → tưởng đang chạy Copilot trong khi phiên vẫn là Local legacy.
-> **Tóm gọn 1 câu:** Não là model, nhà xưởng là harness, cloud chỉ là nhà xưởng thuê của GitHub — đổi target không phải đổi model. 📄 Picker 2 trạng thái: [`examples/02-1-session-target-picker.md`](examples/02-1-session-target-picker.md) · file `.vscode/mcp.json` dạng thật: [`01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh).
+> **Tóm gọn 1 câu:** Não là model, nhà xưởng là harness, cloud chỉ là nhà xưởng thuê của GitHub — đổi target không phải đổi model. 📄 Picker 2 trạng thái: [`./examples/00-tong-quan-copilot/session-target-picker.md`](./examples/00-tong-quan-copilot/session-target-picker.md) · file `.vscode/mcp.json` dạng thật: [`01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh).
 
 ## 3. Approval per tool: người gác cổng allow / ask / deny
 
@@ -94,7 +94,7 @@ Baseline team — commit vào `.vscode/settings.json`:
 > **Nếu làm sai thì sao?** Allow write/delete cho "nhanh" → một injection là dọn hậu quả cả buổi; deny cả lệnh đọc lặp lại → mỏi tay rồi bấm mù, tự vô hiệu hóa cổng mình dựng.
 > **Tóm gọn 1 câu:** Nới việc đọc, siết việc ghi/chạy — và nhớ chính sách hiệu lực là giao nhau của mọi nguồn, không phải của riêng file nào.
 
-> 📄 **Code ví dụ (allow/ask/deny trong settings.json):** [`examples/08-5-approval-allow-ask-deny.jsonc`](examples/08-5-approval-allow-ask-deny.jsonc) · mẫu sandbox + managed: [`examples/10-5-mau-sandbox-va-verify.jsonc`](examples/10-5-mau-sandbox-va-verify.jsonc) · tra nhanh: [policy-approval](commands/copilot/model-agent/policy-approval/README.md)
+> 📄 **Code ví dụ (allow/ask/deny trong settings.json):** [`./examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc`](./examples/08-mcp-ket-noi-cong-cu-ngoai/approval-allow-ask-deny.jsonc) · mẫu sandbox + managed: [`./examples/10-modes-permissions-availability/mau-sandbox-va-verify.jsonc`](./examples/10-modes-permissions-availability/mau-sandbox-va-verify.jsonc) · tra nhanh: [policy-approval](commands/copilot/model-agent/policy-approval/README.md)
 
 ## 4. Permission levels & auto-approve: Manual / Assisted / Allow all
 
@@ -123,7 +123,7 @@ Núm vặn này tự duyệt cho **cả phiên**, đặt TRƯỚC bộ rule per-
 - Bật: `chat.agent.sandbox.enabled` = `off` (default) / `on`, hoặc toggle "Sandboxing for terminal" trong permissions picker (Copilot session). **Preview** trên macOS/Linux/WSL2, **Experimental** trên Windows; chạy bằng **MXC (Microsoft eXecution Container)** — macOS ≥15 Seatbelt, Linux/WSL2 bubblewrap + slirp4netns + iptables, Windows 11 BaseContainer; Alpine-musl và WSL1 không hỗ trợ.
 - **Đừng đoán hàng rào, hãy đọc nó:** [`/sandbox policy`](commands/copilot/model-agent/sandbox-policy/README.md) in ra **chính sách hiệu lực kể cả khi sandbox đang tắt**; danh sách path/mạng của org + user + session **giao nhau** và mảng `[]` = **lockdown**.
 - Enterprise enforce bằng managed settings: `sandbox.enabled`, `sandbox.failIfUnavailable` (máy không hỗ trợ thì **từ chối chạy**, không im lặng chạy trần), `sandbox.allowBypass`. Riêng **Local**: chỉ sandbox lệnh terminal, không enforce rule managed.
-- Đừng nhầm với hàng rào khác: **git worktree** chỉ tách code — docs: "is not a security boundary" (bài 11); **cloud sandbox** là hạ tầng GitHub, không phải MXC trên máy bạn (mục 6). Mẫu cấu hình + verify: [`examples/10-5-mau-sandbox-va-verify.jsonc`](examples/10-5-mau-sandbox-va-verify.jsonc)
+- Đừng nhầm với hàng rào khác: **git worktree** chỉ tách code — docs: "is not a security boundary" (bài 11); **cloud sandbox** là hạ tầng GitHub, không phải MXC trên máy bạn (mục 6). Mẫu cấu hình + verify: [`./examples/10-modes-permissions-availability/mau-sandbox-va-verify.jsonc`](./examples/10-modes-permissions-availability/mau-sandbox-va-verify.jsonc)
 
 > **Vì sao quan trọng?** Approval là "ai bấm nút", sandbox là "nút đó đi tới đâu" — khi bạn bấm nhầm (hay Allow all), chỉ hàng rào còn tác dụng.
 > **Nếu làm sai thì sao?** Bật sandbox rồi tưởng mạng đã kín — hàng rào phụ thuộc danh sách; quên `failIfUnavailable` thì máy không hỗ trợ âm thầm chạy trần.

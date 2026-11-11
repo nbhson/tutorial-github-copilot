@@ -1,6 +1,6 @@
 # 14-2 · Plan nào được bao nhiêu AI Credits?
 
-> Đồng hành với [bài 14 §4](../14-models-chon-model-dung.md#4-ai-credits--bản-đồ-chi-phí).
+> Đồng hành với [bài 14 §4](../../14-models-chon-model-dung.md#4-ai-credits--bản-đồ-chi-phí).
 > Bảng này chuyển ra từ bài 14 cũ để phần đọc liền mạch ngắn lại — mọi con số
 > kiểm tra lại theo đường dẫn ở cuối file, GitHub đổi thường xuyên.
 
@@ -32,7 +32,7 @@ tế của bạn ra credits bằng công thức bài 14 §4, đối chiếu cộ
 team 5 người hay refactor: 5 × 1.900 (Business) = 9.500 credits/tháng, trong
 khi 1 refactor ≈ 350 credits (ước lượng) → cân được khoảng 27 refactor trước
 khi chạm hạn mức. Con số giả định — chạy thử một tuần với
-[`/model` chọn Auto](../commands/copilot/model-agent/model-picker/README.md)
+[`/model` chọn Auto](../../commands/copilot/model-agent/model-picker/README.md)
 rồi đọc số liệu thật ở portal (link bên dưới).
 
 ## Reference

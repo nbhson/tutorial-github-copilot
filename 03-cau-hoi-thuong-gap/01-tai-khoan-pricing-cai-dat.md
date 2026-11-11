@@ -41,7 +41,7 @@ Mấu chốt: **Free/Pro/Pro+/Max = tự trả, tự quản; Business/Enterprise
 
 > **Tóm gọn 1 câu:** Chọn plan là chọn kiểu trả tiền điện: nhà riêng tự đóng tự ngắt, chung cư doanh nghiệp thì ban quản trị (admin) nắm đồng hồ chính — policy của họ luôn thắng nút bấm của bạn.
 
-> 📄 **Code ví dụ:** [`examples/01-1-cac-plan-khac-nhau-gi.sh`](examples/01-1-cac-plan-khac-nhau-gi.sh)
+> 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/cac-plan-khac-nhau-gi.sh`](./examples/01-tai-khoan-pricing-cai-dat/cac-plan-khac-nhau-gi.sh)
 
 > **Nếu vẫn lỗi:** chạy `gh auth status` xem đúng account chưa; mở `github.com/settings/copilot` đối chiếu plan thật; org thì hỏi admin seat đã gán chưa.
 
@@ -61,7 +61,7 @@ Ví von dễ nhớ: seat là ghế xe khách — hợp đồng org mua bao nhiê
 
 Hai chế độ: allow all members (tốn seat theo headcount) hoặc selected teams/users (tiết kiệm). Credits org **pooled ở mức billing entity** — seat nào xài nhiều vẫn lấy chung hạn mức tổ chức.
 
-> 📄 **Code ví dụ:** [`examples/02-3-seat-la-gi-admin-assign-thu-hoi.sh`](examples/02-3-seat-la-gi-admin-assign-thu-hoi.sh)
+> 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/seat-la-gi-admin-assign-thu-hoi.sh`](./examples/01-tai-khoan-pricing-cai-dat/seat-la-gi-admin-assign-thu-hoi.sh)
 
 > **Khi nào áp dụng:** khi dev báo "Copilot đòi mua dù đã join org" — 90% là chưa được assign seat.
 
@@ -76,7 +76,7 @@ Hai chế độ: allow all members (tốn seat theo headcount) hoặc selected t
 | Neovim | `github/copilot.vim` hoặc `zbirenbaum/copilot.lua` | `:Copilot auth` |
 | CLI | `gh extension install github/gh-copilot` hoặc binary `copilot` | `gh auth login` / `copilot init` |
 
-> 📄 **Code ví dụ:** [`examples/03-4-cai-at-the-nao-cho-sach-vs.sh`](examples/03-4-cai-at-the-nao-cho-sach-vs.sh)
+> 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/cai-at-the-nao-cho-sach-vs.sh`](./examples/01-tai-khoan-pricing-cai-dat/cai-at-the-nao-cho-sach-vs.sh)
 
 Bản CLI độc lập 2026 là binary `copilot` (slash `/limits` + `/usage` cho chi phí, `copilot mcp list` cho MCP) — xem [bài 10](10-ci-sdk-review-web.md).
 
@@ -98,7 +98,7 @@ Triệu chứng: setting tự revert sau restart, model picker thiếu model, ch
 
 **Trả lời 1 câu:** 3 lỗi top là 2 plugin Copilot đè nhau, IDE quá cũ, và máy thiếu `gh` — gỡ bản lạ, update IDE, cài `gh` là chạy lại.
 
-> 📄 **Code ví dụ:** [`examples/04-7-loi-cai-at-kinh-ien.sh`](examples/04-7-loi-cai-at-kinh-ien.sh)
+> 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/loi-cai-at-kinh-ien.sh`](./examples/01-tai-khoan-pricing-cai-dat/loi-cai-at-kinh-ien.sh)
 
 > **Khi nào áp dụng:** khi suggestions/chat đột nhiên chết sau update IDE hoặc sau khi vọc extension.
 
@@ -106,7 +106,7 @@ Triệu chứng: setting tự revert sau restart, model picker thiếu model, ch
 
 **Trả lời 1 câu:** Verify suggestions chạy → copy `templates/` (copilot-instructions + mcp.json + settings) → thêm instructions theo stack → thêm MCP nếu cần data ngoài repo → thêm content exclusion cho path nhạy cảm.
 
-> 📄 **Code ví dụ:** [`examples/05-8-bat-au-repo-moi-5-viec-setup.sh`](examples/05-8-bat-au-repo-moi-5-viec-setup.sh)
+> 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/bat-au-repo-moi-5-viec-setup.sh`](./examples/01-tai-khoan-pricing-cai-dat/bat-au-repo-moi-5-viec-setup.sh)
 
 Copilot đọc instructions tĩnh — repo trống vẫn setup được full khung, chỉ cần sửa ~20% cho khớp stack thật (template ghi `npm test` mà bạn dùng `pnpm` thì sửa ngay, không Copilot gợi ý sai lệnh cả tháng). Team thì commit `.github/` + `.vscode/` để người sau khỏi setup lại.
 
@@ -114,7 +114,7 @@ Copilot đọc instructions tĩnh — repo trống vẫn setup được full khu
 
 **Trả lời 1 câu:** Báo qua GitHub Discussions (`github.com/community`) hoặc Support ticket (Business/Enterprise), kèm đủ 3 thứ: plan + IDE version + log thì mới xử lý nhanh.
 
-> 📄 **Code ví dụ:** [`examples/06-9-bao-loi-nho-ho-tro-github-the.sh`](examples/06-9-bao-loi-nho-ho-tro-github-the.sh)
+> 📄 **Code ví dụ:** [`./examples/01-tai-khoan-pricing-cai-dat/bao-loi-nho-ho-tro-github-the.sh`](./examples/01-tai-khoan-pricing-cai-dat/bao-loi-nho-ho-tro-github-the.sh)
 
 ---
 
@@ -124,10 +124,10 @@ Kể cả khi đã làm đúng mọi mục trên, vẫn có ca kẹt — mục n
 
 1. `gh auth status` — đúng account chưa, seat còn không.
 2. `code --list-extensions | grep -i copilot` — chỉ còn bản chính chủ.
-3. Update IDE + extension lên bản mới nhất — 📄 script dọn cài đặt sạch: [`examples/03-4-cai-at-the-nao-cho-sach-vs.sh`](examples/03-4-cai-at-the-nao-cho-sach-vs.sh).
+3. Update IDE + extension lên bản mới nhất — 📄 script dọn cài đặt sạch: [`./examples/01-tai-khoan-pricing-cai-dat/cai-at-the-nao-cho-sach-vs.sh`](./examples/01-tai-khoan-pricing-cai-dat/cai-at-the-nao-cho-sach-vs.sh).
 4. Sign-out → sign-in lại GitHub trong IDE.
 5. Check `github.com/settings/copilot` — hạn mức/seat/policy có đỏ gì không.
 
-Tham khảo chéo: [bài 02](02-model-context-premium.md) (model + chi phí) · [bài 05](05-policies-guardrails-faq.md) (policy) · [bài 08](08-loi-thuong-gap-troubleshooting.md) (bảng lỗi full) · [../templates/README.md](../templates/README.md) (templates copy ngay) · 📄 script verify tổng hợp: [`01-6-verify-tong-va-bang-loi.sh`](../01-huong-dan-su-dung/examples/01-6-verify-tong-va-bang-loi.sh).
+Tham khảo chéo: [bài 02](02-model-context-premium.md) (model + chi phí) · [bài 05](05-policies-guardrails-faq.md) (policy) · [bài 08](08-loi-thuong-gap-troubleshooting.md) (bảng lỗi full) · [../templates/README.md](../templates/README.md) (templates copy ngay) · 📄 script verify tổng hợp: [`../01-huong-dan-su-dung/examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh`](../01-huong-dan-su-dung/examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh).
 
 > **Tóm gọn 1 câu:** Cài Copilot giống lắp ổ khóa: đúng chìa (account), đúng cửa (extension chính chủ), đúng nhà (seat/policy org) — kiểm tra theo thứ tự đó là giải quyết được phần lớn sự cố.

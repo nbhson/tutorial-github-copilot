@@ -54,7 +54,7 @@ Một file hook = JSON `version: 1`; `hooks` là object keyed by event, mỗi ev
 }
 ```
 
-Script `guard.sh` đầy đủ (allow/deny + demo `modifiedArgs`) → [`examples/07-4-guard-allow-deny.sh`](examples/07-4-guard-allow-deny.sh). Ba rule nền của schema:
+Script `guard.sh` đầy đủ (allow/deny + demo `modifiedArgs`) → [`./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh`](./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh). Ba rule nền của schema:
 - **`matcher` là regex** neo `^(?:PATTERN)$`, lọc theo `toolName` (với `preToolUse`/`postToolUse`/`permissionRequest`), `trigger` (`preCompact`), `agentName` (`subagentStart`) — **không có field `if`** như bản course cũ dạy. Regex sai → entry đó bị bỏ qua kèm cảnh báo.
 - **camelCase và PascalCase đều chính thức** (`preToolUse` ↔ `PreToolUse`), nhưng PascalCase đổi payload sang format tương thích VS Code/Claude (snake_case, tool tên `Bash`/`Edit`…) → một script đừng trộn hai kiểu đọc field.
 - **Input là JSON trên stdin**: `sessionId`, `cwd`, `toolName`, `toolArgs`… — session id và repo cần cho audit lấy từ đây.
@@ -95,7 +95,7 @@ Ba chi tiết sống còn khi viết hook: **runaway guard** — 8 lần `block`
 - **Thứ tự load:** policy → user → project → plugins; mọi nguồn được **kết hợp** — cùng một event thì hook của cả máy lẫn repo đều chạy, không nguồn nào thay thế nguồn nào.
 - **Verify:** khởi động CLI in `! Invalid hook configuration in FILE: REASON` cho file/entry lỗi; `jq . .github/hooks/*.json`; `chmod +x` script; pipe test payload vào script và soi exit code + stdout JSON; nếu session bật sandbox, chạy `/sandbox policy <lệnh-hook>` (→ `commands/copilot/model-agent/sandbox-policy/README.md`) để thấy hook cần quyền gì.
 
-> **Tóm gọn 1 câu:** File trong `.github/hooks/` là của chung (team + cloud), file trong `~/.copilot/hooks/` là của riêng bạn, còn `policy.d` là của admin — dev không gỡ được. 📄 File `.github/hooks/guard.json` hoàn chỉnh do script sinh ra: [`examples/07-4-guard-allow-deny.sh`](examples/07-4-guard-allow-deny.sh).
+> **Tóm gọn 1 câu:** File trong `.github/hooks/` là của chung (team + cloud), file trong `~/.copilot/hooks/` là của riêng bạn, còn `policy.d` là của admin — dev không gỡ được. 📄 File `.github/hooks/guard.json` hoàn chỉnh do script sinh ra: [`./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh`](./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh).
 
 ## 4. Guardrail stack: advisory → hook → law
 
@@ -125,8 +125,8 @@ pnpm exec lint-staged
 # package.json: { "lint-staged": { "*.{ts,tsx}": ["prettier --write", "eslint --max-warnings 0"] } }
 ```
 
-- Recipe B (pre-commit framework + gitleaks, đa ngôn ngữ): [`examples/07-4-recipe-b-precommit-gitleaks.yaml`](examples/07-4-recipe-b-precommit-gitleaks.yaml) + [`examples/07-4-recipe-b-precommit-gitleaks.sh`](examples/07-4-recipe-b-precommit-gitleaks.sh). Recipe C (git hook thuần chặn push thẳng vào main, không dependency): [`examples/07-4-recipe-c-pre-push-block-main.sh`](examples/07-4-recipe-c-pre-push-block-main.sh). Các recipe hook nâng cao hơn: [`commands/copilot/system-knowledge/hooks/README.md`](commands/copilot/system-knowledge/hooks/README.md).
-- Hai script hình mẫu cho lớp 2: guard allow/deny ([`examples/07-4-guard-allow-deny.sh`](examples/07-4-guard-allow-deny.sh)) và audit + gate ([`examples/07-4-sec-gate-audit.sh`](examples/07-4-sec-gate-audit.sh)) — `sessionStart`/`sessionEnd`/`postToolUse` log bằng cách **append file** (hook chạy đồng bộ nên việc trong hook phải nhẹ), id + repo lấy từ payload stdin.
+- Recipe B (pre-commit framework + gitleaks, đa ngôn ngữ): [`./examples/07-policies-guardrails-tu-dong-hoa/recipe-b-precommit-gitleaks.yaml`](./examples/07-policies-guardrails-tu-dong-hoa/recipe-b-precommit-gitleaks.yaml) + [`./examples/07-policies-guardrails-tu-dong-hoa/recipe-b-precommit-gitleaks.sh`](./examples/07-policies-guardrails-tu-dong-hoa/recipe-b-precommit-gitleaks.sh). Recipe C (git hook thuần chặn push thẳng vào main, không dependency): [`./examples/07-policies-guardrails-tu-dong-hoa/recipe-c-pre-push-block-main.sh`](./examples/07-policies-guardrails-tu-dong-hoa/recipe-c-pre-push-block-main.sh). Các recipe hook nâng cao hơn: [`commands/copilot/system-knowledge/hooks/README.md`](commands/copilot/system-knowledge/hooks/README.md).
+- Hai script hình mẫu cho lớp 2: guard allow/deny ([`./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh`](./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh)) và audit + gate ([`./examples/07-policies-guardrails-tu-dong-hoa/sec-gate-audit.sh`](./examples/07-policies-guardrails-tu-dong-hoa/sec-gate-audit.sh)) — `sessionStart`/`sessionEnd`/`postToolUse` log bằng cách **append file** (hook chạy đồng bộ nên việc trong hook phải nhẹ), id + repo lấy từ payload stdin.
 
 > **Tóm gọn 1 câu:** Dặn miệng cho model, chuông khói cho tool call, khoá cổng cho server — mỗi loại quy tắc đúng một tầng, đừng trộn.
 
@@ -152,7 +152,7 @@ Verify: mo .env -> icon Copilot bao "excluded"; yeu cau doc file do -> phai tu c
 
 **4 giới hạn docs nêu — nhớ như in:** không phải biên an toàn filesystem; không đảm bảo third-party MCP tôn trọng; không áp cho symlink và repo trên remote filesystem; có thể bỏ sót truy cập gián tiếp. Phòng thủ thêm ở máy dev: `github.copilot.enable` theo language cho file nhạy cảm.
 
-Lớp 6–7 (server): branch protection + required checks — copy-paste [`examples/07-7-1-lop-5-branch-protection-required-checks.sh`](examples/07-7-1-lop-5-branch-protection-required-checks.sh), hoặc Rulesets (Settings → Rules → Rulesets: Restrict deletions, Block force pushes, Require PR + status checks, Require Copilot code review). Secret scanning + push protection + review gate CI (grep CRITICAL trong `gh pr view --json reviews` → exit 1): cả 4 bước test trong [`examples/07-4-sec-gate-audit.sh`](examples/07-4-sec-gate-audit.sh). Review gate: Copilot review mặc định chỉ là **comment**, không phải approval; chi phí theo **review effort Lite/Balanced/Max ≈ $0.25/$1.50/$10 mỗi review** (as of 11/2026) + phút Actions — kinh tế chi tiết ở bài 15.
+Lớp 6–7 (server): branch protection + required checks — copy-paste [`./examples/07-policies-guardrails-tu-dong-hoa/lop-5-branch-protection-required-checks.sh`](./examples/07-policies-guardrails-tu-dong-hoa/lop-5-branch-protection-required-checks.sh), hoặc Rulesets (Settings → Rules → Rulesets: Restrict deletions, Block force pushes, Require PR + status checks, Require Copilot code review). Secret scanning + push protection + review gate CI (grep CRITICAL trong `gh pr view --json reviews` → exit 1): cả 4 bước test trong [`./examples/07-policies-guardrails-tu-dong-hoa/sec-gate-audit.sh`](./examples/07-policies-guardrails-tu-dong-hoa/sec-gate-audit.sh). Review gate: Copilot review mặc định chỉ là **comment**, không phải approval; chi phí theo **review effort Lite/Balanced/Max ≈ $0.25/$1.50/$10 mỗi review** (as of 11/2026) + phút Actions — kinh tế chi tiết ở bài 15.
 
 > **Tóm gọn 1 câu:** Exclusion bịt mắt model từ phía server nhưng không phải bức tường sắt — các lớp 6–7 (push protection, review gate, branch protection) mới là nơi "đã lọt cũng bị chặn".
 
@@ -176,9 +176,9 @@ Lớp 6–7 (server): branch protection + required checks — copy-paste [`examp
 
 ## Bài tập
 
-1. **(15 phút)** Dựng `guard.sh` theo [`examples/07-4-guard-allow-deny.sh`](examples/07-4-guard-allow-deny.sh), commit `.github/hooks/guard.json`; pipe payload giả `{"toolName":"bash","toolArgs":{"command":"rm -rf /tmp/x"}}` → script phải exit 2; mở CLI session thật, gọi lệnh nguy hiểm → thấy "denied".
-2. **(10 phút)** Thêm `sessionStart` + `sessionEnd` + `postToolUse` ghi `logs/copilot-audit.jsonl` (đăng ký theo mẫu JSON trong `examples/07-4-guard-allow-deny.sh`, script chỉ append file); đo thời gian hook — mỗi lần > 5s thì thu hẹp việc; sau đó chạy nốt phần test secret/review gate trong `examples/07-4-sec-gate-audit.sh`.
-3. **(15 phút)** Bật content exclusion cho `.env*` và test như mục 6; chạy bài test secret giả + review gate trong `examples/07-4-sec-gate-audit.sh`; ghi lại lớp nào chặn ở bước nào.
+1. **(15 phút)** Dựng `guard.sh` theo [`./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh`](./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh), commit `.github/hooks/guard.json`; pipe payload giả `{"toolName":"bash","toolArgs":{"command":"rm -rf /tmp/x"}}` → script phải exit 2; mở CLI session thật, gọi lệnh nguy hiểm → thấy "denied".
+2. **(10 phút)** Thêm `sessionStart` + `sessionEnd` + `postToolUse` ghi `logs/copilot-audit.jsonl` (đăng ký theo mẫu JSON trong `./examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh`, script chỉ append file); đo thời gian hook — mỗi lần > 5s thì thu hẹp việc; sau đó chạy nốt phần test secret/review gate trong `./examples/07-policies-guardrails-tu-dong-hoa/sec-gate-audit.sh`.
+3. **(15 phút)** Bật content exclusion cho `.env*` và test như mục 6; chạy bài test secret giả + review gate trong `./examples/07-policies-guardrails-tu-dong-hoa/sec-gate-audit.sh`; ghi lại lớp nào chặn ở bước nào.
 
 ## Link qua
 

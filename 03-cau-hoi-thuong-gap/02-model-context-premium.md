@@ -22,7 +22,7 @@
 - **Completions:** setting `github.copilot.completions.model` — thường không cần đổi.
 - **Chat sidebar / Agent mode:** dropdown trên khung chat, chọn theo conversation.
 
-> 📄 **Code ví dụ:** [`examples/01-1-model-picker-o-au-oi-model-the.sh`](examples/01-1-model-picker-o-au-oi-model-the.sh)
+> 📄 **Code ví dụ:** [`./examples/02-model-context-premium/model-picker-o-au-oi-model-the.sh`](./examples/02-model-context-premium/model-picker-o-au-oi-model-the.sh)
 
 > **Nếu picker thiếu model:** check org policy allowlist (admin ẩn), reload IDE, hỏi admin mở thêm.
 
@@ -46,7 +46,7 @@ Hãy hình dung Credits như tiền điện: mỗi thiết bị (model) có côn
 
 Thứ tự tốn Credits tăng dần → **gõ tay được thì đừng chat; chat được thì đừng agent.**
 
-> 📄 **Code ví dụ:** [`examples/02-2-ai-credits-tinh-tien-the-nao.sh`](examples/02-2-ai-credits-tinh-tien-the-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/02-model-context-premium/ai-credits-tinh-tien-the-nao.sh`](./examples/02-model-context-premium/ai-credits-tinh-tien-the-nao.sh)
 
 **Ví dụ cụ thể:** Pro 1.500 credits/tháng (1.000 base + 500 flex) — số liệu as of 11/2026, verify tại github.com/features/copilot. Dùng model đắt cho mọi chat linh tinh → cạn nhanh; model rẻ cho việc dễ + model mạnh cho việc khó → đủ cả tháng.
 
@@ -60,7 +60,7 @@ Ví von: context là chiếc cặp Copilot mang theo mỗi lần gặp bạn —
 
 Gồm: file đang mở (vùng quanh con trỏ), file liên quan (imports, file mở gần đây), `#file` / `#selection` bạn attach, `copilot-instructions.md` + instructions khớp `applyTo`, và (Agent mode) kết quả tool calls.
 
-> 📄 **Code ví dụ:** [`examples/03-3-context-window-la-gi-copilot-nhet-gi.sh`](examples/03-3-context-window-la-gi-copilot-nhet-gi.sh)
+> 📄 **Code ví dụ:** [`./examples/02-model-context-premium/context-window-la-gi-copilot-nhet-gi.sh`](./examples/02-model-context-premium/context-window-la-gi-copilot-nhet-gi.sh)
 
 > **Trả lời lạc đề:** 80% là context nhiễu, không phải model dốt.
 
@@ -79,7 +79,7 @@ Gồm: file đang mở (vùng quanh con trỏ), file liên quan (imports, file m
 
 **Trả lời 1 câu:** Copilot mặc định **KHÔNG BYOK** cho completions/chat — model đi qua hạ tầng GitHub; chỉ **Enterprise + Azure OpenAI** route được qua Azure tenant của bạn (admin cấu hình).
 
-Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xem [bài 10](10-ci-sdk-review-web.md)). Compliance hỏi "data đi đâu" → xem [bài 09](09-bao-mat-quyen-rieng-tu.md). 📄 Cách BYOK/usage qua API key riêng + billing: [`14-3-byok-additional-usage.json`](../01-huong-dan-su-dung/examples/14-3-byok-additional-usage.json).
+Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xem [bài 10](10-ci-sdk-review-web.md)). Compliance hỏi "data đi đâu" → xem [bài 09](09-bao-mat-quyen-rieng-tu.md). 📄 Cách BYOK/usage qua API key riêng + billing: [`../01-huong-dan-su-dung/examples/14-models-chon-model-dung/byok-additional-usage.json`](../01-huong-dan-su-dung/examples/14-models-chon-model-dung/byok-additional-usage.json).
 
 ## 6. Nên dùng model nào cho việc nào?
 
@@ -90,7 +90,7 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 - Refactor multi-file, debug race condition, thiết kế: model mạnh nhất.
 - Agent tự chạy lâu: model mạnh + instructions chặt (không thì nó chạy loạn bằng model đắt).
 
-> 📄 **Code ví dụ:** [`examples/04-6-nen-dung-model-nao-cho-viec-nao.sh`](examples/04-6-nen-dung-model-nao-cho-viec-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/02-model-context-premium/nen-dung-model-nao-cho-viec-nao.sh`](./examples/02-model-context-premium/nen-dung-model-nao-cho-viec-nao.sh)
 
 ## 7. Sao cùng 1 prompt mà hôm nay dở hơn hôm qua?
 
@@ -98,7 +98,7 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 
 1. **Model sau lưng bị đổi** (GitHub âm thầm update default) → check model picker.
 2. **Context khác** (mở file khác, instructions khác) → check referenced files.
-3. **Instructions mới thêm** làm nhiễu → thử tắt instructions custom (đối chiếu file đang nạp: [`01-1-file-nao-copilot-tu-load-file-nao.sh`](examples/01-1-file-nao-copilot-tu-load-file-nao.sh)).
+3. **Instructions mới thêm** làm nhiễu → thử tắt instructions custom (đối chiếu file đang nạp: [`./examples/02-model-context-premium/file-nao-copilot-tu-load-file-nao.sh`](./examples/02-model-context-premium/file-nao-copilot-tu-load-file-nao.sh)).
 4. **Hết Credits → rớt model yếu** → check usage page.
 
 **Ví dụ:** team thêm `frontend-react.instructions.md` với `applyTo: **` → mọi chat backend cũng bị nhồi React context → chất lượng tụt. Fix: sửa `applyTo` cho hẹp (xem [bài 06](06-prompts-agents-instructions.md)).
@@ -125,7 +125,7 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 
 **Trả lời 1 câu:** Thứ tự: chuyển về model rẻ + tắt Agent → dùng completions và IDE refactor (0 Credits) → xin admin thêm budget / chuyển plan → chờ chu kỳ mới.
 
-> 📄 **Code ví dụ:** [`examples/05-9-het-ai-credits-giua-thang-thi-chua.sh`](examples/05-9-het-ai-credits-giua-thang-thi-chua.sh)
+> 📄 **Code ví dụ:** [`./examples/02-model-context-premium/het-ai-credits-giua-thang-thi-chua.sh`](./examples/02-model-context-premium/het-ai-credits-giua-thang-thi-chua.sh)
 
 **Ví dụ:** còn 100 Credits mà 10 ngày nữa mới reset → 10/ngày: chỉ bật model mạnh cho task blocker, còn lại model nhẹ. Đừng đợi cạn mới tiết kiệm — nhận cảnh báo 80% là bắt đầu.
 
@@ -141,6 +141,6 @@ Cần gọi model ngoài cho workflow riêng → dùng **Copilot CLI / SDK** (xe
 4. Check hạn mức: `github.com/settings/copilot` → "AI Credits usage".
 5. Vẫn tệ → đổi model mạnh hơn 1 nấc, hoặc chia nhỏ prompt.
 
-📄 Checklist debug 6 bước khi instructions/model gây nhiễu: [`examples/06-5-instructions-khong-load-checklist-6-buoc.sh`](examples/06-5-instructions-khong-load-checklist-6-buoc.sh).
+📄 Checklist debug 6 bước khi instructions/model gây nhiễu: [`./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh`](./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh).
 
-Tham khảo chéo: [bài 01](01-tai-khoan-pricing-cai-dat.md) (cài đặt + seat) · 📄 checklist debug: [examples/06-5-instructions-khong-load-checklist-6-buoc.sh](examples/06-5-instructions-khong-load-checklist-6-buoc.sh) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 07](07-custom-agents-coding-agent-workflows.md) (agent tốn Credits) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (bảo mật data).
+Tham khảo chéo: [bài 01](01-tai-khoan-pricing-cai-dat.md) (cài đặt + seat) · 📄 checklist debug: [./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh](./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 07](07-custom-agents-coding-agent-workflows.md) (agent tốn Credits) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (bảo mật data).

@@ -34,7 +34,7 @@ Copilot không còn là một extension gõ tắt: **một subscription chạy t
 | Pro / Pro+ / Max | Cùng một luồng cài, khác nhau ở lượng AI credits — lỗi "hết credits giữa task" bắt đầu từ đây; Copilot in the cloud cần plan trả phí |
 | Business / Enterprise | Phải login đúng account do org quản, vì policy (content exclusion, model gating) đi theo org — login nhầm là dính policy người khác cả buổi |
 
-Tiền, 1 dòng: billing hiện hành là **GitHub AI Credits — 1 credit = $0,01, tính theo token của model**; **code completions và next edit suggestions không trừ credits** · đăng ký plan + xác nhận subscription đã active: [`examples/01-2-dang-ky-plan-va-verify-tai-khoan.sh`](examples/01-2-dang-ky-plan-va-verify-tai-khoan.sh)
+Tiền, 1 dòng: billing hiện hành là **GitHub AI Credits — 1 credit = $0,01, tính theo token của model**; **code completions và next edit suggestions không trừ credits** · đăng ký plan + xác nhận subscription đã active: [`./examples/01-cai-dat-va-xac-thuc/dang-ky-plan-va-verify-tai-khoan.sh`](./examples/01-cai-dat-va-xac-thuc/dang-ky-plan-va-verify-tai-khoan.sh)
 
 > **Vì sao quan trọng?** Sai plan thì hoặc thiếu credits (agent dừng giữa task, code dở dang), hoặc trả tiền cho tính năng không ai dùng.
 > **Nếu làm sai?** Đăng ký một nơi, login một nơi: `github.com/settings/copilot` không hiện plan nghĩa là **đang sai tài khoản**, không phải extension hỏng — kiểm tài khoản trước khi debug bất cứ gì (§6.1).
@@ -52,7 +52,7 @@ Tiền, 1 dòng: billing hiện hành là **GitHub AI Credits — 1 credit = $0,
 3. Mo mot REPO THAT (khong phai folder trong) de agent doc duoc workspace context.
 ```
 
-> 📄 [`examples/01-3-cai-vs-code-va-dang-nhap.sh`](examples/01-3-cai-vs-code-va-dang-nhap.sh) — lệnh đầy đủ, kể cả chọn account cho từng workspace/profile · [`examples/01-3-verify-vs-code-30-giay.sh`](examples/01-3-verify-vs-code-30-giay.sh) — 30 giây verify bằng mắt + bảng phím tắt.
+> 📄 [`./examples/01-cai-dat-va-xac-thuc/cai-vs-code-va-dang-nhap.sh`](./examples/01-cai-dat-va-xac-thuc/cai-vs-code-va-dang-nhap.sh) — lệnh đầy đủ, kể cả chọn account cho từng workspace/profile · [`./examples/01-cai-dat-va-xac-thuc/verify-vs-code-30-giay.sh`](./examples/01-cai-dat-va-xac-thuc/verify-vs-code-30-giay.sh) — 30 giây verify bằng mắt + bảng phím tắt.
 
 ### 3.1. Settings nên bật — và một setting không cần bật
 
@@ -62,7 +62,7 @@ Tiền, 1 dòng: billing hiện hành là **GitHub AI Credits — 1 credit = $0,
 | `editor.inlineSuggest.enabled` + `github.copilot.enable` | `true` / `{"*": true}` | ghost text im lặng dù login đúng = thường do hai cái này (bật/tắt theo ngôn ngữ, file quá lớn), không phải do tài khoản |
 | `github.copilot.chat.codeGeneration.useInstructionFiles` | **không cần bật** | là setting của **Local harness**; Copilot harness tự đọc `.github/copilot-instructions.md` / `AGENTS.md` (bài 03) |
 
-> 📄 [`examples/01-3-settings-nen-bat.jsonc`](examples/01-3-settings-nen-bat.jsonc)
+> 📄 [`./examples/01-cai-dat-va-xac-thuc/settings-nen-bat.jsonc`](./examples/01-cai-dat-va-xac-thuc/settings-nen-bat.jsonc)
 
 > **Vì sao quan trọng?** VS Code có hàng trăm setting, nhưng đúng ba cái dưới đây quyết định "Copilot có hiện ra hay không"; phần còn lại cứ để mặc định.
 > **Nếu làm sai?** Nhét `github.copilot.chat.codeGeneration.useInstructionFiles: true` vào `.vscode/settings.json` rồi tưởng đã bật instructions: đó là setting của **Local harness**, Copilot harness không cần nó — muốn chắc thì verify bằng **Chat: Open Customizations** + mục **References** (§6.3 và bài 03).
@@ -72,7 +72,7 @@ Tiền, 1 dòng: billing hiện hành là **GitHub AI Credits — 1 credit = $0,
 
 JetBrains và Visual Studio có extension chính thức; Neovim dùng plugin `github/copilot.vim`. Ba bề mặt này mạnh về gõ + hỏi nhanh; **năng lực agent khác nhau giữa các bề mặt là việc của bài 02** — bài này không lặp bảng so sánh. Đường cài từng IDE (JetBrains: `Ctrl+Alt+S` → Plugins → Marketplace → "GitHub Copilot"; Visual Studio: Extensions → Manage Extensions; Neovim: `:Copilot setup` rồi `:Copilot status` = `Enabled`):
 
-> 📄 [`examples/01-4-jetbrains-visual-studio-neovim.sh`](examples/01-4-jetbrains-visual-studio-neovim.sh)
+> 📄 [`./examples/00-tong-quan-copilot/jetbrains-visual-studio-neovim.sh`](./examples/00-tong-quan-copilot/jetbrains-visual-studio-neovim.sh)
 
 ## 5. Copilot CLI — đừng nhầm với `gh copilot`
 
@@ -100,7 +100,7 @@ gh extension list      # thay gh-copilot? chi khi do `gh copilot suggest/explain
 gh auth status         # dung account (ca nhan vs cong ty) — kiem dau tien
 ```
 
-> 📄 [`examples/01-6-verify-tong-va-bang-loi.sh`](examples/01-6-verify-tong-va-bang-loi.sh)
+> 📄 [`./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh`](./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh)
 
 | Triệu chứng | Nguyên nhân likely | Fix (copy-paste) |
 |---|---|---|
@@ -132,7 +132,7 @@ Buoc 5 (2 phut): "Chat: Open Customizations" -> tab Instructions -> file phai du
 **Nếu làm sai?** Bỏ bước 5 — instructions lưu rồi nhưng chưa session nào đọc qua, bạn chỉ phát hiện khi một người khác chạy repo này.
 > **Tóm gọn 1 câu:** Session đầu chuẩn = mở Chat → Agent → prompt "tóm tắt repo" → lưu instructions → **verify bằng Customizations editor + References**, rồi hỏi lại trong chat mới.
 
-> 📄 **Code ví dụ (chạy tuần tự là xong walkthrough):** [`examples/01-3-cai-vs-code-va-dang-nhap.sh`](examples/01-3-cai-vs-code-va-dang-nhap.sh) · [`examples/01-2-dang-ky-plan-va-verify-tai-khoan.sh`](examples/01-2-dang-ky-plan-va-verify-tai-khoan.sh) · [`examples/01-3-verify-vs-code-30-giay.sh`](examples/01-3-verify-vs-code-30-giay.sh)
+> 📄 **Code ví dụ (chạy tuần tự là xong walkthrough):** [`./examples/01-cai-dat-va-xac-thuc/cai-vs-code-va-dang-nhap.sh`](./examples/01-cai-dat-va-xac-thuc/cai-vs-code-va-dang-nhap.sh) · [`./examples/01-cai-dat-va-xac-thuc/dang-ky-plan-va-verify-tai-khoan.sh`](./examples/01-cai-dat-va-xac-thuc/dang-ky-plan-va-verify-tai-khoan.sh) · [`./examples/01-cai-dat-va-xac-thuc/verify-vs-code-30-giay.sh`](./examples/01-cai-dat-va-xac-thuc/verify-vs-code-30-giay.sh)
 
 ## 7. Checklist sau cài đặt (30 giây bằng mắt + 3 lệnh)
 
@@ -142,7 +142,7 @@ Buoc 5 (2 phut): "Chat: Open Customizations" -> tab Instructions -> file phai du
 - [ ] `AGENTS.md` / `.github/copilot-instructions.md` hiện trong **Chat: Open Customizations**.
 - [ ] `gh auth status` đúng account (cá nhân vs công ty).
 - [ ] `copilot --version` chạy được; `gh extension list` thấy `gh-copilot` **nếu** bạn dùng `suggest/explain`.
-- [ ] Đã chạy walkthrough §6.3 trên 1 repo thật — 📄 lệnh verify từng thứ: [`examples/01-6-verify-tong-va-bang-loi.sh`](examples/01-6-verify-tong-va-bang-loi.sh) · settings nền: [`examples/01-3-settings-nen-bat.jsonc`](examples/01-3-settings-nen-bat.jsonc).
+- [ ] Đã chạy walkthrough §6.3 trên 1 repo thật — 📄 lệnh verify từng thứ: [`./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh`](./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh) · settings nền: [`./examples/01-cai-dat-va-xac-thuc/settings-nen-bat.jsonc`](./examples/01-cai-dat-va-xac-thuc/settings-nen-bat.jsonc).
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 

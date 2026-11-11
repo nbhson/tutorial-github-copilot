@@ -43,11 +43,11 @@ Sơ đồ fan-out chuẩn:
              --gộp-->     [Chat chính: gộp + verify + review]
 ```
 
-> **Tóm gọn 1 câu:** Song song như bếp nhà hàng: nhiều nồi đun cùng lúc để tiết kiệm thời gian — nhưng mỗi nồi một bếp riêng, và luôn có đầu bếp chính đứng gộp món. 📄 3 cách chạy song song: [`03-5-chay-song-song-3-cach.sh`](../01-huong-dan-su-dung/examples/03-5-chay-song-song-3-cach.sh) · [`03-4-branch-strategy-cua-coding-agent-copilot.sh`](../01-huong-dan-su-dung/examples/03-4-branch-strategy-cua-coding-agent-copilot.sh).
+> **Tóm gọn 1 câu:** Song song như bếp nhà hàng: nhiều nồi đun cùng lúc để tiết kiệm thời gian — nhưng mỗi nồi một bếp riêng, và luôn có đầu bếp chính đứng gộp món. 📄 3 cách chạy song song: [`../01-huong-dan-su-dung/examples/06-custom-agents-parallel/chay-song-song-3-cach.sh`](../01-huong-dan-su-dung/examples/06-custom-agents-parallel/chay-song-song-3-cach.sh) · [`../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/branch-strategy-cua-coding-agent-copilot.sh`](../01-huong-dan-su-dung/examples/11-git-worktrees-checkpoints/branch-strategy-cua-coding-agent-copilot.sh).
 
 ## 3. Kiểu 1: multi-chat song song (nhanh nhất)
 
-Không cần setup. Mở 2–3 chats VS Code (hoặc github.com + VS Code) cùng lúc — như mở ba cửa sổ từ điển trên bàn, tra song song đỡ lật đi lật lại một cuốn — 📄 3 cách chạy song song: [`03-5-chay-song-song-3-cach.sh`](../01-huong-dan-su-dung/examples/03-5-chay-song-song-3-cach.sh).
+Không cần setup. Mở 2–3 chats VS Code (hoặc github.com + VS Code) cùng lúc — như mở ba cửa sổ từ điển trên bàn, tra song song đỡ lật đi lật lại một cuốn — 📄 3 cách chạy song song: [`../01-huong-dan-su-dung/examples/06-custom-agents-parallel/chay-song-song-3-cach.sh`](../01-huong-dan-su-dung/examples/06-custom-agents-parallel/chay-song-song-3-cach.sh).
 
 **Ví dụ 1 — Research 3 modules (copy-paste):**
 
@@ -113,13 +113,13 @@ Mục này dành cho ai muốn hai agent "ở hai căn hộ riêng" trên cùng 
 
 Khi muốn chạy 2 Agents local cùng lúc mà không conflict files:
 
-> 📄 **Code ví dụ:** [`examples/01-5-kieu-3-worktrees-co-lap.sh`](examples/01-5-kieu-3-worktrees-co-lap.sh)
+> 📄 **Code ví dụ:** [`./examples/05-parallel-agents/1-kieu-3-worktrees-co-lap.sh`](./examples/05-parallel-agents/1-kieu-3-worktrees-co-lap.sh)
 
 Chạy song song: mỗi VS Code gắn prompt riêng — `"Đọc plan.md Phase auth. Chỉ làm trong worktree này. Chạy npm test -- auth, dán log."`
 
 **Gộp sau khi cả 2 xanh (copy-paste lệnh):**
 
-> 📄 **Code ví dụ:** [`examples/02-5-kieu-3-worktrees-co-lap.sh`](examples/02-5-kieu-3-worktrees-co-lap.sh)
+> 📄 **Code ví dụ:** [`./examples/05-parallel-agents/2-kieu-3-worktrees-co-lap.sh`](./examples/05-parallel-agents/2-kieu-3-worktrees-co-lap.sh)
 
 **Khi nào KHÔNG cần worktrees:** chỉ research/hỏi (multi-chat là đủ); task <30 phút (1 Agent nhanh hơn setup); máy yếu (dùng Copilot cloud agent thay).
 
@@ -134,7 +134,7 @@ Chia 1 task thành vai: Planner lập plan, Tester viết test, Reviewer soi (t�
 # Code xong:
 @Reviewer Review diff vs plan.md, [SEVERITY] file:line, verdict PASS/NEEDS-FIX.
 
-📄 3 file `.agent.md` tương ứng: [`../templates/.github/agents/`](../templates/.github/agents/) · [`06-2-agent-planner.agent.md`](../01-huong-dan-su-dung/examples/06-2-agent-planner.agent.md).
+📄 3 file `.agent.md` tương ứng: [`../templates/.github/agents/`](../templates/.github/agents/) · [`06-2-agent-planner.agent.md`](../01-huong-dan-su-dung/examples/06-custom-agents-parallel/agent-planner.agent.md).
 ```
 
 **Output contract để gộp rẻ (quy định trước khi chạy):**

@@ -74,7 +74,7 @@ Không tạo file mới, chỉ trả lời trong chat.
 
 Mục này thêm 3 "gia vị" làm prompt đậm đà hơn: tiêu chí xong, cách tự kiểm, và cấm địa.
 
-1. **Success criteria** — done phải check được bằng lệnh (dán `applyTo` vào file luật: [`03-4-mau-python-rules.instructions.md`](../01-huong-dan-su-dung/examples/03-4-mau-python-rules.instructions.md)): `Done = npm test -- payments xanh + npm run lint 0 error` (xem [Tips 04](./04-verification-done-that.md)).
+1. **Success criteria** — done phải check được bằng lệnh (dán `applyTo` vào file luật: [`03-4-mau-python-rules.instructions.md`](../01-huong-dan-su-dung/examples/03-instructions-memory-rules/mau-python-rules.instructions.md)): `Done = npm test -- payments xanh + npm run lint 0 error` (xem [Tips 04](./04-verification-done-that.md)).
 2. **Cách verify** — bắt Copilot tự iterate:
 
 ```text

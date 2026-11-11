@@ -33,7 +33,7 @@ Ba cái bẫy tên đã làm hỏng bài này bản cũ:
 - **Agent Plugins ≠ plugin kiểu khác**: docs gốc của VS Code ghi nguyên văn Agent Plugins *"are distinct from VS Code extensions"* — còn chữ "plugin" nằm trong tên một số extension (mở rộng của extension) là khái niệm của *editor*, không phải tầng này.
 - **"Marketplace"** ở tầng 2 không phải chợ: nó chỉ là **một Git repo** có file `.github/plugin/marketplace.json` — repo nội bộ công ty bạn cũng là một marketplace.
 
-📄 Ba file thật của ba tầng: [`examples/09-3-1-vs-code-pack-settings.jsonc`](examples/09-3-1-vs-code-pack-settings.jsonc) (`.vscode/extensions.json`) · [`examples/16-3-plugin-json-schema-dong.json`](examples/16-3-plugin-json-schema-dong.json) (`plugin.json`) · [`templates/.mcp.json`](../templates/.mcp.json) (`mcpServers`).
+📄 Ba file thật của ba tầng: [`./examples/09-extensions-marketplaces/vs-code-pack-settings.jsonc`](./examples/09-extensions-marketplaces/vs-code-pack-settings.jsonc) (`.vscode/extensions.json`) · [`./examples/09-extensions-marketplaces/plugin-json-schema-dong.json`](./examples/09-extensions-marketplaces/plugin-json-schema-dong.json) (`plugin.json`) · [`templates/.mcp.json`](../templates/.mcp.json) (`mcpServers`).
 
 > **Vì sao quan trọng?** Đúng tầng = đúng file = đúng harness. Cấu hình để sai tầng không báo lỗi to — nó chỉ **im lặng không chạy** (vd: MCP khai trong `.vscode/mcp.json` thì session Copilot harness không thấy).
 > **Nếu làm sai?** Team "cài plugin" bằng cách install extension editor → skills không vào agent; hoặc đi tìm "Copilot Extension" theo tutorial 2024 → không tồn tại nữa.
@@ -65,7 +65,7 @@ Pack nằm trong repo, ai mở folder đều được VS Code gợi ý cài ("Re
 }
 ```
 
-Cài + verify bằng CLI (`code --install-extension <publisher.name>` → `code --list-extensions`), walkthrough từng lệnh ở [`examples/09-3-1-vs-code-pack-install.sh`](examples/09-3-1-vs-code-pack-install.sh), file mẫu [`examples/09-3-1-vs-code-pack-settings.jsonc`](examples/09-3-1-vs-code-pack-settings.jsonc). Docs: *"VS Code prompts a user to install the recommended extensions when a workspace is opened for the first time"* — prompt chỉ bật lần đầu mở folder; ai bỏ lỡ thì tự thấy danh sách qua filter `@recommended` trong Extensions view.
+Cài + verify bằng CLI (`code --install-extension <publisher.name>` → `code --list-extensions`), walkthrough từng lệnh ở [`./examples/09-extensions-marketplaces/vs-code-pack-install.sh`](./examples/09-extensions-marketplaces/vs-code-pack-install.sh), file mẫu [`./examples/09-extensions-marketplaces/vs-code-pack-settings.jsonc`](./examples/09-extensions-marketplaces/vs-code-pack-settings.jsonc). Docs: *"VS Code prompts a user to install the recommended extensions when a workspace is opened for the first time"* — prompt chỉ bật lần đầu mở folder; ai bỏ lỡ thì tự thấy danh sách qua filter `@recommended` trong Extensions view.
 
 **Extension host là gì:** docs định nghĩa *"the server that runs your UI, extensions, and other pieces"* — process chạy extensions; host chết thì debug/terminal/extensions liệt, không phải "Copilot lỗi". Đây cũng là lý do pack nên **ít mà chất**: mở rộng là thêm process vào máy mỗi dev.
 
@@ -79,13 +79,13 @@ Mặc định VS Code **tự cập nhật mọi extension**. Với extension ả
 - Tắt auto-update: setting `"extensions.autoUpdate": false` (hoặc update từng cái bằng tay: Extensions → bánh răng → *Update* / *Install Another Version*).
 - Cài đúng version: `code --install-extension github.copilot-chat@<version>`.
 - Audit: `code --list-extensions --show-versions` — so với allowlist của team mỗi tháng.
-- Nâng version: cuối sprint, test 1 ngày trên repo thử rồi mới announce. Lệnh đầy đủ: [`examples/09-3-2-pin-version.sh`](examples/09-3-2-pin-version.sh).
+- Nâng version: cuối sprint, test 1 ngày trên repo thử rồi mới announce. Lệnh đầy đủ: [`./examples/09-extensions-marketplaces/pin-version.sh`](./examples/09-extensions-marketplaces/pin-version.sh).
 
 ## 4. Tầng 2 — Agent Plugins và marketplace
 
 ### 4.1 Plugin là gì (6 dòng, phần sâu ở bài 17)
 
-Plugin = **một gói chia sẻ đồ nghề của agent**: chứa skills (và cấu hình MCP), cài một lần có cả bộ thay vì copy từng file. Docs VS Code: *"Agent plugins are portable packages of expertise… distinct from VS Code extensions"*. Bật/tắt phía editor: setting `chat.plugins.enabled`; trong session Copilot dùng `/plugin`, ngoài terminal dùng `copilot plugin install|list|validate|recommendations`. Manifest schema **1.0 là schema đóng**: phần port dùng chung nằm ở `skills/` và `mcp.json` root; mục Copilot-specific (agents/hooks/commands…) phải nằm trong namespace `com.github.copilot/`. Quản lý từng lệnh + kiểm manifest: [`commands/copilot/system-knowledge/plugins/README.md`](commands/copilot/system-knowledge/plugins/README.md) · walkthrough đầy đủ: bài 17 + [`examples/17-2-plugin-marketplace.sh`](examples/17-2-plugin-marketplace.sh).
+Plugin = **một gói chia sẻ đồ nghề của agent**: chứa skills (và cấu hình MCP), cài một lần có cả bộ thay vì copy từng file. Docs VS Code: *"Agent plugins are portable packages of expertise… distinct from VS Code extensions"*. Bật/tắt phía editor: setting `chat.plugins.enabled`; trong session Copilot dùng `/plugin`, ngoài terminal dùng `copilot plugin install|list|validate|recommendations`. Manifest schema **1.0 là schema đóng**: phần port dùng chung nằm ở `skills/` và `mcp.json` root; mục Copilot-specific (agents/hooks/commands…) phải nằm trong namespace `com.github.copilot/`. Quản lý từng lệnh + kiểm manifest: [`commands/copilot/system-knowledge/plugins/README.md`](commands/copilot/system-knowledge/plugins/README.md) · walkthrough đầy đủ: bài 17 + [`./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh`](./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh).
 
 ### 4.2 Marketplace — "chợ" chỉ là một Git repo
 
@@ -105,7 +105,7 @@ Bài này không dạy MCP (đồ của **bài 08**); chỉ chốt vị trí tro
 
 ## 6. Repo template — sinh repo mới là mang theo cả pack
 
-Tech lead dựng một repo chuẩn (pack §3 + instructions + skills + hooks + workflows), bật **Settings → General → Template repository**; mỗi repo mới `gh repo create <tên> --template <org>/<template-repo>` là mang nguyên bộ. Điểm hay: pack đi theo tự nhiên, không ai phải nhớ cài gì. Demo + verify: [`examples/09-6-repo-template.sh`](examples/09-6-repo-template.sh).
+Tech lead dựng một repo chuẩn (pack §3 + instructions + skills + hooks + workflows), bật **Settings → General → Template repository**; mỗi repo mới `gh repo create <tên> --template <org>/<template-repo>` là mang nguyên bộ. Điểm hay: pack đi theo tự nhiên, không ai phải nhớ cài gì. Demo + verify: [`./examples/09-extensions-marketplaces/repo-template.sh`](./examples/09-extensions-marketplaces/repo-template.sh).
 
 Lưu ý portability khi template chứa đồ nghề agent: skill nằm trong `.github/skills/` (dạng `*.prompt.md` là format cũ — port trước khi đưa vào template, công thức ở bài 05); workflow/`extensions.json` thì mang sang y nguyên.
 
@@ -127,7 +127,7 @@ Nguyên tắc chung: settings do dev giữ thì dev đổi được; **muốn "c
 | Để auto-update mặc định chạy giữa sprint | extension/plugin đổi hành vi lúc nào không hay | pin version (`@TAG`/sha, `COPILOT_AUTO_UPDATE=false`), nâng cuối sprint sau test |
 | Tưởng `copilot-plugins` built-in như `awesome-copilot` | lệnh cài fail vì chưa add nguồn | `copilot plugin marketplace add github/copilot-plugins` trước khi cài |
 
-📄 Ba file mà bảng này nhắc tới: [`examples/09-3-1-vs-code-pack-settings.jsonc`](examples/09-3-1-vs-code-pack-settings.jsonc) (pack) · [`examples/16-4-marketplace-json-pin-sha.json`](examples/16-4-marketplace-json-pin-sha.json) (marketplace) · [`examples/01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (`.vscode/mcp.json` của Local).
+📄 Ba file mà bảng này nhắc tới: [`./examples/09-extensions-marketplaces/vs-code-pack-settings.jsonc`](./examples/09-extensions-marketplaces/vs-code-pack-settings.jsonc) (pack) · [`./examples/09-extensions-marketplaces/marketplace-json-pin-sha.json`](./examples/09-extensions-marketplaces/marketplace-json-pin-sha.json) (marketplace) · [`examples/01-cach-goi-copy-paste.sh`](commands/local/system-knowledge/vscode-mcp-json/examples/01-cach-goi-copy-paste.sh) (`.vscode/mcp.json` của Local).
 
 ## Best practices (kèm vì sao)
 
@@ -138,9 +138,9 @@ Nguyên tắc chung: settings do dev giữ thì dev đổi được; **muốn "c
 
 ## Bài tập
 
-1. **(10 phút)** Tạo `.vscode/extensions.json` cho repo hiện tại (≤8 ID), commit; nhờ một người mở folder và báo có prompt "Install recommended" — xác nhận bằng `code --list-extensions | grep -i copilot` (theo 📄 [`examples/09-3-1-vs-code-pack-install.sh`](examples/09-3-1-vs-code-pack-install.sh)).
-2. **(10 phút)** Pin `github.copilot-chat` về một version cụ thể, đặt `extensions.autoUpdate: false`; chạy audit `--show-versions`, ghi kết quả vào notes team (📄 [`examples/09-3-2-pin-version.sh`](examples/09-3-2-pin-version.sh)).
-3. **(15 phút)** Thêm marketplace `github/copilot-plugins`, cài một plugin pin theo `@TAG`, verify thư mục `~/.copilot/installed-plugins/`, rồi `/plugin uninstall` — tất cả trong `examples/17-2-plugin-marketplace.sh`.
+1. **(10 phút)** Tạo `.vscode/extensions.json` cho repo hiện tại (≤8 ID), commit; nhờ một người mở folder và báo có prompt "Install recommended" — xác nhận bằng `code --list-extensions | grep -i copilot` (theo 📄 [`./examples/09-extensions-marketplaces/vs-code-pack-install.sh`](./examples/09-extensions-marketplaces/vs-code-pack-install.sh)).
+2. **(10 phút)** Pin `github.copilot-chat` về một version cụ thể, đặt `extensions.autoUpdate: false`; chạy audit `--show-versions`, ghi kết quả vào notes team (📄 [`./examples/09-extensions-marketplaces/pin-version.sh`](./examples/09-extensions-marketplaces/pin-version.sh)).
+3. **(15 phút)** Thêm marketplace `github/copilot-plugins`, cài một plugin pin theo `@TAG`, verify thư mục `~/.copilot/installed-plugins/`, rồi `/plugin uninstall` — tất cả trong `./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh`.
 
 ## Link qua
 

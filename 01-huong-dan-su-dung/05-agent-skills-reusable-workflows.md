@@ -55,7 +55,7 @@ Bạn nói/gõ → Việc gì?
 
 Docs GitHub chốt: **instructions** cho chỉ dẫn đơn giản áp cho mọi task; **skills** cho chỉ dẫn chi tiết mà Copilot chỉ nên đọc khi thật sự relevant. ⚠️ **Chỗ hay vấp:** ở **Copilot harness**, skill quản lý bằng **Agent Customizations editor** (mục 4); slash `/skills` và `/create-skill` **chỉ tồn tại ở Local harness** — gõ trong session Copilot sẽ không thấy.
 
-> **Tóm gọn 1 câu:** Luật nền → instructions; quy trình lặp → skill; chân dung người làm → agent; gói để chia sẻ → plugin. 📄 File thật của từng loại: [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`templates/.github/agents/tester.agent.md`](../templates/.github/agents/tester.agent.md) · [`examples/17-2-plugin-marketplace.sh`](examples/17-2-plugin-marketplace.sh)
+> **Tóm gọn 1 câu:** Luật nền → instructions; quy trình lặp → skill; chân dung người làm → agent; gói để chia sẻ → plugin. 📄 File thật của từng loại: [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`templates/.github/agents/tester.agent.md`](../templates/.github/agents/tester.agent.md) · [`./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh`](./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh)
 
 ## 3. Giải phẫu `SKILL.md`
 
@@ -88,7 +88,7 @@ description: >                  # bat buoc: "lam gi" + "khi nao dung"
 | `context: fork` | ✗ | VS Code | chạy trong subagent riêng, chỉ trả kết quả cuối → context chính sạch. Cần feature `forked-skill-context` + `github.copilot.chat.skillTool.enabled` |
 | `license` · `allowed-tools` | ✗ | docs GitHub | licence / pre-approve tool (vd `allowed-tools: shell`) — **cẩn thận**, xem cảnh báo mục 7 |
 
-**Thân file:** markdown tự do, docs gợi ý đúng 4 khối: *làm gì · khi nào dùng · các bước · output mẫu*. Reference file bằng **link markdown hoặc `#file:`** với đường dẫn **tương đối tới `SKILL.md`**, dùng `/` cho port. Kèm **script đã verify** (`scripts/migrate.sh`, `chmod +x`) thì chắc tay hơn để agent "tự nhớ" lệnh dài — mẫu: [`examples/01-4-2-mau-b-skill-add-table-script.sh`](examples/01-4-2-mau-b-skill-add-table-script.sh). **Docs của skill không khai báo biến nội suy nào** — `${input:...}`/`${selection}` là cú pháp của **prompt files** (Local harness), `${workspaceFolder}` là của tasks; `SKILL.md` chỉ nhận phần bạn viết sau lệnh: `/deploy-checklist staging, bỏ qua smoke test`.
+**Thân file:** markdown tự do, docs gợi ý đúng 4 khối: *làm gì · khi nào dùng · các bước · output mẫu*. Reference file bằng **link markdown hoặc `#file:`** với đường dẫn **tương đối tới `SKILL.md`**, dùng `/` cho port. Kèm **script đã verify** (`scripts/migrate.sh`, `chmod +x`) thì chắc tay hơn để agent "tự nhớ" lệnh dài — mẫu: [`./examples/05-agent-skills-reusable-workflows/mau-b-skill-add-table-script.sh`](./examples/05-agent-skills-reusable-workflows/mau-b-skill-add-table-script.sh). **Docs của skill không khai báo biến nội suy nào** — `${input:...}`/`${selection}` là cú pháp của **prompt files** (Local harness), `${workspaceFolder}` là của tasks; `SKILL.md` chỉ nhận phần bạn viết sau lệnh: `/deploy-checklist staging, bỏ qua smoke test`.
 
 > **Tóm gọn 1 câu:** `name` để hệ thống tìm, `description` để agent quyết định, thân file để làm đúng — thiếu một trong ba là skill vô dụng.
 
@@ -149,7 +149,7 @@ gh skill publish --dry-run                        # validate theo agentskills.io
 
 > ⚠️ Docs cảnh báo nguyên văn: *"Skills are not verified by GitHub and may contain prompt injections, hidden instructions, or malicious scripts"* — luôn `gh skill preview` trước khi cài, và chỉ đặt `allowed-tools: shell` khi bạn **đã đọc hết script** trong skill đó.
 
-Trong VS Code: **Customizations editor → Browse → GitHub Feed** (experimental, tìm theo `@type:skill`), và plugin marketplace (`gh copilot plugin marketplace add`) chứa skill đóng gói — chi tiết ở bài 17. 📄 Mẫu cây skill + SKILL.md: [`templates/.github/skills/review-pr/`](../templates/.github/skills/review-pr/) · script tạo skill đầu tay: [`examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh`](examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh).
+Trong VS Code: **Customizations editor → Browse → GitHub Feed** (experimental, tìm theo `@type:skill`), và plugin marketplace (`gh copilot plugin marketplace add`) chứa skill đóng gói — chi tiết ở bài 17. 📄 Mẫu cây skill + SKILL.md: [`templates/.github/skills/review-pr/`](../templates/.github/skills/review-pr/) · script tạo skill đầu tay: [`./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh`](./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh).
 
 ## 8. Port prompt file `.prompt.md` sang skill (5 phút)
 
@@ -160,7 +160,7 @@ Prompt file vẫn hợp lệ ở Local harness, nhưng chỉ chạy ở đó —
 3. Mất gì khi port: docs migrate ghi rõ 3 field của prompt file **không** map sang → `agent`, `model`, `tools` (muốn buộc persona → custom agent bài 06; muốn siết tool → permissions bài 10).
 4. Test xong (mục 6) mới xoá file cũ.
 
-> 📄 Các bước copy-paste: [`examples/02-4-3-port-prompt-file-cu-sang-skill.sh`](examples/02-4-3-port-prompt-file-cu-sang-skill.sh)
+> 📄 Các bước copy-paste: [`./examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh`](./examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
@@ -180,7 +180,7 @@ Prompt file vẫn hợp lệ ở Local harness, nhưng chỉ chạy ở đó —
 
 ## Bài tập
 
-1. Tạo skill `gen-test` (mẫu: [`examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh`](examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh)), rồi làm đủ 3 bước verify mục 6.
+1. Tạo skill `gen-test` (mẫu: [`./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh`](./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh)), rồi làm đủ 3 bước verify mục 6.
 2. Chạy `gh skill preview` một skill trong `github/awesome-copilot` — đọc `SKILL.md` trước, quyết định có cài hay không, và nói vì sao.
 3. Port một `.prompt.md` bạn đang dùng sang skill (mục 8), giữ `disable-model-invocation: true`, so sánh hành vi giữa Local và Copilot session.
 

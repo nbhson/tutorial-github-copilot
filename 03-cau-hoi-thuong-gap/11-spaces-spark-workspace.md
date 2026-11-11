@@ -59,7 +59,7 @@ App **đã deploy** vẫn tiếp tục chạy — chỉ việc chỉnh sửa tro
 | Issue → spec → plan → PR trong một UI | Assign issue → chạy trên GitHub Actions → draft PR |
 | Chỉnh tay trong workbench | Sửa tiếp bằng comment trên PR, duyệt từ GitHub Mobile |
 
-> 📄 **Code ví dụ:** [`examples/01-3-copilot-workspace-au-roi.sh`](examples/01-3-copilot-workspace-au-roi.sh)
+> 📄 **Code ví dụ:** [`./examples/11-spaces-spark-workspace/copilot-workspace-au-roi.sh`](./examples/11-spaces-spark-workspace/copilot-workspace-au-roi.sh)
 
 > **Không thấy nút assign Copilot:** repo private của org Free plan (cloud agent cần plan trả phí); hoặc org policy tắt cloud agent — hỏi admin bật.
 
@@ -69,7 +69,7 @@ App **đã deploy** vẫn tiếp tục chạy — chỉ việc chỉnh sửa tro
 
 Phân quyền: Space cá nhân = private / share user / public link (view-only); Space org = member thấy theo vai trò admin/editor/viewer hoặc "No access" ẩn hẳn.
 
-> 📄 **Code ví dụ:** [`examples/02-4-truy-cap-spaces-o-au-ai-dung.sh`](examples/02-4-truy-cap-spaces-o-au-ai-dung.sh)
+> 📄 **Code ví dụ:** [`./examples/11-spaces-spark-workspace/truy-cap-spaces-o-au-ai-dung.sh`](./examples/11-spaces-spark-workspace/truy-cap-spaces-o-au-ai-dung.sh)
 
 ## 5. Muốn "vibe coding" tạo app như Spark, giờ dùng gì?
 
@@ -82,7 +82,7 @@ Phân quyền: Space cá nhân = private / share user / public link (view-only);
 | Học/AI trong app | Tự nối provider AI trực tiếp (`llm()` của Spark đã chết cùng GitHub Models) |
 | Không muốn rời terminal | Copilot CLI: `copilot` rồi mô tả việc, duyệt từng bước |
 
-> 📄 **Code ví dụ:** [`examples/03-5-muon-vibe-coding-tao-app-nhu-spark.sh`](examples/03-5-muon-vibe-coding-tao-app-nhu-spark.sh)
+> 📄 **Code ví dụ:** [`./examples/11-spaces-spark-workspace/muon-vibe-coding-tao-app-nhu-spark.sh`](./examples/11-spaces-spark-workspace/muon-vibe-coding-tao-app-nhu-spark.sh)
 
 > Agent làm sai ý: issue viết spec cụ thể hơn (stack, cấu trúc thư mục, tiêu chí xong); chia nhỏ thành nhiều issue thay vì 1 issue khổng lồ.
 
@@ -101,7 +101,7 @@ Phân quyền: Space cá nhân = private / share user / public link (view-only);
 
 **Trả lời 1 câu:** **Spaces API GA 18/05/2026** — CRUD đầy đủ Space + quản lý collaborators/nguồn qua REST, dành cho org cần quản lý hàng loạt: sinh 1 Space cho mỗi repo mới khi onboarding, dọn Space không ai dùng, đồng bộ collaborators theo bảng nhân sự.
 
-> 📄 **Code ví dụ:** [`examples/04-7-quan-ly-spaces-bang-code-spaces-api.sh`](examples/04-7-quan-ly-spaces-bang-code-spaces-api.sh)
+> 📄 **Code ví dụ:** [`./examples/11-spaces-spark-workspace/quan-ly-spaces-bang-code-spaces-api.sh`](./examples/11-spaces-spark-workspace/quan-ly-spaces-bang-code-spaces-api.sh)
 
 > 404 + config trông đúng → bản preview cũ có schema khác, API đã GA 18/05/2026.
 
@@ -118,7 +118,7 @@ Phân quyền: Space cá nhân = private / share user / public link (view-only);
 
 > **Cách đọc bảng này:** đây là ma trận chẩn đoán cả 3 tính năng — dọc cột **Triệu chứng** tìm đúng hiện tượng, cột **Nguyên nhân khả dĩ** thường đã kèm mốc thời gian, cột **Xử lý** là hướng đi thay thế.
 
-> 📄 **Code ví dụ:** [`examples/05-8-troubleshooting-ca-3-ma-tran-trieu-chung.sh`](examples/05-8-troubleshooting-ca-3-ma-tran-trieu-chung.sh)
+> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/troubleshooting-ca-3-ma-tran-trieu-chung.sh`](./examples/08-loi-thuong-gap-troubleshooting/troubleshooting-ca-3-ma-tran-trieu-chung.sh)
 
 ---
 

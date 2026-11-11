@@ -139,7 +139,7 @@ fix, them regression test, chay npm test xac nhan.
 /fix them null check cho params, giu nguyen API shape
 ```
 
-Git flow (✨ ở ô commit message, ✨ ở Create Pull Request view — bản palette `Chat: Commit Staged…`/`Pull: Create PR…` có thể vẫn còn trong một số build), lỗi terminal bằng Terminal Inline Chat và bản tương đương khi đứng ở shell (`copilot -p "…"`, `copilot --continue`) — `gh copilot` là extension cộng đồng đã archived, không phải đường hiện hành (xem `commands/local/system-knowledge/cli-suggest/`) xem ở 📄 [`examples/04-8-git-flow-va-lenh-terminal.sh`](examples/04-8-git-flow-va-lenh-terminal.sh).
+Git flow (✨ ở ô commit message, ✨ ở Create Pull Request view — bản palette `Chat: Commit Staged…`/`Pull: Create PR…` có thể vẫn còn trong một số build), lỗi terminal bằng Terminal Inline Chat và bản tương đương khi đứng ở shell (`copilot -p "…"`, `copilot --continue`) — `gh copilot` là extension cộng đồng đã archived, không phải đường hiện hành (xem `commands/local/system-knowledge/cli-suggest/`) xem ở 📄 [`./examples/04-chat-commands-toan-tap/git-flow-va-lenh-terminal.sh`](./examples/04-chat-commands-toan-tap/git-flow-va-lenh-terminal.sh).
 
 ## 9. Khi lệnh hoặc model "biến mất"
 
@@ -171,7 +171,7 @@ Git flow (✨ ở ô commit message, ✨ ở Create Pull Request view — bản 
 
 1. **(10 phút) Phím:** mở Chat view, chat mới, inline chat (editor và terminal), Quick Chat bằng đúng 4 phím mục 1 — ghi lại mỗi phím mở surface nào (Quick Chat là `Ctrl+Shift+Alt+L`, **không phải** `Ctrl+Alt+I`).
 2. **(20 phút) Inventory + break-in repo:** gõ `/` liệt kê lệnh máy bạn **thật sự có**, so với mục 2–6 và ghi lý do cho lệnh thiếu theo cột availability; sau đó chạy công thức 5 lệnh mục 7 trên repo thật, mỗi bước ghi 1 câu output, đọc effective policy của `/sandbox policy`.
-3. **(10 phút) Git flow:** làm theo 📄 [`examples/04-8-git-flow-va-lenh-terminal.sh`](examples/04-8-git-flow-va-lenh-terminal.sh) — liệt kê thao tác nào đúng ngay, thao tác nào phải sửa tay.
+3. **(10 phút) Git flow:** làm theo 📄 [`./examples/04-chat-commands-toan-tap/git-flow-va-lenh-terminal.sh`](./examples/04-chat-commands-toan-tap/git-flow-va-lenh-terminal.sh) — liệt kê thao tác nào đúng ngay, thao tác nào phải sửa tay.
 
 ## Link qua
 

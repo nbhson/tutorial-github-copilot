@@ -34,7 +34,7 @@ Mục này cho bạn biết sau 25 phút sẽ mang được gì về — như xe
 
 **Copilot CLI** (binary `copilot`) là agent hoàn chỉnh chạy trong terminal — đổi model, tích hợp repo/issue/PR; đừng nhầm với `gh copilot suggest/explain` (extension cộng đồng cho GitHub CLI, chỉ gợi ý lệnh shell). Chi tiết: [bài 02](./02-cac-be-mat-vscode-ide-web-cli.md) · [bài 12](./12-copilot-sdk-ci-cd-automation.md).
 
-> 📄 **Ví dụ copy-paste:** [`examples/00-4-bon-ho-tool-copilot.md`](examples/00-4-bon-ho-tool-copilot.md) — bảng "4 họ tool" ai làm việc gì · [`examples/01-4-jetbrains-visual-studio-neovim.sh`](examples/01-4-jetbrains-visual-studio-neovim.sh) — Copilot trên IDE khác.
+> 📄 **Ví dụ copy-paste:** [`./examples/00-tong-quan-copilot/bon-ho-tool-copilot.md`](./examples/00-tong-quan-copilot/bon-ho-tool-copilot.md) — bảng "4 họ tool" ai làm việc gì · [`./examples/00-tong-quan-copilot/jetbrains-visual-studio-neovim.sh`](./examples/00-tong-quan-copilot/jetbrains-visual-studio-neovim.sh) — Copilot trên IDE khác.
 
 **Chọn chế độ nào — cây hỏi 10 giây:**
 
@@ -70,7 +70,7 @@ Bài 00 là **chủ sở hữu** bảng so sánh này — các bài khác dẫn 
 
 > **Vì sao quan trọng?** Bảng này đổi cho bạn "từ điển" miễn phí: mỗi khái niệm đã học ở Claude Code đều có một ô tương ứng — không phải học lại từ đầu, chỉ phải nhớ *đường dẫn và nơi chạy khác nhau*.
 > **Nếu nhầm thì sao?** Nghĩ "Copilot = autocomplete" (kiểu 2023) là bỏ nửa sức mạnh công cụ. Ngược lại, tưởng "Copilot giống hệt Claude Code" thì sẽ lạc khi thấy Session Target, Customizations editor và các surface web/cloud — khác nhau ở *nơi chạy*, không ở khái niệm.
-> **Tóm gọn 1 câu:** Copilot hơn ở autocomplete không trừ credits + nhiều bề mặt + picker model đa nhà cung cấp; Claude Code mạnh ở agentic mặc định + terminal-first. 📄 Tạo đủ 3 loại file để thấy khác nhau: [`examples/01-2-3-loai-file-phan-biet-va-at.sh`](examples/01-2-3-loai-file-phan-biet-va-at.sh) · port `*.prompt.md`/`CLAUDE.md` sang `.github/`: [`examples/02-4-3-port-prompt-file-cu-sang-skill.sh`](examples/02-4-3-port-prompt-file-cu-sang-skill.sh)
+> **Tóm gọn 1 câu:** Copilot hơn ở autocomplete không trừ credits + nhiều bề mặt + picker model đa nhà cung cấp; Claude Code mạnh ở agentic mặc định + terminal-first. 📄 Tạo đủ 3 loại file để thấy khác nhau: [`./examples/00-tong-quan-copilot/loai-file-phan-biet-va-at.sh`](./examples/00-tong-quan-copilot/loai-file-phan-biet-va-at.sh) · port `*.prompt.md`/`CLAUDE.md` sang `.github/`: [`./examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh`](./examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh)
 
 ## 3. Vòng lặp agent — và harness thật sự chạy nó
 
@@ -92,7 +92,7 @@ Picker chọn "động cơ" là **Session Target** (docs gọi là *Choose an ag
 | **Claude** / **Codex** | **provider harness** thật (Anthropic / OpenAI); org bật enterprise-managed settings có thể chặn |
 | **Cloud** | **KHÔNG phải harness** — là *execution target* chạy **Copilot harness** trên hạ tầng managed của GitHub |
 
-Docs VS Code khuyến nghị bắt đầu (hoặc chuyển sang) **Copilot harness** — xem [Move from Local to Copilot](https://code.visualstudio.com/docs/agents/run/move-to-copilot). Cả khoá này lấy Copilot harness làm mặc định; Local chỉ xuất hiện để so sánh. 📄 Bài tập quan sát picker 2 trạng thái: [`examples/02-1-session-target-picker.md`](examples/02-1-session-target-picker.md).
+Docs VS Code khuyến nghị bắt đầu (hoặc chuyển sang) **Copilot harness** — xem [Move from Local to Copilot](https://code.visualstudio.com/docs/agents/run/move-to-copilot). Cả khoá này lấy Copilot harness làm mặc định; Local chỉ xuất hiện để so sánh. 📄 Bài tập quan sát picker 2 trạng thái: [`./examples/00-tong-quan-copilot/session-target-picker.md`](./examples/00-tong-quan-copilot/session-target-picker.md).
 
 **Khi nào agent làm hỏng?**
 
@@ -108,7 +108,7 @@ Docs VS Code khuyến nghị bắt đầu (hoặc chuyển sang) **Copilot harne
 
 ## 4. Bốn họ tool Copilot
 
-Khi agent "nghĩ", nó có 4 họ công cụ trong tay — biết trước để không giật mình khi nó tự chạy lệnh, và biết tool nào cần soi kỹ. Bảng kiểm + mẫu phiên làm việc 4 họ tool: [`examples/00-4-bon-ho-tool-copilot.md`](examples/00-4-bon-ho-tool-copilot.md).
+Khi agent "nghĩ", nó có 4 họ công cụ trong tay — biết trước để không giật mình khi nó tự chạy lệnh, và biết tool nào cần soi kỹ. Bảng kiểm + mẫu phiên làm việc 4 họ tool: [`./examples/00-tong-quan-copilot/bon-ho-tool-copilot.md`](./examples/00-tong-quan-copilot/bon-ho-tool-copilot.md).
 
 - **Nhóm 1 — Đọc & tìm (nhanh, rẻ):** `read` / `#file`, `search`, `list`. Tiết kiệm: luôn `search` trước rồi `read` sau; file quá dài → bảo agent đọc từng phần. Như mở tủ lạnh: ngó trước, lấy đúng ngăn.
 - **Nhóm 2 — Sửa & chạy (dao sắc, cần review):** `edit` (hiện diff — duyệt từng hunk trước khi Accept), `create` (kiểm tra path), `terminal` (có confirm trước lệnh nguy hiểm).

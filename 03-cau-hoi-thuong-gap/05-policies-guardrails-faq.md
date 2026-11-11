@@ -28,7 +28,7 @@ Coi đây như checklist "vì sao thư không tới tay người nhận": sai đ
 4. User bảo "sửa luôn migration" → model nghe prompt gần hơn instruction.
 5. Context tràn → instructions bị cắt khỏi window (xem [bài 02](02-model-context-premium.md)).
 
-> 📄 **Code ví dụ:** [`examples/01-1-instruction-khong-an-vi-sao-copilot-van.sh`](examples/01-1-instruction-khong-an-vi-sao-copilot-van.sh)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/instruction-khong-an-vi-sao-copilot-van.sh`](./examples/05-policies-guardrails-faq/instruction-khong-an-vi-sao-copilot-van.sh)
 
 > Đi tăng cường độ câu chữ ("KHÔNG, TUYỆT ĐỐI KHÔNG...") trong khi file nằm sai thư mục thì câu cấm có mạnh đến mấy cũng không được nạp.
 
@@ -66,13 +66,13 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 
 > **Cách đọc bảng này:** ba dòng là ba lớp rào xếp từ trong nhà ra tới cổng — lint/test bắt lỗi tại chỗ, gitleaks bắt secret trước khi commit, push protection là cánh cổng cuối của GitHub.
 
-> 📄 **Code ví dụ:** [`examples/02-3-pre-commit-tuong-uong-chan-commit-xau.sh`](examples/02-3-pre-commit-tuong-uong-chan-commit-xau.sh)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/pre-commit-tuong-uong-chan-commit-xau.sh`](./examples/05-policies-guardrails-faq/pre-commit-tuong-uong-chan-commit-xau.sh)
 
 ## 4. Branch protection: chặn push main + ép review thế nào?
 
 **Trả lời 1 câu:** Tạo ruleset `protect-main` ở `Repo → Settings → Rules → Rulesets`: require PR + status checks + block force push — lớp "law" thật sự: dù agent hay người, vào `main` đều phải qua PR + CI xanh.
 
-> 📄 **Code ví dụ:** [`examples/03-4-branch-protection-chan-push-main-ep-review.sh`](examples/03-4-branch-protection-chan-push-main-ep-review.sh)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/branch-protection-chan-push-main-ep-review.sh`](./examples/05-policies-guardrails-faq/branch-protection-chan-push-main-ep-review.sh)
 
 > Dựng **trước** khi onboarding Copilot cloud agent — nó cũng phải tuân ruleset.
 
@@ -83,13 +83,13 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 - **Secret scanning:** quét repo tìm secret đã lộ → alert trong `Security → Secret scanning`.
 - **Push protection:** chặn ngay lúc `git push`, bypass có lý do (lưu audit log).
 
-> 📄 **Code ví dụ:** [`examples/04-5-secret-scanning-push-protection-bat-the-nao.sh`](examples/04-5-secret-scanning-push-protection-bat-the-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/secret-scanning-push-protection-bat-the-nao.sh`](./examples/05-policies-guardrails-faq/secret-scanning-push-protection-bat-the-nao.sh)
 
 ## 6. Ép conventional commits / lint trước khi agent commit?
 
 **Trả lời 1 câu:** commitlint hook local (chặn ngay khi commit) + status check CI (PR không merge được nếu đỏ) — agent và người cùng bị ép một chuẩn.
 
-> 📄 **Code ví dụ:** [`examples/05-6-ep-conventional-commits-lint-truoc-khi-agent.yaml`](examples/05-6-ep-conventional-commits-lint-truoc-khi-agent.yaml)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/ep-conventional-commits-lint-truoc-khi-agent.yaml`](./examples/05-policies-guardrails-faq/ep-conventional-commits-lint-truoc-khi-agent.yaml)
 
 **Ví dụ:** agent commit `fix stuff` → commitlint chặn → agent tự sửa thành `fix(auth): handle expired session`.
 
@@ -97,25 +97,25 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 
 **Trả lời 1 câu:** Admin (Enterprise) cấu hình ở org policy (cloud agent bật cho repo nào); dev ghi rõ repo + branch + phạm vi file trong issue để agent không lan ra ngoài.
 
-> 📄 **Code ví dụ:** [`examples/06-7-gioi-han-coding-agent-chi-cho-no.sh`](examples/06-7-gioi-han-coding-agent-chi-cho-no.sh)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/gioi-han-coding-agent-chi-cho-no.sh`](./examples/05-policies-guardrails-faq/gioi-han-coding-agent-chi-cho-no.sh)
 
 ## 8. Audit: biết ai/agent đã làm gì?
 
 **Trả lời 1 câu:** 3 nguồn log: git history (commit agent có `Co-authored-by: Copilot`), org audit log (ai đổi policy/assign seat), PR timeline (agent ghi comment từng bước).
 
-> 📄 **Code ví dụ:** [`examples/07-8-audit-biet-ai-agent-a-lam-gi.sh`](examples/07-8-audit-biet-ai-agent-a-lam-gi.sh)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/audit-biet-ai-agent-a-lam-gi.sh`](./examples/05-policies-guardrails-faq/audit-biet-ai-agent-a-lam-gi.sh)
 
 ## 9. Guardrail cho lệnh nguy hiểm trong CI?
 
 **Trả lời 1 câu:** Secrets qua `${{ secrets.* }}` → `env`, KHÔNG `echo` secret, KHÔNG flag skip-verification/bypass; job đụng prod dùng `environment:` + required reviewers.
 
-> 📄 **Code ví dụ:** [`examples/08-9-guardrail-cho-lenh-nguy-hiem-trong-ci.yaml`](examples/08-9-guardrail-cho-lenh-nguy-hiem-trong-ci.yaml)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/guardrail-cho-lenh-nguy-hiem-trong-ci.yaml`](./examples/05-policies-guardrails-faq/guardrail-cho-lenh-nguy-hiem-trong-ci.yaml)
 
 ## 10. Checklist guardrails cho repo mới (5 phút)?
 
 **Trả lời 1 câu:** 6 tick: exclusion paths, block Rules ALWAYS/NEVER, ruleset bảo vệ `main`, secret scanning + push protection, CI lint/test, `mcp.json` không hardcode.
 
-> 📄 **Code ví dụ:** [`examples/09-10-checklist-guardrails-cho-repo-moi-5-phut.sh`](examples/09-10-checklist-guardrails-cho-repo-moi-5-phut.sh)
+> 📄 **Code ví dụ:** [`./examples/05-policies-guardrails-faq/checklist-guardrails-cho-repo-moi-5-phut.sh`](./examples/05-policies-guardrails-faq/checklist-guardrails-cho-repo-moi-5-phut.sh)
 
 > Đây là definition-of-done trước khi bật cloud agent — thiếu 1 tick là mở một đường lách qua guardrail.
 
@@ -125,7 +125,7 @@ Ví von: đây là cửa ra vào có khóa cơ và camera — không phụ thu�
 
 1. Instruction sai chỗ/sai glob? (`ls .github/`, xem [bài 06](06-prompts-agents-instructions.md)).
 2. Quy tắc viết mơ hồ? → viết lại ALWAYS/NEVER + path cụ thể.
-3. Hook local đã `pre-commit install` chưa — 📄 script dựng hook + policy org: [`07-4-guard-allow-deny.sh`](../01-huong-dan-su-dung/examples/07-4-guard-allow-deny.sh) · [`16-4-managed-settings-org-lock.json`](../01-huong-dan-su-dung/examples/16-4-managed-settings-org-lock.json).
+3. Hook local đã `pre-commit install` chưa — 📄 script dựng hook + policy org: [`../01-huong-dan-su-dung/examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh`](../01-huong-dan-su-dung/examples/07-policies-guardrails-tu-dong-hoa/guard-allow-deny.sh) · [`../01-huong-dan-su-dung/examples/16-extensions-mcp-bao-mat-validate/managed-settings-org-lock.json`](../01-huong-dan-su-dung/examples/16-extensions-mcp-bao-mat-validate/managed-settings-org-lock.json).
 4. Ruleset/push protection chặn? → đọc thông báo chặn (nó nói rõ lý do).
 5. Vẫn lọt → nâng từ "khuyến nghị" lên "ép buộc server-side" (ruleset + required checks).
 

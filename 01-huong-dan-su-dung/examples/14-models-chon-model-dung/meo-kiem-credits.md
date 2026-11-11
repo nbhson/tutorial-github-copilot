@@ -1,6 +1,6 @@
 # 14-6 · Năm mẹo kiềm AI Credits — mỗi mẹo là một hành động
 
-> Đồng hành với [bài 14 §4](../14-models-chon-model-dung.md#4-ai-credits--bản-đồ-chi-phí).
+> Đồng hành với [bài 14 §4](../../14-models-chon-model-dung.md#4-ai-credits--bản-đồ-chi-phí).
 > Chuyển ra từ phần "mẹo" của bài 14 cũ. Thứ tự = độ hiệu quả giảm dần, theo
 > công thức chi phí: **tiền = tokens × giá per-token**, nên mọi mẹo dưới đây
 > chỉ cắt một trong hai thừa số — không mẹo nào cần đổi gói.

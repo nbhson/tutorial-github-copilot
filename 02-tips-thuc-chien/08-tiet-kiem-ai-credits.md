@@ -52,7 +52,7 @@ Giảm 1 trong 3 là rẻ: **giảm turns** (prompt tốt + plan-first, ít retr
 
 > Rule: **việc rẻ thì dùng cách rẻ. Credits model mạnh để dành cho plan + implement khó.**
 
-> **Tóm gọn 1 câu:** AI Credits như tiền lương tháng: việc vặt trả bằng tiền lẻ (model nhẹ), để dành tiền lớn cho những lần mua sắm xứng đáng (plan, refactor, review khó). 📄 Meo kiem credits + plan nền: [`14-6-meo-kiem-credits.md`](../01-huong-dan-su-dung/examples/14-6-meo-kiem-credits.md) · [`14-2-plan-nen-chon-nao.md`](../01-huong-dan-su-dung/examples/14-2-plan-nen-chon-nao.md).
+> **Tóm gọn 1 câu:** AI Credits như tiền lương tháng: việc vặt trả bằng tiền lẻ (model nhẹ), để dành tiền lớn cho những lần mua sắm xứng đáng (plan, refactor, review khó). 📄 Meo kiem credits + plan nền: [`14-6-meo-kiem-credits.md`](../01-huong-dan-su-dung/examples/14-models-chon-model-dung/meo-kiem-credits.md) · [`14-2-plan-nen-chon-nao.md`](../01-huong-dan-su-dung/examples/14-models-chon-model-dung/plan-nen-chon-nao.md).
 
 ## 3. Model routing: việc nào model nào?
 
@@ -154,7 +154,7 @@ Paste spec 200 dòng vào 20 chats = trả 20 lần. Đưa vào file dùng chung
 
 - **Knowledge base** (Repo → Settings → Copilot → Knowledge bases; nguồn docs/, wiki, ADRs). Hỏi: `@payments-docs Chính sách refund 30 ngày? Kèm link nguồn, 3 bullet.` → không paste spec, không quét repo.
 - **Instructions** thay paste NEVER mỗi chat — mọi chat tự áp luật từ `.github/copilot-instructions.md`.
-- **Skills** thay gõ lại prompt (chuẩn 2026): `.github/skills/team-bug/SKILL.md` — nói "fix bug" là tự load; prompt files `.prompt.md` legacy chỉ chạy Local. Xem [Tips 07](./07-thiet-ke-prompts-skills.md). 📄 3 file đóng gói thật: [`../templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`../templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`03-5-agents-md-portability-viet-1-lan-chay.sh`](../01-huong-dan-su-dung/examples/03-5-agents-md-portability-viet-1-lan-chay.sh).
+- **Skills** thay gõ lại prompt (chuẩn 2026): `.github/skills/team-bug/SKILL.md` — nói "fix bug" là tự load; prompt files `.prompt.md` legacy chỉ chạy Local. Xem [Tips 07](./07-thiet-ke-prompts-skills.md). 📄 3 file đóng gói thật: [`../templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · [`../templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`../01-huong-dan-su-dung/examples/03-instructions-memory-rules/agents-md-portability-viet-1-lan-chay.sh`](../01-huong-dan-su-dung/examples/03-instructions-memory-rules/agents-md-portability-viet-1-lan-chay.sh).
 
 Cẩn thận: đóng gói sai chỗ (nhét cả checklist dài vào instructions) thì nạp lại mỗi turn — càng tốn hơn.
 
@@ -213,7 +213,7 @@ Bảng dưới đây "gắn sao" mức đốt tiền cho từng thói quen — s
 | Đóng gói tri thức | Knowledge base + copilot-instructions.md | `CLAUDE.md` + file trong `.claude/` | Viết 1 lần, tái dùng nhiều lần |
 | Prune công cụ ngoài | MCP servers (giữ ≤6) | MCP servers trong `.mcp.json` | Cả hai cần prune để giảm overhead |
 
-📄 4 họ tool của Copilot (ai tiêu credit cái nào): [`00-4-bon-ho-tool-copilot.md`](../01-huong-dan-su-dung/examples/00-4-bon-ho-tool-copilot.md).
+📄 4 họ tool của Copilot (ai tiêu credit cái nào): [`00-4-bon-ho-tool-copilot.md`](../01-huong-dan-su-dung/examples/00-tong-quan-copilot/bon-ho-tool-copilot.md).
 
 > Nguyên tắc tối ưu giống hệt nhau — chỉ khác đơn vị đo tiền. Copilot đo bằng AI Credits từng lượt nên "thấy" được tiền đi đâu; Claude Code đo bằng hạn mức gói nên càng phải kiểm soát bằng thói quen.
 

@@ -113,7 +113,7 @@ Mục này là hai chiêu cho lúc "mù tòa": chưa biết kẻ thủ phạm �
 
 **Bisect bằng git (khi chưa biết file nào gây lỗi):**
 
-> 📄 **Code ví dụ:** [`examples/01-5-move-3-bisect-log-prompt.sh`](examples/01-5-move-3-bisect-log-prompt.sh)
+> 📄 **Code ví dụ:** [`./examples/10-debugging-power-moves/1-move-3-bisect-log-prompt.sh`](./examples/10-debugging-power-moves/1-move-3-bisect-log-prompt.sh)
 
 Nhờ Copilot viết script bisect: `"Viết script bash: mỗi commit chạy npm test -- payments, in PASS/FAIL + 5 dòng cuối log. Tôi sẽ dùng với git bisect."` Bisect bằng comment code cũng được: `"Bug chỉ xảy ra khi bật voucher + refund cùng lúc. Đề xuất 3 điểm bisect (tắt từng cái) — mỗi điểm kèm file:line + lệnh verify."`
 
@@ -121,7 +121,7 @@ Lưu ý: bisect mà không tái hiện được lỗi một cách ổn định t
 
 **Log→prompt — đừng paste log thô:**
 
-> 📄 **Code ví dụ:** [`examples/02-5-move-3-bisect-log-prompt.sh`](examples/02-5-move-3-bisect-log-prompt.sh)
+> 📄 **Code ví dụ:** [`./examples/10-debugging-power-moves/2-move-3-bisect-log-prompt.sh`](./examples/10-debugging-power-moves/2-move-3-bisect-log-prompt.sh)
 
 ```text
 # Bước 2: mở chat phụ, gắn file log:

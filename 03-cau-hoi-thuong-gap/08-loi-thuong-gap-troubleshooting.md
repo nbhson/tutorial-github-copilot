@@ -27,7 +27,7 @@
 
 Giống điện thoại mất sóng: có thể do bạn ở trong hầm (proxy/firewall), do sim hết hạn (token), hoặc do nhà mạng sập (incident) — lần lượt loại trừ, đừng đổ lỗi cho cái máy ngay.
 
-> 📄 **Code ví dụ:** [`examples/01-1-copilot-bao-offline-vi-sao-fix-sao.sh`](examples/01-1-copilot-bao-offline-vi-sao-fix-sao.sh)
+> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/copilot-bao-offline-vi-sao-fix-sao.sh`](./examples/08-loi-thuong-gap-troubleshooting/copilot-bao-offline-vi-sao-fix-sao.sh)
 
 **Ví dụ:** máy công ty qua proxy → `api.github.com` timeout dù web vẫn mở → xin IT whitelist `*.github.com` + `*.githubcopilot.com`. Khi status bar Offline, cả 2 CLI + Copilot cloud agent vẫn hoạt động nếu có mạng — chỉ IDE bị ảnh hưởng.
 
@@ -35,7 +35,7 @@ Giống điện thoại mất sóng: có thể do bạn ở trong hầm (proxy/f
 
 **Trả lời 1 câu:** Checklist 6 bước: file type không hỗ trợ → nằm trong exclusion (repo + org) → completions bị tắt → token hết hạn → extension xung đột → code "quá lạ".
 
-> 📄 **Code ví dụ:** [`examples/02-2-no-suggestions-go-khong-ra-goi-y.sh`](examples/02-2-no-suggestions-go-khong-ra-goi-y.sh)
+> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/no-suggestions-go-khong-ra-goi-y.sh`](./examples/08-loi-thuong-gap-troubleshooting/no-suggestions-go-khong-ra-goi-y.sh)
 
 > "Chỗ có chỗ không" → so file lỗi vs file test để khoanh vùng. Chỉ file `secrets/` không gợi ý → đúng ý exclusion, không phải lỗi.
 
@@ -63,7 +63,7 @@ Giống điện thoại mất sóng: có thể do bạn ở trong hầm (proxy/f
 | `auth failed` | `gh` chưa login / token hết | `gh auth login --web` |
 | `No seat` | Account không có seat | Xin admin assign (bài 01) |
 
-> 📄 **Code ví dụ:** [`examples/03-4-gh-copilot-cli-fail-command-not-found.sh`](examples/03-4-gh-copilot-cli-fail-command-not-found.sh)
+> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/gh-copilot-cli-fail-command-not-found.sh`](./examples/08-loi-thuong-gap-troubleshooting/gh-copilot-cli-fail-command-not-found.sh)
 
 > CLI chết mà IDE sống (hoặc ngược lại) là 2 "thằng" có auth riêng — fix auth từng thằng. Ngoài `gh copilot` còn có binary `copilot` độc lập (3 chế độ interactive/plan/autopilot) — xem [bài 12](../01-huong-dan-su-dung/12-copilot-sdk-ci-cd-automation.md).
 
@@ -71,7 +71,7 @@ Giống điện thoại mất sóng: có thể do bạn ở trong hầm (proxy/f
 
 **Trả lời 1 câu:** Đừng sửa config vội — validate JSON → test transport (token/env) → reload IDE → đọc Output log. Chi tiết [bài 04](04-mcp-faq.md).
 
-> 📄 **Code ví dụ:** [`examples/04-5-mcp-tools-ot-nhien-mat-thu-tu.sh`](examples/04-5-mcp-tools-ot-nhien-mat-thu-tu.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-tools-ot-nhien-mat-thu-tu.sh`](./examples/04-mcp-faq/mcp-tools-ot-nhien-mat-thu-tu.sh)
 
 **Ví dụ:** sau restart máy tools mất → `echo $TOKEN` rỗng (env mất cùng session) → export lại + mở IDE từ terminal.
 
@@ -99,13 +99,13 @@ return res.status(400).json({ code: "BAD_INPUT", message, requestId });
 
 **Trả lời 1 câu:** Dấu hiệu cần can thiệp: lặp cùng lỗi 3 lần, task nhỏ chạy >20 phút, tool calls toàn retry — xử lý: **Cancel → đọc log vòng cuối → chia task nhỏ → chạy lại từng phần**, đừng để chạy tiếp "biết đâu được" (chỉ đốt AI Credits).
 
-> 📄 **Code ví dụ:** [`examples/05-7-agent-lap-vong-o-chay-mai-khong.sh`](examples/05-7-agent-lap-vong-o-chay-mai-khong.sh)
+> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/agent-lap-vong-o-chay-mai-khong.sh`](./examples/08-loi-thuong-gap-troubleshooting/agent-lap-vong-o-chay-mai-khong.sh)
 
 ## 8. Sau update IDE/extension thì hỏng?
 
 **Trả lời 1 câu:** Lệch version IDE mới + extension cũ (hoặc ngược lại) → API không khớp → fix bằng update CẢ IDE + extension lên mới nhất, reload, sign-in lại.
 
-> 📄 **Code ví dụ:** [`examples/06-8-sau-update-ide-extension-thi-hong.sh`](examples/06-8-sau-update-ide-extension-thi-hong.sh)
+> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/sau-update-ide-extension-thi-hong.sh`](./examples/08-loi-thuong-gap-troubleshooting/sau-update-ide-extension-thi-hong.sh)
 
 > Copilot chết ngay sau auto-update thì 99% do lệch version.
 
@@ -129,7 +129,7 @@ Ví von: đây là quy trình kiểm tra xe không nổ máy — xăng (auth) �
 6. Tắt instructions/MCP/Agent Skills custom tạm (loại trừ config).
 7. Hỏi admin (policy/seat) → báo GitHub Support kèm log.
 
-> 📄 **Code ví dụ:** [`examples/07-10-thu-tu-debug-tong-khong-ro-nguyen.sh`](examples/07-10-thu-tu-debug-tong-khong-ro-nguyen.sh)
+> 📄 **Code ví dụ:** [`./examples/08-loi-thuong-gap-troubleshooting/thu-tu-debug-tong-khong-ro-nguyen.sh`](./examples/08-loi-thuong-gap-troubleshooting/thu-tu-debug-tong-khong-ro-nguyen.sh)
 
 **Ví dụ:** chạy 1 lèo → thấy `api:000` (mất mạng) → khỏi cần check 6 bước còn lại.
 
@@ -142,6 +142,6 @@ Ví von: đây là quy trình kiểm tra xe không nổ máy — xăng (auth) �
 3. Hỏi admin (org) hoặc Discussions `github.com/community` (cá nhân).
 4. Business/Enterprise → Support ticket kèm đủ 3 thứ ở bước 2.
 
-Tham khảo chéo: [bài 01](01-tai-khoan-pricing-cai-dat.md) (auth/seat) · [bài 02](02-model-context-premium.md) (quota/model) · [bài 04](04-mcp-faq.md) (MCP) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 05](05-policies-guardrails-faq.md) (policy) · 📄 ma trận triệu chứng→nguyên nhân: [`examples/05-8-troubleshooting-ca-3-ma-tran-trieu-chung.sh`](examples/05-8-troubleshooting-ca-3-ma-tran-trieu-chung.sh).
+Tham khảo chéo: [bài 01](01-tai-khoan-pricing-cai-dat.md) (auth/seat) · [bài 02](02-model-context-premium.md) (quota/model) · [bài 04](04-mcp-faq.md) (MCP) · [bài 06](06-prompts-agents-instructions.md) (instructions) · [bài 05](05-policies-guardrails-faq.md) (policy) · 📄 ma trận triệu chứng→nguyên nhân: [`./examples/08-loi-thuong-gap-troubleshooting/troubleshooting-ca-3-ma-tran-trieu-chung.sh`](./examples/08-loi-thuong-gap-troubleshooting/troubleshooting-ca-3-ma-tran-trieu-chung.sh).
 
 > **Tóm gọn 1 câu:** Troubleshooting Copilot là trò loại trừ có kỷ luật: auth → mạng → version → phiên sạch → config → policy — đi đúng trật tự thì ~90% ca tự gãy lộ ra nguyên nhân.

@@ -22,7 +22,7 @@
 
 Ví von cho dễ phân: instructions là tạp dước đeo sẵn vào việc (tự áp mỗi lần vào bếp), prompt file là công thức phải mở ra đọc, còn Skill là đầu bếp biết tự nhìn thấy món order mà vào bếp.
 
-> 📄 **Code ví dụ:** [`examples/01-1-file-nao-copilot-tu-load-file-nao.sh`](examples/01-1-file-nao-copilot-tu-load-file-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/02-model-context-premium/file-nao-copilot-tu-load-file-nao.sh`](./examples/02-model-context-premium/file-nao-copilot-tu-load-file-nao.sh)
 
 > "Đã tạo file mà Copilot không biết" — check đường dẫn + tên file trước tiên (đuôi phải là `.instructions.md` chứ không phải `.md` trơn).
 
@@ -30,9 +30,9 @@ Ví von cho dễ phân: instructions là tạp dước đeo sẵn vào việc (t
 
 **Trả lời 1 câu:** `applyTo` là glob phải khớp đúng root thật của repo (thường cần `**/` đầu và quote khi có `*`) — viết theo `ls`/`find` thật, đừng đoán.
 
-> 📄 **Code ví dụ:** [`examples/02-2-applyto-viet-sao-cho-ung.yaml`](examples/02-2-applyto-viet-sao-cho-ung.yaml)
+> 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/applyto-viet-sao-cho-ung.yaml`](./examples/06-prompts-agents-instructions/applyto-viet-sao-cho-ung.yaml)
 
-> 📄 **Code ví dụ:** [`examples/03-2-applyto-viet-sao-cho-ung.sh`](examples/03-2-applyto-viet-sao-cho-ung.sh)
+> 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/applyto-viet-sao-cho-ung.sh`](./examples/06-prompts-agents-instructions/applyto-viet-sao-cho-ung.sh)
 
 > Glob sai root là lý do số 1 khiến instructions "không load".
 
@@ -40,7 +40,7 @@ Ví von cho dễ phân: instructions là tạp dước đeo sẵn vào việc (t
 
 **Trả lời 1 câu:** 4 bẫy: thiếu cặp `---` mở/đóng, sai key (`applyTo` phải camelCase), quên quote glob có `*`, liệt kê `tools` không tồn tại.
 
-> 📄 **Code ví dụ:** [`examples/04-3-frontmatter-loi-cac-bay-pho-bien.sh`](examples/04-3-frontmatter-loi-cac-bay-pho-bien.sh)
+> 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/frontmatter-loi-cac-bay-pho-bien.sh`](./examples/06-prompts-agents-instructions/frontmatter-loi-cac-bay-pho-bien.sh)
 
 ```markdown
 ---
@@ -56,7 +56,7 @@ tools: [github-mcp, search, edit]
 
 **Trả lời 1 câu:** Giữ **<200 dòng** — dài quá context phình, phần cuối bị cắt, rule quan trọng chìm. Phần dài tách sang `*.instructions.md` theo path, procedure dài tách thành `SKILL.md`.
 
-> 📄 **Code ví dụ:** [`examples/05-4-copilot-instructions-md-bao-nhieu-dong-la.sh`](examples/05-4-copilot-instructions-md-bao-nhieu-dong-la.sh)
+> 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/copilot-instructions-md-bao-nhieu-dong-la.sh`](./examples/06-prompts-agents-instructions/copilot-instructions-md-bao-nhieu-dong-la.sh)
 
 **Ví dụ:** file chính 350 dòng (React + API + deploy) → tách React sang `frontend-react.instructions.md`, deploy sang skill → còn 120 dòng.
 
@@ -64,7 +64,7 @@ tools: [github-mcp, search, edit]
 
 **Trả lời 1 câu:** Đi đúng thứ tự: tên file/đường dẫn → `applyTo` đúng glob → file có khớp glob → reload IDE → mở chat mới → hỏi admin (org policy có thể tắt custom instructions).
 
-> 📄 **Code ví dụ:** [`examples/06-5-instructions-khong-load-checklist-6-buoc.sh`](examples/06-5-instructions-khong-load-checklist-6-buoc.sh)
+> 📄 **Code ví dụ:** [`./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh`](./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh)
 
 > **Chat cũ giữ context cũ** — mở chat mới trước khi kết luận instructions sai.
 
@@ -84,7 +84,7 @@ tools: [search, edit]
 3. Trả về: Critical / Major / Minor + gợi ý sửa cụ thể
 ```
 
-> 📄 **Code ví dụ:** [`examples/07-6-prompt-files-prompt-md-legacy.sh`](examples/07-6-prompt-files-prompt-md-legacy.sh)
+> 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/prompt-files-prompt-md-legacy.sh`](./examples/06-prompts-agents-instructions/prompt-files-prompt-md-legacy.sh)
 
 > Repo chỉ chạy Local và đã có prompt file ổn → giữ tạm, port dần sang Skill.
 
@@ -133,7 +133,7 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 
 **Trả lời 1 câu:** Mạnh → yếu: prompt hiện tại > `*.instructions.md` khớp path cụ thể > `copilot-instructions.md` > org policy (trần cứng) — cái cụ thể/gần hơn luôn thắng.
 
-> 📄 **Code ví dụ:** [`examples/08-9-thu-tu-uu-tien-khi-nhieu-instructions.sh`](examples/08-9-thu-tu-uu-tien-khi-nhieu-instructions.sh)
+> 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/thu-tu-uu-tien-khi-nhieu-instructions.sh`](./examples/06-prompts-agents-instructions/thu-tu-uu-tien-khi-nhieu-instructions.sh)
 
 > Đừng viết 2 instructions mâu thuẫn cho cùng path — hành vi sẽ khó đoán.
 
@@ -141,7 +141,7 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 
 **Trả lời 1 câu:** 3 phép thử trong chat mới: **test load** (hỏi quy tắc, phải kể đúng), **test hành vi** (task vi phạm phải bị từ chối), **test nhiễu** (task ngoài scope không bị ảnh hưởng).
 
-> 📄 **Code ví dụ:** [`examples/09-10-test-instructions-moi-co-hieu-qua-khong.sh`](examples/09-10-test-instructions-moi-co-hieu-qua-khong.sh)
+> 📄 **Code ví dụ:** [`./examples/06-prompts-agents-instructions/test-instructions-moi-co-hieu-qua-khong.sh`](./examples/06-prompts-agents-instructions/test-instructions-moi-co-hieu-qua-khong.sh)
 
 **Ví dụ:** thêm "NEVER sửa migrations" → test "sửa giúp migration 003" → Copilot phải từ chối + đề xuất tạo migration mới. 2 phút test đỡ 2 tuần "sao nó không nghe".
 
@@ -155,7 +155,7 @@ description: Dùng khi user nhờ review PR, diff, hoặc kiểm tra code trư�
 4. Reload IDE + mở chat mới.
 5. Hỏi admin: org có tắt custom instructions không.
 
-📄 Script debug 6 bước: [`examples/06-5-instructions-khong-load-checklist-6-buoc.sh`](examples/06-5-instructions-khong-load-checklist-6-buoc.sh).
+📄 Script debug 6 bước: [`./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh`](./examples/02-model-context-premium/instructions-khong-load-checklist-6-buoc.sh).
 
 Tham khảo chéo: [bài 05](05-policies-guardrails-faq.md) (quy tắc ALWAYS/NEVER) · [bài 02](02-model-context-premium.md) (context + nhiễu) · [bài 07](07-custom-agents-coding-agent-workflows.md) (custom agent workflows) · [../templates/README.md](../templates/README.md).
 

@@ -48,7 +48,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 > - Agent Plugins và Connectors: không có ở Local harness.
 > - Customizations user-level sống trong VS Code profile storage → phải migrate sang `~/.copilot/` (§7).
 
-> 📄 Các bước mở + kiểm editor theo harness: [`examples/17-1-open-customizations-editor.sh`](examples/17-1-open-customizations-editor.sh)
+> 📄 Các bước mở + kiểm editor theo harness: [`./examples/17-agent-customizations-hub/open-customizations-editor.sh`](./examples/17-agent-customizations-hub/open-customizations-editor.sh)
 
 ## 3. Customize Your Agent: mô tả → draft
 
@@ -60,7 +60,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
   (.github/copilot-instructions.md hoặc AGENTS.md).
 - Luật sắt: draft là bản nháp, không phải bản chốt — schema model biết có thể đã cũ
   theo version -> mở editor validate, xem References, rồi mới commit qua PR.
-  (📄 [`examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh`](examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh) — tạo skill/agent khớp cấu trúc [`templates/.github/`](../templates/.github/))
+  (📄 [`./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh`](./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh) — tạo skill/agent khớp cấu trúc [`templates/.github/`](../templates/.github/))
 ```
 
 ## 4. Các card trong editor — mỗi card đúng 4 dòng
@@ -72,7 +72,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 - **Marketplace = một Git repo** có mô tả ở `.github/plugin/marketplace.json`; `awesome-copilot` là built-in không remove được, `copilot-plugins` phải thêm manual: `copilot plugin marketplace add github/copilot-plugins`.
 - **`/plugin list|install|update|enable|disable|uninstall|marketplace add|browse|update|remove` chỉ chạy trong Copilot harness session**; plugin cài vào `~/.copilot/installed-plugins/<MARKETPLACE>/<PLUGIN>`, bật/tắt bằng `chat.plugins.enabled`.
 - Skill từ plugin khi gọi bị đặt namespace: `/plugin:skill` (bài 05); tắt plugin = sạch bộ skill/agent/MCP nó mang theo.
-- Đọc "hộp" trước khi tin: duyệt repo chứa plugin, kiểm phần mang code thực thi (hooks/MCP) — chợ nổi tiếng ≠ từng plugin an toàn; walkthrough ở [`examples/17-2-plugin-marketplace.sh`](examples/17-2-plugin-marketplace.sh).
+- Đọc "hộp" trước khi tin: duyệt repo chứa plugin, kiểm phần mang code thực thi (hooks/MCP) — chợ nổi tiếng ≠ từng plugin an toàn; walkthrough ở [`./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh`](./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh).
 
 ### 4.2. MCP Servers — cổng giao hàng
 
@@ -86,7 +86,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 - **Là gì:** quy trình nhiều bước theo từng việc, chuẩn mở agentskills.io; prompt khớp `description` thì agent tự nạp.
 - **File:** project `.github/skills/<ten>/SKILL.md` (`name` = tên thư mục); cá nhân `~/.copilot/skills/`; Local đọc thêm `.claude/skills/`, `.agents/skills/`.
 - **Harness:** chạy ở mọi harness: Copilot · Local · CLI · cloud agent; prompt files `.prompt.md` — chỉ Local.
-- **Bài chủ:** **05** · [agent-skill](commands/copilot/system-knowledge/agent-skill/README.md) · 📄 [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh`](examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh).
+- **Bài chủ:** **05** · [agent-skill](commands/copilot/system-knowledge/agent-skill/README.md) · 📄 [`templates/.github/skills/review-pr/SKILL.md`](../templates/.github/skills/review-pr/SKILL.md) · [`./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh`](./examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh).
 
 ### 4.4. Instructions — nội quy bếp
 
@@ -137,7 +137,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
 - **Voice Mode:** hội thoại hai chiều bằng giọng nói với agent — **experimental**, `feature(voice-mode)`; bật ở card Voice của editor; cần mic.
 - **Dictation:** nói → chèn text vào ô prompt — **built-in** ở ô chat; bản cleanup bằng LLM (experimental) rất hợp prompt tiếng Việt dài kèm tên biến tiếng Anh.
 - File kiểu nói riêng: cá nhân `~/.copilot/voice.md`, `~/.copilot/dictation.md`; repo `.github/voice.md`, `.github/dictation.md`.
-- Voice/Dictation là **kênh giao tiếp**, không phải tuỳ biến hành vi agent — muốn đổi "cách nó trả lời" thì về Instructions (03). Tính năng experimental có thể không có trên harness/plan của bạn: không thấy card thì đừng đi mò setting của bản cũ. 📄 Mở editor để bật card Voice: [`examples/17-1-open-customizations-editor.sh`](examples/17-1-open-customizations-editor.sh).
+- Voice/Dictation là **kênh giao tiếp**, không phải tuỳ biến hành vi agent — muốn đổi "cách nó trả lời" thì về Instructions (03). Tính năng experimental có thể không có trên harness/plan của bạn: không thấy card thì đừng đi mò setting của bản cũ. 📄 Mở editor để bật card Voice: [`./examples/17-agent-customizations-hub/open-customizations-editor.sh`](./examples/17-agent-customizations-hub/open-customizations-editor.sh).
 
 ## 7. Migrate & verify "đã ngấm chưa"
 
@@ -169,7 +169,7 @@ Bài này là "cửa sổ một chỗ" của cả khoá: dạy cách nhìn, các
   enterprise-managed settings là hai harness này bị chặn.
 ```
 
-> 📄 [`examples/17-1-open-customizations-editor.sh`](examples/17-1-open-customizations-editor.sh) (mở editor, đổi harness, kiểm file) · [`examples/17-2-plugin-marketplace.sh`](examples/17-2-plugin-marketplace.sh) (marketplace + cài plugin + đọc "hộp")
+> 📄 [`./examples/17-agent-customizations-hub/open-customizations-editor.sh`](./examples/17-agent-customizations-hub/open-customizations-editor.sh) (mở editor, đổi harness, kiểm file) · [`./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh`](./examples/05-agent-skills-reusable-workflows/plugin-marketplace.sh) (marketplace + cài plugin + đọc "hộp")
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 

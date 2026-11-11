@@ -22,7 +22,7 @@ Mỗi MCP server expose 3 loại thành phần (không phải 3 loại server): 
 
 Ví von: sai tên file hoặc sai key giống gửi thư ghi sai địa chỉ — bưu tá không trả lại thư, không báo lỗi, chỉ lặng lẽ không giao hàng.
 
-> 📄 **Code ví dụ:** [`examples/01-1-mcp-json-nam-o-au-format-chuan.json`](examples/01-1-mcp-json-nam-o-au-format-chuan.json)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-json-nam-o-au-format-chuan.json`](./examples/04-mcp-faq/mcp-json-nam-o-au-format-chuan.json)
 
 > **Sai chỗ/sai key = lỗi âm thầm:** sửa đúng nội dung mà IDE đọc file khác hoặc bỏ qua key lạ — "chẳng có gì xảy ra" dù config trông đúng.
 
@@ -30,9 +30,9 @@ Ví von: sai tên file hoặc sai key giống gửi thư ghi sai địa chỉ �
 
 **Trả lời 1 câu:** stdio = IDE tự spawn process trên máy bạn (nhẹ, cần `npx`, tốn RAM, chết theo IDE); SSE/HTTP = nối tới URL server đang chạy (share team, cần mạng + auth).
 
-> 📄 **Code ví dụ:** [`examples/02-2-stdio-vs-sse-http-khac-nhau-gi.json`](examples/02-2-stdio-vs-sse-http-khac-nhau-gi.json)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/stdio-vs-sse-http-khac-nhau-gi.json`](./examples/04-mcp-faq/stdio-vs-sse-http-khac-nhau-gi.json)
 
-> 📄 **Code ví dụ:** [`examples/03-2-stdio-vs-sse-http-khac-nhau-gi.sh`](examples/03-2-stdio-vs-sse-http-khac-nhau-gi.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/stdio-vs-sse-http-khac-nhau-gi.sh`](./examples/04-mcp-faq/stdio-vs-sse-http-khac-nhau-gi.sh)
 
 > **Chọn sai transport là lỗi âm thầm:** MCP panel báo `disconnected` mà chẳng rõ lý do. 1 mình vọc → stdio; team dùng chung / server nặng → SSE.
 
@@ -48,13 +48,13 @@ Ví von: sai tên file hoặc sai key giống gửi thư ghi sai địa chỉ �
 
 > **Cách đọc bảng này:** cột **An toàn** xếp từ chỗ được phép (cao) tới chỗ tuyệt đối không được (CẤM) — nguyên tắc chung: token không bao giờ nằm trong file được commit lên git.
 
-> 📄 **Code ví dụ:** [`examples/04-3-auth-cho-mcp-server-the-nao.sh`](examples/04-3-auth-cho-mcp-server-the-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/auth-cho-mcp-server-the-nao.sh`](./examples/04-mcp-faq/auth-cho-mcp-server-the-nao.sh)
 
 ## 4. Tools không hiện trong Copilot — debug theo thứ tự nào?
 
 **Trả lời 1 câu:** 5 bước đừng nhảy cóc: validate JSON → check key (`servers` cho `.vscode/mcp.json`, `mcpServers` cho `.mcp.json`) → test process → reload IDE → đọc log MCP panel.
 
-> 📄 **Code ví dụ:** [`examples/05-4-tools-khong-hien-trong-copilot-debug-theo.sh`](examples/05-4-tools-khong-hien-trong-copilot-debug-theo.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/tools-khong-hien-trong-copilot-debug-theo.sh`](./examples/04-mcp-faq/tools-khong-hien-trong-copilot-debug-theo.sh)
 
 Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS Code → View → Output → chọn MCP server đó.
 
@@ -62,9 +62,9 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 
 **Trả lời 1 câu:** Quy tắc vàng: **file MCP commit được = không chứa secret thật** — Copilot harness dùng `${env:...}` (biến đã export), Local harness (VS Code) dùng `${input:...}` (IDE hỏi lúc start).
 
-> 📄 **Code ví dụ:** [`examples/06-5-secrets-trong-mcp-placeholders-viet-sao.json`](examples/06-5-secrets-trong-mcp-placeholders-viet-sao.json)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/secrets-trong-mcp-placeholders-viet-sao.json`](./examples/04-mcp-faq/secrets-trong-mcp-placeholders-viet-sao.json)
 
-> 📄 **Code ví dụ:** [`examples/07-5-secrets-trong-mcp-placeholders-viet-sao.sh`](examples/07-5-secrets-trong-mcp-placeholders-viet-sao.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/secrets-trong-mcp-placeholders-viet-sao.sh`](./examples/04-mcp-faq/secrets-trong-mcp-placeholders-viet-sao.sh)
 
 > Không có ngoại lệ "tạm paste rồi xóa sau": git history giữ mãi, bot quét GitHub tìm thấy trong vài phút. Đã lỡ commit → `git rm` + **xoay token ngay**.
 
@@ -72,9 +72,9 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 
 **Trả lời 1 câu:** 3 lớp bảo vệ, bật cả 3: trỏ **read-replica** (hoặc user DB chỉ `GRANT SELECT`), server chỉ expose query tools (tắt `exec/migrate`), tool `exec` luôn Deny/allow-once.
 
-> 📄 **Code ví dụ:** [`examples/08-6-mcp-postgres-tro-prod-lam-sao-khong.sql`](examples/08-6-mcp-postgres-tro-prod-lam-sao-khong.sql)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-postgres-tro-prod-lam-sao-khong.sql`](./examples/04-mcp-faq/mcp-postgres-tro-prod-lam-sao-khong.sql)
 
-> 📄 **Code ví dụ:** [`examples/09-6-mcp-postgres-tro-prod-lam-sao-khong.sh`](examples/09-6-mcp-postgres-tro-prod-lam-sao-khong.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-postgres-tro-prod-lam-sao-khong.sh`](./examples/04-mcp-faq/mcp-postgres-tro-prod-lam-sao-khong.sh)
 
 > Cần migrate → làm tay bằng migration tool, không qua MCP.
 
@@ -82,15 +82,15 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 
 **Trả lời 1 câu:** Token tối thiểu làm được việc — fine-grained PAT chỉ repo cần (read-only nếu chỉ đọc), tạo PAT riêng cho MCP, đừng reuse PAT deploy.
 
-> 📄 **Code ví dụ:** [`examples/10-7-mcp-github-server-can-scope-token-nao.sh`](examples/10-7-mcp-github-server-can-scope-token-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-github-server-can-scope-token-nao.sh`](./examples/04-mcp-faq/mcp-github-server-can-scope-token-nao.sh)
 
 ## 8. MCP Playwright (browser) dùng khi nào?
 
 **Trả lời 1 câu:** Cho agent mở trang, click, chụp screenshot, đọc console errors — nặng (Chromium ~300-500MB RAM) nhưng cần khi verify UI/E2E thật; chỉ check API thì dùng `curl` nhanh hơn.
 
-> 📄 **Code ví dụ:** [`examples/11-8-mcp-playwright-browser-dung-khi-nao.json`](examples/11-8-mcp-playwright-browser-dung-khi-nao.json)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-playwright-browser-dung-khi-nao.json`](./examples/04-mcp-faq/mcp-playwright-browser-dung-khi-nao.json)
 
-> 📄 **Code ví dụ:** [`examples/12-8-mcp-playwright-browser-dung-khi-nao.sh`](examples/12-8-mcp-playwright-browser-dung-khi-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-playwright-browser-dung-khi-nao.sh`](./examples/04-mcp-faq/mcp-playwright-browser-dung-khi-nao.sh)
 
 > Thiếu browser → `npx playwright install chromium`; boot app local trước; làm backend thuần thì tắt server cho nhẹ máy.
 
@@ -98,7 +98,7 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 
 **Trả lời 1 câu:** Mỗi server stdio = 1 process + RAM, và menu tools dài làm model chọn sai/bỏ sót — chỉ bật server task đang cần, server nặng để SSE chung team.
 
-> 📄 **Code ví dụ:** [`examples/13-9-nhieu-mcp-servers-cung-luc-quan-ly.sh`](examples/13-9-nhieu-mcp-servers-cung-luc-quan-ly.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/nhieu-mcp-servers-cung-luc-quan-ly.sh`](./examples/04-mcp-faq/nhieu-mcp-servers-cung-luc-quan-ly.sh)
 
 > Ngày làm backend → `github + postgres`; ngày làm UI → thêm `playwright`. Không bật cả 3 trừ khi cần.
 
@@ -113,7 +113,7 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 | `ECONNREFUSED` | SSE server chưa chạy | Start server / check URL |
 | `JSON parse error` | `mcp.json` sai cú pháp | Validate JSON (câu 4) |
 
-> 📄 **Code ví dụ:** [`examples/14-10-mcp-log-oc-o-au-loi-nao.sh`](examples/14-10-mcp-log-oc-o-au-loi-nao.sh)
+> 📄 **Code ví dụ:** [`./examples/04-mcp-faq/mcp-log-oc-o-au-loi-nao.sh`](./examples/04-mcp-faq/mcp-log-oc-o-au-loi-nao.sh)
 
 ---
 
@@ -127,7 +127,7 @@ Sau sửa `mcp.json` phải reload / restart MCP server trong MCP panel. Log: VS
 4. Check token: env có, chưa hết hạn, đủ scope.
 5. Reload IDE → đọc Output panel log server đó.
 
-📄 Debug sâu khi tools biến mất giữa chừng: [`examples/04-5-mcp-tools-ot-nhien-mat-thu-tu.sh`](examples/04-5-mcp-tools-ot-nhien-mat-thu-tu.sh).
+📄 Debug sâu khi tools biến mất giữa chừng: [`./examples/04-mcp-faq/mcp-tools-ot-nhien-mat-thu-tu.sh`](./examples/04-mcp-faq/mcp-tools-ot-nhien-mat-thu-tu.sh).
 
 Tham khảo chéo: [bài 03](03-modes-permissions.md) (tool approval) · [bài 08](08-loi-thuong-gap-troubleshooting.md) (lỗi tổng hợp) · [bài 09](09-bao-mat-quyen-rieng-tu.md) (secrets + audit) · [../templates/.mcp.json](../templates/.mcp.json) (mẫu Copilot harness) · [../templates/.vscode/mcp.json](../templates/.vscode/mcp.json) (mẫu Local harness, copy ngay).
 

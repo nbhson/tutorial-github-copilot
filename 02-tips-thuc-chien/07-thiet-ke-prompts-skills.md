@@ -231,7 +231,7 @@ Mục này là bài thực hành tổng hợp: biến một prompt bạn đang g
 | 25–30 | Share | Commit + PR, nhờ 1 đồng nghiệp trigger thử, ghi feedback 3 dòng |
 | 30–35 | Version | Thêm vào README team: khi nào dùng skill, khi nào review |
 
-> **Tóm gọn 1 câu:** Chọn 1 prompt dùng nhiều → viết thành skill có variables + few-shot → test trên task thật → tách luật chung → commit cho cả team. 📄 2 script tạo nhanh: [`03-7-walkthrough-5-phut-skill-au-tien-cua.sh`](../01-huong-dan-su-dung/examples/03-7-walkthrough-5-phut-skill-au-tien-cua.sh) · [`02-4-3-port-prompt-file-cu-sang-skill.sh`](../01-huong-dan-su-dung/examples/02-4-3-port-prompt-file-cu-sang-skill.sh).
+> **Tóm gọn 1 câu:** Chọn 1 prompt dùng nhiều → viết thành skill có variables + few-shot → test trên task thật → tách luật chung → commit cho cả team. 📄 2 script tạo nhanh: [`../01-huong-dan-su-dung/examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh`](../01-huong-dan-su-dung/examples/05-agent-skills-reusable-workflows/walkthrough-5-phut-skill-au-tien-cua.sh) · [`../01-huong-dan-su-dung/examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh`](../01-huong-dan-su-dung/examples/00-tong-quan-copilot/port-prompt-file-cu-sang-skill.sh).
 
 > **Cách đọc bảng này:** mỗi dòng là 1 mốc thời gian trong 35 phút. Cột **Phút** là khung giờ, cột **Việc** là tên bước, cột **Làm gì** là hành động cụ thể cần xong trong mốc đó.
 
@@ -281,7 +281,7 @@ Ba lỗi khó chịu nhất:
 ✅ ĐÚNG: luật chung ở copilot-instructions.md, file con chỉ giữ luật riêng scope
 ```
 
-> **Tóm gọn 1 câu:** File quá dài, thiếu variables, thiếu ví dụ và glob quá rộng là 4 cái bẫy phổ biến nhất — kiểm tra 4 điểm này trước khi share cho team. 📄 Frontmatter `applyTo` mẫu: [`03-4-mau-python-rules.instructions.md`](../01-huong-dan-su-dung/examples/03-4-mau-python-rules.instructions.md).
+> **Tóm gọn 1 câu:** File quá dài, thiếu variables, thiếu ví dụ và glob quá rộng là 4 cái bẫy phổ biến nhất — kiểm tra 4 điểm này trước khi share cho team. 📄 Frontmatter `applyTo` mẫu: [`03-4-mau-python-rules.instructions.md`](../01-huong-dan-su-dung/examples/03-instructions-memory-rules/mau-python-rules.instructions.md).
 
 ## 10. Bài tập cuối bài
 
@@ -295,7 +295,7 @@ Mục này là phần về nhà. Làm đủ 3 bài thì bạn mới thực sự 
 
 > Đạt: sau 1 tháng, team bạn có ≥3 skills/prompts + instructions gọn + 1 skill dài, mọi output đồng format.
 
-> **Tóm gọn 1 câu:** Làm hết 3 bài tập để biến kiến thức thành tài sản thật: 1 prompt file, bộ instructions gọn, và 1 skill cho quy trình dài — giấy làm bài + file đối chiếu: [`02-1-session-target-picker.md`](../01-huong-dan-su-dung/examples/02-1-session-target-picker.md) · [`../templates/.github/`](../templates/.github/).
+> **Tóm gọn 1 câu:** Làm hết 3 bài tập để biến kiến thức thành tài sản thật: 1 prompt file, bộ instructions gọn, và 1 skill cho quy trình dài — giấy làm bài + file đối chiếu: [`02-1-session-target-picker.md`](../01-huong-dan-su-dung/examples/00-tong-quan-copilot/session-target-picker.md) · [`../templates/.github/`](../templates/.github/).
 
 ## Tham khảo chéo
 

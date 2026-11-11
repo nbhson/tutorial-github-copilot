@@ -57,7 +57,7 @@ Docs VS Code khuyên bắt đầu từ **một quy ước mà agent hay bỏ qu�
 - ALWAYS chay focused test sau khi sua; NEVER commit truc tiep main.
 ```
 
-Bản hoàn chỉnh cho hai loại project phổ biến (lệnh đã verify — thay project của bạn vào): 📄 [`examples/04-3-mau-instructions-backend.md`](examples/04-3-mau-instructions-backend.md) (Node + Express, kèm biến thể Python) · 📄 [`examples/05-3-mau-instructions-frontend.md`](examples/05-3-mau-instructions-frontend.md) (Next.js + Prisma) · 📄 tạo đủ 3 loại file trong 1 phút: [`examples/01-2-3-loai-file-phan-biet-va-at.sh`](examples/01-2-3-loai-file-phan-biet-va-at.sh)
+Bản hoàn chỉnh cho hai loại project phổ biến (lệnh đã verify — thay project của bạn vào): 📄 [`./examples/03-instructions-memory-rules/mau-instructions-backend.md`](./examples/03-instructions-memory-rules/mau-instructions-backend.md) (Node + Express, kèm biến thể Python) · 📄 [`./examples/03-instructions-memory-rules/mau-instructions-frontend.md`](./examples/03-instructions-memory-rules/mau-instructions-frontend.md) (Next.js + Prisma) · 📄 tạo đủ 3 loại file trong 1 phút: [`./examples/00-tong-quan-copilot/loai-file-phan-biet-va-at.sh`](./examples/00-tong-quan-copilot/loai-file-phan-biet-va-at.sh)
 
 > **Tóm gọn 1 câu:** Luật chung để `copilot-instructions.md`, luật theo thư mục để `*.instructions.md`, luật đa-tool để `AGENTS.md`.
 
@@ -65,7 +65,7 @@ Bản hoàn chỉnh cho hai loại project phổ biến (lệnh đã verify — 
 
 | Tầng | Nằm ở đâu | Ai quản lý |
 |---|---|---|
-| **Personal** | `~/.copilot/copilot-instructions.md` (chung) + `~/.copilot/instructions/**/*.instructions.md` (module) — 📄 tạo đủ 3 loại file 1 phút: [`examples/01-2-3-loai-file-phan-biet-va-at.sh`](examples/01-2-3-loai-file-phan-biet-va-at.sh) | chính bạn, mọi repo trên máy |
+| **Personal** | `~/.copilot/copilot-instructions.md` (chung) + `~/.copilot/instructions/**/*.instructions.md` (module) — 📄 tạo đủ 3 loại file 1 phút: [`./examples/00-tong-quan-copilot/loai-file-phan-biet-va-at.sh`](./examples/00-tong-quan-copilot/loai-file-phan-biet-va-at.sh) | chính bạn, mọi repo trên máy |
 | **Repository** | `.github/copilot-instructions.md`, `.github/instructions/`, `AGENTS.md` | team, qua git |
 | **Organization** | **settings UI trên GitHub** (Business/Enterprise) — không có file org trong repo | org owner/admin |
 
@@ -105,7 +105,7 @@ Ba sự thật docs GitHub: (1) trên **GitHub.com**, path-specific hiện **ch�
 
 Giới hạn thực hành: ≤8 file, mỗi file <50 dòng. Verify: sửa file trong subtree rồi hỏi "rules nào đang áp cho folder này?" → phải kể đúng nội dung; sửa file ngoài subtree mà rule vẫn đọc = glob quá rộng.
 
-> **Tóm gọn 1 câu:** Glob hẹp nhất có thể — rule chỉ nạp đúng lúc cần thì vừa đỡ tốn credits vừa đỡ áp sai chỗ. Bản hoàn chỉnh để copy (kèm 2 bước verify): 📄 [`examples/03-4-mau-python-rules.instructions.md`](examples/03-4-mau-python-rules.instructions.md).
+> **Tóm gọn 1 câu:** Glob hẹp nhất có thể — rule chỉ nạp đúng lúc cần thì vừa đỡ tốn credits vừa đỡ áp sai chỗ. Bản hoàn chỉnh để copy (kèm 2 bước verify): 📄 [`./examples/03-instructions-memory-rules/mau-python-rules.instructions.md`](./examples/03-instructions-memory-rules/mau-python-rules.instructions.md).
 
 ## 5. `AGENTS.md` — viết một lần, nhiều agent đọc
 
@@ -115,7 +115,7 @@ Giới hạn thực hành: ≤8 file, mỗi file <50 dòng. Verify: sửa file t
 - Ở **root**, `CLAUDE.md` **hoặc** `GEMINI.md` là **thay thế hợp lệ** cho `AGENTS.md` (docs GitHub) — repo đã có thì dùng tiếp, đừng tạo bản sao cạnh tranh.
 - `AGENTS.md` hướng dẫn agent đang tồn tại, **không định nghĩa custom agent** (cái đó là `.github/agents/` — bài 06).
 
-Mỗi lần đổi toolchain: `diff <(sort AGENTS.md) <(sort .github/copilot-instructions.md) | head -30` — trùng >50% thì gộp về một nơi (script đầy đủ: 📄 [`examples/03-5-agents-md-portability-viet-1-lan-chay.sh`](examples/03-5-agents-md-portability-viet-1-lan-chay.sh)).
+Mỗi lần đổi toolchain: `diff <(sort AGENTS.md) <(sort .github/copilot-instructions.md) | head -30` — trùng >50% thì gộp về một nơi (script đầy đủ: 📄 [`./examples/03-instructions-memory-rules/agents-md-portability-viet-1-lan-chay.sh`](./examples/03-instructions-memory-rules/agents-md-portability-viet-1-lan-chay.sh)).
 
 > **Tóm gọn 1 câu:** Thứ chung để `AGENTS.md`, thứ riêng để file riêng từng tool — mỗi sự thật chỉ viết một nơi.
 
@@ -177,7 +177,7 @@ Instructions là **luật bạn chủ động viết và review**; **Copilot Mem
 
 ## Bài tập
 
-1. **(20 phút) Viết từ 0:** mở Customizations editor → tạo `.github/copilot-instructions.md`: thu thập sự thật từ README + package.json, **chạy tay từng lệnh** chỉ giữ lệnh PASS, xếp theo thứ tự mục 6, verify 3 bước mục 3 — 📄 file mẫu: [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · verify bằng lệnh: [`examples/01-6-verify-tong-va-bang-loi.sh`](examples/01-6-verify-tong-va-bang-loi.sh).
+1. **(20 phút) Viết từ 0:** mở Customizations editor → tạo `.github/copilot-instructions.md`: thu thập sự thật từ README + package.json, **chạy tay từng lệnh** chỉ giữ lệnh PASS, xếp theo thứ tự mục 6, verify 3 bước mục 3 — 📄 file mẫu: [`templates/.github/copilot-instructions.md`](../templates/.github/copilot-instructions.md) · verify bằng lệnh: [`./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh`](./examples/01-cai-dat-va-xac-thuc/verify-tong-va-bang-loi.sh).
 2. **(15 phút) Tách `applyTo`:** đưa 2 rules chỉ đúng một subtree vào `.github/instructions/` với glob hẹp; test sửa file trong/ngoài subtree; thêm `excludeAgent: "code-review"` vào một file rồi giải thích sự khác biệt.
 3. **(10 phút) Dedupe `AGENTS.md`:** chạy `diff` mục 5, gom trùng lặp về một nơi, đo lại `wc -l` cả hai file.
 4. **(10 phút) Kiểm memory:** chạy **`Chat: Show Memory Files`**, mở settings Copilot Memory trên GitHub; xoá fact nào đã lỗi thời rồi test lại bằng chat mới.

@@ -1,6 +1,6 @@
 # 14-5 · Thêm model ở đâu trên từng surface — CLI / VS Code / web / cloud
 
-> Đồng hành với [bài 14 §7](../14-models-chon-model-dung.md#7-thêm-model-riêng-vào-picker).
+> Đồng hành với [bài 14 §7](../../14-models-chon-model-dung.md#7-thêm-model-riêng-vào-picker).
 > Nội dung chuyển ra từ bài 14 cũ để phần đọc liền mạch của bài học ngắn lại.
 
 ## Một câu
@@ -31,11 +31,11 @@ gia, CLI luon tim thay model cua Ollama dang chay local — xuat hien trong
 
 1. Settings (`⌘,`) → tìm **Copilot** → mục model / API key của provider.
 2. Dán key (OpenAI, Anthropic, Groq, ...) → model của provider đó xuất hiện
-   trong dropdown [model picker](../commands/copilot/model-agent/model-picker/README.md) của Chat.
+   trong dropdown [model picker](../../commands/copilot/model-agent/model-picker/README.md) của Chat.
 3. Không có mục dán key? Tổ chức chưa bật BYOK (chính sách org) hoặc VS Code
    cũ — cập nhật rồi kiểm tra lại.
 
-(Trình tự chọn surface và mở dropdown model đã hướng dẫn ở [bài 02](../02-cac-be-mat-vscode-ide-web-cli.md).)
+(Trình tự chọn surface và mở dropdown model đã hướng dẫn ở [bài 02](../../02-cac-be-mat-vscode-ide-web-cli.md).)
 
 ## github.com — Copilot Chat
 
@@ -47,7 +47,7 @@ VS Code.
 
 Tạo session cho cloud agent (Agents tab / `/schedule`) → chọn model ngay lúc
 tạo; mặc định là auto. Session sau đó chạy theo model đó, và model "name +
-version" có thể bị đổi giữa chừng — xem [bài 14 §5](../14-models-chon-model-dung.md#5-auto-fallback-và-deprecation)
+version" có thể bị đổi giữa chừng — xem [bài 14 §5](../../14-models-chon-model-dung.md#5-auto-fallback-và-deprecation)
 về lý do nên cân nhắc base model cho việc chạy dài.
 
 ## Hay gặp khi thêm model

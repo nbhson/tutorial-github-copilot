@@ -117,9 +117,9 @@ Cấm: lan man lịch sử, paste cả file vào report, đề xuất refactor n
 
 Ba mẫu còn lại nằm trong `examples/`; ở đây chỉ cần khung:
 
-- **Planner** — [`examples/06-2-agent-planner.agent.md`](examples/06-2-agent-planner.agent.md): `tools: ['read', 'search']`; đọc code → viết `plans/<date>-<task>.md` theo khung Goals / Non-goals / Files / Steps+verify / Risks; output = path + 10 dòng; **không tự implement**.
-- **Security reviewer** — [`examples/06-2-agent-security-reviewer.agent.md`](examples/06-2-agent-security-reviewer.agent.md): `tools: ['read', 'search', 'execute']`; `git diff` → soi injection / authZ / secrets / crypto yếu / SSRF; output ≤10 findings `[CRITICAL|HIGH|MED|LOW] file:line — fix`; không sửa hộ.
-- **Tester** — [`examples/06-2-agent-tester.agent.md`](examples/06-2-agent-tester.agent.md): `tools: ['execute', 'read']`; lấy lệnh test từ instructions; focused trước, full suite chỉ khi được xin; output `PASS (n/n)` / `FAIL (x/y)` + 1 dòng root-cause guess.
+- **Planner** — [`./examples/06-custom-agents-parallel/agent-planner.agent.md`](./examples/06-custom-agents-parallel/agent-planner.agent.md): `tools: ['read', 'search']`; đọc code → viết `plans/<date>-<task>.md` theo khung Goals / Non-goals / Files / Steps+verify / Risks; output = path + 10 dòng; **không tự implement**.
+- **Security reviewer** — [`./examples/06-custom-agents-parallel/agent-security-reviewer.agent.md`](./examples/06-custom-agents-parallel/agent-security-reviewer.agent.md): `tools: ['read', 'search', 'execute']`; `git diff` → soi injection / authZ / secrets / crypto yếu / SSRF; output ≤10 findings `[CRITICAL|HIGH|MED|LOW] file:line — fix`; không sửa hộ.
+- **Tester** — [`./examples/06-custom-agents-parallel/agent-tester.agent.md`](./examples/06-custom-agents-parallel/agent-tester.agent.md): `tools: ['execute', 'read']`; lấy lệnh test từ instructions; focused trước, full suite chỉ khi được xin; output `PASS (n/n)` / `FAIL (x/y)` + 1 dòng root-cause guess.
 
 > **Tóm gọn 1 câu:** Một mẫu hoàn chỉnh để bắt chước, ba khung để mở rộng — tất cả đều khóa `tools` đúng việc, không ai "cho mạnh" bằng full tools.
 
@@ -151,7 +151,7 @@ Pattern C — Adversarial review (PR chạm auth/payment): implementer viết co
   Reviewer quá khắt → dặn "chỉ flag lỗi thực sự".
 ```
 
-> 📄 **Code ví dụ:** [`examples/03-5-chay-song-song-3-cach.sh`](examples/03-5-chay-song-song-3-cach.sh) — mỗi session một worktree/branch riêng (bài 11).
+> 📄 **Code ví dụ:** [`./examples/06-custom-agents-parallel/chay-song-song-3-cach.sh`](./examples/06-custom-agents-parallel/chay-song-song-3-cach.sh) — mỗi session một worktree/branch riêng (bài 11).
 
 Muốn nhẩm cost trước khi fan-out? AI Credits tính per-token theo model — bảng giá + công thức là việc của bài 00/14, ở đây chỉ cần nhớ: **model rẻ cho việc đọc, model mạnh cho việc quyết**.
 

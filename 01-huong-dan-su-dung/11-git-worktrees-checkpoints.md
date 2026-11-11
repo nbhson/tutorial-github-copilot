@@ -57,7 +57,7 @@ Docs VS Code (Review & Revert Changes · Get an agent back on track) mô tả h�
 
 **Checkpoints ≠ thay thế git** — checkpoint là session state (mốc của phiên chat, trên máy bạn), git là code state (mốc bền, đẩy lên server, cả team thấy). Trước task dài: commit một cái rồi mới giao agent — đó là "checkpoint thủ công" không bao giờ bay theo cache IDE.
 
-> 📄 **Code ví dụ (4 cơ chế, copy-paste):** [`examples/11-2-checkpoints-4-co-che.sh`](examples/11-2-checkpoints-4-co-che.sh) · Tra nhanh: [commands/copilot/chat-session/checkpoints](commands/copilot/chat-session/checkpoints/README.md)
+> 📄 **Code ví dụ (4 cơ chế, copy-paste):** [`./examples/11-git-worktrees-checkpoints/checkpoints-4-co-che.sh`](./examples/11-git-worktrees-checkpoints/checkpoints-4-co-che.sh) · Tra nhanh: [commands/copilot/chat-session/checkpoints](commands/copilot/chat-session/checkpoints/README.md)
 
 > **Tóm gọn 1 câu:** Mốc tự động có sẵn cho mọi request — việc của bạn là biết mốc nào đáng về, và commit trước những việc mà mất là đau.
 
@@ -80,7 +80,7 @@ Dọn sau merge              → worktree tồn = branch tồn = nợ.
 - **Rẻ hơn clone:** worktree share `.git` objects, chỉ thêm working files; `git clone` copy cả `.git` nên tốn gấp 5–10 lần (verify: `du -sh ../myrepo-worktrees/feat-x`). Xong việc phải dọn — worktree tồn là nợ.
 - **Worktree đặt ngoài repo đang mở:** VS Code hỏi Workspace Trust lần đầu, session có thể báo permission error với folder lạ — approve đúng folder là xong, không phải hỏng.
 
-> 📄 **Code ví dụ (add/list/remove + dọn dẹp):** [`examples/02-3-worktrees-deep-dive-lenh-thuoc-long.sh`](examples/02-3-worktrees-deep-dive-lenh-thuoc-long.sh)
+> 📄 **Code ví dụ (add/list/remove + dọn dẹp):** [`./examples/11-git-worktrees-checkpoints/worktrees-deep-dive-lenh-thuoc-long.sh`](./examples/11-git-worktrees-checkpoints/worktrees-deep-dive-lenh-thuoc-long.sh)
 
 ## 4. Ba cách chạy song song
 
@@ -106,7 +106,7 @@ Fan-out chi tiết (nhiều agent/subagent một máy, chia scope, gộp kết q
 - Muốn 2 agent cùng bàn 1 vấn đề (thăm dò): shared session + `/fork` — không cần worktree.
 - Tình huống "1 người + N robot qua đêm" (assign cloud): xem mục 5 và bài 12 §6.
 
-> 📄 **Code ví dụ (A + B copy-paste):** [`examples/04-5-3-worktree-workflows-copy-paste.sh`](examples/04-5-3-worktree-workflows-copy-paste.sh)
+> 📄 **Code ví dụ (A + B copy-paste):** [`./examples/11-git-worktrees-checkpoints/worktree-workflows-copy-paste.sh`](./examples/11-git-worktrees-checkpoints/worktree-workflows-copy-paste.sh)
 
 ## 5. Branch strategy: `copilot/*` + branch protection + auth check
 
@@ -120,7 +120,7 @@ Trước khi giao việc hoặc merge, check 2 thứ — **branch protection + a
 - Review PR như PR của người: diff + Copilot code review + CI + 1 approve → merge → branch tự xoá (auto-delete ON).
 - Modes / permissions / environment của session cloud, giới hạn phút, chỗ đọc instructions/skills → [commands/cloud/model-agent/cloud-agent-session](commands/cloud/model-agent/cloud-agent-session/README.md) và bài 12 §6.
 
-> 📄 **Code ví dụ (theo dõi + checkout PR của agent về local test):** [`examples/03-4-branch-strategy-cua-coding-agent-copilot.sh`](examples/03-4-branch-strategy-cua-coding-agent-copilot.sh)
+> 📄 **Code ví dụ (theo dõi + checkout PR của agent về local test):** [`./examples/11-git-worktrees-checkpoints/branch-strategy-cua-coding-agent-copilot.sh`](./examples/11-git-worktrees-checkpoints/branch-strategy-cua-coding-agent-copilot.sh)
 
 ## 6. Rewind: bảng quyết định 30 giây
 
@@ -147,7 +147,7 @@ Cột "Rewind?" là chốt hạ: chưa commit thì rewind càng sớm càng rẻ
 | Mở 2 worktrees trong 1 cửa sổ editor | Mỗi worktree 1 window riêng; window title theo `${rootName}` khỏi nhầm phòng |
 | Agent đi sai mà vẫn argue 10 turn | Sai 2 lần → restore + chat mới, rẻ hơn argue cả bằng AI Credits lẫn buổi làm việc |
 
-> 📄 **Code ví dụ:** [`examples/05-7-gotchas-pitfalls.sh`](examples/05-7-gotchas-pitfalls.sh)
+> 📄 **Code ví dụ:** [`./examples/11-git-worktrees-checkpoints/gotchas-pitfalls.sh`](./examples/11-git-worktrees-checkpoints/gotchas-pitfalls.sh)
 
 ## Lỗi thường gặp (❌ SAI / ✅ ĐÚNG)
 
