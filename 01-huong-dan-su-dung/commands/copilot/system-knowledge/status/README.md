@@ -10,7 +10,7 @@ Liếc đồng hồ xe trước khi lên đường: xăng còn không, đèn bá
 | Bạn ở đâu | Xem trạng thái bằng | Thấy được gì |
 |---|---|---|
 | VS Code (Copilot harness) | **Copilot status dashboard** — hover icon Copilot ở thanh dưới cùng | account, plan, trạng thái kích hoạt, gợi ý mở chat |
-| Copilot CLI | `/user show` (account), `/version` (bản CLI), `/diagnose` khi có vấn đề, `/status` nếu build của bạn có | account/plan đang dùng, model của phiên |
+| Copilot CLI | `/user show` (account), `/version` (bản CLI), `/session info` (session đang dùng), `/usage` (credits) — **không có `/status`** trong CLI (docs chỉ có `/statusline`, `/footer`) | account/plan đang dùng, model của phiên |
 | GitHub.com | `github.com/settings/copilot` | plan, AI credits đã dùng, seat của team |
 
 ## Vì sao phải kiểm trạng thái?

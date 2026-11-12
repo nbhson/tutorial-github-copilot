@@ -1,4 +1,4 @@
-# Nhóm Model & Agent (10 lệnh)
+# Nhóm Model & Agent (2 lệnh)
 
 > **Dành cho:** người chọn model, chọn chế độ làm việc và gọi agent · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi bấm sang README chi tiết (~2 phút).
 

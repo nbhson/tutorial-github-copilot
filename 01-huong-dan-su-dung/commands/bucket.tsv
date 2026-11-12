@@ -4,6 +4,7 @@ checkpoints	chat-session	copilot
 clear	chat-session	copilot
 export	chat-session	local
 help	chat-session	local
+rename	chat-session	local
 history	chat-session	copilot
 inline-chat	chat-session	copilot
 new-chat	chat-session	copilot
@@ -11,6 +12,7 @@ quick-chat	chat-session	copilot
 resume	chat-session	copilot
 shortcuts	chat-session	copilot
 compact	chat-session	copilot
+btw	chat-session	copilot
 agent-mode	model-agent	copilot
 ask-mode	model-agent	copilot
 edit-mode	model-agent	local
@@ -31,6 +33,7 @@ optimize	code-actions	copilot
 pr-desc	code-actions	copilot
 refactor	code-actions	copilot
 tests	code-actions	copilot
+setup-tests	code-actions	copilot
 agent-skill	system-knowledge	copilot
 bug-feedback	system-knowledge	copilot
 cli-explain	system-knowledge	local

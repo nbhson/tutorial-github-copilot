@@ -32,6 +32,9 @@ Gõ prompt tay, bạn không kiểm chứng được điều quan trọng nhất
 
 > Không thấy rule nào trong editor? Kiểm file nằm đúng đường dẫn harness đó đọc, và `name`/glob hợp lệ; sau đó mở **chat mới** (phím `Ctrl+N`) để luật được nạp lại. · 📄 [VS Code Docs: Create project instructions](https://code.visualstudio.com/docs/agent-customization/custom-instructions#create-project-instructions)
 
+> **Liên quan — `/init` (Local agent session):** `/init` sinh/cập nhật workspace instructions (`copilot-instructions.md`) cho repo — docs gắn nhãn "in a local agent session". Khác mục này (mục đích *xem/sửa luật đang nạp*), `/init` lo *khởi tạo* bộ luật ban đầu. · 📄 [VS Code Docs: AI features cheat sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet)
+
+
 ## Ví dụ thật
 
 Nghiệp vụ: team quy định "route không được query DB trực tiếp", nhưng một bạn vừa thêm `db.query()` thẳng trong route. Bạn muốn xem luật này có đang được nạp cho file đó không.

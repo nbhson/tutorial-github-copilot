@@ -138,7 +138,7 @@
 
 ## Tra cứu chi tiết & nguồn docs
 
-Index 57 lệnh theo 3 harness (copilot 43 · local 8 · cloud 6) (`commands/<harness>/<nhóm>/<slug>/`): [01-huong-dan-su-dung/commands/README.md](01-huong-dan-su-dung/commands/README.md) · Hỏi đáp: [03-cau-hoi-thuong-gap/README.md](03-cau-hoi-thuong-gap/README.md) · Mẫu copy-paste: [templates/README.md](templates/README.md)
+Index 60 lệnh theo 3 harness (copilot 45 · local 9 · cloud 6) (`commands/<harness>/<nhóm>/<slug>/`): [01-huong-dan-su-dung/commands/README.md](01-huong-dan-su-dung/commands/README.md) · Hỏi đáp: [03-cau-hoi-thuong-gap/README.md](03-cau-hoi-thuong-gap/README.md) · Mẫu copy-paste: [templates/README.md](templates/README.md)
 
 **Reference (docs 11/2026):**
 - Slash + phím Chat, harness, approvals, sandbox, migrate: https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet · https://code.visualstudio.com/docs/agents/concepts/agent-harnesses · https://code.visualstudio.com/docs/agents/run/approvals · https://code.visualstudio.com/docs/agents/run/agent-sandboxing · https://code.visualstudio.com/docs/agents/run/move-to-copilot

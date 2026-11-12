@@ -1,4 +1,4 @@
-# Bucket `local/` — 8 lệnh & đường dẫn chỉ chạy ở Local harness
+# Bucket `local/` — 9 lệnh & đường dẫn chỉ chạy ở Local harness
 
 > **Dành cho:** người từng dùng VS Code Chat trước khi Copilot harness ra mặc định · **Vấn đề:** `/export`, Edit mode, prompt files, `@workspace`… "tự nhiên mất" · **Đọc xong:** hiểu vì sao chúng không chạy ở harness mới và đường dẫn thay thế là gì (~2 phút).
 

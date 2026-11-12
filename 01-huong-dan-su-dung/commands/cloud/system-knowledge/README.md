@@ -1,4 +1,4 @@
-# Nhóm System & Knowledge (15 lệnh)
+# Nhóm System & Knowledge (3 lệnh)
 
 > **Dành cho:** người cấu hình và xử lý sự cố cho hệ thống, tri thức của Copilot · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi bấm sang README chi tiết (~2 phút).
 
@@ -17,7 +17,6 @@ Nhóm này là "phòng máy" của Copilot: rules mà nó nạp (`/instructions`
 | `/skills` | Liệt kê Agent Skills .github/skills/ khả dụng | [./agent-skill/README.md](../../copilot/system-knowledge/agent-skill/README.md) |
 | `/mcp` | Xem MCP servers/tools đang bật, reconnect khi rớt | [./mcp/README.md](../../copilot/system-knowledge/mcp/README.md) |
 | `MCP add` | Thêm MCP server mới vào cấu hình | [./mcp-add/README.md](../../copilot/system-knowledge/mcp-add/README.md) |
-| `/extensions` | Quản lý Copilot Extensions đã cài | [./extensions/README.md](../../../09-extensions-marketplaces.md) |
 | `Content exclusion` | Xem files Copilot không được đọc | [./content-exclusion/README.md](./content-exclusion/README.md) |
 | `Telemetry` | Xem/sửa code-telemetry consent | [./telemetry/README.md](../../copilot/system-knowledge/telemetry/README.md) |
 | `/status` | Xem trạng thái Copilot: active, account, model | [./status/README.md](../../copilot/system-knowledge/status/README.md) |
@@ -38,7 +37,7 @@ Nhóm này là "phòng máy" của Copilot: rules mà nó nạp (`/instructions`
 | Lệnh tái sử dụng theo tên | Prompt files (`.github/prompts/`, **legacy**) → chuyển sang Skills | Custom slash commands trong `.claude/commands/` |
 | Năng lực tự gọi khi task khớp | Agent Skills (`.github/skills/`, `/skills`) | Skills (`SKILL.md` trong `.claude/skills/`) |
 | Kết nối công cụ ngoài | `/mcp`, `MCP add` | `claude mcp add`, `/mcp` |
-| Chợ extension | Copilot Extensions (`/extensions`) | Không có tương đương trực tiếp — dùng MCP/plugins |
+| Chợ extension | Copilot Extensions — **đã retired 10/11/2025**, không còn `/extensions` | Dùng MCP/plugins thay thế |
 | Chặn đọc file | Content exclusion (cấp tổ chức) | Không có tương đương trực tiếp ở cấp org — dựa vào permission settings và `.gitignore` |
 | Đồng ý telemetry | `Telemetry` (code-telemetry consent) | Cấu hình qua settings/env — không có lệnh riêng |
 | Trạng thái & đăng nhập | `/status`, `/login`, `/logout` | `/status`; xác thực qua `claude` login/setup |

@@ -1,12 +1,12 @@
-# Commands — Index tra cứu 57 lệnh Copilot 2026
+# Commands — Index tra cứu 60 lệnh Copilot 2026
 
-> **Dành cho:** ai cần tra nhanh 1 trong 57 lệnh · **Đọc xong:** tìm đúng lệnh theo harness (Copilot / Local / Cloud), mở README chi tiết của nó (~3 phút).
+> **Dành cho:** ai cần tra nhanh 1 trong 60 lệnh · **Đọc xong:** tìm đúng lệnh theo harness (Copilot / Local / Cloud), mở README chi tiết của nó (~3 phút).
 > Khoá học mặc định dạy **Copilot harness**. Hai bucket còn lại là vùng di sản và vùng cloud: `local/` = lệnh/đường dẫn **chỉ chạy ở Local harness** (Edit mode, prompt files, `@`-participants, `gh copilot`, `.vscode/mcp.json`); `cloud/` = những thứ diễn ra **ngoài máy bạn** (cloud agent, content exclusion, knowledge base).
 
 ## Tra theo harness — 3 câu hỏi
 
-1. **Bạn đang gõ trong Chat view VS Code / Copilot CLI?** → bucket [`copilot/`](./copilot/README.md) (43 lệnh).
-2. **Lệnh cũ không chạy / file cấu hình cũ không được đọc?** → bucket [`local/`](./local/README.md) (8) — kiểm xem nó có phải của Local harness không.
+1. **Bạn đang gõ trong Chat view VS Code / Copilot CLI?** → bucket [`copilot/`](./copilot/README.md) (45 lệnh).
+2. **Lệnh cũ không chạy / file cấu hình cũ không được đọc?** → bucket [`local/`](./local/README.md) (9) — kiểm xem nó có phải của Local harness không.
 3. **Việc diễn ra trên GitHub.com / cloud agent?** → bucket [`cloud/`](./cloud/README.md) (6).
 
 Nguồn sự thật của cây này: [`bucket.tsv`](./bucket.tsv) — mỗi slug một dòng `slug → nhóm → harness`.
@@ -15,11 +15,11 @@ Nguồn sự thật của cây này: [`bucket.tsv`](./bucket.tsv) — mỗi slug
 
 Mỗi nhóm có README riêng liệt kê từng lệnh kèm khi nào dùng:
 
-| Nhóm | Việc | Copilot (43) | Local (8) | Cloud (6) |
+| Nhóm | Việc | Copilot (45) | Local (9) | Cloud (6) |
 |---|---|---|---|---|
-| [Chat & phiên](./copilot/chat-session/README.md) | mở đầu, gắn scope, nén, tìm lại, phím tắt | [12 lệnh](./copilot/chat-session/README.md) | [export, help](./local/chat-session/README.md) | — |
+| [Chat & phiên](./copilot/chat-session/README.md) | mở đầu, gắn scope, nén, tìm lại, phím tắt | [13 lệnh](./copilot/chat-session/README.md) | [export, help, rename](./local/chat-session/README.md) | — |
 | [Model & agent](./copilot/model-agent/README.md) | chọn mode/model/target, credits, sandbox | [8 lệnh](./copilot/model-agent/README.md) | [edit-mode, participants](./local/model-agent/README.md) | [3 phiên cloud agent](./cloud/model-agent/README.md) |
-| [Code actions](./copilot/code-actions/README.md) | /explain /fix /tests /doc /commit /pr… | [11 lệnh](./copilot/code-actions/README.md) | — | — |
+| [Code actions](./copilot/code-actions/README.md) | /explain /fix /tests /doc /commit /pr /setupTests… | [12 lệnh](./copilot/code-actions/README.md) | — | — |
 | [System & kiến thức repo](./copilot/system-knowledge/README.md) | status/login/MCP/skills/hooks/plugins/telemetry | [12 lệnh](./copilot/system-knowledge/README.md) | [gh copilot, prompt file, .vscode/mcp.json](./local/system-knowledge/README.md) | [exclusion, KB, audit-log](./cloud/system-knowledge/README.md) |
 
 ## 5 lệnh nên biết trước (Copilot harness)
@@ -32,7 +32,7 @@ Mỗi nhóm có README riêng liệt kê từng lệnh kèm khi nào dùng:
 | Review diff rồi Accept | chất lượng quyết định bởi bạn | [agent-mode](./copilot/model-agent/agent-mode/README.md) |
 | `/status` | 30 giây chẩn đoán mọi thứ_health_ | [status](./copilot/system-knowledge/status/README.md) |
 
-> 57 lệnh nghe nhiều, nhưng nắm 4 thói quen — mở phiên mới mỗi task, gắn scope bằng `#file`, chọn đúng mode/Session Target, review diff trước khi Accept — là bạn đã dùng đúng phần lớn rồi.
+> 60 lệnh nghe nhiều, nhưng nắm 4 thói quen — mở phiên mới mỗi task, gắn scope bằng `#file`, chọn đúng mode/Session Target, review diff trước khi Accept — là bạn đã dùng đúng phần lớn rồi.
 
 ## Khuôn mỗi README lệnh
 
@@ -52,4 +52,4 @@ Mỗi nhóm có README riêng liệt kê từng lệnh kèm khi nào dùng:
 - [CHEATSHEET.md](../../CHEATSHEET.md) — tra 1 phút không cần mở từng folder · [../examples/](../examples/) — mẫu copy-paste cấp bài.
 - VS Code: [AI features cheat sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet) · GitHub: [Copilot CLI command reference](https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-command-reference).
 
-> **Chốt:** tra lệnh = tra harness trước, lệnh sau. 43 slug `copilot/` là thứ bạn dùng hằng ngày; 8 slug `local/` giải thích vì sao lệnh cũ không chạy; 5 slug `cloud/` cho việc diễn ra khi bạn tắt máy.
+> **Chốt:** tra lệnh = tra harness trước, lệnh sau. 45 slug `copilot/` là thứ bạn dùng hằng ngày; 9 slug `local/` giải thích vì sao lệnh cũ không chạy; 6 slug `cloud/` cho việc diễn ra khi bạn tắt máy.

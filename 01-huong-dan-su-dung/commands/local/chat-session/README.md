@@ -1,4 +1,4 @@
-# Nhóm Chat Session (12 lệnh)
+# Nhóm Chat Session (3 lệnh)
 
 > **Dành cho:** ai cần quản lý vòng đời một cuộc trò chuyện trong Chat · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi bấm sang README chi tiết (~2 phút).
 
@@ -16,6 +16,7 @@ Nhóm này lo phần "hậu cần" của Chat: bắt đầu một phiên mới, 
 | `/clear` | Xóa context chat hiện tại, giữ instructions | [./clear/README.md](../../copilot/chat-session/clear/README.md) |
 | `/history` | Xem lại lịch sử chats, quay lại chat cũ | [./history/README.md](../../copilot/chat-session/history/README.md) |
 | `/export` | Export conversation ra file để lưu/share | [./export/README.md](./export/README.md) |
+| `/rename` | Đổi tên phiên chat cho dễ tìm lại | [./rename/README.md](./rename/README.md) |
 | `/resume` | Mở lại / tiếp tục phiên chat đã lưu | [./resume/README.md](../../copilot/chat-session/resume/README.md) |
 | `Ctrl+I` inline | Chat inline ngay trong editor, sửa tại chỗ | [./inline-chat/README.md](../../copilot/chat-session/inline-chat/README.md) |
 | `Ctrl+Shift+Alt+L` (Quick Chat) | Mở Quick Chat hỏi nhanh không rời editor | [./quick-chat/README.md](../../copilot/chat-session/quick-chat/README.md) |

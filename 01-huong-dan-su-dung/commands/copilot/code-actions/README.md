@@ -1,4 +1,4 @@
-# Nhóm Code Actions (10 lệnh)
+# Nhóm Code Actions (12 lệnh)
 
 > **Dành cho:** dev làm tác vụ code trên selection hoặc diff · **Đọc xong:** tra đúng lệnh theo bảng dưới rồi bấm sang README chi tiết (~2 phút).
 
@@ -17,6 +17,8 @@ Nhóm này là các "động tác nhanh" trên code bạn đang chọn: giải t
 | `/explain` | Giải thích code đang chọn bằng model hiện tại | [./explain/README.md](./explain/README.md) |
 | `/fix` | Fix lỗi/selection đang chọn nhanh hơn prompt tay | [./fix/README.md](./fix/README.md) |
 | `/tests` | Sinh unit tests theo mẫu repo cho code đang chọn | [./tests/README.md](./tests/README.md) |
+| `/setupTests` (Experimental) | Chọn & dựng khung test framework theo stack repo — khác `/tests` | [./setup-tests/README.md](./setup-tests/README.md) |
+| `/plan` | Lập kế hoạch nhiều bước trước khi sửa (plan-first) | [./plan/README.md](./plan/README.md) |
 | `/doc` (inline chat) | Sinh docstring/JSDoc cho hàm đang chọn | [./doc/README.md](./doc/README.md) |
 | `/new`, `/newNotebook` | Scaffold workspace/file/notebook mới từ mô tả — **không phải** "viết hàm hộ" | [./new/README.md](./new/README.md) |
 | Inline chat `Ctrl+I` (docs không có slash `/optimize`) | Tối ưu perf cho đoạn code đang chọn, có đo đạc | [./optimize/README.md](./optimize/README.md) |

@@ -1,4 +1,4 @@
-# Bucket `copilot/` — 43 lệnh của Copilot harness
+# Bucket `copilot/` — 45 lệnh của Copilot harness
 
 > **Dành cho:** người dùng mặc định của khoá học · **Vấn đề:** không chắc lệnh này thuộc harness nào · **Đọc xong:** hiểu bucket này là gì và tra nhanh sang đúng nhóm (~1 phút).
 
@@ -10,9 +10,9 @@ Bucket này chứa các lệnh **chạy được ở Copilot harness** — Copil
 
 | Nhóm | Lệnh | Tra khi |
 |---|---|---|
-| [Chat & phiên](./chat-session/README.md) | 12 | mở đầu phiên, gắn scope, nén, tìm lại, fork, phím tắt |
+| [Chat & phiên](./chat-session/README.md) | 13 | mở đầu phiên, gắn scope, nén, tìm lại, fork, phím tắt |
 | [Model & agent](./model-agent/README.md) | 8 | chọn Ask/Plan/Agent, model, Session Target, credits, approval, sandbox |
-| [Code actions](./code-actions/README.md) | 11 | `/explain` `/fix` `/tests` `/doc` `/commit` `/pr` `/plan`… |
+| [Code actions](./code-actions/README.md) | 12 | `/explain` `/fix` `/tests` `/doc` `/commit` `/pr` `/plan` `/setupTests`… |
 | [System & kiến thức repo](./system-knowledge/README.md) | 12 | `/status` `/login` `/mcp` `/instructions` `/skills` `/plugin` `/hooks`… |
 
 ## Ba slug nên mở đầu tiên
@@ -40,4 +40,4 @@ Bucket này chứa các lệnh **chạy được ở Copilot harness** — Copil
 
 - [../README.md](../README.md) — index toàn cây · [Bucket `local/`](../local/README.md) — legacy VS Code · [Bucket `cloud/`](../cloud/README.md) — việc chạy ngoài máy bạn.
 
-> **Chốt:** `copilot/` là nơi bạn sống hằng ngày — 43 lệnh này cover 90% tương tác với Copilot harness; hai bucket kia tồn tại để trả lời "sao lệnh cũ không chạy" và "AI làm gì khi tôi tắt máy".
+> **Chốt:** `copilot/` là nơi bạn sống hằng ngày — 45 lệnh này cover 90% tương tác với Copilot harness; hai bucket kia tồn tại để trả lời "sao lệnh cũ không chạy" và "AI làm gì khi tôi tắt máy".

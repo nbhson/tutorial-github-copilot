@@ -1,7 +1,7 @@
 # Chat: Export Chat… — Lưu hội thoại ra file để share
 
 > **Dành cho:** dev muốn lưu hoặc chia sẻ hội thoại · **Vấn đề:** kết quả hay nằm trong chat, không đưa được cho teammate/wiki · **Đọc xong:** export ra file sạch, không lọt secrets (~2 phút)
-> **Harness:** Local · **Surface:** VS Code Chat view / Agents window — cần Local harness; docs không liệt kê slash `/export`, đường thật là lệnh Command Palette
+> **Harness:** Local (+ alias CLI) · **Surface:** VS Code Chat view / Agents window — cần Local harness; đường VS Code là lệnh Command Palette (không có slash `/export`); **Copilot CLI lại có `/export` = alias `/share`**
 
 ## 1 câu nôm na
 
@@ -31,7 +31,7 @@ Giá trị thật của một phiên chat thường nằm ở **đoạn giữa**
 
 > 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
 
-> Mở Chat view trước (chọn **Local** ở Session Target), rồi gọi `Chat: Export Chat...` từ Command Palette. Không thấy slash `/export` khi gõ `/` là **đúng**: docs không liệt kê lệnh đó — đừng kết luận "extension lỗi". · 📄 [VS Code Docs: Export or copy a conversation](https://code.visualstudio.com/docs/agents/run/sessions/session-history#export-or-copy-a-conversation)
+> Mở Chat view trước (chọn **Local** ở Session Target), rồi gọi `Chat: Export Chat...` từ Command Palette. Không thấy slash `/export` trong Chat view là **đúng** — `/export` chỉ có ở **Copilot CLI** (alias `/share`), không có trong VS Code Chat. · 📄 [VS Code Docs: Export or copy a conversation](https://code.visualstudio.com/docs/agents/run/sessions/session-history#export-or-copy-a-conversation)
 
 ## Ví dụ thật
 
@@ -63,7 +63,7 @@ Nghiệp vụ: bạn vừa cùng Copilot chốt xong cách xử lý retry cho `a
 |---|---|---|
 | File export lọt secrets | Attach file chứa token rồi export nguyên | Soát trước khi share; xóa token khỏi file rồi export lại |
 | Export quá dài khó đọc | Chat 50+ turns | `/compact` trước rồi export bản gọn |
-| Không thấy `/export` trong menu `/` | Docs không có slash này | Dùng `Chat: Export Chat...` (palette) hoặc Copy All (chuột-phải) |
+| Không thấy `/export` trong menu `/` (Chat view) | Không có slash này trong VS Code Chat | Dùng `Chat: Export Chat...` (palette) / Copy All; trong **Copilot CLI** thì có `/export` = `/share` |
 | Cần Markdown mà file ra JSON | Nhầm hai đường | JSON = `Chat: Export Chat...`; Markdown = Copy All / Copy Final Response |
 ## So sánh với Claude Code
 
@@ -71,7 +71,7 @@ Nghiệp vụ: bạn vừa cùng Copilot chốt xong cách xử lý retry cho `a
 
 | Việc | Copilot (`Chat: Export Chat...`) | Claude Code | Ghi chú |
 |---|---|---|---|
-| Lưu hội thoại ra file | Lệnh palette, xuất **JSON** đủ prompts/responses | `/export [filename]`, xuất **plain text** | Copilot dùng lệnh palette, Claude Code dùng slash — khác loại lệnh |
+| Lưu hội thoại ra file | Lệnh palette, xuất **JSON** đủ prompts/responses | `/export [filename]` (CLI) = alias `/share`, xuất **plain text** | Copilot VS Code dùng palette, Copilot CLI có slash `/export` — đừng nhầm hai surface |
 | Lấy bản Markdown để dán vào wiki | Chuột-phải → Copy All / Copy Final Response | Copy từ transcript trong terminal | Copilot có sẵn menu copy phân lớp |
 | Soát secrets trước khi share | Bạn là người kiểm | Bạn là người kiểm | Không công cụ nào tự che secret |
 ## Best practices (kèm "vì sao")
