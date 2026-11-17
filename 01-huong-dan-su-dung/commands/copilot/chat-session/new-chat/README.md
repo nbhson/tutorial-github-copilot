@@ -15,6 +15,28 @@
 
 ---
 
+## 1.5. Phân biệt rõ: `Ctrl+N` vs `/new` vs `/clear`
+
+Đây là điểm **nhầm lẫn nhất** — 3 lệnh đều có chữ "new/clear" nhưng làm 3 việc HOÀN TOÀN khác nhau:
+
+| Lệnh | Làm gì | Context cũ | File/Workspace |
+|---|---|---|---|
+| **`Ctrl+N`** | Mở **chat mới** (tờ giấy trắng) | ❌ Xóa sạch | Không tạo file |
+| **`/clear`** | Chat mới + **archive** chat cũ | ❌ Xóa sạch | Không tạo file |
+| **`/new`** | **Scaffold** (tạo file/workspace mới) | ✅ Giữ nguyên | ✅ Tạo file mới |
+
+**Ví dụ cụ thể:** Giả sử bạn đang debug bug login trong chat cũ.
+
+- **Gõ `Ctrl+N`** → Mở chat trắng, model không biết bạn vừa debug login. File workspace giữ nguyên.
+- **Gõ `/clear`** → Mở chat trắng, model không biết bạn vừa debug login. Chat cũ được **archive** (lưu lại, không mất). File workspace giữ nguyên.
+- **Gõ `/new`** → **KHÔNG mở chat mới!** Model vẫn thấy history chat cũ. Nó sẽ **tạo một file/workspace mới** (scaffold). Ví dụ: tạo file `src/new-feature.ts` với cấu trúc mặc định.
+
+> **Tóm lại:**
+> - **`Ctrl+N`** và **`/clear`** → bắt đầu chat từ đầu (context sạch)
+> - **`/new`** → tạo file mới (giữ nguyên chat cũ)
+
+---
+
 ## 2. Vì sao phải dùng chat mới?
 
 Chat càng dài, hai vấn đề càng nghiêm trọng:
@@ -51,17 +73,7 @@ Chat mới giải quyết cả hai:
 
 ---
 
-## 4. Phân biệt rõ: `Ctrl+N` vs `/new` vs `/clear`
-
-| Lệnh | Tác dụng | Khi nào dùng |
-|---|---|---|
-| **`Ctrl+N`** | Mở chat mới, context **hoàn toàn sạch** | Bắt đầu task mới, muốn model chỉ thấy việc hiện tại |
-| **`/new`** | **Scaffold** — tạo workspace/file/notebook mới | Tạo cấu trúc dự án mới, không phải chat |
-| **`/clear`** | Chat mới + **archive** chat cũ | Muốn cắt context cũ nhưng vẫn giữ lại lịch sử |
-
----
-
-## 5. Ví dụ thực tế
+## 4. Ví dụ thực tế
 
 **Kịch bản:** Bạn vừa debug xong bug login trong chat cũ, giờ sang task mới là thêm rate-limit. Trước khi đổi task, muốn giữ lại phần debug.
 
