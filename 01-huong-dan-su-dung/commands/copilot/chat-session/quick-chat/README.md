@@ -1,72 +1,34 @@
-# Quick Chat (Chat nhanh)
+# Quick Chat — Hộp Copilot thu gọn giữa màn hình, hỏi nhanh không rời layout
 
-> **Harness:** Copilot · **Surface:** Chat view · Quick Chat
-> **Mục đích:** mở hộp thoại Copilot nhanh mà không cần chuyển sang panel Chat.
-> Phím mở Quick Chat là `Ctrl+Shift+Alt+L` (macOS: `⇧⌥⌘L`) — cách nhanh nhất để hỏi Copilot mà
-> giữ nguyên layout hiện tại. Trong bảng Chat của
-> [Cheat Sheet](../../../../../CHEATSHEET.md), đây là dòng "Mở Quick Chat".
+> **Harness:** Copilot · **Surface:** Chat view · Quick Chat · **Đọc:** ~2 phút
 
-## Quick Chat là gì?
+**Nôm na:** Quick Chat là hộp thoại nổi gọn của **Chat view** — cùng harness, cùng mô hình, chỉ có một ô nhập giữa màn hình, hỏi xong `Esc` là về lại code. Hợp khi bạn cần một câu trả lời ngắn rồi code tiếp, không muốn mở panel bên hông.
 
-Quick Chat là hộp thoại thu gọn của Chat view: cùng harness Chat, cùng mô hình,
-nhưng chỉ có một ô nhập nổi giữa màn hình. Nó là surface của Chat view trong VS Code —
-Agents window không được docs ghi nhận có Quick Chat riêng.
-Dùng khi bạn cần hỏi nhanh rồi code tiếp,
-không muốn mở panel bên hông. · 📄 [VS Code Docs: Sessions (concept)](https://code.visualstudio.com/docs/agents/concepts/sessions)
+## Vì sao dùng?
 
-## Cách mở
-
-📄 [VS Code Docs: Use Quick Chat](https://code.visualstudio.com/docs/chat/inline-chat#use-quick-chat)
-
-| Cách | Thực hiện |
-|---|---|
-| Phím tắt | `Ctrl+Shift+Alt+L` (macOS: `⇧⌥⌘L`) |
-| Command Palette | `Ctrl+Shift+P` (macOS: `⇧⌘P`) → gõ "Quick Chat" rồi chọn lệnh mở Quick Chat |
-## Cách sử dụng
-
-1. Mở Quick Chat, gõ câu hỏi (thêm `#file` để đưa ngữ cảnh nếu cần).
-2. `Enter` để gửi — câu trả lời hiện ngay trong hộp nhỏ.
-3. Câu hỏi dài hoặc nhiều vòng? Mở Chat view (`Ctrl+Alt+I`, macOS: `⌃⌘I` — lệnh "Open Chat view")
-   và hỏi tiếp ở đó — panel đầy đủ hiển thị danh sách phiên, checkpoint, giá trị `#context` rõ hơn.
-4. `Esc` để đóng. · 📄 [VS Code Docs: Use Quick Chat](https://code.visualstudio.com/docs/chat/inline-chat#use-quick-chat)
-
-## Điều hướng
-
-📄 [VS Code Docs: Chat and agent keyboard shortcuts](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet#essential-keyboard-shortcuts)
+Mở Chat view cho câu 1–2 lượt ("hàm này làm gì?") làm gãy nhịp gõ; Quick Chat trả lời ngay tại chỗ mà layout editor không đổi, câu đã gửi vẫn xem lại được trong danh sách phiên. Nó thuộc surface Chat view trong VS Code — Agents window không được docs ghi nhận có Quick Chat riêng, và đây cũng không phải lệnh trong Copilot CLI.
 
 | Phím | Tác dụng |
 |---|---|
-| `Ctrl+Shift+Alt+L` (macOS: `⇧⌥⌘L`) | Mở/đóng Quick Chat |
-| `Enter` | Gửi câu hỏi |
-| `Esc` | Đóng Quick Chat, về lại editor |
-## Mẹo
+| `Ctrl+Shift+Alt+L` (macOS `⇧⌥⌘L`) | mở/đóng Quick Chat |
+| `Enter` | gửi câu hỏi (thêm `#file` nếu cần ngữ cảnh) |
+| `Esc` | đóng Quick Chat, về lại editor |
 
-1. Quick Chat hợp với câu 1–2 lượt ("hàm này làm gì?"); việc nhiều bước hãy dùng Chat view.
-2. Quick Chat thuộc Chat view trong VS Code, không phải lệnh trong Copilot CLI —
-   muốn làm việc trong terminal thì học CLI sau.
-3. Kết quả quan trọng thì giữ lại: `Chat: Export Chat…` lưu Markdown/JSON —
-   xem [Clear chat](../clear/README.md). · 📄 [VS Code Docs: Start a quick chat](https://code.visualstudio.com/docs/agents/run/agents-window#start-a-quick-chat)
+**Nếu làm sai:** bấm phím không thấy gì thường do `Ctrl+Shift+Alt+L` bị extension khác chiếm — thử mở bằng Command Palette để xác nhận tính năng còn sống rồi sửa keybinding; và đây **không** phải inline chat (`Ctrl+I`): Quick Chat hỏi, inline chat sửa ngay đoạn bôi đen.
 
-## Bài tập
+## Cách dùng
 
-→ [01 - Gọi Quick Chat bằng phím](examples/01-cach-goi-copy-paste.sh)
-→ [02 - Ví dụ thật](examples/02-vi-du-that.sh)
-→ [03 - Làm sai thì sai ở đâu](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
-→ [04 - Câu hỏi quá sức với Quick Chat](examples/04-neu-lam-sai-thi-sao-sai-ung.sh) · 📄 [VS Code Docs: Use Quick Chat](https://code.visualstudio.com/docs/chat/inline-chat#use-quick-chat)
+`Ctrl+Shift+Alt+L` (macOS `⇧⌥⌘L`) hoặc Command Palette (`Ctrl+Shift+P` → "Quick Chat").
 
-## Tình trạng thường gặp
+```sh
+Ctrl+Shift+Alt+L → gõ câu hỏi (+ #file) → Enter gửi → Esc đóng
+```
 
-- **Bấm phím không thấy gì**: `Ctrl+Shift+Alt+L` có thể bị extension khác chiếm.
-  Thử mở bằng Command Palette (gõ "Quick Chat") để xác nhận tính năng còn hoạt động, rồi sửa keybinding.
-- **Gõ xong quên mất**: Quick Chat không chiếm toàn màn hình; `Esc` là an toàn nhất,
-  câu hỏi đã gửi vẫn xem lại được trong danh sách phiên — xem [Session History](../history/README.md). · 📄 [VS Code Docs: Chat settings](https://code.visualstudio.com/docs/agents/reference/ai-settings#chat-settings)
+- **Biến thể:** việc dài/nhiều vòng thì mở Chat view (`Ctrl+Alt+I`, macOS `⌃⌘I`) để thấy danh sách phiên, checkpoint, `#context` rõ hơn; kết quả quan trọng thì `Chat: Export Chat…`.
+- **✅ Verify:** trả lời hiện ngay trong hộp nhỏ, layout editor không đổi.
 
-## Học tiếp
+## Liên quan
 
-- [Shortcuts](../shortcuts/README.md) — bảng phím tắt Chat đầy đủ.
-- [Attachments](../attachments/README.md) — đưa ngữ cảnh vào câu hỏi. · 📄 [VS Code Docs: Inline Chat](https://code.visualstudio.com/docs/chat/inline-chat)
-
-## Tham khảo
-
-- [Chat in VS Code - Sessions (Quick Chat)](https://code.visualstudio.com/docs/agents/run/chat-view)
-- [Keyboard shortcuts](https://code.visualstudio.com/docs/configure/keybindings#keyboard-shortcuts-editor) · 📄 [Keyboard shortcuts](https://code.visualstudio.com/docs/configure/keybindings#keyboard-shortcuts-editor)
+- Tra cả bảng phím: [shortcuts](../shortcuts/README.md) · Đưa ngữ cảnh vào câu hỏi: [attachments](../attachments/README.md) · Sửa tại chỗ: [inline-chat](../inline-chat/README.md)
+- Tra nhanh cả nhóm: [../README.md](../README.md) · Chạy thử: [`examples/`](examples/)
+- Nguồn: [VS Code Docs — Use Quick Chat](https://code.visualstudio.com/docs/chat/inline-chat#use-quick-chat)
