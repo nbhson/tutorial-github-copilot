@@ -33,9 +33,9 @@ Mục này là bản đồ cho việc "thêm bài": trước hết xác định 
 ### Lệnh mới trong `01-huong-dan-su-dung/commands/<harness>/<nhóm>/<slug>/README.md`
 
 - `<harness>` = `copilot` (lệnh chạy được trong Copilot harness session — mặc định của khoá), `local` (cần Local harness), `cloud` (đặt lệnh trên GitHub.com). Xem tiêu chí ở `plan-update/04` §1.
-- 1 folder = 1 lệnh, chỉ 1 file `README.md`. Độ dài 60–200 dòng, **đích ≤95**.
-- Format chuẩn theo [`STYLE.md`](./STYLE.md) mục 4 (khuôn "dễ hiểu"), gồm: tiêu đề 1 dòng + `> Dành cho/Đọc xong` → 1 câu nôm na → **Vì sao dùng lệnh này** → Khi nào dùng / đừng → Cách gọi (copy-paste) → Ví dụ thật + kết quả + verify → Nếu làm sai (❌ SAI / ✅ ĐÚNG) → Lỗi thường gặp → **So sánh Claude Code** → Best practices (kèm "vì sao") → Bài tập nhỏ → Tham khảo. Đầu bài phải có dòng `Harness:` hoặc `Surface:`.
-- File vàng để nhìn mẫu: `commands/copilot/chat-session/clear/README.md`.
+- 1 folder = 1 lệnh, chỉ 1 file `README.md`. Độ dài **25–50 dòng**, khuôn 6 khối (mẫu vàng: `commands/copilot/chat-session/compact/README.md`).
+- Format chuẩn theo [`STYLE.md`](./STYLE.md) mục 4: `# <lệnh> — <mục đích 1 dòng>` → dòng `> **Harness:** … · **Surface:** … · **Đọc:** ~2 phút` → `**Nôm na:**` (kèm "Hợp khi …") → `## Vì sao dùng?` (2–4 câu + 1 bảng khi có tư liệu + `**Nếu làm sai:**`) → `## Cách dùng` (code fence có language tag + `**Biến thể:**` / `**Setting:**` / `**✅ Verify:**`) → `## Liên quan` (link nội bộ + `examples/` + URL docs).
+- KHÔNG viết lại các section dài kiểu cũ trong README lệnh: `## Lỗi thường gặp`, `## So sánh với Claude Code`, `## Best practices`, `## Bài tập nhỏ`, `## Tham khảo` — ý nào đắt thì nén vào `## Vì sao dùng?`, phần còn lại để ở README nhóm và bài tổng.
 - Ví dụ phải riêng cho từng lệnh (cấm copy-paste ví dụ chung cho mọi lệnh). Ghi rõ mode nào dùng được (Ask/Edit/Agent) và cách kiểm tra bằng `/` trong Chat.
 
 > **Tóm gọn 1 câu:** Thêm bài giống nấu theo công thức có sẵn — chọn đúng khuôn cho đúng món, việc còn lại là đổ nội dung riêng của bạn vào.
@@ -52,10 +52,10 @@ Mục này chốt cách đặt tên file và giọng viết — giữ đúng quy
 ## PR checklist (tick hết mới merge)
 
 - [ ] Tên file/số thứ tự đúng (không trùng, không nhảy số).
-- [ ] Đủ số dòng: bài 150–200 (cap 220), lệnh 60–200 (đích ≤95) (`wc -l`).
+- [ ] Đủ số dòng: bài 150–200 (cap 220), README lệnh 25–50 (`wc -l`).
 - [ ] Code block đã chạy thử (ghi rõ đã verify ở đâu trong PR mô tả).
-- [ ] Có pitfalls (bảng) + bài tập (có thời gian) + link chéo (≥3, không 404).
-- [ ] Lệnh mới: đủ 6 phần + ví dụ riêng từng lệnh + mode hỗ trợ + cách kiểm tra `/`.
+- [ ] Có pitfalls (bảng) + bài tập (có thời gian) + link chéo (≥3, không 404) — áp cho **bài học**; README lệnh chỉ cần `**Nếu làm sai:**` + `**✅ Verify:**`.
+- [ ] Lệnh mới: đủ 6 khối (meta → Nôm na → Vì sao dùng? → Cách dùng → Liên quan) + ví dụ riêng từng lệnh + mode hỗ trợ + cách kiểm tra `/`.
 - [ ] Workflow YAML mới: parse được (`python -c "import yaml..."`), secrets qua env,
       không hardcode token.
 - [ ] Không sửa file `.md` cũ (diff chỉ chứa file mới, trừ đợt viết lại có ghi rõ lý do).

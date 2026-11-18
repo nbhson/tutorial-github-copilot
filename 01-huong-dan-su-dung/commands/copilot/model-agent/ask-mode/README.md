@@ -1,97 +1,35 @@
-# Ask — Chế độ chỉ hỏi, không sửa
+# Ask mode — built-in agent chỉ-đọc: hỏi thoải mái, không một dòng code bị sửa
 
-> **Dành cho:** người muốn hiểu code/kiến trúc trước khi đụng vào · **Đọc xong:** hỏi thoải mái mà `git status` vẫn sạch (~2 phút)
-> **Harness:** Copilot · **Surface:** VS Code Chat (Copilot harness) / Agents window
+> **Harness:** Copilot · **Surface:** VS Code Chat (Copilot harness) / Agents window · **Đọc:** ~2 phút
 
-## 1 câu nôm na
+**Nôm na:** Chế độ "chỉ nhìn, không chạm" — chọn **Ask** trong trình chọn chế độ ở Chat view, nó đọc và trả lời chứ không được cấp tool sửa file; nhưng đừng tưởng Ask tự biết file bạn đang nói tới, hãy gắn scope bằng `#file:` / `#codebase`. Hợp khi muốn hiểu module lạ hoặc so sánh phương án trước khi động vào code.
 
-Chế độ "chỉ nhìn, không chạm": hỏi gì cũng được, code không mất một cọng. Trong Chat → chọn agent **Ask**, rồi hỏi như bình thường.
+## Vì sao dùng?
 
-Nhưng đừng tưởng Ask tự biết file bạn đang nói tới — nó trả lời tốt khi bạn gắn scope bằng `#file:` hay `#codebase`. Không gắn scope thì câu trả lời chung chung, dù đúng là nó chưa sửa gì.
+Có những việc bạn muốn *hiểu* trước khi *sửa*: đọc module lạ, so hai phương án, xem đoạn code có rủi ro gì. Ask là mắt xích đầu tiên trên thang độ tự chủ Ask → Plan → Agent — rẻ nhất và không có chuyện sửa kèm. Bù lại, chất lượng câu trả lời do scope quyết định: không gắn `#file:` / `#codebase` thì trả lời chung chung, dù đúng là nó chưa đụng gì.
 
-> **Built-in agents:** Copilot harness có ba agent dựng sẵn — **Ask** (chỉ đọc, trả lời), **Plan** (lập kế hoạch, chưa code), **Agent** (sửa + chạy terminal). **Edit** là mode của Local harness, không có trong Copilot. Chi tiết: [10-modes-permissions-availability.md mục 3.2](../../../../10-modes-permissions-availability.md). · 📄 [VS Code Docs: Agents (concept)](https://code.visualstudio.com/docs/agents/concepts/agents)
-
-## Vì sao dùng Ask?
-
-Có những việc bạn muốn *hiểu* trước khi *sửa*: đọc một module lạ, so sánh hai phương án, xem đoạn code này có rủi ro gì. Ở Ask, bạn hỏi thoải mái mà không sợ agent tiện tay sửa lung tung.
-
-| Built-in agent | Đặc điểm | Khi nào dùng |
+| Việc | Copilot (Ask) | Claude Code |
 |---|---|---|
-| Ask | Chỉ đọc, không sửa file | Hỏi/khảo sát/so sánh phương án trước khi đụng code |
-| Plan | Nghiên cứu + lập plan, chưa thực thi | Task đủ lớn để cần xem hình hài trước khi chạy ([plan](../../code-actions/plan/README.md)) |
-| Agent | Tự tìm file, sửa, chạy terminal | Task mở nhiều bước, chưa biết chạm file nào |
+| Chế độ chỉ đọc | built-in agent Ask riêng, chọn bằng picker | không tách mode "chỉ hỏi" — mặc định agentic |
+| Bảo đảm không sửa file | Ask không được cấp tool sửa | phải nói rõ "đừng sửa" hoặc ở plan mode |
+| Lấy ngữ cảnh | `#file:` / `#codebase` | `@file` hoặc để agent tự đọc |
 
-> **Cách đọc bảng này:** xếp theo độ tự chủ tăng dần — Ask đứng đầu vì "rẻ" nhất; việc của bạn chỉ cần đọc thì đừng đi sâu xuống dưới. Muốn review từng file được sửa theo kiểu tick chọn: đó là **Edit** của Local harness ([edit-mode](../../../local/model-agent/edit-mode/README.md)). · 📄 [VS Code Docs: Agents (concept)](https://code.visualstudio.com/docs/agents/concepts/agents)
+**Nếu làm sai:** hai lỗi kinh điển — đang ở Agent mà tưởng Ask nên code bị đổi lúc nào không hay, và hiểu rồi vẫn ngồi Ask mãi để tự gõ tay từng file. Ask là kính cửa sổ, không phải cánh cửa: nhìn thoải mái, muốn đi qua thì đổi agent.
 
-**Nếu làm sai thì sao?** Hai sai lầm hay gặp: (1) nhầm đang ở Agent mà tưởng Ask → code bị đổi; (2) ở mãi Ask dù đã hiểu rồi → bạn ngồi tự sửa tay trong khi Agent làm nhanh hơn. Ask là chế độ rẻ nhất để khảo sát, không phải "chỗ trú ẩn vĩnh viễn".
+## Cách dùng
 
-## Khi nào dùng / khi nào đừng
+Chọn **Ask** trong Chat view (Copilot harness; Agents window cũng có), luôn gắn scope ngay cả khi chỉ hỏi:
 
-- **Dùng khi:** tìm hiểu code/kiến trúc trước khi đụng; so sánh phương án chưa muốn sửa; review kiểu "đoạn này làm gì, rủi ro gì?".
-- **ĐỪNG dùng khi:** đã biết cần sửa file nào → Ask không sửa, chuyển sang [agent-mode](../agent-mode/README.md); task mở nhiều bước cũng cần agent sửa. · 📄 [VS Code Docs: Pick the right tool](https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task)
+```prompt
+#codebase đọc module trong src/auth/, vẽ lại flow login bằng chữ và chỉ ra
+3 rủi ro bảo mật lớn nhất — không sửa file nào.
+```
 
-## Cách gọi (copy-paste)
+- **Biến thể:** hỏi về vài file cụ thể thì gắn từng file: `#file:src/auth/login.ts #file:src/auth/middleware.ts`; đã biết file cần sửa thì chuyển [agent-mode](../agent-mode/README.md) — Ask không sửa.
+- **✅ Verify:** chạy `git status` ngay sau khi hỏi — cây làm việc sạch là đạt.
 
-> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
+## Liên quan
 
-> Không thấy **Ask** trong picker? Mở Copilot status dashboard (hover icon Copilot ở dưới cùng VS Code) kiểm plan + account, hoặc xem [../../system-knowledge/status/README.md](../../system-knowledge/status/README.md) — trên IDE của bạn menu có thể gộp nhóm Ask / Plan / Agent. · 📄 [VS Code Docs: Send a chat request](https://code.visualstudio.com/docs/chat/chat-overview#send-a-chat-request)
-
-## Ví dụ thật
-
-Nghiệp vụ: bạn được giao sửa module auth của một repo lạ, muốn hiểu luồng login trước khi động vào.
-
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Crafting effective prompts](https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts)
-
-**Kết quả mong đợi:** một bản mô tả luồng login + danh sách rủi ro, đủ để quyết bước tiếp theo; không file nào bị sửa.
-
-**✅ Verify:** chạy `git status` sau khi hỏi — cây làm việc sạch là đạt.
-
-## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)
-
-**❌ SAI — hỏi trong Ask mà không gắn scope, rồi tưởng Ask "dở":**
-
-> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
-
-**✅ ĐÚNG — gắn scope ngay cả khi chỉ hỏi:**
-
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh) · 📄 [VS Code Docs: Choose a troubleshooting path](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path)
-
-**Bài học:** Ask không sửa file, nhưng vẫn cần bạn chỉ cho nó đọc ở đâu. Scope quyết định chất lượng câu trả lời ở mọi mode.
-
-## Lỗi thường gặp
-
-📄 [VS Code Docs: Troubleshoot chat interactions](https://code.visualstudio.com/docs/chat/chat-overview#troubleshoot-chat-interactions)
-
-| Triệu chứng | Nguyên nhân | Fix |
-|---|---|---|
-| Hỏi "chỉ để hiểu" mà code vẫn đổi | Picker đang để Agent | Nhìn lại agent đang chọn trước khi Enter |
-| Ask trả lời thiếu vì không đọc file | Quên gắn scope | Gắn `#file:` / `#codebase` ngay cả trong Ask |
-| Ở mãi Ask khi cần sửa | Sợ agent | Hiểu rồi → leo thang sang Agent |
-## So sánh với Claude Code
-
-📄 [GitHub Docs: Choosing & delegating agent work](https://docs.github.com/en/copilot/concepts/agent-capabilities/choosing-and-delegating-agent-work)
-
-| Việc | Copilot (Ask) | Claude Code | Ghi chú |
-|---|---|---|---|
-| Chế độ chỉ đọc | Built-in agent Ask riêng, chọn bằng picker | Không tách mode "chỉ hỏi" — mặc định agentic, có plan mode để lập kế hoạch | Copilot tách "hỏi" thành agent; Claude Code coi "chỉ đọc" là một cách dùng |
-| Không sửa file | Ask không được cấp tool sửa file | Cần nói rõ "đừng sửa" hoặc ở plan mode | Cùng mục đích: khảo sát trước khi thay đổi |
-| Lấy ngữ cảnh | `#file:` / `#codebase` | `@file` hoặc để agent tự đọc | Cả hai đều cần scope thì trả lời mới đúng |
-## Best practices (kèm "vì sao")
-
-- **Ask là bước đầu của task lớn.** *Vì sao?* Hiểu luồng trước khi sửa giúp prompt cho Agent trúng hơn nhiều.
-- **Luôn gắn scope khi hỏi.** *Vì sao?* Ask không tự biết "module auth" của bạn ở đâu — không scope thì câu trả lời chung chung.
-- **Xác nhận đúng agent trước khi Enter.** *Vì sao?* Câu hỏi "chỉ để hiểu" chạy ở Agent có thể kéo theo thay đổi bạn không ngờ. · 📄 [VS Code Docs: Get better responses](https://code.visualstudio.com/docs/chat/chat-overview#get-better-responses)
-
-## Bài tập nhỏ
-
-1. **(3 phút)** Ở Ask, hỏi một module bạn chưa từng đọc (có `#file:`), sau đó chạy `git status` để tự thấy nó sạch.
-2. **(5 phút)** Hỏi cùng một câu hai lần: một lần không gắn scope, một lần gắn `#codebase`. So sánh độ cụ thể của hai câu trả lời. · 📄 [VS Code Docs: Send a chat request](https://code.visualstudio.com/docs/chat/chat-overview#send-a-chat-request)
-
-## Tham khảo
-
-- Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh Model & Agent.
-- Cheatsheet 1 trang: [CHEATSHEET.md](../../../../../CHEATSHEET.md) · Kẹt thì tra [FAQ troubleshooting](../../../../../03-cau-hoi-thuong-gap/08-loi-thuong-gap-troubleshooting.md) · Modes & permission levels: [10-modes-permissions-availability.md](../../../../10-modes-permissions-availability.md).
-- Đã biết file cần sửa: [agent-mode](../agent-mode/README.md) · cần plan trước: [plan](../../code-actions/plan/README.md).
-- VS Code — [Agents (harness & built-in agents)](https://code.visualstudio.com/docs/agents/concepts/agent-harnesses) · [Chat view](https://code.visualstudio.com/docs/agents/run/chat-view).
-
-> Ask là kính cửa sổ chứ không phải cánh cửa — nhìn thoải mái, nhưng muốn đi qua thì phải đổi agent, và dù chỉ nhìn cũng cần biết nhìn đâu.
+- Cần plan trước khi code: [plan](../../code-actions/plan/README.md) · đã tới lúc sửa: [agent-mode](../agent-mode/README.md)
+- Tra nhanh cả nhóm: [../README.md](../README.md) · Chạy thử: [`examples/`](examples/)
+- Nguồn: [VS Code Docs — Agents (concept)](https://code.visualstudio.com/docs/agents/concepts/agents) · [VS Code Docs — Send a chat request](https://code.visualstudio.com/docs/chat/chat-overview#send-a-chat-request)

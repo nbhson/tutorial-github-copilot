@@ -19,6 +19,8 @@ Nôm na: nếu nội dung là gạch và vữa, thì khuôn này là cách bưng
 6. **Best practices kèm chữ "Vì sao?"** — mỗi mẹo phải có lý do, không liệt kê suông.
 7. **Bài tập ngắn** có thời gian từng bài, kiểm chứng được (chạy/sờ thấy kết quả).
 
+Mục 4–7 là khuôn cho **bài học** (template §3). **README lệnh** theo template §4 — bản tra cứu nhanh 25–50 dòng, chỉ bắt buộc ba thứ: *Vì sao dùng?* (kèm bảng khi có tư liệu), *Nếu làm sai:*, *✅ Verify:*; các ý so sánh Claude Code / bài tập đẩy lên README nhóm và bài tổng.
+
 ## 2. Từ cấm / tuyệt đối tránh (đây là "mùi robot")
 
 - ❌ "Section này trả lời: ...", "Phần này nói về ...", "Nội dung dưới đây gồm ...".
@@ -75,51 +77,45 @@ Nôm na: nếu nội dung là gạch và vữa, thì khuôn này là cách bưng
 
 ## 4. Template — README lệnh (`01-huong-dan-su-dung/commands/<harness>/<nhóm>/<slug>/README.md`)
 
-```
+README lệnh là **bản tra cứu nhanh, 25–50 dòng, 6 khối** — đủ để chọn đúng lệnh và gọi đúng cách; muốn sâu thì người đọc lên bài tổng/FAQ.
+
+````
 # /<lệnh> — <mô tả 1 dòng>
 
-> **Dành cho:** ... · **Vấn đề:** ... · **Đọc xong:** ... (~2 phút)
-> **Harness:** Copilot · Local · hoặc **Surface:** Copilot in the cloud — bắt buộc có 1 dòng này.
+> **Harness:** Copilot · **Surface:** Chat view / CLI / editor… · **Đọc:** ~2 phút
 
-## 1 câu nôm na
-<nó là gì, so với thao tác tay thì hơn ở đâu>
+**Nôm na:** <nó là gì + "Hợp khi …">
 
-## Vì sao dùng <lệnh>?
-<lợi ích thật + khi nào nó lợi hơn gõ prompt tay>
+## Vì sao dùng?
 
-## Khi nào dùng / khi nào đừng
-- Dùng khi: ...
-- ĐỪNG dùng khi: ... (chỉ sang mode/lệnh khác)
+<2–4 câu: cơ chế + cái hay nhầm>
 
-## Cách gọi (copy-paste)
-```...
+| <trục so sánh thật của chính lệnh này> | … |
+|---|---|
+
+**Nếu làm sai:** <hậu quả + đường tránh, chỉ sang lệnh/mode khác khi cần>
+
+## Cách dùng
+
+<một dòng: gọi ở đâu, bằng gì>
+
+```prompt
+/<lệnh> <ví dụ copy-paste được>
 ```
 
-## Ví dụ thật (lấy đúng nghiệp vụ của lệnh này)
-```...
-```
-**Kết quả mong đợi:** ... **✅ Verify:** ...
+- **Biến thể:** …
+- **Setting:** `<tên.setting.thật>` …
+- **✅ Verify:** <kiểm chứng được, không phải "là ổn">
 
-## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)
-❌ ... ✅ ... **Bài học:** ...
+## Liên quan
 
-## Lỗi thường gặp
-| Triệu chứng | Nguyên nhân | Fix |
+- <lệnh/mode liên quan trong repo> · [../README.md](../README.md) · [`examples/`](examples/)
+- Nguồn: [VS Code Docs — …](URL) · [GitHub Docs — …](URL)
+````
 
-## So sánh với Claude Code
-| Việc | Copilot (`/<lệnh>`) | Claude Code | Ghi chú |
+**Quy tắc format (bắt buộc):** 1 H1 duy nhất, không in đậm trong title · dòng trống trước/sau mỗi heading, bảng, code fence, danh sách (không hai dòng trắng liên tiếp, file kết thúc bằng 1 dòng mới) · code fence luôn có language tag (`prompt` / `sh` / `json` / `jsonc` / `yaml` / `markdown`) · bảng thẳng cột, escape `|` trong ô bằng `\|` · mỗi paragraph một dòng source · không `📄`, emoji chỉ ✅ ❌ · mọi dữ kiện và URL phải có trong bản cũ hoặc docs, không bịa.
 
-## Best practices (kèm "vì sao")
-- ...
-
-## Bài tập nhỏ
-1. (N phút) ...
-
-## Tham khảo
-- Index nhóm · Cheatsheet · FAQ liên quan · bài học liên quan.
-
-> <câu chốt riêng của lệnh này — KHÔNG copy giữa các file>
-```
+**Mẫu vàng để soi:** `commands/copilot/chat-session/compact/README.md`. Ý "So sánh với Claude Code", "Bài tập", "Best practices" của README lệnh dài nằm ở README nhóm và bài tổng — README lệnh chỉ giữ phần làm được ngay.
 
 ## 5. Template — index / README nhóm
 
@@ -144,7 +140,7 @@ Quay về: [README.md](README.md) · Bài tổng: [...]
 - Số hiệu bài, tên file, folder — giữ nguyên.
 - **Anchor link** (`#...`) và mọi đường dẫn tương đối — nếu đổi heading thì phải cập nhật nơi trỏ tới; ưu tiên giữ heading cũ khi có link trỏ vào.
 - Code block copy-paste được; secrets qua env.
-- **Đầy đủ nội dung:** mọi thông tin/số liệu/bảng của bản cũ phải còn (không cần giữ đúng câu chữ, nhưng không được mất ý).
+- **Đầy đủ nội dung:** ở **bài học**, mọi thông tin/số liệu/bảng của bản cũ phải còn (không cần giữ đúng câu chữ, nhưng không được mất ý). **README lệnh** được nén xuống 25–50 dòng nhưng phải giữ nguyên **số liệu, tên setting, đường dẫn, cảnh báo và URL nguồn** — cắt section được, cắt sự kiện không.
 
 ## 7. Nguồn docs & gắn nhãn surface (bắt buộc từ 11/2026)
 
@@ -154,6 +150,8 @@ Quay về: [README.md](README.md) · Bài tổng: [...]
 
 ## 8. Checklist "hết robot" trước khi lưu
 
+**Bài học** (`01-huong-dan-su-dung/NN-*.md`, tips, FAQ):
+
 - [ ] Có "Vì sao quan trọng?" và "Nếu làm sai thì sao?" cho khái niệm chính.
 - [ ] Có ít nhất 1 pitfall ❌/✅ + "Bài học:".
 - [ ] Có bảng so sánh Claude Code (hoặc ghi rõ không có tương đương).
@@ -161,5 +159,14 @@ Quay về: [README.md](README.md) · Bài tổng: [...]
 - [ ] Không còn câu template trong danh sách "từ cấm".
 - [ ] Câu chốt cuối file là câu riêng của file này.
 - [ ] Không mất thông tin so với bản cũ (đối chiếu nhanh).
+
+**README lệnh** (`commands/<harness>/<nhóm>/<slug>/README.md`) — soi theo template §4:
+
+- [ ] 25–50 dòng, đủ 6 khối đúng thứ tự, 1 H1 duy nhất.
+- [ ] Có `**Nôm na:**` kèm "Hợp khi …", `**Nếu làm sai:**`, `**✅ Verify:**`.
+- [ ] Code fence có language tag + ví dụ copy-paste được thật (không phải mẫu chung cho mọi lệnh).
+- [ ] Bảng (nếu có) ≤5 hàng, thẳng cột, lấy từ sự kiện có thật trong bản cũ/docs.
+- [ ] Dòng `Harness`/`Surface` đúng môi trường; link nội bộ còn sống (`ls` từng đường dẫn).
+- [ ] Không có section thừa: không `## Lỗi thường gặp`, `## So sánh với Claude Code`, `## Bài tập nhỏ`, `## Tham khảo`, không `📄`.
 
 > **Tóm gọn 1 câu:** Checklist này là máy soi trước khi xuất xưởng — file nào qua được cả 7 ô là file đọc như người nói chuyện, không còn "mùi robot".

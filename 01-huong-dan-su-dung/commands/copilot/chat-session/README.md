@@ -12,8 +12,8 @@ Nhóm này lo phần "hậu cần" của Chat: bắt đầu một phiên mới, 
 
 | Lệnh | Mô tả 1 dòng | Chi tiết |
 |---|---|---|
-| `Ctrl+N` (Chat: New Chat) | Phiên sạch cho task mới — thói quen #1; chat cũ archive chứ không mất | [./new-chat/README.md](./new-chat/README.md) |
-| `/clear` | Xóa context chat hiện tại, giữ instructions | [./clear/README.md](./clear/README.md) |
+| `Ctrl+N` (Chat: New Chat) | Mở một phiên tách hẳn khỏi chat hiện tại, cho đầu việc mới — thói quen #1 | [./new-chat/README.md](./new-chat/README.md) |
+| `/clear` | Dọn hội thoại hiện tại để hỏi lại từ đầu, giữ instructions; không tạo session riêng | [./clear/README.md](./clear/README.md) |
 | **Session History** (view) | Xem lại lịch sử chats, quay lại chat cũ | [./history/README.md](./history/README.md) |
 | `Chat: Export Chat…` | Export conversation ra file để lưu/share | [./export/README.md](../../local/chat-session/export/README.md) |
 | Session History (view) · CLI `/resume` | Mở lại / tiếp tục phiên chat đã lưu | [./resume/README.md](./resume/README.md) |
@@ -23,7 +23,8 @@ Nhóm này lo phần "hậu cần" của Chat: bắt đầu một phiên mới, 
 | `Attach / #file` | Đính kèm file/folder/ảnh vào prompt | [./attachments/README.md](./attachments/README.md) |
 | `/help` (Local harness) | Xem help + nhóm lệnh khả dụng; Copilot: menu `/` khi gõ | [./help/README.md](../../local/chat-session/help/README.md) |
 | `Shortcuts` | Liệt kê phím tắt Chat trong IDE này | [./shortcuts/README.md](./shortcuts/README.md) |
-| `/btw` (side chat) | Hỏi câu bên lề tách khỏi task chính | [./btw/README.md](./btw/README.md) |
+| `/btw` (side chat) | Hỏi nhanh câu bên lề mà không làm lệch mạch hội thoại chính | [./btw/README.md](./btw/README.md) |
+| `/fork` | Tạo phiên mới từ ngữ cảnh hiện tại rồi đi hướng khác, bản gốc giữ nguyên | [./fork/README.md](./fork/README.md) |
 | `/compact` | Tóm tắt hội thoại dài thành bản gọn giữ đà task | [./compact/README.md](./compact/README.md) |
 
 > **Cách đọc bảng này:** mỗi dòng là một lệnh, xếp gần theo vòng đời một phiên (mở đầu → đang lỡ dài → tìm lại → lưu/chèn context → sửa sai). Cột "Mô tả 1 dòng" đủ để chọn lệnh; cần cú pháp và ví dụ thì bấm sang cột "Chi tiết".
@@ -34,7 +35,7 @@ Nhóm này lo phần "hậu cần" của Chat: bắt đầu một phiên mới, 
 
 | Việc | Copilot | Claude Code |
 |---|---|---|
-| Bắt đầu phiên mới | `/new` | Dùng `/clear` để làm mới; không có `/new` riêng |
+| Bắt đầu phiên mới | `Ctrl+N` (chat mới) — **không phải** `/new` (lệnh này là scaffold) | Dùng `/clear` để làm mới; không có lệnh tương đương `/new` scaffold |
 | Dọn context nhưng giữ rule | `/clear` | `/clear` (xóa hội thoại, giữ memory/CLAUDE.md) |
 | Nén hội thoại dài | `/compact` | `/compact` |
 | Tìm lại/tiếp tục phiên cũ | Session History (view), `/resume` | `/resume` |
@@ -45,4 +46,4 @@ Nhóm này lo phần "hậu cần" của Chat: bắt đầu một phiên mới, 
 
 Quay về: [../README.md](../../README.md) · Bài tổng: [../../04-chat-commands-toan-tap.md](../../../04-chat-commands-toan-tap.md)
 
-> Phiên chat cũng giống bàn làm việc: dọn trước khi làm việc mới thì tìm đồ nhanh hơn nhiều — `/new` mỗi task là thói quen rẻ nhất mà hiệu quả nhất trong cả nhóm này.
+> Phiên chat cũng giống bàn làm việc: dọn trước khi làm việc mới thì tìm đồ nhanh hơn nhiều — `Ctrl+N` (chat mới) mỗi đầu việc là thói quen rẻ nhất mà hiệu quả nhất trong cả nhóm này.

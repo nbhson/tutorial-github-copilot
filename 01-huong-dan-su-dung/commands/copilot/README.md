@@ -21,18 +21,22 @@ Bucket này chứa các lệnh **chạy được ở Copilot harness** — Copil
 - [agent-mode](./model-agent/agent-mode/README.md) — khung 6 bước giao việc cho agent.
 - [status](./system-knowledge/status/README.md) — 30 giây chẩn đoán trước khi hỏi "sao Copilot không chạy".
 
-## Khuôn README trong bucket
+## Khuôn README trong bucket (mỗi file 25–50 dòng, 6 khối)
 
-1. **Dòng `> **Harness:** Copilot · **Surface:** …`** — surface chính xác (Chat view / CLI / Copilot app…).
-2. 1 câu nôm na · vì sao dùng · khi nào đừng.
-3. Cách gọi copy-paste + ví dụ thật + ✅ Verify.
-4. ❌ SAI / ✅ ĐÚNG · bảng so Claude Code · best practices kèm "vì sao" · bài tập · nguồn docs.
+1. `# <lệnh> — <mục đích 1 dòng>` (H1 duy nhất) + dòng `> **Harness:** … · **Surface:** … · **Đọc:** ~2 phút`.
+2. `**Nôm na:**` — nó là gì + "Hợp khi …".
+3. `## Vì sao dùng?` — 2–4 câu (cơ chế + cái hay nhầm) + 1 bảng khi có tư liệu + `**Nếu làm sai:**`.
+4. `## Cách dùng` — 1 dòng nơi gọi, code fence có language tag, `**Biến thể:**` / `**Setting:**` / `**✅ Verify:**`.
+5. `## Liên quan` — lệnh liên quan · README nhóm · `examples/` · URL docs.
+6. Không còn section dài: So sánh Claude Code / Best practices / Bài tập nằm ở README nhóm và bài tổng.
+
+Mẫu vàng: [chat-session/compact](./chat-session/compact/README.md).
 
 ## Lỗi tra cứu thường gặp
 
-**❌ SAI — thấy một slash nằm ở `copilot/` là tưởng mọi client Copilot đều có.** *Vì sao sai:* CLI, Chat view và cloud surface mỗi bên một subset — đọc dòng **Surface** trong README slug.
+**❌ SAI — thấy một slash nằm ở `copilot/` là tưởng mọi client Copilot đều có.** *Vì sao sai:* CLI, Chat view và cloud surface mỗi bên một subset — đọc câu "**Cách dùng** — …" ở đầu mục 3 trong README slug.
 
-**✅ ĐÚNG — tra 3 bước:** bucket nào (harness của bạn) → nhóm nào (loại việc) → README slug (dòng Surface + cách gọi).
+**✅ ĐÚNG — tra 3 bước:** bucket nào (harness của bạn) → nhóm nào (loại việc) → README slug (mục **Cách dùng** + code fence cú pháp).
 
 **Bài học:** harness trước, nhóm lệnh sau — tránh tra lệnh của môi trường bạn không dùng.
 

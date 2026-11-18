@@ -12,7 +12,8 @@ Hỏi Copilot lặp hàng chục lần mỗi ngày, nên phím tắt cắt đư�
 |---|---|---|---|
 | Mở Chat view | `Ctrl+Alt+I` | `⌃⌘I` | `workbench.action.chat.open` |
 | Chat mới | `Ctrl+N` | `⌘N` | `workbench.action.chat.newChat` |
-| Inline chat (editor & terminal) | `Ctrl+I` | `⌘I` | `inlineChat.start` · `workbench.action.terminal.chat.start` |
+| Inline chat trong editor | `Ctrl+I` | `⌘I` | `inlineChat.start` |
+| Inline chat trong terminal | `Ctrl+I` | `⌘I` | `workbench.action.terminal.chat.start` |
 | Quick Chat | `Ctrl+Shift+Alt+L` | `⇧⌥⌘L` | `workbench.action.quickchat.toggle` |
 | Nhận / bỏ gợi ý code | `Tab` / `Esc` | `Tab` / `Esc` | — |
 

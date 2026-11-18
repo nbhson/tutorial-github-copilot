@@ -1,81 +1,36 @@
-# /rename — Đổi tên phiên chat cho dễ tìm lại
+# /rename — Đổi tên phiên chat đang mở cho dễ tìm lại
 
-> **Dành cho:** người hay chạy nhiều phiên song song trong một ngày · **Vấn đề:** list phiên toàn những tên mặc định "New Chat", không phân biệt được đâu là task nào · **Đọc xong:** đặt tên rõ ràng cho phiên và tìm lại nhanh trong Session History (~1 phút)
-> **Harness:** Local · **Surface:** VS Code Chat (Local harness) — docs ghi `/rename` đổi tên chat trong **một local Ask chat** (`/rename <tên mới>`); CLI có bản riêng `/rename` (đổi tên session hiện tại)
+> **Harness:** Local · **Surface:** VS Code Chat — docs ghi `/rename <tên mới>` trong **local Ask chat**; cũng làm được bằng nút trong Session History · **Đọc:** ~2 phút
 
-## 1 câu nôm na
+**Nôm na:** Dán nhãn lên lọ gia vị trước khi cất vào tủ: `/rename <tên>` đổi tên phiên chat đang mở, không đụng nội dung hội thoại — để Session History hết là một loạt "New Chat" lẫn lộn. Hợp khi chạy 3–4 phiên song song, hoặc sắp bỏ dở một việc mà ngày sau quay lại.
 
-Dán nhãn lên lọ gia vị trước khi cất vào tủ: `/rename <tên>` đổi tên phiên chat đang mở, để lát nữa mở Session History là thấy ngay "Dựng API login" thay vì một loạt "New Chat" lẫn lộn. Đây là lệnh vệ sinh phiên, không đổi nội dung hội thoại. · 📄 [VS Code Docs: AI features cheat sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet)
+## Vì sao dùng?
 
-## Vì sao dùng /rename?
-
-Multi-tasking bằng chat dạng phiên chỉ hiệu quả nếu bạn tìm lại được việc của mình. `/rename` biến Session History thành một cuốn sổ có mục lục: mỗi phiên một tiêu đề mô tả việc thật, thay vì phải mở từng phiên ra dò.
-
-**Nếu làm sai thì sao?** Tưởng `/rename` là lệnh đổi tên biến/file trong code thì nhầm sang nhầm để — nó chỉ đổi **tên phiên chat**, không đụng bất kỳ file nào. Cũng đừng tìm nó trong session Copilot harness nếu máy bạn không có: docs gắn nhãn "in a local chat".
-
-> **Tóm gọn 1 câu:** `/rename <tên>` dán nhãn cho phiên chat hiện tại — đắt giá nhất ở chỗ nó giúp Session History đọc được sau 3 ngày.
-
-## Khi nào dùng / khi nào đừng
-
-- **Dùng khi:** bắt đầu một task sẽ kéo dài; có 3-4 phiên mở song song; chuẩn bị quay lại việc bỏ dở sau một buổi.
-- **ĐỪNG dùng khi:** phiên chỉ để hỏi thoáng qua rồi đóng — thêm bước thừa; bạn cần đổi tên file/biến trong code — đó là việc của editor, không phải chat. · 📄 [VS Code Docs: Pick the right tool](https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task)
-
-## Cách gọi (copy-paste)
-
-> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
-
-> `/rename Sửa bug thanh toán` — đổi tên phiên đang mở thành tên mới. Bạn cũng có thể đổi tên ngay trong **Session History** (nút chuột phải / pencil) thay vì dùng slash. · 📄 [VS Code Docs: Cheat Sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet)
-
-## Ví dụ thật
-
-Đang làm 3 việc cùng lúc: refactor model, viết test, sửa CI. Mỗi lần mở phiên mới làm một việc rồi `/rename` theo tên task — cuối ngày Session History là 3 ô rõ tên, ngày mai bấm tiếp mà không phải dò lại.
-
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh)
-
-**✅ Verify:** mở Session History, thấy phiên vừa đổi tên hiển thị đúng tên mới — đạt.
-
-## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)
-
-**❌ SAI — để cả loạt phiên tên "New Chat" rồi mò từng cái:**
-
-> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
-
-**✅ ĐÚNG — rename ngay khi phiên bắt đầu một việc rõ ràng:**
-
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh)
-
-**Bài học:** tên phiên là chi phí nhỏ nhưng trả về khả năng tìm lại — làm từ đầu thì không phải bò từng phiên.
-
-## Lỗi thường gặp
+Session History toàn tên mặc định thì phải mở từng phiên ra dò việc — chi phí đó lặp lại hàng ngày; `/rename` dán nhãn một lần mất 5 giây và biến list thành cuốn sổ có mục lục. Docs gắn nhãn lệnh "in a local chat" — không thấy nó trong menu `/` thì kiểm Session Target trước khi kết luận extension lỗi; agent session trong Agents window được quản lý riêng, muốn đổi tên thì làm ở đúng cửa sổ.
 
 | Triệu chứng | Nguyên nhân | Fix |
 |---|---|---|
-| Không thấy `/rename` khi gõ `/` | Harness/version không bật, hoặc đang ở Copilot session | Kiểm Session Target; dùng nút đổi tên trong Session History |
-| Đổi tên xong không thấy trong Session History | Nhầm giữa Chat view và Agents window | Agent session ở Agents window quản lý riêng — đổi tên ở đúng cửa sổ |
-| Tưởng đổi tên được cả file code | Hiểu nhầm phạm vi lệnh | `/rename` chỉ đổi tên phiên chat, không phải rename symbol |
+| Gõ `/` không thấy `/rename` | harness/version không bật, hoặc đang ở session Copilot | kiểm Session Target; hoặc dùng nút trong Session History |
+| Đổi tên xong không thấy trong Session History | nhầm giữa Chat view và Agents window | agent session quản lý riêng — đổi tên ở đúng cửa sổ |
+| Tưởng đổi được tên file/biến trong code | hiểu nhầm phạm vi lệnh | `/rename` chỉ đổi tên phiên; rename symbol là F2 |
 
-## So sánh với Claude Code
+**Nếu làm sai:** tưởng `/rename` đổi tên biến/file trong code là đem lệnh quản phiên giao cho nhầm việc — lệnh không đụng file nào; ngược lại, để cả loạt "New Chat" rồi mò từng cái là trả giá bằng hàng chục phút tìm kiếm cho thứ đáng ra tốn 5 giây.
 
-| Việc | Copilot (`/rename`) | Claude Code | Ghi chú |
-|---|---|---|---|
-| Đổi tên phiên chat | `/rename <tên>` (local chat) + nút trong Session History | Đổi tên trong session renaming / UI | Cả hai đều là quản lý phiên, không phải code |
-| Đổi tên biến/file trong code | Công cụ editor (F2 rename) | `/rename` nếu dùng qua agent hoặc editor | Đừng nhầm hai thứ này |
+## Cách dùng
 
-## Best practices (kèm "vì sao")
+Gõ trong Chat (Local harness), hoặc chuột phải vào phiên trong Session History → Rename:
 
-- **Rename ngay khi phiên rõ hướng.** *Vì sao?* Đặt tên lúc đầu còn nhớ ngữ cảnh, tên chính xác hơn lúc quay lại.
-- **Dùng tên theo việc chứ không theo ngày.** *Vì sao?* "Sửa lỗi payment" dễ tìm hơn "Task 14/11".
-- **Phối hợp với folder/workspace để gom phiên.** *Vì sao?* Session History gom theo workspace — cùng một dự án thì mở cùng workspace. · 📄 [VS Code Docs: Crafting effective prompts](https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts)
+```prompt
+/rename Sửa bug thanh toán
+# hoặc: Session History → chuột phải phiên → Rename (bút chì)
+```
 
-## Bài tập nhỏ
+- **Biến thể:** đặt tên theo việc chứ không theo ngày — "Sửa lỗi payment" dễ tìm hơn "Task 14/11"; rename ngay khi phiên rõ hướng, lúc đó tên chính xác hơn lúc quay lại dò.
+- **Setting:** `/rename <tên mới>` là cú pháp docs gắn cho local Ask chat; Copilot CLI có `/rename` riêng cho session hiện tại.
+- **✅ Verify:** mở Session History — phiên vừa đổi hiển thị đúng tên mới.
 
-1. **(2 phút)** Mở một phiên mới, gõ `/rename Viết API login` rồi mở Session History xác nhận tên mới.
-2. **(3 phút)** Tạo 3 phiên, rename theo 3 task khác nhau, ngày sau quay lại tìm đúng phiên chỉ bằng tên. · 📄 [VS Code Docs: Cheat Sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet)
+## Liên quan
 
-## Tham khảo
-
-- Index nhóm: [../README.md](../README.md) — bảng tra 1 dòng mỗi lệnh Chat Session.
-- Cheatsheet 1 trang: [CHEATSHEET.md](../../../../../CHEATSHEET.md) · Tìm lại phiên: [history](../../../copilot/chat-session/history/README.md) · Mở phiên mới: [new-chat](../../../copilot/chat-session/new-chat/README.md)
-- Nguồn docs: [VS Code — AI features cheat sheet (Slash commands, `/rename <name>`)](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet) · [VS Code — Session management](https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions)
-
-> Đặt tên phiên là thói quen 5 giây trả về hàng chục phút tìm kiếm sau này — làm từ đầu, đừng chờ list đầy "New Chat".
+- Tìm lại phiên: [history](../../../copilot/chat-session/history/README.md) · phiên sạch để đặt tên rõ: [new-chat](../../../copilot/chat-session/new-chat/README.md)
+- Tra nhanh cả nhóm: [../README.md](../README.md) · Chạy thử: [`examples/`](examples/)
+- Nguồn: [VS Code Docs — AI features cheat sheet](https://code.visualstudio.com/docs/agents/reference/ai-features-cheat-sheet) · [VS Code Docs — Manage agent sessions](https://code.visualstudio.com/docs/agents/run/sessions/manage-sessions)

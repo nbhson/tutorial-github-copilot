@@ -34,9 +34,11 @@ Mỗi nhóm có README riêng liệt kê từng lệnh kèm khi nào dùng:
 
 > 60 lệnh nghe nhiều, nhưng nắm 4 thói quen — mở phiên mới mỗi task, gắn scope bằng `#file`, chọn đúng mode/Session Target, review diff trước khi Accept — là bạn đã dùng đúng phần lớn rồi.
 
-## Khuôn mỗi README lệnh
+## Khuôn mỗi README lệnh (25–50 dòng, 6 khối)
 
-**lệnh làm gì (1 câu nôm na) → vì sao dùng → khi nào dùng/không dùng → cách gọi (copy-paste) → ví dụ thật + Verify → ❌ SAI / ✅ ĐÚNG → so sánh Claude Code → Best practices kèm "vì sao" → bài tập → nguồn docs**. Dòng `> **Harness:** … · **Surface:** …` ngay dưới title cho biết lệnh chạy ở đâu — đọc nó trước khi copy lệnh sang môi trường khác.
+`# <lệnh> — <mục đích 1 dòng>` → dòng `> **Harness:** … · **Surface:** … · **Đọc:** ~2 phút` → `**Nôm na:**` (kèm "Hợp khi …") → `## Vì sao dùng?` (2–4 câu + 1 bảng khi có tư liệu + `**Nếu làm sai:**`) → `## Cách dùng` (code fence có language tag + `**Biến thể:**` / `**Setting:**` / `**✅ Verify:**`) → `## Liên quan` (lệnh liên quan · README nhóm · `examples/` · URL docs). Khuôn đầy đủ + quy tắc format nằm ở [`STYLE.md`](../../STYLE.md) mục 4, mẫu vàng: [`copilot/chat-session/compact/`](copilot/chat-session/compact/README.md).
+
+Dòng `Harness`/`Surface` cho biết lệnh chạy ở đâu — đọc nó trước khi copy lệnh sang môi trường khác. Bảng "So sánh với Claude Code", bài tập và best practices nằm ở README nhóm, không ở từng lệnh.
 
 ## Lỗi tra cứu thường gặp (❌ SAI / ✅ ĐÚNG)
 

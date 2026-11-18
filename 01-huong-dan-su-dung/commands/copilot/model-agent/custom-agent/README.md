@@ -1,97 +1,36 @@
-# Custom agent — Gọi agent riêng của repo
+# Custom agent — gọi đội chuyên gia của repo bằng `@`: explorer, tester, security-reviewer
 
-> **Dành cho:** người đã có agent riêng trong `.github/agents/` (explorer, tester, security-reviewer) · **Đọc xong:** gọi đúng chuyên gia và đẩy việc ồn ào sang sub-agent (~2 phút)
-> **Harness:** Copilot · **Surface:** VS Code Chat (Copilot harness) / Agents window / Copilot CLI
+> **Harness:** Copilot · **Surface:** VS Code Chat (Copilot harness) / Agents window / Copilot CLI · **Đọc:** ~2 phút
 
-## 1 câu nôm na
+**Nôm na:** Gọi đúng người trong danh bạ: `@explorer` đi trinh sát, `@tester` chạy test focused, `@security-reviewer` soi diff — mỗi agent là file `.github/agents/<TÊN>.agent.md` với phạm vi và `tools` khai báo sẵn. Hợp khi việc ồn ào (đọc mười mấy file) cần đẩy ra khỏi chat chính để chỗ đó chỉ còn quyết định của bạn.
 
-Gọi đúng người trong danh bạ: explorer đi trinh sát, tester đi kiểm tra, security-reviewer soi diff. Bạn gọi agent trong `.github/agents/` và nói rõ phạm vi ngay trong lời gọi — chỉ-đọc hay được phép sửa, file nào được đụng.
+## Vì sao dùng?
 
-> **Nơi ở & cách quản lý:** agent là file `.github/agents/<TEN>.agent.md` (repo, commit cho team) hoặc `~/.copilot/agents/<TEN>.agent.md` (user, mọi repo). Ở **Copilot harness**, agent được quản lý bằng **Agent Customizations editor** — lệnh `Chat: Open Customizations` → tab **Agents** — chứ không bằng slash command; `/create-agent` chỉ tồn tại trong *local agent session*. · 📄 [VS Code Docs: Agents (concept)](https://code.visualstudio.com/docs/agents/concepts/agents)
+Chat chính tự ôm trinh sát multi-file thì kết quả lẫn lộn, bạn khó thấy quyết định nào là chính; đẩy việc sang sub-agent thì nó trả về bản đồ gọn. Custom agent mạnh vì quyền hẹp: `description` + allowlist `tools` nằm ngay trong file nên phạm vi được bảo vệ ở mọi lời gọi. Một điểm dễ quên: sub-agent chạy **context riêng**, không kế history chat — lệnh giao phải tự chứa goal + context + kết quả mong đợi.
 
-## Vì sao dùng Custom agent?
-
-Chat chính nếu ôm cả việc trinh sát multi-file sẽ rất ồn: nó đọc mười mấy file, kết quả lẫn lộn, bạn khó theo dõi quyết định nào là chính. Đẩy việc ồn sang sub-agent thì chat chính chỉ còn lại các quyết định gọn gàng.
-
-Ba việc điển hình nên giao cho chuyên gia:
-
-- **Explorer** — trinh sát multi-file: "file nào chạm tới auth, ai gọi ai".
-- **Tester** — sau mỗi thay đổi, chạy test focused và báo PASS/FAIL.
-- **Security-reviewer** — khi diff chạm auth/payment, soi rủi ro trước khi merge.
-
-**Nếu làm sai thì sao?** Hai lỗi hay gặp: (1) mô tả agent thiếu phạm vi → nó "chạy loạn" ngoài vùng được phép; (2) gọi sai chuyên gia cho việc, ví dụ nhờ tester đi trinh sát → kết quả không đúng thứ bạn cần.
-
-> **Tóm gọn 1 câu:** Custom agent là danh bạ thợ chuyên việc — mô tả `description` + allowlist `tools` nằm ngay trong file `.agent.md`, còn delegate việc ồn là việc của sub-agent. · 📄 [VS Code Docs: Agents (concept)](https://code.visualstudio.com/docs/agents/concepts/agents)
-
-## Khi nào dùng / khi nào đừng
-
-- **Dùng khi:** việc ồn ào cần cô lập (trinh sát multi-file); muốn chạy test focused sau mỗi change; diff chạm auth/payment cần soi bảo mật.
-- **ĐỪNG dùng khi:** việc quá nhỏ hoặc chưa cần tách vai — chat chính là đủ; agent chưa khai báo `tools` giới hạn thì gọi ra cũng không an toàn hơn. · 📄 [VS Code Docs: Pick the right tool](https://code.visualstudio.com/docs/agents/best-practices#pick-the-right-tool-for-the-task)
-
-## Cách gọi (copy-paste)
-
-> 📄 **Code ví dụ:** [`examples/01-cach-goi-copy-paste.sh`](examples/01-cach-goi-copy-paste.sh)
-
-> Không thấy agent trong dropdown? Kiểm tra `.github/agents/` có file `.agent.md` tương ứng chưa, rồi mở `Chat: Open Customizations` xem agent được editor nhận diện hay bị gạch field nào. · 📄 [VS Code Docs: When to use a custom agent](https://code.visualstudio.com/docs/agent-customization/custom-agents#when-to-use-a-custom-agent)
-
-## Ví dụ thật
-
-Nghiệp vụ: bạn sắp refactor module auth, cần biết có những file nào dính tới nó trước khi sửa.
-
-> 📄 **Code ví dụ:** [`examples/02-vi-du-that.sh`](examples/02-vi-du-that.sh) · 📄 [VS Code Docs: Crafting effective prompts](https://code.visualstudio.com/docs/agents/guides/prompt-examples#tips-for-crafting-effective-prompts)
-
-**Kết quả mong đợi:** một bản đồ gọn (danh sách file + quan hệ gọi nhau + test có/không); chat chính chỉ giữ lại quyết định refactor.
-
-**✅ Verify:** kết quả của sub-agent dán thẳng được vào PR/wiki là đạt — nếu phải viết lại từ đầu thì nó chưa trả đúng thứ cần.
-
-## Nếu làm sai thì sao (❌ SAI / ✅ ĐÚNG)
-
-**❌ SAI — gọi explorer mà không nói nó chỉ-đọc:**
-
-> 📄 **Code ví dụ:** [`examples/03-neu-lam-sai-thi-sao-sai-ung.sh`](examples/03-neu-lam-sai-thi-sao-sai-ung.sh)
-
-**✅ ĐÚNG — nêu rõ vai + phạm vi ngay trong lời gọi:**
-
-> 📄 **Code ví dụ:** [`examples/04-neu-lam-sai-thi-sao-sai-ung.sh`](examples/04-neu-lam-sai-thi-sao-sai-ung.sh) · 📄 [VS Code Docs: Choose a troubleshooting path](https://code.visualstudio.com/docs/agents/agent-troubleshooting/troubleshooting#choose-a-troubleshooting-path)
-
-**Bài học:** Custom agent mạnh vì quyền hẹp. Nêu rõ phạm vi trong lời gọi để nó làm đúng vai — sai vai thì chuyên gia thành rủi ro.
-
-## Lỗi thường gặp
-
-📄 [VS Code Docs: Troubleshoot custom agents](https://code.visualstudio.com/docs/agent-customization/custom-agents#troubleshoot-custom-agents)
-
-| Triệu chứng | Nguyên nhân | Fix |
+| Agent | Vai | Kết quả điển hình |
 |---|---|---|
-| Agent "chạy loạn" ngoài phạm vi | Mô tả agent thiếu phạm vi | Ghi rõ chỉ-đọc + files được đụng trong `.agent.md` (`tools` allowlist) |
-| Gọi sai agent cho việc | Chưa thuộc danh bạ | Đọc `templates/.github/agents/` 1 lần, ghi nhớ 3 con core |
-| Chat chính vẫn ồn | Ôm việc trong chat chính | Giao tay: "dùng subagent khảo sát X, không đổi file" |
-| Agent không thấy chat chính | Subagent chạy context riêng, không kế history | Lệnh giao phải tự chứa: goal + context + kết quả mong đợi |
-## So sánh với Claude Code
+| explorer | trinh sát chỉ-đọc: file nào chạm tới auth, ai gọi ai | bản đồ file dán thẳng vào PR/wiki |
+| tester | chạy test focused sau mỗi thay đổi | verdict PASS/FAIL |
+| security-reviewer | soi diff chạm auth/payment trước khi merge | danh sách rủi ro trước merge |
 
-📄 [VS Code Docs: When to use subagents](https://code.visualstudio.com/docs/agents/run/subagents#when-to-use-subagents)
+**Nếu làm sai:** gọi sai chuyên gia — nhờ explorer "dọn lại code auth" là giao việc sửa cho agent sinh ra để trinh sát; và gọi agent chưa khai báo `tools` giới hạn thì cũng chẳng an toàn hơn chat chính.
 
-| Việc | Copilot (Custom agent) | Claude Code | Ghi chú |
-|---|---|---|---|
-| Agent riêng của repo | `.github/agents/<tên>.agent.md` | Subagent trong `.claude/agents/` | Cùng ý tưởng: persona + tool giới hạn |
-| Delegate sang sub-agent | Tool native `task` (Copilot harness) | Task/subagent tool | Local harness dùng `agent/runSubagent` — tên tool và args khác nhau |
-| Giới hạn công cụ/quyền | Frontmatter `tools` (alias `read` `edit` `execute` `search` `agent` `web` `todo`) | Khai trong định nghĩa subagent | Cả hai đều cho phép thu hẹp quyền theo vai |
-## Best practices (kèm "vì sao")
+## Cách dùng
 
-- **Ghi rõ phạm vi trong chính file `.agent.md`.** *Vì sao?* Phạm vi nằm ở định nghĩa thì mọi lời gọi đều được bảo vệ, không phụ thuộc bạn nhớ nhắc.
-- **Thuộc 3 agent core trước khi tạo thêm.** *Vì sao?* Danh bạ quá dài thì chính bạn cũng gọi sai — ít mà đúng vai hơn nhiều mà mơ hồ.
-- **Đẩy việc ồn sang sub-agent ngay từ đầu.** *Vì sao?* Để nó chạy trong chat chính thì kết quả trinh sát sẽ loãng mất các quyết định bạn cần giữ.
-- **Dùng explorer cho chỉ-đọc, tester cho PASS/FAIL.** *Vì sao?* Đúng vai thì kết quả đồng nhất và dán được thẳng vào PR/wiki. · 📄 [VS Code Docs: Write effective agent instructions](https://code.visualstudio.com/docs/agent-customization/custom-agents#write-effective-agent-instructions)
+Gõ `@` trong Chat view để chọn agent (Copilot CLI cũng có custom agent), nêu rõ phạm vi ngay trong lời gọi:
 
-## Bài tập nhỏ
+```prompt
+@explorer (chỉ-đọc): vẽ bản đồ 5 file chạm tới auth + ai gọi ai, file nào có test
+và file nào không — không sửa gì.
+```
 
-1. **(5 phút)** Gọi explorer vẽ bản đồ file của một module bạn chưa quen, rồi thử dán kết quả vào phần mô tả một PR nháp.
-2. **(7 phút)** Mở `Chat: Open Customizations` → tab Agents, đọc `tools` của từng agent và tự hỏi: agent nào đang có quyền ghi không cần thiết? Sửa lại cho hẹp. · 📄 [VS Code Docs: When to use a custom agent](https://code.visualstudio.com/docs/agent-customization/custom-agents#when-to-use-a-custom-agent)
+- **Biến thể:** muốn agent dùng riêng mọi repo thì để ở `~/.copilot/agents/<TÊN>.agent.md`; file trong `.github/agents/` commit được cho cả team.
+- **Setting:** ở Copilot harness, agent quản lý bằng `Chat: Open Customizations` → tab Agents, không bằng slash command — `/create-agent` chỉ tồn tại trong local agent session.
+- **✅ Verify:** kết quả sub-agent dán thẳng vào mô tả PR không phải viết lại — phải viết từ đầu là nó chưa trả đúng thứ cần.
 
-## Tham khảo
+## Liên quan
 
-- Index nhóm: [../README.md](../README.md) · Bài chủ về tạo agent & subagents: [06-custom-agents-parallel.md](../../../../06-custom-agents-parallel.md).
-- Cheatsheet 1 trang: [CHEATSHEET.md](../../../../../CHEATSHEET.md) · Kẹt thì tra [FAQ troubleshooting](../../../../../03-cau-hoi-thuong-gap/08-loi-thuong-gap-troubleshooting.md).
-- Skill nạp vào agent: [../../system-knowledge/agent-skill/README.md](../../system-knowledge/agent-skill/README.md) · Task mở không cần danh bạ: [../agent-mode/README.md](../agent-mode/README.md).
-- VS Code — [Custom agents](https://code.visualstudio.com/docs/agent-customization/custom-agents) · [Subagents](https://code.visualstudio.com/docs/agents/run/subagents) · GitHub — [Custom agents (CLI)](https://docs.github.com/en/copilot/concepts/customizations/custom-agents).
-
-> Đẩy việc ồn ào sang sub-agent là cách giữ chat chính sạch — chuyên gia trả kết quả, còn bạn giữ quyết định.
+- Task mở không cần danh bạ: [agent-mode](../agent-mode/README.md) · skill nạp vào agent: [agent-skill](../../system-knowledge/agent-skill/README.md)
+- Tra nhanh cả nhóm: [../README.md](../README.md) · Chạy thử: [`examples/`](examples/)
+- Nguồn: [VS Code Docs — When to use a custom agent](https://code.visualstudio.com/docs/agent-customization/custom-agents#when-to-use-a-custom-agent) · [VS Code Docs — When to use subagents](https://code.visualstudio.com/docs/agents/run/subagents#when-to-use-subagents)
